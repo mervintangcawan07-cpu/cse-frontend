@@ -10,26 +10,39 @@ export default function ReviewerPage() {
   ];
 
   return (
-    
+    <div className="max-w-6xl mx-auto py-12 px-4 space-y-8">
       
-        Reviewer Module
-        Select a subject to start reviewing its lessons and practice quizzes.
-      
+      {/* Header */}
+      <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+        <h1 className="text-3xl font-extrabold text-slate-800">Reviewer Module</h1>
+        <p className="text-slate-500 text-sm mt-2">
+          Select a subject to start reviewing its lessons and practice quizzes.
+        </p>
+      </div>
 
-      
+      {/* Subjects Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {subjects.map((subject, index) => (
-          
+          <Link 
+            href="/reviewer/lesson" 
+            key={index}
+            className={`p-6 rounded-3xl border shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[160px] ${subject.color}`}
+          >
+            <div>
+              <span className="text-xs font-black uppercase tracking-wider opacity-70 mb-2 block">
+                {subject.category}
+              </span>
+              <h2 className="text-xl font-extrabold">{subject.title}</h2>
+            </div>
             
-              {subject.category}
-              {subject.title}
-            
-            
-              {subject.count}
-              Start →
-            
-          
+            <div className="flex justify-between items-center text-sm font-bold pt-4 opacity-90">
+              <span>{subject.count}</span>
+              <span className="hover:translate-x-1 transition-transform">Start &rarr;</span>
+            </div>
+          </Link>
         ))}
+      </div>
       
-    
+    </div>
   );
 }
