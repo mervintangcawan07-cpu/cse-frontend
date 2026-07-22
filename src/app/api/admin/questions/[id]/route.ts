@@ -2,11 +2,17 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // UPDATE A QUESTION
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: Request, 
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    // We must await the params object in modern Next.js
+    const { id } = await params;
     const body = await request.json();
+    
     const question = await prisma.question.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         category: body.category,
         prompt: body.prompt,
@@ -23,10 +29,16 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 }
 
 // DELETE A QUESTION
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: Request, 
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    // We must await the params object in modern Next.js
+    const { id } = await params;
+    
     await prisma.question.delete({
-      where: { id: params.id },
+      where: { id },
     });
     return NextResponse.json({ message: "Question deleted successfully" }, { status: 200 });
   } catch (error) {
