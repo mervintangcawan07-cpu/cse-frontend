@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String       @id @default(cuid())
+  email     String       @unique
+  name      String?
+  password  String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  results   ExamResult[]
+}
+
+model ExamResult {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score       Float
+  totalItems  Int
+  correct     Int
+  incorrect   Int
+  skipped     Int
+  createdAt   DateTime @default(now())
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  category    String   // e.g., "Numerical", "Verbal", "Analytical", "General Info"
+  prompt      String
+  options     String[] // Array of choices: ["Option A", "Option B", "Option C", "Option D"]
+  answerIndex Int      // Index of the correct option (0, 1, 2, or 3)
+  explanation String?  // Optional explanation for the answer
+  createdAt   DateTime @default(now())
+}
