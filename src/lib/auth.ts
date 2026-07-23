@@ -1,7 +1,14 @@
 import { SignJWT, jwtVerify } from "jose";
 
+const secret = process.env.JWT_SECRET;
+
+// Prevent silent production security bypasses
+if (!secret && process.env.NODE_ENV === "production") {
+  throw new Error("CRITICAL SECURITY ERROR: JWT_SECRET is not set in production!");
+}
+
 const SECRET_KEY = new TextEncoder().encode(
-  process.env.JWT_SECRET || "fallback-secret-key-change-in-production-32chars"
+  secret || "fallback-secret-key-change-in-production-32chars"
 );
 
 export interface JWTPayload {
