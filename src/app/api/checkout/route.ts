@@ -1,57 +1,80 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWT } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { email, userId } = body;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
 
-    if (!email || !userId) {
-      return NextResponse.json({ error: "Missing user details" }, { status: 400 });
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
     }
 
-    // PayMongo v2 Checkout Session API Payload
-    const options = {
+    const session = await verifyJWT(token);
+    if (!session?.userId) {
+      return NextResponse.json({ error: "Invalid session." }, { status: 401 });
+    }
+
+    const secretKey = process.env.PAYMONGO_SECRET_KEY;
+    if (!secretKey) {
+      console.error("PAYMONGO_SECRET_KEY environment variable is missing.");
+      return NextResponse.json(
+        { error: "Payment gateway configuration error." },
+        { status: 500 }
+      );
+    }
+
+    const authHeader = `Basic ${Buffer.from(`${secretKey}:`).toString("base64")}`;
+
+    // Request PayMongo Checkout Session
+    const response = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
       method: "POST",
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        // Base64-encode your PayMongo Secret Key or pass it directly using Basic Auth
-        authorization: `Basic ${Buffer.from(process.env.PAYMONGO_SECRET_KEY + ":").toString("base64")}`,
+        "Content-Type": "application/json",
+        Authorization: authHeader,
       },
       body: JSON.stringify({
         data: {
           attributes: {
+            send_email_receipt: true,
+            show_description: true,
+            show_line_items: true,
             line_items: [
               {
-                name: "Civil Service Exam Premium Reviewer Access",
-                amount: 49900, // Amount in centavos (e.g., PHP 499.00)
                 currency: "PHP",
+                amount: 49900, // 499.00 PHP in centavos
+                name: "Civil Service Exam Full Reviewer Access",
                 quantity: 1,
+                description: "Lifetime access to 500+ mock exam questions, explanations, and study guides.",
               },
             ],
-            payment_method_types: ["card", "gcash", "qrph"],
-            success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?success=true`,
-            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/pricing?canceled=true`,
+            payment_method_types: ["gcash", "paymaya", "card", "grab_pay"],
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=success`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/dashboard?payment=cancelled`,
             metadata: {
-              userId: userId,
-              email: email,
+              userId: session.userId,
+              email: session.email,
             },
           },
         },
       }),
-    };
+    });
 
-    const response = await fetch("https://api.paymongo.com/v2/checkout_sessions", options);
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.errors?.[0]?.detail || "Failed to create checkout session");
+      console.error("PayMongo Checkout API Error:", data);
+      return NextResponse.json(
+        { error: data.errors?.[0]?.detail || "Failed to create checkout session." },
+        { status: response.status }
+      );
     }
 
-    // Return the checkout URL where the user will be redirected to pay
-    return NextResponse.json({ checkoutUrl: data.data.attributes.checkout_url }, { status: 200 });
-  } catch (error: any) {
-    console.error("Checkout creation error:", error);
-    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
+    const checkoutUrl = data?.data?.attributes?.checkout_url;
+    return NextResponse.json({ checkoutUrl }, { status: 200 });
+  } catch (error) {
+    console.error("Checkout route error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
