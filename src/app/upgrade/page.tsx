@@ -47,7 +47,7 @@ export default function UpgradePage() {
             <li className="flex items-center gap-2">✓ Unlimited Full Mock Exam Attempts</li>
             <li className="flex items-center gap-2">✓ Category-Specific Speed Drills</li>
             <li className="flex items-center gap-2">✓ Full Access to Instructor Study Notes</li>
-            <li className="flex items-center gap-2">✓ GCash, Maya, GrabPay & Card Support</li>
+            <li className="flex items-center gap-2">✓ GCash, Maya, QR Ph & Card Support</li>
           </ul>
         </div>
 

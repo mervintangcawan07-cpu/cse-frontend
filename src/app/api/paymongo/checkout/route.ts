@@ -17,7 +17,7 @@ export async function POST() {
     }
 
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cseonlinereview.vercel.app";
 
     if (!secretKey) {
       return NextResponse.json({ error: "PayMongo secret key misconfigured" }, { status: 500 });
@@ -47,7 +47,7 @@ export async function POST() {
                 quantity: 1,
               },
             ],
-            payment_method_types: ["gcash", "paymaya", "card", "grab_pay"],
+            payment_method_types: ["card", "gcash", "paymaya", "qrph"],
             success_url: `${appUrl}/dashboard?payment=success`,
             cancel_url: `${appUrl}/upgrade?payment=cancelled`,
             metadata: {
@@ -61,8 +61,8 @@ export async function POST() {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("PayMongo Checkout Error:", data);
-      return NextResponse.json({ error: "Failed to create payment session" }, { status: response.status });
+      console.error("PayMongo Checkout API Error Details:", JSON.stringify(data, null, 2));
+      return NextResponse.json({ error: "Failed to create payment session", details: data }, { status: response.status });
     }
 
     const checkoutUrl = data?.data?.attributes?.checkout_url;
