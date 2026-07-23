@@ -8,24 +8,28 @@ export async function POST() {
     const token = cookieStore.get("cse_session")?.value;
 
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized: Please log in first." }, { status: 401 });
     }
 
     const session = await verifyJWT(token);
     if (!session?.userId) {
-      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+      return NextResponse.json({ error: "Invalid session: Please log in again." }, { status: 401 });
     }
 
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cseonlinereview.vercel.app";
 
     if (!secretKey) {
-      return NextResponse.json({ error: "PayMongo secret key misconfigured" }, { status: 500 });
+      return NextResponse.json(
+        { error: "PAYMONGO_SECRET_KEY is missing in Vercel environment variables." },
+        { status: 500 }
+      );
     }
 
-    const authHeader = Buffer.from(`${secretKey}:`).toString("base64");
+    const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
-    const response = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
+    // PayMongo V2 Checkout Endpoint
+    const response = await fetch("https://api.paymongo.com/v2/checkout_sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +51,7 @@ export async function POST() {
                 quantity: 1,
               },
             ],
-            payment_method_types: ["card", "gcash", "paymaya", "qrph"],
+            payment_method_types: ["gcash", "card", "paymaya"],
             success_url: `${appUrl}/dashboard?payment=success`,
             cancel_url: `${appUrl}/upgrade?payment=cancelled`,
             metadata: {
@@ -61,14 +65,22 @@ export async function POST() {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("PayMongo Checkout API Error Details:", JSON.stringify(data, null, 2));
-      return NextResponse.json({ error: "Failed to create payment session", details: data }, { status: response.status });
+      console.error("PayMongo Error Details:", JSON.stringify(data, null, 2));
+      const paymongoMsg =
+        data?.errors?.[0]?.detail || data?.errors?.[0]?.code || "PayMongo API Error";
+      return NextResponse.json(
+        { error: `PayMongo rejected request: ${paymongoMsg}`, details: data },
+        { status: response.status }
+      );
     }
 
     const checkoutUrl = data?.data?.attributes?.checkout_url;
     return NextResponse.json({ checkoutUrl }, { status: 200 });
   } catch (error) {
-    console.error("Checkout API Error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    console.error("Checkout Catch Error:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

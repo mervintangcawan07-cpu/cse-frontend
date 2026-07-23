@@ -5,9 +5,11 @@ import Link from "next/link";
 
 export default function UpgradePage() {
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleUpgrade = async () => {
     setLoading(true);
+    setErrorMsg(null);
     try {
       const res = await fetch("/api/paymongo/checkout", {
         method: "POST",
@@ -17,12 +19,16 @@ export default function UpgradePage() {
       if (res.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
-        alert(data.error || "Failed to initiate payment. Please try again.");
+        const msg = data.error || "Failed to initiate payment. Please try again.";
+        setErrorMsg(msg);
+        alert(msg);
         setLoading(false);
       }
     } catch (err) {
       console.error("Checkout error:", err);
-      alert("An unexpected error occurred. Please try again.");
+      const msg = "An unexpected error occurred. Please try again.";
+      setErrorMsg(msg);
+      alert(msg);
       setLoading(false);
     }
   };
@@ -38,6 +44,12 @@ export default function UpgradePage() {
           </p>
         </div>
 
+        {errorMsg && (
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 font-medium text-left">
+            ⚠️ <strong>Error:</strong> {errorMsg}
+          </div>
+        )}
+
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-3 text-left">
           <div className="flex justify-between items-baseline">
             <span className="text-xs font-bold text-slate-500 uppercase">Lifetime Pass</span>
@@ -47,7 +59,7 @@ export default function UpgradePage() {
             <li className="flex items-center gap-2">✓ Unlimited Full Mock Exam Attempts</li>
             <li className="flex items-center gap-2">✓ Category-Specific Speed Drills</li>
             <li className="flex items-center gap-2">✓ Full Access to Instructor Study Notes</li>
-            <li className="flex items-center gap-2">✓ GCash, Maya, QR Ph & Card Support</li>
+            <li className="flex items-center gap-2">✓ GCash, Maya & Card Support</li>
           </ul>
         </div>
 
