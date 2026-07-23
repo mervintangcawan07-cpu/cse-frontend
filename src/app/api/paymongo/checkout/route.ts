@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 
+// Sanitizes and guarantees a valid absolute URL format for PayMongo
+function sanitizeUrl(rawUrl: string): string {
+  let url = rawUrl.trim().replace(/^["']|["']$/g, "").replace(/\/$/, "");
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    url = `https://${url}`;
+  }
+  return url;
+}
+
 export async function POST() {
   try {
     const cookieStore = await cookies();
@@ -17,7 +26,8 @@ export async function POST() {
     }
 
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cseonlinereview.vercel.app";
+    const rawAppUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cseonlinereview.vercel.app";
+    const appUrl = sanitizeUrl(rawAppUrl);
 
     if (!secretKey) {
       return NextResponse.json(
@@ -28,7 +38,6 @@ export async function POST() {
 
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
-    // PayMongo V2 Checkout Endpoint
     const response = await fetch("https://api.paymongo.com/v2/checkout_sessions", {
       method: "POST",
       headers: {
