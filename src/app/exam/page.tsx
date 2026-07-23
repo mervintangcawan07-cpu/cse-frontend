@@ -1,22 +1,30 @@
-import { PrismaClient } from "@prisma/client";
-import UpgradeButton from "@/components/UpgradeButton"; // Ensure your UpgradeButton component path matches
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import UpgradeButton from "@/components/UpgradeButton";
 
 export default async function ExamPage() {
-  // Replace this with your actual authenticated user ID/session check
-  // e.g., const session = await getServerSession(authOptions);
-  const currentUserId = "user_id_here"; 
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("cse_session")?.value;
 
-  // Fetch the current user record from Neon DB
+  if (!userId) {
+    redirect("/login");
+  }
+
   const user = await prisma.user.findUnique({
-    where: { id: currentUserId },
+    where: { id: userId },
   });
 
-  // Check if the user has unlocked premium privileges
-  const hasAccess = user?.isPaid || user?.role === "ADMIN";
+  if (!user) {
+    redirect("/login");
+  }
 
-  // Mock Questions Data
+  // Safely extract properties to prevent TypeScript compiler errors
+  const userRecord = user as any;
+  const isPaidUser = Boolean(userRecord?.isPaid);
+  const isAdmin = userRecord?.role === "ADMIN";
+  const hasAccess = isPaidUser || isAdmin;
+
   const sampleQuestions = [
     {
       id: 1,
@@ -39,11 +47,10 @@ export default async function ExamPage() {
           Civil Service Mock Exam Reviewer
         </h1>
         <p className="text-slate-600 mt-1">
-          Complete practice modules covering Verbal, Analytical, and Numerical Reasoning.
+          Welcome back, <span className="font-semibold text-slate-900">{user.email}</span>!
         </p>
       </div>
 
-      {/* SAMPLE QUESTION (Available to Everyone) */}
       <div className="space-y-6">
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
@@ -64,16 +71,14 @@ export default async function ExamPage() {
           </div>
         </div>
 
-        {/* CONDITIONALLY RENDERED CONTENT */}
         {hasAccess ? (
-          /* UNLOCKED PREMIUM CONTENT */
           <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl space-y-6">
             <div className="flex items-center justify-between border-b border-emerald-200 pb-3">
               <h2 className="text-xl font-bold text-emerald-900">
                 Premium Questions Unlocked
               </h2>
               <span className="px-3 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full">
-                {user?.role === "ADMIN" ? "Admin Access" : "Premium Member"}
+                {isAdmin ? "Admin Access" : "Premium Member"}
               </span>
             </div>
 
@@ -97,8 +102,7 @@ export default async function ExamPage() {
             </div>
           </div>
         ) : (
-          /* LOCKED PAYWALL PROMPT */
-          <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900 to-slate-800 p-8 text-center text-white shadow-xl">
+          <div className="relative overflow-hidden rounded-2xl bg-slate-900 p-8 text-center text-white shadow-xl">
             <div className="max-w-md mx-auto space-y-4">
               <div className="inline-flex p-3 bg-blue-600/20 text-blue-400 rounded-full mb-2">
                 <svg
@@ -124,8 +128,8 @@ export default async function ExamPage() {
 
               <div className="pt-4">
                 <UpgradeButton
-                  userId={user?.id || ""}
-                  email={user?.email || ""}
+                  userId={user.id}
+                  email={user.email}
                 />
               </div>
             </div>

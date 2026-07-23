@@ -1,24 +1,34 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { verifyJWT } from "@/lib/auth";
 
-export function middleware(request: NextRequest) {
-  // Check if the secure cookie exists
-  const session = request.cookies.get('cse_session');
+export async function middleware(request: NextRequest) {
+  const token = request.cookies.get("cse_session")?.value;
+  const { pathname } = request.nextUrl;
 
-  // If there is no session cookie, redirect to the login/settings page
-  if (!session) {
-    return NextResponse.redirect(new URL('/settings', request.url));
+  const session = token ? await verifyJWT(token) : null;
+
+  // Protect Admin Routes
+  if (pathname.startsWith("/admin")) {
+    if (!session || session.role !== "ADMIN") {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
-  // Otherwise, allow the request to proceed
+  // Protect Examinee Routes
+  if (pathname.startsWith("/dashboard") || pathname.startsWith("/exam") || pathname.startsWith("/modules")) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    // Prevent Admins from accessing student views unnecessarily
+    if (session.role === "ADMIN" && pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/admin/questions", request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 
-// Specify exactly which routes the middleware should protect
 export const config = {
-  matcher: [
-    '/dashboard/:path*', 
-    '/mock-exam/:path*',
-    '/admin/:path*'
-  ],
+  matcher: ["/dashboard/:path*", "/exam/:path*", "/modules/:path*", "/admin/:path*"],
 };

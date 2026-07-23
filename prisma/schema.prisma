@@ -24,15 +24,15 @@ model User {
 }
 
 model ExamResult {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score       Float
-  totalItems  Int
-  correct     Int
-  incorrect   Int
-  skipped     Int
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score      Float
+  totalItems Int
+  correct    Int
+  incorrect  Int
+  skipped    Int
+  createdAt  DateTime @default(now())
 }
 
 model Question {
