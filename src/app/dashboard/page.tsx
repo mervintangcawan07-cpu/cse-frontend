@@ -1,184 +1,141 @@
-"use client";
+import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { verifyJWT } from "@/lib/auth";
+import ReviewCenter from "@/components/dashboard/ReviewCenter";
+import AnalyticsOverview from "@/components/dashboard/AnalyticsOverview";
+import UpgradeButton from "@/components/UpgradeButton";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("cse_session")?.value;
 
-export default function DashboardPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [history, setHistory] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  if (!token) redirect("/login");
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("cse_user");
-    if (!storedUser) {
-      router.push("/settings");
-      return;
-    }
-    const parsedUser = JSON.parse(storedUser);
-    setUser(parsedUser);
+  const session = await verifyJWT(token);
+  if (!session?.userId) redirect("/login");
 
-    async function fetchHistory(id: string) {
-      try {
-        const res = await fetch(`/api/exam/history?userId=${id}`);
-        const data = await res.json();
-        if (res.ok) {
-          setHistory(data.history);
-        }
-      } catch (err) {
-        console.error("Failed to load history", err);
-      } finally {
-        setLoading(false);
-      }
-    }
+  const user = await prisma.user.findUnique({
+    where: { id: session.userId },
+    include: {
+      results: { orderBy: { createdAt: "desc" } },
+    },
+  });
 
-    fetchHistory(parsedUser.id);
-  }, [router]);
+  if (!user) redirect("/login");
 
-  if (!user) return null;
+  const userRecord = user as {
+    id: string;
+    email: string;
+    name?: string | null;
+    isPaid: boolean;
+    results: Array<{
+      id: string;
+      score: number;
+      correct: number;
+      incorrect: number;
+      totalItems: number;
+      createdAt: Date;
+    }>;
+  };
 
-  // --- Analytics Calculations ---
-  const totalExams = history.length;
-  const highestScore = totalExams > 0 ? Math.max(...history.map((h) => h.score)) : 0;
-  const averageScore = totalExams > 0 
-    ? Math.round(history.reduce((acc, curr) => acc + curr.score, 0) / totalExams) 
-    : 0;
+  const results = userRecord.results || [];
+  const isPaid = Boolean(userRecord.isPaid);
 
-  // Prepare data for the chart (needs to be chronological: oldest to newest)
-  const chartData = [...history].reverse().map((h, index) => ({
-    name: `Exam ${index + 1}`,
-    date: new Date(h.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-    score: h.score,
+  // Calculate analytics metrics server-side
+  const totalExams = results.length;
+  const avgScore =
+    totalExams > 0 ? Math.round(results.reduce((acc, r) => acc + r.score, 0) / totalExams) : 0;
+  const highestScore = totalExams > 0 ? Math.max(...results.map((r) => r.score)) : 0;
+  const passedCount = results.filter((r) => r.score >= 80).length;
+  const readinessIndex = totalExams > 0 ? Math.round((passedCount / totalExams) * 100) : 0;
+
+  const formattedResults = results.map((r) => ({
+    ...r,
+    createdAt: r.createdAt.toISOString(),
   }));
 
   return (
-    <div className="max-w-5xl mx-auto py-12 px-4 space-y-8">
-      {/* Header Profile Section */}
-      <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-        <h1 className="text-2xl font-extrabold text-slate-800">
-          Welcome back, {user.name || "Reviewee"}!
-        </h1>
-        <p className="text-slate-500 text-sm mt-1">{user.email}</p>
-      </div>
-
-      {loading ? (
-        <div className="text-center py-20">
-          <p className="text-slate-400 font-medium animate-pulse">Loading analytics...</p>
-        </div>
-      ) : totalExams === 0 ? (
-        <div className="bg-white p-12 text-center border-2 border-dashed border-slate-200 rounded-3xl shadow-sm">
-          <h2 className="text-xl font-bold text-slate-800 mb-2">No data to display yet</h2>
-          <p className="text-slate-500 text-sm mb-6">Take your first mock exam to unlock analytics and track your progress.</p>
-          <Link
-            href="/mock-exam/take"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-sm inline-block"
-          >
-            Start First Exam
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          {/* Quick Stats Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Average Score</p>
-              <p className="text-4xl font-black text-blue-600">{averageScore}%</p>
+    <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Banner Header */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
+          <div className="space-y-2 max-w-xl z-10">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl font-extrabold tracking-tight">
+                Welcome, {userRecord.name || userRecord.email}!
+              </h1>
+              {isPaid ? (
+                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30">
+                  PRO MEMBER
+                </span>
+              ) : (
+                <span className="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-full border border-amber-500/30">
+                  PAYMENT REQUIRED
+                </span>
+              )}
             </div>
-            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Highest Score</p>
-              <p className="text-4xl font-black text-emerald-600">{highestScore}%</p>
-            </div>
-            <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-1">Exams Taken</p>
-              <p className="text-4xl font-black text-slate-800">{totalExams}</p>
-            </div>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              {isPaid
+                ? "Track your Civil Service Exam preparation progress and readiness analytics."
+                : "Complete your one-time registration payment to access full reviewer features."}
+            </p>
           </div>
+        </div>
 
-          {/* Performance Chart */}
-          <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-slate-800">Performance Trend</h2>
-              <Link
-                href="/mock-exam/take"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition shadow-sm"
-              >
-                Take New Exam
-              </Link>
+        {/* PAYMONGO PAYMENT GATEWAY FOR UNPAID USERS */}
+        {!isPaid ? (
+          <div className="bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl space-y-8 max-w-3xl mx-auto border border-slate-200/80">
+            <div className="inline-flex p-5 bg-blue-50 text-blue-600 rounded-3xl border border-blue-100 shadow-inner">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
             </div>
-            
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis 
-                    dataKey="name" 
-                    tick={{ fill: '#94a3b8', fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis 
-                    domain={[0, 100]} 
-                    tick={{ fill: '#94a3b8', fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(value) => `${value}%`}
-                  />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    labelStyle={{ fontWeight: 'bold', color: '#1e293b' }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="score" 
-                    stroke="#2563eb" 
-                    strokeWidth={4}
-                    activeDot={{ r: 8, fill: '#2563eb', stroke: '#fff', strokeWidth: 2 }}
-                    dot={{ r: 4, fill: '#2563eb', strokeWidth: 0 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
 
-          {/* Recent History List */}
-          <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-            <h2 className="text-xl font-bold text-slate-800">Recent Sessions</h2>
             <div className="space-y-3">
-              {history.slice(0, 5).map((item) => (
-                <div key={item.id} className="flex justify-between items-center p-4 rounded-2xl border border-slate-100 bg-slate-50 hover:bg-slate-100 transition">
-                  <div>
-                    <p className="text-xs text-slate-400 font-medium">
-                      {new Date(item.createdAt).toLocaleDateString("en-US", { 
-                        weekday: 'short', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' 
-                      })}
-                    </p>
-                    <p className="text-sm font-bold text-slate-800 mt-0.5">Score: {item.score}%</p>
-                  </div>
-                  <div className="text-right text-xs space-x-3">
-                    <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md">✓ {item.correct} correct</span>
-                    <span className="text-rose-600 font-bold bg-rose-50 px-2 py-1 rounded-md">✕ {item.incorrect + item.skipped} missed</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {history.length > 5 && (
-              <p className="text-center text-sm font-semibold text-slate-400 mt-4">
-                Showing your 5 most recent exams.
+              <h2 className="text-3xl font-extrabold text-slate-900">Unlock Full Reviewer Access</h2>
+              <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed">
+                Payment is required via PayMongo before accessing full dashboard contents, analytics, mock exams, and PRO study guides.
               </p>
-            )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left max-w-lg mx-auto text-xs text-slate-700 bg-slate-50 p-5 rounded-2xl border border-slate-200/60">
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-500 font-bold">✓</span>
+                <span>500+ CSE Practice Questions</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-500 font-bold">✓</span>
+                <span>Instant Answer Explanations</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-500 font-bold">✓</span>
+                <span>Real-Time Analytics & Index</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-emerald-500 font-bold">✓</span>
+                <span>Lifetime Mobile & Desktop Access</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <UpgradeButton userId={userRecord.id} email={userRecord.email} />
+            </div>
           </div>
-        </div>
-      )}
+        ) : (
+          /* UNLOCKED DASHBOARD CONTENT FOR PRO MEMBERS */
+          <div className="space-y-8">
+            <ReviewCenter />
+            <AnalyticsOverview
+              totalExams={totalExams}
+              avgScore={avgScore}
+              highestScore={highestScore}
+              readinessIndex={readinessIndex}
+              results={formattedResults}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
