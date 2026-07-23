@@ -44,3 +44,13 @@ model Question {
   explanation String?  // Optional explanation for the answer
   createdAt   DateTime @default(now())
 }
+
+model ReadingMaterial {
+  id        String   @id @default(cuid())
+  title     String
+  category  String
+  content   String
+  isPremium Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

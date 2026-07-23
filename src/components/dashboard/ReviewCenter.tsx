@@ -17,7 +17,7 @@ export default function ReviewCenter() {
       title: "Study Notes & Lessons",
       desc: "Read cheat sheets, grammar rules, and formulas published by instructors.",
       icon: "📚",
-      href: "/modules",
+      href: "/reading-materials", // <-- Updated route path
       badge: "Reviewer Notes",
       color: "border-indigo-200 hover:border-indigo-400 bg-indigo-50/30",
       btnBg: "bg-indigo-600 hover:bg-indigo-700 text-white",

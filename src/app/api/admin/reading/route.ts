@@ -16,12 +16,12 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   try {
-    const questions = await prisma.question.findMany({
+    const modules = await (prisma as any).readingMaterial.findMany({
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json(questions, { status: 200 });
+    return NextResponse.json(modules, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch reading modules" }, { status: 500 });
   }
 }
 
@@ -31,25 +31,23 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { category, prompt, options, answerIndex, explanation } = body;
+    const { title, category, content, isPremium } = body;
 
-    if (!category || !prompt || !options || options.length < 2 || answerIndex === undefined) {
-      return NextResponse.json({ error: "Invalid question data provided" }, { status: 400 });
+    if (!title || !category || !content) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const newQuestion = await prisma.question.create({
+    const newModule = await (prisma as any).readingMaterial.create({
       data: {
+        title,
         category,
-        prompt,
-        options,
-        answerIndex: Number(answerIndex),
-        explanation: explanation || "",
+        content,
+        isPremium: Boolean(isPremium),
       },
     });
 
-    return NextResponse.json(newQuestion, { status: 201 });
+    return NextResponse.json(newModule, { status: 201 });
   } catch (error) {
-    console.error("Create Question Error:", error);
-    return NextResponse.json({ error: "Failed to create question" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create module" }, { status: 500 });
   }
 }

@@ -21,22 +21,21 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { category, prompt, options, answerIndex, explanation } = body;
+    const { title, category, content, isPremium } = body;
 
-    const updated = await prisma.question.update({
+    const updated = await (prisma as any).readingMaterial.update({
       where: { id },
       data: {
+        title,
         category,
-        prompt,
-        options,
-        answerIndex: Number(answerIndex),
-        explanation,
+        content,
+        isPremium: Boolean(isPremium),
       },
     });
 
     return NextResponse.json(updated, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update question" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update module" }, { status: 500 });
   }
 }
 
@@ -49,9 +48,9 @@ export async function DELETE(
 
   try {
     const { id } = await params;
-    await prisma.question.delete({ where: { id } });
+    await (prisma as any).readingMaterial.delete({ where: { id } });
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to delete question" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete module" }, { status: 500 });
   }
 }
