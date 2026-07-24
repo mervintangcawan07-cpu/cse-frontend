@@ -3,10 +3,21 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface AdminStats {
+  questions: number;
+  users: number;
+  paidUsers: number;
+  revenue: number;
+  notes: number;
+  handbooks: number;
+}
+
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<AdminStats>({
     questions: 0,
     users: 0,
+    paidUsers: 0,
+    revenue: 0,
     notes: 0,
     handbooks: 0,
   });
@@ -29,9 +40,14 @@ export default function AdminDashboardPage() {
           hRes.json(),
         ]);
 
+        const usersList = Array.isArray(uData.users) ? uData.users : [];
+        const paidCount = usersList.filter((u: any) => u.isPaid).length;
+
         setStats({
           questions: qData.questions?.length || 0,
-          users: uData.users?.length || 0,
+          users: usersList.length,
+          paidUsers: paidCount,
+          revenue: paidCount * 299, // ₱299 per PRO upgrade
           notes: nData.notes?.length || 0,
           handbooks: hData.handbooks?.length || 0,
         });
@@ -47,32 +63,32 @@ export default function AdminDashboardPage() {
   const adminModules = [
     {
       title: "Question Bank Manager",
-      description: "Create, edit, or remove exam questions and explanations.",
-      count: `${stats.questions} Active Questions`,
+      description: "Create, edit, or remove exam questions, options, and explanations.",
+      count: `${stats.questions} Questions`,
       href: "/admin/questions",
       badge: "Exam Engine",
       color: "border-blue-200 bg-blue-50/50 hover:border-blue-400",
     },
     {
       title: "User Accounts & Subscriptions",
-      description: "Manage registered reviewees and upgrade accounts to PRO status.",
-      count: `${stats.users} Total Users`,
+      description: "Manage registered reviewees, assign roles, and toggle PRO status.",
+      count: `${stats.users} Users (${stats.paidUsers} PRO)`,
       href: "/admin/users",
       badge: "Account Control",
       color: "border-purple-200 bg-purple-50/50 hover:border-purple-400",
     },
     {
       title: "Study Notes Manager",
-      description: "Publish and update reviewer rules, formulas, and pro-tips.",
-      count: `${stats.notes} Published Notes`,
+      description: "Publish and edit reviewer rules, formulas, and exam pro-tips.",
+      count: `${stats.notes} Study Notes`,
       href: "/admin/reviewer",
       badge: "Synced Reviewer",
       color: "border-amber-200 bg-amber-50/50 hover:border-amber-400",
     },
     {
       title: "Handbooks & Documents Manager",
-      description: "Upload local PDF documents for read-only browser viewing.",
-      count: `${stats.handbooks} PDF Documents`,
+      description: "Upload and manage PDF or Word documents for read-only viewing.",
+      count: `${stats.handbooks} Handbooks`,
       href: "/admin/reading-materials",
       badge: "Repository",
       color: "border-emerald-200 bg-emerald-50/50 hover:border-emerald-400",
@@ -80,7 +96,7 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto py-10 px-4 space-y-8">
+    <div className="max-w-7xl mx-auto py-10 px-4 space-y-8">
       {/* Top Banner */}
       <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -89,7 +105,7 @@ export default function AdminDashboardPage() {
           </span>
           <h1 className="text-3xl font-black mt-3">Admin Control Center</h1>
           <p className="text-slate-400 text-xs mt-1">
-            Manage practice questions, user payments, study notes, and PDF handbooks.
+            Real-time analytics, PRO subscription revenue, and platform content management.
           </p>
         </div>
         <Link
@@ -100,12 +116,46 @@ export default function AdminDashboardPage() {
         </Link>
       </div>
 
-      {/* Control Grid */}
+      {/* Analytics Counter Cards */}
       {loading ? (
-        <div className="py-20 text-center font-bold text-slate-400 animate-pulse">
+        <div className="py-12 text-center font-bold text-slate-400 animate-pulse">
           Loading administration metrics...
         </div>
       ) : (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-xs font-extrabold uppercase text-slate-400">Total Users</span>
+            <p className="text-3xl font-black text-slate-900">{stats.users}</p>
+            <p className="text-[11px] text-slate-500">Registered accounts</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-xs font-extrabold uppercase text-purple-600">PRO Subscribers</span>
+            <p className="text-3xl font-black text-purple-900">{stats.paidUsers}</p>
+            <p className="text-[11px] text-purple-600 font-semibold">Upgraded accounts</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-xs font-extrabold uppercase text-emerald-600">Total Revenue</span>
+            <p className="text-3xl font-black text-emerald-700">₱{stats.revenue.toLocaleString()}</p>
+            <p className="text-[11px] text-emerald-600 font-semibold">Estimated gross earnings</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-xs font-extrabold uppercase text-blue-600">Content Repository</span>
+            <p className="text-3xl font-black text-blue-900">
+              {stats.questions + stats.notes + stats.handbooks}
+            </p>
+            <p className="text-[11px] text-slate-500">
+              {stats.questions} Qs • {stats.notes} Notes • {stats.handbooks} Docs
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Module Control Grid */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-extrabold text-slate-900">Management Modules</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {adminModules.map((m) => (
             <Link
@@ -120,7 +170,7 @@ export default function AdminDashboardPage() {
                   </span>
                   <span className="text-xs font-bold text-slate-500">{m.count}</span>
                 </div>
-                <h2 className="text-xl font-extrabold text-slate-900">{m.title}</h2>
+                <h3 className="text-xl font-extrabold text-slate-900">{m.title}</h3>
                 <p className="text-slate-600 text-xs leading-relaxed">{m.description}</p>
               </div>
 
@@ -131,7 +181,7 @@ export default function AdminDashboardPage() {
             </Link>
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
