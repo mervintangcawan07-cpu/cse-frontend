@@ -18,6 +18,7 @@ async function verifyAdmin() {
   return user?.role === "ADMIN";
 }
 
+// GET: Fetch all study notes
 export async function GET() {
   try {
     const notes = await prisma.studyNote.findMany({ orderBy: { createdAt: "desc" } });
@@ -27,6 +28,7 @@ export async function GET() {
   }
 }
 
+// POST: Create a new study note
 export async function POST(req: Request) {
   try {
     if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -47,6 +49,32 @@ export async function POST(req: Request) {
   }
 }
 
+// PUT: Update an existing study note
+export async function PUT(req: Request) {
+  try {
+    if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+    const { id, category, title, summary, content, tips } = await req.json();
+    if (!id) return NextResponse.json({ error: "Note ID required" }, { status: 400 });
+
+    const note = await prisma.studyNote.update({
+      where: { id },
+      data: {
+        category,
+        title,
+        summary,
+        content: Array.isArray(content) ? content : [content],
+        tips,
+      },
+    });
+
+    return NextResponse.json({ note });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to update note" }, { status: 500 });
+  }
+}
+
+// DELETE: Remove a study note
 export async function DELETE(req: Request) {
   try {
     if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });

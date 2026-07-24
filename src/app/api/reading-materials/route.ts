@@ -18,6 +18,7 @@ async function verifyAdmin() {
   return user?.role === "ADMIN";
 }
 
+// GET: Fetch all handbooks metadata
 export async function GET() {
   try {
     const handbooks = await prisma.handbook.findMany({
@@ -38,6 +39,7 @@ export async function GET() {
   }
 }
 
+// POST: Upload a new handbook
 export async function POST(req: Request) {
   try {
     if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
@@ -64,6 +66,39 @@ export async function POST(req: Request) {
   }
 }
 
+// PUT: Update an existing handbook
+export async function PUT(req: Request) {
+  try {
+    if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+    const { id, title, category, description, pages, fileData, fileName } = await req.json();
+    if (!id) return NextResponse.json({ error: "Handbook ID required" }, { status: 400 });
+
+    const updateData: Record<string, string> = {
+      title,
+      category,
+      description,
+      pages: pages || "Official Ref",
+    };
+
+    // Replace file only if a new PDF was selected during edit
+    if (fileData) {
+      updateData.fileData = fileData;
+      if (fileName) updateData.fileName = fileName;
+    }
+
+    const handbook = await prisma.handbook.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return NextResponse.json({ handbook });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to update handbook" }, { status: 500 });
+  }
+}
+
+// DELETE: Remove a handbook
 export async function DELETE(req: Request) {
   try {
     if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
