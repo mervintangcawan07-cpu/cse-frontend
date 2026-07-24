@@ -1,28 +1,36 @@
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { verifyJWT } from "@/lib/auth";
 import UpgradeButton from "@/components/UpgradeButton";
+import Link from "next/link";
+
+export const dynamic = "force-dynamic";
 
 export default async function ExamPage() {
   const cookieStore = await cookies();
-  const userId = cookieStore.get("cse_session")?.value;
+  const token = cookieStore.get("cse_session")?.value;
 
-  if (!userId) {
+  if (!token) {
+    redirect("/login");
+  }
+
+  // 💡 FIX: Safely verify and decode the JWT token to get the real userId
+  const session = await verifyJWT(token);
+  if (!session?.userId) {
     redirect("/login");
   }
 
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: String(session.userId) },
   });
 
   if (!user) {
     redirect("/login");
   }
 
-  // Safely extract properties to prevent TypeScript compiler errors
-  const userRecord = user as any;
-  const isPaidUser = Boolean(userRecord?.isPaid);
-  const isAdmin = userRecord?.role === "ADMIN";
+  const isPaidUser = Boolean(user.isPaid);
+  const isAdmin = user.role === "ADMIN";
   const hasAccess = isPaidUser || isAdmin;
 
   const sampleQuestions = [
@@ -52,6 +60,7 @@ export default async function ExamPage() {
       </div>
 
       <div className="space-y-6">
+        {/* Sample Question Box */}
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
           <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
             Free Sample Question
@@ -71,34 +80,38 @@ export default async function ExamPage() {
           </div>
         </div>
 
+        {/* Access Section */}
         {hasAccess ? (
           <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl space-y-6">
             <div className="flex items-center justify-between border-b border-emerald-200 pb-3">
-              <h2 className="text-xl font-bold text-emerald-900">
-                Premium Questions Unlocked
-              </h2>
+              <div>
+                <h2 className="text-xl font-bold text-emerald-900">
+                  Full Mock Exam Ready
+                </h2>
+                <p className="text-xs text-emerald-700 mt-0.5">
+                  You have full access to all categories and interactive exam modes.
+                </p>
+              </div>
               <span className="px-3 py-1 bg-emerald-600 text-white text-xs font-semibold rounded-full">
                 {isAdmin ? "Admin Access" : "Premium Member"}
               </span>
             </div>
 
-            <div className="bg-white p-6 rounded-xl border border-emerald-100 shadow-sm">
-              <span className="text-xs font-semibold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-md">
-                Question 2 of 500
-              </span>
-              <h3 className="text-lg font-medium text-slate-800 mt-3">
-                {sampleQuestions[1].question}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                {sampleQuestions[1].options.map((option, idx) => (
-                  <button
-                    key={idx}
-                    className="text-left px-4 py-2.5 border rounded-lg hover:bg-slate-50 text-slate-700 font-medium transition"
-                  >
-                    {option}
-                  </button>
-                ))}
+            <div className="bg-white p-6 rounded-2xl border border-emerald-100 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-800">
+                  Interactive Practice Test
+                </h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Start a timed or untimed practice exam with instant scoring.
+                </p>
               </div>
+              <Link
+                href="/mock-exam/take"
+                className="w-full sm:w-auto px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl text-center transition shadow-sm"
+              >
+                Launch Mock Exam &rarr;
+              </Link>
             </div>
           </div>
         ) : (
