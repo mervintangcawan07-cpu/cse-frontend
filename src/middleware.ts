@@ -3,24 +3,34 @@ import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const token = request.cookies.get("cse_session")?.value;
   const { pathname } = request.nextUrl;
+  const token = request.cookies.get("cse_session")?.value;
 
+  // Verify token using Edge-compatible Jose helper
   const session = token ? await verifyJWT(token) : null;
 
-  // Protect Admin Routes
+  // 1. Protect Admin Routes
   if (pathname.startsWith("/admin")) {
     if (!session || session.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  // Protect Examinee Routes
-  if (pathname.startsWith("/dashboard") || pathname.startsWith("/exam") || pathname.startsWith("/modules")) {
+  // 2. Protect Examinee / Student Routes
+  const isStudentRoute =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/exam") ||
+    pathname.startsWith("/mock-exam") ||
+    pathname.startsWith("/reading-materials") ||
+    pathname.startsWith("/reviewer") ||
+    pathname.startsWith("/modules");
+
+  if (isStudentRoute) {
     if (!session) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
-    // Prevent Admins from accessing student views unnecessarily
+
+    // Redirect Admins away from student dashboard if needed
     if (session.role === "ADMIN" && pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/admin/questions", request.url));
     }
@@ -30,5 +40,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/exam/:path*", "/modules/:path*", "/admin/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/exam/:path*",
+    "/mock-exam/:path*",
+    "/reading-materials/:path*",
+    "/reviewer/:path*",
+    "/modules/:path*",
+    "/admin/:path*",
+  ],
 };
