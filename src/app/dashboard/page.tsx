@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { verifyJWT } from "@/lib/auth";
 import ReviewCenter from "@/components/dashboard/ReviewCenter";
 import AnalyticsOverview from "@/components/dashboard/AnalyticsOverview";
@@ -55,6 +56,7 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
     email: string;
     name?: string | null;
     isPaid: boolean;
+    role?: string;
     results: Array<{
       id: string;
       score: number;
@@ -85,9 +87,9 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
     <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Banner Header */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
+        <div className="relative overflow-hidden bg-linear-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
           <div className="space-y-2 max-w-xl z-10">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-3xl font-extrabold tracking-tight">
                 Welcome, {userRecord.name || userRecord.email}!
               </h1>
@@ -99,6 +101,17 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
                 <span className="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-full border border-amber-500/30">
                   PAYMENT REQUIRED
                 </span>
+              )}
+
+              {/* 💡 ADMIN SHORTCUT BUTTON */}
+              {userRecord.role === "ADMIN" && (
+                <Link
+                  href="/admin/questions"
+                  className="px-3.5 py-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-full transition flex items-center gap-1.5 shadow-sm border border-rose-400/30"
+                >
+                  <span>⚙️</span>
+                  <span>Admin Panel</span>
+                </Link>
               )}
             </div>
             <p className="text-slate-300 text-sm leading-relaxed">
