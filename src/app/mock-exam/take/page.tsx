@@ -14,22 +14,22 @@ interface Question {
 
 export default function TakeExamPage() {
   const router = useRouter();
-  
+
   // Data States
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  
+
   // App State
   const [loading, setLoading] = useState(true);
   const [isSetupPhase, setIsSetupPhase] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  
+
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [timerMinutes, setTimerMinutes] = useState(0); // 0 means untimed
   const [timeLeft, setTimeLeft] = useState(0); // In seconds
-  
+
   // Exam States
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
@@ -42,7 +42,9 @@ export default function TakeExamPage() {
         if (res.ok && data.questions) {
           setAllQuestions(data.questions);
           // Automatically extract unique categories from the database questions
-          const uniqueCategories = Array.from(new Set(data.questions.map((q: Question) => q.category))) as string[];
+          const uniqueCategories = Array.from(
+            new Set(data.questions.map((q: Question) => q.category))
+          ) as string[];
           setCategories(uniqueCategories);
         }
       } catch (err) {
@@ -106,11 +108,12 @@ export default function TakeExamPage() {
       score: finalScore,
       correct: correctCount,
       incorrect: incorrectCount,
-      skipped: skippedCount
+      skipped: skippedCount,
     };
     localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
 
-    router.push("/mock-exam/results");
+    // 💡 Fixed: Updated route from /mock-exam/results to /mock-exam/result (singular)
+    router.push("/mock-exam/result");
   }, [examQuestions, selectedAnswers, submitting, router]);
 
   // Timer Logic
@@ -128,11 +131,14 @@ export default function TakeExamPage() {
 
   function handleStartExam() {
     // Filter questions based on selected category
-    const filtered = selectedCategory === "All" 
-      ? allQuestions 
-      : allQuestions.filter(q => q.category === selectedCategory);
-    
+    const filtered =
+      selectedCategory === "All"
+        ? allQuestions
+        : allQuestions.filter((q) => q.category === selectedCategory);
+
     setExamQuestions(filtered);
+    setCurrentIndex(0);
+    setSelectedAnswers({});
     setTimeLeft(timerMinutes * 60);
     setIsSetupPhase(false);
   }
@@ -146,7 +152,9 @@ export default function TakeExamPage() {
 
   // Format timer for display (MM:SS)
   const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
@@ -186,14 +194,16 @@ export default function TakeExamPage() {
               <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
                 Select Category
               </label>
-              <select 
+              <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full p-4 border border-slate-200 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white transition"
               >
                 <option value="All">All Categories (Comprehensive Exam)</option>
                 {categories.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
                 ))}
               </select>
             </div>
@@ -208,7 +218,7 @@ export default function TakeExamPage() {
                   { label: "Untimed", value: 0 },
                   { label: "5 Minutes", value: 5 },
                   { label: "15 Minutes", value: 15 },
-                  { label: "30 Minutes", value: 30 }
+                  { label: "30 Minutes", value: 30 },
                 ].map((timer) => (
                   <button
                     key={timer.value}
@@ -265,12 +275,16 @@ export default function TakeExamPage() {
             {currentIndex + 1} / {examQuestions.length}
           </span>
         </div>
-        
+
         {/* Timer Display */}
         {timerMinutes > 0 && (
-          <div className={`flex items-center gap-2 px-3 py-1 rounded-full border font-bold text-sm ${
-            timeLeft <= 60 ? "border-rose-200 bg-rose-50 text-rose-600 animate-pulse" : "border-slate-200 bg-slate-50 text-slate-600"
-          }`}>
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full border font-bold text-sm ${
+              timeLeft <= 60
+                ? "border-rose-200 bg-rose-50 text-rose-600 animate-pulse"
+                : "border-slate-200 bg-slate-50 text-slate-600"
+            }`}
+          >
             <span>⏱</span>
             <span>{formatTime(timeLeft)}</span>
           </div>
@@ -279,9 +293,7 @@ export default function TakeExamPage() {
 
       {/* Question Card */}
       <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <h2 className="text-lg font-bold text-slate-800 leading-relaxed">
-          {currentQ.prompt}
-        </h2>
+        <h2 className="text-lg font-bold text-slate-800 leading-relaxed">{currentQ.prompt}</h2>
 
         <div className="space-y-3">
           {currentQ.options.map((opt, idx) => {
