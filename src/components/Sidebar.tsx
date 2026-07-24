@@ -6,7 +6,6 @@ const navItems = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Reviewer Module", href: "/reviewer" },
   { name: "Reading Materials", href: "/reading-materials" },
-  { name: "Mock Exams", href: "/exam" }, // 👈 Fixed: Pointed to /exam (or /mock-exam/take)
 ];
 
 export default function Sidebar() {
@@ -23,7 +22,6 @@ export default function Sidebar() {
         
         <nav className="space-y-1">
           {navItems.map((item) => {
-            // Checks exact match OR sub-route matches (e.g. /mock-exam/take or /exam/...)
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             
             return (
