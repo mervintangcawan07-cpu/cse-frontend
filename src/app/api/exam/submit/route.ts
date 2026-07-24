@@ -1,28 +1,34 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const { userId, score, totalItems, correct, incorrect, skipped } = body;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
 
-    // Validate required fields
-    if (!userId || score === undefined) {
-      return NextResponse.json(
-        { error: "Missing required fields (userId, score)" },
-        { status: 400 }
-      );
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Save the exam result into Neon PostgreSQL via Prisma
+    const session = await verifyJWT(token);
+    if (!session?.userId) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const { score, totalItems, correct, incorrect, skipped } = body;
+
+    // Save exam result linked to logged-in user ID retrieved from JWT session
     const newResult = await prisma.examResult.create({
       data: {
-        userId,
-        score,
-        totalItems,
-        correct,
-        incorrect,
-        skipped,
+        userId: String(session.userId),
+        score: Number(score),
+        totalItems: Number(totalItems),
+        correct: Number(correct),
+        incorrect: Number(incorrect),
+        skipped: Number(skipped),
       },
     });
 
@@ -31,7 +37,7 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error saving exam result:", error);
+    console.error("[EXAM_SUBMIT_ERROR]", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

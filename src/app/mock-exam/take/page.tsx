@@ -80,26 +80,21 @@ export default function TakeExamPage() {
     const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
     const finalScore = Math.round(scorePercentage);
 
-    const storedUser = localStorage.getItem("cse_user");
-    const user = storedUser ? JSON.parse(storedUser) : null;
-
-    if (user?.id) {
-      try {
-        await fetch("/api/exam/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.id,
-            score: finalScore,
-            totalItems,
-            correct: correctCount,
-            incorrect: incorrectCount,
-            skipped: skippedCount,
-          }),
-        });
-      } catch (err) {
-        console.error("Error submitting result:", err);
-      }
+    // 💡 Always send result to API (Backend extracts userId from cse_session cookie)
+    try {
+      await fetch("/api/exam/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          score: finalScore,
+          totalItems,
+          correct: correctCount,
+          incorrect: incorrectCount,
+          skipped: skippedCount,
+        }),
+      });
+    } catch (err) {
+      console.error("Error submitting result:", err);
     }
 
     const reviewData = {
@@ -112,7 +107,6 @@ export default function TakeExamPage() {
     };
     localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
 
-    // 💡 Updated route to /mock-exam/results (plural with "s") to match src/app/mock-exam/results/page.tsx
     router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router]);
 
