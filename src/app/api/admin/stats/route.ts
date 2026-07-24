@@ -21,7 +21,6 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Fetch counts across database models
     const [totalUsers, paidUsers, totalQuestions, totalNotes, totalHandbooks] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { isPaid: true } }),
@@ -30,8 +29,7 @@ export async function GET() {
       prisma.handbook.count(),
     ]);
 
-    // Calculate estimated total revenue based on PRO access price (₱299)
-    const totalRevenue = paidUsers * 299;
+    const totalRevenue = paidUsers * 299; // ₱299 PRO upgrade price
 
     return NextResponse.json({
       totalUsers,

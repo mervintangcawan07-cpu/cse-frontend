@@ -15,18 +15,30 @@ export async function GET(req: Request) {
       return new NextResponse("File not found", { status: 404 });
     }
 
-    const base64Data = handbook.fileData.replace(/^data:application\/pdf;base64,/, "");
+    let contentType = "application/pdf";
+    const lowerName = handbook.fileName.toLowerCase();
+
+    if (lowerName.endsWith(".doc")) {
+      contentType = "application/msword";
+    } else if (lowerName.endsWith(".docx")) {
+      contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    } else if (lowerName.endsWith(".txt")) {
+      contentType = "text/plain";
+    }
+
+    const base64Data = handbook.fileData.replace(/^data:[^;]+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");
 
     return new NextResponse(buffer, {
       status: 200,
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="${handbook.fileName || "document.pdf"}"`,
+        "Content-Type": contentType,
+        "Content-Disposition": `inline; filename="${handbook.fileName || "document"}"`,
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
   } catch (error) {
+    console.error("[FILE_STREAM_ERROR]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

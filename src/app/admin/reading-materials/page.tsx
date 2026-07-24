@@ -16,7 +16,7 @@ export default function AdminReadingMaterialsPage() {
   const [handbooks, setHandbooks] = useState<Handbook[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Edit/Add Mode State
+  // Edit State
   const [editingHandbookId, setEditingHandbookId] = useState<string | null>(null);
 
   // Form State
@@ -61,7 +61,7 @@ export default function AdminReadingMaterialsPage() {
     setDescription(h.description);
     setPages(h.pages);
     setFileName(h.fileName);
-    setFileData(null); // Keep current file unless replaced
+    setFileData(null);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,11 +85,11 @@ export default function AdminReadingMaterialsPage() {
     const isEdit = !!editingHandbookId;
 
     if (!title || !description) {
-      return alert("Please fill all required title and description fields.");
+      return alert("Please fill in title and description.");
     }
 
     if (!isEdit && !fileData) {
-      return alert("Please select a PDF file to upload.");
+      return alert("Please select a document file (.pdf, .doc, .docx).");
     }
 
     setSubmitting(true);
@@ -108,7 +108,7 @@ export default function AdminReadingMaterialsPage() {
       if (res.ok) {
         resetForm();
         loadHandbooks();
-        alert(isEdit ? "Handbook updated!" : "Handbook uploaded!");
+        alert(isEdit ? "Handbook updated successfully!" : "Handbook uploaded successfully!");
       } else {
         alert("Operation failed.");
       }
@@ -134,11 +134,10 @@ export default function AdminReadingMaterialsPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-8">
-      {/* Header */}
       <div className="flex justify-between items-center bg-slate-900 text-white p-6 rounded-3xl">
         <div>
-          <h1 className="text-2xl font-black">Native Handbooks & Documents Manager</h1>
-          <p className="text-slate-400 text-xs mt-1">Upload or edit PDF documents for read-only student access.</p>
+          <h1 className="text-2xl font-black">Admin Handbooks & Documents Manager</h1>
+          <p className="text-slate-400 text-xs mt-1">Upload PDF or Word documents for read-only student viewing.</p>
         </div>
         <div className="flex gap-2">
           {editingHandbookId && (
@@ -146,42 +145,41 @@ export default function AdminReadingMaterialsPage() {
               onClick={resetForm}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition"
             >
-              + Upload New Handbook
+              + Upload New Document
             </button>
           )}
-          <Link href="/dashboard" className="px-4 py-2 bg-slate-800 text-xs font-bold rounded-xl border border-slate-700">
-            Dashboard
+          <Link href="/admin/dashboard" className="px-4 py-2 bg-slate-800 text-xs font-bold rounded-xl border border-slate-700">
+            Control Center
           </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Form Panel */}
         <form onSubmit={handleSubmit} className="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 space-y-4 shadow-sm">
           <div className="flex justify-between items-center">
             <h2 className="font-extrabold text-slate-800 text-base">
-              {editingHandbookId ? "✏️ Edit Handbook" : "+ Upload New Document"}
+              {editingHandbookId ? "✏️ Edit Handbook Metadata" : "+ Upload New Document"}
             </h2>
             {editingHandbookId && (
               <button type="button" onClick={resetForm} className="text-xs font-bold text-slate-400 hover:text-slate-600">
-                Cancel Edit
+                Cancel
               </button>
             )}
           </div>
 
           <div>
             <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
-              {editingHandbookId ? "Replace PDF File (Optional)" : "Select PDF File"}
+              {editingHandbookId ? "Replace File (Optional: .pdf, .doc, .docx)" : "Select File (.pdf, .doc, .docx)"}
             </label>
             <input
               type="file"
-              accept=".pdf"
+              accept=".pdf,.doc,.docx,.txt"
               onChange={handleFileChange}
               className="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
             />
             {fileName && (
               <p className="text-[11px] font-semibold text-emerald-600 mt-1">
-                {fileData ? "✓ New File Attached: " : "📄 Current File: "} {fileName}
+                {fileData ? "✓ Attached: " : "📄 Attached: "} {fileName}
               </p>
             )}
           </div>
@@ -190,7 +188,7 @@ export default function AdminReadingMaterialsPage() {
             <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Title</label>
             <input
               type="text"
-              placeholder="e.g. 1987 Constitution Selected Articles"
+              placeholder="e.g. R.A. 6713 Ethical Standards"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
@@ -215,7 +213,7 @@ export default function AdminReadingMaterialsPage() {
             <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Description</label>
             <textarea
               rows={3}
-              placeholder="Summary of handbook contents..."
+              placeholder="Summary of document contents..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
@@ -240,11 +238,10 @@ export default function AdminReadingMaterialsPage() {
               editingHandbookId ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"
             }`}
           >
-            {submitting ? "Saving..." : editingHandbookId ? "Update Handbook" : "Upload & Save to DB"}
+            {submitting ? "Saving..." : editingHandbookId ? "Update Handbook" : "Upload Document"}
           </button>
         </form>
 
-        {/* Existing Handbooks List */}
         <div className="lg:col-span-7 space-y-4 max-h-[700px] overflow-y-auto">
           <h2 className="font-extrabold text-slate-800 text-base">Uploaded Handbooks ({handbooks.length})</h2>
 
