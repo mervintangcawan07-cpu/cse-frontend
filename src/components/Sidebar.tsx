@@ -6,7 +6,7 @@ const navItems = [
   { name: "Dashboard", href: "/dashboard" },
   { name: "Reviewer Module", href: "/reviewer" },
   { name: "Reading Materials", href: "/reading-materials" },
-  { name: "Mock Exams", href: "/mock-exam" },
+  { name: "Mock Exams", href: "/exam" }, // 👈 Fixed: Pointed to /exam (or /mock-exam/take)
 ];
 
 export default function Sidebar() {
@@ -23,13 +23,15 @@ export default function Sidebar() {
         
         <nav className="space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            // Checks exact match OR sub-route matches (e.g. /mock-exam/take or /exam/...)
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition ${
-                  isActive ? "bg-blue-600 text-white font-sembold" : "hover:bg-slate-800 hover:text-white text-slate-400"
+                  isActive ? "bg-blue-600 text-white font-semibold" : "hover:bg-slate-800 hover:text-white text-slate-400"
                 }`}
               >
                 <span>{item.name}</span>
