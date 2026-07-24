@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+// 💡 Prevents Vercel static rendering bugs
+export const dynamic = "force-dynamic";
+
 interface Question {
   id: string;
   category: string;
@@ -25,25 +28,36 @@ interface ReviewData {
 export default function ExamResultPage() {
   const router = useRouter();
   const [reviewData, setReviewData] = useState<ReviewData | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const saved = localStorage.getItem("cse_latest_review");
     if (saved) {
       try {
         setReviewData(JSON.parse(saved));
       } catch (err) {
-        console.error("Failed to parse review data", err);
+        console.error("Failed to parse review data:", err);
       }
     }
   }, []);
 
-  if (!reviewData) {
+  // 💡 Prevents SSR hydration mismatch on Vercel deployment
+  if (!mounted) {
+    return (
+      <div className="max-w-2xl mx-auto py-20 text-center">
+        <p className="text-slate-500 font-medium animate-pulse">Loading exam results...</p>
+      </div>
+    );
+  }
+
+  if (!reviewData || !reviewData.questions) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
         <p className="text-slate-600 font-semibold">No recent test results found.</p>
         <Link
           href="/dashboard"
-          className="inline-block px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl text-sm"
+          className="inline-block px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition"
         >
           Return to Dashboard
         </Link>
@@ -51,7 +65,15 @@ export default function ExamResultPage() {
     );
   }
 
-  const { questions, selectedAnswers, score, correct, incorrect, skipped } = reviewData;
+  const {
+    questions = [],
+    selectedAnswers = {},
+    score = 0,
+    correct = 0,
+    incorrect = 0,
+    skipped = 0,
+  } = reviewData;
+
   const isPassed = score >= 80;
 
   return (
@@ -92,7 +114,7 @@ export default function ExamResultPage() {
         <div className="pt-2 flex justify-center gap-3">
           <Link
             href="/mock-exam/take"
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition"
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm"
           >
             Retake Exam
           </Link>
@@ -162,8 +184,12 @@ export default function ExamResultPage() {
                       className={`p-3 rounded-xl border text-sm flex items-center justify-between ${optionStyle}`}
                     >
                       <span>{opt}</span>
-                      {isRightAnswer && <span className="text-xs text-emerald-600 font-bold">✓ Correct Answer</span>}
-                      {isUserSelection && !isRightAnswer && <span className="text-xs text-rose-600 font-bold">Your Answer</span>}
+                      {isRightAnswer && (
+                        <span className="text-xs text-emerald-600 font-bold">✓ Correct Answer</span>
+                      )}
+                      {isUserSelection && !isRightAnswer && (
+                        <span className="text-xs text-rose-600 font-bold">Your Answer</span>
+                      )}
                     </div>
                   );
                 })}
