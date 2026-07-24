@@ -112,8 +112,8 @@ export default function TakeExamPage() {
     };
     localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
 
-    // 💡 Fixed: Updated route from /mock-exam/results to /mock-exam/result (singular)
-    router.push("/mock-exam/result");
+    // 💡 Updated route to /mock-exam/results (plural with "s") to match src/app/mock-exam/results/page.tsx
+    router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router]);
 
   // Timer Logic
