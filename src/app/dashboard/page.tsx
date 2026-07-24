@@ -6,7 +6,16 @@ import ReviewCenter from "@/components/dashboard/ReviewCenter";
 import AnalyticsOverview from "@/components/dashboard/AnalyticsOverview";
 import UpgradeButton from "@/components/UpgradeButton";
 
-export default async function DashboardPage() {
+// 💡 Force dynamic rendering so Vercel never serves stale cached HTML
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+interface DashboardProps {
+  searchParams: Promise<{ payment?: string }>;
+}
+
+export default async function DashboardPage({ searchParams }: DashboardProps) {
+  const params = await searchParams;
   const cookieStore = await cookies();
   const token = cookieStore.get("cse_session")?.value;
 
@@ -15,7 +24,8 @@ export default async function DashboardPage() {
   const session = await verifyJWT(token);
   if (!session?.userId) redirect("/login");
 
-  const user = await prisma.user.findUnique({
+  // 1. Fetch live user data from Neon DB
+  let user = await prisma.user.findUnique({
     where: { id: session.userId },
     include: {
       results: { orderBy: { createdAt: "desc" } },
@@ -23,6 +33,22 @@ export default async function DashboardPage() {
   });
 
   if (!user) redirect("/login");
+
+  // 2. FAIL-SAFE SYNC: If user returns from PayMongo with ?payment=success but webhook is delayed
+  if (params.payment === "success" && !user.isPaid) {
+    try {
+      user = await prisma.user.update({
+        where: { id: session.userId },
+        data: { isPaid: true },
+        include: {
+          results: { orderBy: { createdAt: "desc" } },
+        },
+      });
+      console.log(`[Dashboard Auto-Sync] User ${user.id} upgraded to PRO via payment callback.`);
+    } catch (err) {
+      console.error("[Dashboard Auto-Sync Error]:", err);
+    }
+  }
 
   const userRecord = user as {
     id: string;
