@@ -1,179 +1,184 @@
-import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { verifyJWT } from "@/lib/auth";
-import ReviewCenter from "@/components/dashboard/ReviewCenter";
-import AnalyticsOverview from "@/components/dashboard/AnalyticsOverview";
-import UpgradeButton from "@/components/UpgradeButton";
 
-// 💡 Force dynamic rendering so Vercel never serves stale cached HTML
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-interface DashboardProps {
-  searchParams: Promise<{ payment?: string }>;
+interface UserProfile {
+  name: string;
+  email: string;
+  role: string;
+  isPaid: boolean;
 }
 
-export default async function DashboardPage({ searchParams }: DashboardProps) {
-  const params = await searchParams;
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
+export default function StudentDashboardPage() {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
+  const [loading, setLoading] = useState(true);
 
-  if (!token) redirect("/login");
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        const [userRes, notesRes, hbRes] = await Promise.all([
+          fetch("/api/auth/me"),
+          fetch("/api/reviewer"),
+          fetch("/api/reading-materials"),
+        ]);
 
-  const session = await verifyJWT(token);
-  if (!session?.userId) redirect("/login");
+        const [userData, notesData, hbData] = await Promise.all([
+          userRes.json(),
+          notesRes.json(),
+          hbRes.json(),
+        ]);
 
-  // 1. Fetch live user data from Neon DB
-  let user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    include: {
-      results: { orderBy: { createdAt: "desc" } },
-    },
-  });
+        if (userRes.ok && userData.user) {
+          setUser(userData.user);
+        }
 
-  if (!user) redirect("/login");
-
-  // 2. FAIL-SAFE SYNC: If user returns from PayMongo with ?payment=success but webhook is delayed
-  if (params.payment === "success" && !user.isPaid) {
-    try {
-      user = await prisma.user.update({
-        where: { id: session.userId },
-        data: { isPaid: true },
-        include: {
-          results: { orderBy: { createdAt: "desc" } },
-        },
-      });
-      console.log(`[Dashboard Auto-Sync] User ${user.id} upgraded to PRO via payment callback.`);
-    } catch (err) {
-      console.error("[Dashboard Auto-Sync Error]:", err);
+        setStats({
+          notesCount: notesData.notes?.length || 0,
+          handbooksCount: hbData.handbooks?.length || 0,
+        });
+      } catch (err) {
+        console.error("Failed to load dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
     }
+    loadDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        Loading student dashboard...
+      </div>
+    );
   }
 
-  const userRecord = user as {
-    id: string;
-    email: string;
-    name?: string | null;
-    isPaid: boolean;
-    role?: string;
-    results: Array<{
-      id: string;
-      score: number;
-      correct: number;
-      incorrect: number;
-      totalItems: number;
-      createdAt: Date;
-    }>;
-  };
-
-  const results = userRecord.results || [];
-  const isPaid = Boolean(userRecord.isPaid);
-
-  // Calculate analytics metrics server-side
-  const totalExams = results.length;
-  const avgScore =
-    totalExams > 0 ? Math.round(results.reduce((acc, r) => acc + r.score, 0) / totalExams) : 0;
-  const highestScore = totalExams > 0 ? Math.max(...results.map((r) => r.score)) : 0;
-  const passedCount = results.filter((r) => r.score >= 80).length;
-  const readinessIndex = totalExams > 0 ? Math.round((passedCount / totalExams) * 100) : 0;
-
-  const formattedResults = results.map((r) => ({
-    ...r,
-    createdAt: r.createdAt.toISOString(),
-  }));
+  const isAdmin = user?.role === "ADMIN";
 
   return (
-    <div className="min-h-screen bg-slate-50/50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Banner Header */}
-        <div className="relative overflow-hidden bg-linear-to-r from-slate-900 via-slate-800 to-indigo-950 p-8 rounded-3xl text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-slate-800">
-          <div className="space-y-2 max-w-xl z-10">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl font-extrabold tracking-tight">
-                Welcome, {userRecord.name || userRecord.email}!
-              </h1>
-              {isPaid ? (
-                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/30">
-                  PRO MEMBER
-                </span>
-              ) : (
-                <span className="px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-bold rounded-full border border-amber-500/30">
-                  PAYMENT REQUIRED
-                </span>
-              )}
-
-              {/* 💡 ADMIN SHORTCUT BUTTON */}
-              {userRecord.role === "ADMIN" && (
-                <Link
-                  href="/admin/questions"
-                  className="px-3.5 py-1 bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold rounded-full transition flex items-center gap-1.5 shadow-sm border border-rose-400/30"
-                >
-                  <span>⚙️</span>
-                  <span>Admin Panel</span>
-                </Link>
-              )}
-            </div>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              {isPaid
-                ? "Track your Civil Service Exam preparation progress and readiness analytics."
-                : "Complete your one-time registration payment to access full reviewer features."}
-            </p>
+    <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
+      {/* Admin Quick Switch Banner (Visible ONLY to Admins) */}
+      {isAdmin && (
+        <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-900 text-xs font-bold">
+          <div className="flex items-center gap-2">
+            <span>⚡ You are logged in as an Administrator.</span>
           </div>
+          <Link
+            href="/admin/dashboard"
+            className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl transition"
+          >
+            Go to Admin Control Center &rarr;
+          </Link>
+        </div>
+      )}
+
+      {/* Welcome Banner */}
+      <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+              {user?.isPaid ? "PRO Student Account" : "Free Reviewee Account"}
+            </span>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-extrabold mt-2">
+            Welcome back, {user?.name || "Reviewee"}!
+          </h1>
+          <p className="text-slate-400 text-xs md:text-sm mt-1">
+            Track your Civil Service Exam preparation and practice modules below.
+          </p>
         </div>
 
-        {/* PAYMONGO PAYMENT GATEWAY FOR UNPAID USERS */}
-        {!isPaid ? (
-          <div className="bg-white rounded-3xl p-8 md:p-12 text-center shadow-xl space-y-8 max-w-3xl mx-auto border border-slate-200/80">
-            <div className="inline-flex p-5 bg-blue-50 text-blue-600 rounded-3xl border border-blue-100 shadow-inner">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
+        <Link
+          href="/mock-exam/take"
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition"
+        >
+          Start Full Mock Exam 📝
+        </Link>
+      </div>
 
-            <div className="space-y-3">
-              <h2 className="text-3xl font-extrabold text-slate-900">Unlock Full Reviewer Access</h2>
-              <p className="text-slate-500 text-sm max-w-lg mx-auto leading-relaxed">
-                Payment is required via PayMongo before accessing full dashboard contents, analytics, mock exams, and PRO study guides.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left max-w-lg mx-auto text-xs text-slate-700 bg-slate-50 p-5 rounded-2xl border border-slate-200/60">
-              <div className="flex items-center gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>500+ CSE Practice Questions</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>Instant Answer Explanations</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>Real-Time Analytics & Index</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-emerald-500 font-bold">✓</span>
-                <span>Lifetime Mobile & Desktop Access</span>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <UpgradeButton userId={userRecord.id} email={userRecord.email} />
-            </div>
+      {/* Main Student Modules Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Full Mock Exam */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
+              Primary Practice
+            </span>
+            <span className="text-xs font-bold text-slate-400">Timed Mode</span>
           </div>
-        ) : (
-          /* UNLOCKED DASHBOARD CONTENT FOR PRO MEMBERS */
-          <div className="space-y-8">
-            <ReviewCenter />
-            <AnalyticsOverview
-              totalExams={totalExams}
-              avgScore={avgScore}
-              highestScore={highestScore}
-              readinessIndex={readinessIndex}
-              results={formattedResults}
-            />
+          <h2 className="text-xl font-extrabold text-slate-900">Full Practice Mock Exam</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Take simulated civil service exams with comprehensive questions across all core subjects.
+          </p>
+          <Link
+            href="/mock-exam/take"
+            className="inline-block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center rounded-xl transition"
+          >
+            Start Exam
+          </Link>
+        </div>
+
+        {/* Speed Drills */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
+              5-Min Challenge
+            </span>
+            <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
           </div>
-        )}
+          <h2 className="text-xl font-extrabold text-slate-900">Category Speed Drills</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Focus on specific subjects like Numerical Reasoning or Verbal Ability under 5 minutes.
+          </p>
+          <Link
+            href="/drills"
+            className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs text-center rounded-xl transition"
+          >
+            Launch Drills
+          </Link>
+        </div>
+
+        {/* Study Notes (Auto-Synced) */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
+              Live Reviewer
+            </span>
+            <span className="text-xs font-bold text-slate-600">{stats.notesCount} Active Notes</span>
+          </div>
+          <h2 className="text-xl font-extrabold text-slate-900">Study Notes & Cheat Sheets</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Review core principles, subject-verb agreement rules, and formulas published by admins.
+          </p>
+          <Link
+            href="/reviewer"
+            className="inline-block w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs text-center rounded-xl transition"
+          >
+            Read Study Notes
+          </Link>
+        </div>
+
+        {/* Read-Only Handbooks (Auto-Synced) */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
+              PDF Repository
+            </span>
+            <span className="text-xs font-bold text-slate-600">{stats.handbooksCount} Handbooks</span>
+          </div>
+          <h2 className="text-xl font-extrabold text-slate-900">Official Reading Materials</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Read official constitutional references, R.A. 6713 ethical standards, and PDF handbooks.
+          </p>
+          <Link
+            href="/reading-materials"
+            className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs text-center rounded-xl transition"
+          >
+            Open Reader
+          </Link>
+        </div>
       </div>
     </div>
   );
