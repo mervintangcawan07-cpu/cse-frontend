@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// 💡 Prevents Vercel static rendering bugs
-export const dynamic = "force-dynamic";
-
 interface Question {
   id: string;
   category: string;
@@ -42,7 +39,7 @@ export default function ExamResultPage() {
     }
   }, []);
 
-  // 💡 Prevents SSR hydration mismatch on Vercel deployment
+  // Prevents SSR hydration mismatch on Vercel deployment
   if (!mounted) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center">
