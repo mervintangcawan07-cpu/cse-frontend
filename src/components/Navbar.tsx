@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  
-  const [user, setUser] = useState<any>(null);
+
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
   const [mounted, setMounted] = useState(false);
 
   // Load user from localStorage and handle hydration
@@ -16,27 +16,43 @@ export default function Navbar() {
     setMounted(true);
     const storedUser = localStorage.getItem("cse_user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Failed to parse user from localStorage", err);
+        setUser(null);
+      }
     } else {
       setUser(null);
     }
-  }, [pathname]); // Re-run whenever the route changes
+  }, [pathname]);
 
-  // Hide the navbar on the login/settings page or if not mounted
-  if (!mounted || pathname === "/settings" || pathname === "/") return null;
-  
-  // If mounted but no user, also hide (middleware will redirect them anyway)
+  // Hide the navbar on auth pages, landing page, settings, or before mounting
+  const isAuthPage =
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/settings";
+
+  if (!mounted || isAuthPage) return null;
+
+  // If mounted but no user, hide navbar
   if (!user) return null;
 
   async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    localStorage.removeItem("cse_user");
-    router.push("/settings");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    } finally {
+      localStorage.removeItem("cse_user");
+      router.push("/login"); // 👈 Updated: Redirect straight to login page
+    }
   }
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard" },
-    { name: "Take Exam", href: "/mock-exam/take" },
+    { name: "Take Exam", href: "/mock-exam/take" }, // or "/exam"
     { name: "Question Bank", href: "/admin/questions" },
   ];
 
@@ -52,7 +68,7 @@ export default function Navbar() {
           
           <div className="hidden md:flex gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname.startsWith(link.href);
+              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
                   key={link.name}
