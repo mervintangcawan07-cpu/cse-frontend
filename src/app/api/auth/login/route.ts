@@ -11,8 +11,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
+    // 💡 Sanitize email input (removes accidental spaces & lowercase conversion)
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    const user = await prisma.user.findUnique({
+      where: { email: cleanEmail },
+    });
+
+    if (!user || !user.password) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
@@ -21,23 +27,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
-    const userRecord = user as { id: string; email: string; role: "USER" | "ADMIN"; isPaid: boolean };
-
     const token = await signJWT({
-      userId: userRecord.id,
-      email: userRecord.email,
-      role: userRecord.role,
-      isPaid: userRecord.isPaid,
+      userId: user.id,
+      email: user.email,
+      role: user.role,
+      isPaid: user.isPaid,
     });
 
     const response = NextResponse.json(
       {
         message: "Authenticated successfully",
         user: {
-          id: userRecord.id,
-          email: userRecord.email,
-          role: userRecord.role,
-          isPaid: userRecord.isPaid,
+          id: user.id,
+          email: user.email,
+          name: user.name, // 👈 Included name for Navbar/localStorage
+          role: user.role,
+          isPaid: user.isPaid,
         },
       },
       { status: 200 }
@@ -47,7 +52,7 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/",
+      path: "/", // 👈 Guarantees cookie availability across all routes (/exam, /mock-exam)
       maxAge: 60 * 60 * 24 * 7, // 7 Days
     });
 
