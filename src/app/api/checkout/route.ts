@@ -2,7 +2,22 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 
-export async function POST() {
+function getOriginUrl(request: Request): string {
+  // Extract host header (e.g. "cseonlinereview.vercel.app" or "localhost:3000")
+  const host =
+    request.headers.get("x-forwarded-host") ||
+    request.headers.get("host") ||
+    "cseonlinereview.vercel.app";
+
+  const cleanHost = host.replace(/^https?:\/\//, "").trim();
+  const isLocalhost = cleanHost.includes("localhost") || cleanHost.includes("127.0.0.1");
+
+  // Force HTTPS for all production domains; allow HTTP for localhost
+  const protocol = isLocalhost ? "http" : "https";
+  return `${protocol}://${cleanHost}`;
+}
+
+export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -17,8 +32,6 @@ export async function POST() {
     }
 
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://cseonlinereview.vercel.app";
-
     if (!secretKey) {
       return NextResponse.json(
         { error: "PAYMONGO_SECRET_KEY is missing in Vercel environment variables." },
@@ -26,10 +39,17 @@ export async function POST() {
       );
     }
 
+    // Guarantees https:// on Vercel domain, http:// on localhost
+    const origin = getOriginUrl(request);
+    const successUrl = `${origin}/dashboard?payment=success`;
+    const cancelUrl = `${origin}/upgrade?payment=cancelled`;
+
+    console.log("[PayMongo Checkout] Resolved Origin:", origin);
+    console.log("[PayMongo Checkout] Success URL:", successUrl);
+
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
-    // PayMongo V2 Checkout Endpoint
-    const response = await fetch("https://api.paymongo.com/v2/checkout_sessions", {
+    const response = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,11 +71,11 @@ export async function POST() {
                 quantity: 1,
               },
             ],
-            payment_method_types: ["gcash", "card", "paymaya"],
-            success_url: `${appUrl}/dashboard?payment=success`,
-            cancel_url: `${appUrl}/upgrade?payment=cancelled`,
+            payment_method_types: ["card", "gcash", "paymaya"],
+            success_url: successUrl,
+            cancel_url: cancelUrl,
             metadata: {
-              userId: session.userId,
+              userId: String(session.userId),
             },
           },
         },
@@ -65,7 +85,7 @@ export async function POST() {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("PayMongo Error Details:", JSON.stringify(data, null, 2));
+      console.error("[PayMongo API Error]:", JSON.stringify(data, null, 2));
       const paymongoMsg =
         data?.errors?.[0]?.detail || data?.errors?.[0]?.code || "PayMongo API Error";
       return NextResponse.json(
