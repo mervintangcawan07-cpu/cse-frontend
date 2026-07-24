@@ -3,16 +3,14 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 
 function getOriginUrl(request: Request): string {
-  // Extract host header (e.g. "cseonlinereview.vercel.app" or "localhost:3000")
   const host =
     request.headers.get("x-forwarded-host") ||
     request.headers.get("host") ||
-    "cseonlinereview.vercel.app";
+    "localhost:3000";
 
   const cleanHost = host.replace(/^https?:\/\//, "").trim();
   const isLocalhost = cleanHost.includes("localhost") || cleanHost.includes("127.0.0.1");
 
-  // Force HTTPS for all production domains; allow HTTP for localhost
   const protocol = isLocalhost ? "http" : "https";
   return `${protocol}://${cleanHost}`;
 }
@@ -34,18 +32,14 @@ export async function POST(request: Request) {
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
     if (!secretKey) {
       return NextResponse.json(
-        { error: "PAYMONGO_SECRET_KEY is missing in Vercel environment variables." },
+        { error: "PAYMONGO_SECRET_KEY is missing in environment variables." },
         { status: 500 }
       );
     }
 
-    // Guarantees https:// on Vercel domain, http:// on localhost
     const origin = getOriginUrl(request);
     const successUrl = `${origin}/dashboard?payment=success`;
     const cancelUrl = `${origin}/upgrade?payment=cancelled`;
-
-    console.log("[PayMongo Checkout] Resolved Origin:", origin);
-    console.log("[PayMongo Checkout] Success URL:", successUrl);
 
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
@@ -66,12 +60,12 @@ export async function POST(request: Request) {
               {
                 currency: "PHP",
                 amount: 49900, // ₱499.00 in centavos
-                description: "Full access to mock exams, category drills, and study notes.",
+                description: "Full access to mock exams, category drills, handbooks, and study notes.",
                 name: "CSE Reviewer PRO Pass",
                 quantity: 1,
               },
             ],
-            payment_method_types: ["card", "gcash", "paymaya"],
+            payment_method_types: ["card", "gcash", "paymaya", "qrph"],
             success_url: successUrl,
             cancel_url: cancelUrl,
             metadata: {
@@ -89,7 +83,7 @@ export async function POST(request: Request) {
       const paymongoMsg =
         data?.errors?.[0]?.detail || data?.errors?.[0]?.code || "PayMongo API Error";
       return NextResponse.json(
-        { error: `PayMongo rejected request: ${paymongoMsg}`, details: data },
+        { error: `PayMongo rejected request: ${paymongoMsg}` },
         { status: response.status }
       );
     }
