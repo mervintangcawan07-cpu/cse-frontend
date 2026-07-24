@@ -4,128 +4,180 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function ExamResultsPage() {
+interface Question {
+  id: string;
+  category: string;
+  prompt: string;
+  options: string[];
+  answerIndex: number;
+  explanation?: string;
+}
+
+interface ReviewData {
+  questions: Question[];
+  selectedAnswers: { [key: number]: number };
+  score: number;
+  correct: number;
+  incorrect: number;
+  skipped: number;
+}
+
+export default function ExamResultPage() {
   const router = useRouter();
-  const [reviewData, setReviewData] = useState<any>(null);
+  const [reviewData, setReviewData] = useState<ReviewData | null>(null);
 
   useEffect(() => {
-    // Read the review data saved from the exam page
-    const storedReview = localStorage.getItem("cse_latest_review");
-    
-    if (!storedReview) {
-      // If there's no recent exam data, send them back to dashboard
-      router.push("/dashboard");
-      return;
+    const saved = localStorage.getItem("cse_latest_review");
+    if (saved) {
+      try {
+        setReviewData(JSON.parse(saved));
+      } catch (err) {
+        console.error("Failed to parse review data", err);
+      }
     }
-    
-    setReviewData(JSON.parse(storedReview));
-  }, [router]);
+  }, []);
 
   if (!reviewData) {
     return (
-      <div className="max-w-3xl mx-auto py-20 text-center">
-        <p className="text-slate-500 animate-pulse font-medium">Loading your results...</p>
+      <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
+        <p className="text-slate-600 font-semibold">No recent test results found.</p>
+        <Link
+          href="/dashboard"
+          className="inline-block px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl text-sm"
+        >
+          Return to Dashboard
+        </Link>
       </div>
     );
   }
 
   const { questions, selectedAnswers, score, correct, incorrect, skipped } = reviewData;
+  const isPassed = score >= 80;
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 space-y-8">
-      {/* Summary Header */}
-      <div className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm text-center space-y-6">
-        <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto font-extrabold">
-          🎉
+    <div className="max-w-3xl mx-auto py-10 px-4 space-y-8">
+      {/* Score Header Card */}
+      <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-center space-y-4">
+        <div className="inline-block">
+          <span
+            className={`text-xs font-extrabold uppercase px-3 py-1 rounded-full ${
+              isPassed ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800"
+            }`}
+          >
+            {isPassed ? "Passed — Benchmark Reached" : "Needs Review"}
+          </span>
         </div>
-        
+
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800">Exam Completed!</h1>
-          <p className="text-slate-500 mt-2 text-sm">Your results have been securely saved to your account.</p>
+          <h1 className="text-5xl font-black text-slate-900">{score}%</h1>
+          <p className="text-slate-500 text-sm mt-1">Final Practice Exam Score</p>
         </div>
 
-        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 grid grid-cols-3 gap-4 text-center max-w-2xl mx-auto">
-          <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase">Score</p>
-            <p className="text-3xl font-black text-blue-600 mt-1">{score}%</p>
+        {/* Breakdown Stats */}
+        <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100">
+          <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
+            <p className="text-xl font-extrabold text-emerald-700">{correct}</p>
+            <p className="text-[11px] font-semibold text-emerald-600">Correct</p>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase">Correct</p>
-            <p className="text-3xl font-black text-emerald-600 mt-1">{correct}</p>
+          <div className="bg-rose-50 p-3 rounded-2xl border border-rose-100">
+            <p className="text-xl font-extrabold text-rose-700">{incorrect}</p>
+            <p className="text-[11px] font-semibold text-rose-600">Incorrect</p>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase">Mistakes</p>
-            <p className="text-3xl font-black text-rose-600 mt-1">{incorrect + skipped}</p>
+          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <p className="text-xl font-extrabold text-slate-700">{skipped}</p>
+            <p className="text-[11px] font-semibold text-slate-500">Skipped</p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-          <Link href="/dashboard" className="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">
-            Back to Dashboard
+        <div className="pt-2 flex justify-center gap-3">
+          <Link
+            href="/mock-exam/take"
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition"
+          >
+            Retake Exam
           </Link>
-          <Link href="/mock-exam/take" className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition shadow-sm">
-            Take Another Exam
+          <Link
+            href="/dashboard"
+            className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition"
+          >
+            Back to Dashboard
           </Link>
         </div>
       </div>
 
-      {/* Detailed Review Section */}
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-slate-800 px-2">Detailed Review</h2>
-        
-        <div className="space-y-6">
-          {questions.map((q: any, idx: number) => {
-            const userAnswer = selectedAnswers[idx];
-            const isCorrect = userAnswer === q.answerIndex;
-            const isSkipped = userAnswer === undefined;
+      {/* Answer Key Breakdown */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-extrabold text-slate-900">Question Review</h2>
 
-            return (
-              <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div className="flex gap-3 items-start">
-                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-bold flex items-center justify-center text-sm">
-                    {idx + 1}
-                  </span>
-                  <div className="space-y-1">
-                    <span className="text-xs font-bold uppercase text-blue-600">{q.category}</span>
-                    <h3 className="text-slate-800 font-bold text-lg leading-relaxed">{q.prompt}</h3>
-                  </div>
-                </div>
+        {questions.map((q, idx) => {
+          const userChoice = selectedAnswers[idx];
+          const isCorrect = userChoice === q.answerIndex;
+          const isSkipped = userChoice === undefined;
 
-                <div className="ml-11 space-y-3">
-                  {/* User's Answer */}
-                  <div className={`p-4 rounded-xl border ${
-                    isCorrect ? "bg-emerald-50 border-emerald-200 text-emerald-800" 
-                    : isSkipped ? "bg-slate-50 border-slate-200 text-slate-600"
-                    : "bg-rose-50 border-rose-200 text-rose-800"
-                  }`}>
-                    <p className="text-xs font-bold uppercase opacity-70 mb-1">
-                      {isCorrect ? "Your Answer (Correct)" : isSkipped ? "You Skipped" : "Your Answer (Incorrect)"}
-                    </p>
-                    <p className="font-semibold">
-                      {isSkipped ? "No answer selected" : q.options[userAnswer]}
-                    </p>
-                  </div>
-
-                  {/* Show Correct Answer if they got it wrong */}
-                  {!isCorrect && (
-                    <div className="p-4 rounded-xl border bg-blue-50 border-blue-200 text-blue-900">
-                      <p className="text-xs font-bold uppercase opacity-70 mb-1">Correct Answer</p>
-                      <p className="font-semibold">{q.options[q.answerIndex]}</p>
-                    </div>
-                  )}
-
-                  {/* Explanation */}
-                  {q.explanation && (
-                    <div className="mt-4 p-5 rounded-xl bg-slate-50 text-slate-700 text-sm leading-relaxed border border-slate-100">
-                      <span className="font-bold text-slate-900">Explanation: </span>
-                      {q.explanation}
-                    </div>
-                  )}
-                </div>
+          return (
+            <div
+              key={q.id || idx}
+              className={`p-6 rounded-2xl border bg-white shadow-sm space-y-4 ${
+                isCorrect
+                  ? "border-emerald-200"
+                  : isSkipped
+                  ? "border-slate-200"
+                  : "border-rose-200"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-400 uppercase">
+                  Question {idx + 1} • {q.category}
+                </span>
+                <span
+                  className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
+                    isCorrect
+                      ? "bg-emerald-100 text-emerald-800"
+                      : isSkipped
+                      ? "bg-slate-100 text-slate-600"
+                      : "bg-rose-100 text-rose-800"
+                  }`}
+                >
+                  {isCorrect ? "Correct" : isSkipped ? "Skipped" : "Incorrect"}
+                </span>
               </div>
-            );
-          })}
-        </div>
+
+              <p className="font-bold text-slate-800 leading-relaxed">{q.prompt}</p>
+
+              <div className="space-y-2">
+                {q.options.map((opt, optionIdx) => {
+                  const isUserSelection = userChoice === optionIdx;
+                  const isRightAnswer = q.answerIndex === optionIdx;
+
+                  let optionStyle = "border-slate-100 bg-slate-50 text-slate-600";
+                  if (isRightAnswer) {
+                    optionStyle = "border-emerald-300 bg-emerald-50 text-emerald-900 font-bold";
+                  } else if (isUserSelection && !isCorrect) {
+                    optionStyle = "border-rose-300 bg-rose-50 text-rose-900 font-bold";
+                  }
+
+                  return (
+                    <div
+                      key={optionIdx}
+                      className={`p-3 rounded-xl border text-sm flex items-center justify-between ${optionStyle}`}
+                    >
+                      <span>{opt}</span>
+                      {isRightAnswer && <span className="text-xs text-emerald-600 font-bold">✓ Correct Answer</span>}
+                      {isUserSelection && !isRightAnswer && <span className="text-xs text-rose-600 font-bold">Your Answer</span>}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {q.explanation && (
+                <div className="p-3 bg-blue-50/50 rounded-xl border border-blue-100 text-xs text-blue-900">
+                  <span className="font-bold">Explanation: </span>
+                  {q.explanation}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
