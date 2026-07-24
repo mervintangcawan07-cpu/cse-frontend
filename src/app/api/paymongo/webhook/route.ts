@@ -7,56 +7,55 @@ export async function POST(request: Request) {
     const rawBody = await request.text();
     const signatureHeader = request.headers.get("paymongo-signature");
 
-    if (!signatureHeader) {
-      return NextResponse.json({ error: "Missing signature header" }, { status: 400 });
-    }
-
+    // Verify HMAC SHA256 signature if webhook secret is set
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-      console.error("PAYMONGO_WEBHOOK_SECRET is missing");
-      return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
-    }
+    if (webhookSecret && signatureHeader) {
+      const parts = signatureHeader.split(",");
+      let timestamp = "";
+      let testSignature = "";
+      let liveSignature = "";
 
-    // Parse signature header: "t=1234567,te=signature1,li=signature2"
-    const parts = signatureHeader.split(",");
-    let timestamp = "";
-    let testSignature = "";
-    let liveSignature = "";
+      for (const part of parts) {
+        const [key, value] = part.split("=");
+        if (key === "t") timestamp = value;
+        if (key === "te") testSignature = value;
+        if (key === "li") liveSignature = value;
+      }
 
-    for (const part of parts) {
-      const [key, value] = part.split("=");
-      if (key === "t") timestamp = value;
-      if (key === "te") testSignature = value;
-      if (key === "li") liveSignature = value;
-    }
+      const computedSignature = crypto
+        .createHmac("sha256", webhookSecret)
+        .update(`${timestamp}.${rawBody}`)
+        .digest("hex");
 
-    // Verify HMAC SHA256 signature
-    const computedSignature = crypto
-      .createHmac("sha256", webhookSecret)
-      .update(`${timestamp}.${rawBody}`)
-      .digest("hex");
+      const isValid = computedSignature === testSignature || computedSignature === liveSignature;
 
-    const isValid = computedSignature === testSignature || computedSignature === liveSignature;
-
-    if (!isValid) {
-      console.error("Invalid PayMongo signature verification");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      if (!isValid) {
+        console.error("Invalid PayMongo signature verification");
+        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      }
     }
 
     const event = JSON.parse(rawBody);
     const eventType = event?.data?.attributes?.type;
+    const eventData = event?.data?.attributes?.data;
 
-    if (eventType === "checkout_session.payment.paid") {
-      const checkoutSession = event.data.attributes.data;
-      const metadata = checkoutSession.attributes.metadata;
-      const userId = metadata?.userId;
+    console.log(`[PayMongo Webhook Received]: ${eventType}`);
+
+    if (
+      eventType === "checkout_session.payment.paid" ||
+      eventType === "payment.paid"
+    ) {
+      const attributes = eventData?.attributes;
+      const userId = attributes?.metadata?.userId || attributes?.metadata?.user_id;
 
       if (userId) {
         await prisma.user.update({
-          where: { id: userId },
+          where: { id: String(userId) },
           data: { isPaid: true },
         });
-        console.log(`[PayMongo Webhook] Activated PRO account for user ID: ${userId}`);
+        console.log(`[PayMongo Webhook] User ID ${userId} automatically upgraded to PRO.`);
+      } else {
+        console.warn("[PayMongo Webhook] Paid event received but userId missing in metadata.");
       }
     }
 

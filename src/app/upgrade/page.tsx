@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function UpgradePage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -33,14 +34,28 @@ export default function UpgradePage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      router.push("/login");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6 text-center">
+      <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 p-8 shadow-md space-y-6 text-center">
+        {/* Header Badge & Title */}
         <div className="space-y-2">
-          <span className="text-4xl">🚀</span>
-          <h2 className="text-2xl font-extrabold text-slate-900">Upgrade to PRO</h2>
+          <span className="text-4xl block">🔒</span>
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 bg-amber-100 text-amber-800 rounded-md border border-amber-200 inline-block">
+            Payment Required
+          </span>
+          <h2 className="text-2xl font-extrabold text-slate-900 pt-1">Upgrade to PRO</h2>
           <p className="text-xs text-slate-500">
-            Unlock lifetime access to full mock exams, category drills, and study materials.
+            Payment is required before accessing the dashboard, mock exams, and study materials.
           </p>
         </div>
 
@@ -50,19 +65,22 @@ export default function UpgradePage() {
           </div>
         )}
 
+        {/* Pricing Card */}
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-3 text-left">
           <div className="flex justify-between items-baseline">
             <span className="text-xs font-bold text-slate-500 uppercase">Lifetime Pass</span>
             <span className="text-2xl font-extrabold text-slate-900">₱499</span>
           </div>
-          <ul className="text-xs text-slate-600 space-y-2 pt-2 border-t border-slate-200">
-            <li className="flex items-center gap-2">✓ Unlimited Full Mock Exam Attempts</li>
-            <li className="flex items-center gap-2">✓ Category-Specific Speed Drills</li>
-            <li className="flex items-center gap-2">✓ Full Access to Instructor Study Notes</li>
-            <li className="flex items-center gap-2">✓ GCash, Maya & Card Support</li>
+          <ul className="text-xs text-slate-600 space-y-2 pt-2 border-t border-slate-200 font-medium">
+            <li className="flex items-center gap-2 text-emerald-600 font-bold">✓ Full Timed Practice Mock Exams</li>
+            <li className="flex items-center gap-2 text-emerald-600 font-bold">✓ Category-Specific Speed Drills</li>
+            <li className="flex items-center gap-2 text-emerald-600 font-bold">✓ Full Access to Instructor Study Notes</li>
+            <li className="flex items-center gap-2 text-emerald-600 font-bold">✓ Read-Only PDF & Word Handbooks</li>
+            <li className="flex items-center gap-2 text-slate-500">✓ GCash, Maya & Card Instant Support</li>
           </ul>
         </div>
 
+        {/* Action Buttons */}
         <button
           onClick={handleUpgrade}
           disabled={loading}
@@ -71,12 +89,12 @@ export default function UpgradePage() {
           {loading ? "Redirecting to PayMongo..." : "Pay ₱499 via PayMongo"}
         </button>
 
-        <Link
-          href="/dashboard"
-          className="block text-xs font-bold text-slate-400 hover:text-slate-600 transition"
+        <button
+          onClick={handleLogout}
+          className="block w-full text-center text-xs font-bold text-slate-400 hover:text-slate-600 transition"
         >
-          &larr; Back to Dashboard
-        </Link>
+          Log Out & Exit
+        </button>
       </div>
     </div>
   );
