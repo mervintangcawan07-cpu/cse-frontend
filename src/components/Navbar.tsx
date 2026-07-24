@@ -1,104 +1,121 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  // Load user from localStorage and handle hydration
-  useEffect(() => {
-    setMounted(true);
-    const storedUser = localStorage.getItem("cse_user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (err) {
-        console.error("Failed to parse user from localStorage", err);
-        setUser(null);
-      }
-    } else {
-      setUser(null);
-    }
-  }, [pathname]);
-
-  // Hide the navbar on auth pages, landing page, settings, or before mounting
-  const isAuthPage =
-    pathname === "/" ||
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/settings";
-
-  if (!mounted || isAuthPage) return null;
-
-  // If mounted but no user, hide navbar
-  if (!user) return null;
-
-  async function handleLogout() {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-    } catch (error) {
-      console.error("Logout request failed:", error);
-    } finally {
-      localStorage.removeItem("cse_user");
-      router.push("/login"); // 👈 Updated: Redirect straight to login page
-    }
+  // Hide Navbar on authentication pages
+  if (pathname === "/login" || pathname === "/register" || pathname === "/") {
+    return null;
   }
 
   const navLinks = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Take Exam", href: "/mock-exam/take" }, // or "/exam"
-    { name: "Question Bank", href: "/admin/questions" },
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/mock-exam/take", label: "Mock Exam" },
+    { href: "/drills", label: "Speed Drills" },
+    { href: "/reviewer", label: "Study Notes" },
+    { href: "/reading-materials", label: "Handbooks" },
   ];
 
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      router.push("/login");
+    }
+  };
+
   return (
-    <nav className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        
-        {/* Left Side: Logo & Links */}
-        <div className="flex items-center gap-8">
-          <Link href="/dashboard" className="text-xl font-black text-blue-600 tracking-tighter">
-            CSE Reviewer
+    <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-40 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Brand Logo */}
+          <Link href="/dashboard" className="flex items-center gap-2 font-black text-lg text-white tracking-tight">
+            <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
+            <span>Reviewer</span>
           </Link>
-          
-          <div className="hidden md:flex gap-1">
+
+          {/* Desktop Links */}
+          <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              const isActive = pathname.startsWith(link.href);
               return (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                     isActive
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
                   }`}
                 >
-                  {link.name}
+                  {link.label}
                 </Link>
               );
             })}
+          </nav>
+
+          {/* Right Action: Logout & Mobile Menu Toggle */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleLogout}
+              className="hidden sm:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+            >
+              Log Out
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? "✕" : "☰"}
+            </button>
           </div>
         </div>
-
-        {/* Right Side: User Info & Logout */}
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-semibold text-slate-600 hidden sm:block">
-            {user.name || user.email}
-          </span>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-700 font-bold text-sm rounded-xl transition"
-          >
-            Log Out
-          </button>
-        </div>
       </div>
-    </nav>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-3 pb-6 space-y-2">
+          {navLinks.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-4 py-3 rounded-xl text-sm font-bold transition ${
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <div className="pt-2 border-t border-slate-800">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="w-full text-left px-4 py-3 text-rose-400 font-bold text-sm hover:bg-slate-800 rounded-xl transition"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }
