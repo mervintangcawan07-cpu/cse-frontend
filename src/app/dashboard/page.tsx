@@ -3,6 +3,15 @@
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from "recharts";
 
 interface UserProfile {
   name: string;
@@ -11,19 +20,35 @@ interface UserProfile {
   isPaid: boolean;
 }
 
+interface AnalyticsData {
+  summary: {
+    totalExamsTaken: number;
+    averageScore: number;
+    highestScore: number;
+    drillsCompleted: number;
+    estimatedPassRate: string;
+  };
+  scoreHistory: { date: string; score: number; passing: number }[];
+  categoryBreakdown: { category: string; score: number; color: string }[];
+}
+
 function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
+  const [chartMounted, setChartMounted] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentStatus = searchParams.get("payment");
 
   useEffect(() => {
+    setChartMounted(true);
+
     async function checkAuthAndLoadDashboard() {
-      // 1. MUST verify payment FIRST before checking user status
+      // 1. Verify payment FIRST if returning from checkout
       if (paymentStatus === "success") {
         setVerifyingPayment(true);
         try {
@@ -35,7 +60,7 @@ function DashboardContent() {
         }
       }
 
-      // 2. Fetch user session AFTER verification
+      // 2. Fetch user session
       try {
         const userRes = await fetch("/api/auth/me");
         const userData = await userRes.json();
@@ -50,20 +75,27 @@ function DashboardContent() {
             return;
           }
 
-          // Fetch dashboard stats for authorized paid users
-          const [notesRes, hbRes] = await Promise.all([
+          // Fetch stats & detailed analytics for authorized paid users
+          const [notesRes, hbRes, analyticsRes] = await Promise.all([
             fetch("/api/reviewer"),
             fetch("/api/reading-materials"),
+            fetch("/api/user/analytics/detailed"),
           ]);
-          const [notesData, hbData] = await Promise.all([
+
+          const [notesData, hbData, analyticsData] = await Promise.all([
             notesRes.json(),
             hbRes.json(),
+            analyticsRes.json(),
           ]);
 
           setStats({
             notesCount: notesData.notes?.length || 0,
             handbooksCount: hbData.handbooks?.length || 0,
           });
+
+          if (analyticsRes.ok && analyticsData.analytics) {
+            setAnalytics(analyticsData.analytics);
+          }
         } else {
           router.push("/login");
         }
@@ -119,17 +151,113 @@ function DashboardContent() {
             Welcome back, {user?.name || "Reviewee"}!
           </h1>
           <p className="text-slate-400 text-xs md:text-sm mt-1">
-            Track your Civil Service Exam preparation and practice modules below.
+            Track your Civil Service Exam performance and study progress.
           </p>
         </div>
 
         <Link
           href="/mock-exam/take"
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition"
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition shrink-0"
         >
           Start Full Mock Exam 📝
         </Link>
       </div>
+
+      {/* ANALYTICS STAT CARDS */}
+      {analytics && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Average Score</span>
+            <div className="text-2xl font-black text-slate-900">{analytics.summary.averageScore}%</div>
+            <span className={`text-[11px] font-bold ${analytics.summary.averageScore >= 80 ? "text-emerald-600" : "text-amber-600"}`}>
+              {analytics.summary.averageScore >= 80 ? "Above Passing (80%)" : "Target: 80%+"}
+            </span>
+          </div>
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Highest Score</span>
+            <div className="text-2xl font-black text-blue-600">{analytics.summary.highestScore}%</div>
+            <span className="text-[11px] font-bold text-slate-400">Personal Best</span>
+          </div>
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Exams Completed</span>
+            <div className="text-2xl font-black text-slate-900">{analytics.summary.totalExamsTaken}</div>
+            <span className="text-[11px] font-bold text-purple-600">Full Practice Mock Exams</span>
+          </div>
+
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Pass Outlook</span>
+            <div className="text-2xl font-black text-emerald-600">{analytics.summary.estimatedPassRate}</div>
+            <span className="text-[11px] font-bold text-emerald-600">Based on History</span>
+          </div>
+        </div>
+      )}
+
+      {/* ANALYTICS VISUALIZATION CHARTS */}
+      {analytics && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Score Trend Area Chart */}
+          <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-black text-slate-900">Score History & Progression</h2>
+                <p className="text-xs text-slate-500">Your mock exam scores over time</p>
+              </div>
+              <span className="text-xs font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
+                Passing Cutoff: 80%
+              </span>
+            </div>
+
+            <div className="h-64 w-full pt-4">
+              {chartMounted && (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={analytics.scoreHistory}>
+                    <defs>
+                      <linearGradient id="scoreColor" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="date" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#0f172a", borderRadius: "12px", border: "none", color: "#fff", fontSize: "12px" }}
+                    />
+                    <Area type="monotone" dataKey="score" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#scoreColor)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
+
+          {/* Subject Proficiency Breakdown */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div>
+              <h2 className="text-lg font-black text-slate-900">Subject Mastery</h2>
+              <p className="text-xs text-slate-500">Accuracy rate by core category</p>
+            </div>
+
+            <div className="space-y-4 pt-2">
+              {analytics.categoryBreakdown.map((cat, idx) => (
+                <div key={idx} className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-bold text-slate-700">
+                    <span>{cat.category}</span>
+                    <span className="text-slate-900 font-extrabold">{cat.score}%</span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                    <div
+                      className={`h-2.5 rounded-full ${cat.color}`}
+                      style={{ width: `${cat.score}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Student Modules Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
