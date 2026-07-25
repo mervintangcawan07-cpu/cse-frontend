@@ -1,48 +1,150 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const navItems = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Reviewer Module", href: "/reviewer" },
-  { name: "Reading Materials", href: "/reading-materials" },
-];
+interface UserSession {
+  id: string;
+  name: string;
+  email: string;
+  role: "USER" | "ADMIN";
+  isPaid: boolean;
+}
 
 export default function Sidebar() {
   const pathname = usePathname();
-  
+  const [user, setUser] = useState<UserSession | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  // Fetch current user session
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user) setUser(data.user);
+        }
+      } catch (err) {
+        console.error("Sidebar auth check error:", err);
+      }
+    }
+    fetchUser();
+  }, [pathname]);
+
+  const isPaid = user?.isPaid || user?.role === "ADMIN";
+
+  // Trigger PayMongo checkout directly when an unpaid user clicks a locked module
+  const handlePayMongoCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/paymongo/checkout", { method: "POST" });
+      const data = await res.json();
+
+      if (res.ok && data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        alert(data.error || "Failed to launch PayMongo checkout gateway.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to payment server.");
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: "📊", public: true },
+    { href: "/reviewer", label: "Reviewer Module", icon: "📝", public: false },
+    { href: "/reading-materials", label: "Reading Materials", icon: "📚", public: false },
+    { href: "/mock-exam/take", label: "Mock Exam", icon: "⏱️", public: false },
+    { href: "/drills", label: "Speed Drills", icon: "⚡", public: false },
+  ];
+
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 min-h-screen p-4 flex flex-col justify-between hidden md:flex">
-      <div>
-        <div className="px-3 py-4 mb-4 border-b border-slate-800">
-          <Link href="/" className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <span className="bg-blue-600 text-white p-1.5 rounded-lg text-xs">CSS</span> Platform
-          </Link>
+    <aside className="w-64 bg-slate-950 border-r border-slate-800 text-white min-h-screen flex flex-col justify-between p-4 shrink-0">
+      <div className="space-y-6">
+        {/* Brand Logo Header */}
+        <div className="flex items-center gap-2.5 px-3 py-2">
+          <span className="p-2 bg-blue-600 rounded-xl text-xs font-black">CSE</span>
+          <div>
+            <h2 className="font-black text-sm tracking-wide text-white">Platform</h2>
+            <span className="text-[10px] text-slate-400 font-bold block">
+              {isPaid ? "PRO Active" : "Free Preview"}
+            </span>
+          </div>
         </div>
-        
-        <nav className="space-y-1">
+
+        {/* Navigation List */}
+        <nav className="space-y-1.5">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const canAccess = item.public || isPaid;
+
+            if (canAccess) {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold transition ${
+                    isActive
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/20"
+                      : "text-slate-400 hover:text-white hover:bg-slate-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                </Link>
+              );
+            }
+
+            // Unpaid Locked Modules -> Render PayMongo Action Button
             return (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition ${
-                  isActive ? "bg-blue-600 text-white font-semibold" : "hover:bg-slate-800 hover:text-white text-slate-400"
-                }`}
+                onClick={handlePayMongoCheckout}
+                disabled={checkoutLoading}
+                className="w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-400 hover:text-amber-400 hover:bg-slate-900/80 transition text-left group"
               >
-                <span>{item.name}</span>
-              </Link>
+                <div className="flex items-center gap-2.5">
+                  <span className="opacity-70 group-hover:opacity-100">{item.icon}</span>
+                  <span className="group-hover:text-white">{item.label}</span>
+                </div>
+                <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+                  🔒 PRO
+                </span>
+              </button>
             );
           })}
         </nav>
       </div>
-      
-      <div className="p-3 bg-slate-800/60 rounded-xl border border-slate-800 text-xs">
-        <p className="font-semibold text-white">Maria Santos</p>
-        <p className="text-slate-400 truncate">maria@example.com</p>
-      </div>
+
+      {/* Catchy Upgrade Promo Card (Visible ONLY for Unpaid Users) */}
+      {!isPaid && (
+        <div className="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-slate-900 border border-amber-500/30 p-4 rounded-3xl space-y-3 mt-6">
+          <div className="space-y-1">
+            <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30 inline-block">
+              Lifetime Pass
+            </span>
+            <h3 className="text-sm font-black text-white">Unlock All Reviewers</h3>
+            <p className="text-[11px] text-slate-400 leading-tight">
+              Get unlimited practice exams, handbooks, and study notes for only <strong className="text-amber-400">₱499</strong>.
+            </p>
+          </div>
+
+          <button
+            onClick={handlePayMongoCheckout}
+            disabled={checkoutLoading}
+            className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition shadow-md disabled:opacity-50"
+          >
+            {checkoutLoading ? "Connecting..." : "Pay ₱499 via PayMongo 💳"}
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
