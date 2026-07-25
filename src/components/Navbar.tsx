@@ -34,24 +34,12 @@ export default function Navbar() {
     fetchUser();
   }, [pathname]);
 
-  // Hide Navbar completely on authentication & landing pages
+  // Hide Navbar on auth & landing pages
   if (pathname === "/login" || pathname === "/register" || pathname === "/") {
     return null;
   }
 
   const isPaid = user?.isPaid || user?.role === "ADMIN";
-  const isUpgradePage = pathname === "/upgrade";
-
-  // 🔒 SECURITY CHECK: Only show navigation links if the user is PAID/ADMIN AND not on /upgrade page
-  const canAccessNav = isPaid && !isUpgradePage;
-
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/mock-exam/take", label: "Mock Exam" },
-    { href: "/drills", label: "Speed Drills" },
-    { href: "/reviewer", label: "Study Notes" },
-    { href: "/reading-materials", label: "Handbooks" },
-  ];
 
   const handleLogout = async () => {
     try {
@@ -69,82 +57,89 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link
-            href={canAccessNav ? "/dashboard" : "/upgrade"}
+            href="/dashboard"
             className="flex items-center gap-2 font-black text-lg text-white tracking-tight"
           >
             <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
             <span>Reviewer</span>
           </Link>
 
-          {/* Desktop Navigation - Hidden for Unpaid Users / Upgrade Page */}
-          {canAccessNav && (
-            <nav className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => {
-                const isActive = pathname.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                      isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-slate-300 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1">
+            <Link
+              href="/dashboard"
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                pathname === "/dashboard"
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              Dashboard
+            </Link>
 
-              {/* ADMIN-ONLY NAVIGATION DROPDOWN */}
-              {user?.role === "ADMIN" && (
-                <div className="relative group ml-2">
-                  <Link
-                    href="/admin/dashboard"
-                    className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
-                  >
-                    <span>⚙️ Admin Panel</span>
-                    <span className="text-[10px]">▼</span>
-                  </Link>
+            {isPaid ? (
+              <>
+                <Link
+                  href="/mock-exam/take"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/mock-exam")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Mock Exam
+                </Link>
+                <Link
+                  href="/drills"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/drills")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Speed Drills
+                </Link>
+                <Link
+                  href="/reviewer"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/reviewer")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Study Notes
+                </Link>
+                <Link
+                  href="/reading-materials"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/reading-materials")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Handbooks
+                </Link>
+              </>
+            ) : (
+              <span className="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                🔒 PRO Modules Locked
+              </span>
+            )}
 
-                  <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-2 hidden group-hover:block space-y-1">
-                    <Link
-                      href="/admin/dashboard"
-                      className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
-                    >
-                      📊 Control Center & Revenue
-                    </Link>
-                    <Link
-                      href="/admin/reviewer"
-                      className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
-                    >
-                      📝 Manage Study Notes
-                    </Link>
-                    <Link
-                      href="/admin/reading-materials"
-                      className="block px-3 py-2 text-emerald-400 hover:bg-emerald-500/10 rounded-xl text-xs font-bold transition"
-                    >
-                      📚 Manage Handbooks (.pdf, .doc)
-                    </Link>
-                    <Link
-                      href="/admin/questions"
-                      className="block px-3 py-2 text-blue-400 hover:bg-blue-500/10 rounded-xl text-xs font-bold transition"
-                    >
-                      ❓ Manage Question Bank
-                    </Link>
-                    <Link
-                      href="/admin/users"
-                      className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
-                    >
-                      👥 Manage Users & PRO Status
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </nav>
-          )}
+            {/* ADMIN DROPDOWN */}
+            {user?.role === "ADMIN" && (
+              <div className="relative group ml-2">
+                <Link
+                  href="/admin/dashboard"
+                  className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
+                >
+                  <span>⚙️ Admin Panel</span>
+                </Link>
+              </div>
+            )}
+          </nav>
 
-          {/* Right Controls: Logout & Mobile Drawer Toggle */}
+          {/* Right Controls */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
@@ -152,98 +147,9 @@ export default function Navbar() {
             >
               Log Out
             </button>
-
-            {/* Mobile Menu Button - Only show if user has nav links */}
-            {canAccessNav && (
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none"
-                aria-label="Toggle menu"
-              >
-                {mobileMenuOpen ? "✕" : "☰"}
-              </button>
-            )}
           </div>
         </div>
       </div>
-
-      {/* Mobile Drawer - Render ONLY if paid */}
-      {canAccessNav && mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-3 pb-6 space-y-2">
-          {navLinks.map((link) => {
-            const isActive = pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-sm font-bold transition ${
-                  isActive
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-
-          {user?.role === "ADMIN" && (
-            <div className="pt-2 border-t border-slate-800 space-y-1">
-              <span className="px-4 text-[10px] font-extrabold text-amber-400 uppercase tracking-wider">
-                Admin Controls
-              </span>
-              <Link
-                href="/admin/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-sm font-bold text-amber-400 hover:bg-slate-800"
-              >
-                📊 Admin Dashboard
-              </Link>
-              <Link
-                href="/admin/reviewer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800"
-              >
-                📝 Study Notes Manager
-              </Link>
-              <Link
-                href="/admin/reading-materials"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800"
-              >
-                📚 Handbooks Manager
-              </Link>
-              <Link
-                href="/admin/questions"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800"
-              >
-                ❓ Question Bank
-              </Link>
-              <Link
-                href="/admin/users"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800"
-              >
-                👥 User Management
-              </Link>
-            </div>
-          )}
-
-          <div className="pt-2 border-t border-slate-800">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                handleLogout();
-              }}
-              className="w-full text-left px-4 py-3 text-rose-400 font-bold text-sm hover:bg-slate-800 rounded-xl transition"
-            >
-              Log Out
-            </button>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
