@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BulkQuestionUploader from "@/components/admin/BulkQuestionUploader";
 
 interface Question {
   id: string;
@@ -62,7 +63,7 @@ export default function AdminQuestionsPage() {
     setFormOptions(updated);
   };
 
-  // Submit new question
+  // Submit new single question
   const handleCreateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
@@ -142,7 +143,7 @@ export default function AdminQuestionsPage() {
         <div>
           <h1 className="text-3xl font-extrabold text-slate-900">Question Bank Manager</h1>
           <p className="text-slate-500 text-sm mt-1">
-            Add, review, and delete practice questions in your Neon DB database.
+            Add, review, bulk import, and delete practice questions in your Neon DB database.
           </p>
         </div>
 
@@ -157,10 +158,13 @@ export default function AdminQuestionsPage() {
             onClick={() => setIsModalOpen(true)}
             className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm"
           >
-            + Add New Question
+            + Add Single Question
           </button>
         </div>
       </div>
+
+      {/* ⚡ BULK QUESTION IMPORTER SECTION */}
+      <BulkQuestionUploader onSuccess={loadQuestions} />
 
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between">
