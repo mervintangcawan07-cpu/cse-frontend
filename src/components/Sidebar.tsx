@@ -52,7 +52,7 @@ export default function Sidebar() {
     } catch (err) {
       console.error(err);
       alert("Error connecting to payment server.");
-    } flex {
+    } finally {
       setCheckoutLoading(false);
     }
   };
@@ -66,7 +66,7 @@ export default function Sidebar() {
   ];
 
   return (
-    /* 💡 hidden lg:flex ensures this desktop sidebar does NOT break mobile layouts */
+    /* hidden lg:flex ensures this desktop sidebar does NOT break mobile layouts */
     <aside className="hidden lg:flex w-64 bg-slate-950 border-r border-slate-800 text-white min-h-screen flex-col justify-between p-4 shrink-0">
       <div className="space-y-6">
         <div className="flex items-center gap-2.5 px-3 py-2">
