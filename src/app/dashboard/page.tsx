@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -11,7 +11,7 @@ interface UserProfile {
   isPaid: boolean;
 }
 
-export default function StudentDashboardPage() {
+function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
   const [loading, setLoading] = useState(true);
@@ -219,5 +219,19 @@ export default function StudentDashboardPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function StudentDashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+          Loading student dashboard...
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
