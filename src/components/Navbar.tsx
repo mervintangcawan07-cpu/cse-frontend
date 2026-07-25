@@ -18,6 +18,11 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<UserSession | null>(null);
 
+  // Close mobile menu whenever the path changes
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   // Fetch current user session
   useEffect(() => {
     async function fetchUser() {
@@ -64,7 +69,7 @@ export default function Navbar() {
             <span>Reviewer</span>
           </Link>
 
-          {/* Navigation Links */}
+          {/* DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/dashboard"
@@ -161,17 +166,116 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Right Controls */}
+          {/* RIGHT CONTROLS & MOBILE TOGGLE */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+              className="hidden md:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
             >
               Log Out
+            </button>
+
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white focus:outline-none border border-slate-700"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </div>
+
+      {/* MOBILE DROPDOWN DRAWER */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-6 space-y-3 font-bold text-xs animate-in slide-in-from-top duration-200">
+          <Link
+            href="/dashboard"
+            className={`block px-4 py-3 rounded-xl transition ${
+              pathname === "/dashboard" ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+            }`}
+          >
+            📊 Dashboard
+          </Link>
+
+          {isPaid ? (
+            <>
+              <Link
+                href="/mock-exam/take"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/mock-exam") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                ⏱️ Practice Mock Exam
+              </Link>
+              <Link
+                href="/drills"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/drills") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                ⚡ Category Speed Drills
+              </Link>
+              <Link
+                href="/reviewer"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/reviewer") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                📝 Study Notes & Reviewers
+              </Link>
+              <Link
+                href="/reading-materials"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/reading-materials") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                📚 Handbooks & PDFs
+              </Link>
+            </>
+          ) : (
+            <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl text-center">
+              🔒 PRO Modules Locked (Select Plan on Dashboard)
+            </div>
+          )}
+
+          {user?.role === "ADMIN" && (
+            <div className="pt-2 border-t border-slate-800 space-y-2">
+              <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block px-1">
+                Admin Controls
+              </span>
+              <Link
+                href="/admin/pricing"
+                className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
+              >
+                💳 Manage Plan Pricing
+              </Link>
+              <Link
+                href="/admin/dashboard"
+                className="block px-4 py-2.5 bg-slate-800 text-slate-300 rounded-xl"
+              >
+                📊 Admin Revenue Center
+              </Link>
+            </div>
+          )}
+
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-3 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl font-bold mt-2"
+          >
+            🚪 Log Out
+          </button>
+        </div>
+      )}
     </header>
   );
 }

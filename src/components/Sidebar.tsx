@@ -17,7 +17,6 @@ export default function Sidebar() {
   const [user, setUser] = useState<UserSession | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  // Fetch current user session
   useEffect(() => {
     async function fetchUser() {
       try {
@@ -35,11 +34,14 @@ export default function Sidebar() {
 
   const isPaid = user?.isPaid || user?.role === "ADMIN";
 
-  // Trigger PayMongo checkout directly when an unpaid user clicks a locked module
   const handlePayMongoCheckout = async () => {
     setCheckoutLoading(true);
     try {
-      const res = await fetch("/api/paymongo/checkout", { method: "POST" });
+      const res = await fetch("/api/paymongo/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planType: "6_MONTHS" }),
+      });
       const data = await res.json();
 
       if (res.ok && data.checkoutUrl) {
@@ -50,7 +52,7 @@ export default function Sidebar() {
     } catch (err) {
       console.error(err);
       alert("Error connecting to payment server.");
-    } finally {
+    } flex {
       setCheckoutLoading(false);
     }
   };
@@ -64,9 +66,9 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-slate-950 border-r border-slate-800 text-white min-h-screen flex flex-col justify-between p-4 shrink-0">
+    /* 💡 hidden lg:flex ensures this desktop sidebar does NOT break mobile layouts */
+    <aside className="hidden lg:flex w-64 bg-slate-950 border-r border-slate-800 text-white min-h-screen flex-col justify-between p-4 shrink-0">
       <div className="space-y-6">
-        {/* Brand Logo Header */}
         <div className="flex items-center gap-2.5 px-3 py-2">
           <span className="p-2 bg-blue-600 rounded-xl text-xs font-black">CSE</span>
           <div>
@@ -77,7 +79,6 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Navigation List */}
         <nav className="space-y-1.5">
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -102,7 +103,6 @@ export default function Sidebar() {
               );
             }
 
-            // Unpaid Locked Modules -> Render PayMongo Action Button
             return (
               <button
                 key={item.href}
@@ -123,16 +123,15 @@ export default function Sidebar() {
         </nav>
       </div>
 
-      {/* Catchy Upgrade Promo Card (Visible ONLY for Unpaid Users) */}
       {!isPaid && (
         <div className="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-slate-900 border border-amber-500/30 p-4 rounded-3xl space-y-3 mt-6">
           <div className="space-y-1">
             <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30 inline-block">
-              Lifetime Pass
+              Unlock Access
             </span>
-            <h3 className="text-sm font-black text-white">Unlock All Reviewers</h3>
+            <h3 className="text-sm font-black text-white">Full Reviewer PRO</h3>
             <p className="text-[11px] text-slate-400 leading-tight">
-              Get unlimited practice exams, handbooks, and study notes for only <strong className="text-amber-400">₱499</strong>.
+              Get unlimited practice exams, handbooks, and study notes.
             </p>
           </div>
 
@@ -141,7 +140,7 @@ export default function Sidebar() {
             disabled={checkoutLoading}
             className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition shadow-md disabled:opacity-50"
           >
-            {checkoutLoading ? "Connecting..." : "Pay ₱499 via PayMongo 💳"}
+            {checkoutLoading ? "Connecting..." : "Unlock Access 💳"}
           </button>
         </div>
       )}
