@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { recordUserActivityStreak } from "@/lib/streakEngine";
 
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -14,33 +15,40 @@ export async function POST(req: Request) {
 
     const session = await verifyJWT(token);
     if (!session?.userId) {
-      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
+    const userId = String(session.userId);
+    const body = await request.json();
     const { score, totalItems, correct, incorrect, skipped } = body;
 
-    // Save exam result linked to logged-in user ID retrieved from JWT session
-    const newResult = await prisma.examResult.create({
+    // Save exam result record
+    const result = await prisma.examResult.create({
       data: {
-        userId: String(session.userId),
-        score: Number(score),
-        totalItems: Number(totalItems),
-        correct: Number(correct),
-        incorrect: Number(incorrect),
-        skipped: Number(skipped),
+        userId,
+        score: Number(score) || 0,
+        totalItems: Number(totalItems) || 0,
+        correct: Number(correct) || 0,
+        incorrect: Number(incorrect) || 0,
+        skipped: Number(skipped) || 0,
       },
     });
 
-    return NextResponse.json(
-      { message: "Exam result saved successfully!", data: newResult },
-      { status: 201 }
-    );
+    // ⚡ Record active study streak automatically
+    const updatedStreak = await recordUserActivityStreak(userId);
+
+    // Clear any active exam draft once successfully submitted
+    await prisma.examDraft.delete({
+      where: { userId },
+    }).catch(() => null);
+
+    return NextResponse.json({
+      success: true,
+      result,
+      streak: updatedStreak?.currentStreak || 1,
+    });
   } catch (error) {
-    console.error("[EXAM_SUBMIT_ERROR]", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("Exam submission error:", error);
+    return NextResponse.json({ error: "Failed to process exam result" }, { status: 500 });
   }
 }
