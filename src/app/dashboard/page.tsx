@@ -20,27 +20,22 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentStatus = searchParams.get("payment");
-  const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
     async function checkAuthAndLoadDashboard() {
-      // 1. Instant payment verification fallback if returning from PayMongo checkout
-      if (paymentStatus === "success" && sessionId) {
+      // 1. MUST verify payment FIRST before checking user status
+      if (paymentStatus === "success") {
         setVerifyingPayment(true);
         try {
-          await fetch("/api/paymongo/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sessionId }),
-          });
+          await fetch("/api/paymongo/verify", { method: "POST" });
         } catch (err) {
-          console.error("Payment sync failed:", err);
+          console.error("Payment sync error:", err);
         } finally {
           setVerifyingPayment(false);
         }
       }
 
-      // 2. Fetch current user session
+      // 2. Fetch user session AFTER verification
       try {
         const userRes = await fetch("/api/auth/me");
         const userData = await userRes.json();
@@ -80,12 +75,12 @@ function DashboardContent() {
     }
 
     checkAuthAndLoadDashboard();
-  }, [paymentStatus, sessionId, router]);
+  }, [paymentStatus, router]);
 
   if (loading || verifyingPayment) {
     return (
       <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        {verifyingPayment ? "⚡ Activating PRO Account..." : "Verifying account access..."}
+        {verifyingPayment ? "⚡ Verifying payment and activating PRO Account..." : "Loading student dashboard..."}
       </div>
     );
   }

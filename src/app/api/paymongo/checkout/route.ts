@@ -88,7 +88,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const checkoutSessionId = data?.data?.id;
     const checkoutUrl = data?.data?.attributes?.checkout_url;
+
+    // Store Checkout Session ID in secure HTTP-only cookie for verification on return
+    if (checkoutSessionId) {
+      cookieStore.set("cse_checkout_id", checkoutSessionId, {
+        httpOnly: true,
+        path: "/",
+        maxAge: 86400, // 24 hours
+        sameSite: "lax",
+      });
+    }
+
     return NextResponse.json({ checkoutUrl }, { status: 200 });
   } catch (error) {
     console.error("Checkout Catch Error:", error);
