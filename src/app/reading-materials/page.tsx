@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import PassageScanner from "@/components/PassageScanner";
 
 interface DocumentItem {
   id: string;
@@ -52,10 +53,12 @@ export default function ReadingMaterialsPage() {
       <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            Read-Only Repository
+            Read-Only Repository • Fast Scanner Active
           </span>
-          <h1 className="text-2xl md:text-3xl font-extrabold mt-2">Official Reading Materials & Handbooks</h1>
-          <p className="text-slate-400 text-xs md:text-sm mt-1">Read civil service handbooks directly in your browser.</p>
+          <h1 className="text-2xl md:3xl font-extrabold mt-2">Official Reading Materials & Handbooks</h1>
+          <p className="text-slate-400 text-xs md:text-sm mt-1">
+            Read civil service handbooks directly in your browser with automatic keyword scanning.
+          </p>
         </div>
         <Link
           href="/dashboard"
@@ -113,15 +116,21 @@ export default function ReadingMaterialsPage() {
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md ${
-                        isSelected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"
-                      }`}>
+                      <span
+                        className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md ${
+                          isSelected ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600"
+                        }`}
+                      >
                         {doc.category}
                       </span>
                       <span className="text-[11px] font-semibold text-slate-400">{doc.pages}</span>
                     </div>
                     <h3 className="font-bold text-slate-800 text-sm leading-snug">{doc.title}</h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">{doc.description}</p>
+
+                    {/* 🔍 NEW FEATURE MERGED: Keyword Passage Fast-Scanner on description */}
+                    <div className="text-xs text-slate-500 leading-relaxed bg-slate-900 p-3 rounded-xl border border-slate-800">
+                      <PassageScanner text={doc.description} />
+                    </div>
                   </div>
                 );
               })}

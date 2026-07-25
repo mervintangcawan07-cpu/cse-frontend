@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { prepareShuffledExam, QuestionItem } from "@/lib/quizUtils";
 
 interface Question {
   id: string;
@@ -56,7 +57,7 @@ export default function TakeExamPage() {
     loadQuestions();
   }, []);
 
-  // Use useCallback so we can safely use it inside the timer's useEffect
+  // Submit Logic
   const handleSubmitExam = useCallback(async () => {
     if (submitting) return;
     setSubmitting(true);
@@ -80,7 +81,7 @@ export default function TakeExamPage() {
     const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
     const finalScore = Math.round(scorePercentage);
 
-    // 💡 Always send result to API (Backend extracts userId from cse_session cookie)
+    // Send result to API
     try {
       await fetch("/api/exam/submit", {
         method: "POST",
@@ -117,7 +118,6 @@ export default function TakeExamPage() {
         const timerId = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
         return () => clearInterval(timerId);
       } else if (timeLeft === 0 && !submitting) {
-        // Time's up! Auto-submit the exam
         handleSubmitExam();
       }
     }
@@ -130,7 +130,10 @@ export default function TakeExamPage() {
         ? allQuestions
         : allQuestions.filter((q) => q.category === selectedCategory);
 
-    setExamQuestions(filtered);
+    // 🔀 NEW FEATURE MERGED: Shuffle question order AND option placements dynamically!
+    const preparedQuestions = prepareShuffledExam(filtered as QuestionItem[]) as Question[];
+
+    setExamQuestions(preparedQuestions);
     setCurrentIndex(0);
     setSelectedAnswers({});
     setTimeLeft(timerMinutes * 60);
@@ -144,7 +147,6 @@ export default function TakeExamPage() {
     }));
   }
 
-  // Format timer for display (MM:SS)
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
@@ -183,7 +185,6 @@ export default function TakeExamPage() {
           </div>
 
           <div className="space-y-6">
-            {/* Category Selector */}
             <div className="space-y-3">
               <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
                 Select Category
@@ -202,7 +203,6 @@ export default function TakeExamPage() {
               </select>
             </div>
 
-            {/* Timer Selector */}
             <div className="space-y-3">
               <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
                 Time Limit
@@ -234,7 +234,7 @@ export default function TakeExamPage() {
             onClick={handleStartExam}
             className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg rounded-2xl transition shadow-sm"
           >
-            Start Exam Now
+            Start Exam Now (Shuffled Mode) 🔀
           </button>
         </div>
       </div>
@@ -259,7 +259,6 @@ export default function TakeExamPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4 space-y-6">
-      {/* Header bar */}
       <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex items-center gap-3">
           <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
@@ -270,7 +269,6 @@ export default function TakeExamPage() {
           </span>
         </div>
 
-        {/* Timer Display */}
         {timerMinutes > 0 && (
           <div
             className={`flex items-center gap-2 px-3 py-1 rounded-full border font-bold text-sm ${
@@ -285,7 +283,6 @@ export default function TakeExamPage() {
         )}
       </div>
 
-      {/* Question Card */}
       <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <h2 className="text-lg font-bold text-slate-800 leading-relaxed">{currentQ.prompt}</h2>
 
@@ -315,7 +312,6 @@ export default function TakeExamPage() {
           })}
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex justify-between items-center pt-4 border-t border-slate-100">
           <button
             onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ExplainMistakeButton from "@/components/ExplainMistakeButton";
 
 interface Question {
   id: string;
@@ -197,6 +198,17 @@ export default function ExamResultPage() {
                   <span className="font-bold">Explanation: </span>
                   {q.explanation}
                 </div>
+              )}
+
+              {/* 🤖 AI TUTOR INTEGRATION: Render "Why was my choice wrong?" ONLY on incorrect answers */}
+              {!isCorrect && !isSkipped && userChoice !== undefined && (
+                <ExplainMistakeButton
+                  prompt={q.prompt}
+                  userChoice={q.options[userChoice]}
+                  correctChoice={q.options[q.answerIndex]}
+                  officialExplanation={q.explanation}
+                  category={q.category}
+                />
               )}
             </div>
           );
