@@ -21,6 +21,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/exam") ||
     pathname.startsWith("/mock-exam") ||
+    pathname.startsWith("/drills") || // ⚡ Added: Protects Drills & Elimination Trainer
     pathname.startsWith("/reading-materials") ||
     pathname.startsWith("/reviewer") ||
     pathname.startsWith("/modules");
@@ -30,13 +31,19 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Redirect Admins away from student dashboard if needed
+    // Redirect Admins away from student dashboard
     if (session.role === "ADMIN" && pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/admin/questions", request.url));
     }
   }
 
-  return NextResponse.next();
+  // 3. Prepare response and enforce Security Headers
+  const response = NextResponse.next();
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  return response;
 }
 
 export const config = {
@@ -44,6 +51,7 @@ export const config = {
     "/dashboard/:path*",
     "/exam/:path*",
     "/mock-exam/:path*",
+    "/drills/:path*", // ⚡ Added: Matches all drill sub-routes
     "/reading-materials/:path*",
     "/reviewer/:path*",
     "/modules/:path*",
