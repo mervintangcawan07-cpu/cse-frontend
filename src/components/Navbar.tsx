@@ -34,10 +34,16 @@ export default function Navbar() {
     fetchUser();
   }, [pathname]);
 
-  // Hide Navbar on authentication & landing pages
+  // Hide Navbar completely on authentication & landing pages
   if (pathname === "/login" || pathname === "/register" || pathname === "/") {
     return null;
   }
+
+  const isPaid = user?.isPaid || user?.role === "ADMIN";
+  const isUpgradePage = pathname === "/upgrade";
+
+  // 🔒 SECURITY CHECK: Only show navigation links if the user is PAID/ADMIN AND not on /upgrade page
+  const canAccessNav = isPaid && !isUpgradePage;
 
   const navLinks = [
     { href: "/dashboard", label: "Dashboard" },
@@ -62,101 +68,107 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2 font-black text-lg text-white tracking-tight">
+          <Link
+            href={canAccessNav ? "/dashboard" : "/upgrade"}
+            className="flex items-center gap-2 font-black text-lg text-white tracking-tight"
+          >
             <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
             <span>Reviewer</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = pathname.startsWith(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                    isActive
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+          {/* Desktop Navigation - Hidden for Unpaid Users / Upgrade Page */}
+          {canAccessNav && (
+            <nav className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => {
+                const isActive = pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                      isActive
+                        ? "bg-blue-600 text-white"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
 
-            {/* ADMIN-ONLY NAVIGATION DROPDOWN */}
-            {user?.role === "ADMIN" && (
-              <div className="relative group ml-2">
-                <Link
-                  href="/admin/dashboard"
-                  className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
-                >
-                  <span>⚙️ Admin Panel</span>
-                  <span className="text-[10px]">▼</span>
-                </Link>
-
-                {/* Dropdown Options */}
-                <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-2 hidden group-hover:block space-y-1">
+              {/* ADMIN-ONLY NAVIGATION DROPDOWN */}
+              {user?.role === "ADMIN" && (
+                <div className="relative group ml-2">
                   <Link
                     href="/admin/dashboard"
-                    className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
+                    className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
                   >
-                    📊 Control Center & Revenue
+                    <span>⚙️ Admin Panel</span>
+                    <span className="text-[10px]">▼</span>
                   </Link>
-                  <Link
-                    href="/admin/reviewer"
-                    className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    📝 Manage Study Notes
-                  </Link>
-                  <Link
-                    href="/admin/reading-materials"
-                    className="block px-3 py-2 text-emerald-400 hover:bg-emerald-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    📚 Manage Handbooks (.pdf, .doc)
-                  </Link>
-                  <Link
-                    href="/admin/questions"
-                    className="block px-3 py-2 text-blue-400 hover:bg-blue-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    ❓ Manage Question Bank
-                  </Link>
-                  <Link
-                    href="/admin/users"
-                    className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    👥 Manage Users & PRO Status
-                  </Link>
-                </div>
-              </div>
-            )}
-          </nav>
 
-          {/* Right Controls */}
+                  <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-2 hidden group-hover:block space-y-1">
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
+                    >
+                      📊 Control Center & Revenue
+                    </Link>
+                    <Link
+                      href="/admin/reviewer"
+                      className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      📝 Manage Study Notes
+                    </Link>
+                    <Link
+                      href="/admin/reading-materials"
+                      className="block px-3 py-2 text-emerald-400 hover:bg-emerald-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      📚 Manage Handbooks (.pdf, .doc)
+                    </Link>
+                    <Link
+                      href="/admin/questions"
+                      className="block px-3 py-2 text-blue-400 hover:bg-blue-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      ❓ Manage Question Bank
+                    </Link>
+                    <Link
+                      href="/admin/users"
+                      className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      👥 Manage Users & PRO Status
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </nav>
+          )}
+
+          {/* Right Controls: Logout & Mobile Drawer Toggle */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="hidden sm:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
             >
               Log Out
             </button>
 
-            {/* Mobile Toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? "✕" : "☰"}
-            </button>
+            {/* Mobile Menu Button - Only show if user has nav links */}
+            {canAccessNav && (
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 focus:outline-none"
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? "✕" : "☰"}
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
+      {/* Mobile Drawer - Render ONLY if paid */}
+      {canAccessNav && mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-800 bg-slate-900 px-4 pt-3 pb-6 space-y-2">
           {navLinks.map((link) => {
             const isActive = pathname.startsWith(link.href);
