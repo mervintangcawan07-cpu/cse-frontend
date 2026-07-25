@@ -19,65 +19,67 @@ export async function POST() {
 
     const userId = String(session.userId);
 
-    // 1. If user is already marked as PRO in database, skip PayMongo check
-    const existingUser = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, isPaid: true },
+      select: { id: true, isPaid: true, paidUntil: true },
     });
 
-    if (existingUser?.isPaid) {
-      return NextResponse.json({ success: true, message: "User is already PRO." });
-    }
-
-    // 2. Retrieve the checkout session ID stored in the HTTP-only cookie
     const checkoutSessionId = cookieStore.get("cse_checkout_id")?.value;
+    const planType = cookieStore.get("cse_checkout_plan")?.value || "1_MONTH";
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
 
-    if (!secretKey) {
-      return NextResponse.json({ error: "PAYMONGO_SECRET_KEY missing" }, { status: 500 });
-    }
-
-    if (!checkoutSessionId) {
-      return NextResponse.json({ success: false, message: "No checkout cookie found." });
+    if (!secretKey || !checkoutSessionId) {
+      return NextResponse.json({ success: false, message: "No active checkout cookie." });
     }
 
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
-    // 3. Directly query PayMongo API for session payment status
     const response = await fetch(`https://api.paymongo.com/v1/checkout_sessions/${checkoutSessionId}`, {
-      headers: {
-        Authorization: `Basic ${authHeader}`,
-      },
+      headers: { Authorization: `Basic ${authHeader}` },
     });
 
     const data = await response.json();
-
     if (!response.ok) {
-      console.error("[VERIFY_PAYMONGO_ERROR]", data);
-      return NextResponse.json({ success: false, error: "Failed to fetch session from PayMongo" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "Failed to query PayMongo." }, { status: 400 });
     }
 
     const checkoutData = data?.data;
     const payments = checkoutData?.attributes?.payments || [];
     const paymentIntentStatus = checkoutData?.attributes?.payment_intent?.attributes?.status;
 
-    const isPaid =
+    const isPaidConfirmed =
       payments.some((p: any) => p?.attributes?.status === "paid") ||
       paymentIntentStatus === "succeeded" ||
       checkoutData?.attributes?.status === "paid";
 
-    // 4. Upgrade user in Neon DB upon confirmed payment
-    if (isPaid) {
+    if (isPaidConfirmed) {
+      const now = new Date();
+      // Renewal logic: If user extends before plan expires, add days onto current paidUntil
+      const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
+
+      let newPaidUntil: Date | null = new Date(baseDate);
+
+      if (planType === "1_MONTH") {
+        newPaidUntil.setDate(newPaidUntil.getDate() + 30);
+      } else if (planType === "6_MONTHS") {
+        newPaidUntil.setDate(newPaidUntil.getDate() + 180);
+      } else if (planType === "LIFETIME") {
+        newPaidUntil = null; // null = Lifetime unlimited
+      }
+
       await prisma.user.update({
         where: { id: userId },
-        data: { isPaid: true },
+        data: {
+          isPaid: true,
+          planType,
+          paidUntil: newPaidUntil,
+        },
       });
 
-      // Clear the temporary checkout cookie
       cookieStore.delete("cse_checkout_id");
+      cookieStore.delete("cse_checkout_plan");
 
-      console.log(`[PAYMONGO_VERIFY] User ID: ${userId} successfully upgraded to PRO!`);
-      return NextResponse.json({ success: true, message: "Payment verified and account upgraded!" });
+      return NextResponse.json({ success: true, message: "Payment verified and duration calculated." });
     }
 
     return NextResponse.json({ success: false, message: "Payment pending or unpaid." });

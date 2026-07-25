@@ -18,6 +18,15 @@ interface UserProfile {
   email: string;
   role: string;
   isPaid: boolean;
+  paidUntil?: string | null;
+  planType?: string | null;
+}
+
+interface Plan {
+  planType: string;
+  name: string;
+  price: number;
+  durationDays: number;
 }
 
 interface AnalyticsData {
@@ -35,10 +44,12 @@ interface AnalyticsData {
 function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<string>("6_MONTHS");
   const [chartMounted, setChartMounted] = useState(false);
 
   const searchParams = useSearchParams();
@@ -49,7 +60,6 @@ function DashboardContent() {
     setChartMounted(true);
 
     async function checkAuthAndLoadDashboard() {
-      // 1. Instant payment verification fallback if returning from PayMongo checkout
       if (paymentStatus === "success") {
         setVerifyingPayment(true);
         try {
@@ -61,7 +71,6 @@ function DashboardContent() {
         }
       }
 
-      // 2. Fetch user session
       try {
         const userRes = await fetch("/api/auth/me");
         const userData = await userRes.json();
@@ -69,23 +78,28 @@ function DashboardContent() {
         if (userRes.ok && userData.user) {
           setUser(userData.user);
 
-          // Fetch stats & detailed analytics
-          const [notesRes, hbRes, analyticsRes] = await Promise.all([
+          const [notesRes, hbRes, analyticsRes, pricingRes] = await Promise.all([
             fetch("/api/reviewer"),
             fetch("/api/reading-materials"),
             fetch("/api/user/analytics/detailed"),
+            fetch("/api/pricing"),
           ]);
 
-          const [notesData, hbData, analyticsData] = await Promise.all([
+          const [notesData, hbData, analyticsData, pricingData] = await Promise.all([
             notesRes.json(),
             hbRes.json(),
             analyticsRes.json(),
+            pricingRes.json(),
           ]);
 
           setStats({
             notesCount: notesData.notes?.length || 0,
             handbooksCount: hbData.handbooks?.length || 0,
           });
+
+          if (pricingRes.ok && pricingData.plans) {
+            setPlans(pricingData.plans);
+          }
 
           if (analyticsRes.ok && analyticsData.analytics) {
             setAnalytics(analyticsData.analytics);
@@ -103,16 +117,20 @@ function DashboardContent() {
     checkAuthAndLoadDashboard();
   }, [paymentStatus, router]);
 
-  const handlePayMongoCheckout = async () => {
+  const handlePayMongoCheckout = async (planType: string) => {
     setCheckoutLoading(true);
     try {
-      const res = await fetch("/api/paymongo/checkout", { method: "POST" });
+      const res = await fetch("/api/paymongo/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planType }),
+      });
       const data = await res.json();
 
       if (res.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
       } else {
-        alert(data.error || "Failed to launch PayMongo checkout gateway.");
+        alert(data.error || "Failed to launch PayMongo checkout.");
       }
     } catch (err) {
       console.error(err);
@@ -125,7 +143,7 @@ function DashboardContent() {
   if (loading || verifyingPayment) {
     return (
       <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        {verifyingPayment ? "⚡ Verifying payment and activating PRO Account..." : "Loading student dashboard..."}
+        {verifyingPayment ? "⚡ Verifying payment and updating subscription..." : "Loading student dashboard..."}
       </div>
     );
   }
@@ -133,12 +151,21 @@ function DashboardContent() {
   const isAdmin = user?.role === "ADMIN";
   const isPaid = user?.isPaid || isAdmin;
 
+  // Calculate days remaining for active plans
+  let daysRemaining: number | null = null;
+  if (user?.paidUntil) {
+    const diff = new Date(user.paidUntil).getTime() - new Date().getTime();
+    daysRemaining = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  }
+
+  const activePlanPrice = plans.find((p) => p.planType === selectedPlan)?.price || 299;
+
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
       {/* Payment Success Alert */}
       {paymentStatus === "success" && (
         <div className="bg-emerald-500 text-slate-950 p-4 rounded-2xl font-black text-xs flex justify-between items-center shadow-md">
-          <span>🎉 Payment Verified! Your account is now fully upgraded to PRO!</span>
+          <span>🎉 Payment Verified! Your PRO Access duration has been calculated.</span>
         </div>
       )}
 
@@ -147,58 +174,85 @@ function DashboardContent() {
         <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-900 text-xs font-bold">
           <span>⚡ Logged in as Administrator.</span>
           <Link
-            href="/admin/dashboard"
+            href="/admin/pricing"
             className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl transition"
           >
-            Go to Admin Control Center &rarr;
+            ⚙️ Manage Plan Pricing &rarr;
           </Link>
         </div>
       )}
 
-      {/* PAYMONGO PRO UPGRADE BANNER (Shown ONLY for Unpaid Users) */}
+      {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-700/80 pb-6">
-            <div>
-              <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-                🔒 Preview Mode
-              </span>
-              <h2 className="text-2xl font-black mt-2 text-white">Upgrade to Civil Service Exam PRO</h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Unlock lifetime access to all timed mock exams, category speed drills, and study notes.
-              </p>
-            </div>
-            <div className="text-left sm:text-right shrink-0">
-              <span className="text-3xl font-black text-amber-400">₱499</span>
-              <span className="block text-[11px] text-slate-400 font-medium">One-Time Lifetime Pass</span>
-            </div>
+        <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6">
+          <div>
+            <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+              Select Reviewer Access Plan
+            </span>
+            <h2 className="text-2xl font-black mt-2 text-white">Upgrade or Renew Your PRO Pass</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Choose your review duration. All plans include full access to mock exams, drills, and notes.
+            </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <ul className="text-xs space-y-2 text-slate-300 font-medium">
-              <li className="flex items-center gap-2"><span className="text-emerald-400 font-bold">✓</span> Full Timed Practice Mock Exams</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400 font-bold">✓</span> 5-Minute Rapid Category Speed Drills</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400 font-bold">✓</span> Read-Only Handbooks & Study Notes</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400 font-bold">✓</span> Instant Automatic Unlock via GCash / Maya / Card</li>
-            </ul>
-
-            <button
-              onClick={handlePayMongoCheckout}
-              disabled={checkoutLoading}
-              className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition disabled:opacity-50 shrink-0"
-            >
-              {checkoutLoading ? "Connecting..." : "Pay ₱499 via PayMongo 💳"}
-            </button>
+          {/* Pricing Options Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {plans.map((p) => (
+              <button
+                key={p.planType}
+                onClick={() => setSelectedPlan(p.planType)}
+                className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
+                  selectedPlan === p.planType
+                    ? "bg-amber-500/10 border-amber-500 text-white"
+                    : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
+                }`}
+              >
+                {p.planType === "6_MONTHS" && (
+                  <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
+                    Popular
+                  </span>
+                )}
+                <div>
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
+                  <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
+                  <span className="text-[11px] text-slate-400 block mt-1">
+                    {p.durationDays > 0 ? `Valid for ${p.durationDays} days` : "Lifetime access"}
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
+
+          <button
+            onClick={() => handlePayMongoCheckout(selectedPlan)}
+            disabled={checkoutLoading}
+            className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition disabled:opacity-50"
+          >
+            {checkoutLoading ? "Launching PayMongo..." : `Pay ₱${activePlanPrice} via PayMongo 💳`}
+          </button>
         </div>
       )}
 
       {/* Welcome Banner */}
       <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            {isPaid ? "PRO Student Account" : "Free Preview Account"}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+              {isPaid ? "PRO Student Account" : "Free Preview Account"}
+            </span>
+
+            {isPaid && daysRemaining !== null && (
+              <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+                ⏳ {daysRemaining} Days Remaining
+              </span>
+            )}
+            {isPaid && daysRemaining === null && !isAdmin && (
+              <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+                ♾️ Lifetime Access
+              </span>
+            )}
+          </div>
+
           <h1 className="text-2xl md:text-3xl font-extrabold mt-2">
             Welcome back, {user?.name || "Reviewee"}!
           </h1>
@@ -208,18 +262,28 @@ function DashboardContent() {
         </div>
 
         {isPaid ? (
-          <Link
-            href="/mock-exam/take"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition shrink-0"
-          >
-            Start Full Mock Exam 📝
-          </Link>
+          <div className="flex items-center gap-2">
+            {daysRemaining !== null && (
+              <button
+                onClick={() => handlePayMongoCheckout("6_MONTHS")}
+                className="px-4 py-3 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition"
+              >
+                🔄 Extend Plan (+180 Days)
+              </button>
+            )}
+            <Link
+              href="/mock-exam/take"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition shrink-0"
+            >
+              Start Full Mock Exam 📝
+            </Link>
+          </div>
         ) : (
           <button
-            onClick={handlePayMongoCheckout}
+            onClick={() => handlePayMongoCheckout(selectedPlan)}
             className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl shadow-sm transition shrink-0"
           >
-            🔒 Unlock PRO (₱499)
+            🔒 Unlock PRO Access
           </button>
         )}
       </div>
@@ -255,10 +319,9 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* ANALYTICS VISUALIZATION CHARTS */}
+      {/* CHARTS */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Score Trend Area Chart */}
           <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex justify-between items-center">
               <div>
@@ -293,7 +356,6 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Subject Proficiency Breakdown */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <div>
               <h2 className="text-lg font-black text-slate-900">Subject Mastery</h2>
@@ -308,10 +370,7 @@ function DashboardContent() {
                     <span className="text-slate-900 font-extrabold">{cat.score}%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                    <div
-                      className={`h-2.5 rounded-full ${cat.color}`}
-                      style={{ width: `${cat.score}%` }}
-                    />
+                    <div className={`h-2.5 rounded-full ${cat.color}`} style={{ width: `${cat.score}%` }} />
                   </div>
                 </div>
               ))}
@@ -322,8 +381,7 @@ function DashboardContent() {
 
       {/* Main Student Modules Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Full Mock Exam */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
               Primary Practice
@@ -343,16 +401,15 @@ function DashboardContent() {
             </Link>
           ) : (
             <button
-              onClick={handlePayMongoCheckout}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition flex items-center justify-center gap-2"
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
             >
-              <span>🔒 Unlock Mock Exam (₱499)</span>
+              🔒 Unlock Mock Exam
             </button>
           )}
         </div>
 
-        {/* Speed Drills */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
               5-Min Challenge
@@ -372,16 +429,15 @@ function DashboardContent() {
             </Link>
           ) : (
             <button
-              onClick={handlePayMongoCheckout}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition flex items-center justify-center gap-2"
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
             >
-              <span>🔒 Unlock Speed Drills (₱499)</span>
+              🔒 Unlock Speed Drills
             </button>
           )}
         </div>
 
-        {/* Study Notes */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
               Live Reviewer
@@ -401,16 +457,15 @@ function DashboardContent() {
             </Link>
           ) : (
             <button
-              onClick={handlePayMongoCheckout}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition flex items-center justify-center gap-2"
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
             >
-              <span>🔒 Unlock Study Notes (₱499)</span>
+              🔒 Unlock Study Notes
             </button>
           )}
         </div>
 
-        {/* Read-Only Handbooks */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
               PDF Repository
@@ -430,10 +485,10 @@ function DashboardContent() {
             </Link>
           ) : (
             <button
-              onClick={handlePayMongoCheckout}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition flex items-center justify-center gap-2"
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
             >
-              <span>🔒 Unlock Handbooks (₱499)</span>
+              🔒 Unlock Handbooks
             </button>
           )}
         </div>

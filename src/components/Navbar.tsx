@@ -134,7 +134,29 @@ export default function Navbar() {
                   className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
                 >
                   <span>⚙️ Admin Panel</span>
+                  <span className="text-[10px]">▼</span>
                 </Link>
+
+                <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-2 hidden group-hover:block space-y-1 z-50">
+                  <Link
+                    href="/admin/pricing"
+                    className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
+                  >
+                    💳 Manage Plan Pricing
+                  </Link>
+                  <Link
+                    href="/admin/dashboard"
+                    className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
+                  >
+                    📊 Control Center & Revenue
+                  </Link>
+                  <Link
+                    href="/admin/users"
+                    className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
+                  >
+                    👥 Manage Users & PRO Status
+                  </Link>
+                </div>
               </div>
             )}
           </nav>

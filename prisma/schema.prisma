@@ -18,6 +18,8 @@ model User {
   password  String
   role      Role         @default(USER)
   isPaid    Boolean      @default(false)
+  paidUntil DateTime?    // Real-world expiration date (null = Lifetime)
+  planType  String?      // "1_MONTH" | "6_MONTHS" | "LIFETIME"
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   results   ExamResult[]
@@ -77,4 +79,13 @@ model Handbook {
   fileName    String   @default("document.pdf")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model PricingPlan {
+  id           String   @id @default(cuid())
+  planType     String   @unique // "1_MONTH" | "6_MONTHS" | "LIFETIME"
+  name         String
+  price        Int      // Stored in PHP (e.g. 199, 299, 499)
+  durationDays Int      // 30, 180, 0 for Lifetime
+  updatedAt    DateTime @updatedAt
 }

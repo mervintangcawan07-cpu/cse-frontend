@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 function getOriginUrl(request: Request): string {
   const host =
@@ -29,17 +30,43 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid session: Please log in again." }, { status: 401 });
     }
 
+    const body = await request.json().catch(() => ({ planType: "1_MONTH" }));
+    const planType = body.planType || "1_MONTH";
+
+    // Fetch dynamic plan price set by Admin from Database
+    let plan = await prisma.pricingPlan.findUnique({
+      where: { planType },
+    });
+
+    if (!plan) {
+      const defaults: Record<string, { price: number; name: string }> = {
+        "1_MONTH": { price: 199, name: "1-Month CSE PRO Access" },
+        "6_MONTHS": { price: 299, name: "6-Month CSE PRO Access" },
+        "LIFETIME": { price: 499, name: "Lifetime Pass CSE PRO" },
+      };
+      plan = {
+        id: "default",
+        planType,
+        name: defaults[planType]?.name || "CSE PRO Access",
+        price: defaults[planType]?.price || 199,
+        durationDays: 30,
+        updatedAt: new Date(),
+      };
+    }
+
+    const amountInCentavos = plan.price * 100;
+
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
     if (!secretKey) {
       return NextResponse.json(
-        { error: "PAYMONGO_SECRET_KEY is missing in environment variables." },
+        { error: "PAYMONGO_SECRET_KEY missing in environment variables." },
         { status: 500 }
       );
     }
 
     const origin = getOriginUrl(request);
     const successUrl = `${origin}/dashboard?payment=success`;
-    const cancelUrl = `${origin}/upgrade?payment=cancelled`;
+    const cancelUrl = `${origin}/dashboard?payment=cancelled`;
 
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
@@ -55,13 +82,13 @@ export async function POST(request: Request) {
             send_email_receipt: true,
             show_description: true,
             show_line_items: true,
-            description: "Civil Service Exam Reviewer PRO - Lifetime Pass",
+            description: `Civil Service Exam Reviewer PRO - ${plan.name}`,
             line_items: [
               {
                 currency: "PHP",
-                amount: 49900, // ₱499.00 in centavos
-                description: "Full access to mock exams, category drills, handbooks, and study notes.",
-                name: "CSE Reviewer PRO Pass",
+                amount: amountInCentavos,
+                description: `Full access to mock exams, speed drills, and study notes.`,
+                name: plan.name,
                 quantity: 1,
               },
             ],
@@ -70,6 +97,7 @@ export async function POST(request: Request) {
             cancel_url: cancelUrl,
             metadata: {
               userId: String(session.userId),
+              planType,
             },
           },
         },
@@ -80,10 +108,8 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       console.error("[PayMongo API Error]:", JSON.stringify(data, null, 2));
-      const paymongoMsg =
-        data?.errors?.[0]?.detail || data?.errors?.[0]?.code || "PayMongo API Error";
       return NextResponse.json(
-        { error: `PayMongo rejected request: ${paymongoMsg}` },
+        { error: `PayMongo rejected request: ${data?.errors?.[0]?.detail || "API Error"}` },
         { status: response.status }
       );
     }
@@ -91,12 +117,18 @@ export async function POST(request: Request) {
     const checkoutSessionId = data?.data?.id;
     const checkoutUrl = data?.data?.attributes?.checkout_url;
 
-    // Store Checkout Session ID in secure HTTP-only cookie for verification on return
     if (checkoutSessionId) {
       cookieStore.set("cse_checkout_id", checkoutSessionId, {
         httpOnly: true,
         path: "/",
-        maxAge: 86400, // 24 hours
+        maxAge: 86400,
+        sameSite: "lax",
+      });
+
+      cookieStore.set("cse_checkout_plan", planType, {
+        httpOnly: true,
+        path: "/",
+        maxAge: 86400,
         sameSite: "lax",
       });
     }
