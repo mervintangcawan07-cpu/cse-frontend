@@ -57,7 +57,7 @@ export default function TakeExamPage() {
     loadQuestions();
   }, []);
 
-  // Submit Logic
+  // Secure Submit Logic
   const handleSubmitExam = useCallback(async () => {
     if (submitting) return;
     setSubmitting(true);
@@ -66,6 +66,7 @@ export default function TakeExamPage() {
     let incorrectCount = 0;
     let skippedCount = 0;
 
+    // Calculate client-side totals for immediate local review display
     examQuestions.forEach((q, idx) => {
       const selected = selectedAnswers[idx];
       if (selected === undefined) {
@@ -81,23 +82,33 @@ export default function TakeExamPage() {
     const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
     const finalScore = Math.round(scorePercentage);
 
-    // Send result to API
+    // Format selected answers array for tamper-proof server verification
+    const formattedAnswers = examQuestions.map((q, idx) => {
+      const selectedIdx = selectedAnswers[idx];
+      const optionLetter = selectedIdx !== undefined ? ["A", "B", "C", "D"][selectedIdx] : "";
+      const optionText = selectedIdx !== undefined ? q.options[selectedIdx] : "";
+
+      return {
+        questionId: q.id,
+        selectedOption: optionLetter || optionText || "",
+      };
+    });
+
+    // Send formatted answers to API for server-side grading and DB recording
     try {
       await fetch("/api/exam/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          score: finalScore,
           totalItems,
-          correct: correctCount,
-          incorrect: incorrectCount,
-          skipped: skippedCount,
+          answers: formattedAnswers,
         }),
       });
     } catch (err) {
       console.error("Error submitting result:", err);
     }
 
+    // Save review data locally for the results screen
     const reviewData = {
       questions: examQuestions,
       selectedAnswers,
@@ -130,7 +141,7 @@ export default function TakeExamPage() {
         ? allQuestions
         : allQuestions.filter((q) => q.category === selectedCategory);
 
-    // 🔀 NEW FEATURE MERGED: Shuffle question order AND option placements dynamically!
+    // Shuffle question order AND option placements dynamically
     const preparedQuestions = prepareShuffledExam(filtered as QuestionItem[]) as Question[];
 
     setExamQuestions(preparedQuestions);

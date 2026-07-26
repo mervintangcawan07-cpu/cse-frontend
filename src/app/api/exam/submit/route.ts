@@ -4,6 +4,11 @@ import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
 
+interface SubmittedAnswer {
+  questionId: string;
+  selectedOption: string; // e.g. "A", "B", "C", "D"
+}
+
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
@@ -20,24 +25,62 @@ export async function POST(request: Request) {
 
     const userId = String(session.userId);
     const body = await request.json();
-    const { score, totalItems, correct, incorrect, skipped } = body;
+    
+    // Expect user answers array from frontend instead of client-calculated score
+    const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
 
-    // Save exam result record
+    if (!Array.isArray(answers)) {
+      return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
+    }
+
+    // 1. Fetch official correct answers from DB for the submitted questions
+    const questionIds = answers.map((a) => a.questionId);
+    const dbQuestions = await prisma.question.findMany({
+      where: { id: { in: questionIds } },
+      select: { id: true, correctAnswer: true },
+    });
+
+    const questionMap = new Map(dbQuestions.map((q) => [q.id, q.correctAnswer]));
+
+    // 2. Grade the answers strictly on the server
+    let correct = 0;
+    let incorrect = 0;
+    let skipped = 0;
+
+    for (const ans of answers) {
+      if (!ans.selectedOption) {
+        skipped++;
+        continue;
+      }
+
+      const correctAnswer = questionMap.get(ans.questionId);
+      if (correctAnswer && ans.selectedOption === correctAnswer) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    }
+
+    // Calculate score on the server (Percentage)
+    const itemsCount = totalItems || answers.length;
+    const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
+
+    // 3. Save verified result to Neon DB
     const result = await prisma.examResult.create({
       data: {
         userId,
-        score: Number(score) || 0,
-        totalItems: Number(totalItems) || 0,
-        correct: Number(correct) || 0,
-        incorrect: Number(incorrect) || 0,
-        skipped: Number(skipped) || 0,
+        score,
+        totalItems: itemsCount,
+        correct,
+        incorrect,
+        skipped,
       },
     });
 
     // ⚡ Record active study streak automatically
     const updatedStreak = await recordUserActivityStreak(userId);
 
-    // Clear any active exam draft once successfully submitted
+    // Clear active exam draft
     await prisma.examDraft.delete({
       where: { userId },
     }).catch(() => null);
