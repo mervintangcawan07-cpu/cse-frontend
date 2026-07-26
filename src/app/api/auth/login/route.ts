@@ -27,6 +27,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
+    // 🔒 Require Email Verification (Admins bypass verification)
+    if (!user.isEmailVerified && user.role !== "ADMIN") {
+      return NextResponse.json(
+        {
+          error: "Please verify your email address before logging in. Check your inbox for the verification link.",
+          unverified: true,
+          email: user.email,
+        },
+        { status: 403 }
+      );
+    }
+
     const token = await signJWT({
       userId: user.id,
       email: user.email,

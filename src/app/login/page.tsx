@@ -7,23 +7,21 @@ import Link from "next/link";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [roleMode, setRoleMode] = useState<"USER" | "ADMIN">("USER");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isUnverified, setIsUnverified] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Forgot Password Modal State
-  const [showForgotModal, setShowForgotModal] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [resetMessage, setResetMessage] = useState("");
-  const [resetLoading, setResetLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendMessage, setResendMessage] = useState<string | null>(null);
 
   const router = useRouter();
 
-  const handleLoginSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
+    setError(null);
+    setIsUnverified(false);
+    setResendMessage(null);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -34,208 +32,151 @@ export default function LoginPage() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to log in");
+      // Handle Unverified Email Gate (403 Status)
+      if (res.status === 403 && data.unverified) {
+        setIsUnverified(true);
+        setUnverifiedEmail(data.email || email);
+        setError("Please verify your email address before logging in.");
+        return;
       }
 
-      if (roleMode === "ADMIN" && data.user?.role !== "ADMIN") {
-        throw new Error("Access denied. Account does not have Admin privileges.");
-      }
+      if (res.ok) {
+        if (data.user?.name) {
+          localStorage.setItem("cse_user_name", data.user.name);
+        }
 
-      if (data.user?.role === "ADMIN") {
-        router.push("/admin/questions");
+        // Automatic Role-Based Routing
+        if (data.user?.role === "ADMIN") {
+          router.push("/admin/questions");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
-        router.push("/dashboard");
+        setError(data.error || "Invalid email or password.");
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
+    } catch (err) {
+      setError("Failed to connect to authentication server.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResetSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setResetMessage("");
-    setResetLoading(true);
+  const handleResendVerification = async () => {
+    setResending(true);
+    setResendMessage(null);
 
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const res = await fetch("/api/auth/resend-verification", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: resetEmail, newPassword }),
+        body: JSON.stringify({ email: unverifiedEmail }),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Reset failed");
-
-      setResetMessage(data.message);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setResetMessage(err.message);
+      if (res.ok && data.success) {
+        setResendMessage("A new verification link has been sent to your email!");
       } else {
-        setResetMessage("Failed to reset password.");
+        setResendMessage(data.error || "Failed to resend link.");
       }
+    } catch (err) {
+      setResendMessage("Failed to connect to email server.");
     } finally {
-      setResetLoading(false);
+      setResending(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold text-slate-900">Sign In</h1>
-          <p className="text-slate-500 mt-1 text-sm">Civil Service Exam Reviewer Portal</p>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md w-full space-y-6 shadow-2xl text-white">
+        <div>
+          <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+            Welcome Back
+          </span>
+          <h1 className="text-2xl font-black mt-2">Sign In to Your Account</h1>
+          <p className="text-xs text-slate-400 mt-1">Access your mock exams and study analytics.</p>
         </div>
 
-        {/* Account Mode Switcher */}
-        <div className="flex bg-slate-100 p-1 rounded-2xl mb-6">
-          <button
-            type="button"
-            onClick={() => setRoleMode("USER")}
-            className={`flex-1 py-2 text-xs font-bold rounded-xl transition ${
-              roleMode === "USER"
-                ? "bg-white text-slate-900 shadow-sm"
-                : "text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            Examinee Portal
-          </button>
-          <button
-            type="button"
-            onClick={() => setRoleMode("ADMIN")}
-            className={`flex-1 py-2 text-xs font-bold rounded-xl transition ${
-              roleMode === "ADMIN"
-                ? "bg-slate-900 text-white shadow-sm"
-                : "text-slate-500 hover:text-slate-800"
-            }`}
-          >
-            Admin Portal
-          </button>
-        </div>
-
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm mb-4 border border-red-100 text-center font-medium">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleLoginSubmit} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
+            <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
               Email Address
             </label>
             <input
               type="email"
+              required
+              placeholder="juan@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full border border-slate-300 rounded-xl p-3 outline-none focus:border-blue-500 text-slate-900 text-sm"
-              required
+              className="w-full p-3.5 bg-slate-800 border border-slate-700 rounded-xl text-sm outline-none focus:border-blue-500 text-white font-medium"
             />
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-xs font-bold uppercase text-slate-400">
                 Password
               </label>
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(true)}
-                className="text-xs font-semibold text-blue-600 hover:underline"
-              >
-                Forgot Password?
-              </button>
+              <Link href="/forgot-password" className="text-xs text-blue-400 hover:underline font-bold">
+                Forgot password?
+              </Link>
             </div>
             <input
               type="password"
+              required
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full border border-slate-300 rounded-xl p-3 outline-none focus:border-blue-500 text-slate-900 text-sm"
-              required
+              className="w-full p-3.5 bg-slate-800 border border-slate-700 rounded-xl text-sm outline-none focus:border-blue-500 text-white font-medium"
             />
           </div>
+
+          {error && (
+            <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 text-rose-400 rounded-xl text-xs font-bold">
+              {error}
+            </div>
+          )}
+
+          {/* 📧 Unverified Alert & Resend Link Trigger */}
+          {isUnverified && (
+            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-3">
+              <p className="text-xs text-amber-300 font-medium leading-relaxed">
+                📩 We sent a verification link to <strong className="text-white">{unverifiedEmail}</strong>. Please check your inbox and click the link to activate your account.
+              </p>
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={resending}
+                className="w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-xl transition disabled:opacity-50"
+              >
+                {resending ? "Sending New Link..." : "🔄 Resend Verification Email"}
+              </button>
+            </div>
+          )}
+
+          {resendMessage && (
+            <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl text-xs font-bold">
+              {resendMessage}
+            </div>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full text-white font-bold py-3.5 rounded-xl transition shadow-md mt-2 disabled:opacity-50 ${
-              roleMode === "ADMIN" ? "bg-slate-900 hover:bg-slate-800" : "bg-blue-600 hover:bg-blue-700"
-            }`}
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50"
           >
-            {loading ? "Verifying..." : roleMode === "ADMIN" ? "Log In as Admin" : "Log In as Examinee"}
+            {loading ? "Signing in..." : "Sign In →"}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-xs text-slate-500">
-            Don't have an examinee account?{" "}
-            <Link href="/register" className="font-bold text-blue-600 hover:underline">
+        <div className="text-center pt-2 border-t border-slate-800">
+          <p className="text-xs text-slate-400">
+            {"Don't have an account? "}
+            <Link href="/signup" className="text-blue-400 font-bold hover:underline">
               Register here
             </Link>
           </p>
         </div>
       </div>
-
-      {/* Forgot Password Modal */}
-      {showForgotModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <h2 className="text-xl font-bold text-slate-900">Reset Password</h2>
-            <p className="text-xs text-slate-500">
-              Enter your registered email and a new password to reset your access credentials.
-            </p>
-
-            {resetMessage && (
-              <div className="p-3 bg-blue-50 text-blue-700 rounded-xl text-xs font-semibold">
-                {resetMessage}
-              </div>
-            )}
-
-            <form onSubmit={handleResetSubmit} className="space-y-3">
-              <input
-                type="email"
-                value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-                placeholder="Account Email"
-                required
-                className="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-blue-500"
-              />
-              <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="New Password (min 6 chars)"
-                required
-                className="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-blue-500"
-              />
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowForgotModal(false)}
-                  className="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-xl font-bold text-xs hover:bg-slate-200 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={resetLoading}
-                  className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs hover:bg-blue-700 transition disabled:opacity-50"
-                >
-                  {resetLoading ? "Updating..." : "Update Password"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

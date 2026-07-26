@@ -12,23 +12,31 @@ enum Role {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  name         String?
-  password     String
-  role         Role          @default(USER)
-  isPaid       Boolean       @default(false)
-  paidUntil    DateTime?     // Real-world expiration date (null = Lifetime)
-  planType     String?       // "1_MONTH" | "6_MONTHS" | "LIFETIME"
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  results      ExamResult[]
+  id                        String        @id @default(cuid())
+  name                      String?
+  email                     String        @unique
+  password                  String
+  role                      Role          @default(USER)
+  isPaid                    Boolean       @default(false)
+  paidUntil                 DateTime?     // Real-world expiration date (null = Lifetime)
+  planType                  String?       // "1_MONTH" | "6_MONTHS" | "LIFETIME"
 
-  // Additive optional relations for new features (Zero data risk)
-  streak       UserStreak?
-  bookmarks    Bookmark[]
-  examDraft    ExamDraft?
-  transactions Transaction[]
+  // 🔒 Security & Verification Fields
+  isEmailVerified           Boolean       @default(false)
+  emailVerificationToken    String?       @unique
+  emailVerificationExpires  DateTime?
+  passwordResetToken        String?       @unique
+  passwordResetExpires      DateTime?
+
+  createdAt                 DateTime      @default(now())
+  updatedAt                 DateTime      @updatedAt
+
+  // Database Relations
+  results                   ExamResult[]
+  streak                    UserStreak?
+  bookmarks                 Bookmark[]
+  examDraft                 ExamDraft?
+  transactions              Transaction[]
 }
 
 model ExamResult {
@@ -97,7 +105,7 @@ model PricingPlan {
 }
 
 // ==========================================
-// NEW ENTERPRISE FEATURE EXTENSIONS
+// ENTERPRISE FEATURE EXTENSIONS
 // ==========================================
 
 model UserStreak {
