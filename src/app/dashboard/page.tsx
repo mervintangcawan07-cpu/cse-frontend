@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import NotificationBell from "@/components/NotificationBell";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -29,7 +30,7 @@ interface Plan {
   durationDays: number;
 }
 
-interface AnalyticsData {
+interface DetailedAnalytics {
   summary: {
     totalExamsTaken: number;
     averageScore: number;
@@ -41,11 +42,29 @@ interface AnalyticsData {
   categoryBreakdown: { category: string; score: number; color: string }[];
 }
 
+interface DashboardAnalytics {
+  totalExams: number;
+  averageScore: number;
+  passReadinessScore: number;
+  currentStreak: number;
+  longestStreak: number;
+  totalBookmarks: number;
+  recommendation: string;
+  recentHistory: Array<{
+    id: string;
+    score: number;
+    correct: number;
+    totalItems: number;
+    date: string;
+  }>;
+}
+
 function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [analytics, setAnalytics] = useState<DetailedAnalytics | null>(null);
+  const [dashAnalytics, setDashAnalytics] = useState<DashboardAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -78,19 +97,23 @@ function DashboardContent() {
         if (userRes.ok && userData.user) {
           setUser(userData.user);
 
-          const [notesRes, hbRes, analyticsRes, pricingRes] = await Promise.all([
-            fetch("/api/reviewer"),
-            fetch("/api/reading-materials"),
-            fetch("/api/user/analytics/detailed"),
-            fetch("/api/pricing"),
-          ]);
+          const [notesRes, hbRes, analyticsRes, pricingRes, dashAnalyticsRes] =
+            await Promise.all([
+              fetch("/api/reviewer"),
+              fetch("/api/reading-materials"),
+              fetch("/api/user/analytics/detailed"),
+              fetch("/api/pricing"),
+              fetch("/api/analytics/dashboard"),
+            ]);
 
-          const [notesData, hbData, analyticsData, pricingData] = await Promise.all([
-            notesRes.json(),
-            hbRes.json(),
-            analyticsRes.json(),
-            pricingRes.json(),
-          ]);
+          const [notesData, hbData, analyticsData, pricingData, dashAnalyticsData] =
+            await Promise.all([
+              notesRes.json(),
+              hbRes.json(),
+              analyticsRes.json(),
+              pricingRes.json(),
+              dashAnalyticsRes.json(),
+            ]);
 
           setStats({
             notesCount: notesData.notes?.length || 0,
@@ -103,6 +126,10 @@ function DashboardContent() {
 
           if (analyticsRes.ok && analyticsData.analytics) {
             setAnalytics(analyticsData.analytics);
+          }
+
+          if (dashAnalyticsRes.ok) {
+            setDashAnalytics(dashAnalyticsData);
           }
         } else {
           router.push("/login");
@@ -142,8 +169,10 @@ function DashboardContent() {
 
   if (loading || verifyingPayment) {
     return (
-      <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        {verifyingPayment ? "⚡ Verifying payment and updating subscription..." : "Loading student dashboard..."}
+      <div className="max-w-6xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        {verifyingPayment
+          ? "⚡ Verifying payment and updating subscription..."
+          : "Loading student dashboard..."}
       </div>
     );
   }
@@ -158,18 +187,19 @@ function DashboardContent() {
     daysRemaining = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   }
 
-  const activePlanPrice = plans.find((p) => p.planType === selectedPlan)?.price || 299;
+  const activePlanPrice =
+    plans.find((p) => p.planType === selectedPlan)?.price || 299;
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4 space-y-8">
-      {/* Payment Success Alert */}
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+      {/* PAYMENT SUCCESS ALERT */}
       {paymentStatus === "success" && (
         <div className="bg-emerald-500 text-slate-950 p-4 rounded-2xl font-black text-xs flex justify-between items-center shadow-md">
           <span>🎉 Payment Verified! Your PRO Access duration has been calculated.</span>
         </div>
       )}
 
-      {/* Admin Quick Switch Banner */}
+      {/* ADMIN QUICK SWITCH BANNER */}
       {isAdmin && (
         <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-900 text-xs font-bold">
           <span>⚡ Logged in as Administrator.</span>
@@ -182,7 +212,67 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* DYNAMIC PLAN SELECTOR BANNER */}
+      {/* WELCOME BANNER WITH NOTIFICATION BELL */}
+      <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+              {isPaid ? "PRO Student Account" : "Free Preview Account"}
+            </span>
+
+            {isPaid && daysRemaining !== null && (
+              <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+                ⏳ {daysRemaining} Days Remaining
+              </span>
+            )}
+            {isPaid && daysRemaining === null && !isAdmin && (
+              <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
+                ♾️ Lifetime Access
+              </span>
+            )}
+          </div>
+
+          <h1 className="text-2xl md:text-3xl font-extrabold mt-2">
+            Welcome back, {user?.name || "Reviewee"}!
+          </h1>
+          <p className="text-slate-400 text-xs md:text-sm mt-1">
+            Track your Civil Service Exam performance and study progress.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3 shrink-0">
+          {/* 🔔 In-App Notification Bell */}
+          <NotificationBell />
+
+          {isPaid ? (
+            <div className="flex items-center gap-2">
+              {daysRemaining !== null && (
+                <button
+                  onClick={() => handlePayMongoCheckout("6_MONTHS")}
+                  className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition"
+                >
+                  🔄 Extend Plan
+                </button>
+              )}
+              <Link
+                href="/mock-exam/take"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition shrink-0"
+              >
+                ⚡ Start Mock Exam
+              </Link>
+            </div>
+          ) : (
+            <button
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0"
+            >
+              🔒 Unlock PRO Access
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* DYNAMIC PLAN SELECTOR BANNER (IF UNPAID) */}
       {!isPaid && (
         <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6">
           <div>
@@ -195,7 +285,6 @@ function DashboardContent() {
             </p>
           </div>
 
-          {/* Pricing Options Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {plans.map((p) => (
               <button
@@ -233,93 +322,75 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* Welcome Banner */}
-      <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-              {isPaid ? "PRO Student Account" : "Free Preview Account"}
-            </span>
-
-            {isPaid && daysRemaining !== null && (
-              <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-                ⏳ {daysRemaining} Days Remaining
-              </span>
-            )}
-            {isPaid && daysRemaining === null && !isAdmin && (
-              <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                ♾️ Lifetime Access
-              </span>
-            )}
+      {/* STATS OVERVIEW CARDS (REAL-TIME ANALYTICS + STREAKS) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Daily Streak */}
+        <div className="bg-slate-900 text-white p-5 rounded-3xl border border-slate-800 shadow-md space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-slate-400 font-extrabold uppercase">Study Streak</span>
+            <span className="text-xl">🔥</span>
           </div>
+          <div className="text-3xl font-black text-amber-400">
+            {dashAnalytics ? `${dashAnalytics.currentStreak} Days` : "0 Days"}
+          </div>
+          <p className="text-[11px] text-slate-400">Longest: {dashAnalytics?.longestStreak || 0} Days</p>
+        </div>
 
-          <h1 className="text-2xl md:text-3xl font-extrabold mt-2">
-            Welcome back, {user?.name || "Reviewee"}!
-          </h1>
-          <p className="text-slate-400 text-xs md:text-sm mt-1">
-            Track your Civil Service Exam performance and study progress.
+        {/* Pass Readiness Score */}
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-slate-500 font-extrabold uppercase">Pass Readiness</span>
+            <span className="text-xl">🎯</span>
+          </div>
+          <div className="text-3xl font-black text-emerald-600">
+            {dashAnalytics ? `${dashAnalytics.passReadinessScore}%` : "0%"}
+          </div>
+          <p className="text-[11px] text-slate-500">Target Benchmark: 80%+</p>
+        </div>
+
+        {/* Total Mock Exams Completed */}
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-slate-500 font-extrabold uppercase">Mock Exams</span>
+            <span className="text-xl">📝</span>
+          </div>
+          <div className="text-3xl font-black text-slate-900">
+            {analytics?.summary.totalExamsTaken ?? dashAnalytics?.totalExams ?? 0}
+          </div>
+          <p className="text-[11px] text-slate-500">
+            Avg Score: {analytics?.summary.averageScore ?? dashAnalytics?.averageScore ?? 0}%
           </p>
         </div>
 
-        {isPaid ? (
-          <div className="flex items-center gap-2">
-            {daysRemaining !== null && (
-              <button
-                onClick={() => handlePayMongoCheckout("6_MONTHS")}
-                className="px-4 py-3 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition"
-              >
-                🔄 Extend Plan (+180 Days)
-              </button>
-            )}
-            <Link
-              href="/mock-exam/take"
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-sm transition shrink-0"
-            >
-              Start Full Mock Exam 📝
-            </Link>
+        {/* Bookmarked Questions */}
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-slate-500 font-extrabold uppercase">Bookmarks</span>
+            <span className="text-xl">🔖</span>
           </div>
-        ) : (
-          <button
-            onClick={() => handlePayMongoCheckout(selectedPlan)}
-            className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl shadow-sm transition shrink-0"
-          >
-            🔒 Unlock PRO Access
-          </button>
-        )}
+          <div className="text-3xl font-black text-blue-600">
+            {dashAnalytics?.totalBookmarks || 0}
+          </div>
+          <p className="text-[11px] text-slate-500">Saved for Review</p>
+        </div>
       </div>
 
-      {/* ANALYTICS STAT CARDS */}
-      {analytics && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Average Score</span>
-            <div className="text-2xl font-black text-slate-900">{analytics.summary.averageScore}%</div>
-            <span className={`text-[11px] font-bold ${analytics.summary.averageScore >= 80 ? "text-emerald-600" : "text-amber-600"}`}>
-              {analytics.summary.averageScore >= 80 ? "Above Passing (80%)" : "Target: 80%+"}
-            </span>
-          </div>
-
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Highest Score</span>
-            <div className="text-2xl font-black text-blue-600">{analytics.summary.highestScore}%</div>
-            <span className="text-[11px] font-bold text-slate-400">Personal Best</span>
-          </div>
-
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Exams Completed</span>
-            <div className="text-2xl font-black text-slate-900">{analytics.summary.totalExamsTaken}</div>
-            <span className="text-[11px] font-bold text-purple-600">Full Practice Mock Exams</span>
-          </div>
-
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
-            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Pass Outlook</span>
-            <div className="text-2xl font-black text-emerald-600">{analytics.summary.estimatedPassRate}</div>
-            <span className="text-[11px] font-bold text-emerald-600">Based on History</span>
+      {/* AI STUDY RECOMMENDATION CARD */}
+      {dashAnalytics?.recommendation && (
+        <div className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-3xl flex items-start gap-3">
+          <span className="text-xl shrink-0 mt-0.5">💡</span>
+          <div>
+            <h3 className="text-xs font-black uppercase text-amber-800 tracking-wider">
+              Personalized Study Recommendation
+            </h3>
+            <p className="text-xs text-slate-700 font-medium mt-1">
+              {dashAnalytics.recommendation}
+            </p>
           </div>
         </div>
       )}
 
-      {/* CHARTS */}
+      {/* CHARTS (SCORE HISTORY & SUBJECT MASTERY) */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
@@ -347,9 +418,22 @@ function DashboardContent() {
                     <XAxis dataKey="date" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
                     <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
                     <Tooltip
-                      contentStyle={{ backgroundColor: "#0f172a", borderRadius: "12px", border: "none", color: "#fff", fontSize: "12px" }}
+                      contentStyle={{
+                        backgroundColor: "#0f172a",
+                        borderRadius: "12px",
+                        border: "none",
+                        color: "#fff",
+                        fontSize: "12px",
+                      }}
                     />
-                    <Area type="monotone" dataKey="score" stroke="#2563eb" strokeWidth={3} fillOpacity={1} fill="url(#scoreColor)" />
+                    <Area
+                      type="monotone"
+                      dataKey="score"
+                      stroke="#2563eb"
+                      strokeWidth={3}
+                      fillOpacity={1}
+                      fill="url(#scoreColor)"
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -370,7 +454,10 @@ function DashboardContent() {
                     <span className="text-slate-900 font-extrabold">{cat.score}%</span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                    <div className={`h-2.5 rounded-full ${cat.color}`} style={{ width: `${cat.score}%` }} />
+                    <div
+                      className={`h-2.5 rounded-full ${cat.color}`}
+                      style={{ width: `${cat.score}%` }}
+                    />
                   </div>
                 </div>
               ))}
@@ -379,7 +466,7 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* Main Student Modules Grid */}
+      {/* MAIN STUDENT MODULES GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
@@ -501,7 +588,7 @@ export default function StudentDashboardPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        <div className="max-w-6xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
           Loading student dashboard...
         </div>
       }

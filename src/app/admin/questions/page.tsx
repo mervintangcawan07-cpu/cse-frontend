@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import BulkQuestionUploader from "@/components/admin/BulkQuestionUploader";
+import NotificationBell from "@/components/NotificationBell";
+import AdminBroadcastModal from "@/components/admin/AdminBroadcastModal";
 
 interface Question {
   id: string;
@@ -148,6 +150,12 @@ export default function AdminQuestionsPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* 🔔 Notification Bell */}
+          <NotificationBell />
+
+          {/* 📢 Admin Announcement Broadcast Modal */}
+          <AdminBroadcastModal />
+
           <Link
             href="/dashboard"
             className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition"
