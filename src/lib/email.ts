@@ -1,6 +1,14 @@
 import { Resend } from "resend";
 
 /**
+ * Cleans the base URL to strip any accidental Markdown formatting or quotes
+ */
+function getBaseUrl() {
+  const rawUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  return rawUrl.replace(/\[.*?\]|\(|\)|['"]/g, "").trim() || "http://localhost:3000";
+}
+
+/**
  * Gets a clean, sanitized 'from' address without quotes
  */
 function getFromEmail() {
@@ -21,8 +29,7 @@ function getResendClient() {
  * 📧 Send Account Email Verification Link via Resend
  */
 export async function sendVerificationEmail(toEmail: string, token: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const verifyLink = `${baseUrl}/verify-email?token=${token}`;
+  const verifyLink = `${getBaseUrl()}/verify-email?token=${token}`;
   const resend = getResendClient();
 
   if (!resend) {
@@ -45,7 +52,10 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
           <div style="margin: 24px 0;">
             <a href="${verifyLink}" style="display: inline-block; padding: 14px 28px; background-color: #2563eb; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 12px; font-size: 14px;">Verify Email Address</a>
           </div>
-          <p style="font-size: 12px; color: #64748b;">If you didn't create an account, you can safely ignore this email.</p>
+          <p style="font-size: 12px; color: #64748b; word-break: break-all;">
+            If the button above doesn't work, copy and paste this link into your browser:<br/>
+            <a href="${verifyLink}" style="color: #2563eb;">${verifyLink}</a>
+          </p>
         </div>
       `,
     });
@@ -64,8 +74,7 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
  * 🔒 Send Password Reset Link via Resend
  */
 export async function sendPasswordResetEmail(toEmail: string, token: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  const resetLink = `${baseUrl}/reset-password?token=${token}`;
+  const resetLink = `${getBaseUrl()}/reset-password?token=${token}`;
   const resend = getResendClient();
 
   if (!resend) {
@@ -88,7 +97,10 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
           <div style="margin: 24px 0;">
             <a href="${resetLink}" style="display: inline-block; padding: 14px 28px; background-color: #0f172a; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 12px; font-size: 14px;">Reset Password</a>
           </div>
-          <p style="font-size: 12px; color: #64748b;">This security link expires in 1 hour. If you didn't request this, no action is needed.</p>
+          <p style="font-size: 12px; color: #64748b; word-break: break-all;">
+            If the button above doesn't work, copy and paste this link into your browser:<br/>
+            <a href="${resetLink}" style="color: #2563eb;">${resetLink}</a>
+          </p>
         </div>
       `,
     });
