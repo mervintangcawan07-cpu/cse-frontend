@@ -6,33 +6,42 @@ export async function POST(request: Request) {
   try {
     const rawBody = await request.text();
     const signatureHeader = request.headers.get("paymongo-signature");
-
-    // Verify HMAC SHA256 signature if webhook secret is set
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET;
-    if (webhookSecret && signatureHeader) {
-      const parts = signatureHeader.split(",");
-      let timestamp = "";
-      let testSignature = "";
-      let liveSignature = "";
 
-      for (const part of parts) {
-        const [key, value] = part.split("=");
-        if (key === "t") timestamp = value;
-        if (key === "te") testSignature = value;
-        if (key === "li") liveSignature = value;
-      }
+    // 🚨 STRICT SECURITY CHECK: Reject immediately if secret or signature is missing
+    if (!webhookSecret) {
+      console.error("[PayMongo Webhook Error]: PAYMONGO_WEBHOOK_SECRET is missing.");
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+    }
 
-      const computedSignature = crypto
-        .createHmac("sha256", webhookSecret)
-        .update(`${timestamp}.${rawBody}`)
-        .digest("hex");
+    if (!signatureHeader) {
+      console.error("[PayMongo Webhook Error]: Missing paymongo-signature header.");
+      return NextResponse.json({ error: "Missing signature header" }, { status: 400 });
+    }
 
-      const isValid = computedSignature === testSignature || computedSignature === liveSignature;
+    // Verify HMAC SHA256 signature
+    const parts = signatureHeader.split(",");
+    let timestamp = "";
+    let testSignature = "";
+    let liveSignature = "";
 
-      if (!isValid) {
-        console.error("Invalid PayMongo signature verification");
-        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-      }
+    for (const part of parts) {
+      const [key, value] = part.split("=");
+      if (key === "t") timestamp = value;
+      if (key === "te") testSignature = value;
+      if (key === "li") liveSignature = value;
+    }
+
+    const computedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(`${timestamp}.${rawBody}`)
+      .digest("hex");
+
+    const isValid = computedSignature === testSignature || computedSignature === liveSignature;
+
+    if (!isValid) {
+      console.error("[PayMongo Webhook Error]: Invalid signature verification.");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
     const event = JSON.parse(rawBody);
@@ -46,14 +55,38 @@ export async function POST(request: Request) {
       eventType === "payment.paid"
     ) {
       const attributes = eventData?.attributes;
-      const userId = attributes?.metadata?.userId || attributes?.metadata?.user_id;
+      const metadata = attributes?.metadata || {};
+      const userId = metadata.userId || metadata.user_id;
+      const planType = metadata.planType || "1_MONTH";
 
       if (userId) {
+        // Fetch current user to compute accurate plan duration/extension
+        const user = await prisma.user.findUnique({
+          where: { id: String(userId) },
+          select: { paidUntil: true },
+        });
+
+        const now = new Date();
+        const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
+        let newPaidUntil: Date | null = new Date(baseDate);
+
+        if (planType === "1_MONTH") {
+          newPaidUntil.setDate(newPaidUntil.getDate() + 30);
+        } else if (planType === "6_MONTHS") {
+          newPaidUntil.setDate(newPaidUntil.getDate() + 180);
+        } else if (planType === "LIFETIME") {
+          newPaidUntil = null;
+        }
+
         await prisma.user.update({
           where: { id: String(userId) },
-          data: { isPaid: true },
+          data: {
+            isPaid: true,
+            planType,
+            paidUntil: newPaidUntil,
+          },
         });
-        console.log(`[PayMongo Webhook] User ID ${userId} automatically upgraded to PRO.`);
+        console.log(`[PayMongo Webhook] User ID ${userId} upgraded to PRO (${planType}).`);
       } else {
         console.warn("[PayMongo Webhook] Paid event received but userId missing in metadata.");
       }

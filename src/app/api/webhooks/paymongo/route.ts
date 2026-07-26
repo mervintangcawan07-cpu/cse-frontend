@@ -8,41 +8,63 @@ export async function POST(request: Request) {
     const signatureHeader = request.headers.get("paymongo-signature");
     const webhookSecret = process.env.PAYMONGO_WEBHOOK_SECRET;
 
-    // Verify cryptographic signature if secret is defined
-    if (webhookSecret && signatureHeader) {
-      const parts = signatureHeader.split(",");
-      let t = "";
-      let te = "";
+    // 🚨 1. STRICT SECURITY CHECK: Reject immediately if secret or signature is missing
+    if (!webhookSecret) {
+      console.error("[PayMongo Webhook Error]: PAYMONGO_WEBHOOK_SECRET is missing.");
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+    }
 
-      parts.forEach((part) => {
-        const [key, value] = part.split("=");
-        if (key.trim() === "t") t = value;
-        if (key.trim() === "te") te = value;
-      });
+    if (!signatureHeader) {
+      console.error("[PayMongo Webhook Error]: Missing paymongo-signature header.");
+      return NextResponse.json({ error: "Missing signature header" }, { status: 400 });
+    }
 
-      const comparisonString = `${t}.${rawBody}`;
-      const expectedSignature = crypto
-        .createHmac("sha256", webhookSecret)
-        .update(comparisonString)
-        .digest("hex");
+    // 🚨 2. VERIFY Cryptographic Signature (Handles both Test 'te' and Live 'li' keys)
+    const parts = signatureHeader.split(",");
+    let timestamp = "";
+    let testSignature = "";
+    let liveSignature = "";
 
-      if (te !== expectedSignature) {
-        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-      }
+    parts.forEach((part) => {
+      const [key, value] = part.split("=");
+      const trimmedKey = key?.trim();
+      const trimmedValue = value?.trim();
+      if (trimmedKey === "t") timestamp = trimmedValue;
+      if (trimmedKey === "te") testSignature = trimmedValue;
+      if (trimmedKey === "li") liveSignature = trimmedValue;
+    });
+
+    const comparisonString = `${timestamp}.${rawBody}`;
+    const expectedSignature = crypto
+      .createHmac("sha256", webhookSecret)
+      .update(comparisonString)
+      .digest("hex");
+
+    const isValidSignature =
+      expectedSignature === testSignature || expectedSignature === liveSignature;
+
+    if (!isValidSignature) {
+      console.error("[PayMongo Webhook Error]: Invalid signature verification.");
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
     const payload = JSON.parse(rawBody);
     const eventType = payload?.data?.attributes?.type;
 
-    if (eventType === "checkout_session.payment.paid") {
+    console.log(`[PayMongo Webhook Event]: ${eventType}`);
+
+    if (
+      eventType === "checkout_session.payment.paid" ||
+      eventType === "payment.paid"
+    ) {
       const attributes = payload?.data?.attributes?.data?.attributes;
       const metadata = attributes?.metadata;
-      const userId = metadata?.userId;
+      const userId = metadata?.userId || metadata?.user_id;
       const planType = metadata?.planType || "1_MONTH";
       const checkoutSessionId = payload?.data?.attributes?.data?.id;
 
       if (userId) {
-        const user = await prisma.user.findUnique({ where: { id: userId } });
+        const user = await prisma.user.findUnique({ where: { id: String(userId) } });
         const now = new Date();
         const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
         let newPaidUntil: Date | null = new Date(baseDate);
@@ -53,14 +75,14 @@ export async function POST(request: Request) {
 
         await prisma.$transaction([
           prisma.user.update({
-            where: { id: userId },
+            where: { id: String(userId) },
             data: { isPaid: true, planType, paidUntil: newPaidUntil },
           }),
           prisma.transaction.upsert({
             where: { checkoutSessionId: checkoutSessionId || `txn_${Date.now()}` },
             update: { status: "PAID" },
             create: {
-              userId,
+              userId: String(userId),
               checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
               amount: attributes?.amount ? attributes.amount / 100 : 0,
               planType,
@@ -68,6 +90,10 @@ export async function POST(request: Request) {
             },
           }),
         ]);
+
+        console.log(`[PayMongo Webhook Success]: Upgraded user ${userId} to ${planType}`);
+      } else {
+        console.warn("[PayMongo Webhook Warning]: Paid event received but userId was missing in metadata.");
       }
     }
 
