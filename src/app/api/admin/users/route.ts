@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 async function verifyAdmin() {
   const cookieStore = await cookies();
@@ -84,9 +85,10 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    let updateData: { isPaid?: boolean; role?: string; planType?: string | null; paidUntil?: Date | null } = {};
+    // Typed as Prisma.UserUpdateInput to resolve strict Enum type checking
+    const updateData: Prisma.UserUpdateInput = {};
 
-    if (role !== undefined) updateData.role = role;
+    if (role !== undefined) updateData.role = role as any;
 
     // Handle specific duration actions for offline payments or manual overrides
     if (action) {
@@ -97,36 +99,24 @@ export async function PATCH(req: Request) {
           : new Date(now);
 
       if (action === "REVOKE") {
-        updateData = {
-          ...updateData,
-          isPaid: false,
-          planType: null,
-          paidUntil: new Date(0),
-        };
+        updateData.isPaid = false;
+        updateData.planType = null;
+        updateData.paidUntil = new Date(0);
       } else if (action === "EXTEND_30") {
         baseDate.setDate(baseDate.getDate() + 30);
-        updateData = {
-          ...updateData,
-          isPaid: true,
-          planType: "1_MONTH",
-          paidUntil: baseDate,
-        };
+        updateData.isPaid = true;
+        updateData.planType = "1_MONTH";
+        updateData.paidUntil = baseDate;
       } else if (action === "EXTEND_180") {
         baseDate.setDate(baseDate.getDate() + 180);
-        updateData = {
-          ...updateData,
-          isPaid: true,
-          planType: "6_MONTHS",
-          paidUntil: baseDate,
-        };
+        updateData.isPaid = true;
+        updateData.planType = "6_MONTHS";
+        updateData.paidUntil = baseDate;
       } else if (action === "EXTEND_365") {
         baseDate.setDate(baseDate.getDate() + 365);
-        updateData = {
-          ...updateData,
-          isPaid: true,
-          planType: "1_YEAR",
-          paidUntil: baseDate,
-        };
+        updateData.isPaid = true;
+        updateData.planType = "1_YEAR";
+        updateData.paidUntil = baseDate;
       }
     } else if (isPaid !== undefined) {
       updateData.isPaid = Boolean(isPaid);
