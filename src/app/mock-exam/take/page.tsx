@@ -42,7 +42,7 @@ export default function TakeExamPage() {
         const data = await res.json();
         if (res.ok && data.questions) {
           setAllQuestions(data.questions);
-          // Automatically extract unique categories from the database questions
+          // Extract unique categories dynamically from DB
           const uniqueCategories = Array.from(
             new Set(data.questions.map((q: Question) => q.category))
           ) as string[];
@@ -85,12 +85,10 @@ export default function TakeExamPage() {
     // Format selected answers array for tamper-proof server verification
     const formattedAnswers = examQuestions.map((q, idx) => {
       const selectedIdx = selectedAnswers[idx];
-      const optionLetter = selectedIdx !== undefined ? ["A", "B", "C", "D"][selectedIdx] : "";
-      const optionText = selectedIdx !== undefined ? q.options[selectedIdx] : "";
-
       return {
         questionId: q.id,
-        selectedOption: optionLetter || optionText || "",
+        selectedIndex: selectedIdx !== undefined ? selectedIdx : -1,
+        selectedOption: selectedIdx !== undefined ? ["A", "B", "C", "D"][selectedIdx] : "",
       };
     });
 

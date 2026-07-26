@@ -6,7 +6,8 @@ import { recordUserActivityStreak } from "@/lib/streakEngine";
 
 interface SubmittedAnswer {
   questionId: string;
-  selectedOption: string; // e.g. "A", "B", "C", "D"
+  selectedOption?: string | number;
+  selectedIndex?: number;
 }
 
 export async function POST(request: Request) {
@@ -26,42 +27,62 @@ export async function POST(request: Request) {
     const userId = String(session.userId);
     const body = await request.json();
     
-    // Expect user answers array from frontend instead of client-calculated score
     const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
 
     if (!Array.isArray(answers)) {
       return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
     }
 
-    // 1. Fetch official correct answers from DB for the submitted questions
+    // 1. Fetch questions from DB with official answerIndex field
     const questionIds = answers.map((a) => a.questionId);
     const dbQuestions = await prisma.question.findMany({
       where: { id: { in: questionIds } },
-      select: { id: true, correctAnswer: true },
+      select: { id: true, answerIndex: true, options: true },
     });
 
-    const questionMap = new Map(dbQuestions.map((q) => [q.id, q.correctAnswer]));
+    const questionMap = new Map(dbQuestions.map((q) => [q.id, q]));
 
-    // 2. Grade the answers strictly on the server
+    // 2. Grade answers strictly on the server
     let correct = 0;
     let incorrect = 0;
     let skipped = 0;
 
     for (const ans of answers) {
-      if (!ans.selectedOption) {
+      const q = questionMap.get(ans.questionId);
+      if (!q) {
         skipped++;
         continue;
       }
 
-      const correctAnswer = questionMap.get(ans.questionId);
-      if (correctAnswer && ans.selectedOption === correctAnswer) {
+      // Resolve submitted answer index (0, 1, 2, 3)
+      let userIdx: number | null = null;
+
+      if (typeof ans.selectedIndex === "number" && ans.selectedIndex >= 0) {
+        userIdx = ans.selectedIndex;
+      } else if (typeof ans.selectedOption === "number" && ans.selectedOption >= 0) {
+        userIdx = ans.selectedOption;
+      } else if (typeof ans.selectedOption === "string" && ans.selectedOption.trim() !== "") {
+        const val = ans.selectedOption.trim();
+        const letterIdx = ["A", "B", "C", "D"].indexOf(val.toUpperCase());
+        if (letterIdx !== -1) {
+          userIdx = letterIdx;
+        } else if (!isNaN(Number(val))) {
+          userIdx = Number(val);
+        } else if (Array.isArray(q.options)) {
+          userIdx = q.options.indexOf(val);
+        }
+      }
+
+      if (userIdx === null || userIdx < 0) {
+        skipped++;
+      } else if (userIdx === q.answerIndex) {
         correct++;
       } else {
         incorrect++;
       }
     }
 
-    // Calculate score on the server (Percentage)
+    // Calculate score percentage
     const itemsCount = totalItems || answers.length;
     const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
 
@@ -77,8 +98,8 @@ export async function POST(request: Request) {
       },
     });
 
-    // ⚡ Record active study streak automatically
-    const updatedStreak = await recordUserActivityStreak(userId);
+    // Record active study streak
+    const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);
 
     // Clear active exam draft
     await prisma.examDraft.delete({
