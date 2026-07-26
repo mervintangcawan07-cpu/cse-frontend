@@ -17,7 +17,7 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden. Admin access required." }, { status: 403 });
     }
 
-    // Parallel execution for high performance database queries
+    // Parallel database queries
     const [
       totalUsers,
       paidUsers,
@@ -25,6 +25,7 @@ export async function GET() {
       totalReadingMaterials,
       allResults,
       recentUsers,
+      paidTransactions,
     ] = await Promise.all([
       prisma.user.count({ where: { role: "USER" } }),
       prisma.user.count({ where: { role: "USER", isPaid: true } }),
@@ -35,12 +36,29 @@ export async function GET() {
         where: { role: "USER" },
         take: 5,
         orderBy: { createdAt: "desc" },
-        select: { id: true, email: true, name: true, isPaid: true, createdAt: true },
+        select: { id: true, email: true, name: true, isPaid: true, createdAt: true, planType: true, paidUntil: true },
+      }),
+      prisma.transaction.findMany({
+        where: { status: "PAID" },
+        select: { amount: true, planType: true },
       }),
     ]);
 
+    // Calculate detailed revenue from transactions
+    let totalRevenue = 0;
+    let monthlyRevenue = 0;
+    let sixMonthRevenue = 0;
+    let lifetimeRevenue = 0;
+
+    paidTransactions.forEach((tx) => {
+      totalRevenue += tx.amount;
+      if (tx.planType === "1_MONTH") monthlyRevenue += tx.amount;
+      else if (tx.planType === "6_MONTHS") sixMonthRevenue += tx.amount;
+      else if (tx.planType === "LIFETIME") lifetimeRevenue += tx.amount;
+    });
+
     const totalExamsTaken = allResults.length;
-    const estimatedRevenue = paidUsers * 499; // ₱499 per PRO member
+    const estimatedRevenue = totalRevenue > 0 ? totalRevenue : paidUsers * 499;
     const passingExams = allResults.filter((r) => r.score >= 80).length;
     const overallPassRate = totalExamsTaken > 0 ? Math.round((passingExams / totalExamsTaken) * 100) : 0;
     const platformAverageScore =
@@ -54,6 +72,13 @@ export async function GET() {
         paidUsers,
         unpaidUsers: totalUsers - paidUsers,
         estimatedRevenue,
+        revenueBreakdown: {
+          totalRevenue: estimatedRevenue,
+          monthlyRevenue,
+          sixMonthRevenue,
+          lifetimeRevenue,
+          totalTransactions: paidTransactions.length,
+        },
         totalQuestions,
         totalReadingMaterials,
         totalExamsTaken,
