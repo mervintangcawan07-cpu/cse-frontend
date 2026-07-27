@@ -15,6 +15,7 @@ export default function NotificationBell() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedNotification, setSelectedNotification] = useState<NotificationItem | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -69,19 +70,23 @@ export default function NotificationBell() {
     }
   };
 
-  const handleMarkSingleRead = async (id: string, isRead: boolean) => {
-    if (isRead) return;
-    try {
-      await fetch("/api/notifications", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notificationId: id }),
-      });
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-      );
-    } catch (err) {
-      console.error("Failed to mark notification read:", err);
+  const handleSelectNotification = async (item: NotificationItem) => {
+    setSelectedNotification(item);
+    setIsOpen(false); // Close dropdown popover when modal opens
+
+    if (!item.isRead) {
+      try {
+        await fetch("/api/notifications", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ notificationId: item.id }),
+        });
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === item.id ? { ...n, isRead: true } : n))
+        );
+      } catch (err) {
+        console.error("Failed to mark notification read:", err);
+      }
     }
   };
 
@@ -103,7 +108,7 @@ export default function NotificationBell() {
 
       {/* Dropdown Popover */}
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-3xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="fixed inset-x-4 top-16 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-3 sm:w-96 rounded-3xl bg-white border border-slate-200 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="p-4 bg-slate-900 text-white flex justify-between items-center border-b border-slate-800">
             <div>
               <h3 className="font-black text-sm">Notifications</h3>
@@ -119,7 +124,7 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+          <div className="max-h-[60vh] sm:max-h-80 overflow-y-auto divide-y divide-slate-100">
             {loading && notifications.length === 0 ? (
               <div className="p-6 text-center text-xs text-slate-400 font-medium animate-pulse">
                 Loading notifications...
@@ -132,24 +137,26 @@ export default function NotificationBell() {
               notifications.map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => handleMarkSingleRead(item.id, item.isRead)}
-                  className={`p-4 transition cursor-pointer flex gap-3 ${
+                  onClick={() => handleSelectNotification(item)}
+                  className={`p-4 transition cursor-pointer flex gap-3 items-start ${
                     item.isRead ? "bg-white hover:bg-slate-50" : "bg-blue-50/40 hover:bg-blue-50/70"
                   }`}
                 >
                   <span className="text-base shrink-0 mt-0.5">
                     {item.type === "STREAK" ? "🔥" : item.type === "PAYMENT" ? "💳" : "📢"}
                   </span>
-                  <div className="space-y-1">
+                  <div className="space-y-1 min-w-0 flex-1">
                     <div className="flex justify-between items-start gap-2">
-                      <h4 className="text-xs font-bold text-slate-900 leading-tight">
+                      <h4 className="text-xs font-bold text-slate-900 leading-tight truncate">
                         {item.title}
                       </h4>
                       {!item.isRead && (
                         <span className="h-2 w-2 rounded-full bg-blue-600 shrink-0 mt-1" />
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-600 leading-relaxed">{item.message}</p>
+                    <p className="text-[11px] text-slate-600 leading-relaxed line-clamp-2 break-words">
+                      {item.message}
+                    </p>
                     <span className="text-[9px] font-bold text-slate-400 block pt-0.5">
                       {new Date(item.createdAt).toLocaleDateString("en-US", {
                         month: "short",
@@ -162,6 +169,68 @@ export default function NotificationBell() {
                 </div>
               ))
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Full-Screen / Reading Modal for Mobile & Desktop */}
+      {selectedNotification && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            {/* Modal Header */}
+            <div className="p-5 bg-slate-900 text-white flex justify-between items-center shrink-0 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <span className="text-lg">
+                  {selectedNotification.type === "STREAK"
+                    ? "🔥"
+                    : selectedNotification.type === "PAYMENT"
+                    ? "💳"
+                    : "📢"}
+                </span>
+                <h3 className="font-extrabold text-sm">Notification Details</h3>
+              </div>
+              <button
+                onClick={() => setSelectedNotification(null)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition text-xs font-bold"
+                aria-label="Close notification"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrollable Modal Content */}
+            <div className="p-6 overflow-y-auto space-y-4">
+              <div>
+                <h4 className="text-base font-black text-slate-900 leading-snug break-words">
+                  {selectedNotification.title}
+                </h4>
+                <p className="text-[11px] font-bold text-slate-400 mt-1">
+                  {new Date(selectedNotification.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed break-words whitespace-pre-wrap font-medium">
+                  {selectedNotification.message}
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Action Footer */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end shrink-0">
+              <button
+                onClick={() => setSelectedNotification(null)}
+                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition shadow-sm"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
