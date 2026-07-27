@@ -23,21 +23,29 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  // Fetch current user session
+  // Fetch current user session & enforce auto-logout on session expiration
   useEffect(() => {
     async function fetchUser() {
       try {
         const res = await fetch("/api/auth/me");
         if (res.ok) {
           const data = await res.json();
-          if (data.user) setUser(data.user);
+          if (data.user) {
+            setUser(data.user);
+          } else {
+            // Session expired or logged in on another device
+            setUser(null);
+            if (pathname !== "/" && pathname !== "/login" && pathname !== "/register") {
+              router.push("/login");
+            }
+          }
         }
       } catch (err) {
         console.error("Auth check error:", err);
       }
     }
     fetchUser();
-  }, [pathname]);
+  }, [pathname, router]);
 
   // Hide Navbar on auth & landing pages
   if (pathname === "/login" || pathname === "/register" || pathname === "/") {
@@ -52,6 +60,7 @@ export default function Navbar() {
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
+      setUser(null);
       router.push("/login");
     }
   };

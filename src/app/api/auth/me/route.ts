@@ -27,30 +27,76 @@ export async function GET() {
         isPaid: true,
         paidUntil: true,
         planType: true,
+        activeSessionId: true,
+        lastActiveAt: true,
       },
     });
 
     if (!user) {
+      cookieStore.delete("cse_session");
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
+
+    // 🔒 SINGLE ACTIVE SESSION GUARD
+    // If another device logged in, invalidate old cookie and return null
+    if (
+      session.activeSessionId &&
+      user.activeSessionId &&
+      user.activeSessionId !== session.activeSessionId
+    ) {
+      cookieStore.delete("cse_session");
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
     const now = new Date();
+    const INACTIVITY_LIMIT_MINUTES = 30;
+
+    // 🔒 30-MINUTE INACTIVITY AUTO-LOGOUT GUARD
+    if (user.lastActiveAt) {
+      const minutesInactive =
+        (now.getTime() - new Date(user.lastActiveAt).getTime()) / (1000 * 60);
+
+      if (minutesInactive >= INACTIVITY_LIMIT_MINUTES) {
+        // Reset active session in DB and clear session cookie
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            activeSessionId: null,
+            lastActiveAt: null,
+          },
+        });
+        cookieStore.delete("cse_session");
+        return NextResponse.json({ user: null }, { status: 200 });
+      }
+    }
+
     let isPaid = user.isPaid;
+    const updateData: { lastActiveAt: Date; isPaid?: boolean } = {
+      lastActiveAt: now,
+    };
 
     // 🔒 REAL-WORLD EXPIRATION GUARD
     // Revokes access if the paidUntil date has passed for non-admin accounts
     if (user.paidUntil && user.paidUntil < now && user.role !== "ADMIN") {
       isPaid = false;
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { isPaid: false },
-      });
+      updateData.isPaid = false;
     }
+
+    // Update lastActiveAt timestamp (and isPaid status if subscription expired)
+    await prisma.user.update({
+      where: { id: user.id },
+      data: updateData,
+    });
 
     return NextResponse.json({
       user: {
-        ...user,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
         isPaid,
+        paidUntil: user.paidUntil,
+        planType: user.planType,
       },
     });
   } catch (error) {
