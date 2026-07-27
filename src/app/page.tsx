@@ -74,7 +74,7 @@ export default function LandingPage() {
     },
     {
       q: "Can I access the study materials on my smartphone?",
-      a: "Absolutely. CSE Mastery is fully optimized for mobile browsers, laptops, and tablets so you can review anywhere, anytime.",
+      a: "Absolutely. CSexprep is fully optimized for mobile browsers, laptops, and tablets so you can review anywhere, anytime.",
     },
     {
       q: "How often is the question bank updated?",
@@ -97,7 +97,7 @@ export default function LandingPage() {
         {/* Navigation Bar */}
         <nav className="w-full bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-6 md:px-12 py-4 flex justify-between items-center shadow-sm">
           <div className="text-2xl font-extrabold text-blue-600 tracking-tight">
-            CSE<span className="text-slate-800">Mastery</span>
+            CSex<span className="text-slate-800">prep</span>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <Link href="/login" className="px-4 py-2 font-semibold text-slate-600 hover:text-slate-900 transition">
@@ -254,7 +254,7 @@ export default function LandingPage() {
             </div>
           </section>
 
-          {/* Original Features Grid */}
+          {/* Features Grid */}
           <section className="bg-slate-50 py-20 px-4 border-b border-slate-200">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
@@ -341,9 +341,9 @@ export default function LandingPage() {
         <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-center">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
             <div className="text-xl font-extrabold text-white tracking-tight mb-4 md:mb-0">
-              CSE<span className="text-blue-500">Mastery</span>
+              CSex<span className="text-blue-500">prep</span>
             </div>
-            <p className="text-sm">© 2026 CSE Mastery Philippines. All rights reserved.</p>
+            <p className="text-sm">© 2026 CSexprep Philippines. All rights reserved.</p>
           </div>
         </footer>
 
