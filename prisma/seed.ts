@@ -1,18 +1,20 @@
 import "dotenv/config";
 import { prisma } from "../src/lib/prisma";
 import bcrypt from "bcryptjs";
+import { numericalNotesData } from "./data/numericalNotes";
 
 async function main() {
-  console.log("🧹 Clearing existing user accounts and exam results...");
+  console.log("🌱 Starting database seeding...");
 
-  // 1. Clear exam results first to avoid foreign key errors
-  // Some Prisma schemas may name the model differently or not have a Result model.
-  // Use a runtime-safe access to avoid TypeScript errors when the property doesn't exist.
-  if ((prisma as any).result && typeof (prisma as any).result.deleteMany === "function") {
+  // 1. Clear exam results first to avoid foreign key constraints
+  if ((prisma as any).examResult && typeof (prisma as any).examResult.deleteMany === "function") {
+    await (prisma as any).examResult.deleteMany({});
+    console.log("✓ All exam results deleted.");
+  } else if ((prisma as any).result && typeof (prisma as any).result.deleteMany === "function") {
     await (prisma as any).result.deleteMany({});
     console.log("✓ All exam results deleted.");
   } else {
-    console.log("i: No result model found on prisma client, skipping deletion of exam results.");
+    console.log("i: No exam result model found on prisma client, skipping deletion.");
   }
 
   // 2. Clear all user and admin accounts
@@ -41,10 +43,8 @@ async function main() {
   console.log("Role:     ADMIN");
   console.log("=========================================\n");
 
-  // 4. Seed question bank (Original Content Preserved)
+  // 4. Seed question bank
   console.log("Seeding question bank...");
-
-  // Clear existing questions to prevent duplicates during testing
   await prisma.question.deleteMany({});
 
   await prisma.question.createMany({
@@ -96,13 +96,39 @@ async function main() {
       },
     ],
   });
+  console.log("✓ Question bank seeded successfully!");
 
-  console.log("Questions seeded successfully!");
+  // 5. Seed Numerical Ability Study Notes (50 Rules & Shortcuts)
+  console.log("Seeding 50 Numerical Ability Study Notes...");
+  for (const note of numericalNotesData) {
+    const noteId = `num-note-${note.title.split('.')[0]}`;
+    await prisma.studyNote.upsert({
+      where: { id: noteId },
+      update: {
+        category: note.category,
+        title: note.title,
+        summary: note.summary,
+        content: note.content,
+        tips: note.tips,
+      },
+      create: {
+        id: noteId,
+        category: note.category,
+        title: note.title,
+        summary: note.summary,
+        content: note.content,
+        tips: note.tips,
+      },
+    });
+  }
+  console.log("✓ Numerical Ability Study Notes seeded successfully!");
+
+  console.log("\n✅ ALL SEEDING COMPLETED SUCCESSFULLY!");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Seeding failed:", e);
     process.exit(1);
   })
   .finally(async () => {
