@@ -82,7 +82,7 @@ export default function AdminPricingPage() {
           </span>
           <h1 className="text-2xl font-black mt-1">Manage Plan Pricing</h1>
           <p className="text-xs text-slate-400">
-            Set custom prices for 1-Month, 6-Month, and Lifetime passes.
+            Set custom prices for 1-Month, 6-Month, and 1-Year passes.
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export default function AdminPricingPage() {
               <div>
                 <h3 className="font-extrabold text-slate-900 text-sm">{p.name}</h3>
                 <span className="text-xs text-slate-500 block">
-                  {p.durationDays > 0 ? `Access valid for ${p.durationDays} days` : "Lifetime unlimited access"}
+                  {p.durationDays > 0 ? `Access valid for ${p.durationDays} days` : "1 year access"}
                 </span>
               </div>
 

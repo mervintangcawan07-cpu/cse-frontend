@@ -227,7 +227,7 @@ function DashboardContent() {
             )}
             {isPaid && daysRemaining === null && !isAdmin && (
               <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                ♾️ Lifetime Access
+                ♾️ 1-Year Access
               </span>
             )}
           </div>
@@ -305,7 +305,7 @@ function DashboardContent() {
                   <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
                   <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
                   <span className="text-[11px] text-slate-400 block mt-1">
-                    {p.durationDays > 0 ? `Valid for ${p.durationDays} days` : "Lifetime access"}
+                    {p.durationDays > 0 ? `Valid for ${p.durationDays} days` : "1 year access"}
                   </span>
                 </div>
               </button>
