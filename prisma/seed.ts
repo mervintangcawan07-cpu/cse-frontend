@@ -6,7 +6,7 @@ import { numericalNotesData } from "./data/numericalNotes";
 async function main() {
   console.log("🌱 Starting safe database seeding (preserving existing users and data)...");
 
-  // 1. Upsert Admin Account (Creates if missing, updates if exists — NO USER DELETIONS)
+  // 1. Upsert Admin Account (NO USER DELETIONS)
   const adminEmail = "thamarmervin@cse.com";
   const adminPassword = "Azel110521";
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
@@ -28,7 +28,7 @@ async function main() {
 
   console.log("✓ Admin account verified/created:", adminUser.email);
 
-  // 2. Seed Question Bank safely without deleting existing questions
+  // 2. Seed Question Bank safely
   console.log("Checking and seeding question bank...");
   const sampleQuestions = [
     {
@@ -88,7 +88,7 @@ async function main() {
   }
   console.log("✓ Question bank verified!");
 
-  // 3. Upsert 50 Numerical Ability Study Notes (Reversed order so #1 stays at top)
+  // 3. Upsert 50 Numerical Ability Study Notes
   console.log("Upserting 50 Numerical Ability Study Notes...");
   const reversedNotes = [...numericalNotesData].reverse();
 
@@ -114,6 +114,28 @@ async function main() {
     });
   }
   console.log("✓ Numerical Ability Study Notes upserted successfully!");
+
+  // 4. Upsert Pricing Plans (Enforces 365 Days duration for 1-Year Pass)
+  if ((prisma as any).pricingPlan) {
+    console.log("Upserting pricing plans with 365-day countdown...");
+    const plansToSeed = [
+      { planType: "1_MONTH", name: "1-Month Pass", price: 99, durationDays: 30 },
+      { planType: "6_MONTHS", name: "6-Month Pass", price: 299, durationDays: 180 },
+      { planType: "1_YEAR", name: "1-Year Pass", price: 499, durationDays: 365 },
+    ];
+
+    for (const plan of plansToSeed) {
+      await (prisma as any).pricingPlan.upsert({
+        where: { planType: plan.planType },
+        update: {
+          name: plan.name,
+          durationDays: plan.durationDays,
+        },
+        create: plan,
+      });
+    }
+    console.log("✓ Pricing plans configured with 365-day duration!");
+  }
 
   console.log("\n✅ SAFE SEEDING COMPLETED SUCCESSFULLY!");
 }

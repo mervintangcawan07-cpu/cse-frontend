@@ -180,7 +180,7 @@ function DashboardContent() {
   const isAdmin = user?.role === "ADMIN";
   const isPaid = user?.isPaid || isAdmin;
 
-  // Calculate days remaining for active plans
+  // Real 365-day (or active plan) countdown calculation
   let daysRemaining: number | null = null;
   if (user?.paidUntil) {
     const diff = new Date(user.paidUntil).getTime() - new Date().getTime();
@@ -220,6 +220,7 @@ function DashboardContent() {
               {isPaid ? "PRO Student Account" : "Free Preview Account"}
             </span>
 
+            {/* 👈 Dynamic Countdown Badge (renders ⏳ 365 Days Remaining, 364 Days Remaining, etc.) */}
             {isPaid && daysRemaining !== null && (
               <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
                 ⏳ {daysRemaining} Days Remaining
@@ -227,7 +228,7 @@ function DashboardContent() {
             )}
             {isPaid && daysRemaining === null && !isAdmin && (
               <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                ♾️ 1-Year Access
+                ⏳ 365 Days Remaining
               </span>
             )}
           </div>
@@ -241,7 +242,6 @@ function DashboardContent() {
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
-          {/* 🔔 In-App Notification Bell */}
           <NotificationBell />
 
           {isPaid ? (
@@ -264,7 +264,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0"
+              className="px-5 py-2.5 bg-amber-50 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0"
             >
               🔒 Unlock PRO Access
             </button>
@@ -286,33 +286,39 @@ function DashboardContent() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {plans.map((p) => (
-              <button
-                key={p.planType}
-                onClick={() => setSelectedPlan(p.planType)}
-                className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
-                  selectedPlan === p.planType
-                    ? "bg-amber-500/10 border-amber-500 text-white"
-                    : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
-                }`}
-              >
-                {p.planType === "6_MONTHS" && (
-                  <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
-                    Popular
-                  </span>
-                )}
-                <div>
-                  {/* 👈 Replaces "LIFETIME PASS" with "1-YEAR PASS" */}
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">
-                    {p.name.replace(/Lifetime/gi, "1-Year")}
-                  </span>
-                  <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
-                  <span className="text-[11px] text-slate-400 block mt-1">
-                    {p.durationDays > 0 ? `Valid for ${p.durationDays} days` : "1 year access"}
-                  </span>
-                </div>
-              </button>
-            ))}
+            {plans.map((p) => {
+              const displayName = p.name.replace(/Lifetime/gi, "1-Year");
+              const durationLabel = p.durationDays === 365 
+                ? "Valid for 365 days (1 year access)"
+                : p.durationDays > 0 
+                  ? `Valid for ${p.durationDays} days` 
+                  : "Valid for 365 days (1 year access)";
+
+              return (
+                <button
+                  key={p.planType}
+                  onClick={() => setSelectedPlan(p.planType)}
+                  className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
+                    selectedPlan === p.planType
+                      ? "bg-amber-500/10 border-amber-500 text-white"
+                      : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
+                  }`}
+                >
+                  {p.planType === "6_MONTHS" && (
+                    <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
+                      Popular
+                    </span>
+                  )}
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-slate-400 block">{displayName}</span>
+                    <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
+                    <span className="text-[11px] text-slate-400 block mt-1">
+                      {durationLabel}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
           <button
@@ -325,7 +331,7 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* STATS OVERVIEW CARDS (REAL-TIME ANALYTICS + STREAKS) */}
+      {/* STATS OVERVIEW CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Daily Streak */}
         <div className="bg-slate-900 text-white p-5 rounded-3xl border border-slate-800 shadow-md space-y-2">
