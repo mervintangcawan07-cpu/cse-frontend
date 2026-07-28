@@ -33,9 +33,7 @@ export default function Navbar() {
           if (data.user) {
             setUser(data.user);
           } else {
-            // Session expired or logged in on another device
             setUser(null);
-            // Allowed public routes where unauthenticated users can stay
             if (
               pathname !== "/" &&
               pathname !== "/login" &&
@@ -151,7 +149,7 @@ export default function Navbar() {
               </span>
             )}
 
-            {/* ADMIN DROPDOWN */}
+            {/* ADMIN DROPDOWN WITH FIXED HOVER BRIDGE & HIGH Z-INDEX */}
             {user?.role === "ADMIN" && (
               <div className="relative group ml-2">
                 <Link
@@ -162,25 +160,28 @@ export default function Navbar() {
                   <span className="text-[10px]">▼</span>
                 </Link>
 
-                <div className="absolute right-0 top-full mt-1 w-56 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-2 hidden group-hover:block space-y-1 z-50">
-                  <Link
-                    href="/admin/pricing"
-                    className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    💳 Manage Plan Pricing
-                  </Link>
-                  <Link
-                    href="/admin/dashboard"
-                    className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
-                  >
-                    📊 Control Center & Revenue
-                  </Link>
-                  <Link
-                    href="/admin/users"
-                    className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
-                  >
-                    👥 Manage Users & PRO Status
-                  </Link>
+                {/* Outer wrapper provides an invisible hover bridge and high z-index */}
+                <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-[100]">
+                  <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 space-y-1">
+                    <Link
+                      href="/admin/pricing"
+                      className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      💳 Manage Plan Pricing
+                    </Link>
+                    <Link
+                      href="/admin/dashboard"
+                      className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
+                    >
+                      📊 Control Center & Revenue
+                    </Link>
+                    <Link
+                      href="/admin/users"
+                      className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      👥 Manage Users & PRO Status
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}
