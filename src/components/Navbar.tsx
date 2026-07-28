@@ -75,7 +75,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 text-white">
+    // 👈 Set header to z-[9999] so all dropdowns sit on top of page content
+    <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[9999] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
@@ -149,7 +150,7 @@ export default function Navbar() {
               </span>
             )}
 
-            {/* ADMIN DROPDOWN WITH FIXED HOVER BRIDGE & HIGH Z-INDEX */}
+            {/* ADMIN DROPDOWN */}
             {user?.role === "ADMIN" && (
               <div className="relative group ml-2">
                 <Link
@@ -160,8 +161,8 @@ export default function Navbar() {
                   <span className="text-[10px]">▼</span>
                 </Link>
 
-                {/* Outer wrapper provides an invisible hover bridge and high z-index */}
-                <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-[100]">
+                {/* Outer wrapper provides an invisible hover bridge and elevated z-index */}
+                <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-[10000]">
                   <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 space-y-1">
                     <Link
                       href="/admin/pricing"
