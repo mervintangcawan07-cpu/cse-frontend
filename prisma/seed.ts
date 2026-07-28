@@ -98,20 +98,18 @@ async function main() {
   });
   console.log("✓ Question bank seeded successfully!");
 
-  // 5. Seed Numerical Ability Study Notes (50 Rules & Shortcuts)
-  console.log("Seeding 50 Numerical Ability Study Notes...");
-  for (const note of numericalNotesData) {
-    const noteId = `num-note-${note.title.split('.')[0]}`;
-    await prisma.studyNote.upsert({
-      where: { id: noteId },
-      update: {
-        category: note.category,
-        title: note.title,
-        summary: note.summary,
-        content: note.content,
-        tips: note.tips,
-      },
-      create: {
+  // 5. Seed 50 Numerical Ability Study Notes (Reversed order so Rule 1 is created last & appears at top)
+  console.log("Seeding 50 Numerical Ability Study Notes (Reversed order for display)...");
+  await prisma.studyNote.deleteMany({
+    where: { category: "Numerical Ability" },
+  });
+
+  const reversedNotes = [...numericalNotesData].reverse();
+
+  for (const note of reversedNotes) {
+    const noteId = `num-note-${note.title.split('.')[0].trim()}`;
+    await prisma.studyNote.create({
+      data: {
         id: noteId,
         category: note.category,
         title: note.title,
@@ -121,7 +119,7 @@ async function main() {
       },
     });
   }
-  console.log("✓ Numerical Ability Study Notes seeded successfully!");
+  console.log("✓ Numerical Ability Study Notes seeded successfully with #1 at top!");
 
   console.log("\n✅ ALL SEEDING COMPLETED SUCCESSFULLY!");
 }
