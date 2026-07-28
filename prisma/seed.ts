@@ -115,13 +115,23 @@ async function main() {
   }
   console.log("✓ Numerical Ability Study Notes upserted successfully!");
 
-  // 4. Upsert Pricing Plans (Enforces 365 Days duration for 1-Year Pass)
+  // 4. Clean Obsolete Plans & Seed 3 Standard Plans
   if ((prisma as any).pricingPlan) {
-    console.log("Upserting pricing plans with 365-day countdown...");
+    console.log("Purging old plan entries and syncing 3 clean pricing plans...");
+
+    // Remove obsolete plan keys (e.g. LIFETIME) that cause duplicate entries
+    await (prisma as any).pricingPlan.deleteMany({
+      where: {
+        planType: {
+          notIn: ["1_MONTH", "6_MONTHS", "1_YEAR"],
+        },
+      },
+    });
+
     const plansToSeed = [
       { planType: "1_MONTH", name: "1-Month Pass", price: 99, durationDays: 30 },
-      { planType: "6_MONTHS", name: "6-Month Pass", price: 299, durationDays: 180 },
-      { planType: "1_YEAR", name: "1-Year Pass", price: 499, durationDays: 365 },
+      { planType: "6_MONTHS", name: "6-Month Pass", price: 199, durationDays: 180 },
+      { planType: "1_YEAR", name: "1-Year Pass", price: 299, durationDays: 365 },
     ];
 
     for (const plan of plansToSeed) {
@@ -129,12 +139,13 @@ async function main() {
         where: { planType: plan.planType },
         update: {
           name: plan.name,
+          price: plan.price,
           durationDays: plan.durationDays,
         },
         create: plan,
       });
     }
-    console.log("✓ Pricing plans configured with 365-day duration!");
+    console.log("✓ Clean pricing plans configured successfully!");
   }
 
   console.log("\n✅ SAFE SEEDING COMPLETED SUCCESSFULLY!");

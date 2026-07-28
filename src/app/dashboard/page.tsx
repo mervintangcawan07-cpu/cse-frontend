@@ -180,7 +180,7 @@ function DashboardContent() {
   const isAdmin = user?.role === "ADMIN";
   const isPaid = user?.isPaid || isAdmin;
 
-  // Real 365-day (or active plan) countdown calculation
+  // Calculate days remaining for active plans
   let daysRemaining: number | null = null;
   if (user?.paidUntil) {
     const diff = new Date(user.paidUntil).getTime() - new Date().getTime();
@@ -188,7 +188,7 @@ function DashboardContent() {
   }
 
   const activePlanPrice =
-    plans.find((p) => p.planType === selectedPlan)?.price || 299;
+    plans.find((p) => p.planType === selectedPlan)?.price || 199;
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
@@ -220,7 +220,6 @@ function DashboardContent() {
               {isPaid ? "PRO Student Account" : "Free Preview Account"}
             </span>
 
-            {/* 👈 Dynamic Countdown Badge (renders ⏳ 365 Days Remaining, 364 Days Remaining, etc.) */}
             {isPaid && daysRemaining !== null && (
               <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
                 ⏳ {daysRemaining} Days Remaining
@@ -228,7 +227,7 @@ function DashboardContent() {
             )}
             {isPaid && daysRemaining === null && !isAdmin && (
               <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                ⏳ 365 Days Remaining
+                ⏳ Active Access
               </span>
             )}
           </div>
@@ -286,39 +285,30 @@ function DashboardContent() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {plans.map((p) => {
-              const displayName = p.name.replace(/Lifetime/gi, "1-Year");
-              const durationLabel = p.durationDays === 365 
-                ? "Valid for 365 days (1 year access)"
-                : p.durationDays > 0 
-                  ? `Valid for ${p.durationDays} days` 
-                  : "Valid for 365 days (1 year access)";
-
-              return (
-                <button
-                  key={p.planType}
-                  onClick={() => setSelectedPlan(p.planType)}
-                  className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
-                    selectedPlan === p.planType
-                      ? "bg-amber-500/10 border-amber-500 text-white"
-                      : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
-                  }`}
-                >
-                  {p.planType === "6_MONTHS" && (
-                    <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
-                      Popular
-                    </span>
-                  )}
-                  <div>
-                    <span className="text-[10px] font-bold uppercase text-slate-400 block">{displayName}</span>
-                    <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
-                    <span className="text-[11px] text-slate-400 block mt-1">
-                      {durationLabel}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+            {plans.map((p) => (
+              <button
+                key={p.planType}
+                onClick={() => setSelectedPlan(p.planType)}
+                className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
+                  selectedPlan === p.planType
+                    ? "bg-amber-500/10 border-amber-500 text-white"
+                    : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
+                }`}
+              >
+                {p.planType === "6_MONTHS" && (
+                  <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
+                    Popular
+                  </span>
+                )}
+                <div>
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
+                  <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
+                  <span className="text-[11px] text-slate-400 block mt-1">
+                    Valid for {p.durationDays} days
+                  </span>
+                </div>
+              </button>
+            ))}
           </div>
 
           <button

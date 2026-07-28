@@ -102,37 +102,28 @@ export default function AdminPricingPage() {
 
       <form onSubmit={handleSavePrices} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="space-y-4">
-          {plans.map((p) => {
-            const displayName = p.name.replace(/Lifetime/gi, "1-Year");
-            const durationText = p.durationDays === 365 
-              ? "Access valid for 365 days (1 year access)"
-              : p.durationDays > 0 
-                ? `Access valid for ${p.durationDays} days` 
-                : "Access valid for 365 days (1 year access)";
-
-            return (
-              <div key={p.planType} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-2xl bg-slate-50 border border-slate-200 gap-4">
-                <div>
-                  <h3 className="font-extrabold text-slate-900 text-sm">{displayName}</h3>
-                  <span className="text-xs text-slate-500 block">
-                    {durationText}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <span className="font-black text-slate-700 text-sm">₱</span>
-                  <input
-                    type="number"
-                    min="1"
-                    value={p.price}
-                    onChange={(e) => handlePriceChange(p.planType, e.target.value)}
-                    className="w-full sm:w-32 px-3 py-2 border border-slate-300 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
-                    required
-                  />
-                </div>
+          {plans.map((p) => (
+            <div key={p.planType} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-2xl bg-slate-50 border border-slate-200 gap-4">
+              <div>
+                <h3 className="font-extrabold text-slate-900 text-sm">{p.name}</h3>
+                <span className="text-xs text-slate-500 block">
+                  Access valid for {p.durationDays} days
+                </span>
               </div>
-            );
-          })}
+
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <span className="font-black text-slate-700 text-sm">₱</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={p.price}
+                  onChange={(e) => handlePriceChange(p.planType, e.target.value)}
+                  className="w-full sm:w-32 px-3 py-2 border border-slate-300 rounded-xl font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                  required
+                />
+              </div>
+            </div>
+          ))}
         </div>
 
         <button
