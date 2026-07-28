@@ -302,7 +302,10 @@ function DashboardContent() {
                   </span>
                 )}
                 <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
+                  {/* 👈 Replaces "LIFETIME PASS" with "1-YEAR PASS" */}
+                  <span className="text-[10px] font-bold uppercase text-slate-400 block">
+                    {p.name.replace(/Lifetime/gi, "1-Year")}
+                  </span>
                   <span className="text-2xl font-black text-amber-400">₱{p.price}</span>
                   <span className="text-[11px] text-slate-400 block mt-1">
                     {p.durationDays > 0 ? `Valid for ${p.durationDays} days` : "1 year access"}

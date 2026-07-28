@@ -105,7 +105,10 @@ export default function AdminPricingPage() {
           {plans.map((p) => (
             <div key={p.planType} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 rounded-2xl bg-slate-50 border border-slate-200 gap-4">
               <div>
-                <h3 className="font-extrabold text-slate-900 text-sm">{p.name}</h3>
+                {/* 👈 Replaces "Lifetime" with "1-Year" in plan header */}
+                <h3 className="font-extrabold text-slate-900 text-sm">
+                  {p.name.replace(/Lifetime/gi, "1-Year")}
+                </h3>
                 <span className="text-xs text-slate-500 block">
                   {p.durationDays > 0 ? `Access valid for ${p.durationDays} days` : "1 year access"}
                 </span>
