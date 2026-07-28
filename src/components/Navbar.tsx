@@ -35,7 +35,13 @@ export default function Navbar() {
           } else {
             // Session expired or logged in on another device
             setUser(null);
-            if (pathname !== "/" && pathname !== "/login" && pathname !== "/register") {
+            // Allowed public routes where unauthenticated users can stay
+            if (
+              pathname !== "/" &&
+              pathname !== "/login" &&
+              pathname !== "/register" &&
+              pathname !== "/signup"
+            ) {
               router.push("/login");
             }
           }
@@ -48,7 +54,12 @@ export default function Navbar() {
   }, [pathname, router]);
 
   // Hide Navbar on auth & landing pages
-  if (pathname === "/login" || pathname === "/register" || pathname === "/") {
+  if (
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/signup" ||
+    pathname === "/"
+  ) {
     return null;
   }
 
