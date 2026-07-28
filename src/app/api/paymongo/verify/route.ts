@@ -63,8 +63,8 @@ export async function POST() {
         newPaidUntil.setDate(newPaidUntil.getDate() + 30);
       } else if (planType === "6_MONTHS") {
         newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-      } else if (planType === "LIFETIME") {
-        newPaidUntil = null; // null = Lifetime unlimited
+      } else if (planType === "1_YEAR" || planType === "LIFETIME") {
+        newPaidUntil.setDate(newPaidUntil.getDate() + 365);
       }
 
       await prisma.user.update({

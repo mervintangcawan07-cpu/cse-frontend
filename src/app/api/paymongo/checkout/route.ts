@@ -39,17 +39,21 @@ export async function POST(request: Request) {
     });
 
     if (!plan) {
-      const defaults: Record<string, { price: number; name: string }> = {
-        "1_MONTH": { price: 199, name: "1-Month CSE PRO Access" },
-        "6_MONTHS": { price: 299, name: "6-Month CSE PRO Access" },
-        "LIFETIME": { price: 499, name: "Lifetime Pass CSE PRO" },
+      const defaults: Record<string, { price: number; name: string; durationDays: number }> = {
+        "1_MONTH": { price: 99, name: "1-Month CSE PRO Access", durationDays: 30 },
+        "6_MONTHS": { price: 199, name: "6-Month CSE PRO Access", durationDays: 180 },
+        "1_YEAR": { price: 299, name: "1-Year CSE PRO Access", durationDays: 365 },
+        "LIFETIME": { price: 299, name: "1-Year CSE PRO Access", durationDays: 365 },
       };
+
+      const fallback = defaults[planType] || { price: 99, name: "CSE PRO Access", durationDays: 30 };
+
       plan = {
         id: "default",
         planType,
-        name: defaults[planType]?.name || "CSE PRO Access",
-        price: defaults[planType]?.price || 199,
-        durationDays: 30,
+        name: fallback.name,
+        price: fallback.price,
+        durationDays: fallback.durationDays,
         updatedAt: new Date(),
       };
     }
