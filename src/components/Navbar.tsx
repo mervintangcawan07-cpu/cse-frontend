@@ -123,6 +123,16 @@ export default function Navbar() {
                   Speed Drills
                 </Link>
                 <Link
+                  href="/flashcards"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/flashcards")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Flashcards
+                </Link>
+                <Link
                   href="/reviewer"
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/reviewer")
@@ -180,6 +190,12 @@ export default function Navbar() {
                       className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
                     >
                       💳 Manage Plan Pricing
+                    </Link>
+                    <Link
+                      href="/admin/flashcards"
+                      className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      🎴 Manage Flashcards
                     </Link>
                     <Link
                       href="/admin/dashboard"
@@ -259,6 +275,14 @@ export default function Navbar() {
                 ⚡ Category Speed Drills
               </Link>
               <Link
+                href="/flashcards"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/flashcards") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                🎴 Active Recall Flashcards
+              </Link>
+              <Link
                 href="/reviewer"
                 className={`block px-4 py-3 rounded-xl transition ${
                   pathname.startsWith("/reviewer") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
@@ -301,6 +325,12 @@ export default function Navbar() {
                 className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
               >
                 💳 Manage Plan Pricing
+              </Link>
+              <Link
+                href="/admin/flashcards"
+                className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
+              >
+                🎴 Manage Flashcards
               </Link>
               <Link
                 href="/admin/dashboard"

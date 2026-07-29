@@ -12,26 +12,26 @@ enum Role {
 }
 
 model User {
-  id                       String        @id @default(cuid())
+  id                       String    @id @default(cuid())
   name                     String?
-  email                    String        @unique
+  email                    String    @unique
   password                 String
-  role                     Role          @default(USER)
-  isPaid                   Boolean       @default(false)
-  paidUntil                DateTime?     // Real-world expiration date (null = Lifetime)
-  planType                 String?       // "1_MONTH" | "6_MONTHS" | "LIFETIME"
+  role                     Role      @default(USER)
+  isPaid                   Boolean   @default(false)
+  paidUntil                DateTime? // Real-world expiration date (null = Lifetime)
+  planType                 String?   // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
 
   // 🔒 Security & Active Session Fields
-  isEmailVerified          Boolean       @default(false)
-  emailVerificationToken   String?       @unique
+  isEmailVerified          Boolean   @default(false)
+  emailVerificationToken   String?   @unique
   emailVerificationExpires DateTime?
-  passwordResetToken       String?       @unique
+  passwordResetToken       String?   @unique
   passwordResetExpires     DateTime?
-  activeSessionId          String?       // Single active session ID
-  lastActiveAt             DateTime?     // Timestamp for 30-min inactivity check
+  activeSessionId          String?   // Single active session ID
+  lastActiveAt             DateTime? // Timestamp for 30-min inactivity check
 
-  createdAt                DateTime      @default(now())
-  updatedAt                DateTime      @updatedAt
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
 
   // Database Relations
   results                  ExamResult[]
@@ -99,10 +99,10 @@ model Handbook {
 
 model PricingPlan {
   id           String   @id @default(cuid())
-  planType     String   @unique // "1_MONTH" | "6_MONTHS" | "LIFETIME"
+  planType     String   @unique // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
   name         String
-  price        Int      // Stored in PHP (e.g. 199, 299, 499)
-  durationDays Int      // 30, 180, 0 for Lifetime
+  price        Int      // Stored in PHP (e.g. 99, 199, 299)
+  durationDays Int      // 30, 180, 365, 0 for Lifetime
   updatedAt    DateTime @updatedAt
 }
 
@@ -174,4 +174,14 @@ model Transaction {
   receiptUrl        String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model Flashcard {
+  id        String   @id @default(cuid())
+  category  String
+  topic     String
+  front     String   @db.Text
+  back      String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
