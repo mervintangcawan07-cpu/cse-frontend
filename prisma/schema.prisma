@@ -185,3 +185,26 @@ model Flashcard {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum DuelStatus {
+  WAITING
+  IN_PROGRESS
+  FINISHED
+}
+
+model DuelMatch {
+  id          String     @id @default(cuid())
+  player1Id   String
+  player1Name String     @default("Examinee 1")
+  player2Id   String?
+  player2Name String?
+  status      DuelStatus @default(WAITING)
+  questions   Json       // 5 rapid questions
+  p1Score     Int        @default(0)
+  p2Score     Int        @default(0)
+  p1Current   Int        @default(0)
+  p2Current   Int        @default(0)
+  winnerId    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
