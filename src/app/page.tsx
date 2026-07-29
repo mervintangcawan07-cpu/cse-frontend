@@ -1,15 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+  const router = useRouter();
+
   // Sample Question Widget State
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  // ⚡ Auto-redirect active logged-in users (<30 min inactivity) to Dashboard
+  useEffect(() => {
+    async function checkActiveSession() {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user) {
+            router.replace("/dashboard");
+          }
+        }
+      } catch (err) {
+        // Session invalid or expired -> Stay on landing page
+      }
+    }
+    checkActiveSession();
+  }, [router]);
 
   const sampleQuestion = {
     category: "General Information & PH Constitution",
@@ -139,7 +160,7 @@ export default function LandingPage() {
         {/* Navigation Bar */}
         <nav className="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 sm:px-8 py-4 flex justify-between items-center shadow-md">
           <Link
-            href="/dashboard"
+            href="/"
             className="flex items-center gap-2 font-black text-lg text-white tracking-tight"
           >
             <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
@@ -511,7 +532,7 @@ export default function LandingPage() {
         {/* Footer */}
         <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 py-8 px-6 text-center text-xs space-y-2">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <Link href="/dashboard" className="font-black text-white">
+            <Link href="/" className="font-black text-white">
               CSE <span className="text-blue-500">Reviewer</span>
             </Link>
             <p>© 2026 CSE Reviewer Philippines. All rights reserved.</p>
