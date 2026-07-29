@@ -240,8 +240,15 @@ function DashboardContent() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 flex-wrap">
           <NotificationBell />
+
+          <Link
+            href="/readiness-card"
+            className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition shrink-0"
+          >
+            🏆 Flex Readiness Card
+          </Link>
 
           {isPaid ? (
             <div className="flex items-center gap-2">
@@ -336,15 +343,23 @@ function DashboardContent() {
         </div>
 
         {/* Pass Readiness Score */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-xs text-slate-500 font-extrabold uppercase">Pass Readiness</span>
-            <span className="text-xl">🎯</span>
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-slate-500 font-extrabold uppercase">Pass Readiness</span>
+              <span className="text-xl">🎯</span>
+            </div>
+            <div className="text-3xl font-black text-emerald-600 mt-1">
+              {dashAnalytics ? `${dashAnalytics.passReadinessScore}%` : "0%"}
+            </div>
+            <p className="text-[11px] text-slate-500">Target Benchmark: 80%+</p>
           </div>
-          <div className="text-3xl font-black text-emerald-600">
-            {dashAnalytics ? `${dashAnalytics.passReadinessScore}%` : "0%"}
-          </div>
-          <p className="text-[11px] text-slate-500">Target Benchmark: 80%+</p>
+          <Link
+            href="/readiness-card"
+            className="text-[11px] font-bold text-blue-600 hover:text-blue-500 transition block mt-1"
+          >
+            🏆 Export Shareable Card &rarr;
+          </Link>
         </div>
 
         {/* Total Mock Exams Completed */}
