@@ -20,6 +20,7 @@ export default function TakeExamPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
   // App State
   const [loading, setLoading] = useState(true);
@@ -36,26 +37,66 @@ export default function TakeExamPage() {
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
-    async function loadQuestions() {
+    async function loadQuestionsAndBookmarks() {
       try {
-        const res = await fetch("/api/questions");
-        const data = await res.json();
-        if (res.ok && data.questions) {
-          setAllQuestions(data.questions);
+        const [questionsRes, bookmarkRes] = await Promise.all([
+          fetch("/api/questions"),
+          fetch("/api/bookmarks"),
+        ]);
+
+        const qData = await questionsRes.json();
+        if (questionsRes.ok && qData.questions) {
+          setAllQuestions(qData.questions);
           // Extract unique categories dynamically from DB
           const uniqueCategories = Array.from(
-            new Set(data.questions.map((q: Question) => q.category))
+            new Set(qData.questions.map((q: Question) => q.category))
           ) as string[];
           setCategories(uniqueCategories);
         }
+
+        if (bookmarkRes.ok) {
+          const bookmarkData = await bookmarkRes.json();
+          const ids = new Set<string>(
+            bookmarkData.bookmarks
+              ?.filter((b: any) => b.targetType === "QUESTION" || !b.targetType)
+              .map((b: any) => b.id) || []
+          );
+          setBookmarkedIds(ids);
+        }
       } catch (err) {
-        console.error("Failed to load questions:", err);
+        console.error("Failed to load questions or bookmarks:", err);
       } finally {
         setLoading(false);
       }
     }
-    loadQuestions();
+    loadQuestionsAndBookmarks();
   }, []);
+
+  // Toggle Bookmark Handler
+  const toggleBookmark = async (questionId: string) => {
+    try {
+      const res = await fetch("/api/bookmarks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetId: questionId, targetType: "QUESTION" }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setBookmarkedIds((prev) => {
+          const next = new Set(prev);
+          if (data.isBookmarked) {
+            next.add(questionId);
+          } else {
+            next.delete(questionId);
+          }
+          return next;
+        });
+      }
+    } catch (err) {
+      console.error("Failed to update bookmark:", err);
+    }
+  };
 
   // Secure Submit Logic
   const handleSubmitExam = useCallback(async () => {
@@ -265,6 +306,7 @@ export default function TakeExamPage() {
   }
 
   const currentQ = examQuestions[currentIndex];
+  const isBookmarked = currentQ ? bookmarkedIds.has(currentQ.id) : false;
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4 space-y-6">
@@ -293,6 +335,24 @@ export default function TakeExamPage() {
       </div>
 
       <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        {/* CARD HEADER WITH BOOKMARK TOGGLE BUTTON */}
+        <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            Question Prompt
+          </span>
+
+          <button
+            onClick={() => toggleBookmark(currentQ.id)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 ${
+              isBookmarked
+                ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
+                : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-800"
+            }`}
+          >
+            <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
+          </button>
+        </div>
+
         <h2 className="text-lg font-bold text-slate-800 leading-relaxed">{currentQ.prompt}</h2>
 
         <div className="space-y-3">

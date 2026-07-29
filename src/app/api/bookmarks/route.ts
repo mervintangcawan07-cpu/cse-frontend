@@ -13,7 +13,7 @@ async function getAuthUserId() {
   return session?.userId ? String(session.userId) : null;
 }
 
-// 1. GET ALL BOOKMARKED QUESTIONS FOR CURRENT USER
+// 1. GET ALL BOOKMARKED QUESTIONS & STUDY NOTES FOR CURRENT USER
 export async function GET() {
   try {
     const userId = await getAuthUserId();
@@ -21,45 +21,70 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Fetch user bookmarks for questions
+    // Fetch all user bookmarks
     const bookmarks = await prisma.bookmark.findMany({
-      where: {
-        userId,
-        targetType: "QUESTION",
-      },
+      where: { userId },
       orderBy: { createdAt: "desc" },
     });
 
-    const questionIds = bookmarks.map((b) => b.targetId);
+    // Extract target IDs by targetType
+    const questionIds = bookmarks
+      .filter((b) => b.targetType === "QUESTION" || !b.targetType)
+      .map((b) => b.targetId);
 
-    // Fetch corresponding question details
-    const questions = await prisma.question.findMany({
-      where: {
-        id: { in: questionIds },
-      },
-    });
+    const studyNoteIds = bookmarks
+      .filter((b) => b.targetType === "STUDY_NOTE")
+      .map((b) => b.targetId);
 
-    // Combine bookmark metadata with question content
-    const bookmarkedQuestions = bookmarks
+    // Fetch corresponding entities from DB in parallel
+    const [questions, studyNotes] = await Promise.all([
+      prisma.question.findMany({
+        where: { id: { in: questionIds } },
+      }),
+      prisma.studyNote.findMany({
+        where: { id: { in: studyNoteIds } },
+      }),
+    ]);
+
+    // Combine bookmark metadata with actual entity details
+    const bookmarkedItems = bookmarks
       .map((b) => {
-        const question = questions.find((q) => q.id === b.targetId);
-        if (!question) return null;
-        return {
-          bookmarkId: b.id,
-          bookmarkedAt: b.createdAt,
-          ...question,
-        };
+        const type = b.targetType || "QUESTION";
+
+        if (type === "QUESTION") {
+          const question = questions.find((q) => q.id === b.targetId);
+          if (!question) return null;
+          return {
+            bookmarkId: b.id,
+            targetType: "QUESTION",
+            bookmarkedAt: b.createdAt,
+            ...question,
+          };
+        }
+
+        if (type === "STUDY_NOTE") {
+          const note = studyNotes.find((n) => n.id === b.targetId);
+          if (!note) return null;
+          return {
+            bookmarkId: b.id,
+            targetType: "STUDY_NOTE",
+            bookmarkedAt: b.createdAt,
+            ...note,
+          };
+        }
+
+        return null;
       })
       .filter(Boolean);
 
-    return NextResponse.json({ success: true, bookmarks: bookmarkedQuestions });
+    return NextResponse.json({ success: true, bookmarks: bookmarkedItems });
   } catch (error: any) {
     console.error("[BOOKMARKS_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch bookmarks." }, { status: 500 });
   }
 }
 
-// 2. TOGGLE OR ADD BOOKMARK
+// 2. TOGGLE OR ADD BOOKMARK (QUESTION OR STUDY_NOTE)
 export async function POST(request: Request) {
   try {
     const userId = await getAuthUserId();
