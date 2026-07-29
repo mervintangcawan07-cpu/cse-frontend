@@ -482,6 +482,7 @@ function DashboardContent() {
 
       {/* MAIN STUDENT MODULES GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* MOCK EXAM MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
@@ -510,6 +511,7 @@ function DashboardContent() {
           )}
         </div>
 
+        {/* SPEED DRILLS MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
@@ -538,6 +540,38 @@ function DashboardContent() {
           )}
         </div>
 
+        {/* ⚔️ 1v1 STUDY DUELS (LIVE ARENA MODULE) */}
+        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 relative overflow-hidden">
+          <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
+              Live Battle Arena
+            </span>
+            <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
+          </div>
+          <div>
+            <h2 className="text-xl font-extrabold text-white">1v1 Study Duels</h2>
+            <p className="text-xs text-slate-400 leading-relaxed mt-1">
+              Challenge online examinees in a 5-round rapid speed quiz. Earn XP points and test your recall against real opponents!
+            </p>
+          </div>
+          {isPaid ? (
+            <Link
+              href="/duels"
+              className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-md"
+            >
+              ⚔️ Enter Battle Arena
+            </Link>
+          ) : (
+            <button
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+            >
+              🔒 Unlock 1v1 Duels
+            </button>
+          )}
+        </div>
+
+        {/* STUDY NOTES MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
@@ -566,6 +600,7 @@ function DashboardContent() {
           )}
         </div>
 
+        {/* READING MATERIALS MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
