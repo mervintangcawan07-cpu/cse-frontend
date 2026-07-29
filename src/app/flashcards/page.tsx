@@ -1,47 +1,276 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+interface Flashcard {
+  id: string;
+  category: string;
+  topic: string;
+  front: string;
+  back: string;
+}
 
 export default function FlashcardsPage() {
-  const decks = [
-    { title: "Vocabulary Builder", description: "Synonyms, antonyms, and context clues.", cards: 150, color: "border-blue-200 bg-blue-50 text-blue-700", icon: "VB" },
-    { title: "Phil. Constitution", description: "Key articles, sections, and amendments.", cards: 85, color: "border-amber-200 bg-amber-50 text-amber-700", icon: "PC" },
-    { title: "Math Formulas", description: "Essential formulas for Numerical Ability.", cards: 45, color: "border-emerald-200 bg-emerald-50 text-emerald-700", icon: "MF" },
-    { title: "Idioms & Grammar", description: "Common idiomatic expressions and rules.", cards: 120, color: "border-purple-200 bg-purple-50 text-purple-700", icon: "IG" },
-  ];
+  const router = useRouter();
+  const [allCards, setAllCards] = useState<Flashcard[]>([]);
+  const [filteredCards, setFilteredCards] = useState<Flashcard[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    async function loadFlashcards() {
+      try {
+        const res = await fetch("/api/flashcards");
+        const data = await res.json();
+
+        if (res.ok && data.flashcards) {
+          setAllCards(data.flashcards);
+          setFilteredCards(data.flashcards);
+        } else {
+          router.push("/dashboard");
+        }
+      } catch (err) {
+        console.error("Failed to fetch flashcards:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadFlashcards();
+  }, [router]);
+
+  // Handle Category Filtering
+  useEffect(() => {
+    setIsFlipped(false);
+    setCurrentIndex(0);
+    if (selectedCategory === "ALL") {
+      setFilteredCards(allCards);
+    } else {
+      setFilteredCards(allCards.filter((c) => c.category === selectedCategory));
+    }
+  }, [selectedCategory, allCards]);
+
+  const currentCard = filteredCards[currentIndex];
+
+  const handleNext = () => {
+    setIsFlipped(false);
+    if (currentIndex < filteredCards.length - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    } else {
+      setCurrentIndex(0); // Loop back
+    }
+  };
+
+  const handlePrev = () => {
+    setIsFlipped(false);
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    } else {
+      setCurrentIndex(filteredCards.length - 1);
+    }
+  };
+
+  const toggleMastered = (cardId: string) => {
+    setMasteredIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(cardId)) {
+        next.delete(cardId);
+      } else {
+        next.add(cardId);
+      }
+      return next;
+    });
+  };
+
+  const shuffleDeck = () => {
+    setIsFlipped(false);
+    setCurrentIndex(0);
+    const shuffled = [...filteredCards].sort(() => Math.random() - 0.5);
+    setFilteredCards(shuffled);
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        Loading active-recall flashcard deck...
+      </div>
+    );
+  }
+
+  const isCurrentMastered = currentCard ? masteredIds.has(currentCard.id) : false;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
-      <div className="bg-linear-to-r from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-md flex flex-col md:flex-row justify-between items-center gap-6">
+    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6 text-slate-100">
+      {/* HEADER BANNER */}
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>
-          <h1 className="text-3xl font-bold">Flashcards</h1>
-          <p className="text-slate-300 mt-2">Master concepts faster using active recall and spaced repetition.</p>
+          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+            Active Recall Practice
+          </span>
+          <h1 className="text-2xl font-black text-white mt-2">
+            Interactive Flashcards
+          </h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Tap cards to flip between prompts and answers. Memorize key formulas, laws, and vocabulary.
+          </p>
         </div>
-        <button className="bg-white text-slate-900 font-bold px-6 py-3 rounded-xl shadow-sm hover:bg-slate-100 transition whitespace-nowrap">
-          Start Random Review
+
+        <Link
+          href="/dashboard"
+          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 shrink-0"
+        >
+          ← Return to Dashboard
+        </Link>
+      </div>
+
+      {/* CATEGORY FILTERS & CONTROLS */}
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs font-bold">
+          {["ALL", "Verbal Ability", "General Information", "Numerical Reasoning"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3.5 py-2 rounded-xl transition shrink-0 ${
+                selectedCategory === cat
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+              }`}
+            >
+              {cat === "ALL" ? "🎴 All Decks" : cat}
+            </button>
+          ))}
+        </div>
+
+        <button
+          onClick={shuffleDeck}
+          className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-bold text-xs rounded-xl transition shrink-0 flex items-center justify-center gap-1.5"
+        >
+          🔀 Shuffle Deck
         </button>
       </div>
 
-      <h2 className="text-xl font-bold text-slate-800 px-1">Your Study Decks</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {decks.map((deck, i) => (
-          <div key={i} className="bg-white rounded-2xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition p-6 flex flex-col justify-between h-56">
-            <div>
-              <div className={`w-12 h-12 rounded-xl mb-4 border flex items-center justify-center text-sm font-bold ${deck.color}`}>
-                {deck.icon}
-              </div>
-              <h3 className="font-bold text-slate-800 text-lg">{deck.title}</h3>
-              <p className="text-sm text-slate-500 mt-1 line-clamp-2">{deck.description}</p>
-            </div>
-            
-            <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
-              <span className="text-xs font-semibold text-slate-500">{deck.cards} Cards</span>
-              <Link href="#" className="text-sm font-bold text-blue-600 hover:underline">
-                Study Now
-              </Link>
+      {/* PROGRESS METRICS */}
+      <div className="flex justify-between items-center text-xs font-extrabold text-slate-400 px-1">
+        <span>
+          Card {currentIndex + 1} of {filteredCards.length}
+        </span>
+        <span className="text-emerald-400">
+          ⭐ Mastered: {masteredIds.size} / {allCards.length}
+        </span>
+      </div>
+
+      {/* 3D FLIP CARD CONTAINER */}
+      {currentCard ? (
+        <div className="space-y-4">
+          <div
+            onClick={() => setIsFlipped(!isFlipped)}
+            className="w-full min-h-[300px] sm:min-h-[340px] cursor-pointer perspective-1000"
+          >
+            <div
+              className={`relative w-full h-full min-h-[300px] sm:min-h-[340px] rounded-3xl p-8 border transition-transform duration-500 shadow-2xl flex flex-col justify-between ${
+                isFlipped
+                  ? "bg-slate-900 border-amber-500/50"
+                  : "bg-slate-900/90 border-blue-500/40 hover:border-blue-500"
+              }`}
+              style={{
+                transformStyle: "preserve-3d",
+                transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+              }}
+            >
+              {/* FRONT SIDE */}
+              {!isFlipped && (
+                <div className="flex flex-col justify-between h-full space-y-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
+                      {currentCard.category} • {currentCard.topic}
+                    </span>
+                    <span className="text-xs text-slate-500 font-bold">
+                      Click card to reveal answer 🔄
+                    </span>
+                  </div>
+
+                  <div className="my-auto text-center space-y-3">
+                    <h2 className="text-lg sm:text-xl font-black text-white leading-relaxed">
+                      {currentCard.front}
+                    </h2>
+                  </div>
+
+                  <div className="text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    Question / Prompt
+                  </div>
+                </div>
+              )}
+
+              {/* BACK SIDE */}
+              {isFlipped && (
+                <div
+                  className="flex flex-col justify-between h-full space-y-6"
+                  style={{ transform: "rotateY(180deg)" }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/20">
+                      Solution / Rationalization
+                    </span>
+                    <span className="text-xs text-amber-400 font-bold">
+                      Answer Revealed ✅
+                    </span>
+                  </div>
+
+                  <div className="my-auto space-y-3 text-center sm:text-left">
+                    <p className="text-sm sm:text-base font-bold text-slate-200 leading-relaxed whitespace-pre-line">
+                      {currentCard.back}
+                    </p>
+                  </div>
+
+                  <div className="text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    Tap to turn back
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* CARD NAVIGATION & MASTERY CONTROLS */}
+          <div className="flex items-center justify-between gap-3 pt-2">
+            <button
+              onClick={handlePrev}
+              className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs rounded-2xl border border-slate-800 transition shadow-md"
+            >
+              ← Previous
+            </button>
+
+            <button
+              onClick={() => toggleMastered(currentCard.id)}
+              className={`px-4 py-3 rounded-2xl font-black text-xs transition border shadow-md ${
+                isCurrentMastered
+                  ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
+                  : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+              }`}
+            >
+              {isCurrentMastered ? "⭐ Mastered" : "☆ Mark as Mastered"}
+            </button>
+
+            <button
+              onClick={handleNext}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg transition"
+            >
+              Next Card →
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
+          <span className="text-3xl block">🎴</span>
+          <p className="text-xs font-bold text-slate-400">
+            No flashcards found in this category.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
