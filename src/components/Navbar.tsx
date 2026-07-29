@@ -75,7 +75,6 @@ export default function Navbar() {
   };
 
   return (
-    // 👈 Set header to z-[9999] so all dropdowns sit on top of page content
     <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[9999] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -149,6 +148,18 @@ export default function Navbar() {
                 🔒 PRO Modules Locked
               </span>
             )}
+
+            {/* 👤 PROFILE LINK */}
+            <Link
+              href="/profile"
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                pathname === "/profile"
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              👤 Profile
+            </Link>
 
             {/* ADMIN DROPDOWN */}
             {user?.role === "ADMIN" && (
@@ -269,6 +280,16 @@ export default function Navbar() {
               🔒 PRO Modules Locked (Select Plan on Dashboard)
             </div>
           )}
+
+          {/* 👤 MOBILE PROFILE LINK */}
+          <Link
+            href="/profile"
+            className={`block px-4 py-3 rounded-xl transition ${
+              pathname === "/profile" ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+            }`}
+          >
+            👤 My Profile & Settings
+          </Link>
 
           {user?.role === "ADMIN" && (
             <div className="pt-2 border-t border-slate-800 space-y-2">
