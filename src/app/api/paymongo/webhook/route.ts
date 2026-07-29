@@ -74,8 +74,9 @@ export async function POST(request: Request) {
           newPaidUntil.setDate(newPaidUntil.getDate() + 30);
         } else if (planType === "6_MONTHS") {
           newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-        } else if (planType === "LIFETIME") {
-          newPaidUntil = null;
+        } else if (planType === "1_YEAR" || planType === "LIFETIME") {
+          // 👈 Calculate 365 days countdown for 1-Year Pass
+          newPaidUntil.setDate(newPaidUntil.getDate() + 365);
         }
 
         await prisma.user.update({
@@ -86,7 +87,7 @@ export async function POST(request: Request) {
             paidUntil: newPaidUntil,
           },
         });
-        console.log(`[PayMongo Webhook] User ID ${userId} upgraded to PRO (${planType}).`);
+        console.log(`[PayMongo Webhook] User ID ${userId} upgraded to PRO (${planType}) until ${newPaidUntil.toISOString()}.`);
       } else {
         console.warn("[PayMongo Webhook] Paid event received but userId missing in metadata.");
       }
