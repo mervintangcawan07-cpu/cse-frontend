@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { prepareShuffledExam, QuestionItem } from "@/lib/quizUtils";
 
 interface Question {
   id: string;
@@ -12,6 +11,8 @@ interface Question {
   answerIndex: number;
   explanation?: string;
 }
+
+const LOCAL_STORAGE_KEY = "cse_active_exam_session";
 
 export default function TakeExamPage() {
   const router = useRouter();
@@ -36,8 +37,9 @@ export default function TakeExamPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
 
+  // 1. Load Questions, Bookmarks & Restore In-Progress Session
   useEffect(() => {
-    async function loadQuestionsAndBookmarks() {
+    async function initExam() {
       try {
         const [questionsRes, bookmarkRes] = await Promise.all([
           fetch("/api/questions"),
@@ -47,7 +49,6 @@ export default function TakeExamPage() {
         const qData = await questionsRes.json();
         if (questionsRes.ok && qData.questions) {
           setAllQuestions(qData.questions);
-          // Extract unique categories dynamically from DB
           const uniqueCategories = Array.from(
             new Set(qData.questions.map((q: Question) => q.category))
           ) as string[];
@@ -63,14 +64,42 @@ export default function TakeExamPage() {
           );
           setBookmarkedIds(ids);
         }
+
+        // 🔄 Check for active unfinished exam session in local storage
+        const savedSession = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (savedSession) {
+          const parsed = JSON.parse(savedSession);
+          if (parsed.examQuestions && parsed.examQuestions.length > 0) {
+            setExamQuestions(parsed.examQuestions);
+            setSelectedAnswers(parsed.selectedAnswers || {});
+            setCurrentIndex(parsed.currentIndex || 0);
+            setTimerMinutes(parsed.timerMinutes || 0);
+            setTimeLeft(parsed.timeLeft || 0);
+            setIsSetupPhase(false);
+          }
+        }
       } catch (err) {
-        console.error("Failed to load questions or bookmarks:", err);
+        console.error("Failed to initialize exam session:", err);
       } finally {
         setLoading(false);
       }
     }
-    loadQuestionsAndBookmarks();
+    initExam();
   }, []);
+
+  // 2. Auto-Save Active Exam State to LocalStorage
+  useEffect(() => {
+    if (!isSetupPhase && examQuestions.length > 0 && !submitting) {
+      const activeSession = {
+        examQuestions,
+        selectedAnswers,
+        currentIndex,
+        timerMinutes,
+        timeLeft,
+      };
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
+    }
+  }, [isSetupPhase, examQuestions, selectedAnswers, currentIndex, timerMinutes, timeLeft, submitting]);
 
   // Toggle Bookmark Handler
   const toggleBookmark = async (questionId: string) => {
@@ -98,7 +127,7 @@ export default function TakeExamPage() {
     }
   };
 
-  // Secure Submit Logic
+  // 3. Submit Exam & Clear Active Session
   const handleSubmitExam = useCallback(async () => {
     if (submitting) return;
     setSubmitting(true);
@@ -107,7 +136,6 @@ export default function TakeExamPage() {
     let incorrectCount = 0;
     let skippedCount = 0;
 
-    // Calculate client-side totals for immediate local review display
     examQuestions.forEach((q, idx) => {
       const selected = selectedAnswers[idx];
       if (selected === undefined) {
@@ -123,7 +151,6 @@ export default function TakeExamPage() {
     const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
     const finalScore = Math.round(scorePercentage);
 
-    // Format selected answers array for tamper-proof server verification
     const formattedAnswers = examQuestions.map((q, idx) => {
       const selectedIdx = selectedAnswers[idx];
       return {
@@ -133,7 +160,6 @@ export default function TakeExamPage() {
       };
     });
 
-    // Send formatted answers to API for server-side grading and DB recording
     try {
       await fetch("/api/exam/submit", {
         method: "POST",
@@ -147,7 +173,6 @@ export default function TakeExamPage() {
       console.error("Error submitting result:", err);
     }
 
-    // Save review data locally for the results screen
     const reviewData = {
       questions: examQuestions,
       selectedAnswers,
@@ -157,6 +182,9 @@ export default function TakeExamPage() {
       skipped: skippedCount,
     };
     localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
+
+    // Clear active session from storage on exam completion
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
 
     router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router]);
@@ -173,17 +201,33 @@ export default function TakeExamPage() {
     }
   }, [isSetupPhase, timerMinutes, timeLeft, submitting, handleSubmitExam]);
 
+  // 4. Start Exam (Preserves Subject Block Sequence & Randomizes Option Choices)
   function handleStartExam() {
-    // Filter questions based on selected category
     const filtered =
       selectedCategory === "All"
         ? allQuestions
         : allQuestions.filter((q) => q.category === selectedCategory);
 
-    // Shuffle question order AND option placements dynamically
-    const preparedQuestions = prepareShuffledExam(filtered as QuestionItem[]) as Question[];
+    // Keep subject block sequence intact, but shuffle A/B/C/D option placement per question
+    const preparedQuestions = filtered.map((q) => {
+      const indexedOptions = q.options.map((opt, idx) => ({
+        text: opt,
+        isCorrect: idx === q.answerIndex,
+      }));
 
-    setExamQuestions(preparedQuestions);
+      const shuffledOptions = [...indexedOptions].sort(() => Math.random() - 0.5);
+
+      return {
+        ...q,
+        options: shuffledOptions.map((o) => o.text),
+        answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
+      };
+    });
+
+    // Strictly cap to 170 items
+    const cappedQuestions = preparedQuestions.slice(0, 170);
+
+    setExamQuestions(cappedQuestions);
     setCurrentIndex(0);
     setSelectedAnswers({});
     setTimeLeft(timerMinutes * 60);
@@ -231,7 +275,9 @@ export default function TakeExamPage() {
         <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-8">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-800">Configure Mock Exam</h1>
-            <p className="text-slate-500 text-sm mt-1">Customize your practice session before you begin.</p>
+            <p className="text-slate-500 text-sm mt-1">
+              Customize your practice session before you begin.
+            </p>
           </div>
 
           <div className="space-y-6">
@@ -244,7 +290,7 @@ export default function TakeExamPage() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full p-4 border border-slate-200 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white transition"
               >
-                <option value="All">All Categories (Comprehensive Exam)</option>
+                <option value="All">All Categories (170 Items - Subject Sequential)</option>
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -260,9 +306,9 @@ export default function TakeExamPage() {
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { label: "Untimed", value: 0 },
-                  { label: "5 Minutes", value: 5 },
                   { label: "15 Minutes", value: 15 },
                   { label: "30 Minutes", value: 30 },
+                  { label: "3 Hours 10 Mins (Official)", value: 190 },
                 ].map((timer) => (
                   <button
                     key={timer.value}
@@ -284,7 +330,7 @@ export default function TakeExamPage() {
             onClick={handleStartExam}
             className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg rounded-2xl transition shadow-sm"
           >
-            Start Exam Now (Shuffled Mode) 🔀
+            Start 170-Item Exam (Sequential Subjects) 🚀
           </button>
         </div>
       </div>
@@ -310,20 +356,21 @@ export default function TakeExamPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4 space-y-6">
+      {/* EXAM STATUS & CATEGORY SECTION HEADER */}
       <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
             {currentQ.category}
           </span>
           <span className="text-sm font-semibold text-slate-500">
-            {currentIndex + 1} / {examQuestions.length}
+            {currentIndex + 1} / {examQuestions.length} Items
           </span>
         </div>
 
         {timerMinutes > 0 && (
           <div
             className={`flex items-center gap-2 px-3 py-1 rounded-full border font-bold text-sm ${
-              timeLeft <= 60
+              timeLeft <= 180
                 ? "border-rose-200 bg-rose-50 text-rose-600 animate-pulse"
                 : "border-slate-200 bg-slate-50 text-slate-600"
             }`}
@@ -338,7 +385,7 @@ export default function TakeExamPage() {
         {/* CARD HEADER WITH BOOKMARK TOGGLE BUTTON */}
         <div className="flex justify-between items-center border-b border-slate-100 pb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-            Question Prompt
+            Section: {currentQ.category}
           </span>
 
           <button
