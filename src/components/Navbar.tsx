@@ -133,6 +133,16 @@ export default function Navbar() {
                   Flashcards
                 </Link>
                 <Link
+                  href="/bookmarks"
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/bookmarks")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Bookmarks
+                </Link>
+                <Link
                   href="/reviewer"
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/reviewer")
@@ -281,6 +291,14 @@ export default function Navbar() {
                 }`}
               >
                 🎴 Active Recall Flashcards
+              </Link>
+              <Link
+                href="/bookmarks"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/bookmarks") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                🔖 Saved Bookmarks
               </Link>
               <Link
                 href="/reviewer"
