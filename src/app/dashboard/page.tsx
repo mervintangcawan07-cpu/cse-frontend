@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
+import ResumeExamBanner from "@/components/dashboard/ResumeExamBanner";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -212,6 +213,9 @@ function DashboardContent() {
         </div>
       )}
 
+      {/* ⏸️ PAUSED EXAM RESUME BANNER */}
+      <ResumeExamBanner />
+
       {/* WELCOME BANNER WITH NOTIFICATION BELL */}
       <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -261,7 +265,7 @@ function DashboardContent() {
                 </button>
               )}
               <Link
-                href="/mock-exam/take"
+                href="/exam"
                 className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition shrink-0"
               >
                 ⚡ Start Mock Exam
@@ -496,7 +500,7 @@ function DashboardContent() {
           </p>
           {isPaid ? (
             <Link
-              href="/mock-exam/take"
+              href="/exam"
               className="inline-block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center rounded-xl transition"
             >
               Start Exam
