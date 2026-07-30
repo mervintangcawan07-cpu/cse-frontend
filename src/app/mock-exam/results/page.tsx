@@ -40,6 +40,12 @@ export default function ExamResultPage() {
     }
   }, []);
 
+  // Handler for fresh retake
+  const handleRetakeExam = () => {
+    localStorage.removeItem("cse_active_exam_session");
+    router.push("/exam");
+  };
+
   // Prevents SSR hydration mismatch on Vercel deployment
   if (!mounted) {
     return (
@@ -110,12 +116,12 @@ export default function ExamResultPage() {
         </div>
 
         <div className="pt-2 flex justify-center gap-3">
-          <Link
-            href="/mock-exam/take"
+          <button
+            onClick={handleRetakeExam}
             className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm"
           >
-            Retake Exam
-          </Link>
+            Retake Exam ⚡
+          </button>
           <Link
             href="/dashboard"
             className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition"

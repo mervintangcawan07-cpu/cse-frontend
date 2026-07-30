@@ -59,14 +59,16 @@ export default function Sidebar() {
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: "📊", public: true },
-    { href: "/reviewer", label: "Reviewer Module", icon: "📝", public: false },
-    { href: "/reading-materials", label: "Reading Materials", icon: "📚", public: false },
-    { href: "/mock-exam/take", label: "Mock Exam", icon: "⏱️", public: false },
+    { href: "/exam", label: "Mock Exam", icon: "⏱️", public: false },
     { href: "/drills", label: "Speed Drills", icon: "⚡", public: false },
+    { href: "/duels", label: "1v1 Duels", icon: "⚔️", public: false },
+    { href: "/flashcards", label: "Flashcards", icon: "🎴", public: false },
+    { href: "/bookmarks", label: "Bookmarks", icon: "🔖", public: false },
+    { href: "/reviewer", label: "Study Notes", icon: "📝", public: false },
+    { href: "/reading-materials", label: "Handbooks", icon: "📚", public: false },
   ];
 
   return (
-    /* hidden lg:flex ensures this desktop sidebar does NOT break mobile layouts */
     <aside className="hidden lg:flex w-64 bg-slate-950 border-r border-slate-800 text-white min-h-screen flex-col justify-between p-4 shrink-0">
       <div className="space-y-6">
         <div className="flex items-center gap-2.5 px-3 py-2">
@@ -81,7 +83,14 @@ export default function Sidebar() {
 
         <nav className="space-y-1.5">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isExamRoute =
+              item.href === "/exam" &&
+              (pathname === "/exam" || pathname.startsWith("/mock-exam"));
+            const isActive =
+              isExamRoute ||
+              pathname === item.href ||
+              (item.href !== "/dashboard" && pathname.startsWith(item.href + "/"));
+
             const canAccess = item.public || isPaid;
 
             if (canAccess) {

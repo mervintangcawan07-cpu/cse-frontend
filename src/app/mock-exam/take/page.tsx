@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Question {
   id: string;
@@ -28,7 +29,7 @@ export default function TakeExamPage() {
   const [isSetupPhase, setIsSetupPhase] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
-  const [hasSavedSession, setHasSavedSession] = useState(false);
+  const [savedSessionData, setSavedSessionData] = useState<any | null>(null);
 
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -68,17 +69,15 @@ export default function TakeExamPage() {
         }
 
         // 🔄 Check for active unfinished exam session in local storage
-        const savedSession = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedSession) {
-          const parsed = JSON.parse(savedSession);
-          if (parsed.examQuestions && parsed.examQuestions.length > 0) {
-            setExamQuestions(parsed.examQuestions);
-            setSelectedAnswers(parsed.selectedAnswers || {});
-            setCurrentIndex(parsed.currentIndex || 0);
-            setTimerMinutes(parsed.timerMinutes || 0);
-            setTimeLeft(parsed.timeLeft || 0);
-            setHasSavedSession(true);
-            setIsSetupPhase(false);
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed.examQuestions && parsed.examQuestions.length > 0) {
+              setSavedSessionData(parsed);
+            }
+          } catch (e) {
+            console.error("Error parsing saved exam session:", e);
           }
         }
       } catch (err) {
@@ -204,17 +203,27 @@ export default function TakeExamPage() {
     }
   }, [isSetupPhase, timerMinutes, timeLeft, submitting, handleSubmitExam, isPauseModalOpen]);
 
-  // 4. Start Exam (Preserves Subject Block Sequence & Randomizes Option Choices)
+  // Resume Saved Session Handler
+  function handleResumeSavedSession() {
+    if (!savedSessionData) return;
+    setExamQuestions(savedSessionData.examQuestions);
+    setSelectedAnswers(savedSessionData.selectedAnswers || {});
+    setCurrentIndex(savedSessionData.currentIndex || 0);
+    setTimerMinutes(savedSessionData.timerMinutes || 0);
+    setTimeLeft(savedSessionData.timeLeft || 0);
+    setIsSetupPhase(false);
+  }
+
+  // 4. Start New Exam
   function handleStartExam() {
-    // Clear any previous saved session when starting a brand new exam
     localStorage.removeItem(LOCAL_STORAGE_KEY);
+    setSavedSessionData(null);
 
     const filtered =
       selectedCategory === "All"
         ? allQuestions
         : allQuestions.filter((q) => q.category === selectedCategory);
 
-    // Keep subject block sequence intact, but shuffle A/B/C/D option placement per question
     const preparedQuestions = filtered.map((q) => {
       const indexedOptions = q.options.map((opt, idx) => ({
         text: opt,
@@ -230,18 +239,15 @@ export default function TakeExamPage() {
       };
     });
 
-    // Strictly cap to 170 items
     const cappedQuestions = preparedQuestions.slice(0, 170);
 
     setExamQuestions(cappedQuestions);
     setCurrentIndex(0);
     setSelectedAnswers({});
     setTimeLeft(timerMinutes * 60);
-    setHasSavedSession(false);
     setIsSetupPhase(false);
   }
 
-  // Handle Option Selection
   function handleSelectOption(optionIndex: number) {
     setSelectedAnswers((prev) => ({
       ...prev,
@@ -268,6 +274,7 @@ export default function TakeExamPage() {
     setExamQuestions([]);
     setSelectedAnswers({});
     setCurrentIndex(0);
+    setSavedSessionData(null);
     setIsSetupPhase(true);
     setIsPauseModalOpen(false);
     router.push("/dashboard");
@@ -292,8 +299,10 @@ export default function TakeExamPage() {
   if (allQuestions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
-        <p className="text-slate-600 font-semibold">No questions found in the database.</p>
-        <p className="text-slate-400 text-sm">Please make sure you have run the seed script or uploaded questions.</p>
+        <p className="text-slate-600 font-semibold">No questions found in database.</p>
+        <Link href="/dashboard" className="text-blue-600 font-bold hover:underline text-sm">
+          Return to Dashboard
+        </Link>
       </div>
     );
   }
@@ -303,7 +312,52 @@ export default function TakeExamPage() {
   // ==========================================
   if (isSetupPhase) {
     return (
-      <div className="max-w-xl mx-auto py-12 px-4 space-y-8">
+      <div className="max-w-xl mx-auto py-10 px-4 space-y-6">
+        {/* Navigation Link */}
+        <div className="flex justify-between items-center">
+          <Link
+            href="/dashboard"
+            className="text-xs font-extrabold text-slate-500 hover:text-slate-800 transition flex items-center gap-1"
+          >
+            ← Back to Dashboard
+          </Link>
+        </div>
+
+        {/* Saved Session Resume Prompt (If exists) */}
+        {savedSessionData && (
+          <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 p-6 rounded-3xl space-y-3 shadow-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black uppercase text-amber-700 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                ⏸️ Unfinished Exam Found
+              </span>
+            </div>
+            <h2 className="text-base font-extrabold text-slate-900">
+              You have a saved exam session in progress!
+            </h2>
+            <p className="text-xs text-slate-600 font-medium leading-relaxed">
+              Answered {Object.keys(savedSessionData.selectedAnswers || {}).length} of{" "}
+              {savedSessionData.examQuestions?.length || 0} items.
+            </p>
+            <div className="flex gap-3 pt-1">
+              <button
+                onClick={handleResumeSavedSession}
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition"
+              >
+                Resume Saved Exam ⚡
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.removeItem(LOCAL_STORAGE_KEY);
+                  setSavedSessionData(null);
+                }}
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition"
+              >
+                Discard & Start Fresh
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-8">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-800">Configure Mock Exam</h1>
@@ -362,7 +416,7 @@ export default function TakeExamPage() {
             onClick={handleStartExam}
             className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg rounded-2xl transition shadow-sm"
           >
-            Start 170-Item Exam (Sequential Subjects) 🚀
+            Start 170-Item Exam 🚀
           </button>
         </div>
       </div>
@@ -370,7 +424,7 @@ export default function TakeExamPage() {
   }
 
   // ==========================================
-  // PHASE 2: EXAM SCREEN
+  // PHASE 2: ACTIVE EXAM SCREEN
   // ==========================================
   if (examQuestions.length === 0) {
     return (
@@ -385,27 +439,29 @@ export default function TakeExamPage() {
 
   const currentQ = examQuestions[currentIndex];
   const isBookmarked = currentQ ? bookmarkedIds.has(currentQ.id) : false;
+  const answeredCount = Object.keys(selectedAnswers).length;
+  const progressPercent = Math.round((answeredCount / examQuestions.length) * 100);
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 space-y-6">
-      {/* EXAM STATUS & CATEGORY SECTION HEADER */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm gap-4">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+    <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
+      {/* TOP HEADER: TIMER, ITEM COUNTER, AND PAUSE / EXIT BUTTON */}
+      <div className="bg-slate-900 text-white p-4 md:p-5 rounded-3xl shadow-md flex justify-between items-center gap-4">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-extrabold uppercase px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
             {currentQ?.category || "General"}
           </span>
-          <span className="text-sm font-semibold text-slate-500">
-            {currentIndex + 1} / {examQuestions.length} Items
+          <span className="text-xs font-bold text-slate-400 hidden sm:inline">
+            Item {currentIndex + 1} of {examQuestions.length} ({answeredCount} answered)
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           {timerMinutes > 0 && (
             <div
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full border font-bold text-xs ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono font-bold text-xs ${
                 timeLeft <= 180
-                  ? "border-rose-200 bg-rose-50 text-rose-600 animate-pulse"
-                  : "border-slate-200 bg-slate-50 text-slate-600"
+                  ? "border-rose-500/50 bg-rose-500/20 text-rose-300 animate-pulse"
+                  : "border-slate-700 bg-slate-800 text-amber-400"
               }`}
             >
               <span>⏱</span>
@@ -413,10 +469,10 @@ export default function TakeExamPage() {
             </div>
           )}
 
-          {/* ⏸️ EXIT / PAUSE EXAM TRIGGER BUTTON */}
+          {/* 🔴 PAUSE / EXIT BUTTON */}
           <button
             onClick={() => setIsPauseModalOpen(true)}
-            className="px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs rounded-xl transition border border-rose-200 flex items-center gap-1.5"
+            className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0"
           >
             <span>⏸️</span>
             <span>Pause / Exit</span>
@@ -424,11 +480,19 @@ export default function TakeExamPage() {
         </div>
       </div>
 
-      <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        {/* CARD HEADER WITH BOOKMARK TOGGLE BUTTON */}
+      {/* VISUAL PROGRESS BAR */}
+      <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+        <div
+          className="bg-blue-600 h-2 transition-all duration-300 ease-out rounded-full"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
+      {/* EXAM QUESTION CARD */}
+      <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex justify-between items-center border-b border-slate-100 pb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-            Section: {currentQ?.category}
+            Question #{currentIndex + 1} • {currentQ?.category}
           </span>
 
           <button
@@ -499,11 +563,10 @@ export default function TakeExamPage() {
         </div>
       </div>
 
-      {/* ⏸️ PAUSE / CANCEL EXAM MODAL OVERLAY */}
+      {/* ⏸️ PAUSE / EXIT MODAL OVERLAY */}
       {isPauseModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full border border-slate-200 shadow-2xl space-y-6">
-            {/* Modal Header */}
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mx-auto">
                 ⏸️
@@ -512,42 +575,38 @@ export default function TakeExamPage() {
                 Pause or Exit Exam?
               </h2>
               <p className="text-xs text-slate-500 font-medium">
-                Your timer is currently paused. What would you like to do with your exam progress?
+                Your exam timer is currently paused. What would you like to do?
               </p>
             </div>
 
-            {/* Actions Stack */}
             <div className="space-y-3">
-              {/* Option 1: Save & Exit for Later */}
               <button
                 onClick={handleSaveAndExit}
-                className="w-full p-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-2xl transition shadow-md flex items-center justify-between group"
+                className="w-full p-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-2xl transition shadow-md flex items-center justify-between"
               >
                 <div className="text-left">
-                  <p className="font-extrabold">💾 Save for Later</p>
+                  <p className="font-extrabold">💾 Save & Exit for Later</p>
                   <p className="text-[11px] text-blue-100 font-normal">
-                    Save current answers & time. Resume anytime.
+                    Save current answers & timer. Resume from Dashboard anytime.
                   </p>
                 </div>
                 <span>→</span>
               </button>
 
-              {/* Option 2: Discard & End Exam */}
               <button
                 onClick={handleDiscardAndExit}
-                className="w-full p-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-sm rounded-2xl transition flex items-center justify-between group"
+                className="w-full p-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-sm rounded-2xl transition flex items-center justify-between"
               >
                 <div className="text-left">
                   <p className="font-extrabold">🛑 Discard & Exit</p>
                   <p className="text-[11px] text-rose-500 font-normal">
-                    Discard current attempt and start over next time.
+                    Clear progress and return to dashboard.
                   </p>
                 </div>
                 <span>→</span>
               </button>
             </div>
 
-            {/* Option 3: Resume Exam */}
             <div className="pt-2 border-t border-slate-100 text-center">
               <button
                 onClick={() => setIsPauseModalOpen(false)}

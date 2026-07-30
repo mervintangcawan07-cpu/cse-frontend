@@ -74,6 +74,9 @@ export default function Navbar() {
     }
   };
 
+  const isMockExamActive =
+    pathname.startsWith("/mock-exam") || pathname.startsWith("/exam");
+
   return (
     <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[9999] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +94,7 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/dashboard"
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                 pathname === "/dashboard"
                   ? "bg-blue-600 text-white"
                   : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -103,9 +106,9 @@ export default function Navbar() {
             {isPaid ? (
               <>
                 <Link
-                  href="/mock-exam/take"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                    pathname.startsWith("/mock-exam")
+                  href="/exam"
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                    isMockExamActive
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
                   }`}
@@ -114,7 +117,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/drills"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/drills")
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -123,8 +126,18 @@ export default function Navbar() {
                   Speed Drills
                 </Link>
                 <Link
+                  href="/duels"
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/duels")
+                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  ⚔️ 1v1 Duels
+                </Link>
+                <Link
                   href="/flashcards"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/flashcards")
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -134,7 +147,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/bookmarks"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/bookmarks")
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -144,7 +157,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/reviewer"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/reviewer")
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -154,7 +167,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/reading-materials"
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                     pathname.startsWith("/reading-materials")
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -172,7 +185,7 @@ export default function Navbar() {
             {/* 👤 PROFILE LINK */}
             <Link
               href="/profile"
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
                 pathname === "/profile"
                   ? "bg-blue-600 text-white"
                   : "text-slate-300 hover:text-white hover:bg-slate-800"
@@ -183,18 +196,23 @@ export default function Navbar() {
 
             {/* ADMIN DROPDOWN */}
             {user?.role === "ADMIN" && (
-              <div className="relative group ml-2">
+              <div className="relative group ml-1">
                 <Link
                   href="/admin/dashboard"
-                  className="px-3.5 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
+                  className="px-3 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
                 >
-                  <span>⚙️ Admin Panel</span>
+                  <span>⚙️ Admin</span>
                   <span className="text-[10px]">▼</span>
                 </Link>
 
-                {/* Outer wrapper provides an invisible hover bridge and elevated z-index */}
                 <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-[10000]">
                   <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 space-y-1">
+                    <Link
+                      href="/admin/questions"
+                      className="block px-3 py-2 text-blue-400 hover:bg-blue-500/10 rounded-xl text-xs font-bold transition"
+                    >
+                      📚 Question Bank Manager
+                    </Link>
                     <Link
                       href="/admin/pricing"
                       className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
@@ -269,9 +287,9 @@ export default function Navbar() {
           {isPaid ? (
             <>
               <Link
-                href="/mock-exam/take"
+                href="/exam"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/mock-exam") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  isMockExamActive ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 ⏱️ Practice Mock Exam
@@ -283,6 +301,14 @@ export default function Navbar() {
                 }`}
               >
                 ⚡ Category Speed Drills
+              </Link>
+              <Link
+                href="/duels"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/duels") ? "bg-amber-500/20 text-amber-300 border border-amber-500/30" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                ⚔️ 1v1 Study Duels
               </Link>
               <Link
                 href="/flashcards"
@@ -338,6 +364,12 @@ export default function Navbar() {
               <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block px-1">
                 Admin Controls
               </span>
+              <Link
+                href="/admin/questions"
+                className="block px-4 py-2.5 bg-blue-600/20 text-blue-300 rounded-xl border border-blue-500/30"
+              >
+                📚 Question Bank Manager
+              </Link>
               <Link
                 href="/admin/pricing"
                 className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
