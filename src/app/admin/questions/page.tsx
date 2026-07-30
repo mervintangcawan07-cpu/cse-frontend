@@ -21,6 +21,10 @@ export default function AdminQuestionsPage() {
   const [search, setSearch] = useState("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("All");
 
+  // Selection & Bulk Actions State
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [deleting, setDeleting] = useState(false);
+
   // Modal & Form State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -58,6 +62,66 @@ export default function AdminQuestionsPage() {
     loadQuestions();
   }, []);
 
+  // Filter questions by category and search
+  const filteredQuestions = questions.filter((q) => {
+    const matchesCategory =
+      selectedCategoryFilter === "All" || q.category === selectedCategoryFilter;
+    const matchesSearch =
+      q.prompt.toLowerCase().includes(search.toLowerCase()) ||
+      q.category.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  // Toggle Select All (Filtered Questions)
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      const allFilteredIds = filteredQuestions.map((q) => q.id);
+      setSelectedIds(allFilteredIds);
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  // Toggle Select One
+  const handleSelectOne = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  // Bulk Delete Handler
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+
+    const confirmed = confirm(
+      `Are you sure you want to permanently delete ${selectedIds.length} question(s)?`
+    );
+    if (!confirmed) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/admin/questions/bulk-delete", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setQuestions((prev) => prev.filter((q) => !selectedIds.includes(q.id)));
+        setSelectedIds([]);
+      } else {
+        alert(data.error || "Failed to delete selected questions.");
+      }
+    } catch (err) {
+      console.error("Error bulk deleting questions:", err);
+      alert("An error occurred during bulk deletion.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   // Option input change handler
   const handleOptionChange = (index: number, value: string) => {
     const updated = [...formOptions];
@@ -70,7 +134,6 @@ export default function AdminQuestionsPage() {
     e.preventDefault();
     if (submitting) return;
 
-    // Basic validation
     if (!formPrompt.trim() || formOptions.some((opt) => !opt.trim())) {
       alert("Please fill in the prompt and all 4 options.");
       return;
@@ -91,7 +154,6 @@ export default function AdminQuestionsPage() {
       });
 
       if (res.ok) {
-        // Reset Form & Close Modal
         setFormPrompt("");
         setFormOptions(["", "", "", ""]);
         setFormAnswerIndex(0);
@@ -109,7 +171,7 @@ export default function AdminQuestionsPage() {
     }
   };
 
-  // Delete question
+  // Delete single question
   const handleDeleteQuestion = async (id: string) => {
     if (!confirm("Are you sure you want to delete this question?")) return;
 
@@ -120,6 +182,7 @@ export default function AdminQuestionsPage() {
 
       if (res.ok) {
         setQuestions((prev) => prev.filter((q) => q.id !== id));
+        setSelectedIds((prev) => prev.filter((item) => item !== id));
       } else {
         alert("Failed to delete question.");
       }
@@ -128,32 +191,21 @@ export default function AdminQuestionsPage() {
     }
   };
 
-  // Filter questions by category and search
-  const filteredQuestions = questions.filter((q) => {
-    const matchesCategory =
-      selectedCategoryFilter === "All" || q.category === selectedCategoryFilter;
-    const matchesSearch =
-      q.prompt.toLowerCase().includes(search.toLowerCase()) ||
-      q.category.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900">Question Bank Manager</h1>
+          <h1 className="text-3xl font-extrabold text-slate-900">
+            Question Bank Manager
+          </h1>
           <p className="text-slate-500 text-sm mt-1">
-            Add, review, bulk import, and delete practice questions in your Neon DB database.
+            Add, review, bulk import, and batch delete practice questions in your database.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          {/* 🔔 Notification Bell */}
           <NotificationBell />
-
-          {/* 📢 Admin Announcement Broadcast Modal */}
           <AdminBroadcastModal />
 
           <Link
@@ -174,28 +226,46 @@ export default function AdminQuestionsPage() {
       {/* ⚡ BULK QUESTION IMPORTER SECTION */}
       <BulkQuestionUploader onSuccess={loadQuestions} />
 
-      {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between">
-        <input
-          type="text"
-          placeholder="Search question prompts..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-80 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition"
-        />
+      {/* Filter, Search & Bulk Delete Action Bar */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
+          <input
+            type="text"
+            placeholder="Search question prompts..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full sm:w-80 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition"
+          />
 
-        <select
-          value={selectedCategoryFilter}
-          onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-          className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-blue-500 transition"
-        >
-          <option value="All">All Categories ({questions.length})</option>
-          {categoriesList.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+          <select
+            value={selectedCategoryFilter}
+            onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+            className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-blue-500 transition"
+          >
+            <option value="All">All Categories ({questions.length})</option>
+            {categoriesList.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* 🗑️ BULK DELETE BUTTON */}
+        {selectedIds.length > 0 && (
+          <button
+            onClick={handleBulkDelete}
+            disabled={deleting}
+            className="w-full md:w-auto px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            <span>🗑️</span>
+            <span>
+              {deleting
+                ? "Deleting..."
+                : `Delete Selected (${selectedIds.length})`}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Questions Table */}
@@ -213,6 +283,19 @@ export default function AdminQuestionsPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold uppercase text-slate-500 tracking-wider">
+                  <th className="p-4 w-12 text-center">
+                    <input
+                      type="checkbox"
+                      checked={
+                        filteredQuestions.length > 0 &&
+                        filteredQuestions.every((q) =>
+                          selectedIds.includes(q.id)
+                        )
+                      }
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    />
+                  </th>
                   <th className="p-4">Category</th>
                   <th className="p-4">Prompt</th>
                   <th className="p-4">Correct Answer</th>
@@ -220,34 +303,52 @@ export default function AdminQuestionsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                {filteredQuestions.map((q) => (
-                  <tr key={q.id} className="hover:bg-slate-50/50 transition">
-                    <td className="p-4">
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
-                        {q.category}
-                      </span>
-                    </td>
-                    <td className="p-4 max-w-md">
-                      <p className="font-bold text-slate-800 line-clamp-2">{q.prompt}</p>
-                      {q.explanation && (
-                        <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-                          💡 {q.explanation}
+                {filteredQuestions.map((q) => {
+                  const isSelected = selectedIds.includes(q.id);
+                  return (
+                    <tr
+                      key={q.id}
+                      className={`hover:bg-slate-50/80 transition ${
+                        isSelected ? "bg-amber-50/40" : ""
+                      }`}
+                    >
+                      <td className="p-4 text-center">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleSelectOne(q.id)}
+                          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        />
+                      </td>
+                      <td className="p-4">
+                        <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
+                          {q.category}
+                        </span>
+                      </td>
+                      <td className="p-4 max-w-md">
+                        <p className="font-bold text-slate-800 line-clamp-2">
+                          {q.prompt}
                         </p>
-                      )}
-                    </td>
-                    <td className="p-4 font-semibold text-emerald-700">
-                      ✓ {q.options[q.answerIndex] || `Option ${q.answerIndex + 1}`}
-                    </td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => handleDeleteQuestion(q.id)}
-                        className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {q.explanation && (
+                          <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                            💡 {q.explanation}
+                          </p>
+                        )}
+                      </td>
+                      <td className="p-4 font-semibold text-emerald-700">
+                        ✓ {q.options[q.answerIndex] || `Option ${q.answerIndex + 1}`}
+                      </td>
+                      <td className="p-4 text-right">
+                        <button
+                          onClick={() => handleDeleteQuestion(q.id)}
+                          className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -259,7 +360,9 @@ export default function AdminQuestionsPage() {
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-6 my-8">
             <div className="flex justify-between items-center border-b border-slate-100 pb-4">
-              <h2 className="text-xl font-extrabold text-slate-900">Add New CSE Question</h2>
+              <h2 className="text-xl font-extrabold text-slate-900">
+                Add New CSE Question
+              </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 font-bold text-lg"
