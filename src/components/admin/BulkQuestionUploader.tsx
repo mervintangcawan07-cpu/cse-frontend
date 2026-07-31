@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { parseCSVToQuestions, downloadCSVTemplate, RawQuestionItem } from "@/lib/csvParser";
+import Papa from "papaparse";
+import { downloadCSVTemplate } from "@/lib/csvParser";
 
 interface BulkUploaderProps {
   onSuccess?: () => void;
@@ -20,12 +21,56 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
 
     try {
       const text = await file.text();
-      let questionsToImport: RawQuestionItem[] = [];
+      let questionsToImport: any[] = [];
 
       if (file.name.endsWith(".json")) {
         questionsToImport = JSON.parse(text);
       } else if (file.name.endsWith(".csv")) {
-        questionsToImport = parseCSVToQuestions(text);
+        const parsed = Papa.parse(text, {
+          header: true,
+          skipEmptyLines: true,
+        });
+
+        questionsToImport = parsed.data
+          .map((item: any) => {
+            const category = String(item.category || item.subject || "").trim();
+            const prompt = String(item.prompt || item.question || "").trim();
+            const explanation = item.explanation ? String(item.explanation).trim() : null;
+            const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+
+            let options: string[] = [];
+            if (Array.isArray(item.options)) {
+              options = item.options.map((o: any) => String(o).trim());
+            } else {
+              options = [
+                item.optionA || item.option_a || "",
+                item.optionB || item.option_b || "",
+                item.optionC || item.option_c || "",
+                item.optionD || item.option_d || "",
+              ]
+                .map((o) => String(o).trim())
+                .filter(Boolean);
+            }
+
+            let answerIndex = 0;
+            if (typeof item.answerIndex === "number") {
+              answerIndex = item.answerIndex;
+            } else if (typeof item.answerIndex === "string") {
+              answerIndex = parseInt(item.answerIndex, 10) || 0;
+            } else if (typeof item.correctAnswer === "number") {
+              answerIndex = item.correctAnswer;
+            }
+
+            return {
+              category,
+              prompt,
+              options,
+              answerIndex,
+              explanation,
+              imageUrl,
+            };
+          })
+          .filter((q: any) => q.prompt && q.category && q.options.length >= 2);
       } else {
         throw new Error("Unsupported file format. Please upload a .csv or .json file.");
       }
