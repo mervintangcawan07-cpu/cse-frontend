@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import MaintenanceToggleCard from "@/components/admin/MaintenanceToggleCard";
 
 interface StatsData {
   totalUsers: number;
@@ -60,6 +61,9 @@ export default function AdminDashboardPage() {
           👁️ Switch to Student View &rarr;
         </Link>
       </div>
+
+      {/* 🛠️ SYSTEM MAINTENANCE MODE CONTROLLER */}
+      <MaintenanceToggleCard />
 
       {/* Analytics Counter Grid */}
       {loading ? (
