@@ -5,6 +5,7 @@ import Link from "next/link";
 import BulkQuestionUploader from "@/components/admin/BulkQuestionUploader";
 import NotificationBell from "@/components/NotificationBell";
 import AdminBroadcastModal from "@/components/admin/AdminBroadcastModal";
+import EditQuestionModal from "@/components/admin/EditQuestionModal";
 
 interface Question {
   id: string;
@@ -25,7 +26,10 @@ export default function AdminQuestionsPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
 
-  // Modal & Form State
+  // Edit Modal State
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+
+  // Create Modal & Form State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formCategory, setFormCategory] = useState("Verbal Ability");
@@ -61,6 +65,13 @@ export default function AdminQuestionsPage() {
   useEffect(() => {
     loadQuestions();
   }, []);
+
+  // Update question in state after successful edit
+  const handleQuestionUpdated = (updatedQuestion: Question) => {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+    );
+  };
 
   // Filter questions by category and search
   const filteredQuestions = questions.filter((q) => {
@@ -122,7 +133,7 @@ export default function AdminQuestionsPage() {
     }
   };
 
-  // Option input change handler
+  // Option input change handler for creation form
   const handleOptionChange = (index: number, value: string) => {
     const updated = [...formOptions];
     updated[index] = value;
@@ -200,7 +211,7 @@ export default function AdminQuestionsPage() {
             Question Bank Manager
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            Add, review, bulk import, and batch delete practice questions in your database.
+            Add, edit, review, bulk import, and batch delete practice questions in your database.
           </p>
         </div>
 
@@ -216,7 +227,7 @@ export default function AdminQuestionsPage() {
           </Link>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm"
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm cursor-pointer"
           >
             + Add Single Question
           </button>
@@ -256,7 +267,7 @@ export default function AdminQuestionsPage() {
           <button
             onClick={handleBulkDelete}
             disabled={deleting}
-            className="w-full md:w-auto px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full md:w-auto px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-md flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             <span>🗑️</span>
             <span>
@@ -339,12 +350,22 @@ export default function AdminQuestionsPage() {
                         ✓ {q.options[q.answerIndex] || `Option ${q.answerIndex + 1}`}
                       </td>
                       <td className="p-4 text-right">
-                        <button
-                          onClick={() => handleDeleteQuestion(q.id)}
-                          className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition"
-                        >
-                          Delete
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          {/* ✏️ EDIT BUTTON */}
+                          <button
+                            onClick={() => setEditingQuestion(q)}
+                            className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold rounded-lg transition border border-amber-200/60 cursor-pointer"
+                          >
+                            ✏️ Edit
+                          </button>
+                          {/* 🗑️ DELETE BUTTON */}
+                          <button
+                            onClick={() => handleDeleteQuestion(q.id)}
+                            className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition cursor-pointer"
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -355,7 +376,15 @@ export default function AdminQuestionsPage() {
         )}
       </div>
 
-      {/* Add Question Modal Overlay */}
+      {/* ✏️ EDIT QUESTION MODAL */}
+      <EditQuestionModal
+        isOpen={editingQuestion !== null}
+        onClose={() => setEditingQuestion(null)}
+        question={editingQuestion}
+        onSuccess={handleQuestionUpdated}
+      />
+
+      {/* Add Single Question Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-6 my-8">
@@ -365,7 +394,7 @@ export default function AdminQuestionsPage() {
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold text-lg"
+                className="text-slate-400 hover:text-slate-600 font-bold text-lg cursor-pointer"
               >
                 ✕
               </button>
@@ -457,14 +486,14 @@ export default function AdminQuestionsPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition"
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm disabled:opacity-50"
+                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? "Saving..." : "Save Question"}
                 </button>
