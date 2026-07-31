@@ -152,7 +152,30 @@ export default function AdminDashboardPage() {
             </span>
           </Link>
 
-          {/* Module 2: Question Bank Manager */}
+          {/* Module 2: Feature Flags & Support Tickets (NEW) */}
+          <Link
+            href="/admin/system"
+            className="p-6 bg-white hover:bg-rose-50/50 rounded-3xl border border-slate-200 hover:border-rose-300 transition-all duration-200 shadow-sm hover:shadow-md space-y-3 block group"
+          >
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-3 py-1 bg-rose-100 text-rose-800 rounded-full tracking-wider">
+                System Toggles & Helpdesk
+              </span>
+              <span className="text-xs font-bold text-rose-700">Live Controls</span>
+            </div>
+            <h3 className="text-lg font-black text-slate-900 group-hover:text-rose-900 transition-colors flex items-center justify-between">
+              <span>🚩 Feature Flags & Support Tickets</span>
+              <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </h3>
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">
+              Enable or disable platform modules (Duels, AI Assistant, Flashcards) in real-time and review examinee support tickets.
+            </p>
+            <span className="text-xs font-extrabold text-rose-700 inline-block pt-1">
+              Open Feature Flags & Support Tickets &rarr;
+            </span>
+          </Link>
+
+          {/* Module 3: Question Bank Manager */}
           <Link
             href="/admin/questions"
             className="p-6 bg-white hover:bg-blue-50/50 rounded-3xl border border-slate-200 hover:border-blue-300 transition-all duration-200 shadow-sm hover:shadow-md space-y-3 block group"
@@ -175,7 +198,7 @@ export default function AdminDashboardPage() {
             </span>
           </Link>
 
-          {/* Module 3: Admin Study Notes */}
+          {/* Module 4: Admin Study Notes */}
           <Link
             href="/admin/reviewer"
             className="p-6 bg-white hover:bg-amber-50/50 rounded-3xl border border-slate-200 hover:border-amber-300 transition-all duration-200 shadow-sm hover:shadow-md space-y-3 block group"
@@ -198,7 +221,7 @@ export default function AdminDashboardPage() {
             </span>
           </Link>
 
-          {/* Module 4: Admin Handbooks & Docs */}
+          {/* Module 5: Admin Handbooks & Docs */}
           <Link
             href="/admin/reading-materials"
             className="p-6 bg-white hover:bg-emerald-50/50 rounded-3xl border border-slate-200 hover:border-emerald-300 transition-all duration-200 shadow-sm hover:shadow-md space-y-3 block group"
