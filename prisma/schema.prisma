@@ -21,7 +21,9 @@ model User {
   paidUntil                DateTime? // Real-world expiration date (null = Lifetime)
   planType                 String?   // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
 
-  // 🔒 Security & Active Session Fields
+  // 🔒 Security, Moderation & Active Session Fields
+  isBanned                 Boolean   @default(false)
+  banReason                String?
   isEmailVerified          Boolean   @default(false)
   emailVerificationToken   String?   @unique
   emailVerificationExpires DateTime?
@@ -107,7 +109,7 @@ model PricingPlan {
 }
 
 // ==========================================
-// ENTERPRISE FEATURE EXTENSIONS
+// ENTERPRISE & INTERNAL ADMIN EXTENSIONS
 // ==========================================
 
 model UserStreak {
@@ -213,4 +215,36 @@ model SystemSetting {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
+}
+
+model LoginHistory {
+  id        String   @id @default(cuid())
+  userId    String?
+  email     String
+  ipAddress String?
+  userAgent String?
+  status    String   // "SUCCESS" | "FAILED"
+  reason    String?  // e.g. "Invalid Password", "Account Banned"
+  createdAt DateTime @default(now())
+}
+
+model FeatureFlag {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String?
+  isEnabled   Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+}
+
+model SupportTicket {
+  id          String   @id @default(cuid())
+  userId      String?
+  userEmail   String
+  subject     String
+  message     String   @db.Text
+  status      String   @default("OPEN")
+  adminNotes  String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
