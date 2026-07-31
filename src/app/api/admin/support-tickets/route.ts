@@ -38,12 +38,53 @@ export async function PUT(request: Request) {
 
     const { id, status, adminNotes } = await request.json();
 
-    const updated = await prisma.supportTicket.update({
+    // 1. Update the Support Ticket
+    const updatedTicket = await prisma.supportTicket.update({
       where: { id },
       data: { status, adminNotes },
     });
 
-    return NextResponse.json({ success: true, ticket: updated });
+    // 2. Identify the target student ID
+    let targetUserId = updatedTicket.userId;
+
+    if (!targetUserId && updatedTicket.userEmail) {
+      const student = await prisma.user.findUnique({
+        where: { email: updatedTicket.userEmail },
+        select: { id: true },
+      });
+      if (student) targetUserId = student.id;
+    }
+
+    // 3. Auto-generate In-App Notification
+    if (targetUserId) {
+      const statusLabel =
+        status === "RESOLVED"
+          ? "Resolved ✅"
+          : status === "IN_PROGRESS"
+          ? "In Progress ⏳"
+          : "Pending Review 📩";
+
+      const truncatedSubject =
+        updatedTicket.subject.length > 28
+          ? `${updatedTicket.subject.slice(0, 28)}...`
+          : updatedTicket.subject;
+
+      const notePreview = adminNotes
+        ? ` Admin Note: "${adminNotes.slice(0, 80)}${adminNotes.length > 80 ? "..." : ""}"`
+        : "";
+
+      await prisma.notification.create({
+        data: {
+          userId: targetUserId,
+          title: `Support Ticket Updated: ${truncatedSubject}`,
+          message: `Your support inquiry status changed to "${statusLabel}".${notePreview}`,
+          type: "SYSTEM",
+          isRead: false,
+        },
+      });
+    }
+
+    return NextResponse.json({ success: true, ticket: updatedTicket });
   } catch (error) {
     console.error("[SUPPORT_TICKETS_PUT]", error);
     return NextResponse.json({ error: "Failed to update ticket" }, { status: 500 });
