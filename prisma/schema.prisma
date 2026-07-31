@@ -12,28 +12,28 @@ enum Role {
 }
 
 model User {
-  id                       String    @id @default(cuid())
+  id                       String        @id @default(cuid())
   name                     String?
-  email                    String    @unique
+  email                    String        @unique
   password                 String
-  role                     Role      @default(USER)
-  isPaid                   Boolean   @default(false)
+  role                     Role          @default(USER)
+  isPaid                   Boolean       @default(false)
   paidUntil                DateTime? // Real-world expiration date (null = Lifetime)
-  planType                 String?   // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
+  planType                 String? // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
 
   // 🔒 Security, Moderation & Active Session Fields
-  isBanned                 Boolean   @default(false)
+  isBanned                 Boolean       @default(false)
   banReason                String?
-  isEmailVerified          Boolean   @default(false)
-  emailVerificationToken   String?   @unique
+  isEmailVerified          Boolean       @default(false)
+  emailVerificationToken   String?       @unique
   emailVerificationExpires DateTime?
-  passwordResetToken       String?   @unique
+  passwordResetToken       String?       @unique
   passwordResetExpires     DateTime?
-  activeSessionId          String?   // Single active session ID
+  activeSessionId          String? // Single active session ID
   lastActiveAt             DateTime? // Timestamp for 30-min inactivity check
 
-  createdAt                DateTime  @default(now())
-  updatedAt                DateTime  @updatedAt
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
 
   // Database Relations
   results                  ExamResult[]
@@ -57,11 +57,12 @@ model ExamResult {
 
 model Question {
   id          String   @id @default(cuid())
-  category    String   // e.g., "Numerical", "Verbal", "Analytical", "General Info"
+  category    String // e.g., "Numerical", "Verbal", "Analytical", "General Info"
   prompt      String
   options     String[] // Array of choices: ["Option A", "Option B", "Option C", "Option D"]
-  answerIndex Int      // Index of the correct option (0, 1, 2, or 3)
-  explanation String?  // Optional explanation for the answer
+  answerIndex Int // Index of the correct option (0, 1, 2, or 3)
+  explanation String? // Optional explanation for the answer
+  imageUrl    String? // 🎯 Added field for graph & chart image URLs
   createdAt   DateTime @default(now())
 }
 
@@ -103,8 +104,8 @@ model PricingPlan {
   id           String   @id @default(cuid())
   planType     String   @unique // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
   name         String
-  price        Int      // Stored in PHP (e.g. 99, 199, 299)
-  durationDays Int      // 30, 180, 365, 0 for Lifetime
+  price        Int // Stored in PHP (e.g. 99, 199, 299)
+  durationDays Int // 30, 180, 365, 0 for Lifetime
   updatedAt    DateTime @updatedAt
 }
 
@@ -126,7 +127,7 @@ model Bookmark {
   id         String   @id @default(cuid())
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  targetType String   // "QUESTION" | "HANDBOOK" | "STUDY_NOTE"
+  targetType String // "QUESTION" | "HANDBOOK" | "STUDY_NOTE"
   targetId   String
   createdAt  DateTime @default(now())
 
@@ -147,7 +148,7 @@ model ExamDraft {
 
 model Notification {
   id        String   @id @default(cuid())
-  userId    String?  // null = System Broadcast
+  userId    String? // null = System Broadcast
   title     String
   message   String
   type      String   @default("INFO") // "INFO" | "PAYMENT" | "SYSTEM" | "STREAK"
@@ -172,7 +173,7 @@ model Transaction {
   paymentIntentId   String?
   amount            Int
   planType          String
-  status            String   // "PENDING" | "PAID" | "FAILED"
+  status            String // "PENDING" | "PAID" | "FAILED"
   receiptUrl        String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -201,7 +202,7 @@ model DuelMatch {
   player2Id   String?
   player2Name String?
   status      DuelStatus @default(WAITING)
-  questions   Json       // 5 rapid questions
+  questions   Json // 5 rapid questions
   p1Score     Int        @default(0)
   p2Score     Int        @default(0)
   p1Current   Int        @default(0)
@@ -223,8 +224,8 @@ model LoginHistory {
   email     String
   ipAddress String?
   userAgent String?
-  status    String   // "SUCCESS" | "FAILED"
-  reason    String?  // e.g. "Invalid Password", "Account Banned"
+  status    String // "SUCCESS" | "FAILED"
+  reason    String? // e.g. "Invalid Password", "Account Banned"
   createdAt DateTime @default(now())
 }
 
@@ -238,13 +239,13 @@ model FeatureFlag {
 }
 
 model SupportTicket {
-  id          String   @id @default(cuid())
-  userId      String?
-  userEmail   String
-  subject     String
-  message     String   @db.Text
-  status      String   @default("OPEN")
-  adminNotes  String?  @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  userId     String?
+  userEmail  String
+  subject    String
+  message    String   @db.Text
+  status     String   @default("OPEN")
+  adminNotes String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
