@@ -13,11 +13,14 @@ export async function GET() {
     const session = await verifyJWT(token);
     if (!session) return NextResponse.json({ error: "Invalid session" }, { status: 401 });
 
+    const userId = session.id as string;
+    const userEmail = session.email as string;
+
     const tickets = await prisma.supportTicket.findMany({
       where: {
         OR: [
-          { userId: session.id },
-          { userEmail: session.email },
+          { userId },
+          { userEmail },
         ],
       },
       orderBy: { createdAt: "desc" },
@@ -40,6 +43,9 @@ export async function POST(request: Request) {
     const session = await verifyJWT(token);
     if (!session) return NextResponse.json({ error: "Invalid session" }, { status: 401 });
 
+    const userId = session.id as string;
+    const userEmail = session.email as string;
+
     const { subject, message } = await request.json();
 
     if (!subject || !message) {
@@ -48,8 +54,8 @@ export async function POST(request: Request) {
 
     const newTicket = await prisma.supportTicket.create({
       data: {
-        userId: session.id,
-        userEmail: session.email,
+        userId,
+        userEmail,
         subject,
         message,
         status: "OPEN",
