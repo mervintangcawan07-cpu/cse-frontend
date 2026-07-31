@@ -3,7 +3,6 @@ import Link from "next/link";
 export default function LessonPage() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 space-y-8">
-      
       {/* Breadcrumb Navigation */}
       <div className="text-sm font-bold text-slate-500 space-x-2">
         <Link href="/reviewer" className="hover:text-blue-600 transition">Reviewer</Link>
@@ -33,8 +32,6 @@ export default function LessonPage() {
 
       {/* Lesson Content */}
       <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-10">
-        
-        {/* Section 1 */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-800">1. Converting Fractions to Decimals</h2>
           <p className="text-slate-600 leading-relaxed">
@@ -47,14 +44,12 @@ export default function LessonPage() {
           </div>
         </section>
 
-        {/* Section 2 */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-800">2. Study Tip for the CSE</h2>
           <p className="text-slate-600 leading-relaxed">
             Memorize common fractions (1/2, 1/4, 3/4, 1/5) as decimals. This saves crucial time during the timed examination!
           </p>
         </section>
-
       </div>
 
       {/* Navigation Buttons */}
@@ -72,7 +67,6 @@ export default function LessonPage() {
           Take Practice Quiz →
         </Link>
       </div>
-      
     </div>
   );
 }

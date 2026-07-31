@@ -11,6 +11,7 @@ interface Question {
   options: string[];
   answerIndex: number;
   explanation: string;
+  imageUrl?: string;
 }
 
 interface UserAnswer {
@@ -183,10 +184,22 @@ export default function ExamReviewPage({
                 </span>
               </div>
 
-              {/* Prompt */}
-              <h3 className="text-sm font-extrabold text-white mb-4 leading-relaxed">
-                {q.prompt}
-              </h3>
+              {/* Prompt with HTML Table Support */}
+              <div
+                className="text-sm font-extrabold text-white mb-4 leading-relaxed overflow-x-auto"
+                dangerouslySetInnerHTML={{ __html: q.prompt }}
+              />
+
+              {/* Chart / Graph Image Display */}
+              {q.imageUrl && (
+                <div className="my-4 flex justify-center bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
+                  <img
+                    src={q.imageUrl}
+                    alt="Question Diagram"
+                    className="max-h-64 object-contain rounded-xl shadow-sm"
+                  />
+                </div>
+              )}
 
               {/* Options */}
               <div className="space-y-2 mb-4">

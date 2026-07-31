@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import Papa from "papaparse";
 
-// Helper function to check if the requester is an ADMIN
 async function verifyAdmin() {
   const cookieStore = await cookies();
   const token = cookieStore.get("cse_session")?.value;
@@ -21,7 +21,7 @@ async function verifyAdmin() {
   return user;
 }
 
-// 1. GET ALL QUESTIONS
+// 1. GET ALL QUESTIONS FOR ADMIN TABLE
 export async function GET() {
   try {
     const admin = await verifyAdmin();
@@ -40,7 +40,7 @@ export async function GET() {
   }
 }
 
-// 2. CREATE A NEW QUESTION
+// 2. CREATE NEW QUESTION OR PROCESS BULK CSV/JSON
 export async function POST(req: Request) {
   try {
     const admin = await verifyAdmin();
@@ -48,24 +48,87 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized: Admin access required" }, { status: 403 });
     }
 
-    const body = await req.json();
-    const { category, prompt, options, answerIndex, explanation } = body;
+    const contentType = req.headers.get("content-type") || "";
+    let rawQuestions: any[] = [];
 
-    if (!category || !prompt || !options || options.length < 2 || answerIndex === undefined) {
+    if (contentType.includes("text/csv") || contentType.includes("multipart/form-data")) {
+      const csvText = await req.text();
+      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+      rawQuestions = parsed.data;
+    } else {
+      const body = await req.json();
+      if (typeof body.csvText === "string") {
+        const parsed = Papa.parse(body.csvText, { header: true, skipEmptyLines: true });
+        rawQuestions = parsed.data;
+      } else if (Array.isArray(body)) {
+        rawQuestions = body;
+      } else if (body.questions && Array.isArray(body.questions)) {
+        rawQuestions = body.questions;
+      } else {
+        rawQuestions = [body];
+      }
+    }
+
+    if (!rawQuestions || rawQuestions.length === 0) {
       return NextResponse.json({ error: "Missing required question fields" }, { status: 400 });
     }
 
-    const question = await prisma.question.create({
-      data: {
-        category,
-        prompt,
-        options,
-        answerIndex: Number(answerIndex),
-        explanation: explanation || null,
-      },
+    // Format fields cleanly
+    const formattedData = rawQuestions
+      .map((item: any) => {
+        const category = String(item.category || item.subject || "").trim();
+        const prompt = String(item.prompt || item.question || "").trim();
+        const explanation = item.explanation ? String(item.explanation).trim() : null;
+        const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+
+        let options: string[] = [];
+        if (Array.isArray(item.options)) {
+          options = item.options.map((o: any) => String(o).trim());
+        } else {
+          options = [
+            item.optionA || item.option_a || "",
+            item.optionB || item.option_b || "",
+            item.optionC || item.option_c || "",
+            item.optionD || item.option_d || "",
+          ]
+            .map((o) => String(o).trim())
+            .filter(Boolean);
+        }
+
+        let answerIndex = 0;
+        if (typeof item.answerIndex === "number") {
+          answerIndex = item.answerIndex;
+        } else if (typeof item.answerIndex === "string") {
+          answerIndex = parseInt(item.answerIndex, 10) || 0;
+        }
+
+        return {
+          category,
+          prompt,
+          options,
+          answerIndex,
+          explanation,
+          imageUrl,
+        };
+      })
+      .filter((q) => q.prompt && q.category && q.options.length >= 2);
+
+    if (formattedData.length === 0) {
+      return NextResponse.json({ error: "No valid questions passed validation" }, { status: 400 });
+    }
+
+    if (formattedData.length === 1) {
+      const single = await prisma.question.create({
+        data: formattedData[0] as any,
+      });
+      return NextResponse.json({ question: single }, { status: 201 });
+    }
+
+    const created = await prisma.question.createMany({
+      data: formattedData as any,
     });
 
-    return NextResponse.json({ question }, { status: 201 });
+    return NextResponse.json({ success: true, count: created.count }, { status: 201 });
   } catch (error) {
     console.error("[ADMIN_QUESTIONS_POST]", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

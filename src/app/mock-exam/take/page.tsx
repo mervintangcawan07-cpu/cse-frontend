@@ -11,6 +11,7 @@ interface Question {
   options: string[];
   answerIndex: number;
   explanation?: string;
+  imageUrl?: string;
 }
 
 const LOCAL_STORAGE_KEY = "cse_active_exam_session";
@@ -68,7 +69,7 @@ export default function TakeExamPage() {
           setBookmarkedIds(ids);
         }
 
-        // 🔄 Check for active unfinished exam session in local storage
+        // Check for active unfinished exam session in local storage
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           try {
@@ -191,7 +192,7 @@ export default function TakeExamPage() {
     router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router]);
 
-  // Timer Logic (Pauses automatically when Pause/Cancel Modal is open)
+  // Timer Logic
   useEffect(() => {
     if (!isSetupPhase && timerMinutes > 0 && !isPauseModalOpen) {
       if (timeLeft > 0) {
@@ -307,13 +308,10 @@ export default function TakeExamPage() {
     );
   }
 
-  // ==========================================
   // PHASE 1: SETUP SCREEN
-  // ==========================================
   if (isSetupPhase) {
     return (
       <div className="max-w-xl mx-auto py-10 px-4 space-y-6">
-        {/* Navigation Link */}
         <div className="flex justify-between items-center">
           <Link
             href="/dashboard"
@@ -323,7 +321,6 @@ export default function TakeExamPage() {
           </Link>
         </div>
 
-        {/* Saved Session Resume Prompt (If exists) */}
         {savedSessionData && (
           <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 p-6 rounded-3xl space-y-3 shadow-sm">
             <div className="flex items-center gap-2">
@@ -423,9 +420,7 @@ export default function TakeExamPage() {
     );
   }
 
-  // ==========================================
   // PHASE 2: ACTIVE EXAM SCREEN
-  // ==========================================
   if (examQuestions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
@@ -444,7 +439,7 @@ export default function TakeExamPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
-      {/* TOP HEADER: TIMER, ITEM COUNTER, AND PAUSE / EXIT BUTTON */}
+      {/* TOP HEADER */}
       <div className="bg-slate-900 text-white p-4 md:p-5 rounded-3xl shadow-md flex justify-between items-center gap-4">
         <div className="flex items-center gap-3">
           <span className="text-xs font-extrabold uppercase px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
@@ -469,7 +464,6 @@ export default function TakeExamPage() {
             </div>
           )}
 
-          {/* 🔴 PAUSE / EXIT BUTTON */}
           <button
             onClick={() => setIsPauseModalOpen(true)}
             className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0"
@@ -507,7 +501,22 @@ export default function TakeExamPage() {
           </button>
         </div>
 
-        <h2 className="text-lg font-bold text-slate-800 leading-relaxed">{currentQ?.prompt}</h2>
+        {/* 🎯 PROMPT RENDERING WITH HTML TABLE SUPPORT */}
+        <div
+          className="text-lg font-bold text-slate-800 leading-relaxed overflow-x-auto"
+          dangerouslySetInnerHTML={{ __html: currentQ?.prompt || "" }}
+        />
+
+        {/* 🎯 CHART / GRAPH IMAGE DISPLAY */}
+        {currentQ?.imageUrl && (
+          <div className="my-4 flex justify-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <img
+              src={currentQ.imageUrl}
+              alt="Question Diagram or Chart"
+              className="max-h-64 object-contain rounded-xl shadow-sm"
+            />
+          </div>
+        )}
 
         <div className="space-y-3">
           {currentQ?.options.map((opt, idx) => {
@@ -563,7 +572,7 @@ export default function TakeExamPage() {
         </div>
       </div>
 
-      {/* ⏸️ PAUSE / EXIT MODAL OVERLAY */}
+      {/* PAUSE / EXIT MODAL OVERLAY */}
       {isPauseModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full border border-slate-200 shadow-2xl space-y-6">

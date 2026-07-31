@@ -29,7 +29,7 @@ export default async function ExamPage() {
 
   const isPaid = user.isPaid || user.role === "ADMIN";
 
-  // Redirect unpaid users to the dashboard preview where they can pay
+  // Redirect unpaid users to the dashboard preview
   if (!isPaid) {
     redirect("/dashboard");
   }

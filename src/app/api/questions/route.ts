@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import Papa from "papaparse";
 
 export async function GET(request: Request) {
   try {
@@ -153,6 +154,127 @@ export async function GET(request: Request) {
     console.error("[QUESTIONS_FETCH_ERROR]", error);
     return NextResponse.json(
       { error: "Failed to fetch questions.", details: error?.message },
+      { status: 500 }
+    );
+  }
+}
+
+// 🎯 POST: Bulk Upload / CSV Import & Single Question Creation
+export async function POST(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const session = await verifyJWT(token);
+    if (!session?.userId || session.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Admin access required" },
+        { status: 403 }
+      );
+    }
+
+    const contentType = request.headers.get("content-type") || "";
+    let rawQuestions: any[] = [];
+
+    // 1. Handle CSV payload or JSON payload safely
+    if (contentType.includes("text/csv") || contentType.includes("multipart/form-data")) {
+      const csvText = await request.text();
+      const parsed = Papa.parse(csvText, {
+        header: true,
+        skipEmptyLines: true,
+      });
+      rawQuestions = parsed.data;
+    } else {
+      const body = await request.json();
+      if (typeof body.csvText === "string") {
+        const parsed = Papa.parse(body.csvText, {
+          header: true,
+          skipEmptyLines: true,
+        });
+        rawQuestions = parsed.data;
+      } else if (Array.isArray(body)) {
+        rawQuestions = body;
+      } else if (body.questions && Array.isArray(body.questions)) {
+        rawQuestions = body.questions;
+      } else {
+        rawQuestions = [body];
+      }
+    }
+
+    if (!rawQuestions || rawQuestions.length === 0) {
+      return NextResponse.json(
+        { error: "No valid questions provided for upload" },
+        { status: 400 }
+      );
+    }
+
+    // 2. Sanitize and structure each question field cleanly
+    const formattedData = rawQuestions
+      .map((item: any) => {
+        const category = (item.category || item.subject || "").trim();
+        const prompt = (item.prompt || item.question || "").trim();
+        const explanation = (item.explanation || "").trim();
+        const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+
+        let options: string[] = [];
+        if (Array.isArray(item.options)) {
+          options = item.options.map((o: any) => String(o).trim());
+        } else {
+          options = [
+            item.optionA || item.option_a || "",
+            item.optionB || item.option_b || "",
+            item.optionC || item.option_c || "",
+            item.optionD || item.option_d || "",
+          ]
+            .map((o) => String(o).trim())
+            .filter(Boolean);
+        }
+
+        let answerIndex = 0;
+        if (typeof item.answerIndex === "number") {
+          answerIndex = item.answerIndex;
+        } else if (typeof item.answerIndex === "string") {
+          answerIndex = parseInt(item.answerIndex, 10) || 0;
+        } else if (typeof item.correctAnswer === "number") {
+          answerIndex = item.correctAnswer;
+        }
+
+        return {
+          category,
+          prompt,
+          options,
+          answerIndex,
+          explanation,
+          imageUrl,
+        };
+      })
+      .filter((q) => q.prompt && q.category && q.options.length >= 2);
+
+    if (formattedData.length === 0) {
+      return NextResponse.json(
+        { error: "No valid questions found after parsing fields." },
+        { status: 400 }
+      );
+    }
+
+    // 3. Batch insert questions into Database
+    const createdCount = await prisma.question.createMany({
+      data: formattedData as any,
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: `Successfully uploaded ${createdCount.count} question(s).`,
+      count: createdCount.count,
+    });
+  } catch (error: any) {
+    console.error("[POST_QUESTIONS_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to create/upload questions", details: error?.message },
       { status: 500 }
     );
   }

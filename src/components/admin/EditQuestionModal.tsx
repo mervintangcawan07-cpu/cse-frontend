@@ -9,6 +9,7 @@ interface Question {
   options: string[];
   answerIndex: number;
   explanation?: string;
+  imageUrl?: string;
 }
 
 interface EditQuestionModalProps {
@@ -26,6 +27,7 @@ export default function EditQuestionModal({
 }: EditQuestionModalProps) {
   const [category, setCategory] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [options, setOptions] = useState<string[]>(["", "", "", ""]);
   const [answerIndex, setAnswerIndex] = useState(0);
   const [explanation, setExplanation] = useState("");
@@ -35,6 +37,7 @@ export default function EditQuestionModal({
     if (question) {
       setCategory(question.category || "General");
       setPrompt(question.prompt || "");
+      setImageUrl(question.imageUrl || "");
       setOptions(
         question.options && question.options.length >= 4
           ? question.options
@@ -81,6 +84,7 @@ export default function EditQuestionModal({
         body: JSON.stringify({
           category,
           prompt,
+          imageUrl: imageUrl.trim() || null,
           options,
           answerIndex,
           explanation,
@@ -141,7 +145,7 @@ export default function EditQuestionModal({
           {/* Prompt */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-              Question Prompt
+              Question Prompt (HTML Tables Supported)
             </label>
             <textarea
               value={prompt}
@@ -150,6 +154,30 @@ export default function EditQuestionModal({
               className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition resize-none"
               required
             />
+          </div>
+
+          {/* Optional Chart Image URL */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Chart/Graph Image URL (Optional)
+            </label>
+            <input
+              type="text"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="/charts/chart1.png or https://..."
+              className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+            />
+            {imageUrl && (
+              <div className="mt-2 p-2 bg-slate-50 rounded-xl border border-slate-200 flex justify-center">
+                <img
+                  src={imageUrl}
+                  alt="Chart Preview"
+                  className="max-h-32 object-contain rounded-lg"
+                  onError={(e) => ((e.target as HTMLElement).style.display = "none")}
+                />
+              </div>
+            )}
           </div>
 
           {/* Options */}
