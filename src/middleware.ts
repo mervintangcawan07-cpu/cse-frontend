@@ -69,7 +69,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 4. Protect Examinee / Student Routes (Including newly added modules)
+  // 4. Protect Examinee / Student Routes (Including support module)
   const isStudentRoute =
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/exam") ||
@@ -82,7 +82,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/reviewer") ||
     pathname.startsWith("/reading-materials") ||
     pathname.startsWith("/modules") ||
-    pathname.startsWith("/profile");
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/support"); // Added /support route protection
 
   if (isStudentRoute) {
     if (!session) {
@@ -123,6 +124,7 @@ export const config = {
     "/reading-materials/:path*",
     "/modules/:path*",
     "/profile/:path*",
+    "/support/:path*", // Added /support to Next.js matcher
     "/admin/:path*",
   ],
 };
