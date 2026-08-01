@@ -26,7 +26,9 @@ export async function GET(request: Request) {
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
-    // 1. SAFELY FETCH USER'S MASTERED QUESTIONS TO PREVENT REPETITION OF SOLVED ITEMS
+    // ------------------------------------------------------------------
+    // 1. SAFELY FETCH USER'S MASTERED QUESTIONS TO PREVENT REPETITION
+    // ------------------------------------------------------------------
     const masteredQuestionIds = new Set<string>();
 
     try {
@@ -67,7 +69,9 @@ export async function GET(request: Request) {
       // Gracefully continue if examResult structure varies
     }
 
+    // ------------------------------------------------------------------
     // 2. SINGLE CATEGORY / SUBTOPIC DRILL MODE
+    // ------------------------------------------------------------------
     if (category && category !== "All") {
       const whereClause: any = {
         category: { equals: category, mode: "insensitive" },
@@ -87,7 +91,7 @@ export async function GET(request: Request) {
         },
       });
 
-      // Fallback: Fill up with mastered items if pool is smaller than requested limit
+      // Fallback 1: Fill up with mastered items if pool is smaller than requested limit
       if (questions.length < requestedLimit && masteredQuestionIds.size > 0) {
         const fallback = await prisma.question.findMany({
           where: {
@@ -98,7 +102,21 @@ export async function GET(request: Request) {
         questions = [...questions, ...fallback];
       }
 
-      // Shuffle and limit output
+      // Fallback 2: If still empty, fetch any questions under this category regardless of subtopic
+      if (questions.length === 0) {
+        questions = await prisma.question.findMany({
+          where: { category: { equals: category, mode: "insensitive" } },
+        });
+      }
+
+      // Fallback 3: Ultimate safeguard - fetch any questions in the DB
+      if (questions.length === 0) {
+        questions = await prisma.question.findMany({
+          take: requestedLimit,
+        });
+      }
+
+      // Shuffle and return requested slice
       questions = questions.sort(() => Math.random() - 0.5);
 
       return NextResponse.json({
@@ -107,76 +125,130 @@ export async function GET(request: Request) {
       });
     }
 
-    // 3. FULL COMPREHENSIVE EXAM MODE ("All"): BALANCED SUBJECT BLOCKS & SUBTOPICS
+    // ------------------------------------------------------------------
+    // 3. FULL COMPREHENSIVE EXAM MODE ("All"): SUBTOPIC-BALANCED BLOCKS
     // CSC Official Distribution Quotas (Total: 170 items)
+    // ------------------------------------------------------------------
     const subjectOrder = [
       {
         name: "Verbal Ability",
+        keyword: "Verbal",
         quota: 50,
         subtopics: ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
       },
       {
         name: "Numerical Reasoning",
+        keyword: "Numerical",
         quota: 45,
         subtopics: ["Basic Operations", "Word Problems", "Data Interpretation"],
       },
       {
         name: "Analytical Reasoning",
+        keyword: "Analytical",
         quota: 45,
         subtopics: ["Word Analogy", "Logic & Inferences", "Number Series"],
       },
       {
         name: "General Information",
+        keyword: "General",
         quota: 30,
         subtopics: ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
       },
     ];
 
     let finalExamQuestions: any[] = [];
+    const addedIds = new Set<string>();
 
     for (const subject of subjectOrder) {
-      // Fetch all available unmastered questions for this category
-      let subjectQuestions = await prisma.question.findMany({
-        where: {
-          category: { contains: subject.name.split(" ")[0], mode: "insensitive" },
-          ...(masteredQuestionIds.size > 0
-            ? { id: { notIn: Array.from(masteredQuestionIds) } }
-            : {}),
-        },
-      });
+      let subjectCollected: any[] = [];
+      const subCount = subject.subtopics.length;
+      const perSubtopicQuota = Math.floor(subject.quota / subCount);
+      let extraQuota = subject.quota % subCount;
 
-      // Shuffle subject questions
-      subjectQuestions = subjectQuestions.sort(() => Math.random() - 0.5);
+      // Step A: Attempt subtopic-balanced selection for this subject
+      for (const sub of subject.subtopics) {
+        const subQuota = perSubtopicQuota + (extraQuota > 0 ? 1 : 0);
+        if (extraQuota > 0) extraQuota--;
 
-      // Fallback: Top up with mastered questions for this subject if below quota
-      if (subjectQuestions.length < subject.quota && masteredQuestionIds.size > 0) {
-        let masteredSubjectQuestions = await prisma.question.findMany({
+        if (subQuota <= 0) continue;
+
+        // Fetch unmastered questions for this subtopic
+        let subQuestions = await prisma.question.findMany({
           where: {
-            category: { contains: subject.name.split(" ")[0], mode: "insensitive" },
-            id: { in: Array.from(masteredQuestionIds) },
+            category: { contains: subject.keyword, mode: "insensitive" },
+            subtopic: { equals: sub, mode: "insensitive" },
+            ...(masteredQuestionIds.size > 0
+              ? { id: { notIn: Array.from(masteredQuestionIds) } }
+              : {}),
           },
         });
-        masteredSubjectQuestions = masteredSubjectQuestions.sort(() => Math.random() - 0.5);
-        subjectQuestions = [...subjectQuestions, ...masteredSubjectQuestions];
+
+        // Top up with mastered questions for this subtopic if needed
+        if (subQuestions.length < subQuota && masteredQuestionIds.size > 0) {
+          const masteredSub = await prisma.question.findMany({
+            where: {
+              category: { contains: subject.keyword, mode: "insensitive" },
+              subtopic: { equals: sub, mode: "insensitive" },
+              id: { in: Array.from(masteredQuestionIds) },
+            },
+          });
+          subQuestions = [...subQuestions, ...masteredSub];
+        }
+
+        subQuestions = subQuestions.sort(() => Math.random() - 0.5);
+        for (const q of subQuestions.slice(0, subQuota)) {
+          if (!addedIds.has(q.id)) {
+            addedIds.add(q.id);
+            subjectCollected.push(q);
+          }
+        }
       }
 
-      // Add subject block up to its quota
-      finalExamQuestions.push(...subjectQuestions.slice(0, subject.quota));
+      // Step B: Top up subject block from general category pool if subtopic queries didn't reach full quota
+      if (subjectCollected.length < subject.quota) {
+        let generalCatQuestions = await prisma.question.findMany({
+          where: {
+            category: { contains: subject.keyword, mode: "insensitive" },
+            id: { notIn: Array.from(addedIds) },
+          },
+        });
+
+        generalCatQuestions = generalCatQuestions.sort(() => Math.random() - 0.5);
+        const needed = subject.quota - subjectCollected.length;
+
+        for (const q of generalCatQuestions.slice(0, needed)) {
+          addedIds.add(q.id);
+          subjectCollected.push(q);
+        }
+      }
+
+      finalExamQuestions.push(...subjectCollected);
     }
 
-    // Handle custom categories if database has items outside standard 4 categories
-    const handledCategoryKeywords = ["Verbal", "Numerical", "Analytical", "General"];
-    const customQuestions = await prisma.question.findMany({
-      where: {
-        AND: handledCategoryKeywords.map((keyword) => ({
-          category: { not: { contains: keyword, mode: "insensitive" } },
-        })),
-      },
-    });
+    // ------------------------------------------------------------------
+    // 4. ULTIMATE FALLBACK SAFEGUARDS (PREVENTS EMPTY EXAM SCREENS)
+    // ------------------------------------------------------------------
+    // If total items < 170, fill up with any remaining questions in DB
+    if (finalExamQuestions.length < 170) {
+      const extraQuestions = await prisma.question.findMany({
+        where: { id: { notIn: Array.from(addedIds) } },
+        take: 170 - finalExamQuestions.length,
+      });
 
-    if (customQuestions.length > 0) {
-      const shuffledCustom = customQuestions.sort(() => Math.random() - 0.5);
-      finalExamQuestions.push(...shuffledCustom);
+      for (const q of extraQuestions) {
+        if (!addedIds.has(q.id)) {
+          addedIds.add(q.id);
+          finalExamQuestions.push(q);
+        }
+      }
+    }
+
+    // Absolute fallback: If DB matches returned nothing, fetch top 170 questions
+    if (finalExamQuestions.length === 0) {
+      finalExamQuestions = await prisma.question.findMany({
+        take: 170,
+      });
+      finalExamQuestions = finalExamQuestions.sort(() => Math.random() - 0.5);
     }
 
     return NextResponse.json({
@@ -192,7 +264,9 @@ export async function GET(request: Request) {
   }
 }
 
-// 🎯 POST: BULK CSV IMPORT & SINGLE QUESTION CREATION (SAVES CATEGORY + SUBTOPIC + OPTIONS)
+// ----------------------------------------------------------------------
+// 🎯 POST: BULK CSV IMPORT & SINGLE QUESTION CREATION
+// ----------------------------------------------------------------------
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
@@ -215,7 +289,7 @@ export async function POST(request: Request) {
     const contentType = request.headers.get("content-type") || "";
     let rawQuestions: any[] = [];
 
-    // 1. Handle CSV payload or JSON payload safely
+    // 1. Parse incoming CSV text, multipart data, or JSON payloads
     if (contentType.includes("text/csv") || contentType.includes("multipart/form-data")) {
       const csvText = await request.text();
       const parsed = Papa.parse(csvText, {
