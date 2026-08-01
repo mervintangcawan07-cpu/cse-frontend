@@ -27,7 +27,7 @@ export default function EditQuestionModal({
   onSuccess,
 }: EditQuestionModalProps) {
   const [category, setCategory] = useState("Verbal Ability");
-  const [subtopic, setSubtopic] = useState("Vocabulary");
+  const [subtopic, setSubtopic] = useState("General");
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [options, setOptions] = useState<string[]>(["", "", "", ""]);
@@ -43,18 +43,9 @@ export default function EditQuestionModal({
     "Clerical Ability",
   ];
 
-  const subtopicsMap: Record<string, string[]> = {
-    "Verbal Ability": ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
-    "Numerical Reasoning": ["Basic Operations", "Word Problems", "Data Interpretation"],
-    "Analytical Reasoning": ["Word Analogy", "Logic & Inferences", "Number Series"],
-    "General Information": ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
-    "Clerical Ability": ["Alphabetizing", "Clerical Operations", "Spelling & Filing"],
-  };
-
   useEffect(() => {
     if (question) {
-      const cat = question.category || "Verbal Ability";
-      setCategory(cat);
+      setCategory(question.category || "Verbal Ability");
       setSubtopic(question.subtopic || "General");
       setPrompt(question.prompt || "");
       setImageUrl(question.imageUrl || "");
@@ -74,16 +65,6 @@ export default function EditQuestionModal({
   }, [question]);
 
   if (!isOpen || !question) return null;
-
-  const handleCategoryChange = (newCat: string) => {
-    setCategory(newCat);
-    const available = subtopicsMap[newCat];
-    if (available && available.length > 0) {
-      setSubtopic(available[0]);
-    } else {
-      setSubtopic("General");
-    }
-  };
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -114,7 +95,7 @@ export default function EditQuestionModal({
         body: JSON.stringify({
           id: question.id,
           category,
-          subtopic,
+          subtopic: subtopic.trim() || "General",
           prompt,
           imageUrl: imageUrl.trim() || null,
           options,
@@ -139,11 +120,6 @@ export default function EditQuestionModal({
     }
   };
 
-  // Combine predefined subtopics with current subtopic if it was dynamically loaded from CSV
-  const availableSubtopics = Array.from(
-    new Set([...(subtopicsMap[category] || []), subtopic, "General"])
-  ).filter(Boolean);
-
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-6 my-8">
@@ -165,7 +141,7 @@ export default function EditQuestionModal({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Category & Subtopic Grid */}
+          {/* Category & Subtopic Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Category */}
             <div className="space-y-1.5">
@@ -174,7 +150,7 @@ export default function EditQuestionModal({
               </label>
               <select
                 value={category}
-                onChange={(e) => handleCategoryChange(e.target.value)}
+                onChange={(e) => setCategory(e.target.value)}
                 className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
                 required
               >
@@ -186,30 +162,26 @@ export default function EditQuestionModal({
               </select>
             </div>
 
-            {/* Subtopic */}
+            {/* Subtopic (Flexible Text Input) */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Subtopic
+                Subtopic Name
               </label>
-              <select
+              <input
+                type="text"
                 value={subtopic}
                 onChange={(e) => setSubtopic(e.target.value)}
+                placeholder="e.g. Vocabulary, Word Problems"
                 className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
                 required
-              >
-                {availableSubtopics.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
 
           {/* Prompt */}
           <div className="space-y-1.5">
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-              Question Prompt (HTML Tables Supported)
+              Question Prompt
             </label>
             <textarea
               value={prompt}
@@ -288,9 +260,6 @@ export default function EditQuestionModal({
                 </div>
               ))}
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">
-              Click the letter badge (A, B, C, D) to mark it as the correct answer.
-            </p>
           </div>
 
           {/* Explanation */}

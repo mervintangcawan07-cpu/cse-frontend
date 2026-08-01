@@ -15,6 +15,7 @@ interface Question {
   options: string[];
   answerIndex: number;
   explanation?: string;
+  imageUrl?: string;
 }
 
 export default function AdminQuestionsPage() {
@@ -35,8 +36,9 @@ export default function AdminQuestionsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formCategory, setFormCategory] = useState("Verbal Ability");
-  const [formSubtopic, setFormSubtopic] = useState("Vocabulary");
+  const [formSubtopic, setFormSubtopic] = useState("General");
   const [formPrompt, setFormPrompt] = useState("");
+  const [formImageUrl, setFormImageUrl] = useState("");
   const [formOptions, setFormOptions] = useState(["", "", "", ""]);
   const [formAnswerIndex, setFormAnswerIndex] = useState(0);
   const [formExplanation, setFormExplanation] = useState("");
@@ -48,14 +50,6 @@ export default function AdminQuestionsPage() {
     "General Information",
     "Clerical Ability",
   ];
-
-  const subtopicsMap: Record<string, string[]> = {
-    "Verbal Ability": ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
-    "Numerical Reasoning": ["Basic Operations", "Word Problems", "Data Interpretation"],
-    "Analytical Reasoning": ["Word Analogy", "Logic & Inferences", "Number Series"],
-    "General Information": ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
-    "Clerical Ability": ["Alphabetizing", "Clerical Operations", "Spelling & Filing"],
-  };
 
   // Fetch all questions
   const loadQuestions = async () => {
@@ -77,17 +71,6 @@ export default function AdminQuestionsPage() {
     loadQuestions();
   }, []);
 
-  // Update formSubtopic when formCategory changes
-  const handleFormCategoryChange = (newCat: string) => {
-    setFormCategory(newCat);
-    const available = subtopicsMap[newCat];
-    if (available && available.length > 0) {
-      setFormSubtopic(available[0]);
-    } else {
-      setFormSubtopic("General");
-    }
-  };
-
   // Update question in state after successful edit
   const handleQuestionUpdated = (updatedQuestion: Question) => {
     setQuestions((prev) =>
@@ -95,11 +78,18 @@ export default function AdminQuestionsPage() {
     );
   };
 
-  // Available subtopics for filter bar based on selected category
-  const availableFilterSubtopics =
-    selectedCategoryFilter !== "All" && subtopicsMap[selectedCategoryFilter]
-      ? subtopicsMap[selectedCategoryFilter]
-      : Object.values(subtopicsMap).flat();
+  // ⚡ EXTRACT SUBTOPICS 100% DYNAMICALLY FROM DATABASE QUESTIONS
+  const availableFilterSubtopics = Array.from(
+    new Set(
+      questions
+        .filter(
+          (q) =>
+            selectedCategoryFilter === "All" || q.category === selectedCategoryFilter
+        )
+        .map((q) => q.subtopic?.trim() || "General")
+        .filter(Boolean)
+    )
+  );
 
   // Filter questions by category, subtopic, and search prompt
   const filteredQuestions = questions.filter((q) => {
@@ -116,7 +106,7 @@ export default function AdminQuestionsPage() {
     return matchesCategory && matchesSubtopic && matchesSearch;
   });
 
-  // Toggle Select All (Filtered Questions)
+  // Toggle Select All
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       const allFilteredIds = filteredQuestions.map((q) => q.id);
@@ -190,8 +180,9 @@ export default function AdminQuestionsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: formCategory,
-          subtopic: formSubtopic,
+          subtopic: formSubtopic.trim() || "General",
           prompt: formPrompt,
+          imageUrl: formImageUrl.trim() || null,
           options: formOptions,
           answerIndex: formAnswerIndex,
           explanation: formExplanation,
@@ -200,6 +191,8 @@ export default function AdminQuestionsPage() {
 
       if (res.ok) {
         setFormPrompt("");
+        setFormImageUrl("");
+        setFormSubtopic("General");
         setFormOptions(["", "", "", ""]);
         setFormAnswerIndex(0);
         setFormExplanation("");
@@ -300,14 +293,14 @@ export default function AdminQuestionsPage() {
             ))}
           </select>
 
-          {/* Subtopic Filter */}
+          {/* ⚡ Dynamic Subtopic Filter */}
           <select
             value={selectedSubtopicFilter}
             onChange={(e) => setSelectedSubtopicFilter(e.target.value)}
             className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-blue-500 transition"
           >
-            <option value="All">All Subtopics</option>
-            {Array.from(new Set(availableFilterSubtopics)).map((sub) => (
+            <option value="All">All Subtopics ({availableFilterSubtopics.length})</option>
+            {availableFilterSubtopics.map((sub) => (
               <option key={sub} value={sub}>
                 {sub}
               </option>
@@ -315,7 +308,7 @@ export default function AdminQuestionsPage() {
           </select>
         </div>
 
-        {/* 🗑️ BULK DELETE BUTTON */}
+        {/* Bulk Delete Button */}
         {selectedIds.length > 0 && (
           <button
             onClick={handleBulkDelete}
@@ -399,6 +392,11 @@ export default function AdminQuestionsPage() {
                         <p className="font-bold text-slate-800 line-clamp-2">
                           {q.prompt}
                         </p>
+                        {q.imageUrl && (
+                          <span className="inline-block mt-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                            🖼️ Chart Included
+                          </span>
+                        )}
                         {q.explanation && (
                           <p className="text-xs text-slate-400 mt-1 line-clamp-1">
                             💡 {q.explanation}
@@ -410,14 +408,12 @@ export default function AdminQuestionsPage() {
                       </td>
                       <td className="p-4 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          {/* ✏️ EDIT BUTTON */}
                           <button
                             onClick={() => setEditingQuestion(q)}
                             className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold rounded-lg transition border border-amber-200/60 cursor-pointer"
                           >
                             ✏️ Edit
                           </button>
-                          {/* 🗑️ DELETE BUTTON */}
                           <button
                             onClick={() => handleDeleteQuestion(q.id)}
                             className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition cursor-pointer"
@@ -435,7 +431,7 @@ export default function AdminQuestionsPage() {
         )}
       </div>
 
-      {/* ✏️ EDIT QUESTION MODAL */}
+      {/* Edit Question Modal */}
       <EditQuestionModal
         isOpen={editingQuestion !== null}
         onClose={() => setEditingQuestion(null)}
@@ -469,7 +465,7 @@ export default function AdminQuestionsPage() {
                   </label>
                   <select
                     value={formCategory}
-                    onChange={(e) => handleFormCategoryChange(e.target.value)}
+                    onChange={(e) => setFormCategory(e.target.value)}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
                   >
                     {categoriesList.map((cat) => (
@@ -480,22 +476,24 @@ export default function AdminQuestionsPage() {
                   </select>
                 </div>
 
-                {/* Subtopic */}
+                {/* Subtopic (Flexible Input with Datalist Autocomplete) */}
                 <div className="space-y-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Subtopic
+                    Subtopic Name
                   </label>
-                  <select
+                  <input
+                    type="text"
+                    list="existing-subtopics"
+                    placeholder="e.g. Mixed Numerical, Vocabulary, etc."
                     value={formSubtopic}
                     onChange={(e) => setFormSubtopic(e.target.value)}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
-                  >
-                    {(subtopicsMap[formCategory] || ["General"]).map((sub) => (
-                      <option key={sub} value={sub}>
-                        {sub}
-                      </option>
+                  />
+                  <datalist id="existing-subtopics">
+                    {availableFilterSubtopics.map((sub) => (
+                      <option key={sub} value={sub} />
                     ))}
-                  </select>
+                  </datalist>
                 </div>
               </div>
 
@@ -514,7 +512,21 @@ export default function AdminQuestionsPage() {
                 />
               </div>
 
-              {/* 4 Choices */}
+              {/* Chart/Graph Image URL */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                  Chart / Graph Image URL (Optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="/charts/chart1.png or https://..."
+                  value={formImageUrl}
+                  onChange={(e) => setFormImageUrl(e.target.value)}
+                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                />
+              </div>
+
+              {/* Options */}
               <div className="space-y-3">
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
                   Multiple Choice Options
@@ -542,9 +554,6 @@ export default function AdminQuestionsPage() {
                     />
                   </div>
                 ))}
-                <p className="text-[11px] text-slate-400">
-                  💡 Select the radio button next to the correct answer.
-                </p>
               </div>
 
               {/* Explanation */}
@@ -561,7 +570,7 @@ export default function AdminQuestionsPage() {
                 />
               </div>
 
-              {/* Modal Actions */}
+              {/* Actions */}
               <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
