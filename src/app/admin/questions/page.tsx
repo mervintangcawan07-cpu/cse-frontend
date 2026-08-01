@@ -10,6 +10,7 @@ import EditQuestionModal from "@/components/admin/EditQuestionModal";
 interface Question {
   id: string;
   category: string;
+  subtopic?: string;
   prompt: string;
   options: string[];
   answerIndex: number;
@@ -21,6 +22,7 @@ export default function AdminQuestionsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("All");
+  const [selectedSubtopicFilter, setSelectedSubtopicFilter] = useState("All");
 
   // Selection & Bulk Actions State
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -33,6 +35,7 @@ export default function AdminQuestionsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formCategory, setFormCategory] = useState("Verbal Ability");
+  const [formSubtopic, setFormSubtopic] = useState("Vocabulary");
   const [formPrompt, setFormPrompt] = useState("");
   const [formOptions, setFormOptions] = useState(["", "", "", ""]);
   const [formAnswerIndex, setFormAnswerIndex] = useState(0);
@@ -45,6 +48,14 @@ export default function AdminQuestionsPage() {
     "General Information",
     "Clerical Ability",
   ];
+
+  const subtopicsMap: Record<string, string[]> = {
+    "Verbal Ability": ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
+    "Numerical Reasoning": ["Basic Operations", "Word Problems", "Data Interpretation"],
+    "Analytical Reasoning": ["Word Analogy", "Logic & Inferences", "Number Series"],
+    "General Information": ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
+    "Clerical Ability": ["Alphabetizing", "Clerical Operations", "Spelling & Filing"],
+  };
 
   // Fetch all questions
   const loadQuestions = async () => {
@@ -66,6 +77,17 @@ export default function AdminQuestionsPage() {
     loadQuestions();
   }, []);
 
+  // Update formSubtopic when formCategory changes
+  const handleFormCategoryChange = (newCat: string) => {
+    setFormCategory(newCat);
+    const available = subtopicsMap[newCat];
+    if (available && available.length > 0) {
+      setFormSubtopic(available[0]);
+    } else {
+      setFormSubtopic("General");
+    }
+  };
+
   // Update question in state after successful edit
   const handleQuestionUpdated = (updatedQuestion: Question) => {
     setQuestions((prev) =>
@@ -73,14 +95,25 @@ export default function AdminQuestionsPage() {
     );
   };
 
-  // Filter questions by category and search
+  // Available subtopics for filter bar based on selected category
+  const availableFilterSubtopics =
+    selectedCategoryFilter !== "All" && subtopicsMap[selectedCategoryFilter]
+      ? subtopicsMap[selectedCategoryFilter]
+      : Object.values(subtopicsMap).flat();
+
+  // Filter questions by category, subtopic, and search prompt
   const filteredQuestions = questions.filter((q) => {
     const matchesCategory =
       selectedCategoryFilter === "All" || q.category === selectedCategoryFilter;
+    const matchesSubtopic =
+      selectedSubtopicFilter === "All" ||
+      (q.subtopic || "General") === selectedSubtopicFilter;
     const matchesSearch =
       q.prompt.toLowerCase().includes(search.toLowerCase()) ||
-      q.category.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesSearch;
+      q.category.toLowerCase().includes(search.toLowerCase()) ||
+      (q.subtopic && q.subtopic.toLowerCase().includes(search.toLowerCase()));
+
+    return matchesCategory && matchesSubtopic && matchesSearch;
   });
 
   // Toggle Select All (Filtered Questions)
@@ -157,6 +190,7 @@ export default function AdminQuestionsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: formCategory,
+          subtopic: formSubtopic,
           prompt: formPrompt,
           options: formOptions,
           answerIndex: formAnswerIndex,
@@ -211,7 +245,7 @@ export default function AdminQuestionsPage() {
             Question Bank Manager
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            Add, edit, review, bulk import, and batch delete practice questions in your database.
+            Add, edit, review, bulk import, and batch delete practice questions by Category and Subtopic.
           </p>
         </div>
 
@@ -240,23 +274,42 @@ export default function AdminQuestionsPage() {
       {/* Filter, Search & Bulk Delete Action Bar */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
+          {/* Search Bar */}
           <input
             type="text"
-            placeholder="Search question prompts..."
+            placeholder="Search prompt, category, subtopic..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-80 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition"
+            className="w-full sm:w-64 p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition"
           />
 
+          {/* Category Filter */}
           <select
             value={selectedCategoryFilter}
-            onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+            onChange={(e) => {
+              setSelectedCategoryFilter(e.target.value);
+              setSelectedSubtopicFilter("All");
+            }}
             className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-blue-500 transition"
           >
             <option value="All">All Categories ({questions.length})</option>
             {categoriesList.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
+              </option>
+            ))}
+          </select>
+
+          {/* Subtopic Filter */}
+          <select
+            value={selectedSubtopicFilter}
+            onChange={(e) => setSelectedSubtopicFilter(e.target.value)}
+            className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 outline-none focus:bg-white focus:border-blue-500 transition"
+          >
+            <option value="All">All Subtopics</option>
+            {Array.from(new Set(availableFilterSubtopics)).map((sub) => (
+              <option key={sub} value={sub}>
+                {sub}
               </option>
             ))}
           </select>
@@ -308,6 +361,7 @@ export default function AdminQuestionsPage() {
                     />
                   </th>
                   <th className="p-4">Category</th>
+                  <th className="p-4">Subtopic</th>
                   <th className="p-4">Prompt</th>
                   <th className="p-4">Correct Answer</th>
                   <th className="p-4 text-right">Actions</th>
@@ -334,6 +388,11 @@ export default function AdminQuestionsPage() {
                       <td className="p-4">
                         <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
                           {q.category}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
+                          {q.subtopic || "General"}
                         </span>
                       </td>
                       <td className="p-4 max-w-md">
@@ -401,22 +460,43 @@ export default function AdminQuestionsPage() {
             </div>
 
             <form onSubmit={handleCreateQuestion} className="space-y-5">
-              {/* Category */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Category
-                </label>
-                <select
-                  value={formCategory}
-                  onChange={(e) => setFormCategory(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
-                >
-                  {categoriesList.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
+              {/* Category & Subtopic Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Category */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Category
+                  </label>
+                  <select
+                    value={formCategory}
+                    onChange={(e) => handleFormCategoryChange(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                  >
+                    {categoriesList.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Subtopic */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Subtopic
+                  </label>
+                  <select
+                    value={formSubtopic}
+                    onChange={(e) => setFormSubtopic(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                  >
+                    {(subtopicsMap[formCategory] || ["General"]).map((sub) => (
+                      <option key={sub} value={sub}>
+                        {sub}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Question Prompt */}
