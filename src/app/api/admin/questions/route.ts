@@ -10,10 +10,11 @@ async function verifyAdmin() {
   if (!token) return null;
 
   const session = await verifyJWT(token);
-  if (!session?.userId) return null;
+  const userId = session?.userId || session?.id;
+  if (!userId) return null;
 
   const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
+    where: { id: String(userId) },
     select: { id: true, role: true },
   });
 
@@ -21,15 +22,28 @@ async function verifyAdmin() {
   return user;
 }
 
-// 1. GET ALL QUESTIONS FOR ADMIN TABLE
-export async function GET() {
+// 1. GET QUESTIONS FOR ADMIN TABLE (SUPPORTING CATEGORY & SUBTOPIC FILTERS)
+export async function GET(req: Request) {
   try {
     const admin = await verifyAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized: Admin access required" }, { status: 403 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+    const subtopic = searchParams.get("subtopic");
+
+    const whereClause: any = {};
+    if (category && category !== "All") {
+      whereClause.category = { equals: category, mode: "insensitive" };
+    }
+    if (subtopic && subtopic !== "All") {
+      whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+    }
+
     const questions = await prisma.question.findMany({
+      where: whereClause,
       orderBy: { createdAt: "desc" },
     });
 
@@ -73,26 +87,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required question fields" }, { status: 400 });
     }
 
-    // Format fields cleanly
+    // Format fields cleanly with Category + Subtopic + Dual Option fields
     const formattedData = rawQuestions
       .map((item: any) => {
-        const category = String(item.category || item.subject || "").trim();
+        const category = String(item.category || item.subject || "General").trim();
+        const subtopic = String(item.subtopic || item.sub_topic || item.subTopic || "General").trim();
         const prompt = String(item.prompt || item.question || "").trim();
         const explanation = item.explanation ? String(item.explanation).trim() : null;
         const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
 
+        const optA = String(item.optionA || item.option_a || "").trim();
+        const optB = String(item.optionB || item.option_b || "").trim();
+        const optC = String(item.optionC || item.option_c || "").trim();
+        const optD = String(item.optionD || item.option_d || "").trim();
+
         let options: string[] = [];
-        if (Array.isArray(item.options)) {
+        if (Array.isArray(item.options) && item.options.length > 0) {
           options = item.options.map((o: any) => String(o).trim());
         } else {
-          options = [
-            item.optionA || item.option_a || "",
-            item.optionB || item.option_b || "",
-            item.optionC || item.option_c || "",
-            item.optionD || item.option_d || "",
-          ]
-            .map((o) => String(o).trim())
-            .filter(Boolean);
+          options = [optA, optB, optC, optD].filter(Boolean);
         }
 
         let answerIndex = 0;
@@ -100,12 +113,21 @@ export async function POST(req: Request) {
           answerIndex = item.answerIndex;
         } else if (typeof item.answerIndex === "string") {
           answerIndex = parseInt(item.answerIndex, 10) || 0;
+        } else if (typeof item.correctAnswer === "number") {
+          answerIndex = item.correctAnswer;
+        } else if (typeof item.correctAnswer === "string") {
+          answerIndex = parseInt(item.correctAnswer, 10) || 0;
         }
 
         return {
           category,
+          subtopic,
           prompt,
           options,
+          optionA: optA || (options[0] ?? null),
+          optionB: optB || (options[1] ?? null),
+          optionC: optC || (options[2] ?? null),
+          optionD: optD || (options[3] ?? null),
           answerIndex,
           explanation,
           imageUrl,

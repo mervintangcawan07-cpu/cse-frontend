@@ -6,8 +6,13 @@ import Papa from "papaparse";
 
 interface ImportedQuestion {
   category: string;
+  subtopic: string;
   prompt: string;
   options: string[];
+  optionA?: string | null;
+  optionB?: string | null;
+  optionC?: string | null;
+  optionD?: string | null;
   answerIndex: number;
   explanation?: string | null;
   imageUrl?: string | null;
@@ -23,7 +28,9 @@ export async function POST(request: Request) {
     }
 
     const session = await verifyJWT(token);
-    if (!session?.userId || session.role !== "ADMIN") {
+    const userId = session?.userId || session?.id;
+
+    if (!userId || session?.role !== "ADMIN") {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 
@@ -56,23 +63,22 @@ export async function POST(request: Request) {
     // Validate and format structure of imported items
     const validQuestions: ImportedQuestion[] = [];
     for (const q of rawQuestions) {
-      const category = String(q.category || q.subject || "").trim();
+      const category = String(q.category || q.subject || "General").trim();
+      const subtopic = String(q.subtopic || q.sub_topic || q.subTopic || "General").trim();
       const prompt = String(q.prompt || q.question || "").trim();
       const explanation = q.explanation ? String(q.explanation).trim() : null;
       const imageUrl = (q.imageUrl || q.image_url || q.image || "").trim() || null;
 
+      const optA = String(q.optionA || q.option_a || "").trim();
+      const optB = String(q.optionB || q.option_b || "").trim();
+      const optC = String(q.optionC || q.option_c || "").trim();
+      const optD = String(q.optionD || q.option_d || "").trim();
+
       let options: string[] = [];
-      if (Array.isArray(q.options)) {
+      if (Array.isArray(q.options) && q.options.length > 0) {
         options = q.options.map((opt: unknown) => String(opt).trim());
       } else {
-        options = [
-          q.optionA || q.option_a || "",
-          q.optionB || q.option_b || "",
-          q.optionC || q.option_c || "",
-          q.optionD || q.option_d || "",
-        ]
-          .map((o) => String(o).trim())
-          .filter(Boolean);
+        options = [optA, optB, optC, optD].filter(Boolean);
       }
 
       let answerIndex = 0;
@@ -82,13 +88,20 @@ export async function POST(request: Request) {
         answerIndex = parseInt(q.answerIndex, 10) || 0;
       } else if (typeof q.correctAnswer === "number") {
         answerIndex = q.correctAnswer;
+      } else if (typeof q.correctAnswer === "string") {
+        answerIndex = parseInt(q.correctAnswer, 10) || 0;
       }
 
       if (prompt && category && options.length >= 2) {
         validQuestions.push({
           category,
+          subtopic,
           prompt,
           options,
+          optionA: optA || (options[0] ?? null),
+          optionB: optB || (options[1] ?? null),
+          optionC: optC || (options[2] ?? null),
+          optionD: optD || (options[3] ?? null),
           answerIndex,
           explanation,
           imageUrl,
@@ -108,7 +121,7 @@ export async function POST(request: Request) {
     // Log admin bulk activity
     await prisma.activityLog.create({
       data: {
-        userId: String(session.userId),
+        userId: String(userId),
         action: "BULK_QUESTIONS_IMPORTED",
         metadata: JSON.stringify({ count: created.count }),
       },

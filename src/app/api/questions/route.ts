@@ -14,15 +14,19 @@ export async function GET(request: Request) {
     }
 
     const session = await verifyJWT(token);
-    if (!session?.userId) {
+    const userId = String(session?.userId || session?.id || "");
+
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = String(session.userId);
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
+    const subtopic = searchParams.get("subtopic");
+    const limitParam = searchParams.get("limit");
+    const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
-    // 1. Safely fetch user's past exam submissions to check question mastery
+    // 1. SAFELY FETCH USER'S MASTERED QUESTIONS TO PREVENT REPETITION OF SOLVED ITEMS
     const masteredQuestionIds = new Set<string>();
 
     try {
@@ -51,8 +55,7 @@ export async function GET(request: Request) {
           select: { id: true, answerIndex: true },
         });
 
-        // 🎯 MASTERED QUESTIONS: Exclude ONLY questions answered CORRECTLY at least once.
-        // Questions answered INCORRECTLY remain in the active pool for re-testing!
+        // Exclude ONLY questions answered CORRECTLY at least once
         pastQuestions.forEach((q) => {
           const selectedIndices = pastAnswerMap.get(q.id) || [];
           if (selectedIndices.includes(q.answerIndex)) {
@@ -61,91 +64,121 @@ export async function GET(request: Request) {
         });
       }
     } catch (err) {
-      // Gracefully ignore if answers column is not present in DB schema
+      // Gracefully continue if examResult structure varies
     }
 
-    // 2. SINGLE CATEGORY MODE
+    // 2. SINGLE CATEGORY / SUBTOPIC DRILL MODE
     if (category && category !== "All") {
+      const whereClause: any = {
+        category: { equals: category, mode: "insensitive" },
+      };
+
+      if (subtopic && subtopic !== "All") {
+        whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+      }
+
+      // Fetch unmastered questions first
       let questions = await prisma.question.findMany({
         where: {
-          category,
-          id: masteredQuestionIds.size > 0 ? { notIn: Array.from(masteredQuestionIds) } : undefined,
+          ...whereClause,
+          ...(masteredQuestionIds.size > 0
+            ? { id: { notIn: Array.from(masteredQuestionIds) } }
+            : {}),
         },
       });
 
-      // Fallback: If unmastered questions are under 170, fill up with mastered items
-      if (questions.length < 170 && masteredQuestionIds.size > 0) {
+      // Fallback: Fill up with mastered items if pool is smaller than requested limit
+      if (questions.length < requestedLimit && masteredQuestionIds.size > 0) {
         const fallback = await prisma.question.findMany({
           where: {
-            category,
+            ...whereClause,
             id: { in: Array.from(masteredQuestionIds) },
           },
         });
         questions = [...questions, ...fallback];
       }
 
-      // Shuffle order within category
+      // Shuffle and limit output
       questions = questions.sort(() => Math.random() - 0.5);
 
-      return NextResponse.json({ success: true, questions: questions.slice(0, 170) });
+      return NextResponse.json({
+        success: true,
+        questions: questions.slice(0, requestedLimit),
+      });
     }
 
-    // 3. FULL COMPREHENSIVE EXAM MODE ("All"): Sequential Subject Blocks
-    // Exact CSC Subject Order & Quotas (Total 170 items)
+    // 3. FULL COMPREHENSIVE EXAM MODE ("All"): BALANCED SUBJECT BLOCKS & SUBTOPICS
+    // CSC Official Distribution Quotas (Total: 170 items)
     const subjectOrder = [
-      { name: "Verbal Ability", quota: 50 },
-      { name: "Numerical Reasoning", quota: 45 },
-      { name: "Analytical Ability", quota: 45 },
-      { name: "General Information", quota: 30 },
+      {
+        name: "Verbal Ability",
+        quota: 50,
+        subtopics: ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
+      },
+      {
+        name: "Numerical Reasoning",
+        quota: 45,
+        subtopics: ["Basic Operations", "Word Problems", "Data Interpretation"],
+      },
+      {
+        name: "Analytical Reasoning",
+        quota: 45,
+        subtopics: ["Word Analogy", "Logic & Inferences", "Number Series"],
+      },
+      {
+        name: "General Information",
+        quota: 30,
+        subtopics: ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
+      },
     ];
 
     let finalExamQuestions: any[] = [];
 
     for (const subject of subjectOrder) {
-      // Fetch unmastered items for this subject
-      let catQuestions = await prisma.question.findMany({
+      // Fetch all available unmastered questions for this category
+      let subjectQuestions = await prisma.question.findMany({
         where: {
-          category: subject.name,
-          id: masteredQuestionIds.size > 0 ? { notIn: Array.from(masteredQuestionIds) } : undefined,
+          category: { contains: subject.name.split(" ")[0], mode: "insensitive" },
+          ...(masteredQuestionIds.size > 0
+            ? { id: { notIn: Array.from(masteredQuestionIds) } }
+            : {}),
         },
       });
 
-      // Shuffle questions WITHIN this subject block
-      catQuestions = catQuestions.sort(() => Math.random() - 0.5);
+      // Shuffle subject questions
+      subjectQuestions = subjectQuestions.sort(() => Math.random() - 0.5);
 
-      // If unmastered items are less than quota, fill up with mastered items from this subject
-      if (catQuestions.length < subject.quota && masteredQuestionIds.size > 0) {
-        let catMastered = await prisma.question.findMany({
+      // Fallback: Top up with mastered questions for this subject if below quota
+      if (subjectQuestions.length < subject.quota && masteredQuestionIds.size > 0) {
+        let masteredSubjectQuestions = await prisma.question.findMany({
           where: {
-            category: subject.name,
+            category: { contains: subject.name.split(" ")[0], mode: "insensitive" },
             id: { in: Array.from(masteredQuestionIds) },
           },
         });
-        catMastered = catMastered.sort(() => Math.random() - 0.5);
-        catQuestions = [...catQuestions, ...catMastered];
+        masteredSubjectQuestions = masteredSubjectQuestions.sort(() => Math.random() - 0.5);
+        subjectQuestions = [...subjectQuestions, ...masteredSubjectQuestions];
       }
 
-      // Append subject block questions sequentially up to quota
-      finalExamQuestions.push(...catQuestions.slice(0, subject.quota));
+      // Add subject block up to its quota
+      finalExamQuestions.push(...subjectQuestions.slice(0, subject.quota));
     }
 
-    // Fallback for custom categories if DB has subjects not in default list
-    const handledCategories = new Set(subjectOrder.map((s) => s.name));
-    const customCategories = await prisma.question.findMany({
-      distinct: ["category"],
-      where: { category: { notIn: Array.from(handledCategories) } },
-      select: { category: true },
+    // Handle custom categories if database has items outside standard 4 categories
+    const handledCategoryKeywords = ["Verbal", "Numerical", "Analytical", "General"];
+    const customQuestions = await prisma.question.findMany({
+      where: {
+        AND: handledCategoryKeywords.map((keyword) => ({
+          category: { not: { contains: keyword, mode: "insensitive" } },
+        })),
+      },
     });
 
-    for (const customCat of customCategories) {
-      let extraQuestions = await prisma.question.findMany({
-        where: { category: customCat.category },
-      });
-      extraQuestions = extraQuestions.sort(() => Math.random() - 0.5);
-      finalExamQuestions.push(...extraQuestions);
+    if (customQuestions.length > 0) {
+      const shuffledCustom = customQuestions.sort(() => Math.random() - 0.5);
+      finalExamQuestions.push(...shuffledCustom);
     }
 
-    // Return subject blocks IN SEQUENTIAL ORDER (No global scramble across subjects)
     return NextResponse.json({
       success: true,
       questions: finalExamQuestions.slice(0, 170),
@@ -159,7 +192,7 @@ export async function GET(request: Request) {
   }
 }
 
-// 🎯 POST: Bulk Upload / CSV Import & Single Question Creation
+// 🎯 POST: BULK CSV IMPORT & SINGLE QUESTION CREATION (SAVES CATEGORY + SUBTOPIC + OPTIONS)
 export async function POST(request: Request) {
   try {
     const cookieStore = await cookies();
@@ -170,7 +203,9 @@ export async function POST(request: Request) {
     }
 
     const session = await verifyJWT(token);
-    if (!session?.userId || session.role !== "ADMIN") {
+    const userId = session?.userId || session?.id;
+
+    if (!userId || session?.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Forbidden: Admin access required" },
         { status: 403 }
@@ -212,41 +247,49 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Sanitize and structure each question field cleanly
+    // 2. Sanitize and structure Category, Subtopic, Options, and Answer Fields
     const formattedData = rawQuestions
       .map((item: any) => {
-        const category = (item.category || item.subject || "").trim();
-        const prompt = (item.prompt || item.question || "").trim();
-        const explanation = (item.explanation || "").trim();
-        const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+        const category = String(item.category || item.subject || "General").trim();
+        const subtopic = String(item.subtopic || item.sub_topic || item.subTopic || "General").trim();
+        const prompt = String(item.prompt || item.question || "").trim();
+        const explanation = item.explanation ? String(item.explanation).trim() : null;
+        const imageUrl = String(item.imageUrl || item.image_url || item.image || "").trim() || null;
+
+        const optA = String(item.optionA || item.option_a || "").trim();
+        const optB = String(item.optionB || item.option_b || "").trim();
+        const optC = String(item.optionC || item.option_c || "").trim();
+        const optD = String(item.optionD || item.option_d || "").trim();
 
         let options: string[] = [];
-        if (Array.isArray(item.options)) {
+        if (Array.isArray(item.options) && item.options.length > 0) {
           options = item.options.map((o: any) => String(o).trim());
         } else {
-          options = [
-            item.optionA || item.option_a || "",
-            item.optionB || item.option_b || "",
-            item.optionC || item.option_c || "",
-            item.optionD || item.option_d || "",
-          ]
-            .map((o) => String(o).trim())
-            .filter(Boolean);
+          options = [optA, optB, optC, optD].filter(Boolean);
         }
 
         let answerIndex = 0;
         if (typeof item.answerIndex === "number") {
           answerIndex = item.answerIndex;
         } else if (typeof item.answerIndex === "string") {
-          answerIndex = parseInt(item.answerIndex, 10) || 0;
+          const parsedIdx = parseInt(item.answerIndex, 10);
+          answerIndex = isNaN(parsedIdx) ? 0 : parsedIdx;
         } else if (typeof item.correctAnswer === "number") {
           answerIndex = item.correctAnswer;
+        } else if (typeof item.correctAnswer === "string") {
+          const parsedIdx = parseInt(item.correctAnswer, 10);
+          answerIndex = isNaN(parsedIdx) ? 0 : parsedIdx;
         }
 
         return {
           category,
+          subtopic,
           prompt,
           options,
+          optionA: optA || (options[0] ?? null),
+          optionB: optB || (options[1] ?? null),
+          optionC: optC || (options[2] ?? null),
+          optionD: optD || (options[3] ?? null),
           answerIndex,
           explanation,
           imageUrl,
