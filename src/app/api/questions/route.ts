@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
     // ------------------------------------------------------------------
-    // 1. SAFELY FETCH USER'S MASTERED QUESTIONS TO PREVENT REPETITION
+    // 1. IDENTIFY MASTERED QUESTIONS (ANSWERED CORRECTLY AT LEAST ONCE)
     // ------------------------------------------------------------------
     const masteredQuestionIds = new Set<string>();
 
@@ -57,7 +57,8 @@ export async function GET(request: Request) {
           select: { id: true, answerIndex: true },
         });
 
-        // Exclude ONLY questions answered CORRECTLY at least once
+        // Add to mastered set ONLY if answered CORRECTLY at least once.
+        // Incorrectly answered questions stay in the active candidate pool for re-testing!
         pastQuestions.forEach((q) => {
           const selectedIndices = pastAnswerMap.get(q.id) || [];
           if (selectedIndices.includes(q.answerIndex)) {
@@ -81,7 +82,7 @@ export async function GET(request: Request) {
         whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
       }
 
-      // Fetch unmastered questions first
+      // Priority 1: Fetch Unmastered questions first (New + Past Incorrect)
       let questions = await prisma.question.findMany({
         where: {
           ...whereClause,
@@ -91,32 +92,25 @@ export async function GET(request: Request) {
         },
       });
 
-      // Fallback 1: Fill up with mastered items if pool is smaller than requested limit
+      // Priority 2: RECYCLING TRIGGER - Top up with Mastered items if unmastered pool runs low
       if (questions.length < requestedLimit && masteredQuestionIds.size > 0) {
-        const fallback = await prisma.question.findMany({
+        const masteredFallback = await prisma.question.findMany({
           where: {
             ...whereClause,
             id: { in: Array.from(masteredQuestionIds) },
           },
         });
-        questions = [...questions, ...fallback];
+        const shuffledMastered = masteredFallback.sort(() => Math.random() - 0.5);
+        questions = [...questions, ...shuffledMastered];
       }
 
-      // Fallback 2: If still empty, fetch any questions under this category regardless of subtopic
+      // Priority 3: MAIN CATEGORY CATCH-ALL - If subtopic query was empty, fetch any questions under this category
       if (questions.length === 0) {
         questions = await prisma.question.findMany({
           where: { category: { equals: category, mode: "insensitive" } },
         });
       }
 
-      // Fallback 3: Ultimate safeguard - fetch any questions in the DB
-      if (questions.length === 0) {
-        questions = await prisma.question.findMany({
-          take: requestedLimit,
-        });
-      }
-
-      // Shuffle and return requested slice
       questions = questions.sort(() => Math.random() - 0.5);
 
       return NextResponse.json({
@@ -126,129 +120,143 @@ export async function GET(request: Request) {
     }
 
     // ------------------------------------------------------------------
-    // 3. FULL COMPREHENSIVE EXAM MODE ("All"): SUBTOPIC-BALANCED BLOCKS
-    // CSC Official Distribution Quotas (Total: 170 items)
+    // 3. FULL MOCK EXAM MODE ("All"): DYNAMIC SUBTOPICS & STRICT CATEGORY QUOTAS
     // ------------------------------------------------------------------
     const subjectOrder = [
-      {
-        name: "Verbal Ability",
-        keyword: "Verbal",
-        quota: 50,
-        subtopics: ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
-      },
-      {
-        name: "Numerical Reasoning",
-        keyword: "Numerical",
-        quota: 45,
-        subtopics: ["Basic Operations", "Word Problems", "Data Interpretation"],
-      },
-      {
-        name: "Analytical Reasoning",
-        keyword: "Analytical",
-        quota: 45,
-        subtopics: ["Word Analogy", "Logic & Inferences", "Number Series"],
-      },
-      {
-        name: "General Information",
-        keyword: "General",
-        quota: 30,
-        subtopics: ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
-      },
+      { name: "Verbal Ability", keyword: "Verbal", quota: 50 },
+      { name: "Numerical Reasoning", keyword: "Numerical", quota: 45 },
+      { name: "Analytical Reasoning", keyword: "Analytical", quota: 45 },
+      { name: "General Information", keyword: "General", quota: 30 },
     ];
 
     let finalExamQuestions: any[] = [];
     const addedIds = new Set<string>();
 
     for (const subject of subjectOrder) {
-      let subjectCollected: any[] = [];
-      const subCount = subject.subtopics.length;
-      const perSubtopicQuota = Math.floor(subject.quota / subCount);
-      let extraQuota = subject.quota % subCount;
+      const categoryQuestions: any[] = [];
 
-      // Step A: Attempt subtopic-balanced selection for this subject
-      for (const sub of subject.subtopics) {
-        const subQuota = perSubtopicQuota + (extraQuota > 0 ? 1 : 0);
-        if (extraQuota > 0) extraQuota--;
+      // 🔍 A. DISCOVER ALL SUBTOPICS DYNAMICALLY FROM DATABASE FOR THIS CATEGORY
+      const dbSubtopicObjects = await prisma.question.findMany({
+        where: { category: { contains: subject.keyword, mode: "insensitive" } },
+        select: { subtopic: true },
+        distinct: ["subtopic"],
+      });
 
-        if (subQuota <= 0) continue;
+      const activeSubtopics = dbSubtopicObjects
+        .map((s) => s.subtopic?.trim())
+        .filter((s): s is string => Boolean(s) && s !== "");
 
-        // Fetch unmastered questions for this subtopic
-        let subQuestions = await prisma.question.findMany({
-          where: {
-            category: { contains: subject.keyword, mode: "insensitive" },
-            subtopic: { equals: sub, mode: "insensitive" },
-            ...(masteredQuestionIds.size > 0
-              ? { id: { notIn: Array.from(masteredQuestionIds) } }
-              : {}),
-          },
-        });
+      // ⚖️ B. EVENLY DIVIDE CATEGORY QUOTA ACROSS ALL DISCOVERED SUBTOPICS
+      if (activeSubtopics.length > 0) {
+        const subCount = activeSubtopics.length;
+        const basePerSub = Math.floor(subject.quota / subCount);
+        let remainder = subject.quota % subCount;
 
-        // Top up with mastered questions for this subtopic if needed
-        if (subQuestions.length < subQuota && masteredQuestionIds.size > 0) {
-          const masteredSub = await prisma.question.findMany({
+        for (const sub of activeSubtopics) {
+          const subTarget = basePerSub + (remainder > 0 ? 1 : 0);
+          if (remainder > 0) remainder--;
+          if (subTarget <= 0) continue;
+
+          // Priority 1: Unmastered questions for this specific subtopic
+          let subQuestions = await prisma.question.findMany({
             where: {
               category: { contains: subject.keyword, mode: "insensitive" },
               subtopic: { equals: sub, mode: "insensitive" },
-              id: { in: Array.from(masteredQuestionIds) },
+              id: {
+                notIn: [
+                  ...Array.from(masteredQuestionIds),
+                  ...Array.from(addedIds),
+                ],
+              },
             },
           });
-          subQuestions = [...subQuestions, ...masteredSub];
-        }
 
-        subQuestions = subQuestions.sort(() => Math.random() - 0.5);
-        for (const q of subQuestions.slice(0, subQuota)) {
-          if (!addedIds.has(q.id)) {
+          // Priority 2: RECYCLING TRIGGER - Recycle Mastered questions for this subtopic if unmastered is exhausted
+          if (subQuestions.length < subTarget && masteredQuestionIds.size > 0) {
+            const masteredSub = await prisma.question.findMany({
+              where: {
+                category: { contains: subject.keyword, mode: "insensitive" },
+                subtopic: { equals: sub, mode: "insensitive" },
+                id: {
+                  in: Array.from(masteredQuestionIds),
+                  notIn: Array.from(addedIds),
+                },
+              },
+            });
+            const shuffledMastered = masteredSub.sort(() => Math.random() - 0.5);
+            subQuestions = [...subQuestions, ...shuffledMastered];
+          }
+
+          subQuestions = subQuestions.sort(() => Math.random() - 0.5);
+
+          for (const q of subQuestions.slice(0, subTarget)) {
             addedIds.add(q.id);
-            subjectCollected.push(q);
+            categoryQuestions.push(q);
           }
         }
       }
 
-      // Step B: Top up subject block from general category pool if subtopic queries didn't reach full quota
-      if (subjectCollected.length < subject.quota) {
-        let generalCatQuestions = await prisma.question.findMany({
+      // 🛡️ C. MAIN CATEGORY CATCH-ALL & RECYCLING
+      // If subtopics ran short, fill remaining category quota using ANY question in this main category
+      if (categoryQuestions.length < subject.quota) {
+        const needed = subject.quota - categoryQuestions.length;
+
+        // Catch-All Priority 1: Unmastered Category Questions
+        let extraUnmastered = await prisma.question.findMany({
           where: {
             category: { contains: subject.keyword, mode: "insensitive" },
-            id: { notIn: Array.from(addedIds) },
+            id: {
+              notIn: [
+                ...Array.from(masteredQuestionIds),
+                ...Array.from(addedIds),
+              ],
+            },
           },
         });
 
-        generalCatQuestions = generalCatQuestions.sort(() => Math.random() - 0.5);
-        const needed = subject.quota - subjectCollected.length;
-
-        for (const q of generalCatQuestions.slice(0, needed)) {
+        extraUnmastered = extraUnmastered.sort(() => Math.random() - 0.5);
+        for (const q of extraUnmastered.slice(0, needed)) {
           addedIds.add(q.id);
-          subjectCollected.push(q);
+          categoryQuestions.push(q);
+        }
+
+        // Catch-All Priority 2: Mastered Category Questions
+        if (categoryQuestions.length < subject.quota) {
+          const stillNeeded = subject.quota - categoryQuestions.length;
+          let extraMastered = await prisma.question.findMany({
+            where: {
+              category: { contains: subject.keyword, mode: "insensitive" },
+              id: {
+                in: Array.from(masteredQuestionIds),
+                notIn: Array.from(addedIds),
+              },
+            },
+          });
+
+          extraMastered = extraMastered.sort(() => Math.random() - 0.5);
+          for (const q of extraMastered.slice(0, stillNeeded)) {
+            addedIds.add(q.id);
+            categoryQuestions.push(q);
+          }
         }
       }
 
-      finalExamQuestions.push(...subjectCollected);
+      finalExamQuestions.push(...categoryQuestions);
     }
 
-    // ------------------------------------------------------------------
-    // 4. ULTIMATE FALLBACK SAFEGUARDS (PREVENTS EMPTY EXAM SCREENS)
-    // ------------------------------------------------------------------
-    // If total items < 170, fill up with any remaining questions in DB
+    // 🛡️ D. INFINITE EXAM READINESS SAFEGUARD (If DB total items < 170 items)
     if (finalExamQuestions.length < 170) {
-      const extraQuestions = await prisma.question.findMany({
+      const neededGlobal = 170 - finalExamQuestions.length;
+      let globalFallback = await prisma.question.findMany({
         where: { id: { notIn: Array.from(addedIds) } },
-        take: 170 - finalExamQuestions.length,
+        take: neededGlobal,
       });
 
-      for (const q of extraQuestions) {
-        if (!addedIds.has(q.id)) {
-          addedIds.add(q.id);
-          finalExamQuestions.push(q);
-        }
+      globalFallback = globalFallback.sort(() => Math.random() - 0.5);
+      for (const q of globalFallback) {
+        addedIds.add(q.id);
+        finalExamQuestions.push(q);
       }
-    }
-
-    // Absolute fallback: If DB matches returned nothing, fetch top 170 questions
-    if (finalExamQuestions.length === 0) {
-      finalExamQuestions = await prisma.question.findMany({
-        take: 170,
-      });
-      finalExamQuestions = finalExamQuestions.sort(() => Math.random() - 0.5);
     }
 
     return NextResponse.json({

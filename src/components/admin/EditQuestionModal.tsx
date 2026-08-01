@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 interface Question {
   id: string;
   category: string;
+  subtopic?: string;
   prompt: string;
   options: string[];
   answerIndex: number;
@@ -25,7 +26,8 @@ export default function EditQuestionModal({
   question,
   onSuccess,
 }: EditQuestionModalProps) {
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Verbal Ability");
+  const [subtopic, setSubtopic] = useState("Vocabulary");
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [options, setOptions] = useState<string[]>(["", "", "", ""]);
@@ -33,19 +35,37 @@ export default function EditQuestionModal({
   const [explanation, setExplanation] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  const categoriesList = [
+    "Verbal Ability",
+    "Numerical Reasoning",
+    "Analytical Reasoning",
+    "General Information",
+    "Clerical Ability",
+  ];
+
+  const subtopicsMap: Record<string, string[]> = {
+    "Verbal Ability": ["Vocabulary", "Grammar", "Sentence Skills", "Reading Skills"],
+    "Numerical Reasoning": ["Basic Operations", "Word Problems", "Data Interpretation"],
+    "Analytical Reasoning": ["Word Analogy", "Logic & Inferences", "Number Series"],
+    "General Information": ["Philippine Constitution", "R.A. 6713", "Peace & Human Rights"],
+    "Clerical Ability": ["Alphabetizing", "Clerical Operations", "Spelling & Filing"],
+  };
+
   useEffect(() => {
     if (question) {
-      setCategory(question.category || "General");
+      const cat = question.category || "Verbal Ability";
+      setCategory(cat);
+      setSubtopic(question.subtopic || "General");
       setPrompt(question.prompt || "");
       setImageUrl(question.imageUrl || "");
       setOptions(
         question.options && question.options.length >= 4
           ? question.options
           : [
-              question.options[0] || "",
-              question.options[1] || "",
-              question.options[2] || "",
-              question.options[3] || "",
+              question.options?.[0] || "",
+              question.options?.[1] || "",
+              question.options?.[2] || "",
+              question.options?.[3] || "",
             ]
       );
       setAnswerIndex(question.answerIndex ?? 0);
@@ -54,6 +74,16 @@ export default function EditQuestionModal({
   }, [question]);
 
   if (!isOpen || !question) return null;
+
+  const handleCategoryChange = (newCat: string) => {
+    setCategory(newCat);
+    const available = subtopicsMap[newCat];
+    if (available && available.length > 0) {
+      setSubtopic(available[0]);
+    } else {
+      setSubtopic("General");
+    }
+  };
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -78,11 +108,13 @@ export default function EditQuestionModal({
     setSubmitting(true);
 
     try {
-      const res = await fetch(`/api/questions/${question.id}`, {
+      const res = await fetch("/api/admin/questions", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          id: question.id,
           category,
+          subtopic,
           prompt,
           imageUrl: imageUrl.trim() || null,
           options,
@@ -107,6 +139,11 @@ export default function EditQuestionModal({
     }
   };
 
+  // Combine predefined subtopics with current subtopic if it was dynamically loaded from CSV
+  const availableSubtopics = Array.from(
+    new Set([...(subtopicsMap[category] || []), subtopic, "General"])
+  ).filter(Boolean);
+
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full border border-slate-200 shadow-2xl space-y-6 my-8">
@@ -121,25 +158,52 @@ export default function EditQuestionModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold text-sm transition flex items-center justify-center cursor-pointer"
           >
             ✕
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Category */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-              Category
-            </label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
-              required
-            />
+          {/* Category & Subtopic Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Category */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Category
+              </label>
+              <select
+                value={category}
+                onChange={(e) => handleCategoryChange(e.target.value)}
+                className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                required
+              >
+                {categoriesList.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subtopic */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Subtopic
+              </label>
+              <select
+                value={subtopic}
+                onChange={(e) => setSubtopic(e.target.value)}
+                className="w-full p-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 text-sm font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                required
+              >
+                {availableSubtopics.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Prompt */}
@@ -198,7 +262,7 @@ export default function EditQuestionModal({
                   <button
                     type="button"
                     onClick={() => setAnswerIndex(idx)}
-                    className={`w-7 h-7 rounded-full border font-bold text-xs flex items-center justify-center shrink-0 transition ${
+                    className={`w-7 h-7 rounded-full border font-bold text-xs flex items-center justify-center shrink-0 transition cursor-pointer ${
                       answerIndex === idx
                         ? "bg-emerald-600 border-emerald-600 text-white shadow-sm"
                         : "border-slate-300 bg-white text-slate-400 hover:border-slate-400"
@@ -249,14 +313,14 @@ export default function EditQuestionModal({
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition"
+              className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition disabled:opacity-50"
+              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
             >
               {submitting ? "Saving Changes..." : "Save Changes 💾"}
             </button>
