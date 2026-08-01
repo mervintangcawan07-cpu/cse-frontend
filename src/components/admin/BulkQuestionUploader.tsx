@@ -29,42 +29,58 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
         const parsed = Papa.parse(text, {
           header: true,
           skipEmptyLines: true,
+          transformHeader: (h) => h.trim(),
         });
+
+        // Helper to extract field values case-insensitively
+        const getVal = (item: any, possibleKeys: string[]) => {
+          const keys = Object.keys(item);
+          for (const target of possibleKeys) {
+            const k = keys.find((key) => key.trim().toLowerCase() === target.toLowerCase());
+            if (k && item[k] !== undefined && item[k] !== null) {
+              const strVal = String(item[k]).trim();
+              if (strVal !== "") return strVal;
+            }
+          }
+          return "";
+        };
 
         questionsToImport = parsed.data
           .map((item: any) => {
-            const category = String(item.category || item.subject || "").trim();
-            const prompt = String(item.prompt || item.question || "").trim();
-            const explanation = item.explanation ? String(item.explanation).trim() : null;
-            const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+            const category = getVal(item, ["category", "subject"]) || "General";
+            const subtopic = getVal(item, ["subtopic", "sub_topic", "subTopic", "topic"]) || "General";
+            const prompt = getVal(item, ["prompt", "question"]);
+            const explanation = getVal(item, ["explanation", "solution"]) || null;
+            const imageUrl = getVal(item, ["imageUrl", "image_url", "image"]) || null;
+
+            const optA = getVal(item, ["optionA", "option_a", "choiceA", "a"]);
+            const optB = getVal(item, ["optionB", "option_b", "choiceB", "b"]);
+            const optC = getVal(item, ["optionC", "option_c", "choiceC", "c"]);
+            const optD = getVal(item, ["optionD", "option_d", "choiceD", "d"]);
 
             let options: string[] = [];
-            if (Array.isArray(item.options)) {
+            if (Array.isArray(item.options) && item.options.length > 0) {
               options = item.options.map((o: any) => String(o).trim());
             } else {
-              options = [
-                item.optionA || item.option_a || "",
-                item.optionB || item.option_b || "",
-                item.optionC || item.option_c || "",
-                item.optionD || item.option_d || "",
-              ]
-                .map((o) => String(o).trim())
-                .filter(Boolean);
+              options = [optA, optB, optC, optD].filter(Boolean);
             }
 
             let answerIndex = 0;
-            if (typeof item.answerIndex === "number") {
-              answerIndex = item.answerIndex;
-            } else if (typeof item.answerIndex === "string") {
-              answerIndex = parseInt(item.answerIndex, 10) || 0;
-            } else if (typeof item.correctAnswer === "number") {
-              answerIndex = item.correctAnswer;
+            const rawAns = getVal(item, ["answerIndex", "correctAnswer", "answer_index", "correct_answer"]);
+            if (rawAns !== "") {
+              const parsedIdx = parseInt(rawAns, 10);
+              answerIndex = isNaN(parsedIdx) ? 0 : parsedIdx;
             }
 
             return {
               category,
+              subtopic,
               prompt,
               options,
+              optionA: optA || (options[0] ?? null),
+              optionB: optB || (options[1] ?? null),
+              optionC: optC || (options[2] ?? null),
+              optionD: optD || (options[3] ?? null),
               answerIndex,
               explanation,
               imageUrl,
@@ -89,9 +105,10 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
       const data = await res.json();
 
       if (res.ok && data.success) {
+        const count = data.importedCount || data.count || questionsToImport.length;
         setStatusMessage({
           type: "success",
-          text: ` Successfully imported ${data.importedCount} questions into the database!`,
+          text: `Successfully imported ${count} question(s) into the database!`,
         });
         if (onSuccess) onSuccess();
       } else {
@@ -108,7 +125,7 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
       });
     } finally {
       setLoading(false);
-      e.target.value = ""; // Reset input
+      e.target.value = ""; // Reset file input
     }
   };
 
@@ -125,7 +142,7 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
 
         <button
           onClick={downloadCSVTemplate}
-          className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded-xl text-xs font-bold transition shrink-0"
+          className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer"
         >
           📥 Download CSV Template
         </button>
