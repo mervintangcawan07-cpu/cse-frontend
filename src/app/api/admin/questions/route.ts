@@ -54,7 +54,7 @@ export async function GET(req: Request) {
   }
 }
 
-// 2. CREATE NEW QUESTION OR PROCESS BULK CSV/JSON
+// 2. CREATE NEW QUESTION OR PROCESS BULK CSV/JSON (ROBUST FIELD DISCOVERY)
 export async function POST(req: Request) {
   try {
     const admin = await verifyAdmin();
@@ -67,12 +67,20 @@ export async function POST(req: Request) {
 
     if (contentType.includes("text/csv") || contentType.includes("multipart/form-data")) {
       const csvText = await req.text();
-      const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+      const parsed = Papa.parse(csvText, {
+        header: true,
+        skipEmptyLines: true,
+        transformHeader: (h) => h.trim(),
+      });
       rawQuestions = parsed.data;
     } else {
       const body = await req.json();
       if (typeof body.csvText === "string") {
-        const parsed = Papa.parse(body.csvText, { header: true, skipEmptyLines: true });
+        const parsed = Papa.parse(body.csvText, {
+          header: true,
+          skipEmptyLines: true,
+          transformHeader: (h) => h.trim(),
+        });
         rawQuestions = parsed.data;
       } else if (Array.isArray(body)) {
         rawQuestions = body;
@@ -87,19 +95,34 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required question fields" }, { status: 400 });
     }
 
-    // Format fields cleanly with Category + Subtopic + Dual Option fields
+    // Helper function to extract field values regardless of header casing or trailing spaces
+    const getFieldValue = (item: Record<string, any>, possibleKeys: string[]): string => {
+      const itemKeys = Object.keys(item);
+      for (const targetKey of possibleKeys) {
+        const matchedKey = itemKeys.find(
+          (k) => k.trim().toLowerCase() === targetKey.toLowerCase()
+        );
+        if (matchedKey && item[matchedKey] !== undefined && item[matchedKey] !== null) {
+          const val = String(item[matchedKey]).trim();
+          if (val !== "") return val;
+        }
+      }
+      return "";
+    };
+
+    // Format fields cleanly
     const formattedData = rawQuestions
       .map((item: any) => {
-        const category = String(item.category || item.subject || "General").trim();
-        const subtopic = String(item.subtopic || item.sub_topic || item.subTopic || "General").trim();
-        const prompt = String(item.prompt || item.question || "").trim();
-        const explanation = item.explanation ? String(item.explanation).trim() : null;
-        const imageUrl = (item.imageUrl || item.image_url || item.image || "").trim() || null;
+        const category = getFieldValue(item, ["category", "subject"]) || "General";
+        const subtopic = getFieldValue(item, ["subtopic", "sub_topic", "subTopic", "topic"]) || "General";
+        const prompt = getFieldValue(item, ["prompt", "question"]);
+        const explanation = getFieldValue(item, ["explanation", "solution"]) || null;
+        const imageUrl = getFieldValue(item, ["imageUrl", "image_url", "image"]) || null;
 
-        const optA = String(item.optionA || item.option_a || "").trim();
-        const optB = String(item.optionB || item.option_b || "").trim();
-        const optC = String(item.optionC || item.option_c || "").trim();
-        const optD = String(item.optionD || item.option_d || "").trim();
+        const optA = getFieldValue(item, ["optionA", "option_a", "choiceA", "a"]);
+        const optB = getFieldValue(item, ["optionB", "option_b", "choiceB", "b"]);
+        const optC = getFieldValue(item, ["optionC", "option_c", "choiceC", "c"]);
+        const optD = getFieldValue(item, ["optionD", "option_d", "choiceD", "d"]);
 
         let options: string[] = [];
         if (Array.isArray(item.options) && item.options.length > 0) {
@@ -109,14 +132,10 @@ export async function POST(req: Request) {
         }
 
         let answerIndex = 0;
-        if (typeof item.answerIndex === "number") {
-          answerIndex = item.answerIndex;
-        } else if (typeof item.answerIndex === "string") {
-          answerIndex = parseInt(item.answerIndex, 10) || 0;
-        } else if (typeof item.correctAnswer === "number") {
-          answerIndex = item.correctAnswer;
-        } else if (typeof item.correctAnswer === "string") {
-          answerIndex = parseInt(item.correctAnswer, 10) || 0;
+        const rawAns = getFieldValue(item, ["answerIndex", "correctAnswer", "answer_index", "correct_answer"]);
+        if (rawAns !== "") {
+          const parsed = parseInt(rawAns, 10);
+          answerIndex = isNaN(parsed) ? 0 : parsed;
         }
 
         return {
