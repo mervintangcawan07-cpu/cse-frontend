@@ -486,66 +486,46 @@ function DashboardContent() {
 
       {/* MAIN STUDENT MODULES GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* MOCK EXAM MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
-                Primary Practice
-              </span>
-              <span className="text-xs font-bold text-slate-400">Timed Mode</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Full Practice Mock Exam</h2>
-            <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Take simulated civil service exams with comprehensive questions across all core subjects.
-            </p>
-          </div>
-          {isPaid ? (
-            <Link
-              href="/exam"
-              className="inline-block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs text-center rounded-xl transition"
-            >
-              Start Exam
-            </Link>
-          ) : (
-            <button
-              onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
-            >
-              🔒 Unlock Mock Exam
-            </button>
-          )}
-        </div>
-
-        {/* 📜 MOCK EXAM HISTORY MODULE */}
+        {/* CLEAN INTEGRATED MOCK EXAM CARD WITH INLINE HISTORY */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
-                Diagnostic Logs
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30">
+                170 Timed Items
               </span>
-              <span className="text-xs font-bold text-slate-400">100% Revisit</span>
+              <span className="text-xs font-bold text-slate-400">Timed Mode</span>
             </div>
-            <h2 className="text-xl font-extrabold text-white mt-2">Mock Exam History</h2>
+            <h2 className="text-xl font-extrabold text-white mt-2">Practice Mock Exam</h2>
             <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              View, review, and analyze all your completed mock exams with full item solution keys.
+              Simulate 3-hour civil service exams or review item explanations from your 3 recent attempts.
             </p>
           </div>
-          {isPaid ? (
-            <Link
-              href="/mock-exam/history"
-              className="inline-block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs text-center rounded-xl transition shadow-md"
-            >
-              📜 View Exam History 🔍
-            </Link>
-          ) : (
-            <button
-              onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50/10 hover:bg-amber-50/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
-            >
-              🔒 Unlock Exam History
-            </button>
-          )}
+
+          <div className="flex gap-2">
+            {isPaid ? (
+              <>
+                <Link
+                  href="/exam"
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs text-center rounded-xl transition shadow-md"
+                >
+                  Start Exam ⚡
+                </Link>
+                <Link
+                  href="/exam"
+                  className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs text-center rounded-xl border border-slate-700 transition shrink-0"
+                >
+                  📜 History (3)
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={() => handlePayMongoCheckout(selectedPlan)}
+                className="w-full py-3 bg-amber-50/10 hover:bg-amber-50/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
+              >
+                🔒 Unlock Mock Exam
+              </button>
+            )}
+          </div>
         </div>
 
         {/* SPEED DRILLS MODULE */}
@@ -580,17 +560,17 @@ function DashboardContent() {
         </div>
 
         {/* ⚔️ 1v1 STUDY DUELS (LIVE ARENA MODULE) */}
-        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 lg:col-span-3 relative overflow-hidden">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
-              Live Battle Arena
-            </span>
-            <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
-          </div>
+        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 lg:col-span-1 relative overflow-hidden flex flex-col justify-between">
           <div>
-            <h2 className="text-xl font-extrabold text-white">1v1 Study Duels</h2>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
+                Live Battle Arena
+              </span>
+              <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-2">1v1 Study Duels</h2>
             <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              Challenge online examinees in a 5-round rapid speed quiz. Earn XP points and test your recall against real opponents!
+              Challenge online examinees in a 5-round rapid speed quiz. Earn XP points!
             </p>
           </div>
           {isPaid ? (

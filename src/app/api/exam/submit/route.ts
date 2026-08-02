@@ -26,26 +26,39 @@ export async function POST(request: Request) {
 
     const userId = String(session.userId);
     const body = await request.json();
-    
+
     const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
 
     if (!Array.isArray(answers)) {
       return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
     }
 
-    // 1. Fetch questions from DB with official answerIndex field
+    // 1. Fetch full questions from DB to build complete review snapshot
     const questionIds = answers.map((a) => a.questionId);
     const dbQuestions = await prisma.question.findMany({
       where: { id: { in: questionIds } },
-      select: { id: true, answerIndex: true, options: true },
+      select: {
+        id: true,
+        category: true,
+        subtopic: true,
+        prompt: true,
+        options: true,
+        optionA: true,
+        optionB: true,
+        optionC: true,
+        optionD: true,
+        answerIndex: true,
+        explanation: true,
+      },
     });
 
     const questionMap = new Map(dbQuestions.map((q) => [q.id, q]));
 
-    // 2. Grade answers strictly on the server
+    // 2. Grade answers strictly on the server & build details snapshot
     let correct = 0;
     let incorrect = 0;
     let skipped = 0;
+    const detailsSnapshot: any[] = [];
 
     for (const ans of answers) {
       const q = questionMap.get(ans.questionId);
@@ -80,13 +93,31 @@ export async function POST(request: Request) {
       } else {
         incorrect++;
       }
+
+      // Format options array
+      const resolvedOptions =
+        Array.isArray(q.options) && q.options.length > 0
+          ? q.options
+          : [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean);
+
+      // Build question snapshot item
+      detailsSnapshot.push({
+        id: q.id,
+        category: q.category || "General",
+        subtopic: q.subtopic || "General",
+        prompt: q.prompt,
+        options: resolvedOptions,
+        answerIndex: q.answerIndex,
+        selectedIndex: userIdx,
+        explanation: q.explanation || null,
+      });
     }
 
     // Calculate score percentage
     const itemsCount = totalItems || answers.length;
     const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
 
-    // 3. Save verified result to Neon DB
+    // 3. Save verified result with full detailsJson snapshot
     const result = await prisma.examResult.create({
       data: {
         userId,
@@ -95,8 +126,29 @@ export async function POST(request: Request) {
         correct,
         incorrect,
         skipped,
+        detailsJson: JSON.stringify(detailsSnapshot),
       },
     });
+
+    // 4. 🧹 AUTOMATIC DATABASE CLEANUP: Delete exams beyond top 3 for this user
+    try {
+      const userExams = await prisma.examResult.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        select: { id: true },
+      });
+
+      if (userExams.length > 3) {
+        const examsToDelete = userExams.slice(3).map((e) => e.id);
+        await prisma.examResult.deleteMany({
+          where: {
+            id: { in: examsToDelete },
+          },
+        });
+      }
+    } catch (cleanupErr) {
+      console.error("Auto-pruning older exams failed:", cleanupErr);
+    }
 
     // Record active study streak
     const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);

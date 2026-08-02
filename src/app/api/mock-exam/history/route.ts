@@ -21,11 +21,12 @@ export async function GET() {
 
     let attempts: any[] = [];
 
-    // Check ExamResult model first
+    // Fetch ONLY the 3 most recent completed exams to optimize storage and UI space
     try {
       attempts = await prisma.examResult.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
+        take: 3, // 👈 Cap limit to 3 items
       });
     } catch (e) {
       // Fallback to examAttempt if present
@@ -33,6 +34,7 @@ export async function GET() {
         attempts = await (prisma as any).examAttempt.findMany({
           where: { userId },
           orderBy: { createdAt: "desc" },
+          take: 3, // 👈 Cap limit to 3 items
         });
       }
     }
@@ -55,7 +57,12 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json({ success: true, attempts: formattedAttempts, history: formattedAttempts });
+    // Returns both attempts and history keys for maximum backward compatibility across UI components
+    return NextResponse.json({
+      success: true,
+      attempts: formattedAttempts,
+      history: formattedAttempts,
+    });
   } catch (error: any) {
     console.error("[MOCK_EXAM_HISTORY_FETCH_ERROR]", error);
     return NextResponse.json(
