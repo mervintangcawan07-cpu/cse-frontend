@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Schedule {
   title: string;
@@ -76,7 +77,7 @@ export default function CSCCountdownWidget() {
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 text-white p-6 md:p-8 rounded-3xl shadow-xl space-y-4">
+    <div className="bg-slate-900 border border-slate-800 text-white p-6 md:p-8 rounded-3xl shadow-xl space-y-5 relative">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
         <div>
           <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
@@ -85,11 +86,13 @@ export default function CSCCountdownWidget() {
           <h3 className="text-lg font-extrabold text-white mt-1">{schedule.title}</h3>
         </div>
 
-        <span className={`text-xs font-black px-3 py-1 rounded-xl uppercase shrink-0 ${
-          schedule.status === "APPLICATIONS_OPEN"
-            ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-            : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-        }`}>
+        <span
+          className={`text-xs font-black px-3 py-1 rounded-xl uppercase shrink-0 ${
+            schedule.status === "APPLICATIONS_OPEN"
+              ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+              : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+          }`}
+        >
           {schedule.status === "APPLICATIONS_OPEN" ? "🟢 Applications Open" : "⏱️ Scheduled"}
         </span>
       </div>
@@ -114,16 +117,37 @@ export default function CSCCountdownWidget() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between text-xs text-slate-400 pt-2 font-medium">
-        <span>🗓️ Exam Date: <strong className="text-white">{new Date(schedule.examDate).toLocaleDateString()}</strong></span>
-        <a
-          href="https://erpo.csc.gov.ph"
-          target="_blank"
-          rel="noreferrer"
-          className="text-blue-400 hover:text-blue-300 font-bold underline transition"
-        >
-          Check Official Room Assignment (Online ERPO Portal) &rarr;
-        </a>
+      {/* ENLARGED EXAM DATE & CLICKABLE ACTION BUTTONS */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs pt-2 font-medium border-t border-slate-800/60">
+        
+        {/* HIGHLIGHTED & ENLARGED EXAM DATE BADGE */}
+        <div className="flex items-center gap-2 bg-slate-800/90 border border-amber-500/30 px-3.5 py-2 rounded-2xl shadow-inner">
+          <span className="text-base">🗓️</span>
+          <span className="text-slate-300 font-bold text-xs uppercase tracking-wider">Exam Date:</span>
+          <strong className="text-amber-400 font-black text-sm md:text-base tracking-wide">
+            {new Date(schedule.examDate).toLocaleDateString()}
+          </strong>
+        </div>
+
+        {/* CLICKABLE ROOM ASSIGNMENT & ERPO PORTAL BUTTONS */}
+        <div className="flex items-center gap-2 flex-wrap w-full md:w-auto">
+          <Link
+            href="/room-assignment"
+            className="flex-1 md:flex-initial px-3.5 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 font-bold text-xs rounded-xl transition text-center flex items-center justify-center gap-1.5 shadow-sm"
+          >
+            <span>🏢</span>
+            <span>Room Assignment Helper</span>
+          </Link>
+
+          <a
+            href="https://erpo.csc.gov.ph"
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 md:flex-initial px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-xl transition text-center flex items-center justify-center gap-1 shadow-sm"
+          >
+            <span>Online ERPO Portal ↗</span>
+          </a>
+        </div>
       </div>
     </div>
   );
