@@ -330,3 +330,71 @@ model SupportTicket {
   @@index([userEmail])
   @@index([status])
 }
+
+// ==========================================
+// AUTOMATIC CSC SYNCHRONIZATION SYSTEM
+// ==========================================
+
+model SyncStatus {
+  id               String   @id @default("csc_sync_status")
+  lastSyncAt       DateTime @default(now())
+  nextSyncAt       DateTime
+  status           String   @default("IDLE") // "IDLE" | "SYNCING" | "SUCCESS" | "FAILED"
+  recordsUpdated   Int      @default(0)
+  lastError        String?  @db.Text
+  updatedAt        DateTime @updatedAt
+}
+
+model SyncLog {
+  id           String   @id @default(cuid())
+  sourceUrl    String
+  action       String   // "SCHEDULE_UPDATE" | "ANNOUNCEMENT_NEW" | "NEWS_UPDATE" | "SYNC_ERROR"
+  details      String   @db.Text
+  isError      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
+}
+
+model CSCExamSchedule {
+  id               String   @id @default(cuid())
+  title            String   // e.g. "2026 Civil Service Exam Pen and Paper Test (CSE-PPT)"
+  examDate         DateTime
+  appOpeningDate   DateTime?
+  appClosingDate   DateTime?
+  status           String   @default("UPCOMING") // "UPCOMING" | "APPLICATIONS_OPEN" | "CLOSED" | "COMPLETED"
+  isPinned         Boolean  @default(false)
+  isManualOverride Boolean  @default(false) // Prevents background cron from overwriting admin edits
+  notes            String?  @db.Text
+  officialLink     String?  
+  updatedAt        DateTime @updatedAt
+  createdAt        DateTime @default(now())
+
+  @@index([examDate])
+  @@index([status])
+}
+
+model CSCAnnouncement {
+  id           String   @id @default(cuid())
+  title        String
+  content      String   @db.Text
+  category     String   @default("GENERAL") // "EXAM_NOTICE" | "ROOM_ASSIGNMENT" | "RESULTS" | "PRESS_RELEASE"
+  publishedAt  DateTime @default(now())
+  sourceUrl    String?
+  isPinned     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([category])
+  @@index([publishedAt(sort: Desc)])
+}
+
+model CSCDownload {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // "APPLICATION_FORM" | "GUIDELINES" | "CERTIFICATION"
+  fileUrl     String
+  fileSize    String?
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+}
