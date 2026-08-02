@@ -259,7 +259,7 @@ function DashboardContent() {
               {daysRemaining !== null && (
                 <button
                   onClick={() => handlePayMongoCheckout("6_MONTHS")}
-                  className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition"
+                  className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition cursor-pointer"
                 >
                   🔄 Extend Plan
                 </button>
@@ -274,7 +274,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="px-5 py-2.5 bg-amber-50 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0"
+              className="px-5 py-2.5 bg-amber-50 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0 cursor-pointer"
             >
               🔒 Unlock PRO Access
             </button>
@@ -300,7 +300,7 @@ function DashboardContent() {
               <button
                 key={p.planType}
                 onClick={() => setSelectedPlan(p.planType)}
-                className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between ${
+                className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
                   selectedPlan === p.planType
                     ? "bg-amber-500/10 border-amber-500 text-white"
                     : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
@@ -325,7 +325,7 @@ function DashboardContent() {
           <button
             onClick={() => handlePayMongoCheckout(selectedPlan)}
             disabled={checkoutLoading}
-            className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition disabled:opacity-50"
+            className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
             {checkoutLoading ? "Launching PayMongo..." : `Pay ₱${activePlanPrice} via PayMongo 💳`}
           </button>
@@ -485,19 +485,21 @@ function DashboardContent() {
       )}
 
       {/* MAIN STUDENT MODULES GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* MOCK EXAM MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
-              Primary Practice
-            </span>
-            <span className="text-xs font-bold text-slate-400">Timed Mode</span>
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
+                Primary Practice
+              </span>
+              <span className="text-xs font-bold text-slate-400">Timed Mode</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Full Practice Mock Exam</h2>
+            <p className="text-xs text-slate-500 leading-relaxed mt-1">
+              Take simulated civil service exams with comprehensive questions across all core subjects.
+            </p>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900">Full Practice Mock Exam</h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Take simulated civil service exams with comprehensive questions across all core subjects.
-          </p>
           {isPaid ? (
             <Link
               href="/exam"
@@ -508,25 +510,58 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
               🔒 Unlock Mock Exam
             </button>
           )}
         </div>
 
-        {/* SPEED DRILLS MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
-              5-Min Challenge
-            </span>
-            <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
+        {/* 📜 MOCK EXAM HISTORY MODULE */}
+        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
+                Diagnostic Logs
+              </span>
+              <span className="text-xs font-bold text-slate-400">100% Revisit</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-2">Mock Exam History</h2>
+            <p className="text-xs text-slate-400 leading-relaxed mt-1">
+              View, review, and analyze all your completed mock exams with full item solution keys.
+            </p>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900">Category Speed Drills</h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Focus on specific subjects like Numerical Reasoning or Verbal Ability under 5 minutes.
-          </p>
+          {isPaid ? (
+            <Link
+              href="/mock-exam/history"
+              className="inline-block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs text-center rounded-xl transition shadow-md"
+            >
+              📜 View Exam History 🔍
+            </Link>
+          ) : (
+            <button
+              onClick={() => handlePayMongoCheckout(selectedPlan)}
+              className="w-full py-3 bg-amber-50/10 hover:bg-amber-50/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
+            >
+              🔒 Unlock Exam History
+            </button>
+          )}
+        </div>
+
+        {/* SPEED DRILLS MODULE */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
+                5-Min Challenge
+              </span>
+              <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Category Speed Drills</h2>
+            <p className="text-xs text-slate-500 leading-relaxed mt-1">
+              Focus on specific subjects like Numerical Reasoning or Verbal Ability under 5 minutes.
+            </p>
+          </div>
           {isPaid ? (
             <Link
               href="/drills"
@@ -537,7 +572,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
               🔒 Unlock Speed Drills
             </button>
@@ -545,7 +580,7 @@ function DashboardContent() {
         </div>
 
         {/* ⚔️ 1v1 STUDY DUELS (LIVE ARENA MODULE) */}
-        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 relative overflow-hidden">
+        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 lg:col-span-3 relative overflow-hidden">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
               Live Battle Arena
@@ -568,7 +603,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
               🔒 Unlock 1v1 Duels
             </button>
@@ -576,17 +611,19 @@ function DashboardContent() {
         </div>
 
         {/* STUDY NOTES MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
-              Live Reviewer
-            </span>
-            <span className="text-xs font-bold text-slate-600">{stats.notesCount} Active Notes</span>
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
+                Live Reviewer
+              </span>
+              <span className="text-xs font-bold text-slate-600">{stats.notesCount} Active Notes</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Study Notes & Cheat Sheets</h2>
+            <p className="text-xs text-slate-500 leading-relaxed mt-1">
+              Review core principles, subject-verb agreement rules, and formulas published by admins.
+            </p>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900">Study Notes & Cheat Sheets</h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Review core principles, subject-verb agreement rules, and formulas published by admins.
-          </p>
           {isPaid ? (
             <Link
               href="/reviewer"
@@ -597,7 +634,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
               🔒 Unlock Study Notes
             </button>
@@ -605,17 +642,19 @@ function DashboardContent() {
         </div>
 
         {/* READING MATERIALS MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
-              PDF Repository
-            </span>
-            <span className="text-xs font-bold text-slate-600">{stats.handbooksCount} Handbooks</span>
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between md:col-span-2 lg:col-span-1">
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
+                PDF Repository
+              </span>
+              <span className="text-xs font-bold text-slate-600">{stats.handbooksCount} Handbooks</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Official Reading Materials</h2>
+            <p className="text-xs text-slate-500 leading-relaxed mt-1">
+              Read official constitutional references, R.A. 6713 ethical standards, and PDF handbooks.
+            </p>
           </div>
-          <h2 className="text-xl font-extrabold text-slate-900">Official Reading Materials</h2>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Read official constitutional references, R.A. 6713 ethical standards, and PDF handbooks.
-          </p>
           {isPaid ? (
             <Link
               href="/reading-materials"
@@ -626,7 +665,7 @@ function DashboardContent() {
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition"
+              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
               🔒 Unlock Handbooks
             </button>

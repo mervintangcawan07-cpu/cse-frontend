@@ -115,6 +115,19 @@ export default function Navbar() {
                 >
                   Mock Exam
                 </Link>
+
+                {/* 📜 MOCK EXAM HISTORY LINK */}
+                <Link
+                  href="/mock-exam/history"
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                    pathname.startsWith("/mock-exam/history")
+                      ? "bg-blue-600 text-white"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  }`}
+                >
+                  Exam History
+                </Link>
+
                 <Link
                   href="/drills"
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
@@ -247,7 +260,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="hidden md:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+              className="hidden md:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer"
             >
               Log Out
             </button>
@@ -294,6 +307,17 @@ export default function Navbar() {
               >
                 ⏱️ Practice Mock Exam
               </Link>
+              
+              {/* 📜 MOBILE MOCK EXAM HISTORY LINK */}
+              <Link
+                href="/mock-exam/history"
+                className={`block px-4 py-3 rounded-xl transition ${
+                  pathname.startsWith("/mock-exam/history") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                }`}
+              >
+                📜 Mock Exam History
+              </Link>
+
               <Link
                 href="/drills"
                 className={`block px-4 py-3 rounded-xl transition ${
@@ -393,7 +417,7 @@ export default function Navbar() {
 
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-3 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl font-bold mt-2"
+            className="w-full text-left px-4 py-3 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl font-bold mt-2 cursor-pointer"
           >
             🚪 Log Out
           </button>
