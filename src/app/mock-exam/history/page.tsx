@@ -23,10 +23,10 @@ export default function ExamHistoryPage() {
         const res = await fetch("/api/mock-exam/history");
         const data = await res.json();
 
-        if (res.ok && data.attempts) {
-          setAttempts(data.attempts);
-        } else {
-          router.push("/dashboard");
+        if (res.ok && (data.attempts || data.history)) {
+          setAttempts(data.attempts || data.history);
+        } else if (res.status === 401) {
+          router.push("/login");
         }
       } catch (err) {
         console.error("Failed to load attempt history:", err);
@@ -131,7 +131,7 @@ export default function ExamHistoryPage() {
                   </div>
 
                   <Link
-                    href={`/mock-exam/review/${item.id}`}
+                    href={`/mock-exam/results?id=${item.id}`}
                     className="px-4 py-2.5 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/30 font-bold text-xs rounded-xl transition shrink-0"
                   >
                     🔍 Review Answers

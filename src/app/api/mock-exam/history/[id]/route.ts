@@ -17,30 +17,66 @@ export async function GET(
     }
 
     const session = await verifyJWT(token);
-    if (!session?.userId) {
+    const userId = String(session?.userId || session?.id || "");
+
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = String(session.userId);
+    let attempt: any = null;
 
-    // 1. Fetch specific exam attempt belonging to the user
-    const attempt = await (prisma as any).examAttempt.findFirst({
-      where: {
-        id: attemptId,
-        userId: userId,
-      },
-      include: {
-        answers: {
-          include: {
-            question: true,
+    // 1. Try finding in ExamResult model (JSON details snapshot format)
+    try {
+      const result = await prisma.examResult.findFirst({
+        where: { id: attemptId, userId },
+      });
+
+      if (result) {
+        let details = [];
+        if ((result as any).detailsJson) {
+          try {
+            details = JSON.parse((result as any).detailsJson);
+          } catch (pErr) {
+            console.error("Failed to parse detailsJson:", pErr);
+          }
+        }
+
+        attempt = {
+          id: result.id,
+          score: result.correct ?? result.score,
+          totalItems: result.totalItems,
+          percentage: Math.round(((result.correct ?? result.score) / result.totalItems) * 100),
+          correct: result.correct,
+          incorrect: result.incorrect,
+          skipped: result.skipped,
+          createdAt: result.createdAt,
+          details,
+        };
+      }
+    } catch (e) {
+      // Ignore and check secondary model
+    }
+
+    // 2. Fallback to examAttempt relational structure if not found in ExamResult
+    if (!attempt && (prisma as any).examAttempt) {
+      attempt = await (prisma as any).examAttempt.findFirst({
+        where: {
+          id: attemptId,
+          userId: userId,
+        },
+        include: {
+          answers: {
+            include: {
+              question: true,
+            },
           },
         },
-      },
-    });
+      });
+    }
 
     if (!attempt) {
       return NextResponse.json(
-        { error: "Exam review record not found." },
+        { error: "Exam review record not found or access denied." },
         { status: 404 }
       );
     }

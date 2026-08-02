@@ -47,18 +47,52 @@ model User {
 }
 
 model ExamResult {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score      Float
-  totalItems Int
-  correct    Int
-  incorrect  Int
-  skipped    Int
-  createdAt  DateTime @default(now())
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score        Float
+  totalItems   Int
+  correct      Int
+  incorrect    Int
+  skipped      Int
+  
+  // 🚀 MOCK EXAM HISTORY EXTENSIONS (Safe Optional Additions)
+  timeSpentSec Int      @default(0) // Total duration in seconds
+  examType     String   @default("FULL_MOCK") // "FULL_MOCK" | "PRACTICE_DRILL" | "CATEGORY_TEST"
+  passed       Boolean  @default(false) // Pass indicator (e.g. score >= 80%)
+  
+  // Immutable full question & answer snapshot payload
+  detailsJson  String?  @db.Text 
+
+  createdAt    DateTime @default(now())
+
+  // Structured per-category breakdown metrics
+  categoryBreakdowns ExamCategoryResult[]
 
   @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
   @@index([createdAt])
+  @@index([examType])
+}
+
+// 🚀 NEW MODEL: Per-Category Exam Breakdown Metrics
+model ExamCategoryResult {
+  id           String     @id @default(cuid())
+  examResultId String
+  examResult   ExamResult @relation(fields: [examResultId], references: [id], onDelete: Cascade)
+
+  category     String     // e.g., "Verbal Ability", "Numerical Reasoning", "Analytical Reasoning", "General Information"
+  totalItems   Int        @default(0)
+  correct      Int        @default(0)
+  incorrect    Int        @default(0)
+  accuracy     Float      @default(0.0) // Percentage value (0.0 to 100.0)
+  timeSpentSec Int        @default(0) // Time spent within this specific category
+
+  createdAt    DateTime   @default(now())
+
+  @@index([examResultId])
+  @@index([category])
+  @@index([examResultId, category])
 }
 
 model Question {
