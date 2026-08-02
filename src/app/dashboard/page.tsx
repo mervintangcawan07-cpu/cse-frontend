@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
 import ResumeExamBanner from "@/components/dashboard/ResumeExamBanner";
+import CSCCountdownWidget from "@/components/CSCCountdownWidget";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -170,10 +171,13 @@ function DashboardContent() {
 
   if (loading || verifyingPayment) {
     return (
-      <div className="max-w-6xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        {verifyingPayment
-          ? "⚡ Verifying payment and updating subscription..."
-          : "Loading student dashboard..."}
+      <div className="max-w-6xl mx-auto py-24 text-center font-bold text-slate-400 animate-pulse flex flex-col items-center justify-center space-y-3">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-xs uppercase tracking-widest font-black text-slate-500">
+          {verifyingPayment
+            ? "⚡ Verifying payment & syncing subscription..."
+            : "Initializing your command center..."}
+        </p>
       </div>
     );
   }
@@ -192,23 +196,26 @@ function DashboardContent() {
     plans.find((p) => p.planType === selectedPlan)?.price || 199;
 
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
       {/* PAYMENT SUCCESS ALERT */}
       {paymentStatus === "success" && (
-        <div className="bg-emerald-500 text-slate-950 p-4 rounded-2xl font-black text-xs flex justify-between items-center shadow-md">
-          <span>🎉 Payment Verified! Your PRO Access duration has been calculated.</span>
+        <div className="bg-emerald-500 text-slate-950 p-4 rounded-2xl font-black text-xs flex justify-between items-center shadow-lg border border-emerald-400/40 animate-in fade-in duration-300">
+          <span>🎉 Payment Verified! Your PRO Access duration has been updated.</span>
         </div>
       )}
 
       {/* ADMIN QUICK SWITCH BANNER */}
       {isAdmin && (
-        <div className="bg-amber-500/10 border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-900 text-xs font-bold">
-          <span>⚡ Logged in as Administrator.</span>
+        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-300 text-xs font-bold backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <span className="p-1 bg-amber-500/20 rounded-lg text-amber-400">⚙️</span>
+            <span>Logged in with Administrator privileges.</span>
+          </div>
           <Link
             href="/admin/pricing"
-            className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl transition"
+            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl transition shadow-md shrink-0"
           >
-            ⚙️ Manage Plan Pricing &rarr;
+            Manage Plan Pricing &rarr;
           </Link>
         </div>
       )}
@@ -216,99 +223,111 @@ function DashboardContent() {
       {/* ⏸️ PAUSED EXAM RESUME BANNER */}
       <ResumeExamBanner />
 
-      {/* WELCOME BANNER WITH NOTIFICATION BELL */}
-      <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-              {isPaid ? "PRO Student Account" : "Free Preview Account"}
-            </span>
+      {/* WELCOME HERO HEADER */}
+      <div className="relative overflow-hidden bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4">
+        {/* Futuristic background ambient lighting glow */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            {isPaid && daysRemaining !== null && (
-              <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-                ⏳ {daysRemaining} Days Remaining
-              </span>
-            )}
-            {isPaid && daysRemaining === null && !isAdmin && (
-              <span className="text-xs font-bold px-2.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full border border-emerald-500/30">
-                ⏳ Active Access
-              </span>
-            )}
-          </div>
-
-          <h1 className="text-2xl md:text-3xl font-extrabold mt-2">
-            Welcome back, {user?.name || "Reviewee"}!
-          </h1>
-          <p className="text-slate-400 text-xs md:text-sm mt-1">
-            Track your Civil Service Exam performance and study progress.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0 flex-wrap">
-          <NotificationBell />
-
-          <Link
-            href="/readiness-card"
-            className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition shrink-0"
-          >
-            🏆 Flex Readiness Card
-          </Link>
-
-          {isPaid ? (
-            <div className="flex items-center gap-2">
-              {daysRemaining !== null && (
-                <button
-                  onClick={() => handlePayMongoCheckout("6_MONTHS")}
-                  className="px-3.5 py-2.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 font-bold text-xs rounded-xl transition cursor-pointer"
-                >
-                  🔄 Extend Plan
-                </button>
-              )}
-              <Link
-                href="/exam"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition shrink-0"
-              >
-                ⚡ Start Mock Exam
-              </Link>
-            </div>
-          ) : (
-            <button
-              onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="px-5 py-2.5 bg-amber-50 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition shrink-0 cursor-pointer"
-            >
-              🔒 Unlock PRO Access
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* DYNAMIC PLAN SELECTOR BANNER (IF UNPAID) */}
-      {!isPaid && (
-        <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-              Select Reviewer Access Plan
-            </span>
-            <h2 className="text-2xl font-black mt-2 text-white">Upgrade or Renew Your PRO Pass</h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Choose your review duration. All plans include full access to mock exams, drills, and notes.
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[11px] font-black uppercase tracking-wider px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 shadow-inner">
+                {isPaid ? "✨ PRO Examinee Access" : "Free Preview Account"}
+              </span>
+
+              {isPaid && daysRemaining !== null && (
+                <span className="text-[11px] font-black px-3 py-1 bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 shadow-inner">
+                  ⏳ {daysRemaining} Days Remaining
+                </span>
+              )}
+              {isPaid && daysRemaining === null && !isAdmin && (
+                <span className="text-[11px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 shadow-inner">
+                  ⏳ Active Lifetime / Custom Pass
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-3xl md:text-4xl font-black mt-3 tracking-tight text-white">
+              Welcome back, {user?.name || "Reviewee"}!
+            </h1>
+            <p className="text-slate-400 text-xs md:text-sm mt-1 max-w-xl font-medium">
+              Monitor your real-time civil service test readiness, study streaks, and high-frequency exam categories.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap relative z-10">
+            <NotificationBell />
+
+            <Link
+              href="/readiness-card"
+              className="px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs rounded-2xl transition shrink-0 flex items-center gap-1.5 backdrop-blur-sm"
+            >
+              <span>🏆</span>
+              <span>Flex Readiness Card</span>
+            </Link>
+
+            {isPaid ? (
+              <div className="flex items-center gap-2">
+                {daysRemaining !== null && (
+                  <button
+                    onClick={() => handlePayMongoCheckout("6_MONTHS")}
+                    className="px-4 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-2xl transition cursor-pointer"
+                  >
+                    🔄 Extend Pass
+                  </button>
+                )}
+                <Link
+                  href="/exam"
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-blue-600/30 transition shrink-0 flex items-center gap-1.5"
+                >
+                  <span>⚡</span>
+                  <span>Mock Exam Hub</span>
+                </Link>
+              </div>
+            ) : (
+              <button
+                onClick={() => handlePayMongoCheckout(selectedPlan)}
+                className="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg shadow-amber-500/20 transition shrink-0 cursor-pointer"
+              >
+                🔒 Upgrade to PRO
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ⏱️ AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
+      <CSCCountdownWidget />
+
+      {/* DYNAMIC PLAN SELECTOR BANNER (FOR FREE / UNPAID USERS) */}
+      {!isPaid && (
+        <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl border border-amber-500/40 space-y-6 relative overflow-hidden">
+          <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl"></div>
+          <div>
+            <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+              Unlock Unlimited Mock Exams & Drills
+            </span>
+            <h2 className="text-2xl font-black mt-2 text-white">Upgrade or Renew Your Review Pass</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Gain full access to the 170-item mock exam player, 5-minute category speed drills, and official handbooks.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
             {plans.map((p) => (
               <button
                 key={p.planType}
                 onClick={() => setSelectedPlan(p.planType)}
                 className={`p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
                   selectedPlan === p.planType
-                    ? "bg-amber-500/10 border-amber-500 text-white"
-                    : "bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500"
+                    ? "bg-amber-500/10 border-amber-500 text-white shadow-lg shadow-amber-500/10"
+                    : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:border-slate-500"
                 }`}
               >
                 {p.planType === "6_MONTHS" && (
-                  <span className="absolute -top-3 right-4 px-2 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
-                    Popular
+                  <span className="absolute -top-3 right-4 px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase shadow-md">
+                    Most Popular
                   </span>
                 )}
                 <div>
@@ -325,100 +344,100 @@ function DashboardContent() {
           <button
             onClick={() => handlePayMongoCheckout(selectedPlan)}
             disabled={checkoutLoading}
-            className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition disabled:opacity-50 cursor-pointer"
+            className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-xl transition disabled:opacity-50 cursor-pointer relative z-10"
           >
-            {checkoutLoading ? "Launching PayMongo..." : `Pay ₱${activePlanPrice} via PayMongo 💳`}
+            {checkoutLoading ? "Launching PayMongo Portal..." : `Unlock PRO via PayMongo (₱${activePlanPrice}) 💳`}
           </button>
         </div>
       )}
 
-      {/* STATS OVERVIEW CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* PERFORMANCE METRICS & OVERVIEW CARDS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* Daily Streak */}
-        <div className="bg-slate-900 text-white p-5 rounded-3xl border border-slate-800 shadow-md space-y-2">
+        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-xs text-slate-400 font-extrabold uppercase">Study Streak</span>
-            <span className="text-xl">🔥</span>
+            <span className="text-xs text-slate-400 font-extrabold uppercase tracking-wider">Study Streak</span>
+            <span className="text-2xl p-2 bg-amber-500/10 rounded-2xl border border-amber-500/20">🔥</span>
           </div>
           <div className="text-3xl font-black text-amber-400">
             {dashAnalytics ? `${dashAnalytics.currentStreak} Days` : "0 Days"}
           </div>
-          <p className="text-[11px] text-slate-400">Longest: {dashAnalytics?.longestStreak || 0} Days</p>
+          <p className="text-[11px] text-slate-400 font-medium">Personal Best: {dashAnalytics?.longestStreak || 0} Days</p>
         </div>
 
         {/* Pass Readiness Score */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2 flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
-              <span className="text-xs text-slate-500 font-extrabold uppercase">Pass Readiness</span>
-              <span className="text-xl">🎯</span>
+              <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider">Pass Readiness</span>
+              <span className="text-2xl p-2 bg-emerald-50 rounded-2xl border border-emerald-100">🎯</span>
             </div>
-            <div className="text-3xl font-black text-emerald-600 mt-1">
+            <div className="text-3xl font-black text-emerald-600 mt-2">
               {dashAnalytics ? `${dashAnalytics.passReadinessScore}%` : "0%"}
             </div>
-            <p className="text-[11px] text-slate-500">Target Benchmark: 80%+</p>
+            <p className="text-[11px] text-slate-500 font-medium mt-1">Passing Target: 80% Cutoff</p>
           </div>
           <Link
             href="/readiness-card"
-            className="text-[11px] font-bold text-blue-600 hover:text-blue-500 transition block mt-1"
+            className="text-[11px] font-bold text-blue-600 hover:text-blue-500 transition block mt-2"
           >
-            🏆 Export Shareable Card &rarr;
+            🏆 Shareable Card &rarr;
           </Link>
         </div>
 
         {/* Total Mock Exams Completed */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-xs text-slate-500 font-extrabold uppercase">Mock Exams</span>
-            <span className="text-xl">📝</span>
+            <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider">Mock Exams</span>
+            <span className="text-2xl p-2 bg-blue-50 rounded-2xl border border-blue-100">📝</span>
           </div>
           <div className="text-3xl font-black text-slate-900">
             {analytics?.summary.totalExamsTaken ?? dashAnalytics?.totalExams ?? 0}
           </div>
-          <p className="text-[11px] text-slate-500">
-            Avg Score: {analytics?.summary.averageScore ?? dashAnalytics?.averageScore ?? 0}%
+          <p className="text-[11px] text-slate-500 font-medium">
+            Overall Avg: {analytics?.summary.averageScore ?? dashAnalytics?.averageScore ?? 0}%
           </p>
         </div>
 
         {/* Bookmarked Questions */}
-        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-xs text-slate-500 font-extrabold uppercase">Bookmarks</span>
-            <span className="text-xl">🔖</span>
+            <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider">Bookmarks</span>
+            <span className="text-2xl p-2 bg-purple-50 rounded-2xl border border-purple-100">🔖</span>
           </div>
-          <div className="text-3xl font-black text-blue-600">
+          <div className="text-3xl font-black text-purple-600">
             {dashAnalytics?.totalBookmarks || 0}
           </div>
-          <p className="text-[11px] text-slate-500">Saved for Review</p>
+          <p className="text-[11px] text-slate-500 font-medium">Saved Items for Review</p>
         </div>
       </div>
 
       {/* AI STUDY RECOMMENDATION CARD */}
       {dashAnalytics?.recommendation && (
-        <div className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-3xl flex items-start gap-3">
-          <span className="text-xl shrink-0 mt-0.5">💡</span>
+        <div className="bg-amber-500/10 border border-amber-500/30 p-5 rounded-3xl flex items-start gap-3.5 backdrop-blur-sm">
+          <span className="text-2xl shrink-0 mt-0.5 p-2 bg-amber-500/20 rounded-2xl">💡</span>
           <div>
-            <h3 className="text-xs font-black uppercase text-amber-800 tracking-wider">
-              Personalized Study Recommendation
+            <h3 className="text-xs font-black uppercase text-amber-800 dark:text-amber-300 tracking-wider">
+              Personalized AI Study Focus
             </h3>
-            <p className="text-xs text-slate-700 font-medium mt-1">
+            <p className="text-xs text-slate-700 dark:text-slate-300 font-medium mt-1 leading-relaxed">
               {dashAnalytics.recommendation}
             </p>
           </div>
         </div>
       )}
 
-      {/* CHARTS (SCORE HISTORY & SUBJECT MASTERY) */}
+      {/* PERFORMANCE CHARTS */}
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-lg font-black text-slate-900">Score History & Progression</h2>
-                <p className="text-xs text-slate-500">Your mock exam scores over time</p>
+                <h2 className="text-lg font-black text-slate-900">Score Progression</h2>
+                <p className="text-xs text-slate-500">Historical performance across mock exam attempts</p>
               </div>
-              <span className="text-xs font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full">
-                Passing Cutoff: 80%
+              <span className="text-xs font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+                80% Benchmark
               </span>
             </div>
 
@@ -438,7 +457,7 @@ function DashboardContent() {
                     <Tooltip
                       contentStyle={{
                         backgroundColor: "#0f172a",
-                        borderRadius: "12px",
+                        borderRadius: "16px",
                         border: "none",
                         color: "#fff",
                         fontSize: "12px",
@@ -458,10 +477,10 @@ function DashboardContent() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
             <div>
               <h2 className="text-lg font-black text-slate-900">Subject Mastery</h2>
-              <p className="text-xs text-slate-500">Accuracy rate by core category</p>
+              <p className="text-xs text-slate-500 font-medium">Accuracy rate by core subject</p>
             </div>
 
             <div className="space-y-4 pt-2">
@@ -484,24 +503,24 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* MAIN STUDENT MODULES GRID */}
+      {/* CORE STUDY MODULES GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* CLEAN INTEGRATED MOCK EXAM CARD WITH INLINE HISTORY */}
-        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between">
+        {/* STREAMLINED CLEAN MOCK EXAM CARD */}
+        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30">
                 170 Timed Items
               </span>
-              <span className="text-xs font-bold text-slate-400">Timed Mode</span>
+              <span className="text-xs font-bold text-slate-400">Timed Simulation</span>
             </div>
-            <h2 className="text-xl font-extrabold text-white mt-2">Practice Mock Exam</h2>
+            <h2 className="text-xl font-extrabold text-white mt-3">Practice Mock Exam</h2>
             <p className="text-xs text-slate-400 leading-relaxed mt-1">
               Simulate 3-hour civil service exams or review item explanations from your 3 recent attempts.
             </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2.5 pt-2">
             {isPaid ? (
               <>
                 <Link
@@ -520,7 +539,7 @@ function DashboardContent() {
             ) : (
               <button
                 onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-amber-50/10 hover:bg-amber-50/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
+                className="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
               >
                 🔒 Unlock Mock Exam
               </button>
@@ -529,7 +548,7 @@ function DashboardContent() {
         </div>
 
         {/* SPEED DRILLS MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
@@ -537,17 +556,17 @@ function DashboardContent() {
               </span>
               <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Category Speed Drills</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Category Speed Drills</h2>
             <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Focus on specific subjects like Numerical Reasoning or Verbal Ability under 5 minutes.
+              Target specific subjects like Numerical Reasoning or Verbal Ability in rapid 5-minute drills.
             </p>
           </div>
           {isPaid ? (
             <Link
               href="/drills"
-              className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs text-center rounded-xl transition"
+              className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs text-center rounded-xl transition shadow-sm"
             >
-              Launch Drills
+              Launch Speed Drills ⚡
             </Link>
           ) : (
             <button
@@ -559,18 +578,18 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* ⚔️ 1v1 STUDY DUELS (LIVE ARENA MODULE) */}
-        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-sm space-y-4 text-white md:col-span-2 lg:col-span-1 relative overflow-hidden flex flex-col justify-between">
+        {/* ⚔️ 1v1 STUDY DUELS */}
+        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-xl space-y-4 text-white flex flex-col justify-between relative overflow-hidden">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
-                Live Battle Arena
+                Live Arena
               </span>
               <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
             </div>
-            <h2 className="text-xl font-extrabold text-white mt-2">1v1 Study Duels</h2>
+            <h2 className="text-xl font-extrabold text-white mt-3">1v1 Study Duels</h2>
             <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              Challenge online examinees in a 5-round rapid speed quiz. Earn XP points!
+              Challenge examinees online in rapid 5-round speed quizzes. Earn XP points and test your recall!
             </p>
           </div>
           {isPaid ? (
@@ -578,12 +597,12 @@ function DashboardContent() {
               href="/duels"
               className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-md"
             >
-              ⚔️ Enter Battle Arena
+              Enter Battle Arena ⚔️
             </Link>
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
-              className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
+              className="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
             >
               🔒 Unlock 1v1 Duels
             </button>
@@ -591,25 +610,25 @@ function DashboardContent() {
         </div>
 
         {/* STUDY NOTES MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
-                Live Reviewer
+                Cheat Sheets
               </span>
-              <span className="text-xs font-bold text-slate-600">{stats.notesCount} Active Notes</span>
+              <span className="text-xs font-bold text-slate-600">{stats.notesCount} Notes</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Study Notes & Cheat Sheets</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Study Notes & Cheat Sheets</h2>
             <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Review core principles, subject-verb agreement rules, and formulas published by admins.
+              Review grammar rules, constitutional principles, and math formulas published by admins.
             </p>
           </div>
           {isPaid ? (
             <Link
               href="/reviewer"
-              className="inline-block w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs text-center rounded-xl transition"
+              className="inline-block w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs text-center rounded-xl transition shadow-sm"
             >
-              Read Study Notes
+              Read Study Notes 📚
             </Link>
           ) : (
             <button
@@ -622,7 +641,7 @@ function DashboardContent() {
         </div>
 
         {/* READING MATERIALS MODULE */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between md:col-span-2 lg:col-span-1">
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between md:col-span-2 lg:col-span-2">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md">
@@ -630,17 +649,17 @@ function DashboardContent() {
               </span>
               <span className="text-xs font-bold text-slate-600">{stats.handbooksCount} Handbooks</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-2">Official Reading Materials</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Official Reading Materials & Handbooks</h2>
             <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Read official constitutional references, R.A. 6713 ethical standards, and PDF handbooks.
+              Read official constitutional references, R.A. 6713 code of conduct, and downloadable PDF handbooks.
             </p>
           </div>
           {isPaid ? (
             <Link
               href="/reading-materials"
-              className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs text-center rounded-xl transition"
+              className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs text-center rounded-xl transition shadow-sm"
             >
-              Open Reader
+              Open PDF Reader 📖
             </Link>
           ) : (
             <button
@@ -660,8 +679,11 @@ export default function StudentDashboardPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-6xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-          Loading student dashboard...
+        <div className="max-w-6xl mx-auto py-24 text-center font-bold text-slate-400 animate-pulse flex flex-col items-center justify-center space-y-3">
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xs uppercase tracking-widest font-black text-slate-500">
+            Loading student dashboard...
+          </p>
         </div>
       }
     >

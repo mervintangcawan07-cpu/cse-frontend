@@ -78,115 +78,123 @@ export default function Navbar() {
     pathname.startsWith("/mock-exam") || pathname.startsWith("/exam");
 
   return (
-    <header className="bg-slate-900 border-b border-slate-800 sticky top-0 z-[9999] text-white">
+    <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-[9999] text-white shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 font-black text-lg text-white tracking-tight"
+            className="flex items-center gap-2.5 font-black text-lg text-white tracking-tight group"
           >
-            <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
-            <span>Reviewer</span>
+            <span className="px-2 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-xs shadow-md shadow-blue-500/20 group-hover:scale-105 transition">
+              CSE
+            </span>
+            <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent font-extrabold">
+              Reviewer
+            </span>
           </Link>
 
           {/* DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center gap-1">
             <Link
               href="/dashboard"
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                 pathname === "/dashboard"
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/70"
               }`}
             >
-              Dashboard
+              📊 Dashboard
             </Link>
 
             {isPaid ? (
               <>
                 <Link
                   href="/exam"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     isMockExamActive
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Mock Exam
+                  ⏱️ Mock Exam
                 </Link>
 
-                {/* 📜 MOCK EXAM HISTORY LINK */}
                 <Link
                   href="/mock-exam/history"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/mock-exam/history")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Exam History
+                  📜 History
                 </Link>
 
                 <Link
                   href="/drills"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/drills")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Speed Drills
+                  ⚡ Drills
                 </Link>
+
                 <Link
                   href="/duels"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/duels")
-                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-md shadow-amber-500/10"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
                   ⚔️ 1v1 Duels
                 </Link>
+
                 <Link
                   href="/flashcards"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/flashcards")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Flashcards
+                  🎴 Flashcards
                 </Link>
+
                 <Link
                   href="/bookmarks"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/bookmarks")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Bookmarks
+                  🔖 Bookmarks
                 </Link>
+
                 <Link
                   href="/reviewer"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/reviewer")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Study Notes
+                  📝 Notes
                 </Link>
+
                 <Link
                   href="/reading-materials"
-                  className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+                  className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                     pathname.startsWith("/reading-materials")
-                      ? "bg-blue-600 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800"
+                      ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/70"
                   }`}
                 >
-                  Handbooks
+                  📚 Handbooks
                 </Link>
               </>
             ) : (
@@ -198,52 +206,64 @@ export default function Navbar() {
             {/* 👤 PROFILE LINK */}
             <Link
               href="/profile"
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition ${
+              className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                 pathname === "/profile"
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/70"
               }`}
             >
               👤 Profile
             </Link>
 
-            {/* ADMIN DROPDOWN */}
+            {/* ADMIN DROPDOWN WITH CSC SYNC CENTER */}
             {user?.role === "ADMIN" && (
               <div className="relative group ml-1">
                 <Link
                   href="/admin/dashboard"
-                  className="px-3 py-2 bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs"
+                  className="px-3.5 py-2 bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 rounded-xl transition flex items-center gap-1.5 font-extrabold text-xs shadow-md shadow-amber-500/10"
                 >
                   <span>⚙️ Admin</span>
-                  <span className="text-[10px]">▼</span>
+                  <span className="text-[9px]">▼</span>
                 </Link>
 
-                <div className="absolute right-0 top-full pt-1.5 w-56 hidden group-hover:block z-[10000]">
-                  <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 space-y-1">
+                <div className="absolute right-0 top-full pt-2 w-60 hidden group-hover:block z-[10000] animate-in fade-in duration-150">
+                  <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl p-2 space-y-1">
+                    {/* 🔄 AUTOMATED CSC SYNC CENTER LINK */}
+                    <Link
+                      href="/admin/csc-sync"
+                      className="block px-3 py-2 text-amber-300 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition border border-amber-500/20"
+                    >
+                      🔄 CSC Sync & Helper Center
+                    </Link>
+
                     <Link
                       href="/admin/questions"
                       className="block px-3 py-2 text-blue-400 hover:bg-blue-500/10 rounded-xl text-xs font-bold transition"
                     >
                       📚 Question Bank Manager
                     </Link>
+
                     <Link
                       href="/admin/pricing"
                       className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
                     >
                       💳 Manage Plan Pricing
                     </Link>
+
                     <Link
                       href="/admin/flashcards"
                       className="block px-3 py-2 text-amber-400 hover:bg-amber-500/10 rounded-xl text-xs font-bold transition"
                     >
                       🎴 Manage Flashcards
                     </Link>
+
                     <Link
                       href="/admin/dashboard"
                       className="block px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl text-xs font-bold transition"
                     >
                       📊 Control Center & Revenue
                     </Link>
+
                     <Link
                       href="/admin/users"
                       className="block px-3 py-2 text-purple-400 hover:bg-purple-500/10 rounded-xl text-xs font-bold transition"
@@ -260,7 +280,7 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="hidden md:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer"
+              className="hidden md:block px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer shadow-sm"
             >
               Log Out
             </button>
@@ -287,11 +307,11 @@ export default function Navbar() {
 
       {/* MOBILE DROPDOWN DRAWER */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-6 space-y-3 font-bold text-xs animate-in slide-in-from-top duration-200">
+        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-6 space-y-2.5 font-bold text-xs animate-in slide-in-from-top duration-200">
           <Link
             href="/dashboard"
             className={`block px-4 py-3 rounded-xl transition ${
-              pathname === "/dashboard" ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+              pathname === "/dashboard" ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
             }`}
           >
             📊 Dashboard
@@ -302,17 +322,16 @@ export default function Navbar() {
               <Link
                 href="/exam"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  isMockExamActive ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  isMockExamActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 ⏱️ Practice Mock Exam
               </Link>
               
-              {/* 📜 MOBILE MOCK EXAM HISTORY LINK */}
               <Link
                 href="/mock-exam/history"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/mock-exam/history") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/mock-exam/history") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 📜 Mock Exam History
@@ -321,11 +340,12 @@ export default function Navbar() {
               <Link
                 href="/drills"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/drills") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/drills") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 ⚡ Category Speed Drills
               </Link>
+
               <Link
                 href="/duels"
                 className={`block px-4 py-3 rounded-xl transition ${
@@ -334,41 +354,45 @@ export default function Navbar() {
               >
                 ⚔️ 1v1 Study Duels
               </Link>
+
               <Link
                 href="/flashcards"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/flashcards") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/flashcards") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 🎴 Active Recall Flashcards
               </Link>
+
               <Link
                 href="/bookmarks"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/bookmarks") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/bookmarks") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 🔖 Saved Bookmarks
               </Link>
+
               <Link
                 href="/reviewer"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/reviewer") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/reviewer") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 📝 Study Notes & Reviewers
               </Link>
+
               <Link
                 href="/reading-materials"
                 className={`block px-4 py-3 rounded-xl transition ${
-                  pathname.startsWith("/reading-materials") ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+                  pathname.startsWith("/reading-materials") ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
                 }`}
               >
                 📚 Handbooks & PDFs
               </Link>
             </>
           ) : (
-            <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl text-center">
+            <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-xl text-center font-extrabold">
               🔒 PRO Modules Locked (Select Plan on Dashboard)
             </div>
           )}
@@ -377,35 +401,47 @@ export default function Navbar() {
           <Link
             href="/profile"
             className={`block px-4 py-3 rounded-xl transition ${
-              pathname === "/profile" ? "bg-blue-600 text-white" : "bg-slate-800/60 text-slate-300"
+              pathname === "/profile" ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "bg-slate-800/60 text-slate-300"
             }`}
           >
             👤 My Profile & Settings
           </Link>
 
+          {/* MOBILE ADMIN CONTROLS INCLUDING CSC SYNC */}
           {user?.role === "ADMIN" && (
-            <div className="pt-2 border-t border-slate-800 space-y-2">
+            <div className="pt-3 border-t border-slate-800 space-y-2">
               <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider block px-1">
                 Admin Controls
               </span>
+
+              <Link
+                href="/admin/csc-sync"
+                className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
+              >
+                🔄 CSC Sync & Helper Center
+              </Link>
+
               <Link
                 href="/admin/questions"
                 className="block px-4 py-2.5 bg-blue-600/20 text-blue-300 rounded-xl border border-blue-500/30"
               >
                 📚 Question Bank Manager
               </Link>
+
               <Link
                 href="/admin/pricing"
                 className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
               >
                 💳 Manage Plan Pricing
               </Link>
+
               <Link
                 href="/admin/flashcards"
                 className="block px-4 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl border border-amber-500/30"
               >
                 🎴 Manage Flashcards
               </Link>
+
               <Link
                 href="/admin/dashboard"
                 className="block px-4 py-2.5 bg-slate-800 text-slate-300 rounded-xl"
