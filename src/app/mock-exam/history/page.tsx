@@ -45,19 +45,32 @@ export default function ExamHistoryPage() {
     );
   }
 
+  // 1. COMPUTATIONS USING 100% OF ALL HISTORICAL EXAMS
+  const totalExamsTaken = attempts.length;
+  const overallAverageScore =
+    totalExamsTaken > 0
+      ? Math.round(
+          attempts.reduce((acc, curr) => acc + curr.percentage, 0) / totalExamsTaken
+        )
+      : 0;
+
+  // 2. DISPLAY LIMIT: SLICE TO SHOW ONLY THE 3 MOST RECENT ATTEMPTS
+  const recent3Attempts = attempts.slice(0, 3);
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-6 text-slate-100">
-      {/* HEADER BANNER */}
+      {/* HEADER BANNER WITH OVERALL STATS */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            Performance Log
+            Performance Log ({totalExamsTaken} Total Exams)
           </span>
           <h1 className="text-2xl font-black text-white mt-2">
             Past Exam Attempts & Reviews
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Review detailed question explanations for all your completed practice mock exams.
+            Displaying your 3 most recent attempts. Overall lifetime average score:{" "}
+            <strong className="text-amber-400">{overallAverageScore}%</strong>.
           </p>
         </div>
 
@@ -69,7 +82,7 @@ export default function ExamHistoryPage() {
         </Link>
       </div>
 
-      {/* ATTEMPTS LIST */}
+      {/* ATTEMPTS LIST (SHOWING ONLY TOP 3) */}
       {attempts.length === 0 ? (
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-4">
           <span className="text-4xl block">📝</span>
@@ -78,7 +91,7 @@ export default function ExamHistoryPage() {
             Take your first practice mock exam to generate diagnostic analytics and review item explanations.
           </p>
           <Link
-            href="/mock-exam/take"
+            href="/exam"
             className="inline-block px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition"
           >
             ⚡ Take Practice Exam
@@ -86,7 +99,12 @@ export default function ExamHistoryPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {attempts.map((item, index) => {
+          <div className="flex justify-between items-center text-xs font-bold text-slate-400 px-1">
+            <span>Recent 3 Attempts</span>
+            <span>Total Completed: {totalExamsTaken}</span>
+          </div>
+
+          {recent3Attempts.map((item, index) => {
             const isPassing = item.percentage >= 80;
 
             return (
@@ -97,7 +115,7 @@ export default function ExamHistoryPage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-black text-white">
-                      Mock Exam Attempt #{attempts.length - index}
+                      Mock Exam Attempt #{totalExamsTaken - index}
                     </span>
                     <span
                       className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border ${

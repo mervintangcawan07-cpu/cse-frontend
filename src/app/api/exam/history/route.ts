@@ -22,20 +22,18 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized: Missing user authentication" }, { status: 401 });
     }
 
-    // Fetch ONLY the 3 most recent completed exams to optimize storage and UI space
+    // Fetch ALL completed exams (No 'take: 3' restriction)
     let history: any[] = [];
     try {
       history = await prisma.examResult.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: 3, // 👈 Cap limit to 3 items
       });
     } catch (dbErr) {
       if ((prisma as any).examAttempt) {
         history = await (prisma as any).examAttempt.findMany({
           where: { userId },
           orderBy: { createdAt: "desc" },
-          take: 3,
         });
       }
     }
