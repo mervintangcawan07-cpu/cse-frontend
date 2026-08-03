@@ -38,12 +38,12 @@ export async function GET(request: Request) {
 
     const correctlyAnsweredIds = new Set<string>();
 
-    userResults.forEach((result) => {
+    userResults.forEach((result: { detailsJson: string | null }) => {
       if (result.detailsJson) {
         try {
           const details = JSON.parse(result.detailsJson);
           if (Array.isArray(details)) {
-            details.forEach((item: any) => {
+            details.forEach((item: { id?: string; selectedIndex?: number | null; answerIndex?: number }) => {
               if (
                 item.id &&
                 item.selectedIndex !== null &&
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
     let finalExamQuestions: any[] = [];
 
     // Determine target category quotas
-    const activeQuotas =
+    const activeQuotas: Record<string, number> =
       selectedCategory === "All"
         ? CSE_CATEGORY_QUOTAS
         : { [selectedCategory]: 170 };
@@ -78,8 +78,8 @@ export async function GET(request: Request) {
         distinct: ["subtopic"],
       });
 
-      const subtopics = subtopicRecords
-        .map((s) => s.subtopic || "General")
+      const subtopics: string[] = subtopicRecords
+        .map((s: { subtopic: string | null }) => s.subtopic || "General")
         .filter(Boolean);
 
       const subtopicCount = subtopics.length || 1;
@@ -153,7 +153,7 @@ export async function GET(request: Request) {
       // Step C: Fallback check if category quota wasn't completely filled
       if (categoryPickedQuestions.length < catQuota) {
         const catMissing = catQuota - categoryPickedQuestions.length;
-        const existingCategoryIds = categoryPickedQuestions.map((q) => q.id);
+        const existingCategoryIds = categoryPickedQuestions.map((q: any) => q.id);
 
         const categoryFillers = await prisma.question.findMany({
           where: {
@@ -184,13 +184,13 @@ export async function GET(request: Request) {
     }
 
     // 3. Prepare options & shuffle option indices
-    const preparedQuestions = finalExamQuestions.map((q) => {
-      const resolvedOptions =
+    const preparedQuestions = finalExamQuestions.map((q: any) => {
+      const resolvedOptions: string[] =
         Array.isArray(q.options) && q.options.length > 0
-          ? q.options
-          : [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean);
+          ? (q.options as string[])
+          : ([q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean) as string[]);
 
-      const indexedOptions = resolvedOptions.map((opt, idx) => ({
+      const indexedOptions = resolvedOptions.map((opt: string, idx: number) => ({
         text: opt,
         isCorrect: idx === q.answerIndex,
       }));
@@ -202,8 +202,8 @@ export async function GET(request: Request) {
         category: q.category || "General",
         subtopic: q.subtopic || "General",
         prompt: q.prompt,
-        options: shuffledOptions.map((o) => o.text),
-        answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
+        options: shuffledOptions.map((o: { text: string; isCorrect: boolean }) => o.text),
+        answerIndex: shuffledOptions.findIndex((o: { text: string; isCorrect: boolean }) => o.isCorrect),
         explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
       };
