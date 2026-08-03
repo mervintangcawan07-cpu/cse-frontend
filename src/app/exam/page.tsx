@@ -20,7 +20,7 @@ export default function ExamHubPage() {
   const [user, setUser] = useState<any>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [activeTab, setActiveTab] = useState<"NEW" | "HISTORY">("NEW");
-  const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
+  const [allAttempts, setAllAttempts] = useState<ExamAttempt[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
   // 1. Authenticate user & verify PRO access
@@ -53,7 +53,7 @@ export default function ExamHubPage() {
     checkAuth();
   }, [router]);
 
-  // 2. Fetch history when user clicks on History tab
+  // 2. Fetch all history when user switches to History tab
   useEffect(() => {
     if (activeTab === "HISTORY" && user) {
       loadHistory();
@@ -66,8 +66,7 @@ export default function ExamHubPage() {
       const res = await fetch("/api/mock-exam/history");
       const data = await res.json();
       if (res.ok && (data.attempts || data.history)) {
-        const rawHistory = data.attempts || data.history;
-        setAttempts(rawHistory.slice(0, 3)); // Strict cap to top 3 items
+        setAllAttempts(data.attempts || data.history);
       }
     } catch (err) {
       console.error("Failed to load history:", err);
@@ -83,6 +82,16 @@ export default function ExamHubPage() {
       </div>
     );
   }
+
+  // Calculate statistics over ALL historical attempts
+  const totalExamsTaken = allAttempts.length;
+  const overallAvg =
+    totalExamsTaken > 0
+      ? Math.round(allAttempts.reduce((acc, curr) => acc + curr.percentage, 0) / totalExamsTaken)
+      : 0;
+  
+  // UI Display: Limit table to top 3 items
+  const recent3Attempts = allAttempts.slice(0, 3);
 
   return (
     <div className="max-w-5xl mx-auto py-8 px-4 space-y-6 text-slate-100">
@@ -128,7 +137,7 @@ export default function ExamHubPage() {
               : "border-transparent text-slate-400 hover:text-slate-200"
           }`}
         >
-          📜 Exam History (Top 3)
+          📜 Recent Exam History (Top 3)
         </button>
       </div>
 
@@ -163,7 +172,7 @@ export default function ExamHubPage() {
             <div className="p-12 text-center text-slate-400 font-bold animate-pulse">
               Loading recent exam records...
             </div>
-          ) : attempts.length === 0 ? (
+          ) : recent3Attempts.length === 0 ? (
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
               <span className="text-4xl block">📝</span>
               <h3 className="text-sm font-bold text-white">No Exam History Yet</h3>
@@ -173,7 +182,12 @@ export default function ExamHubPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {attempts.map((item, index) => {
+              <div className="flex justify-between items-center text-xs text-slate-400 px-1 font-bold">
+                <span>Showing 3 Most Recent Attempts</span>
+                <span>Lifetime Average: <strong className="text-amber-400">{overallAvg}%</strong> ({totalExamsTaken} Total Exams)</span>
+              </div>
+
+              {recent3Attempts.map((item, index) => {
                 const isPassing = item.percentage >= 80;
 
                 return (
@@ -184,7 +198,7 @@ export default function ExamHubPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-black text-white">
-                          Recent Attempt #{index + 1}
+                          Attempt #{totalExamsTaken - index}
                         </span>
                         <span
                           className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border ${

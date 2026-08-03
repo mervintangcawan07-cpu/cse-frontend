@@ -117,7 +117,7 @@ export async function POST(request: Request) {
     const itemsCount = totalItems || answers.length;
     const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
 
-    // 3. Save verified result with full detailsJson snapshot
+    // 3. Save verified result with full detailsJson snapshot (ALL EXAMS KEPT FOR PROGRESSION LOGS)
     const result = await prisma.examResult.create({
       data: {
         userId,
@@ -129,26 +129,6 @@ export async function POST(request: Request) {
         detailsJson: JSON.stringify(detailsSnapshot),
       },
     });
-
-    // 4. 🧹 AUTOMATIC DATABASE CLEANUP: Delete exams beyond top 3 for this user
-    try {
-      const userExams = await prisma.examResult.findMany({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        select: { id: true },
-      });
-
-      if (userExams.length > 3) {
-        const examsToDelete = userExams.slice(3).map((e) => e.id);
-        await prisma.examResult.deleteMany({
-          where: {
-            id: { in: examsToDelete },
-          },
-        });
-      }
-    } catch (cleanupErr) {
-      console.error("Auto-pruning older exams failed:", cleanupErr);
-    }
 
     // Record active study streak
     const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);

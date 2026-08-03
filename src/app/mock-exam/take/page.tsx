@@ -27,6 +27,7 @@ export default function TakeExamPage() {
 
   // App State
   const [loading, setLoading] = useState(true);
+  const [startingExam, setStartingExam] = useState(false);
   const [isSetupPhase, setIsSetupPhase] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
@@ -41,7 +42,7 @@ export default function TakeExamPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
 
-  // 1. Load Questions, Bookmarks & Check for In-Progress Session
+  // 1. Load Initial Categories, Bookmarks & Check for In-Progress Session
   useEffect(() => {
     async function initExam() {
       try {
@@ -215,38 +216,33 @@ export default function TakeExamPage() {
     setIsSetupPhase(false);
   }
 
-  // 4. Start New Exam
-  function handleStartExam() {
+  // 4. Start New Smart Exam Session (Spaced Repetition Engine)
+  async function handleStartExam() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
+    setStartingExam(true);
 
-    const filtered =
-      selectedCategory === "All"
-        ? allQuestions
-        : allQuestions.filter((q) => q.category === selectedCategory);
+    try {
+      const res = await fetch(
+        `/api/exam/start?category=${encodeURIComponent(selectedCategory)}`
+      );
+      const data = await res.json();
 
-    const preparedQuestions = filtered.map((q) => {
-      const indexedOptions = q.options.map((opt, idx) => ({
-        text: opt,
-        isCorrect: idx === q.answerIndex,
-      }));
-
-      const shuffledOptions = [...indexedOptions].sort(() => Math.random() - 0.5);
-
-      return {
-        ...q,
-        options: shuffledOptions.map((o) => o.text),
-        answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
-      };
-    });
-
-    const cappedQuestions = preparedQuestions.slice(0, 170);
-
-    setExamQuestions(cappedQuestions);
-    setCurrentIndex(0);
-    setSelectedAnswers({});
-    setTimeLeft(timerMinutes * 60);
-    setIsSetupPhase(false);
+      if (res.ok && data.questions && data.questions.length > 0) {
+        setExamQuestions(data.questions);
+        setCurrentIndex(0);
+        setSelectedAnswers({});
+        setTimeLeft(timerMinutes * 60);
+        setIsSetupPhase(false);
+      } else {
+        alert("Unable to generate exam questions. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error starting exam:", err);
+      alert("Connection error starting exam.");
+    } finally {
+      setStartingExam(false);
+    }
   }
 
   function handleSelectOption(optionIndex: number) {
@@ -292,7 +288,9 @@ export default function TakeExamPage() {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center">
-        <p className="text-slate-500 font-medium animate-pulse">Loading exam configurations...</p>
+        <p className="text-slate-500 font-medium animate-pulse">
+          Loading exam configurations...
+        </p>
       </div>
     );
   }
@@ -338,7 +336,7 @@ export default function TakeExamPage() {
             <div className="flex gap-3 pt-1">
               <button
                 onClick={handleResumeSavedSession}
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition cursor-pointer"
               >
                 Resume Saved Exam ⚡
               </button>
@@ -347,7 +345,7 @@ export default function TakeExamPage() {
                   localStorage.removeItem(LOCAL_STORAGE_KEY);
                   setSavedSessionData(null);
                 }}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition"
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 Discard & Start Fresh
               </button>
@@ -359,7 +357,7 @@ export default function TakeExamPage() {
           <div>
             <h1 className="text-2xl font-extrabold text-slate-800">Configure Mock Exam</h1>
             <p className="text-slate-500 text-sm mt-1">
-              Customize your practice session before you begin.
+              Customize your practice session with smart non-repeating question queue.
             </p>
           </div>
 
@@ -373,7 +371,7 @@ export default function TakeExamPage() {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full p-4 border border-slate-200 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white transition"
               >
-                <option value="All">All Categories (170 Items - Subject Sequential)</option>
+                <option value="All">All Categories (170 Items - Smart Repetition)</option>
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat}
@@ -396,7 +394,7 @@ export default function TakeExamPage() {
                   <button
                     key={timer.value}
                     onClick={() => setTimerMinutes(timer.value)}
-                    className={`p-3 rounded-xl border text-sm font-bold transition ${
+                    className={`p-3 rounded-xl border text-sm font-bold transition cursor-pointer ${
                       timerMinutes === timer.value
                         ? "border-blue-600 bg-blue-50 text-blue-700"
                         : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
@@ -411,9 +409,10 @@ export default function TakeExamPage() {
 
           <button
             onClick={handleStartExam}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black text-lg rounded-2xl transition shadow-sm"
+            disabled={startingExam}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-black text-lg rounded-2xl transition shadow-sm cursor-pointer"
           >
-            Start 170-Item Exam 🚀
+            {startingExam ? "Assembling Smart Exam Pool..." : "Start 170-Item Exam 🚀"}
           </button>
         </div>
       </div>
@@ -425,7 +424,7 @@ export default function TakeExamPage() {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
         <p className="text-slate-600 font-semibold">No questions available for this category.</p>
-        <button onClick={() => setIsSetupPhase(true)} className="text-blue-600 font-bold hover:underline">
+        <button onClick={() => setIsSetupPhase(true)} className="text-blue-600 font-bold hover:underline cursor-pointer">
           Go back to Setup
         </button>
       </div>
@@ -466,7 +465,7 @@ export default function TakeExamPage() {
 
           <button
             onClick={() => setIsPauseModalOpen(true)}
-            className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0"
+            className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0 cursor-pointer"
           >
             <span>⏸️</span>
             <span>Pause / Exit</span>
@@ -491,7 +490,7 @@ export default function TakeExamPage() {
 
           <button
             onClick={() => currentQ && toggleBookmark(currentQ.id)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 cursor-pointer ${
               isBookmarked
                 ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
                 : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-800"
@@ -501,13 +500,13 @@ export default function TakeExamPage() {
           </button>
         </div>
 
-        {/* 🎯 PROMPT RENDERING WITH HTML TABLE SUPPORT */}
+        {/* PROMPT RENDERING WITH HTML TABLE SUPPORT */}
         <div
           className="text-lg font-bold text-slate-800 leading-relaxed overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: currentQ?.prompt || "" }}
         />
 
-        {/* 🎯 CHART / GRAPH IMAGE DISPLAY */}
+        {/* CHART / GRAPH IMAGE DISPLAY */}
         {currentQ?.imageUrl && (
           <div className="my-4 flex justify-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
             <img
@@ -525,7 +524,7 @@ export default function TakeExamPage() {
               <button
                 key={idx}
                 onClick={() => handleSelectOption(idx)}
-                className={`w-full text-left p-4 rounded-2xl border text-sm font-medium transition flex items-center justify-between ${
+                className={`w-full text-left p-4 rounded-2xl border text-sm font-medium transition flex items-center justify-between cursor-pointer ${
                   isSelected
                     ? "border-blue-600 bg-blue-50/50 text-blue-900 font-bold"
                     : "border-slate-200 hover:border-slate-300 text-slate-700 bg-slate-50/50"
@@ -548,7 +547,7 @@ export default function TakeExamPage() {
           <button
             onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
             disabled={currentIndex === 0}
-            className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition disabled:opacity-40"
+            className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition disabled:opacity-40 cursor-pointer"
           >
             Previous
           </button>
@@ -556,7 +555,7 @@ export default function TakeExamPage() {
           {currentIndex < examQuestions.length - 1 ? (
             <button
               onClick={() => setCurrentIndex((prev) => Math.min(examQuestions.length - 1, prev + 1))}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl transition shadow-sm"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl transition shadow-sm cursor-pointer"
             >
               Next
             </button>
@@ -564,7 +563,7 @@ export default function TakeExamPage() {
             <button
               onClick={handleSubmitExam}
               disabled={submitting}
-              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition shadow-sm disabled:opacity-50"
+              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition shadow-sm disabled:opacity-50 cursor-pointer"
             >
               {submitting ? "Submitting..." : "Submit Exam"}
             </button>
@@ -591,7 +590,7 @@ export default function TakeExamPage() {
             <div className="space-y-3">
               <button
                 onClick={handleSaveAndExit}
-                className="w-full p-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-2xl transition shadow-md flex items-center justify-between"
+                className="w-full p-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-2xl transition shadow-md flex items-center justify-between cursor-pointer"
               >
                 <div className="text-left">
                   <p className="font-extrabold">💾 Save & Exit for Later</p>
@@ -604,7 +603,7 @@ export default function TakeExamPage() {
 
               <button
                 onClick={handleDiscardAndExit}
-                className="w-full p-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-sm rounded-2xl transition flex items-center justify-between"
+                className="w-full p-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-sm rounded-2xl transition flex items-center justify-between cursor-pointer"
               >
                 <div className="text-left">
                   <p className="font-extrabold">🛑 Discard & Exit</p>
@@ -619,7 +618,7 @@ export default function TakeExamPage() {
             <div className="pt-2 border-t border-slate-100 text-center">
               <button
                 onClick={() => setIsPauseModalOpen(false)}
-                className="px-5 py-2.5 text-slate-500 hover:text-slate-800 font-bold text-xs rounded-xl transition"
+                className="px-5 py-2.5 text-slate-500 hover:text-slate-800 font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 ← Resume Exam Now
               </button>
