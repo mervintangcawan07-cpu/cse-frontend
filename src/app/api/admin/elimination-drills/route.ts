@@ -89,20 +89,38 @@ export async function POST(request: Request) {
         return;
       }
 
+      // Robust Answer Index Resolver
       let resolvedAnswerIdx = 0;
-      if (typeof q.answerIndex === "number" && q.answerIndex >= 0) {
+      if (typeof q.answerIndex === "number" && q.answerIndex >= 0 && q.answerIndex < rawOptions.length) {
         resolvedAnswerIdx = q.answerIndex;
       } else if (typeof q.answerIndex === "string" && !isNaN(parseInt(q.answerIndex, 10))) {
-        resolvedAnswerIdx = parseInt(q.answerIndex, 10);
-      } else if (typeof q.correctAnswer === "string") {
-        const foundIdx = rawOptions.indexOf(q.correctAnswer.trim());
-        if (foundIdx !== -1) resolvedAnswerIdx = foundIdx;
+        const parsed = parseInt(q.answerIndex, 10);
+        if (parsed >= 0 && parsed < rawOptions.length) resolvedAnswerIdx = parsed;
+      } else if (typeof q.correctAnswer === "string" && q.correctAnswer.trim()) {
+        const ansStr = q.correctAnswer.trim();
+        if (ansStr.toUpperCase() === "A") resolvedAnswerIdx = 0;
+        else if (ansStr.toUpperCase() === "B") resolvedAnswerIdx = 1;
+        else if (ansStr.toUpperCase() === "C") resolvedAnswerIdx = 2;
+        else if (ansStr.toUpperCase() === "D") resolvedAnswerIdx = 3;
+        else {
+          const foundIdx = rawOptions.findIndex(
+            (opt) => opt.toLowerCase() === ansStr.toLowerCase()
+          );
+          if (foundIdx !== -1) resolvedAnswerIdx = foundIdx;
+        }
       }
+
+      // Tag subtopic so queries can consistently identify Elimination Drill items
+      const rawCategory = q.category?.trim() || "Elimination Drill";
+      const rawSubtopic = q.subtopic?.trim() || "Speed Drill";
+      const subtopicTagged = rawSubtopic.toLowerCase().includes("elimination drill")
+        ? rawSubtopic
+        : `${rawSubtopic} (Elimination Drill)`;
 
       formattedToInsert.push({
         prompt: q.prompt.trim(),
-        category: q.category?.trim() || "Elimination Drill",
-        subtopic: q.subtopic?.trim() || "Speed Drill",
+        category: rawCategory,
+        subtopic: subtopicTagged,
         options: rawOptions,
         optionA: rawOptions[0] || null,
         optionB: rawOptions[1] || null,

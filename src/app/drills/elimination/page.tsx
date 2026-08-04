@@ -52,11 +52,11 @@ export default function EliminationTrainerPage() {
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔄 Fetch live questions from database
+  // 🔄 Fetch live questions from public student API endpoint
   useEffect(() => {
     async function fetchDrillQuestions() {
       try {
-        const res = await fetch("/api/admin/elimination-drills");
+        const res = await fetch("/api/drills/elimination");
         const data = await res.json();
 
         if (res.ok && data.drills && data.drills.length > 0) {
