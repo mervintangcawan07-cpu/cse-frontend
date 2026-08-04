@@ -59,7 +59,7 @@ export default function AdminUsersPage() {
     try {
       setLoading(true);
       const res = await fetch(
-        `/api/admin/login-history?q=${encodeURIComponent(query)}&filter=${filter}`
+        `/api/admin/login-history?q=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`
       );
       const data = await res.json();
       if (res.ok && data.history) {
