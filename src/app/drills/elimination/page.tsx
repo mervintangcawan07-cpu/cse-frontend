@@ -10,7 +10,7 @@ interface DrillQuestion {
   options: string[];
   answerIndex: number;
   explanation: string;
-  eliminationNotes: { [optionIndex: number]: string };
+  eliminationNotes?: { [optionIndex: number]: string };
 }
 
 const SAMPLE_QUESTIONS: DrillQuestion[] = [
@@ -42,6 +42,9 @@ const SAMPLE_QUESTIONS: DrillQuestion[] = [
   },
 ];
 
+const STORAGE_SEEN_KEY = "cse_elimination_seen_ids";
+const STORAGE_CURRENT_SESSION = "cse_elimination_active_session";
+
 export default function EliminationTrainerPage() {
   const [questions, setQuestions] = useState<DrillQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,54 +54,90 @@ export default function EliminationTrainerPage() {
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔄 Fetch live questions from public student API endpoint
+  // 🔄 Load drill questions from browser cache or single API request
   useEffect(() => {
-    async function fetchDrillQuestions() {
-      try {
-        const res = await fetch("/api/drills/elimination");
-        const data = await res.json();
+    loadDrillSession();
+  }, []);
 
-        if (res.ok && data.drills && data.drills.length > 0) {
-          const dbQuestions: DrillQuestion[] = data.drills.map((item: any, idx: number) => {
-            const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
-            
-            const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
-              const prefix = `${String.fromCharCode(65 + oIdx)}. `;
-              return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
-                ? opt
-                : `${prefix}${opt}`;
-            });
+  const loadDrillSession = async (forceNew = false) => {
+    setLoading(true);
+    setIsFinished(false);
+    setCurrentIndex(0);
+    setEliminatedIndices([]);
+    setIsRevealed(false);
+    setScore(0);
 
-            return {
-              id: item.id || String(idx + 1),
-              category: item.category || "General Ability",
-              prompt: item.prompt,
-              options: formattedOptions,
-              answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
-              explanation: item.explanation || "No detailed explanation provided.",
-              eliminationNotes: item.eliminationNotes || {
-                0: "Incorrect distractor option.",
-                1: "Incorrect distractor option.",
-                2: "Incorrect distractor option.",
-                3: "Incorrect distractor option.",
-              },
-            };
-          });
-
-          setQuestions(dbQuestions);
-        } else {
-          setQuestions(SAMPLE_QUESTIONS);
+    // 1. Check browser cache (sessionStorage) for an active session
+    if (!forceNew) {
+      const cachedSession = sessionStorage.getItem(STORAGE_CURRENT_SESSION);
+      if (cachedSession) {
+        try {
+          const parsed = JSON.parse(cachedSession);
+          if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
+            setQuestions(parsed.questions);
+            setLoading(false);
+            return;
+          }
+        } catch (e) {
+          sessionStorage.removeItem(STORAGE_CURRENT_SESSION);
         }
-      } catch (err) {
-        console.error("Failed to load drill questions from API, using fallback:", err);
-        setQuestions(SAMPLE_QUESTIONS);
-      } finally {
-        setLoading(false);
       }
     }
 
-    fetchDrillQuestions();
-  }, []);
+    // 2. Fetch new 10-item set from API passing seen IDs
+    try {
+      const seenRaw = localStorage.getItem(STORAGE_SEEN_KEY) || "";
+      const res = await fetch(`/api/drills/elimination?seenIds=${encodeURIComponent(seenRaw)}`);
+      const data = await res.json();
+
+      if (res.ok && data.drills && data.drills.length > 0) {
+        if (data.loopReset) {
+          localStorage.removeItem(STORAGE_SEEN_KEY);
+        }
+
+        const dbQuestions: DrillQuestion[] = data.drills.map((item: any, idx: number) => {
+          const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
+          
+          const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
+            const prefix = `${String.fromCharCode(65 + oIdx)}. `;
+            return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
+              ? opt
+              : `${prefix}${opt}`;
+          });
+
+          return {
+            id: item.id || String(idx + 1),
+            category: item.category || "General Ability",
+            prompt: item.prompt,
+            options: formattedOptions,
+            answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
+            explanation: item.explanation || "No detailed explanation provided.",
+            eliminationNotes: item.eliminationNotes || {
+              0: "Incorrect distractor option.",
+              1: "Incorrect distractor option.",
+              2: "Incorrect distractor option.",
+              3: "Incorrect distractor option.",
+            },
+          };
+        });
+
+        setQuestions(dbQuestions);
+
+        // Cache 10-item session in sessionStorage
+        sessionStorage.setItem(
+          STORAGE_CURRENT_SESSION,
+          JSON.stringify({ questions: dbQuestions })
+        );
+      } else {
+        setQuestions(SAMPLE_QUESTIONS);
+      }
+    } catch (err) {
+      console.error("Failed to load drill questions from API, using fallback:", err);
+      setQuestions(SAMPLE_QUESTIONS);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleToggleEliminate = (index: number) => {
     if (isRevealed) return;
@@ -123,14 +162,27 @@ export default function EliminationTrainerPage() {
     }
   };
 
+  // 🚀 Local State Navigation: ZERO DB calls on "Next Question"
   const handleNextQuestion = () => {
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex((prev) => prev + 1);
       setEliminatedIndices([]);
       setIsRevealed(false);
     } else {
-      setIsFinished(true);
+      finishDrill();
     }
+  };
+
+  const finishDrill = () => {
+    setIsFinished(true);
+
+    // Save completed IDs to localStorage for loop-prevention
+    const currentSeenRaw = localStorage.getItem(STORAGE_SEEN_KEY) || "";
+    const existingSeenIds = new Set(currentSeenRaw.split(",").filter(Boolean));
+    questions.forEach((q) => existingSeenIds.add(q.id));
+
+    localStorage.setItem(STORAGE_SEEN_KEY, Array.from(existingSeenIds).join(","));
+    sessionStorage.removeItem(STORAGE_CURRENT_SESSION);
   };
 
   if (loading) {
@@ -145,7 +197,7 @@ export default function EliminationTrainerPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
-      {/* Header Banner (Timer & Speed Text Removed) */}
+      {/* Header Banner */}
       <div className="flex justify-between items-center bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-md">
         <div>
           <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -220,7 +272,7 @@ export default function EliminationTrainerPage() {
                 </span>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+              <p className="text-xs text-slate-300 leading-relaxed font-medium whitespace-pre-line">
                 <strong className="text-white">Overall Explanation: </strong>
                 {currentQ.explanation}
               </p>
@@ -263,10 +315,16 @@ export default function EliminationTrainerPage() {
               You avoided striking out the correct answer on <strong className="text-amber-400">{score}</strong> out of{" "}
               {questions.length} questions.
             </p>
-            <div className="pt-2">
+            <div className="pt-4 flex justify-center gap-3">
+              <button
+                onClick={() => loadDrillSession(true)}
+                className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition cursor-pointer"
+              >
+                ⚡ Start Next 10-Item Drill
+              </button>
               <Link
                 href="/dashboard"
-                className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition"
+                className="inline-block px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition"
               >
                 Return to Dashboard
               </Link>
