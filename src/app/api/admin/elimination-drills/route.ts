@@ -21,7 +21,6 @@ interface IncomingQuestionPayload {
   eliminationB?: string;
   eliminationC?: string;
   eliminationD?: string;
-  eliminationNotes?: Record<number, string> | string;
   imageUrl?: string;
 }
 
@@ -118,15 +117,18 @@ export async function POST(request: Request) {
         }
       }
 
-      // Construct Distractor Elimination Notes
-      let elimNotesObj: Record<string, string> = {};
-      if (q.eliminationNotes && typeof q.eliminationNotes === "object") {
-        elimNotesObj = q.eliminationNotes as any;
-      } else {
-        if (q.eliminationA) elimNotesObj[0] = q.eliminationA.trim();
-        if (q.eliminationB) elimNotesObj[1] = q.eliminationB.trim();
-        if (q.eliminationC) elimNotesObj[2] = q.eliminationC.trim();
-        if (q.eliminationD) elimNotesObj[3] = q.eliminationD.trim();
+      // Format Explanation + Elimination Notes cleanly together
+      const baseExplanation = (q.explanation || "").trim();
+      const elimParts: string[] = [];
+      if (q.eliminationA && q.eliminationA.trim()) elimParts.push(`• A: ${q.eliminationA.trim()}`);
+      if (q.eliminationB && q.eliminationB.trim()) elimParts.push(`• B: ${q.eliminationB.trim()}`);
+      if (q.eliminationC && q.eliminationC.trim()) elimParts.push(`• C: ${q.eliminationC.trim()}`);
+      if (q.eliminationD && q.eliminationD.trim()) elimParts.push(`• D: ${q.eliminationD.trim()}`);
+
+      let finalExplanation: string | null = baseExplanation || null;
+      if (elimParts.length > 0) {
+        const breakdownStr = `Elimination Strategy Breakdown:\n${elimParts.join("\n")}`;
+        finalExplanation = baseExplanation ? `${baseExplanation}\n\n${breakdownStr}` : breakdownStr;
       }
 
       const rawCategory = q.category?.trim() || "Elimination Drill";
@@ -135,6 +137,7 @@ export async function POST(request: Request) {
         ? rawSubtopic
         : `${rawSubtopic} (Elimination Drill)`;
 
+      // Strictly map to valid standard Prisma Question model fields
       formattedToInsert.push({
         prompt: promptText,
         category: rawCategory,
@@ -145,8 +148,7 @@ export async function POST(request: Request) {
         optionC: rawOptions[2] || null,
         optionD: rawOptions[3] || null,
         answerIndex: resolvedAnswerIdx,
-        explanation: q.explanation?.trim() || null,
-        eliminationNotes: Object.keys(elimNotesObj).length > 0 ? elimNotesObj : null,
+        explanation: finalExplanation,
         imageUrl: q.imageUrl?.trim() || null,
       });
     });
