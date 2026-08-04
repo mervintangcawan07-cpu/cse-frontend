@@ -223,11 +223,13 @@ function DashboardContent() {
       {/* ⏸️ PAUSED EXAM RESUME BANNER */}
       <ResumeExamBanner />
 
-      {/* WELCOME HERO HEADER */}
-      <div className="relative overflow-hidden bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4">
-        {/* Futuristic background ambient lighting glow */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* WELCOME HERO HEADER (CONTAINER PERMITS POPUP OVERFLOW, INSET CLIPS GLOWS) */}
+      <div className="relative bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4 z-30">
+        {/* Isolated background ambient glow (Clips glow to rounded corners without clipping popups) */}
+        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
+        </div>
 
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
@@ -256,7 +258,8 @@ function DashboardContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0 flex-wrap relative z-10">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap relative z-20">
+            {/* NOTIFICATION BELL WITH UNCLIPPED POPUP */}
             <NotificationBell />
 
             <Link
@@ -516,7 +519,7 @@ function DashboardContent() {
             </div>
             <h2 className="text-xl font-extrabold text-white mt-3">Practice Mock Exam</h2>
             <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              Simulate 3-hour civil service exams or review item explanations from your 3 recent attempts.
+              Simulate 3-hour civil service exams or review item explanations from your recent attempts.
             </p>
           </div>
 
@@ -533,7 +536,7 @@ function DashboardContent() {
                   href="/exam"
                   className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs text-center rounded-xl border border-slate-700 transition shrink-0"
                 >
-                  📜 History (3)
+                  📜 History
                 </Link>
               </>
             ) : (
