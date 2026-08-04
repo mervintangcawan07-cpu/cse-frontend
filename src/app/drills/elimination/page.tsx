@@ -46,7 +46,6 @@ export default function EliminationTrainerPage() {
   const [questions, setQuestions] = useState<DrillQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [eliminatedIndices, setEliminatedIndices] = useState<number[]>([]);
-  const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -63,7 +62,6 @@ export default function EliminationTrainerPage() {
           const dbQuestions: DrillQuestion[] = data.drills.map((item: any, idx: number) => {
             const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
             
-            // Format option labels nicely (e.g. "A. Careless")
             const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
               const prefix = `${String.fromCharCode(65 + oIdx)}. `;
               return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
@@ -89,7 +87,6 @@ export default function EliminationTrainerPage() {
 
           setQuestions(dbQuestions);
         } else {
-          // Fallback if DB has no records
           setQuestions(SAMPLE_QUESTIONS);
         }
       } catch (err) {
@@ -102,22 +99,6 @@ export default function EliminationTrainerPage() {
 
     fetchDrillQuestions();
   }, []);
-
-  // 10-Second Timer Logic
-  useEffect(() => {
-    if (isFinished || loading || isRevealed || questions.length === 0) return;
-
-    if (timeLeft === 0) {
-      setIsRevealed(true);
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, isFinished, loading, isRevealed, questions]);
 
   const handleToggleEliminate = (index: number) => {
     if (isRevealed) return;
@@ -147,7 +128,6 @@ export default function EliminationTrainerPage() {
       setCurrentIndex((prev) => prev + 1);
       setEliminatedIndices([]);
       setIsRevealed(false);
-      setTimeLeft(10);
     } else {
       setIsFinished(true);
     }
@@ -165,21 +145,14 @@ export default function EliminationTrainerPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
-      {/* Header Banner */}
+      {/* Header Banner (Timer & Speed Text Removed) */}
       <div className="flex justify-between items-center bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-md">
         <div>
           <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-            Speed Strategy Drill
+            Option Elimination Trainer
           </span>
           <h1 className="text-xl font-black mt-1">Option Elimination Trainer</h1>
-          <p className="text-xs text-slate-400">Strike out 2 wrong choices in under 10 seconds!</p>
-        </div>
-
-        <div className="text-right shrink-0">
-          <span className={`text-2xl font-black ${timeLeft <= 3 ? "text-red-400 animate-pulse" : "text-amber-400"}`}>
-            {timeLeft}s
-          </span>
-          <span className="block text-[10px] text-slate-400 uppercase font-bold">Time Left</span>
+          <p className="text-xs text-slate-400">Strike out 2 wrong choices to reveal the strategy breakdown!</p>
         </div>
       </div>
 
