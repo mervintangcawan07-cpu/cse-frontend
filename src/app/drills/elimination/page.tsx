@@ -13,62 +13,94 @@ interface DrillQuestion {
   eliminationNotes: { [optionIndex: number]: string };
 }
 
+const SAMPLE_QUESTIONS: DrillQuestion[] = [
+  {
+    id: "1",
+    category: "Numerical Reasoning",
+    prompt: "What is 15% of 300?",
+    options: ["A. 45", "B. 3,000", "C. -15", "D. 90"],
+    answerIndex: 0,
+    explanation: "15% of 300 = 0.15 × 300 = 45.",
+    eliminationNotes: {
+      1: "3,000 is larger than 300. A percentage less than 100% cannot be larger than the original number.",
+      2: "-15 is negative. Taking a positive percentage of a positive number yields a positive result.",
+      3: "90 is 30% of 300 (double the requested 15%).",
+    },
+  },
+  {
+    id: "2",
+    category: "Verbal Ability",
+    prompt: "Which word is an antonym for 'BENEVOLENT'?",
+    options: ["A. Kind", "B. Malevolent", "C. Generous", "D. Helpful"],
+    answerIndex: 1,
+    explanation: "'Benevolent' means well-meaning and kindly. 'Malevolent' means wishing to do evil.",
+    eliminationNotes: {
+      0: "'Kind' is a synonym, not an antonym.",
+      2: "'Generous' is a positive attribute aligned with benevolent.",
+      3: "'Helpful' is another positive synonym.",
+    },
+  },
+];
+
 export default function EliminationTrainerPage() {
   const [questions, setQuestions] = useState<DrillQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [eliminatedIndices, setEliminatedIndices] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false); // Controls immediate answer + elimination review
+  const [isRevealed, setIsRevealed] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Load drill questions with elimination logic notes
+  // 🔄 Fetch live questions from database
   useEffect(() => {
-    const sampleSet: DrillQuestion[] = [
-      {
-        id: "1",
-        category: "Numerical Reasoning",
-        prompt: "What is 15% of 300?",
-        options: ["A. 45", "B. 3,000", "C. -15", "D. 90"],
-        answerIndex: 0,
-        explanation: "15% of 300 = 0.15 × 300 = 45.",
-        eliminationNotes: {
-          1: "3,000 is larger than 300. A percentage less than 100% cannot be larger than the original number.",
-          2: "-15 is negative. Taking a positive percentage of a positive number yields a positive result.",
-          3: "90 is 30% of 300 (double the requested 15%).",
-        },
-      },
-      {
-        id: "2",
-        category: "Verbal Ability",
-        prompt: "Which word is an antonym for 'BENEVOLENT'?",
-        options: ["A. Kind", "B. Malevolent", "C. Generous", "D. Helpful"],
-        answerIndex: 1,
-        explanation: "'Benevolent' means well-meaning and kindly. 'Malevolent' means wishing to do evil.",
-        eliminationNotes: {
-          0: "'Kind' is a synonym, not an antonym.",
-          2: "'Generous' is a positive attribute aligned with benevolent.",
-          3: "'Helpful' is another positive synonym.",
-        },
-      },
-      {
-        id: "3",
-        category: "Analytical Reasoning",
-        prompt: "If all A are B, and all B are C, which statement MUST be true?",
-        options: ["A. All A are C", "B. No C are A", "C. All C are A", "D. Some B are not C"],
-        answerIndex: 0,
-        explanation: "By transitivity in logic: if A is inside B, and B is inside C, then A is inside C.",
-        eliminationNotes: {
-          1: "'No C are A' directly contradicts the premises.",
-          2: "'All C are A' is a converse error (e.g., all dogs are animals, but not all animals are dogs).",
-          3: "'Some B are not C' contradicts 'all B are C'.",
-        },
-      },
-    ];
+    async function fetchDrillQuestions() {
+      try {
+        const res = await fetch("/api/admin/elimination-drills");
+        const data = await res.json();
 
-    setQuestions(sampleSet);
-    setLoading(false);
+        if (res.ok && data.drills && data.drills.length > 0) {
+          const dbQuestions: DrillQuestion[] = data.drills.map((item: any, idx: number) => {
+            const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
+            
+            // Format option labels nicely (e.g. "A. Careless")
+            const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
+              const prefix = `${String.fromCharCode(65 + oIdx)}. `;
+              return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
+                ? opt
+                : `${prefix}${opt}`;
+            });
+
+            return {
+              id: item.id || String(idx + 1),
+              category: item.category || "General Ability",
+              prompt: item.prompt,
+              options: formattedOptions,
+              answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
+              explanation: item.explanation || "No detailed explanation provided.",
+              eliminationNotes: item.eliminationNotes || {
+                0: "Incorrect distractor option.",
+                1: "Incorrect distractor option.",
+                2: "Incorrect distractor option.",
+                3: "Incorrect distractor option.",
+              },
+            };
+          });
+
+          setQuestions(dbQuestions);
+        } else {
+          // Fallback if DB has no records
+          setQuestions(SAMPLE_QUESTIONS);
+        }
+      } catch (err) {
+        console.error("Failed to load drill questions from API, using fallback:", err);
+        setQuestions(SAMPLE_QUESTIONS);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDrillQuestions();
   }, []);
 
   // 10-Second Timer Logic
@@ -76,7 +108,6 @@ export default function EliminationTrainerPage() {
     if (isFinished || loading || isRevealed || questions.length === 0) return;
 
     if (timeLeft === 0) {
-      // Auto-reveal explanation when time expires
       setIsRevealed(true);
       return;
     }
@@ -89,7 +120,7 @@ export default function EliminationTrainerPage() {
   }, [timeLeft, isFinished, loading, isRevealed, questions]);
 
   const handleToggleEliminate = (index: number) => {
-    if (isRevealed) return; // Freeze selections once review is active
+    if (isRevealed) return;
 
     if (eliminatedIndices.includes(index)) {
       setEliminatedIndices(eliminatedIndices.filter((i) => i !== index));
@@ -98,7 +129,6 @@ export default function EliminationTrainerPage() {
         const nextIndices = [...eliminatedIndices, index];
         setEliminatedIndices(nextIndices);
 
-        // Once 2 options are eliminated, evaluate score & show immediate review
         if (nextIndices.length === 2) {
           const currentQ = questions[currentIndex];
           const struckCorrect = nextIndices.includes(currentQ.answerIndex);
@@ -126,7 +156,7 @@ export default function EliminationTrainerPage() {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        Loading Elimination Trainer & Review Engine...
+        Loading Elimination Trainer & Question Bank...
       </div>
     );
   }
@@ -221,26 +251,6 @@ export default function EliminationTrainerPage() {
                 <strong className="text-white">Overall Explanation: </strong>
                 {currentQ.explanation}
               </p>
-
-              <div className="space-y-2 pt-1">
-                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                  Why distractor options should be eliminated:
-                </span>
-                {currentQ.options.map((opt, idx) => {
-                  if (idx === currentQ.answerIndex) return null;
-                  const note = currentQ.eliminationNotes[idx];
-
-                  return (
-                    <div key={idx} className="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-xs flex items-start gap-2">
-                      <span className="text-red-400 font-black shrink-0">✕</span>
-                      <div>
-                        <strong className="text-slate-200">{opt}: </strong>
-                        <span className="text-slate-400">{note || "Obvious distractor."}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
           )}
 
@@ -253,7 +263,7 @@ export default function EliminationTrainerPage() {
             {isRevealed ? (
               <button
                 onClick={handleNextQuestion}
-                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition"
+                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer"
               >
                 {currentIndex + 1 < questions.length ? "Next Question →" : "View Final Review →"}
               </button>
@@ -261,7 +271,7 @@ export default function EliminationTrainerPage() {
               <button
                 onClick={() => setIsRevealed(true)}
                 disabled={eliminatedIndices.length === 0}
-                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition disabled:opacity-40"
+                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition disabled:opacity-40 cursor-pointer"
               >
                 Reveal Answer & Notes
               </button>
@@ -269,7 +279,7 @@ export default function EliminationTrainerPage() {
           </div>
         </div>
       ) : (
-        /* 🏆 FINAL DRILL SUMMARY & COMPREHENSIVE QUESTION REVIEW */
+        /* 🏆 FINAL DRILL SUMMARY */
         <div className="space-y-6">
           <div className="bg-slate-900 text-white p-8 rounded-3xl text-center space-y-4 border border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -282,42 +292,12 @@ export default function EliminationTrainerPage() {
             </p>
             <div className="pt-2">
               <Link
-                href="/drills"
+                href="/dashboard"
                 className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition"
               >
-                Return to Drills Hub
+                Return to Dashboard
               </Link>
             </div>
-          </div>
-
-          {/* Complete Question Review List */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-black text-slate-900">Comprehensive Strategy Review</h3>
-            {questions.map((q, qIdx) => (
-              <div key={q.id || qIdx} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                <div className="flex justify-between items-center border-b border-slate-100 pb-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase">Question {qIdx + 1} • {q.category}</span>
-                  <span className="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    Correct: {q.options[q.answerIndex]}
-                  </span>
-                </div>
-
-                <p className="font-bold text-slate-900 text-sm">{q.prompt}</p>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
-                  <span className="font-extrabold text-slate-700 block">Why Distractors Are Eliminated:</span>
-                  {q.options.map((opt, optIdx) => {
-                    if (optIdx === q.answerIndex) return null;
-                    return (
-                      <div key={optIdx} className="text-slate-600 leading-relaxed">
-                        <strong className="text-slate-800">{opt}: </strong>
-                        {q.eliminationNotes[optIdx] || "Incorrect choice."}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       )}
