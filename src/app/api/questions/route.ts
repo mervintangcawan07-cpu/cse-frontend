@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import Papa from "papaparse";
 
 export async function GET(request: Request) {
@@ -26,8 +27,8 @@ export async function GET(request: Request) {
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
-    // 🛡️ EXCLUSION FILTER: Keep Elimination Drill questions out of Mock Exams
-    const NOT_ELIMINATION_DRILL = [
+    // 🛡️ EXCLUSION FILTER: Typed with Prisma.QuestionWhereInput[] to satisfy QueryMode
+    const NOT_ELIMINATION_DRILL: Prisma.QuestionWhereInput[] = [
       { category: { equals: "Elimination Drill", mode: "insensitive" } },
       { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
     ];
