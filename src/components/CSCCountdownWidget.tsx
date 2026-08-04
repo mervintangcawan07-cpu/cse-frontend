@@ -96,7 +96,6 @@ export default function CSCCountdownWidget() {
         </span>
       </div>
 
-      {/* Countdown Grid */}
       <div className="grid grid-cols-4 gap-2 text-center pt-2">
         <div className="bg-slate-800/80 p-3 rounded-2xl border border-slate-700/60">
           <span className="text-2xl md:text-3xl font-black text-amber-400 block">{timeLeft.days}</span>
@@ -116,10 +115,7 @@ export default function CSCCountdownWidget() {
         </div>
       </div>
 
-      {/* ENLARGED EXAM DATE & CLICKABLE ACTION BUTTONS */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs pt-2 font-medium border-t border-slate-800/60">
-        
-        {/* HIGHLIGHTED & ENLARGED EXAM DATE BADGE */}
         <div className="flex items-center gap-2 bg-slate-800/90 border border-amber-500/30 px-3.5 py-2 rounded-2xl shadow-inner">
           <span className="text-base">🗓️</span>
           <span className="text-slate-300 font-bold text-xs uppercase tracking-wider">Exam Date:</span>
@@ -128,7 +124,6 @@ export default function CSCCountdownWidget() {
           </strong>
         </div>
 
-        {/* CLICKABLE APPOINTMENT HELPER & CIVIL SERVICE PORTAL (ERPO/OCSERGS/ONSA) BUTTONS */}
         <div className="flex items-center gap-2 flex-wrap w-full md:w-auto">
           <a
             href="https://ocseas.csc.gov.ph"
@@ -147,7 +142,7 @@ export default function CSCCountdownWidget() {
             className="flex-1 md:flex-initial px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-xl transition text-center flex items-center justify-center gap-1 shadow-sm"
           >
             <span>🏛️</span>
-            <span>Civil Service Portal ↗</span>
+            <span>OCSERGS & ONSA (Exam Results & School Assignment) ↗</span>
           </a>
         </div>
       </div>
