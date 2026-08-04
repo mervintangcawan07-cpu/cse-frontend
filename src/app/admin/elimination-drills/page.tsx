@@ -14,16 +14,18 @@ interface DrillItem {
   createdAt: string;
 }
 
-const SAMPLE_CSV = `Category,Subtopic,Prompt,Option A,Option B,Option C,Option D,Answer Index,Explanation
-Verbal Ability,Synonyms,Which word is SYNONYMOUS with 'AMBIGUOUS'?,Clear,Uncertain,Definite,Luminous,1,Ambiguous means uncertain.
-Numerical Reasoning,Basic Math,What is 15% of 200?,20,25,30,35,2,15% of 200 is 30.`;
+const SAMPLE_CSV = `Question,Option A,Option B,Option C,Option D,Correct Answer,Explanation,Elimination A,Elimination B,Elimination C,Elimination D,Category,Tags
+"What is 15% of 300?",45,"3,000",-15,90,A,"15% of 300 = 0.15 * 300 = 45.","Correct choice; 0.15 * 300 = 45.","3000 is larger than 300.",-15 is negative.,90 is 30% of 300.,Numerical Ability,Percentages
+"Which word is an antonym for 'BENEVOLENT'?",Kind,Malevolent,Generous,Helpful,B,"Benevolent means kind; malevolent means wishing evil.",Kind is a synonym.,Correct choice; malevolent means wishing evil.,Generous is a positive synonym.,Helpful is a positive synonym.,Verbal Ability,Antonyms`;
 
 export default function AdminEliminationDrillsPage() {
   const [uploadMode, setUploadMode] = useState<"CSV_FILE" | "CSV_PASTE" | "JSON">("CSV_FILE");
   const [inputText, setInputText] = useState("");
   const [existingDrills, setExistingDrills] = useState<DrillItem[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function AdminEliminationDrillsPage() {
       const data = await res.json();
       if (res.ok && data.drills) {
         setExistingDrills(data.drills);
+        setSelectedIds([]);
       }
     } catch (e) {
       console.error("Failed to load existing drills:", e);
@@ -44,7 +47,7 @@ export default function AdminEliminationDrillsPage() {
     }
   };
 
-  // CSV Parsing Utility supporting quoted strings
+  // CSV Parsing Utility supporting flexible headers (Question, Option A-D, Correct Answer, Elimination A-D, Category, Tags)
   const parseCSV = (csvText: string) => {
     const lines = csvText.split(/\r?\n/).filter((line: string) => line.trim() !== "");
     if (lines.length < 2) throw new Error("CSV must contain a header row and at least 1 question row.");
@@ -76,37 +79,58 @@ export default function AdminEliminationDrillsPage() {
       const cols: string[] = parseRow(lines[i]);
       if (cols.length < 4) continue;
 
-      const getCol = (keyName: string): string => {
-        const idx = headers.findIndex((h: string) => h.includes(keyName.toLowerCase()));
-        return idx !== -1 ? cols[idx] : "";
+      const getCol = (...keyNames: string[]): string => {
+        for (const key of keyNames) {
+          const idx = headers.findIndex((h: string) => h.trim().toLowerCase() === key.toLowerCase() || h.includes(key.toLowerCase()));
+          if (idx !== -1 && cols[idx]) return cols[idx];
+        }
+        return "";
       };
 
       const category = getCol("category") || "Elimination Drill";
-      const subtopic = getCol("subtopic") || "General";
-      const prompt = getCol("prompt");
-      const optA = getCol("option a") || cols[3] || "";
-      const optB = getCol("option b") || cols[4] || "";
-      const optC = getCol("option c") || cols[5] || "";
-      const optD = getCol("option d") || cols[6] || "";
-      const ansIdxRaw = getCol("answer index") || getCol("answer") || cols[7] || "0";
-      const explanation = getCol("explanation") || cols[8] || "";
+      const subtopic = getCol("tags", "subtopic") || "General";
+      const prompt = getCol("question", "prompt");
+      const optA = getCol("option a", "choice a") || cols[1] || "";
+      const optB = getCol("option b", "choice b") || cols[2] || "";
+      const optC = getCol("option c", "choice c") || cols[3] || "";
+      const optD = getCol("option d", "choice d") || cols[4] || "";
+      const correctRaw = getCol("correct answer", "answer index", "answer") || "A";
+      const explanation = getCol("explanation") || "";
+
+      const eliminationA = getCol("elimination a");
+      const eliminationB = getCol("elimination b");
+      const eliminationC = getCol("elimination c");
+      const eliminationD = getCol("elimination d");
 
       if (!prompt) continue;
+
+      // Resolve Answer Index (Letter A/B/C/D or numeric 0/1/2/3)
+      let answerIndex = 0;
+      const ansClean = correctRaw.trim().toUpperCase();
+      if (ansClean === "A" || ansClean === "0") answerIndex = 0;
+      else if (ansClean === "B" || ansClean === "1") answerIndex = 1;
+      else if (ansClean === "C" || ansClean === "2") answerIndex = 2;
+      else if (ansClean === "D" || ansClean === "3") answerIndex = 3;
+
+      const options = [optA, optB, optC, optD].filter(Boolean);
 
       questions.push({
         category,
         subtopic,
         prompt,
-        options: [optA, optB, optC, optD].filter(Boolean),
-        answerIndex: parseInt(ansIdxRaw, 10) || 0,
+        options,
+        answerIndex,
         explanation,
+        eliminationA,
+        eliminationB,
+        eliminationC,
+        eliminationD,
       });
     }
 
     return questions;
   };
 
-  // CSV File Handler
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -119,7 +143,6 @@ export default function AdminEliminationDrillsPage() {
     reader.readAsText(file);
   };
 
-  // Submit Handler
   const handleUploadSubmit = async () => {
     setMessage(null);
     if (!inputText.trim()) {
@@ -177,7 +200,94 @@ export default function AdminEliminationDrillsPage() {
     }
   };
 
-  // CSV Template Downloader
+  // 🗑 DELETE SINGLE QUESTION
+  const handleDeleteSingle = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this drill question?")) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/elimination-drills?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMessage({ type: "success", text: "✓ Question deleted successfully." });
+        fetchDrills();
+      } else {
+        setMessage({ type: "error", text: data.error || "Failed to delete question." });
+      }
+    } catch (e) {
+      setMessage({ type: "error", text: "Error deleting question." });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  // 🗑 BULK DELETE SELECTED QUESTIONS
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected question(s)?`)) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/admin/elimination-drills", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMessage({ type: "success", text: `✓ Successfully deleted ${data.deletedCount} question(s).` });
+        fetchDrills();
+      } else {
+        setMessage({ type: "error", text: data.error || "Bulk delete failed." });
+      }
+    } catch (e) {
+      setMessage({ type: "error", text: "Error performing bulk delete." });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  // 🗑 DELETE ALL DRILLS
+  const handleDeleteAll = async () => {
+    if (!confirm("⚠️ WARNING: This will permanently delete ALL Elimination Drill questions from the database. Proceed?")) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/admin/elimination-drills?all=true", {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMessage({ type: "success", text: `✓ Deleted all ${data.deletedCount} drill questions.` });
+        fetchDrills();
+      } else {
+        setMessage({ type: "error", text: data.error || "Failed to clear drills." });
+      }
+    } catch (e) {
+      setMessage({ type: "error", text: "Error clearing drills." });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === existingDrills.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(existingDrills.map((d) => d.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((i) => i !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
   const handleDownloadSampleCSV = () => {
     const blob = new Blob([SAMPLE_CSV], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -201,7 +311,7 @@ export default function AdminEliminationDrillsPage() {
             Elimination Drill Bulk Uploader
           </h1>
           <p className="text-xs text-slate-400 mt-1 max-w-xl">
-            Upload CSV spreadsheets directly from Excel / Google Sheets or paste JSON to instantly publish speed drill items.
+            Upload CSV spreadsheets directly with Question, Options A–D, Correct Answer (A/B/C/D), and Distractor Eliminations A–D.
           </p>
         </div>
 
@@ -286,8 +396,8 @@ export default function AdminEliminationDrillsPage() {
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInputText(e.target.value)}
             placeholder={
               uploadMode === "CSV_PASTE"
-                ? "Category,Subtopic,Prompt,Option A,Option B,Option C,Option D,Answer Index,Explanation\nVerbal Ability,Synonyms,Synonym for AMBIGUOUS?,Clear,Uncertain,Definite,Bright,1,Ambiguous means uncertain."
-                : '[\n  {\n    "category": "Verbal Ability",\n    "prompt": "Synonym for AMBIGUOUS?",\n    "options": ["Clear", "Uncertain", "Definite", "Bright"],\n    "answerIndex": 1\n  }\n]'
+                ? 'Question,Option A,Option B,Option C,Option D,Correct Answer,Explanation,Elimination A,Elimination B,Elimination C,Elimination D,Category,Tags\n"What is 15% of 300?",45,"3,000",-15,90,A,"15% of 300 = 45.","Correct choice.",3000 is larger.,-15 is negative.,90 is 30%.,Numerical Ability,Percentages'
+                : '[\n  {\n    "question": "What is 15% of 300?",\n    "optionA": "45",\n    "optionB": "3,000",\n    "optionC": "-15",\n    "optionD": "90",\n    "correctAnswer": "A",\n    "explanation": "15% of 300 = 45."\n  }\n]'
             }
             rows={10}
             className="w-full p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs font-mono text-emerald-400 focus:outline-none focus:border-emerald-500 transition"
@@ -315,21 +425,59 @@ export default function AdminEliminationDrillsPage() {
         </button>
       </div>
 
-      {/* LIVE POOL TABLE */}
+      {/* LIVE POOL TABLE WITH BULK DELETE */}
       <div className="space-y-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap gap-2">
           <h2 className="text-lg font-black text-white flex items-center gap-2">
             <span>📚</span>
             <span>Live Elimination Drill Question Bank ({existingDrills.length})</span>
           </h2>
 
-          <button
-            onClick={fetchDrills}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 rounded-xl transition cursor-pointer"
-          >
-            🔄 Refresh List
-          </button>
+          <div className="flex items-center gap-2">
+            {selectedIds.length > 0 && (
+              <button
+                onClick={handleDeleteSelected}
+                disabled={deleting}
+                className="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-xs font-bold text-white rounded-xl transition cursor-pointer shadow-md"
+              >
+                🗑 Delete Selected ({selectedIds.length})
+              </button>
+            )}
+
+            {existingDrills.length > 0 && (
+              <button
+                onClick={handleDeleteAll}
+                disabled={deleting}
+                className="px-3 py-1.5 bg-slate-800 hover:bg-rose-900/50 text-xs font-bold text-rose-300 rounded-xl transition border border-rose-500/30 cursor-pointer"
+              >
+                ⚠️ Delete All Drills
+              </button>
+            )}
+
+            <button
+              onClick={fetchDrills}
+              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-300 rounded-xl transition cursor-pointer"
+            >
+              🔄 Refresh List
+            </button>
+          </div>
         </div>
+
+        {/* SELECT ALL HEADER CONTROL */}
+        {existingDrills.length > 0 && (
+          <div className="flex items-center justify-between bg-slate-900/80 border border-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold text-slate-400">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={selectedIds.length === existingDrills.length && existingDrills.length > 0}
+                onChange={toggleSelectAll}
+                className="rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 cursor-pointer"
+              />
+              <span>Select All ({existingDrills.length})</span>
+            </label>
+            <span>{selectedIds.length} selected</span>
+          </div>
+        )}
 
         {loading ? (
           <div className="p-10 text-center text-xs text-slate-400 font-bold animate-pulse">
@@ -341,28 +489,44 @@ export default function AdminEliminationDrillsPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {existingDrills.slice(0, 20).map((drill: DrillItem, idx: number) => (
+            {existingDrills.map((drill: DrillItem, idx: number) => (
               <div
                 key={drill.id || idx}
-                className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2 hover:border-slate-700 transition"
+                className={`bg-slate-900 border rounded-2xl p-5 space-y-3 transition ${
+                  selectedIds.includes(drill.id) ? "border-emerald-500/60 bg-emerald-950/10" : "border-slate-800 hover:border-slate-700"
+                }`}
               >
-                <div className="flex justify-between items-center flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30">
-                      {drill.category}
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-400">
-                      {drill.subtopic}
-                    </span>
+                <div className="flex justify-between items-start gap-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(drill.id)}
+                      onChange={() => toggleSelect(drill.id)}
+                      className="rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 cursor-pointer mt-0.5"
+                    />
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-black px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30">
+                        {drill.category}
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-400">
+                        {drill.subtopic}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-[10px] text-slate-500">
-                    Created: {new Date(drill.createdAt).toLocaleDateString()}
-                  </span>
+
+                  <button
+                    onClick={() => handleDeleteSingle(drill.id)}
+                    disabled={deleting}
+                    className="p-1.5 bg-slate-800 hover:bg-rose-600/30 text-slate-400 hover:text-rose-300 rounded-lg transition text-xs cursor-pointer shrink-0"
+                    title="Delete Question"
+                  >
+                    🗑
+                  </button>
                 </div>
 
-                <p className="text-sm font-bold text-white">{drill.prompt}</p>
+                <p className="text-sm font-bold text-white pl-7">{drill.prompt}</p>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pl-7 pt-1">
                   {drill.options.map((opt: string, oIdx: number) => (
                     <div
                       key={oIdx}
