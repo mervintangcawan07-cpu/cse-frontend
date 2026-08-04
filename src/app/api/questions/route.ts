@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     }
 
     const session = await verifyJWT(token);
-    const userId = String(session?.userId || session?.id || "");
+    const userId = session?.userId || session?.id;
 
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -25,6 +25,12 @@ export async function GET(request: Request) {
     const subtopic = searchParams.get("subtopic");
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
+
+    // 🛡️ EXCLUSION FILTER: Keep Elimination Drill questions out of Mock Exams
+    const NOT_ELIMINATION_DRILL = [
+      { category: { equals: "Elimination Drill", mode: "insensitive" } },
+      { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
+    ];
 
     // ------------------------------------------------------------------
     // 1. IDENTIFY MASTERED QUESTIONS (ANSWERED CORRECTLY AT LEAST ONCE)
@@ -57,8 +63,6 @@ export async function GET(request: Request) {
           select: { id: true, answerIndex: true },
         });
 
-        // Add to mastered set ONLY if answered CORRECTLY at least once.
-        // Incorrectly answered questions stay in the active candidate pool for re-testing!
         pastQuestions.forEach((q) => {
           const selectedIndices = pastAnswerMap.get(q.id) || [];
           if (selectedIndices.includes(q.answerIndex)) {
@@ -74,12 +78,20 @@ export async function GET(request: Request) {
     // 2. SINGLE CATEGORY / SUBTOPIC DRILL MODE
     // ------------------------------------------------------------------
     if (category && category !== "All") {
+      const isEliminationQuery =
+        category.toLowerCase() === "elimination drill" ||
+        (subtopic && subtopic.toLowerCase().includes("elimination drill"));
+
       const whereClause: any = {
         category: { equals: category, mode: "insensitive" },
       };
 
       if (subtopic && subtopic !== "All") {
         whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+      }
+
+      if (!isEliminationQuery) {
+        whereClause.NOT = NOT_ELIMINATION_DRILL;
       }
 
       // Priority 1: Fetch Unmastered questions first (New + Past Incorrect)
@@ -106,8 +118,14 @@ export async function GET(request: Request) {
 
       // Priority 3: MAIN CATEGORY CATCH-ALL - If subtopic query was empty, fetch any questions under this category
       if (questions.length === 0) {
+        const catchAllWhere: any = {
+          category: { equals: category, mode: "insensitive" },
+        };
+        if (!isEliminationQuery) {
+          catchAllWhere.NOT = NOT_ELIMINATION_DRILL;
+        }
         questions = await prisma.question.findMany({
-          where: { category: { equals: category, mode: "insensitive" } },
+          where: catchAllWhere,
         });
       }
 
@@ -135,16 +153,22 @@ export async function GET(request: Request) {
     for (const subject of subjectOrder) {
       const categoryQuestions: any[] = [];
 
-      // 🔍 A. DISCOVER ALL SUBTOPICS DYNAMICALLY FROM DATABASE FOR THIS CATEGORY
+      // 🔍 A. DISCOVER ALL SUBTOPICS DYNAMICALLY FROM DATABASE FOR THIS CATEGORY (EXCLUDING ELIMINATION DRILLS)
       const dbSubtopicObjects = await prisma.question.findMany({
-        where: { category: { contains: subject.keyword, mode: "insensitive" } },
+        where: {
+          category: { contains: subject.keyword, mode: "insensitive" },
+          NOT: NOT_ELIMINATION_DRILL,
+        },
         select: { subtopic: true },
         distinct: ["subtopic"],
       });
 
       const activeSubtopics = dbSubtopicObjects
         .map((s) => s.subtopic?.trim())
-        .filter((s): s is string => Boolean(s) && s !== "");
+        .filter(
+          (s): s is string =>
+            Boolean(s) && s !== "" && !s.toLowerCase().includes("elimination drill")
+        );
 
       // ⚖️ B. EVENLY DIVIDE CATEGORY QUOTA ACROSS ALL DISCOVERED SUBTOPICS
       if (activeSubtopics.length > 0) {
@@ -168,6 +192,7 @@ export async function GET(request: Request) {
                   ...Array.from(addedIds),
                 ],
               },
+              NOT: NOT_ELIMINATION_DRILL,
             },
           });
 
@@ -181,6 +206,7 @@ export async function GET(request: Request) {
                   in: Array.from(masteredQuestionIds),
                   notIn: Array.from(addedIds),
                 },
+                NOT: NOT_ELIMINATION_DRILL,
               },
             });
             const shuffledMastered = masteredSub.sort(() => Math.random() - 0.5);
@@ -196,8 +222,7 @@ export async function GET(request: Request) {
         }
       }
 
-      // 🛡️ C. MAIN CATEGORY CATCH-ALL & RECYCLING
-      // If subtopics ran short, fill remaining category quota using ANY question in this main category
+      // 🛡️ C. MAIN CATEGORY CATCH-ALL & RECYCLING (EXCLUDING ELIMINATION DRILLS)
       if (categoryQuestions.length < subject.quota) {
         const needed = subject.quota - categoryQuestions.length;
 
@@ -211,6 +236,7 @@ export async function GET(request: Request) {
                 ...Array.from(addedIds),
               ],
             },
+            NOT: NOT_ELIMINATION_DRILL,
           },
         });
 
@@ -230,6 +256,7 @@ export async function GET(request: Request) {
                 in: Array.from(masteredQuestionIds),
                 notIn: Array.from(addedIds),
               },
+              NOT: NOT_ELIMINATION_DRILL,
             },
           });
 
@@ -244,11 +271,14 @@ export async function GET(request: Request) {
       finalExamQuestions.push(...categoryQuestions);
     }
 
-    // 🛡️ D. INFINITE EXAM READINESS SAFEGUARD (If DB total items < 170 items)
+    // 🛡️ D. INFINITE EXAM READINESS SAFEGUARD (If DB total items < 170 items, EXCLUDING ELIMINATION DRILLS)
     if (finalExamQuestions.length < 170) {
       const neededGlobal = 170 - finalExamQuestions.length;
       let globalFallback = await prisma.question.findMany({
-        where: { id: { notIn: Array.from(addedIds) } },
+        where: {
+          id: { notIn: Array.from(addedIds) },
+          NOT: NOT_ELIMINATION_DRILL,
+        },
         take: neededGlobal,
       });
 

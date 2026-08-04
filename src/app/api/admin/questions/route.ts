@@ -22,7 +22,7 @@ async function verifyAdmin() {
   return user;
 }
 
-// 1. GET QUESTIONS FOR ADMIN TABLE (SUPPORTING CATEGORY & SUBTOPIC FILTERS)
+// 1. GET QUESTIONS FOR ADMIN TABLE (WITH AUTOMATIC ELIMINATION DRILL EXCLUSION)
 export async function GET(req: Request) {
   try {
     const admin = await verifyAdmin();
@@ -34,12 +34,25 @@ export async function GET(req: Request) {
     const category = searchParams.get("category");
     const subtopic = searchParams.get("subtopic");
 
+    const isEliminationQuery =
+      (category && category.toLowerCase() === "elimination drill") ||
+      (subtopic && subtopic.toLowerCase().includes("elimination drill"));
+
     const whereClause: any = {};
+
     if (category && category !== "All") {
       whereClause.category = { equals: category, mode: "insensitive" };
     }
     if (subtopic && subtopic !== "All") {
       whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+    }
+
+    // 🛡️ Exclude Elimination Drill questions unless specifically queried
+    if (!isEliminationQuery) {
+      whereClause.NOT = [
+        { category: { equals: "Elimination Drill", mode: "insensitive" } },
+        { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
+      ];
     }
 
     const questions = await prisma.question.findMany({
