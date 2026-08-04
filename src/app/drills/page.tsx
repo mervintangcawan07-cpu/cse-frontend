@@ -20,13 +20,13 @@ export default function DrillsPage() {
         <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md">
-              10-Sec Rapid Elimination
+              Option Elimination
             </span>
             <span className="text-xs font-bold text-amber-600">Technique Drill</span>
           </div>
           <h2 className="text-xl font-extrabold text-slate-900">Option Elimination Trainer</h2>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Train yourself to spot and strike out 2 obviously wrong choices in under 10 seconds. Boosts educated guessing speed under pressure!
+            Train yourself to spot and strike out 2 obviously wrong choices. Boosts educated guessing accuracy for exam day!
           </p>
           <Link
             href="/drills/elimination"
