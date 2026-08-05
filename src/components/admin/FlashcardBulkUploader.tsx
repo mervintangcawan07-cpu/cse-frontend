@@ -16,14 +16,18 @@ export interface FlashcardRow {
   error?: string;
 }
 
-export default function FlashcardBulkUploader() {
+export interface FlashcardBulkUploaderProps {
+  onAdded?: () => void;
+  onSuccess?: () => void;
+}
+
+export default function FlashcardBulkUploader({ onAdded, onSuccess }: FlashcardBulkUploaderProps) {
   const [data, setData] = useState<FlashcardRow[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<FlashcardRow | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Updated validateRow type to omit 'id', fixing TS(2345)
   const validateRow = (row: Omit<FlashcardRow, 'id' | 'isValid' | 'error'>): { isValid: boolean; error: string } => {
     let error = '';
     if (!row.category?.trim()) error = 'Missing category';
@@ -113,10 +117,13 @@ export default function FlashcardBulkUploader() {
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Upload failed');
+      if (!response.ok) throw new Error(result.message || result.error || 'Upload failed');
 
-      setStatusMessage({ type: 'success', text: `Successfully inserted ${result.count} flashcards!` });
+      setStatusMessage({ type: 'success', text: `Successfully inserted ${result.count || validRows.length} flashcards!` });
       setData([]);
+
+      if (onAdded) onAdded();
+      if (onSuccess) onSuccess();
     } catch (err: any) {
       setStatusMessage({ type: 'error', text: err.message || 'Server error occurred' });
     } finally {
@@ -196,7 +203,7 @@ export default function FlashcardBulkUploader() {
                             type="text"
                             value={editForm.category}
                             onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
-                            className="w-full p-1 border rounded"
+                            className="w-full p-1 border rounded text-gray-900"
                             placeholder="Category"
                           />
                         </td>
@@ -205,7 +212,7 @@ export default function FlashcardBulkUploader() {
                             type="text"
                             value={editForm.question}
                             onChange={(e) => setEditForm({ ...editForm, question: e.target.value })}
-                            className="w-full p-1 border rounded"
+                            className="w-full p-1 border rounded text-gray-900"
                             placeholder="Question"
                           />
                         </td>
@@ -214,7 +221,7 @@ export default function FlashcardBulkUploader() {
                             type="text"
                             value={editForm.answer}
                             onChange={(e) => setEditForm({ ...editForm, answer: e.target.value })}
-                            className="w-full p-1 border rounded"
+                            className="w-full p-1 border rounded text-gray-900"
                             placeholder="Answer"
                           />
                         </td>
@@ -223,7 +230,7 @@ export default function FlashcardBulkUploader() {
                             type="text"
                             value={editForm.options || ''}
                             onChange={(e) => setEditForm({ ...editForm, options: e.target.value })}
-                            className="w-full p-1 border rounded"
+                            className="w-full p-1 border rounded text-gray-900"
                             placeholder="Opt1|Opt2|Opt3"
                           />
                         </td>
@@ -231,7 +238,7 @@ export default function FlashcardBulkUploader() {
                           <select
                             value={editForm.difficulty || 'medium'}
                             onChange={(e) => setEditForm({ ...editForm, difficulty: e.target.value as any })}
-                            className="w-full p-1 border rounded"
+                            className="w-full p-1 border rounded text-gray-900"
                           >
                             <option value="easy">Easy</option>
                             <option value="medium">Medium</option>

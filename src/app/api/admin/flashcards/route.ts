@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 async function checkAdminAuth() {
   const cookieStore = await cookies();
@@ -50,20 +51,34 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { category, topic, front, back } = body;
+    const { category, topic, front, back, question, answer, options, difficulty, explanation } = body;
 
-    if (!category || !topic || !front || !back) {
-      return NextResponse.json({ error: "All fields are required." }, { status: 400 });
+    // Supports both (front/back/topic) and (question/answer/options/difficulty) schema structures
+    const cardCategory = category || topic || "General";
+    const cardFront = question || front;
+    const cardBack = answer || back;
+
+    if (!cardFront || !cardBack) {
+      return NextResponse.json({ error: "Question/Front and Answer/Back are required." }, { status: 400 });
     }
 
     const newCard = await (prisma as any).flashcard.create({
       data: {
-        category: category.trim(),
-        topic: topic.trim(),
-        front: front.trim(),
-        back: back.trim(),
+        category: cardCategory.trim(),
+        topic: topic ? topic.trim() : cardCategory.trim(),
+        front: cardFront.trim(),
+        back: cardBack.trim(),
+        ...(question && { question: question.trim() }),
+        ...(answer && { answer: answer.trim() }),
+        ...(options && { options }),
+        ...(difficulty && { difficulty }),
+        ...(explanation && { explanation }),
       },
     });
+
+    revalidatePath("/flashcards");
+    revalidatePath("/admin/flashcards");
+    revalidatePath("/api/flashcards");
 
     return NextResponse.json({ success: true, flashcard: newCard });
   } catch (error: any) {
@@ -81,21 +96,30 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { id, category, topic, front, back } = body;
+    const { id, category, topic, front, back, question, answer, options, difficulty, explanation } = body;
 
-    if (!id || !category || !topic || !front || !back) {
-      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ error: "Missing required flashcard ID." }, { status: 400 });
     }
 
     const updatedCard = await (prisma as any).flashcard.update({
       where: { id },
       data: {
-        category: category.trim(),
-        topic: topic.trim(),
-        front: front.trim(),
-        back: back.trim(),
+        ...(category && { category: category.trim() }),
+        ...(topic && { topic: topic.trim() }),
+        ...(front && { front: front.trim() }),
+        ...(back && { back: back.trim() }),
+        ...(question && { question: question.trim() }),
+        ...(answer && { answer: answer.trim() }),
+        ...(options && { options }),
+        ...(difficulty && { difficulty }),
+        ...(explanation && { explanation }),
       },
     });
+
+    revalidatePath("/flashcards");
+    revalidatePath("/admin/flashcards");
+    revalidatePath("/api/flashcards");
 
     return NextResponse.json({ success: true, flashcard: updatedCard });
   } catch (error: any) {
@@ -104,7 +128,7 @@ export async function PUT(request: Request) {
   }
 }
 
-// 4. DELETE FLASHCARD
+// 4. DELETE FLASHCARD (Single or Bulk Delete All)
 export async function DELETE(request: Request) {
   try {
     const admin = await checkAdminAuth();
@@ -114,14 +138,35 @@ export async function DELETE(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
+    const deleteAll = searchParams.get("all") === "true" || searchParams.get("deleteAll") === "true";
 
+    // 🔴 Delete ALL Flashcards
+    if (deleteAll) {
+      const result = await (prisma as any).flashcard.deleteMany({});
+
+      revalidatePath("/flashcards");
+      revalidatePath("/admin/flashcards");
+      revalidatePath("/api/flashcards");
+
+      return NextResponse.json({
+        success: true,
+        message: `Successfully deleted all ${result.count} flashcard(s).`,
+        count: result.count,
+      });
+    }
+
+    // 🗑️ Delete Single Flashcard
     if (!id) {
-      return NextResponse.json({ error: "Card ID is required." }, { status: 400 });
+      return NextResponse.json({ error: "Card ID or delete parameters required." }, { status: 400 });
     }
 
     await (prisma as any).flashcard.delete({
       where: { id },
     });
+
+    revalidatePath("/flashcards");
+    revalidatePath("/admin/flashcards");
+    revalidatePath("/api/flashcards");
 
     return NextResponse.json({ success: true, message: "Flashcard deleted successfully." });
   } catch (error: any) {

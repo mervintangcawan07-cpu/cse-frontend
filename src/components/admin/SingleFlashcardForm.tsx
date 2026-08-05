@@ -2,7 +2,12 @@
 
 import React, { useState } from 'react';
 
-export default function SingleFlashcardForm({ onAdded }: { onAdded?: () => void }) {
+export interface SingleFlashcardFormProps {
+  onAdded?: () => void;
+  onSuccess?: () => void;
+}
+
+export default function SingleFlashcardForm({ onAdded, onSuccess }: SingleFlashcardFormProps) {
   const [form, setForm] = useState({
     category: '',
     question: '',
@@ -34,7 +39,11 @@ export default function SingleFlashcardForm({ onAdded }: { onAdded?: () => void 
       if (res.ok) {
         setForm({ category: '', question: '', answer: '', options: '', explanation: '', difficulty: 'medium' });
         if (onAdded) onAdded();
+        if (onSuccess) onSuccess();
         alert('Flashcard saved successfully!');
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || errorData.message || 'Error saving flashcard');
       }
     } catch (err) {
       alert('Error saving flashcard');
@@ -52,12 +61,12 @@ export default function SingleFlashcardForm({ onAdded }: { onAdded?: () => void 
           placeholder="Category (e.g. Philippine Constitution)"
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="p-2 border rounded text-sm"
+          className="p-2 border rounded text-sm text-gray-900"
         />
         <select
           value={form.difficulty}
           onChange={(e) => setForm({ ...form, difficulty: e.target.value })}
-          className="p-2 border rounded text-sm"
+          className="p-2 border rounded text-sm text-gray-900"
         >
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
@@ -68,7 +77,7 @@ export default function SingleFlashcardForm({ onAdded }: { onAdded?: () => void 
           placeholder="Question"
           value={form.question}
           onChange={(e) => setForm({ ...form, question: e.target.value })}
-          className="p-2 border rounded text-sm md:col-span-2"
+          className="p-2 border rounded text-sm text-gray-900 md:col-span-2"
           rows={2}
         />
         <input
@@ -76,26 +85,26 @@ export default function SingleFlashcardForm({ onAdded }: { onAdded?: () => void 
           placeholder="Correct Answer"
           value={form.answer}
           onChange={(e) => setForm({ ...form, answer: e.target.value })}
-          className="p-2 border rounded text-sm"
+          className="p-2 border rounded text-sm text-gray-900"
         />
         <input
           placeholder="Options (Pipe separated: Option A|Option B|Option C)"
           value={form.options}
           onChange={(e) => setForm({ ...form, options: e.target.value })}
-          className="p-2 border rounded text-sm"
+          className="p-2 border rounded text-sm text-gray-900"
         />
         <textarea
           placeholder="Explanation / Solution (Optional)"
           value={form.explanation}
           onChange={(e) => setForm({ ...form, explanation: e.target.value })}
-          className="p-2 border rounded text-sm md:col-span-2"
+          className="p-2 border rounded text-sm text-gray-900 md:col-span-2"
           rows={2}
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50"
+        className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition"
       >
         {loading ? 'Saving...' : 'Add Flashcard'}
       </button>
