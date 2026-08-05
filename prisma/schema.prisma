@@ -249,16 +249,22 @@ model Transaction {
   @@index([status])
 }
 
-model Flashcard {
-  id        String   @id @default(cuid())
-  category  String
-  topic     String
-  front     String   @db.Text
-  back      String   @db.Text
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+mmodel Flashcard {
+  id          String   @id @default(cuid())
+  category    String
+  topic       String   @default("General") // Keeps compatibility with existing schema
+  front       String?  @db.Text
+  back        String?  @db.Text
+  question    String?  @db.Text            // New bulk uploader field
+  answer      String?  @db.Text            // New bulk uploader field
+  options     String[] @default([])        // Choice options array
+  explanation String?  @db.Text            // Solution breakdown
+  difficulty  String   @default("medium")   // "easy" | "medium" | "hard"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([category, topic])
+  @@index([category])
 }
 
 enum DuelStatus {
