@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { acquireLock, releaseLock, getClientIp } from "@/lib/rate-limit";
 
 function getOriginUrl(request: Request): string {
   const host =
@@ -17,6 +18,17 @@ function getOriginUrl(request: Request): string {
 }
 
 export async function POST(request: Request) {
+  const clientIp = getClientIp(request);
+  const lockKey = `checkout:${clientIp}`;
+
+  // 🔒 Enforce 1 active checkout request at a time per client IP
+  if (!acquireLock(lockKey)) {
+    return NextResponse.json(
+      { error: "A payment transaction is already processing. Please wait..." },
+      { status: 409 }
+    );
+  }
+
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -144,5 +156,8 @@ export async function POST(request: Request) {
       { error: error instanceof Error ? error.message : "Internal Server Error" },
       { status: 500 }
     );
+  } finally {
+    // 🔓 Always release the concurrency lock after request processing completes
+    releaseLock(lockKey);
   }
 }

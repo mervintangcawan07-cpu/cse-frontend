@@ -2,16 +2,35 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/lib/auth";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `login:${clientIp}`;
+
+    // 🔒 Limit: 3 login attempts per minute per IP
+    const { allowed, resetSeconds } = checkRateLimit(rateLimitKey, 3, 60000);
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: `Too many login attempts. Please wait ${resetSeconds} seconds before trying again.`,
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(resetSeconds) },
+        }
+      );
+    }
+
     const { email, password } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
     }
 
-    // 💡 Sanitize email input (removes accidental spaces & lowercase conversion)
+    // 💡 Sanitize email input
     const cleanEmail = String(email).trim().toLowerCase();
 
     const user = await prisma.user.findUnique({
@@ -52,7 +71,7 @@ export async function POST(request: Request) {
         user: {
           id: user.id,
           email: user.email,
-          name: user.name, // 👈 Included name for Navbar/localStorage
+          name: user.name,
           role: user.role,
           isPaid: user.isPaid,
         },
@@ -64,7 +83,7 @@ export async function POST(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      path: "/", // 👈 Guarantees cookie availability across all routes (/exam, /mock-exam)
+      path: "/",
       maxAge: 60 * 60 * 24 * 7, // 7 Days
     });
 
