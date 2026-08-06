@@ -11,6 +11,7 @@ interface StudyNote {
   summary: string;
   content: string[];
   tips?: string;
+  videoUrl?: string;
 }
 
 export default function ReviewerPage() {
@@ -168,6 +169,21 @@ export default function ReviewerPage() {
 
                 {/* EXAM PRO-TIP BOX IN BULLET FORM */}
                 {note.tips && <ProTipBullets proTip={note.tips} />}
+
+                {/* VIDEO EXPLANATION BUTTON */}
+                {note.videoUrl && (
+                  <div className="pt-1">
+                    <a
+                      href={note.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition shadow-xs cursor-pointer"
+                    >
+                      <span>🎬 Watch Video Explanation on Facebook</span>
+                      <span>&rarr;</span>
+                    </a>
+                  </div>
+                )}
               </div>
             );
           })}

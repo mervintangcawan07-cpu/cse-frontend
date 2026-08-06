@@ -10,6 +10,7 @@ interface StudyNote {
   summary: string;
   content: string[];
   tips?: string;
+  videoUrl?: string;
 }
 
 export default function AdminReviewerPage() {
@@ -25,6 +26,7 @@ export default function AdminReviewerPage() {
   const [summary, setSummary] = useState("");
   const [contentInput, setContentInput] = useState("");
   const [tips, setTips] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const loadNotes = async () => {
@@ -52,6 +54,7 @@ export default function AdminReviewerPage() {
     setSummary("");
     setContentInput("");
     setTips("");
+    setVideoUrl("");
   };
 
   const handleStartEdit = (note: StudyNote) => {
@@ -61,6 +64,7 @@ export default function AdminReviewerPage() {
     setSummary(note.summary);
     setContentInput(note.content.join("\n"));
     setTips(note.tips || "");
+    setVideoUrl(note.videoUrl || "");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,8 +77,8 @@ export default function AdminReviewerPage() {
     const isEdit = !!editingNoteId;
     const method = isEdit ? "PUT" : "POST";
     const payload = isEdit
-      ? { id: editingNoteId, category, title, summary, content: contentArr, tips }
-      : { category, title, summary, content: contentArr, tips };
+      ? { id: editingNoteId, category, title, summary, content: contentArr, tips, videoUrl }
+      : { category, title, summary, content: contentArr, tips, videoUrl };
 
     try {
       const res = await fetch("/api/reviewer", {
@@ -225,6 +229,19 @@ export default function AdminReviewerPage() {
             />
           </div>
 
+          <div>
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Video Explanation Link (Optional)
+            </label>
+            <input
+              type="url"
+              placeholder="e.g. https://facebook.com/watch/?v=123456789"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              className="w-full p-3 bg-blue-50/60 border border-blue-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+            />
+          </div>
+
           <button
             type="submit"
             disabled={submitting}
@@ -275,6 +292,11 @@ export default function AdminReviewerPage() {
                 </div>
                 <h3 className="font-extrabold text-slate-800 text-sm">{note.title}</h3>
                 <p className="text-xs text-slate-500 leading-relaxed">{note.summary}</p>
+                {note.videoUrl && (
+                  <span className="inline-block text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md mt-1">
+                    🎥 Video Link Attached
+                  </span>
+                )}
               </div>
             ))
           )}
