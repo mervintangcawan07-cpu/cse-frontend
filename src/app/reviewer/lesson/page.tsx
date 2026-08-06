@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FormattedProTip from "@/components/notes/FormattedProTip";
 
 export default function LessonPage() {
   return (
@@ -44,11 +45,13 @@ export default function LessonPage() {
           </div>
         </section>
 
+        {/* Section 2: Formatted Exam Pro-Tip / Study Tip */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-800">2. Study Tip for the CSE</h2>
-          <p className="text-slate-600 leading-relaxed">
-            Memorize common fractions (1/2, 1/4, 3/4, 1/5) as decimals. This saves crucial time during the timed examination!
-          </p>
+          <FormattedProTip
+            title="⚡ Key Examination Strategy"
+            tip="Memorize common fractions (1/2, 1/4, 3/4, 1/5) as decimals. This saves crucial time during the timed examination! Always simplify fractions first before performing multiplication or division."
+          />
         </section>
       </div>
 
