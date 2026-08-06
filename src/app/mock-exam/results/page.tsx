@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ExplainMistakeButton from "@/components/ExplainMistakeButton";
+import FormattedExplanation from "@/components/exam/FormattedExplanation";
 
 interface Question {
   id: string;
@@ -357,13 +358,13 @@ function ExamResultContent() {
                   })}
                 </div>
 
-                {/* Explanation Box */}
+                {/* Formatted Explanation Box */}
                 {q.explanation && (
-                  <div className="p-3.5 bg-blue-500/10 rounded-xl border border-blue-500/20 text-xs text-blue-300 space-y-1">
-                    <span className="font-extrabold uppercase text-[10px] text-blue-400 block">
-                      💡 Official Explanation
-                    </span>
-                    <p className="leading-relaxed">{q.explanation}</p>
+                  <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-200">
+                    <FormattedExplanation
+                      explanation={q.explanation}
+                      title="💡 Official Explanation"
+                    />
                   </div>
                 )}
 
