@@ -29,15 +29,21 @@ export default function ProTipBullets({ proTip }: ProTipBulletsProps) {
     .filter((pt) => pt.length > 0);
 
   return (
-    <div className="p-4 bg-indigo-50/60 dark:bg-sky-950/30 border border-indigo-100 dark:border-sky-800/50 rounded-2xl flex items-start gap-2.5 text-xs text-indigo-900 dark:text-slate-200">
-      <span className="text-base shrink-0 mt-0.5">💡</span>
-      <div className="space-y-1.5 w-full">
-        <span className="font-extrabold block">Exam Pro-Tip:</span>
+    <div className="p-4 sm:p-5 bg-amber-50/80 border border-amber-200/90 rounded-2xl flex items-start gap-3.5 shadow-xs">
+      <div className="p-2 bg-amber-100/80 rounded-xl shrink-0 text-amber-700 text-lg leading-none">
+        💡
+      </div>
+      <div className="space-y-1.5 w-full pt-0.5">
+        <span className="text-xs font-black uppercase tracking-wider text-amber-900 block">
+          Exam Pro-Tip
+        </span>
 
         {cleanPoints.length <= 1 ? (
-          <p className="leading-relaxed">{cleanText}</p>
+          <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+            {cleanText}
+          </p>
         ) : (
-          <ul className="list-disc list-outside ml-4 space-y-1 leading-relaxed">
+          <ul className="list-disc list-outside ml-4 space-y-1.5 text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
             {cleanPoints.map((point, index) => (
               <li key={index} className="pl-1">
                 {point}
