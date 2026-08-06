@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import ProTipBullets from "@/components/notes/ProTipBullets";
 
 interface StudyNote {
   id: string;
@@ -156,6 +157,7 @@ export default function ReviewerPage() {
                   <p className="text-slate-500 text-xs mt-0.5">{note.summary}</p>
                 </div>
 
+                {/* ORIGINAL MAIN CONTENT BOX (UNTOUCHED) */}
                 <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-2 text-sm text-slate-700">
                   {note.content.map((line, idx) => (
                     <p key={idx} className="leading-relaxed font-medium">
@@ -164,15 +166,8 @@ export default function ReviewerPage() {
                   ))}
                 </div>
 
-                {note.tips && (
-                  <div className="p-4 bg-indigo-50/60 border border-indigo-100 rounded-2xl text-xs text-indigo-900 flex items-start gap-2.5">
-                    <span className="text-base">💡</span>
-                    <div>
-                      <span className="font-extrabold">Exam Pro-Tip: </span>
-                      {note.tips}
-                    </div>
-                  </div>
-                )}
+                {/* EXAM PRO-TIP BOX IN BULLET FORM */}
+                {note.tips && <ProTipBullets proTip={note.tips} />}
               </div>
             );
           })}
