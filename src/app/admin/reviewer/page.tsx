@@ -111,9 +111,9 @@ export default function AdminReviewerPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-8">
+    <div className="max-w-6xl mx-auto p-6 space-y-8 text-slate-900 dark:text-slate-100">
       {/* Header */}
-      <div className="flex justify-between items-center bg-slate-900 text-white p-6 rounded-3xl">
+      <div className="flex justify-between items-center bg-slate-900 text-white p-6 rounded-3xl shadow-md">
         <div>
           <h1 className="text-2xl font-black">Study Notes Manager</h1>
           <p className="text-slate-400 text-xs mt-1">Create, edit, or remove reviewer study notes.</p>
@@ -122,37 +122,49 @@ export default function AdminReviewerPage() {
           {editingNoteId && (
             <button
               onClick={resetForm}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition cursor-pointer"
             >
               + Add New Note
             </button>
           )}
-          <Link href="/admin/dashboard" className="px-4 py-2 bg-slate-800 text-xs font-bold rounded-xl border border-slate-700">
+          <Link
+            href="/admin/dashboard"
+            className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl border border-slate-700 hover:bg-slate-700 transition"
+          >
             Control Center
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Form Panel */}
-        <form onSubmit={handleSubmit} className="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200 space-y-4 shadow-sm">
-          <div className="flex justify-between items-center">
-            <h2 className="font-extrabold text-slate-800 text-base">
+        <form
+          onSubmit={handleSubmit}
+          className="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-4 shadow-sm"
+        >
+          <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+            <h2 className="font-extrabold text-slate-900 text-base">
               {editingNoteId ? "✏️ Edit Study Note" : "+ Add New Study Note"}
             </h2>
             {editingNoteId && (
-              <button type="button" onClick={resetForm} className="text-xs font-bold text-slate-400 hover:text-slate-600">
+              <button
+                type="button"
+                onClick={resetForm}
+                className="text-xs font-bold text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
                 Cancel
               </button>
             )}
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Category</label>
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Category
+            </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-slate-900 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition cursor-pointer"
             >
               <option value="Verbal Ability">Verbal Ability</option>
               <option value="Numerical Reasoning">Numerical Reasoning</option>
@@ -162,53 +174,61 @@ export default function AdminReviewerPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Title</label>
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Title
+            </label>
             <input
               type="text"
               placeholder="e.g. Subject-Verb Agreement Rules"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Summary</label>
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Summary
+            </label>
             <input
               type="text"
               placeholder="Brief overview of topic"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Rules (1 bullet point per line)</label>
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Rules (1 bullet point per line)
+            </label>
             <textarea
-              rows={5}
+              rows={6}
               placeholder="1. Singular subjects take singular verbs..."
               value={contentInput}
               onChange={(e) => setContentInput(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition leading-relaxed"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Exam Pro-Tip (Optional)</label>
-            <input
-              type="text"
+            <label className="block text-xs font-extrabold uppercase tracking-wider text-slate-700 mb-1.5">
+              Exam Pro-Tip (Optional)
+            </label>
+            <textarea
+              rows={3}
               placeholder="e.g. Always identify the true subject..."
               value={tips}
               onChange={(e) => setTips(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-xs font-medium text-slate-900 placeholder:text-amber-800/40 focus:bg-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 transition leading-relaxed"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className={`w-full py-3 text-white font-bold text-xs rounded-xl shadow-sm transition ${
+            className={`w-full py-3 text-white font-extrabold text-xs rounded-xl shadow-sm transition cursor-pointer disabled:opacity-50 ${
               editingNoteId ? "bg-amber-600 hover:bg-amber-500" : "bg-blue-600 hover:bg-blue-500"
             }`}
           >
@@ -217,42 +237,44 @@ export default function AdminReviewerPage() {
         </form>
 
         {/* Existing Notes List */}
-        <div className="lg:col-span-7 space-y-4 max-h-[700px] overflow-y-auto">
+        <div className="lg:col-span-7 space-y-4 max-h-[750px] overflow-y-auto pr-1">
           <h2 className="font-extrabold text-slate-800 text-base">Published Notes ({notes.length})</h2>
 
           {loading ? (
-            <p className="text-xs text-slate-400">Loading study notes...</p>
+            <p className="text-xs text-slate-400 font-bold animate-pulse">Loading study notes...</p>
           ) : notes.length === 0 ? (
-            <p className="text-xs text-slate-400">No study notes created yet.</p>
+            <div className="p-8 bg-white rounded-3xl border border-slate-200 text-center text-slate-400 text-xs">
+              No study notes created yet. Use the form on the left to add one.
+            </div>
           ) : (
             notes.map((note) => (
               <div
                 key={note.id}
                 className={`bg-white p-5 rounded-3xl border transition space-y-2 shadow-sm ${
-                  editingNoteId === note.id ? "border-amber-400 bg-amber-50/20" : "border-slate-200"
+                  editingNoteId === note.id ? "border-amber-500 bg-amber-50/30" : "border-slate-200"
                 }`}
               >
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] font-bold uppercase px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md">
+                  <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
                     {note.category}
                   </span>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => handleStartEdit(note)}
-                      className="text-amber-600 text-xs font-bold hover:underline"
+                      className="text-amber-600 text-xs font-bold hover:underline cursor-pointer"
                     >
                       ✏️ Edit
                     </button>
                     <button
                       onClick={() => handleDelete(note.id)}
-                      className="text-rose-600 text-xs font-bold hover:underline"
+                      className="text-rose-600 text-xs font-bold hover:underline cursor-pointer"
                     >
                       🗑️ Delete
                     </button>
                   </div>
                 </div>
                 <h3 className="font-extrabold text-slate-800 text-sm">{note.title}</h3>
-                <p className="text-xs text-slate-500">{note.summary}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">{note.summary}</p>
               </div>
             ))
           )}
