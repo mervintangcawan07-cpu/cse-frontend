@@ -45,12 +45,9 @@ export default function LoginPage() {
           localStorage.setItem("cse_user_name", data.user.name);
         }
 
-        // Automatic Role-Based Routing
-        if (data.user?.role === "ADMIN") {
-          router.push("/admin/questions");
-        } else {
-          router.push("/dashboard");
-        }
+        // Full window navigation ensures newly set auth cookie attaches immediately to request headers
+        const targetUrl = data.user?.role === "ADMIN" ? "/admin/questions" : "/dashboard";
+        window.location.href = targetUrl;
       } else {
         setError(data.error || "Invalid email or password.");
       }
@@ -146,7 +143,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleResendVerification}
                 disabled={resending}
-                className="w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-xl transition disabled:opacity-50"
+                className="w-full py-2 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-xl transition disabled:opacity-50 cursor-pointer"
               >
                 {resending ? "Sending New Link..." : "🔄 Resend Verification Email"}
               </button>
@@ -162,7 +159,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Signing in..." : "Sign In →"}
           </button>

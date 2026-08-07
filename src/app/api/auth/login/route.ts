@@ -58,11 +58,22 @@ export async function POST(request: Request) {
       );
     }
 
+    // 🆔 Generate active session ID & update session timestamp prior to JWT issuance
+    const activeSessionId = crypto.randomUUID();
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        activeSessionId,
+        lastActiveAt: new Date(),
+      },
+    });
+
     const token = await signJWT({
       userId: user.id,
       email: user.email,
       role: user.role,
       isPaid: user.isPaid,
+      sessionId: activeSessionId,
     });
 
     const response = NextResponse.json(
