@@ -177,17 +177,18 @@ export async function getTrashBinItems(
     }
   }
 
-  // 4. Flashcards
+  // 4. Flashcards (Handles both 'front' and 'question' field formats)
   const softDeletedCards = await prisma.flashcard.findMany({
     where: { deletedAt: { not: null } },
-    select: { id: true, front: true, deletedAt: true, deletedBy: true },
+    select: { id: true, front: true, question: true, topic: true, deletedAt: true, deletedBy: true },
   });
   for (const c of softDeletedCards) {
     if (c.deletedAt) {
+      const cardTitle = c.front || c.question || c.topic || `Flashcard ${c.id}`;
       items.push({
         id: c.id,
         entityType: "flashcard",
-        displayName: c.front?.slice(0, 50) || `Flashcard ${c.id}`,
+        displayName: cardTitle.slice(0, 50),
         deletedAt: c.deletedAt,
         deletedBy: c.deletedBy || "admin",
         daysRemaining: calculateDaysRemaining(c.deletedAt, retentionDays),

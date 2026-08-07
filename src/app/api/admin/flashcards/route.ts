@@ -1,8 +1,10 @@
+// Relative Path: src/app/api/admin/flashcards/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { softDeleteRecord } from "@/lib/recovery/softDelete";
 
 async function checkAdminAuth() {
   const cookieStore = await cookies();
@@ -23,7 +25,7 @@ async function checkAdminAuth() {
   return user;
 }
 
-// 1. GET ALL FLASHCARDS (Admin)
+// 1. GET ALL ACTIVE FLASHCARDS (Admin)
 export async function GET() {
   try {
     const admin = await checkAdminAuth();
@@ -31,12 +33,13 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized: Admin access required." }, { status: 403 });
     }
 
-    const flashcards = await (prisma as any).flashcard.findMany({
+    const flashcards = await prisma.flashcard.findMany({
+      where: { deletedAt: null },
       orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json({ success: true, flashcards });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[ADMIN_FLASHCARDS_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch flashcards." }, { status: 500 });
   }
@@ -53,7 +56,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { category, topic, front, back, question, answer, options, difficulty, explanation } = body;
 
-    // Supports both (front/back/topic) and (question/answer/options/difficulty) schema structures
     const cardCategory = category || topic || "General";
     const cardFront = question || front;
     const cardBack = answer || back;
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Question/Front and Answer/Back are required." }, { status: 400 });
     }
 
-    const newCard = await (prisma as any).flashcard.create({
+    const newCard = await prisma.flashcard.create({
       data: {
         category: cardCategory.trim(),
         topic: topic ? topic.trim() : cardCategory.trim(),
@@ -81,7 +83,7 @@ export async function POST(request: Request) {
     revalidatePath("/api/flashcards");
 
     return NextResponse.json({ success: true, flashcard: newCard });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[ADMIN_FLASHCARDS_POST_ERROR]", error);
     return NextResponse.json({ error: "Failed to create flashcard." }, { status: 500 });
   }
@@ -102,7 +104,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Missing required flashcard ID." }, { status: 400 });
     }
 
-    const updatedCard = await (prisma as any).flashcard.update({
+    const updatedCard = await prisma.flashcard.update({
       where: { id },
       data: {
         ...(category && { category: category.trim() }),
@@ -122,13 +124,13 @@ export async function PUT(request: Request) {
     revalidatePath("/api/flashcards");
 
     return NextResponse.json({ success: true, flashcard: updatedCard });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[ADMIN_FLASHCARDS_PUT_ERROR]", error);
     return NextResponse.json({ error: "Failed to update flashcard." }, { status: 500 });
   }
 }
 
-// 4. DELETE FLASHCARD (Single or Bulk Delete All)
+// 4. SOFT DELETE FLASHCARD (Single or Bulk Delete All)
 export async function DELETE(request: Request) {
   try {
     const admin = await checkAdminAuth();
@@ -140,9 +142,15 @@ export async function DELETE(request: Request) {
     const id = searchParams.get("id");
     const deleteAll = searchParams.get("all") === "true" || searchParams.get("deleteAll") === "true";
 
-    // 🔴 Delete ALL Flashcards
+    // Soft Delete ALL Flashcards
     if (deleteAll) {
-      const result = await (prisma as any).flashcard.deleteMany({});
+      const result = await prisma.flashcard.updateMany({
+        where: { deletedAt: null },
+        data: {
+          deletedAt: new Date(),
+          deletedBy: String(admin.id),
+        },
+      });
 
       revalidatePath("/flashcards");
       revalidatePath("/admin/flashcards");
@@ -150,26 +158,24 @@ export async function DELETE(request: Request) {
 
       return NextResponse.json({
         success: true,
-        message: `Successfully deleted all ${result.count} flashcard(s).`,
+        message: `Successfully soft-deleted ${result.count} flashcard(s).`,
         count: result.count,
       });
     }
 
-    // 🗑️ Delete Single Flashcard
+    // Soft Delete Single Flashcard
     if (!id) {
       return NextResponse.json({ error: "Card ID or delete parameters required." }, { status: 400 });
     }
 
-    await (prisma as any).flashcard.delete({
-      where: { id },
-    });
+    await softDeleteRecord("flashcard", id, String(admin.id));
 
     revalidatePath("/flashcards");
     revalidatePath("/admin/flashcards");
     revalidatePath("/api/flashcards");
 
-    return NextResponse.json({ success: true, message: "Flashcard deleted successfully." });
-  } catch (error: any) {
+    return NextResponse.json({ success: true, message: "Flashcard soft-deleted successfully." });
+  } catch (error: unknown) {
     console.error("[ADMIN_FLASHCARDS_DELETE_ERROR]", error);
     return NextResponse.json({ error: "Failed to delete flashcard." }, { status: 500 });
   }
