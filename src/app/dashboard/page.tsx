@@ -312,7 +312,7 @@ function DashboardContent() {
             </span>
             <h2 className="text-2xl font-black mt-2 text-white">Upgrade or Renew Your Review Pass</h2>
             <p className="text-xs text-slate-400 mt-1">
-              Gain full access to the 170-item mock exam player, 5-minute category speed drills, and official handbooks.
+              Gain full access to the 170-item mock exam player, 5-minute strategy drills, and official handbooks.
             </p>
           </div>
 
@@ -545,18 +545,20 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* CARD 2: CATEGORY SPEED DRILLS */}
+        {/* CARD 2: SPECIALIZED STRATEGY & TECHNIQUE DRILLS */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
                 5-Min Challenge
               </span>
-              <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
+              <span className="text-xs font-bold text-emerald-600">Technique Center</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Category Speed Drills</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-3">
+              Specialized Strategy & Technique Drills
+            </h2>
             <p className="text-xs text-slate-600 leading-relaxed mt-2">
-              <strong className="text-slate-900 font-bold">Laser-target your weak spots!</strong> Execute rapid 5-minute sprints in Numerical, Verbal, or Analytical reasoning to build speed and accuracy.
+              <strong className="text-slate-900 font-bold">Master exam strategy!</strong> Train option elimination tactics and keyword passage scanning to boost your educated guessing accuracy and scan speed.
             </p>
           </div>
           {isPaid ? (
@@ -564,14 +566,14 @@ function DashboardContent() {
               href="/drills"
               className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs text-center rounded-xl transition shadow-sm"
             >
-              Launch Speed Drills ⚡
+              Launch Strategy Drills ⚡
             </Link>
           ) : (
             <button
               onClick={() => handlePayMongoCheckout(selectedPlan)}
               className="w-full py-3 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs rounded-xl border border-amber-300 transition cursor-pointer"
             >
-              🔒 Unlock Speed Drills
+              🔒 Unlock Strategy Drills
             </button>
           )}
         </div>
