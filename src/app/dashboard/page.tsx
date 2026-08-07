@@ -1,3 +1,4 @@
+// Relative Path: src/app/dashboard/page.tsx
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
@@ -223,9 +224,8 @@ function DashboardContent() {
       {/* ⏸️ PAUSED EXAM RESUME BANNER */}
       <ResumeExamBanner />
 
-      {/* WELCOME HERO HEADER (CONTAINER PERMITS POPUP OVERFLOW, INSET CLIPS GLOWS) */}
+      {/* WELCOME HERO HEADER */}
       <div className="relative bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4 z-30">
-        {/* Isolated background ambient glow (Clips glow to rounded corners without clipping popups) */}
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
@@ -259,7 +259,6 @@ function DashboardContent() {
           </div>
 
           <div className="flex items-center gap-3 shrink-0 flex-wrap relative z-20">
-            {/* NOTIFICATION BELL WITH UNCLIPPED POPUP */}
             <NotificationBell />
 
             <Link
@@ -303,7 +302,7 @@ function DashboardContent() {
       {/* ⏱️ AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
       <CSCCountdownWidget />
 
-      {/* DYNAMIC PLAN SELECTOR BANNER (FOR FREE / UNPAID USERS) */}
+      {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (
         <div className="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl border border-amber-500/40 space-y-6 relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl"></div>
@@ -356,7 +355,6 @@ function DashboardContent() {
 
       {/* PERFORMANCE METRICS & OVERVIEW CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Daily Streak */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-xs text-slate-400 font-extrabold uppercase tracking-wider">Study Streak</span>
@@ -368,7 +366,6 @@ function DashboardContent() {
           <p className="text-[11px] text-slate-400 font-medium">Personal Best: {dashAnalytics?.longestStreak || 0} Days</p>
         </div>
 
-        {/* Pass Readiness Score */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
@@ -388,7 +385,6 @@ function DashboardContent() {
           </Link>
         </div>
 
-        {/* Total Mock Exams Completed */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider">Mock Exams</span>
@@ -402,7 +398,6 @@ function DashboardContent() {
           </p>
         </div>
 
-        {/* Bookmarked Questions */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-xs text-slate-500 font-extrabold uppercase tracking-wider">Bookmarks</span>
@@ -508,7 +503,7 @@ function DashboardContent() {
 
       {/* CORE STUDY MODULES GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* STREAMLINED CLEAN MOCK EXAM CARD */}
+        {/* CARD 1: PRACTICE MOCK EXAM */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden">
           <div>
             <div className="flex justify-between items-center">
@@ -518,8 +513,8 @@ function DashboardContent() {
               <span className="text-xs font-bold text-slate-400">Timed Simulation</span>
             </div>
             <h2 className="text-xl font-extrabold text-white mt-3">Practice Mock Exam</h2>
-            <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              Simulate 3-hour civil service exams or review item explanations from your recent attempts.
+            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              <strong className="text-white font-bold">Experience realistic exam conditions!</strong> Take full 170-item timed simulations with detailed step-by-step explanations and live score analytics.
             </p>
           </div>
 
@@ -533,7 +528,7 @@ function DashboardContent() {
                   Start Exam ⚡
                 </Link>
                 <Link
-                  href="/exam"
+                  href="/history"
                   className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs text-center rounded-xl border border-slate-700 transition shrink-0"
                 >
                   📜 History
@@ -550,7 +545,7 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* SPEED DRILLS MODULE */}
+        {/* CARD 2: CATEGORY SPEED DRILLS */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
@@ -560,8 +555,8 @@ function DashboardContent() {
               <span className="text-xs font-bold text-slate-400">Rapid Fire</span>
             </div>
             <h2 className="text-xl font-extrabold text-slate-900 mt-3">Category Speed Drills</h2>
-            <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Target specific subjects like Numerical Reasoning or Verbal Ability in rapid 5-minute drills.
+            <p className="text-xs text-slate-600 leading-relaxed mt-2">
+              <strong className="text-slate-900 font-bold">Laser-target your weak spots!</strong> Execute rapid 5-minute sprints in Numerical, Verbal, or Analytical reasoning to build speed and accuracy.
             </p>
           </div>
           {isPaid ? (
@@ -581,7 +576,7 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* ⚔️ 1v1 STUDY DUELS */}
+        {/* CARD 3: 1v1 STUDY DUELS */}
         <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-xl space-y-4 text-white flex flex-col justify-between relative overflow-hidden">
           <div>
             <div className="flex justify-between items-center">
@@ -591,13 +586,13 @@ function DashboardContent() {
               <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
             </div>
             <h2 className="text-xl font-extrabold text-white mt-3">1v1 Study Duels</h2>
-            <p className="text-xs text-slate-400 leading-relaxed mt-1">
-              Challenge examinees online in rapid 5-round speed quizzes. Earn XP points and test your recall!
+            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              <strong className="text-white font-bold">Compete head-to-head in real time!</strong> Test your recall against fellow examinees in 5-round speed quizzes. Win duels, earn XP, and rule the leaderboard.
             </p>
           </div>
           {isPaid ? (
             <Link
-              href="/duels"
+              href="/1v1"
               className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-md"
             >
               Enter Battle Arena ⚔️
@@ -612,7 +607,7 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* STUDY NOTES MODULE */}
+        {/* CARD 4: STUDY NOTES MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
@@ -622,8 +617,8 @@ function DashboardContent() {
               <span className="text-xs font-bold text-slate-600">{stats.notesCount} Notes</span>
             </div>
             <h2 className="text-xl font-extrabold text-slate-900 mt-3">Study Notes & Cheat Sheets</h2>
-            <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Review grammar rules, constitutional principles, and math formulas published by admins.
+            <p className="text-xs text-slate-600 leading-relaxed mt-2">
+              <strong className="text-slate-900 font-bold">Master key formulas and rules fast!</strong> Access concise cheat sheets covering Civil Service laws, math shortcuts, and English grammar rules.
             </p>
           </div>
           {isPaid ? (
@@ -643,7 +638,7 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* READING MATERIALS MODULE */}
+        {/* CARD 5: READING MATERIALS MODULE */}
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between md:col-span-2 lg:col-span-2">
           <div>
             <div className="flex justify-between items-center">
@@ -653,8 +648,8 @@ function DashboardContent() {
               <span className="text-xs font-bold text-slate-600">{stats.handbooksCount} Handbooks</span>
             </div>
             <h2 className="text-xl font-extrabold text-slate-900 mt-3">Official Reading Materials & Handbooks</h2>
-            <p className="text-xs text-slate-500 leading-relaxed mt-1">
-              Read official constitutional references, R.A. 6713 code of conduct, and downloadable PDF handbooks.
+            <p className="text-xs text-slate-600 leading-relaxed mt-2">
+              <strong className="text-slate-900 font-bold">Unlock official government references!</strong> Read and download complete PDF handbooks for the 1987 Philippine Constitution, R.A. 6713 Code of Conduct, and Executive Orders.
             </p>
           </div>
           {isPaid ? (
