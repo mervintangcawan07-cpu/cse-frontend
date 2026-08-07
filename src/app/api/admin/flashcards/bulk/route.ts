@@ -1,43 +1,37 @@
-// src/app/api/admin/flashcards/bulk/route.ts
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+﻿// Relative Path: src/app/api/admin/flashcards/bulk/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWT } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { requireSudo } from "@/middleware/requireSudo";
 
-export async function POST(req: Request) {
+export const DELETE = requireSudo(async (req: NextRequest) => {
   try {
-    const { flashcards } = await req.json();
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    if (!Array.isArray(flashcards) || flashcards.length === 0) {
-      return NextResponse.json(
-        { message: 'No valid flashcards provided' },
-        { status: 400 }
-      );
+    const session = await verifyJWT(token);
+    if (!session || session.role !== "ADMIN") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Insert into live database with dual mapping (question/answer & front/back)
-    const result = await prisma.flashcard.createMany({
-      data: flashcards.map((fc: any) => ({
-        category: fc.category,
-        topic: fc.topic || 'General',
-        question: fc.question,
-        answer: fc.answer,
-        front: fc.front || fc.question, // Fallback for legacy components
-        back: fc.back || fc.answer,     // Fallback for legacy components
-        options: fc.options || [],
-        explanation: fc.explanation || '',
-        difficulty: fc.difficulty || 'medium',
-      })),
-      skipDuplicates: true,
+    const { ids } = await req.json();
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ error: "No flashcard IDs provided" }, { status: 400 });
+    }
+
+    const result = await prisma.flashcard.updateMany({
+      where: { id: { in: ids } },
+      data: {
+        deletedAt: new Date(),
+        deletedBy: String(session.userId),
+      },
     });
 
-    return NextResponse.json({
-      success: true,
-      count: result.count,
-    });
-  } catch (error: any) {
-    console.error('Prisma Flashcard Bulk Insert Error:', error);
-    return NextResponse.json(
-      { message: error.message || 'Database insert failed' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: true, count: result.count });
+  } catch (error) {
+    console.error("[BULK_DELETE_FLASHCARDS_ERROR]", error);
+    return NextResponse.json({ error: "Failed to delete flashcards" }, { status: 500 });
   }
-}
+});

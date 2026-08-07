@@ -24,17 +24,18 @@ export const DELETE = requireSudo(async (request: NextRequest) => {
       return NextResponse.json({ error: "No question IDs provided" }, { status: 400 });
     }
 
-    const result = await prisma.question.deleteMany({
-      where: {
-        id: {
-          in: ids,
-        },
+    // Soft delete all matching questions in a single query
+    const result = await prisma.question.updateMany({
+      where: { id: { in: ids } },
+      data: {
+        deletedAt: new Date(),
+        deletedBy: String(session.userId),
       },
     });
 
     return NextResponse.json({ success: true, count: result.count });
   } catch (error) {
     console.error("[BULK_DELETE_QUESTIONS_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete questions" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to soft-delete questions" }, { status: 500 });
   }
 });

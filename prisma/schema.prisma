@@ -18,10 +18,9 @@ model User {
   password                 String
   role                     Role          @default(USER)
   isPaid                   Boolean       @default(false)
-  paidUntil                DateTime?     // Real-world expiration date (null = Lifetime)
-  planType                 String?       // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
+  paidUntil                DateTime?
+  planType                 String?
 
-  // 🔒 Security, Moderation & Active Session Fields
   isBanned                 Boolean       @default(false)
   banReason                String?
   isEmailVerified          Boolean       @default(false)
@@ -29,13 +28,14 @@ model User {
   emailVerificationExpires DateTime?
   passwordResetToken       String?       @unique
   passwordResetExpires     DateTime?
-  activeSessionId          String?       // Single active session ID
-  lastActiveAt             DateTime?     // Timestamp for 30-min inactivity check
+  activeSessionId          String?
+  lastActiveAt             DateTime?
 
   createdAt                DateTime      @default(now())
   updatedAt                DateTime      @updatedAt
+  deletedAt                DateTime?
+  deletedBy                String?
 
-  // Database Relations
   results                  ExamResult[]
   streak                   UserStreak?
   bookmarks                Bookmark[]
@@ -44,29 +44,26 @@ model User {
 
   @@index([email])
   @@index([role])
+  @@index([deletedAt])
 }
 
 model ExamResult {
-  id           String   @id @default(cuid())
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score        Float
-  totalItems   Int
-  correct      Int
-  incorrect    Int
-  skipped      Int
+  id                 String               @id @default(cuid())
+  userId             String
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score              Float
+  totalItems         Int
+  correct            Int
+  incorrect          Int
+  skipped            Int
 
-  // 🚀 MOCK EXAM HISTORY EXTENSIONS (Safe Optional Additions)
-  timeSpentSec Int      @default(0) // Total duration in seconds
-  examType     String   @default("FULL_MOCK") // "FULL_MOCK" | "PRACTICE_DRILL" | "CATEGORY_TEST"
-  passed       Boolean  @default(false) // Pass indicator (e.g. score >= 80%)
+  timeSpentSec       Int                  @default(0)
+  examType           String               @default("FULL_MOCK")
+  passed             Boolean              @default(false)
 
-  // Immutable full question & answer snapshot payload
-  detailsJson  String?  @db.Text
+  detailsJson        String?              @db.Text
+  createdAt          DateTime             @default(now())
 
-  createdAt    DateTime @default(now())
-
-  // Structured per-category breakdown metrics
   categoryBreakdowns ExamCategoryResult[]
 
   @@index([userId])
@@ -75,18 +72,17 @@ model ExamResult {
   @@index([examType])
 }
 
-// 🚀 NEW MODEL: Per-Category Exam Breakdown Metrics
 model ExamCategoryResult {
   id           String     @id @default(cuid())
   examResultId String
   examResult   ExamResult @relation(fields: [examResultId], references: [id], onDelete: Cascade)
 
-  category     String     // e.g., "Verbal Ability", "Numerical Reasoning", "Analytical Reasoning", "General Information"
+  category     String
   totalItems   Int        @default(0)
   correct      Int        @default(0)
   incorrect    Int        @default(0)
-  accuracy     Float      @default(0.0) // Percentage value (0.0 to 100.0)
-  timeSpentSec Int        @default(0) // Time spent within this specific category
+  accuracy     Float      @default(0.0)
+  timeSpentSec Int        @default(0)
 
   createdAt    DateTime   @default(now())
 
@@ -96,28 +92,46 @@ model ExamCategoryResult {
 }
 
 model Question {
-  id          String   @id @default(cuid())
-  category    String   // e.g., "Verbal Ability", "Numerical Reasoning", "Analytical Reasoning", "General Information"
-  subtopic    String   @default("General") // e.g., "Vocabulary", "Grammar", "Word Problems", "Philippine Constitution"
-  prompt      String   @db.Text
+  id          String    @id @default(cuid())
+  category    String
+  subtopic    String    @default("General")
+  prompt      String    @db.Text
 
-  // Choice representation supporting both formats for maximum compatibility
-  options     String[] // Array format: ["Option A", "Option B", "Option C", "Option D"]
+  options     String[]
   optionA     String?
   optionB     String?
   optionC     String?
   optionD     String?
 
-  answerIndex Int      // Index of the correct option (0, 1, 2, or 3)
-  explanation String?  @db.Text // Explanation for answer review
-  imageUrl    String?  // Image URLs for charts, diagrams & graphs
+  answerIndex Int
+  explanation String?   @db.Text
+  imageUrl    String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  deletedBy   String?
 
   @@index([category])
   @@index([subtopic])
   @@index([category, subtopic])
+  @@index([deletedAt])
+}
+
+model EliminationDrill {
+  id            String    @id @default(cuid())
+  title         String
+  category      String
+  description   String?
+  timeLimitSec  Int       @default(300)
+  questionsJson String    @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  deletedBy     String?
+
+  @@index([category])
+  @@index([deletedAt])
 }
 
 model ReadingMaterial {
@@ -137,9 +151,9 @@ model StudyNote {
   category  String
   title     String
   summary   String   @db.Text
-  content   String[] // Bullet points or rules
+  content   String[]
   tips      String?  @db.Text
-  videoUrl  String?  @db.Text // 👈 PERSISTED VIDEO EXPLANATION LINK
+  videoUrl  String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -153,7 +167,7 @@ model Handbook {
   description String
   pages       String
   lastUpdated String   @default("Official Ref")
-  fileData    String   @db.Text // Base64 encoded document
+  fileData    String   @db.Text
   fileName    String   @default("document.pdf")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -163,10 +177,10 @@ model Handbook {
 
 model PricingPlan {
   id           String   @id @default(cuid())
-  planType     String   @unique // "1_MONTH" | "6_MONTHS" | "1_YEAR" | "LIFETIME"
+  planType     String   @unique
   name         String
-  price        Int      // Stored in PHP (e.g. 99, 199, 299)
-  durationDays Int      // 30, 180, 365, 0 for Lifetime
+  price        Int
+  durationDays Int
   updatedAt    DateTime @updatedAt
 }
 
@@ -184,7 +198,7 @@ model Bookmark {
   id         String   @id @default(cuid())
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  targetType String   // "QUESTION" | "HANDBOOK" | "STUDY_NOTE"
+  targetType String
   targetId   String
   createdAt  DateTime @default(now())
 
@@ -206,10 +220,10 @@ model ExamDraft {
 
 model Notification {
   id        String   @id @default(cuid())
-  userId    String?  // null = System Broadcast
+  userId    String?
   title     String
   message   String   @db.Text
-  type      String   @default("INFO") // "INFO" | "PAYMENT" | "SYSTEM" | "STREAK"
+  type      String   @default("INFO")
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
@@ -237,7 +251,7 @@ model Transaction {
   paymentIntentId   String?
   amount            Int
   planType          String
-  status            String   // "PENDING" | "PAID" | "FAILED"
+  status            String
   receiptUrl        String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -247,21 +261,24 @@ model Transaction {
 }
 
 model Flashcard {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   category    String
-  topic       String   @default("General") // Keeps compatibility with existing schema
-  front       String?  @db.Text
-  back        String?  @db.Text
-  question    String?  @db.Text            // New bulk uploader field
-  answer      String?  @db.Text            // New bulk uploader field
-  options     String[] @default([])        // Choice options array
-  explanation String?  @db.Text            // Solution breakdown
-  difficulty  String   @default("medium")   // "easy" | "medium" | "hard"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  topic       String    @default("General")
+  front       String?   @db.Text
+  back        String?   @db.Text
+  question    String?   @db.Text
+  answer      String?   @db.Text
+  options     String[]  @default([])
+  explanation String?   @db.Text
+  difficulty  String    @default("medium")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  deletedBy   String?
 
   @@index([category, topic])
   @@index([category])
+  @@index([deletedAt])
 }
 
 enum DuelStatus {
@@ -277,7 +294,7 @@ model DuelMatch {
   player2Id   String?
   player2Name String?
   status      DuelStatus @default(WAITING)
-  questions   Json       // 5 rapid questions
+  questions   Json
   p1Score     Int        @default(0)
   p2Score     Int        @default(0)
   p1Current   Int        @default(0)
@@ -290,9 +307,13 @@ model DuelMatch {
 }
 
 model SystemSetting {
-  key       String   @id
-  value     String   @db.Text
-  updatedAt DateTime @updatedAt
+  key       String    @id
+  value     String    @db.Text
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  deletedBy String?
+
+  @@index([deletedAt])
 }
 
 model LoginHistory {
@@ -301,8 +322,8 @@ model LoginHistory {
   email     String
   ipAddress String?
   userAgent String?
-  status    String   // "SUCCESS" | "FAILED"
-  reason    String?  // e.g. "Invalid Password", "Account Banned"
+  status    String
+  reason    String?
   createdAt DateTime @default(now())
 
   @@index([email])
@@ -325,7 +346,7 @@ model SupportTicket {
   userEmail  String
   subject    String
   message    String   @db.Text
-  status     String   @default("OPEN") // "OPEN" | "IN_PROGRESS" | "RESOLVED"
+  status     String   @default("OPEN")
   adminNotes String?  @db.Text
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -338,7 +359,7 @@ model SyncStatus {
   id             String   @id @default("csc_sync_status")
   lastSyncAt     DateTime @default(now())
   nextSyncAt     DateTime
-  status         String   @default("IDLE") // "IDLE" | "SYNCING" | "SUCCESS" | "FAILED"
+  status         String   @default("IDLE")
   recordsUpdated Int      @default(0)
   lastError      String?  @db.Text
   updatedAt      DateTime @updatedAt
@@ -347,7 +368,7 @@ model SyncStatus {
 model SyncLog {
   id        String   @id @default(cuid())
   sourceUrl String
-  action    String   // "SCHEDULE_UPDATE" | "ANNOUNCEMENT_NEW" | "NEWS_UPDATE" | "SYNC_ERROR"
+  action    String
   details   String   @db.Text
   isError   Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -357,13 +378,13 @@ model SyncLog {
 
 model CSCExamSchedule {
   id               String    @id @default(cuid())
-  title            String    // e.g. "2026 Civil Service Exam Pen and Paper Test (CSE-PPT)"
+  title            String
   examDate         DateTime
   appOpeningDate   DateTime?
   appClosingDate   DateTime?
-  status           String    @default("UPCOMING") // "UPCOMING" | "APPLICATIONS_OPEN" | "CLOSED" | "COMPLETED"
+  status           String    @default("UPCOMING")
   isPinned         Boolean   @default(false)
-  isManualOverride Boolean   @default(false) // Prevents background cron from overwriting admin edits
+  isManualOverride Boolean   @default(false)
   notes            String?   @db.Text
   officialLink     String?
   updatedAt        DateTime  @updatedAt
@@ -377,7 +398,7 @@ model CSCAnnouncement {
   id          String   @id @default(cuid())
   title       String
   content     String   @db.Text
-  category    String   @default("GENERAL") // "EXAM_NOTICE" | "ROOM_ASSIGNMENT" | "RESULTS" | "PRESS_RELEASE"
+  category    String   @default("GENERAL")
   publishedAt DateTime @default(now())
   sourceUrl   String?
   isPinned    Boolean  @default(false)
@@ -390,7 +411,7 @@ model CSCAnnouncement {
 model CSCDownload {
   id        String   @id @default(cuid())
   title     String
-  category  String   // "APPLICATION_FORM" | "GUIDELINES" | "CERTIFICATION"
+  category  String
   fileUrl   String
   fileSize  String?
   updatedAt DateTime @updatedAt
