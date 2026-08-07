@@ -1,10 +1,12 @@
-import { NextResponse } from "next/server";
+﻿// Relative Path: src/app/api/admin/users/action/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { requireSudo } from "@/middleware/requireSudo";
 
-export async function POST(request: Request) {
+export const POST = requireSudo(async (request: NextRequest) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -66,4 +68,4 @@ export async function POST(request: Request) {
     console.error("[ADMIN_USER_ACTION_ERROR]", error);
     return NextResponse.json({ error: "Failed to perform user action" }, { status: 500 });
   }
-}
+});

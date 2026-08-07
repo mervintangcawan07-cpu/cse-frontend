@@ -1,7 +1,9 @@
-import { NextResponse } from "next/server";
+﻿// Relative Path: src/app/api/admin/maintenance/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireSudo } from "@/middleware/requireSudo";
 
 export async function GET() {
   try {
@@ -31,7 +33,7 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export const POST = requireSudo(async (request: NextRequest) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -67,4 +69,4 @@ export async function POST(request: Request) {
     console.error("[ADMIN_MAINTENANCE_POST_ERROR]", error);
     return NextResponse.json({ error: "Failed to update maintenance mode" }, { status: 500 });
   }
-}
+});

@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
+﻿// Relative Path: src/app/api/admin/questions/bulk-delete/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { requireSudo } from "@/middleware/requireSudo";
 
-export async function DELETE(request: Request) {
+export const DELETE = requireSudo(async (request: NextRequest) => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("cse_session")?.value;
@@ -22,7 +24,6 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "No question IDs provided" }, { status: 400 });
     }
 
-    // Delete all matching questions in a single query
     const result = await prisma.question.deleteMany({
       where: {
         id: {
@@ -36,4 +37,4 @@ export async function DELETE(request: Request) {
     console.error("[BULK_DELETE_QUESTIONS_ERROR]", error);
     return NextResponse.json({ error: "Failed to delete questions" }, { status: 500 });
   }
-}
+});
