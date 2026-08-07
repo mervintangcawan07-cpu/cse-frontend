@@ -1,3 +1,4 @@
+// Relative Path: src/app/admin/questions/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import BulkQuestionUploader from "@/components/admin/BulkQuestionUploader";
 import NotificationBell from "@/components/NotificationBell";
 import AdminBroadcastModal from "@/components/admin/AdminBroadcastModal";
 import EditQuestionModal from "@/components/admin/EditQuestionModal";
+import { useSudo } from "@/context/SudoContext";
 
 interface Question {
   id: string;
@@ -19,6 +21,7 @@ interface Question {
 }
 
 export default function AdminQuestionsPage() {
+  const { fetchWithSudo } = useSudo();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -128,13 +131,13 @@ export default function AdminQuestionsPage() {
     if (selectedIds.length === 0) return;
 
     const confirmed = confirm(
-      `Are you sure you want to permanently delete ${selectedIds.length} question(s)?`
+      `Are you sure you want to move ${selectedIds.length} question(s) to the Trash Bin?`
     );
     if (!confirmed) return;
 
     setDeleting(true);
     try {
-      const res = await fetch("/api/admin/questions/bulk-delete", {
+      const res = await fetchWithSudo("/api/admin/questions/bulk-delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: selectedIds }),
@@ -211,10 +214,10 @@ export default function AdminQuestionsPage() {
 
   // Delete single question
   const handleDeleteQuestion = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this question?")) return;
+    if (!confirm("Are you sure you want to move this question to the Trash Bin?")) return;
 
     try {
-      const res = await fetch(`/api/admin/questions?id=${id}`, {
+      const res = await fetchWithSudo(`/api/admin/questions?id=${id}`, {
         method: "DELETE",
       });
 
@@ -476,7 +479,7 @@ export default function AdminQuestionsPage() {
                   </select>
                 </div>
 
-                {/* Subtopic (Flexible Input with Datalist Autocomplete) */}
+                {/* Subtopic */}
                 <div className="space-y-2">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-600">
                     Subtopic Name

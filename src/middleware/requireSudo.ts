@@ -1,4 +1,4 @@
-﻿// Relative Path: src/middleware/requireSudo.ts
+// Relative Path: src/middleware/requireSudo.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger/logger";
@@ -10,16 +10,11 @@ type SudoProtectedHandler = (
   context?: any
 ) => Promise<NextResponse> | NextResponse;
 
-/**
- * Opt-in middleware wrapper that checks for valid Sudo Mode session tickets
- * before executing high-risk administrative operations.
- */
 export function requireSudo(handler: SudoProtectedHandler) {
   return async (req: NextRequest, context?: any): Promise<NextResponse> => {
     const route = req.nextUrl?.pathname || "/api/admin";
     const method = req.method;
 
-    // 1. Extract sudo token from headers or secure cookies
     const sudoHeader = req.headers.get("x-sudo-token");
     const sudoCookie = req.cookies.get("cse_sudo_token")?.value;
     const token = sudoHeader || sudoCookie;
@@ -35,10 +30,11 @@ export function requireSudo(handler: SudoProtectedHandler) {
         code: "SUDO_REQUIRED",
       };
 
-      return NextResponse.json(payload, { status: 403 });
+      const res = NextResponse.json(payload, { status: 403 });
+      res.headers.set("X-Sudo-Required", "true");
+      return res;
     }
 
-    // 2. Cryptographically verify token
     const verification = validateSudoTicket(token);
 
     if (!verification.valid || !verification.ticket) {
@@ -58,10 +54,11 @@ export function requireSudo(handler: SudoProtectedHandler) {
         code,
       };
 
-      return NextResponse.json(payload, { status: 403 });
+      const res = NextResponse.json(payload, { status: 403 });
+      res.headers.set("X-Sudo-Required", "true");
+      return res;
     }
 
-    // 3. Log successful elevated action access
     logger.info(`Sudo Mode Authorized: Executing [${method}] ${route}`, {
       user: { hashedUserId: verification.ticket.userId, role: verification.ticket.role },
       request: { route, method },

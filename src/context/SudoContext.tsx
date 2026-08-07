@@ -1,4 +1,4 @@
-﻿// Relative Path: src/context/SudoContext.tsx
+// Relative Path: src/context/SudoContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
@@ -24,14 +24,18 @@ export function SudoProvider({ children }: { children: ReactNode }) {
 
   const handleVerifySuccess = () => {
     setIsOpen(false);
-    if (resolver) resolver(true);
-    setResolver(null);
+    if (resolver) {
+      resolver(true);
+      setResolver(null);
+    }
   };
 
   const handleCancel = () => {
     setIsOpen(false);
-    if (resolver) resolver(false);
-    setResolver(null);
+    if (resolver) {
+      resolver(false);
+      setResolver(null);
+    }
   };
 
   const fetchWithSudo = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
@@ -41,15 +45,21 @@ export function SudoProvider({ children }: { children: ReactNode }) {
       const cloned = res.clone();
       try {
         const data = await cloned.json();
-        if (data.error === "SUDO_REQUIRED" || res.headers.get("X-Sudo-Required") === "true") {
+        const isSudoReq =
+          data.code === "SUDO_REQUIRED" ||
+          data.code === "SUDO_EXPIRED" ||
+          data.error === "SUDO_REQUIRED" ||
+          res.headers.get("X-Sudo-Required") === "true";
+
+        if (isSudoReq) {
           const success = await requestSudo();
           if (success) {
-            // Retry original request
+            // Retry original request with newly issued sudo ticket cookie
             res = await fetch(input, init);
           }
         }
       } catch {
-        // Response wasn't JSON, ignore
+        // Response wasn't JSON, return original response
       }
     }
 

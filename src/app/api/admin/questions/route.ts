@@ -4,13 +4,21 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
-    const where: any = { deletedAt: null };
+    const where: Prisma.QuestionWhereInput = {
+      deletedAt: null,
+      NOT: [
+        { category: "Elimination Drill" },
+        { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
+      ],
+    };
+
     if (category && category !== "All") {
       where.category = category;
     }
@@ -20,11 +28,18 @@ export async function GET(request: Request) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ success: true, questions });
+    return NextResponse.json({
+      success: true,
+      questions,
+      count: questions.length,
+    });
   } catch (error: unknown) {
     const err = error as Error;
     console.error("[QUESTIONS_GET_ERROR]", err);
-    return NextResponse.json({ error: "Failed to fetch questions.", details: err?.message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch questions.", details: err?.message },
+      { status: 500 }
+    );
   }
 }
 
