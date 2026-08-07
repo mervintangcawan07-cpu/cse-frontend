@@ -1,5 +1,5 @@
-// Relative Path: src/scripts/rebuild-elimination-drills.ts
-import { prisma } from "../lib/prisma";
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 async function rebuildDrills() {
   console.log("🔍 Inspecting database for questions and drills...");
@@ -40,7 +40,7 @@ async function rebuildDrills() {
   });
 
   // Group questions by category and repopulate/create drills
-  const categories = Array.from(new Set(activeQuestions.map((q) => q.category)));
+  const categories = [...new Set(activeQuestions.map((q) => q.category))];
 
   for (const cat of categories) {
     const catQuestions = activeQuestions.filter((q) => q.category === cat);

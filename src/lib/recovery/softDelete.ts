@@ -55,10 +55,6 @@ export async function softDeleteRecord(
       await prisma.question.update({ where: { id: entityId }, data });
       break;
 
-    case "eliminationDrill":
-      await prisma.eliminationDrill.update({ where: { id: entityId }, data });
-      break;
-
     case "flashcard":
       await prisma.flashcard.update({ where: { id: entityId }, data });
       break;
@@ -92,10 +88,6 @@ export async function restoreRecord(
 
     case "question":
       await prisma.question.update({ where: { id: entityId }, data: clearData });
-      break;
-
-    case "eliminationDrill":
-      await prisma.eliminationDrill.update({ where: { id: entityId }, data: clearData });
       break;
 
     case "flashcard":
@@ -139,36 +131,19 @@ export async function getTrashBinItems(
     });
   }
 
-  // 2. Elimination Drills
-  const softDeletedDrills = await prisma.eliminationDrill.findMany({
-    where: { deletedAt: { not: null } },
-    select: { id: true, title: true, deletedAt: true, deletedBy: true },
-  });
-  for (const d of softDeletedDrills) {
-    if (d.deletedAt) {
-      items.push({
-        id: d.id,
-        entityType: "eliminationDrill",
-        displayName: d.title || `Drill ${d.id}`,
-        deletedAt: d.deletedAt,
-        deletedBy: d.deletedBy || "admin",
-        daysRemaining: calculateDaysRemaining(d.deletedAt, retentionDays),
-        canRestore: true,
-      });
-    }
-  }
-
-  // 3. Questions
+  // 2. Questions & Elimination Drill Questions
   const softDeletedQuestions = await prisma.question.findMany({
     where: { deletedAt: { not: null } },
-    select: { id: true, prompt: true, deletedAt: true, deletedBy: true },
+    select: { id: true, prompt: true, category: true, subtopic: true, deletedAt: true, deletedBy: true },
   });
   for (const q of softDeletedQuestions) {
     if (q.deletedAt) {
+      const isElimination = q.category === "Elimination Drill" || q.subtopic.includes("Elimination Drill");
+      const prefix = isElimination ? "[Elimination Drill] " : "";
       items.push({
         id: q.id,
         entityType: "question",
-        displayName: q.prompt?.slice(0, 50) || `Question ${q.id}`,
+        displayName: `${prefix}${(q.prompt || `Question ${q.id}`).slice(0, 50)}`,
         deletedAt: q.deletedAt,
         deletedBy: q.deletedBy || "admin",
         daysRemaining: calculateDaysRemaining(q.deletedAt, retentionDays),
@@ -177,7 +152,7 @@ export async function getTrashBinItems(
     }
   }
 
-  // 4. Flashcards (Handles both 'front' and 'question' field formats)
+  // 3. Flashcards
   const softDeletedCards = await prisma.flashcard.findMany({
     where: { deletedAt: { not: null } },
     select: { id: true, front: true, question: true, topic: true, deletedAt: true, deletedBy: true },
@@ -197,7 +172,7 @@ export async function getTrashBinItems(
     }
   }
 
-  // 5. System Settings
+  // 4. System Settings
   const softDeletedSettings = await prisma.systemSetting.findMany({
     where: { deletedAt: { not: null } },
     select: { key: true, deletedAt: true, deletedBy: true },
@@ -231,11 +206,6 @@ export async function purgeExpiredRecords(
     where: { deletedAt: { lte: cutoffDate } },
   });
   results.push({ entityType: "user", totalPurged: userPurge.count, retentionDays, purgedBefore: cutoffDate });
-
-  const drillPurge = await prisma.eliminationDrill.deleteMany({
-    where: { deletedAt: { lte: cutoffDate } },
-  });
-  results.push({ entityType: "eliminationDrill", totalPurged: drillPurge.count, retentionDays, purgedBefore: cutoffDate });
 
   const questionPurge = await prisma.question.deleteMany({
     where: { deletedAt: { lte: cutoffDate } },

@@ -1,29 +1,15 @@
-﻿// Relative Path: src/types/recovery.ts
+// Relative Path: src/types/recovery.ts
 
-export type SupportedEntityType =
-  | "user"
-  | "question"
-  | "eliminationDrill"
-  | "flashcard"
-  | "readingPassage"
-  | "systemSetting";
-
-export interface SoftDeleteMetadata {
-  deletedAt: Date;
-  deletedBy?: string;
-  restoreDeadline: Date;
-  isDeleted: boolean;
-}
+export type SupportedEntityType = "user" | "question" | "flashcard" | "systemSetting";
 
 export interface TrashItem {
   id: string;
   entityType: SupportedEntityType;
   displayName: string;
   deletedAt: Date;
-  deletedBy?: string;
+  deletedBy: string;
   daysRemaining: number;
   canRestore: boolean;
-  dataSummary?: Record<string, any>;
 }
 
 export interface RestoreResponse {
@@ -35,7 +21,7 @@ export interface RestoreResponse {
 }
 
 export interface PurgeResult {
-  entityType: string;
+  entityType: SupportedEntityType;
   totalPurged: number;
   retentionDays: number;
   purgedBefore: Date;

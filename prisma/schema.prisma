@@ -118,22 +118,6 @@ model Question {
   @@index([deletedAt])
 }
 
-model EliminationDrill {
-  id            String    @id @default(cuid())
-  title         String
-  category      String
-  description   String?
-  timeLimitSec  Int       @default(300)
-  questionsJson String    @db.Text
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
-  deletedBy     String?
-
-  @@index([category])
-  @@index([deletedAt])
-}
-
 model ReadingMaterial {
   id        String   @id @default(cuid())
   title     String

@@ -1,3 +1,4 @@
+// Relative Path: src/app/api/drills/elimination/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -11,9 +12,9 @@ export async function GET(request: Request) {
     const seenIds = new Set(seenParam.split(",").filter(Boolean));
     const LIMIT = 10;
 
-    // 1. Fetch all Elimination Drill questions from Database
-    const allDrillQuestions = await prisma.question.findMany({
+    let allDrillQuestions = await prisma.question.findMany({
       where: {
+        deletedAt: null,
         OR: [
           { category: "Elimination Drill" },
           { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
@@ -23,20 +24,25 @@ export async function GET(request: Request) {
     });
 
     if (allDrillQuestions.length === 0) {
+      allDrillQuestions = await prisma.question.findMany({
+        where: { deletedAt: null },
+        take: 50,
+        orderBy: { createdAt: "desc" },
+      });
+    }
+
+    if (allDrillQuestions.length === 0) {
       return NextResponse.json({ success: true, drills: [], loopReset: false });
     }
 
-    // 2. Filter out questions already seen in past sessions
     let candidatePool = allDrillQuestions.filter((q) => !seenIds.has(q.id));
     let loopReset = false;
 
-    // 3. LOOP RESET: If unseen pool has fewer than 10 items, reset candidates to full DB pool
     if (candidatePool.length < LIMIT) {
       candidatePool = [...allDrillQuestions];
       loopReset = true;
     }
 
-    // 4. Group candidate questions by category
     const categoryMap = new Map<string, typeof allDrillQuestions>();
     candidatePool.forEach((q) => {
       const cat = q.category || "General";
@@ -50,7 +56,6 @@ export async function GET(request: Request) {
     const selectedQuestions: typeof allDrillQuestions = [];
     const addedIds = new Set<string>();
 
-    // 5. Divide 10 items EQUALLY across available categories
     if (categories.length > 0) {
       const baseQuota = Math.floor(LIMIT / categories.length);
       let remainder = LIMIT % categories.length;
@@ -67,7 +72,6 @@ export async function GET(request: Request) {
         });
       }
 
-      // Catch-all: Top up to 10 if any category had fewer items than allocated quota
       if (selectedQuestions.length < LIMIT) {
         const remainingCandidates = candidatePool
           .filter((q) => !addedIds.has(q.id))
@@ -81,7 +85,6 @@ export async function GET(request: Request) {
       }
     }
 
-    // 6. Shuffle final 10 items to intermix categories
     const finalDrills = selectedQuestions.sort(() => Math.random() - 0.5).slice(0, LIMIT);
 
     return NextResponse.json({
@@ -89,10 +92,11 @@ export async function GET(request: Request) {
       drills: finalDrills,
       loopReset,
     });
-  } catch (error: any) {
-    console.error("Failed to fetch elimination drills:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("Failed to fetch elimination drills:", err);
     return NextResponse.json(
-      { error: "Failed to fetch elimination drills", details: error?.message },
+      { error: "Failed to fetch elimination drills", details: err?.message },
       { status: 500 }
     );
   }
