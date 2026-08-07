@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+﻿import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { verifyJWT } from "@/lib/auth";
@@ -65,6 +65,13 @@ export default async function AdminLayout({
             </Link>
 
             <Link
+              href="/admin/health"
+              className="px-3.5 py-2 rounded-xl text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 transition whitespace-nowrap flex items-center gap-1.5 font-black shadow-sm"
+            >
+              <span className="text-sm">💓</span> System Health
+            </Link>
+
+            <Link
               href="/admin/elimination-drills"
               className="px-3.5 py-2 rounded-xl text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition whitespace-nowrap flex items-center gap-1.5 font-black shadow-sm"
             >
@@ -75,34 +82,44 @@ export default async function AdminLayout({
               href="/admin/questions"
               className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
             >
-              <span>❓</span> Question Bank
+              <span>❓</span> Questions
             </Link>
 
             <Link
               href="/admin/users"
               className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
             >
-              <span>👥</span> Users & PRO Subscriptions
+              <span>👥</span> Users
             </Link>
 
             <Link
-              href="/admin/reviewer"
-              className="px-3.5 py-2 rounded-xl text-amber-400 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition whitespace-nowrap flex items-center gap-1.5"
+              href="/admin/flashcards"
+              className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
             >
-              <span>📝</span> Admin Study Notes
+              <span>🎴</span> Flashcards
             </Link>
 
             <Link
-              href="/admin/reading-materials"
-              className="px-3.5 py-2 rounded-xl text-blue-400 bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 transition whitespace-nowrap flex items-center gap-1.5"
+              href="/admin/csc-sync"
+              className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
             >
-              <span>📚</span> Admin Handbooks & Docs
+              <span>🔄</span> CSC Sync
+            </Link>
+
+            <Link
+              href="/admin/system"
+              className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
+            >
+              <span>⚙️</span> System Config
             </Link>
           </nav>
         </div>
       </header>
 
-      <main className="py-6">{children}</main>
+      {/* Main Content Viewport */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children}
+      </main>
     </div>
   );
 }
