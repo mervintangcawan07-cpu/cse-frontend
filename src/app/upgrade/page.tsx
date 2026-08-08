@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/common/LoadingButton";
 import { useDoubleSubmitPreventer } from "@/hooks/useDoubleSubmitPreventer";
+import { fetchWithTimeout } from "@/lib/fetchWithTimeout";
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -13,8 +14,10 @@ export default function UpgradePage() {
   const executeUpgrade = async () => {
     setErrorMsg(null);
     try {
-      const res = await fetch("/api/paymongo/checkout", {
+      // Automatically abort request if server response exceeds 12 seconds
+      const res = await fetchWithTimeout("/api/paymongo/checkout", {
         method: "POST",
+        timeout: 12000,
       });
 
       const data = await res.json();
@@ -25,9 +28,9 @@ export default function UpgradePage() {
         setErrorMsg(msg);
         alert(msg);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Checkout error:", err);
-      const msg = "An unexpected error occurred. Please try again.";
+      const msg = err?.message || "An unexpected error occurred. Please try again.";
       setErrorMsg(msg);
       alert(msg);
     }
@@ -37,7 +40,7 @@ export default function UpgradePage() {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetchWithTimeout("/api/auth/logout", { method: "POST", timeout: 5000 });
     } catch (err) {
       console.error("Logout error:", err);
     } finally {

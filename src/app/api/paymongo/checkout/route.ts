@@ -1,3 +1,4 @@
+﻿// Relative Path: src/app/api/paymongo/checkout/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -86,12 +87,14 @@ export async function POST(request: Request) {
 
     const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
 
+    // ⏱️ Abort outbound PayMongo API request after 10 seconds if PayMongo hangs
     const response = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Basic ${authHeader}`,
       },
+      signal: AbortSignal.timeout(10000),
       body: JSON.stringify({
         data: {
           attributes: {
@@ -150,8 +153,16 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ checkoutUrl }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Checkout Catch Error:", error);
+
+    if (error?.name === "AbortError" || error?.name === "TimeoutError") {
+      return NextResponse.json(
+        { error: "PayMongo API timed out after 10s. Please try again." },
+        { status: 504 }
+      );
+    }
+
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal Server Error" },
       { status: 500 }
