@@ -312,7 +312,7 @@ function DashboardContent() {
             </span>
             <h2 className="text-2xl font-black mt-2 text-white">Upgrade or Renew Your Review Pass</h2>
             <p className="text-xs text-slate-400 mt-1">
-              Gain full access to the 170-item mock exam player, 5-minute strategy drills, and official handbooks.
+              Gain full access to the 170-item mock exam player, specialized strategy drills, and official handbooks.
             </p>
           </div>
 
@@ -549,8 +549,8 @@ function DashboardContent() {
         <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">
-                5-Min Challenge
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-md font-mono">
+                EXAM TACTICS
               </span>
               <span className="text-xs font-bold text-emerald-600">Technique Center</span>
             </div>
