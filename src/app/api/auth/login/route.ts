@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/auth/login/route.ts
+// Relative Path: src/app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
@@ -9,6 +9,7 @@ import {
   recordFailedAttempt,
   resetFailedAttempts,
 } from "@/lib/accountLockout";
+import { recordLoginFailure } from "@/lib/systemHealthMonitor";
 
 export async function POST(request: Request) {
   try {
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
     });
 
     if (!user || !user.password) {
+      recordLoginFailure();
       const failure = recordFailedAttempt(cleanEmail);
       if (failure.isLocked) {
         const mins = Math.ceil(failure.remainingSeconds / 60);
@@ -72,6 +74,7 @@ export async function POST(request: Request) {
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
+      recordLoginFailure();
       const failure = recordFailedAttempt(cleanEmail);
       if (failure.isLocked) {
         const mins = Math.ceil(failure.remainingSeconds / 60);
