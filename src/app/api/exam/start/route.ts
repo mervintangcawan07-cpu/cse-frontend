@@ -1,4 +1,5 @@
-﻿import { NextResponse } from "next/server";
+// Relative Path: src/app/api/exam/start/route.ts
+import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -10,6 +11,16 @@ const CSE_CATEGORY_QUOTAS: Record<string, number> = {
   "Analytical Reasoning": 45,
   "General Information": 30,
 };
+
+// Fisher-Yates Shuffle Utility
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 export async function GET(request: Request) {
   try {
@@ -43,16 +54,18 @@ export async function GET(request: Request) {
         try {
           const details = JSON.parse(result.detailsJson);
           if (Array.isArray(details)) {
-            details.forEach((item: { id?: string; selectedIndex?: number | null; answerIndex?: number }) => {
-              if (
-                item.id &&
-                item.selectedIndex !== null &&
-                item.selectedIndex !== undefined &&
-                item.selectedIndex === item.answerIndex
-              ) {
-                correctlyAnsweredIds.add(String(item.id));
+            details.forEach(
+              (item: { id?: string; selectedIndex?: number | null; answerIndex?: number }) => {
+                if (
+                  item.id &&
+                  item.selectedIndex !== null &&
+                  item.selectedIndex !== undefined &&
+                  item.selectedIndex === item.answerIndex
+                ) {
+                  correctlyAnsweredIds.add(String(item.id));
+                }
               }
-            });
+            );
           }
         } catch (e) {
           console.error("Error parsing detailsJson:", e);
@@ -60,130 +73,122 @@ export async function GET(request: Request) {
       }
     });
 
-    const correctlyAnsweredArray = Array.from(correctlyAnsweredIds);
-    let finalExamQuestions: any[] = [];
-
     // Determine target category quotas
     const activeQuotas: Record<string, number> =
       selectedCategory === "All"
         ? CSE_CATEGORY_QUOTAS
         : { [selectedCategory]: 170 };
 
-    // 2. Build question pool per Category and Subtopic
+    const requiredCategories = Object.keys(activeQuotas);
+
+    // 2. Fetch ALL non-deleted questions matching active categories in 1 SINGLE DB QUERY
+    const allQuestions = await prisma.question.findMany({
+      where: {
+        deletedAt: null,
+        category: { in: requiredCategories, mode: "insensitive" },
+        NOT: [
+          { category: { equals: "Elimination Drill", mode: "insensitive" } },
+          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
+        ],
+      },
+      select: {
+        id: true,
+        category: true,
+        subtopic: true,
+        prompt: true,
+        options: true,
+        optionA: true,
+        optionB: true,
+        optionC: true,
+        optionD: true,
+        answerIndex: true,
+        explanation: true,
+        imageUrl: true,
+      },
+    });
+
+    // Group questions by category in memory
+    const categoryMap: Record<string, typeof allQuestions> = {};
+    for (const q of allQuestions) {
+      const catKey = q.category || "General Information";
+      const matchedKey =
+        requiredCategories.find((c) => c.toLowerCase() === catKey.toLowerCase()) || catKey;
+
+      if (!categoryMap[matchedKey]) {
+        categoryMap[matchedKey] = [];
+      }
+      categoryMap[matchedKey].push(q);
+    }
+
+    let finalExamQuestions: any[] = [];
+
+    // 3. Process subtopics and quotas in memory
     for (const [catName, catQuota] of Object.entries(activeQuotas)) {
-      // Find all distinct subtopics in this category
-      const subtopicRecords = await prisma.question.findMany({
-        where: { category: catName },
-        select: { subtopic: true },
-        distinct: ["subtopic"],
-      });
+      const catQuestions = categoryMap[catName] || [];
+      if (catQuestions.length === 0) continue;
 
-      const subtopics: string[] = subtopicRecords
-        .map((s: { subtopic: string | null }) => s.subtopic || "General")
-        .filter(Boolean);
+      // Group category questions by subtopic
+      const subtopicMap: Record<string, typeof catQuestions> = {};
+      for (const q of catQuestions) {
+        const sub = q.subtopic?.trim() || "General";
+        if (!subtopicMap[sub]) subtopicMap[sub] = [];
+        subtopicMap[sub].push(q);
+      }
 
+      const subtopics = Object.keys(subtopicMap);
       const subtopicCount = subtopics.length || 1;
       const baseQuotaPerSubtopic = Math.floor(catQuota / subtopicCount);
       let remainder = catQuota % subtopicCount;
 
       let categoryPickedQuestions: any[] = [];
+      const pickedIdsInCat = new Set<string>();
 
       // Pull questions equally per subtopic
       for (const sub of subtopics) {
         const subQuota = baseQuotaPerSubtopic + (remainder > 0 ? 1 : 0);
         if (remainder > 0) remainder--;
-
         if (subQuota <= 0) continue;
 
-        // Step A: Fetch unmastered / unseen questions for this subtopic
-        let subQuestions = await prisma.question.findMany({
-          where: {
-            category: catName,
-            subtopic: sub,
-            id: { notIn: correctlyAnsweredArray },
-          },
-          select: {
-            id: true,
-            category: true,
-            subtopic: true,
-            prompt: true,
-            options: true,
-            optionA: true,
-            optionB: true,
-            optionC: true,
-            optionD: true,
-            answerIndex: true,
-            explanation: true,
-            imageUrl: true,
-          },
+        const subPool = subtopicMap[sub] || [];
+
+        // Split subtopic pool into unmastered vs mastered
+        const unmastered = subPool.filter((q) => !correctlyAnsweredIds.has(q.id));
+        const mastered = subPool.filter((q) => correctlyAnsweredIds.has(q.id));
+
+        // Step A: Fetch unmastered / unseen questions
+        const shuffledUnmastered = shuffleArray(unmastered);
+        const pickedFromUnmastered = shuffledUnmastered.slice(0, subQuota);
+
+        pickedFromUnmastered.forEach((q) => {
+          categoryPickedQuestions.push(q);
+          pickedIdsInCat.add(q.id);
         });
 
-        // Step B: Endless Loop Fallback — recycle mastered questions from this subtopic if needed
-        if (subQuestions.length < subQuota) {
-          const missingCount = subQuota - subQuestions.length;
-          const recycledSubQuestions = await prisma.question.findMany({
-            where: {
-              category: catName,
-              subtopic: sub,
-              id: { in: correctlyAnsweredArray },
-            },
-            take: missingCount,
-            select: {
-              id: true,
-              category: true,
-              subtopic: true,
-              prompt: true,
-              options: true,
-              optionA: true,
-              optionB: true,
-              optionC: true,
-              optionD: true,
-              answerIndex: true,
-              explanation: true,
-              imageUrl: true,
-            },
+        // Step B: Recycling mastered questions fallback if unmastered pool is smaller than quota
+        if (pickedFromUnmastered.length < subQuota) {
+          const missingCount = subQuota - pickedFromUnmastered.length;
+          const shuffledMastered = shuffleArray(mastered);
+          const recycled = shuffledMastered.slice(0, missingCount);
+
+          recycled.forEach((q) => {
+            categoryPickedQuestions.push(q);
+            pickedIdsInCat.add(q.id);
           });
-
-          subQuestions = [...subQuestions, ...recycledSubQuestions];
         }
-
-        categoryPickedQuestions.push(...shuffleArray(subQuestions).slice(0, subQuota));
       }
 
       // Step C: Fallback check if category quota wasn't completely filled
       if (categoryPickedQuestions.length < catQuota) {
         const catMissing = catQuota - categoryPickedQuestions.length;
-        const existingCategoryIds = categoryPickedQuestions.map((q: any) => q.id);
-
-        const categoryFillers = await prisma.question.findMany({
-          where: {
-            category: catName,
-            id: { notIn: existingCategoryIds },
-          },
-          take: catMissing,
-          select: {
-            id: true,
-            category: true,
-            subtopic: true,
-            prompt: true,
-            options: true,
-            optionA: true,
-            optionB: true,
-            optionC: true,
-            optionD: true,
-            answerIndex: true,
-            explanation: true,
-            imageUrl: true,
-          },
-        });
-
+        const unpickedInCat = catQuestions.filter((q) => !pickedIdsInCat.has(q.id));
+        const categoryFillers = shuffleArray(unpickedInCat).slice(0, catMissing);
         categoryPickedQuestions.push(...categoryFillers);
       }
 
-      finalExamQuestions.push(...categoryPickedQuestions);
+      finalExamQuestions.push(...shuffleArray(categoryPickedQuestions).slice(0, catQuota));
     }
 
-    // 3. Prepare options & shuffle option indices
+    // 4. Prepare options & shuffle option indices
     const preparedQuestions = finalExamQuestions.map((q: any) => {
       const resolvedOptions: string[] =
         Array.isArray(q.options) && q.options.length > 0
@@ -195,15 +200,15 @@ export async function GET(request: Request) {
         isCorrect: idx === q.answerIndex,
       }));
 
-      const shuffledOptions = [...indexedOptions].sort(() => Math.random() - 0.5);
+      const shuffledOptions = shuffleArray(indexedOptions);
 
       return {
         id: q.id,
         category: q.category || "General",
         subtopic: q.subtopic || "General",
         prompt: q.prompt,
-        options: shuffledOptions.map((o: { text: string; isCorrect: boolean }) => o.text),
-        answerIndex: shuffledOptions.findIndex((o: { text: string; isCorrect: boolean }) => o.isCorrect),
+        options: shuffledOptions.map((o) => o.text),
+        answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
         explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
       };
@@ -224,14 +229,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-}
-
-// Fisher-Yates Shuffle Utility
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
 }

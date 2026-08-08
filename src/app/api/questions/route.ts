@@ -1,9 +1,27 @@
+// Relative Path: src/app/api/questions/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import Papa from "papaparse";
+
+// Official Civil Service Exam Category Breakdown (Total = 170)
+const CSE_SUBJECT_ORDER = [
+  { name: "Verbal Ability", keyword: "verbal", quota: 50 },
+  { name: "Numerical Reasoning", keyword: "numerical", quota: 45 },
+  { name: "Analytical Reasoning", keyword: "analytical", quota: 45 },
+  { name: "General Information", keyword: "general", quota: 30 },
+];
+
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 export async function GET(request: Request) {
   try {
@@ -27,7 +45,6 @@ export async function GET(request: Request) {
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
-    // 🛡️ EXCLUSION FILTER: Typed with Prisma.QuestionWhereInput[] to satisfy QueryMode
     const NOT_ELIMINATION_DRILL: Prisma.QuestionWhereInput[] = [
       { category: { equals: "Elimination Drill", mode: "insensitive" } },
       { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
@@ -83,7 +100,8 @@ export async function GET(request: Request) {
         category.toLowerCase() === "elimination drill" ||
         (subtopic && subtopic.toLowerCase().includes("elimination drill"));
 
-      const whereClause: any = {
+      const whereClause: Prisma.QuestionWhereInput = {
+        deletedAt: null,
         category: { equals: category, mode: "insensitive" },
       };
 
@@ -95,83 +113,80 @@ export async function GET(request: Request) {
         whereClause.NOT = NOT_ELIMINATION_DRILL;
       }
 
-      // Priority 1: Fetch Unmastered questions first (New + Past Incorrect)
-      let questions = await prisma.question.findMany({
-        where: {
-          ...whereClause,
-          ...(masteredQuestionIds.size > 0
-            ? { id: { notIn: Array.from(masteredQuestionIds) } }
-            : {}),
-        },
+      // ⚡ FAST BULK FETCH: Query all candidate questions for this category/subtopic in 1 SQL call
+      const allCategoryPool = await prisma.question.findMany({
+        where: whereClause,
       });
 
-      // Priority 2: RECYCLING TRIGGER - Top up with Mastered items if unmastered pool runs low
-      if (questions.length < requestedLimit && masteredQuestionIds.size > 0) {
-        const masteredFallback = await prisma.question.findMany({
-          where: {
-            ...whereClause,
-            id: { in: Array.from(masteredQuestionIds) },
-          },
-        });
-        const shuffledMastered = masteredFallback.sort(() => Math.random() - 0.5);
-        questions = [...questions, ...shuffledMastered];
-      }
-
-      // Priority 3: MAIN CATEGORY CATCH-ALL - If subtopic query was empty, fetch any questions under this category
-      if (questions.length === 0) {
-        const catchAllWhere: any = {
+      if (allCategoryPool.length === 0) {
+        // Catch-all fallback
+        const catchAllWhere: Prisma.QuestionWhereInput = {
+          deletedAt: null,
           category: { equals: category, mode: "insensitive" },
         };
         if (!isEliminationQuery) {
           catchAllWhere.NOT = NOT_ELIMINATION_DRILL;
         }
-        questions = await prisma.question.findMany({
+        const catchAllPool = await prisma.question.findMany({
           where: catchAllWhere,
+        });
+        return NextResponse.json({
+          success: true,
+          questions: shuffleArray(catchAllPool).slice(0, requestedLimit),
         });
       }
 
-      questions = questions.sort(() => Math.random() - 0.5);
+      // In-Memory Prioritization: Unmastered first, then Mastered recycling
+      const unmastered = allCategoryPool.filter((q) => !masteredQuestionIds.has(q.id));
+      const mastered = allCategoryPool.filter((q) => masteredQuestionIds.has(q.id));
+
+      let picked = shuffleArray(unmastered);
+      if (picked.length < requestedLimit && mastered.length > 0) {
+        const needed = requestedLimit - picked.length;
+        picked.push(...shuffleArray(mastered).slice(0, needed));
+      }
 
       return NextResponse.json({
         success: true,
-        questions: questions.slice(0, requestedLimit),
+        questions: picked.slice(0, requestedLimit),
       });
     }
 
     // ------------------------------------------------------------------
-    // 3. FULL MOCK EXAM MODE ("All"): DYNAMIC SUBTOPICS & STRICT CATEGORY QUOTAS
+    // 3. FULL MOCK EXAM MODE ("All"): SINGLE BULK QUERY + IN-MEMORY ALLOCATION
     // ------------------------------------------------------------------
-    const subjectOrder = [
-      { name: "Verbal Ability", keyword: "Verbal", quota: 50 },
-      { name: "Numerical Reasoning", keyword: "Numerical", quota: 45 },
-      { name: "Analytical Reasoning", keyword: "Analytical", quota: 45 },
-      { name: "General Information", keyword: "General", quota: 30 },
-    ];
+    // ⚡ SINGLE SQL QUERY: Retrieve all non-deleted, active questions at once
+    const globalPool = await prisma.question.findMany({
+      where: {
+        deletedAt: null,
+        NOT: NOT_ELIMINATION_DRILL,
+      },
+    });
 
     let finalExamQuestions: any[] = [];
     const addedIds = new Set<string>();
 
-    for (const subject of subjectOrder) {
+    for (const subject of CSE_SUBJECT_ORDER) {
       const categoryQuestions: any[] = [];
 
-      // 🔍 A. DISCOVER ALL SUBTOPICS DYNAMICALLY FROM DATABASE FOR THIS CATEGORY (EXCLUDING ELIMINATION DRILLS)
-      const dbSubtopicObjects = await prisma.question.findMany({
-        where: {
-          category: { contains: subject.keyword, mode: "insensitive" },
-          NOT: NOT_ELIMINATION_DRILL,
-        },
-        select: { subtopic: true },
-        distinct: ["subtopic"],
-      });
+      // Filter global pool for this subject
+      const subjectPool = globalPool.filter((q) =>
+        q.category?.toLowerCase().includes(subject.keyword)
+      );
 
-      const activeSubtopics = dbSubtopicObjects
-        .map((s) => s.subtopic?.trim())
-        .filter(
-          (s): s is string =>
-            Boolean(s) && s !== "" && !s.toLowerCase().includes("elimination drill")
-        );
+      // Discover active subtopics from in-memory pool
+      const subtopicMap = new Map<string, typeof globalPool>();
+      for (const q of subjectPool) {
+        const sub = q.subtopic?.trim() || "General";
+        if (sub && !sub.toLowerCase().includes("elimination drill")) {
+          if (!subtopicMap.has(sub)) subtopicMap.set(sub, []);
+          subtopicMap.get(sub)!.push(q);
+        }
+      }
 
-      // ⚖️ B. EVENLY DIVIDE CATEGORY QUOTA ACROSS ALL DISCOVERED SUBTOPICS
+      const activeSubtopics = Array.from(subtopicMap.keys());
+
+      // Divide quota across subtopics in memory
       if (activeSubtopics.length > 0) {
         const subCount = activeSubtopics.length;
         const basePerSub = Math.floor(subject.quota / subCount);
@@ -182,109 +197,56 @@ export async function GET(request: Request) {
           if (remainder > 0) remainder--;
           if (subTarget <= 0) continue;
 
-          // Priority 1: Unmastered questions for this specific subtopic
-          let subQuestions = await prisma.question.findMany({
-            where: {
-              category: { contains: subject.keyword, mode: "insensitive" },
-              subtopic: { equals: sub, mode: "insensitive" },
-              id: {
-                notIn: [
-                  ...Array.from(masteredQuestionIds),
-                  ...Array.from(addedIds),
-                ],
-              },
-              NOT: NOT_ELIMINATION_DRILL,
-            },
-          });
+          const subPool = subtopicMap.get(sub) || [];
+          const availableUnused = subPool.filter((q) => !addedIds.has(q.id));
 
-          // Priority 2: RECYCLING TRIGGER - Recycle Mastered questions for this subtopic if unmastered is exhausted
-          if (subQuestions.length < subTarget && masteredQuestionIds.size > 0) {
-            const masteredSub = await prisma.question.findMany({
-              where: {
-                category: { contains: subject.keyword, mode: "insensitive" },
-                subtopic: { equals: sub, mode: "insensitive" },
-                id: {
-                  in: Array.from(masteredQuestionIds),
-                  notIn: Array.from(addedIds),
-                },
-                NOT: NOT_ELIMINATION_DRILL,
-              },
-            });
-            const shuffledMastered = masteredSub.sort(() => Math.random() - 0.5);
-            subQuestions = [...subQuestions, ...shuffledMastered];
+          const unmastered = availableUnused.filter((q) => !masteredQuestionIds.has(q.id));
+          const mastered = availableUnused.filter((q) => masteredQuestionIds.has(q.id));
+
+          let subPicked = shuffleArray(unmastered).slice(0, subTarget);
+
+          // Recycle mastered if unmastered is insufficient
+          if (subPicked.length < subTarget && mastered.length > 0) {
+            const missing = subTarget - subPicked.length;
+            subPicked.push(...shuffleArray(mastered).slice(0, missing));
           }
 
-          subQuestions = subQuestions.sort(() => Math.random() - 0.5);
-
-          for (const q of subQuestions.slice(0, subTarget)) {
+          for (const q of subPicked) {
             addedIds.add(q.id);
             categoryQuestions.push(q);
           }
         }
       }
 
-      // 🛡️ C. MAIN CATEGORY CATCH-ALL & RECYCLING (EXCLUDING ELIMINATION DRILLS)
+      // Catch-all filling for category if quota wasn't reached
       if (categoryQuestions.length < subject.quota) {
         const needed = subject.quota - categoryQuestions.length;
+        const remainingInCat = subjectPool.filter((q) => !addedIds.has(q.id));
 
-        // Catch-All Priority 1: Unmastered Category Questions
-        let extraUnmastered = await prisma.question.findMany({
-          where: {
-            category: { contains: subject.keyword, mode: "insensitive" },
-            id: {
-              notIn: [
-                ...Array.from(masteredQuestionIds),
-                ...Array.from(addedIds),
-              ],
-            },
-            NOT: NOT_ELIMINATION_DRILL,
-          },
-        });
+        const unmasteredCat = remainingInCat.filter((q) => !masteredQuestionIds.has(q.id));
+        const masteredCat = remainingInCat.filter((q) => masteredQuestionIds.has(q.id));
 
-        extraUnmastered = extraUnmastered.sort(() => Math.random() - 0.5);
-        for (const q of extraUnmastered.slice(0, needed)) {
-          addedIds.add(q.id);
-          categoryQuestions.push(q);
+        let extra = shuffleArray(unmasteredCat).slice(0, needed);
+        if (extra.length < needed && masteredCat.length > 0) {
+          const stillNeeded = needed - extra.length;
+          extra.push(...shuffleArray(masteredCat).slice(0, stillNeeded));
         }
 
-        // Catch-All Priority 2: Mastered Category Questions
-        if (categoryQuestions.length < subject.quota) {
-          const stillNeeded = subject.quota - categoryQuestions.length;
-          let extraMastered = await prisma.question.findMany({
-            where: {
-              category: { contains: subject.keyword, mode: "insensitive" },
-              id: {
-                in: Array.from(masteredQuestionIds),
-                notIn: Array.from(addedIds),
-              },
-              NOT: NOT_ELIMINATION_DRILL,
-            },
-          });
-
-          extraMastered = extraMastered.sort(() => Math.random() - 0.5);
-          for (const q of extraMastered.slice(0, stillNeeded)) {
-            addedIds.add(q.id);
-            categoryQuestions.push(q);
-          }
+        for (const q of extra) {
+          addedIds.add(q.id);
+          categoryQuestions.push(q);
         }
       }
 
       finalExamQuestions.push(...categoryQuestions);
     }
 
-    // 🛡️ D. INFINITE EXAM READINESS SAFEGUARD (If DB total items < 170 items, EXCLUDING ELIMINATION DRILLS)
+    // Safeguard to top up global items if pool total is under 170
     if (finalExamQuestions.length < 170) {
       const neededGlobal = 170 - finalExamQuestions.length;
-      let globalFallback = await prisma.question.findMany({
-        where: {
-          id: { notIn: Array.from(addedIds) },
-          NOT: NOT_ELIMINATION_DRILL,
-        },
-        take: neededGlobal,
-      });
-
-      globalFallback = globalFallback.sort(() => Math.random() - 0.5);
-      for (const q of globalFallback) {
+      const globalRemaining = globalPool.filter((q) => !addedIds.has(q.id));
+      const fallback = shuffleArray(globalRemaining).slice(0, neededGlobal);
+      for (const q of fallback) {
         addedIds.add(q.id);
         finalExamQuestions.push(q);
       }
