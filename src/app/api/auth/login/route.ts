@@ -1,8 +1,14 @@
+﻿// Relative Path: src/app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/lib/auth";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  checkAccountLockout,
+  recordFailedAttempt,
+  resetFailedAttempts,
+} from "@/lib/accountLockout";
 
 export async function POST(request: Request) {
   try {
@@ -33,18 +39,52 @@ export async function POST(request: Request) {
     // 💡 Sanitize email input
     const cleanEmail = String(email).trim().toLowerCase();
 
+    // 🔒 Check if account is locked out due to previous failed password attempts
+    const { isLocked, remainingSeconds } = checkAccountLockout(cleanEmail);
+    if (isLocked) {
+      const minutes = Math.ceil(remainingSeconds / 60);
+      return NextResponse.json(
+        {
+          error: `Account is temporarily locked due to multiple failed login attempts. Please try again in ${minutes} minute${minutes > 1 ? "s" : ""}.`,
+        },
+        {
+          status: 423, // 423 Locked
+          headers: { "Retry-After": String(remainingSeconds) },
+        }
+      );
+    }
+
     const user = await prisma.user.findUnique({
       where: { email: cleanEmail },
     });
 
     if (!user || !user.password) {
+      const failure = recordFailedAttempt(cleanEmail);
+      if (failure.isLocked) {
+        const mins = Math.ceil(failure.remainingSeconds / 60);
+        return NextResponse.json(
+          { error: `Account locked after 5 failed attempts. Try again in ${mins} minutes.` },
+          { status: 423 }
+        );
+      }
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
+      const failure = recordFailedAttempt(cleanEmail);
+      if (failure.isLocked) {
+        const mins = Math.ceil(failure.remainingSeconds / 60);
+        return NextResponse.json(
+          { error: `Account locked after 5 failed attempts. Try again in ${mins} minutes.` },
+          { status: 423 }
+        );
+      }
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
+
+    // 🔒 Reset failed attempts on successful password verification
+    resetFailedAttempts(cleanEmail);
 
     // 🔒 Require Email Verification (Admins bypass verification)
     if (!user.isEmailVerified && user.role !== "ADMIN") {
