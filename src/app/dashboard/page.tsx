@@ -64,7 +64,6 @@ interface DashboardAnalytics {
 
 function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
   const [plans, setPlans] = useState<Plan[]>([]);
   const [analytics, setAnalytics] = useState<DetailedAnalytics | null>(null);
   const [dashAnalytics, setDashAnalytics] = useState<DashboardAnalytics | null>(null);
@@ -100,28 +99,17 @@ function DashboardContent() {
         if (userRes.ok && userData.user) {
           setUser(userData.user);
 
-          const [notesRes, hbRes, analyticsRes, pricingRes, dashAnalyticsRes] =
-            await Promise.all([
-              fetch("/api/reviewer"),
-              fetch("/api/reading-materials"),
-              fetch("/api/user/analytics/detailed"),
-              fetch("/api/pricing"),
-              fetch("/api/analytics/dashboard"),
-            ]);
+          const [analyticsRes, pricingRes, dashAnalyticsRes] = await Promise.all([
+            fetch("/api/user/analytics/detailed"),
+            fetch("/api/pricing"),
+            fetch("/api/analytics/dashboard"),
+          ]);
 
-          const [notesData, hbData, analyticsData, pricingData, dashAnalyticsData] =
-            await Promise.all([
-              notesRes.json(),
-              hbRes.json(),
-              analyticsRes.json(),
-              pricingRes.json(),
-              dashAnalyticsRes.json(),
-            ]);
-
-          setStats({
-            notesCount: notesData.notes?.length || 0,
-            handbooksCount: hbData.handbooks?.length || 0,
-          });
+          const [analyticsData, pricingData, dashAnalyticsData] = await Promise.all([
+            analyticsRes.json(),
+            pricingRes.json(),
+            dashAnalyticsRes.json(),
+          ]);
 
           if (pricingRes.ok && pricingData.plans) {
             setPlans(pricingData.plans);
@@ -186,7 +174,6 @@ function DashboardContent() {
   const isAdmin = user?.role === "ADMIN";
   const isPaid = user?.isPaid || isAdmin;
 
-  // Calculate days remaining for active plans
   let daysRemaining: number | null = null;
   if (user?.paidUntil) {
     const diff = new Date(user.paidUntil).getTime() - new Date().getTime();
@@ -221,7 +208,7 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* ⏸️ PAUSED EXAM RESUME BANNER */}
+      {/* PAUSED EXAM RESUME BANNER */}
       <ResumeExamBanner />
 
       {/* WELCOME HERO HEADER */}
@@ -280,11 +267,11 @@ function DashboardContent() {
                   </button>
                 )}
                 <Link
-                  href="/exam"
+                  href="/practice"
                   className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-blue-600/30 transition shrink-0 flex items-center gap-1.5"
                 >
                   <span>⚡</span>
-                  <span>Mock Exam Hub</span>
+                  <span>Practice Center</span>
                 </Link>
               </div>
             ) : (
@@ -299,7 +286,7 @@ function DashboardContent() {
         </div>
       </div>
 
-      {/* ⏱️ AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
+      {/* AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
       <CSCCountdownWidget />
 
       {/* DYNAMIC PLAN SELECTOR BANNER */}
@@ -500,190 +487,6 @@ function DashboardContent() {
           </div>
         </div>
       )}
-
-      {/* UNIFIED FUTURISTIC CORE STUDY MODULES GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* CARD 1: PRACTICE MOCK EXAM */}
-        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/40 transition-all duration-300">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-md border border-blue-500/30">
-                170 Timed Items
-              </span>
-              <span className="text-xs font-bold text-slate-400">Timed Simulation</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-white mt-3">Practice Mock Exam</h2>
-            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-white font-bold">Experience realistic exam conditions!</strong> Take full 170-item timed simulations with detailed step-by-step explanations and live score analytics.
-            </p>
-          </div>
-
-          <div className="flex gap-2.5 pt-2 relative z-10">
-            {isPaid ? (
-              <>
-                <Link
-                  href="/exam"
-                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-blue-600/30"
-                >
-                  Start Exam ⚡
-                </Link>
-                <Link
-                  href="/history"
-                  className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs text-center rounded-xl border border-slate-700 transition shrink-0"
-                >
-                  📜 History
-                </Link>
-              </>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 font-bold text-xs rounded-xl border border-blue-500/30 transition cursor-pointer"
-              >
-                🔒 Unlock Mock Exam
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* CARD 2: SPECIALIZED STRATEGY & TECHNIQUE DRILLS (FUTURISTIC DARK THEME) */}
-        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-emerald-500/30 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-300">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded-md border border-emerald-500/30 font-mono tracking-wider">
-                EXAM TACTICS
-              </span>
-              <span className="text-xs font-bold text-emerald-400">Technique Center</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-white mt-3">
-              Specialized Strategy & Technique Drills
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-emerald-400 font-bold">Master exam strategy!</strong> Train option elimination tactics and keyword passage scanning to boost your educated guessing accuracy and scan speed.
-            </p>
-          </div>
-          <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/drills"
-                className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-emerald-600/30"
-              >
-                Launch Strategy Drills ⚡
-              </Link>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-bold text-xs rounded-xl border border-emerald-500/30 transition cursor-pointer"
-              >
-                🔒 Unlock Strategy Drills
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* CARD 3: 1v1 STUDY DUELS */}
-        <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-xl space-y-4 text-white flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/50 transition-all duration-300">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
-                Live Arena
-              </span>
-              <span className="text-xs font-bold text-slate-400">Multiplayer ⚔️</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-white mt-3">1v1 Study Duels</h2>
-            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-white font-bold">Compete head-to-head in real time!</strong> Test your recall against fellow examinees in 5-round speed quizzes. Win duels, earn XP, and rule the leaderboard.
-            </p>
-          </div>
-          <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/1v1"
-                className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-lg shadow-amber-500/20"
-              >
-                Enter Battle Arena ⚔️
-              </Link>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
-              >
-                🔒 Unlock 1v1 Duels
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* CARD 4: STUDY NOTES MODULE (FUTURISTIC DARK THEME) */}
-        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-amber-500/30 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/50 transition-all duration-300">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-md border border-amber-500/30">
-                Cheat Sheets
-              </span>
-              <span className="text-xs font-bold text-slate-400">{stats.notesCount} Notes</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-white mt-3">Study Notes & Cheat Sheets</h2>
-            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-amber-400 font-bold">Master key formulas and rules fast!</strong> Access concise cheat sheets covering Civil Service laws, math shortcuts, and English grammar rules.
-            </p>
-          </div>
-          <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/reviewer"
-                className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-lg shadow-amber-500/20"
-              >
-                Read Study Notes 📚
-              </Link>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-xs rounded-xl border border-amber-500/30 transition cursor-pointer"
-              >
-                🔒 Unlock Study Notes
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* CARD 5: READING MATERIALS MODULE (FUTURISTIC DARK THEME) */}
-        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-purple-500/30 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-purple-500/50 transition-all duration-300 md:col-span-2 lg:col-span-2">
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-500/20 text-purple-400 rounded-md border border-purple-500/30">
-                PDF Repository
-              </span>
-              <span className="text-xs font-bold text-slate-400">{stats.handbooksCount} Handbooks</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-white mt-3">Official Reading Materials & Handbooks</h2>
-            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-purple-400 font-bold">Unlock official government references!</strong> Read and download complete PDF handbooks for the 1987 Philippine Constitution, R.A. 6713 Code of Conduct, and Executive Orders.
-            </p>
-          </div>
-          <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/reading-materials"
-                className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-purple-600/30"
-              >
-                Open PDF Reader 📖
-              </Link>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full py-3 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 font-bold text-xs rounded-xl border border-purple-500/30 transition cursor-pointer"
-              >
-                🔒 Unlock Handbooks
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
