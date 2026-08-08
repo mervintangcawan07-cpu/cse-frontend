@@ -1,15 +1,16 @@
+﻿// Relative Path: src/app/upgrade/page.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingButton from "@/components/common/LoadingButton";
+import { useDoubleSubmitPreventer } from "@/hooks/useDoubleSubmitPreventer";
 
 export default function UpgradePage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleUpgrade = async () => {
-    setLoading(true);
+  const executeUpgrade = async () => {
     setErrorMsg(null);
     try {
       const res = await fetch("/api/paymongo/checkout", {
@@ -23,16 +24,16 @@ export default function UpgradePage() {
         const msg = data.error || "Failed to initiate payment. Please try again.";
         setErrorMsg(msg);
         alert(msg);
-        setLoading(false);
       }
     } catch (err) {
       console.error("Checkout error:", err);
       const msg = "An unexpected error occurred. Please try again.";
       setErrorMsg(msg);
       alert(msg);
-      setLoading(false);
     }
   };
+
+  const { isSubmitting: loading, handleSubmit: handleUpgrade } = useDoubleSubmitPreventer(executeUpgrade);
 
   const handleLogout = async () => {
     try {
@@ -81,17 +82,20 @@ export default function UpgradePage() {
         </div>
 
         {/* Action Buttons */}
-        <button
+        <LoadingButton
+          type="button"
           onClick={handleUpgrade}
-          disabled={loading}
-          className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-sm disabled:opacity-50"
+          isLoading={loading}
+          loadingText="Redirecting to PayMongo..."
+          className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition shadow-sm"
         >
-          {loading ? "Redirecting to PayMongo..." : "Pay ₱499 via PayMongo"}
-        </button>
+          Pay ₱499 via PayMongo
+        </LoadingButton>
 
         <button
+          type="button"
           onClick={handleLogout}
-          className="block w-full text-center text-xs font-bold text-slate-400 hover:text-slate-600 transition"
+          className="block w-full text-center text-xs font-bold text-slate-400 hover:text-slate-600 transition cursor-pointer"
         >
           Log Out & Exit
         </button>
