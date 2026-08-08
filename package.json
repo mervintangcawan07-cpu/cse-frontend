@@ -10,11 +10,14 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@livekit/components-react": "^2.9.23",
     "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.9.0",
     "bcryptjs": "^3.0.3",
     "cheerio": "^1.2.0",
     "jose": "^6.2.4",
+    "livekit-client": "^2.21.0",
+    "livekit-server-sdk": "^2.17.0",
     "lucide-react": "^1.28.0",
     "next": "16.2.10",
     "papaparse": "^5.5.4",

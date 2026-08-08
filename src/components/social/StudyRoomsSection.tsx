@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import StudyRoomStage from "@/components/social/rooms/StudyRoomStage";
 
 export default function StudyRoomsSection() {
   const [rooms, setRooms] = useState<any[]>([]);
@@ -276,6 +277,13 @@ export default function StudyRoomsSection() {
             </button>
           </div>
         </div>
+
+        {/* INTERACTIVE VOICE, SCREEN SHARE, AND LIVE WHITEBOARD STAGE */}
+        <StudyRoomStage
+          roomId={activeRoom.id}
+          roomName={activeRoom.name}
+          isHost={activeRoom.isHost || activeRoom.hostId === currentUserId}
+        />
 
         {/* WORKSPACE & LIVE GROUP CHAT */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
