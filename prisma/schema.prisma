@@ -11,6 +11,45 @@ enum Role {
   ADMIN
 }
 
+enum ClassmateStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  BLOCKED
+}
+
+enum MessageState {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum RoomState {
+  SCHEDULED
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum RoomParticipantRole {
+  HOST
+  MODERATOR
+  MEMBER
+}
+
+enum EventRSVPStatus {
+  ATTENDING
+  MAYBE
+  DECLINED
+}
+
+enum ClubMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
 model User {
   id                       String        @id @default(cuid())
   name                     String?
@@ -42,9 +81,215 @@ model User {
   examDraft                ExamDraft?
   transactions             Transaction[]
 
+  // Classmate Relations
+  sentClassmateRequests     ClassmateRelation[] @relation("SentClassmateRequests")
+  receivedClassmateRequests ClassmateRelation[] @relation("ReceivedClassmateRequests")
+
+  // Messaging Relations
+  directMessageParticipants DirectMessageParticipant[]
+  sentDirectMessages        DirectMessage[]
+
+  // Study Room Relations
+  hostedRooms               StudyRoom[]            @relation("HostedStudyRooms")
+  roomParticipants          StudyRoomParticipant[]
+  roomMessages              StudyRoomMessage[]
+
+  // Study Event & Club Relations
+  hostedEvents              StudyEvent[]           @relation("HostedEvents")
+  eventRSVPs                StudyEventRSVP[]
+  ownedClubs                StudyClub[]            @relation("OwnedClubs")
+  clubMemberships           StudyClubMember[]
+
   @@index([email])
   @@index([role])
   @@index([deletedAt])
+}
+
+model ClassmateRelation {
+  id          String          @id @default(cuid())
+  senderId    String
+  receiverId  String
+  status      ClassmateStatus @default(PENDING)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  sender      User            @relation("SentClassmateRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver    User            @relation("ReceivedClassmateRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([status])
+}
+
+model Conversation {
+  id           String                     @id @default(cuid())
+  createdAt    DateTime                   @default(now())
+  updatedAt    DateTime                   @updatedAt
+
+  participants DirectMessageParticipant[]
+  messages     DirectMessage[]
+
+  @@index([updatedAt(sort: Desc)])
+}
+
+model DirectMessageParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  createdAt      DateTime     @default(now())
+
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@index([conversationId])
+}
+
+model DirectMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String         @db.Text
+  state          MessageState   @default(SENT)
+  replyToId      String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User           @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo        DirectMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies        DirectMessage[] @relation("MessageReplies")
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+model StudyRoom {
+  id              String                 @id @default(cuid())
+  name            String
+  description     String?                @db.Text
+  topic           String                 @default("General Review")
+  isPublic        Boolean                @default(true)
+  maxParticipants Int                    @default(10)
+  inviteCode      String                 @unique
+  scheduledFor    DateTime?
+  state           RoomState              @default(ACTIVE)
+  hostId          String
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  host            User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  participants    StudyRoomParticipant[]
+  messages        StudyRoomMessage[]
+
+  @@index([hostId])
+  @@index([state])
+  @@index([isPublic])
+  @@index([inviteCode])
+}
+
+model StudyRoomParticipant {
+  id        String              @id @default(cuid())
+  roomId    String
+  userId    String
+  role      RoomParticipantRole @default(MEMBER)
+  joinedAt  DateTime            @default(now())
+
+  room      StudyRoom           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+}
+
+model StudyRoomMessage {
+  id        String    @id @default(cuid())
+  roomId    String
+  senderId  String
+  content   String    @db.Text
+  isPinned  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  room      StudyRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+model StudyEvent {
+  id          String           @id @default(cuid())
+  title       String
+  description String?          @db.Text
+  topic       String           @default("General Review")
+  scheduledAt DateTime
+  durationMin Int              @default(60)
+  isPublic    Boolean          @default(true)
+  hostId      String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  host        User             @relation("HostedEvents", fields: [hostId], references: [id], onDelete: Cascade)
+  rsvps       StudyEventRSVP[]
+
+  @@index([hostId])
+  @@index([scheduledAt])
+  @@index([isPublic])
+}
+
+model StudyEventRSVP {
+  id        String          @id @default(cuid())
+  eventId   String
+  userId    String
+  status    EventRSVPStatus @default(ATTENDING)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  event     StudyEvent      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
+  @@index([userId])
+}
+
+model StudyClub {
+  id          String            @id @default(cuid())
+  name        String
+  description String?           @db.Text
+  category    String            @default("General Study")
+  isPublic    Boolean           @default(true)
+  ownerId     String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  owner       User              @relation("OwnedClubs", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     StudyClubMember[]
+
+  @@index([ownerId])
+  @@index([category])
+  @@index([isPublic])
+}
+
+model StudyClubMember {
+  id        String         @id @default(cuid())
+  clubId    String
+  userId    String
+  role      ClubMemberRole @default(MEMBER)
+  joinedAt  DateTime       @default(now())
+
+  club      StudyClub      @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, userId])
+  @@index([clubId])
+  @@index([userId])
 }
 
 model ExamResult {

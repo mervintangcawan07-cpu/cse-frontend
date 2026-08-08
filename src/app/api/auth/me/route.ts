@@ -1,3 +1,4 @@
+﻿// Relative Path: src/app/api/auth/me/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -38,7 +39,6 @@ export async function GET() {
     }
 
     // 🔒 SINGLE ACTIVE SESSION GUARD
-    // If another device logged in, invalidate old cookie and return null
     if (
       session.activeSessionId &&
       user.activeSessionId &&
@@ -57,7 +57,6 @@ export async function GET() {
         (now.getTime() - new Date(user.lastActiveAt).getTime()) / (1000 * 60);
 
       if (minutesInactive >= INACTIVITY_LIMIT_MINUTES) {
-        // Reset active session in DB and clear session cookie
         await prisma.user.update({
           where: { id: user.id },
           data: {
@@ -75,14 +74,13 @@ export async function GET() {
       lastActiveAt: now,
     };
 
-    // 🔒 REAL-WORLD EXPIRATION GUARD
-    // Revokes access if the paidUntil date has passed for non-admin accounts
+    // 🔒 REAL-WORLD SUBSCRIPTION EXPIRATION GUARD
     if (user.paidUntil && user.paidUntil < now && user.role !== "ADMIN") {
       isPaid = false;
       updateData.isPaid = false;
     }
 
-    // Update lastActiveAt timestamp (and isPaid status if subscription expired)
+    // Update lastActiveAt timestamp & subscription state
     await prisma.user.update({
       where: { id: user.id },
       data: updateData,
@@ -97,10 +95,11 @@ export async function GET() {
         isPaid,
         paidUntil: user.paidUntil,
         planType: user.planType,
+        lastActiveAt: now,
       },
     });
   } catch (error) {
-    console.error("Auth check error:", error);
+    console.error("[AUTH_ME_ERROR]", error);
     return NextResponse.json({ user: null }, { status: 500 });
   }
 }

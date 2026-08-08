@@ -1,159 +1,104 @@
-// Relative Path: src/components/Sidebar.tsx
+﻿// Relative Path: src/components/Sidebar.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [user, setUser] = useState<{ name?: string; role?: string; isPaid?: boolean } | null>(null);
 
-  const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
+  useEffect(() => {
+    async function fetchMe() {
+      try {
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user || null);
+        }
+      } catch (err) {
+        // Silently handle unauthenticated state
+      }
+    }
+    fetchMe();
+  }, [pathname]);
+
+  const mainNavItems = [
+    { label: "Dashboard", href: "/dashboard", icon: "🏠" },
+    { label: "Practice & Prep", href: "/practice", icon: "📝" },
+    { label: "Learning Hub", href: "/learning", icon: "📚" },
+    { label: "Study Together", href: "/social", icon: "👥" },
+  ];
+
+  if (user?.role === "ADMIN") {
+    mainNavItems.push({ label: "Admin Portal", href: "/admin", icon: "🛡️" });
+  }
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 text-slate-200 min-h-screen p-5 flex flex-col justify-between shrink-0 shadow-xl hidden md:flex">
+    <aside className="w-64 bg-slate-950 border-r border-slate-800/80 min-h-[calc(100vh-4rem)] p-4 flex flex-col justify-between hidden md:flex shrink-0">
       <div className="space-y-6">
-        {/* Brand Logo */}
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-xs shadow-lg shadow-blue-600/30">
-            CSE
-          </div>
-          <div>
-            <span className="font-extrabold text-sm tracking-tight text-white block">
-              CSE Reviewer
-            </span>
-            <span className="text-[10px] text-slate-400 font-mono block">PRO Platform</span>
-          </div>
+        <div>
+          <p className="px-3 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+            Main Navigation
+          </p>
+          <nav className="space-y-1">
+            {mainNavItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                    isActive
+                      ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 font-black shadow-md shadow-blue-500/10"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
+                  }`}
+                >
+                  <span className="text-base">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        <div className="h-px bg-slate-800"></div>
-
-        {/* Navigation Sections */}
-        <nav className="space-y-6 text-xs font-bold">
-          {/* Section 1: Overview */}
+        <div>
+          <p className="px-3 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+            Quick Actions
+          </p>
           <div className="space-y-1">
-            <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 px-3 block">
-              Overview
-            </span>
             <Link
-              href="/dashboard"
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
-                pathname === "/dashboard"
-                  ? "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-600/20"
-                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
+              href="/mock-exam/take"
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-amber-400 hover:bg-slate-900/80 transition"
             >
-              <span>📊</span>
-              <span>Dashboard</span>
+              <span>⚡</span>
+              <span>Take Mock Exam</span>
+            </Link>
+            <Link
+              href="/profile"
+              className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-slate-200 hover:bg-slate-900/80 transition"
+            >
+              <span>⚙️</span>
+              <span>Account Settings</span>
             </Link>
           </div>
-
-          {/* Section 2: Assessment & Testing */}
-          <div className="space-y-1">
-            <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 px-3 block">
-              Assessment
-            </span>
-            <Link
-              href="/practice"
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
-                pathname === "/practice" || isActive("/exam") || isActive("/drills") || isActive("/1v1")
-                  ? "bg-blue-600 text-white font-extrabold shadow-md shadow-blue-600/20"
-                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
-            >
-              <span>🎯</span>
-              <span>Practice & Prep Center</span>
-            </Link>
-            <div className="pl-6 space-y-1 pt-1 border-l border-slate-800 ml-5">
-              <Link
-                href="/exam"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/exam") ? "text-blue-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Mock Exam
-              </Link>
-              <Link
-                href="/drills"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/drills") ? "text-blue-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Speed Drills
-              </Link>
-              <Link
-                href="/1v1"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/1v1") ? "text-blue-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                1v1 Duels
-              </Link>
-            </div>
-          </div>
-
-          {/* Section 3: Knowledge Vault */}
-          <div className="space-y-1">
-            <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 px-3 block">
-              Knowledge Vault
-            </span>
-            <Link
-              href="/learning"
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
-                pathname === "/learning" || isActive("/flashcards") || isActive("/bookmarks") || isActive("/reviewer") || isActive("/reading-materials")
-                  ? "bg-purple-600 text-white font-extrabold shadow-md shadow-purple-600/20"
-                  : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
-              }`}
-            >
-              <span>📚</span>
-              <span>Learning Hub</span>
-            </Link>
-            <div className="pl-6 space-y-1 pt-1 border-l border-slate-800 ml-5">
-              <Link
-                href="/flashcards"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/flashcards") ? "text-purple-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Flashcards
-              </Link>
-              <Link
-                href="/bookmarks"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/bookmarks") ? "text-purple-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Bookmarks
-              </Link>
-              <Link
-                href="/reviewer"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/reviewer") ? "text-purple-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Study Notes
-              </Link>
-              <Link
-                href="/reading-materials"
-                className={`block py-1.5 px-3 rounded-lg text-[11px] transition ${
-                  isActive("/reading-materials") ? "text-purple-400 font-extrabold" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Handbooks
-              </Link>
-            </div>
-          </div>
-        </nav>
+        </div>
       </div>
 
-      <div className="px-2 pt-4 border-t border-slate-800">
-        <Link
-          href="/profile"
-          className="flex items-center gap-3 text-xs font-bold text-slate-400 hover:text-white transition py-2"
-        >
-          <span>👤</span>
-          <span>My Account</span>
-        </Link>
-      </div>
+      {user && (
+        <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-3.5 flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase">
+            {user.name ? user.name[0] : "U"}
+          </div>
+          <div className="overflow-hidden flex-1">
+            <p className="text-xs font-bold text-white truncate">{user.name || "Examinee"}</p>
+            <span className="text-[10px] font-semibold text-emerald-400 block truncate">
+              {user.role === "ADMIN" ? "Administrator" : user.isPaid ? "PRO Member" : "Free Member"}
+            </span>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

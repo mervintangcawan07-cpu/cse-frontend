@@ -1,0 +1,214 @@
+﻿// Relative Path: src/app/api/social/messages/[conversationId]/route.ts
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWT } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ conversationId: string }> | { conversationId: string } }
+) {
+  try {
+    const resolvedParams = await params;
+    const conversationId = String(resolvedParams.conversationId);
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const session = await verifyJWT(token);
+    const rawUserId = session?.userId || session?.id;
+    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = String(rawUserId);
+
+    // Verify user is a participant
+    const participant = await prisma.directMessageParticipant.findUnique({
+      where: {
+        conversationId_userId: {
+          conversationId,
+          userId,
+        },
+      },
+    });
+
+    if (!participant) {
+      return NextResponse.json({ error: "Access denied to conversation" }, { status: 403 });
+    }
+
+    // Mark messages sent by other user as READ
+    await prisma.directMessage.updateMany({
+      where: {
+        conversationId,
+        senderId: { not: userId },
+        state: { not: "READ" },
+      },
+      data: { state: "READ" },
+    });
+
+    const messages = await prisma.directMessage.findMany({
+      where: { conversationId },
+      include: {
+        sender: { select: { id: true, name: true, email: true } },
+        replyTo: { select: { id: true, content: true, senderId: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: {
+        participants: {
+          include: {
+            user: { select: { id: true, name: true, email: true, isPaid: true, lastActiveAt: true } },
+          },
+        },
+      },
+    });
+
+    const otherParticipant = conversation?.participants.find((p) => p.userId !== userId)?.user || null;
+
+    return NextResponse.json({
+      success: true,
+      otherUser: otherParticipant,
+      messages: messages.map((m) => ({
+        id: m.id,
+        content: m.content,
+        senderId: m.senderId,
+        senderName: m.sender.name,
+        state: m.state,
+        createdAt: m.createdAt,
+        replyTo: m.replyTo
+          ? {
+              id: m.replyTo.id,
+              content: m.replyTo.content,
+              senderId: m.replyTo.senderId,
+            }
+          : null,
+      })),
+    });
+  } catch (error: any) {
+    console.error("[MESSAGES_GET_ERROR]", error);
+    return NextResponse.json({ error: "Failed to fetch messages", details: error?.message }, { status: 500 });
+  }
+}
+
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ conversationId: string }> | { conversationId: string } }
+) {
+  try {
+    const resolvedParams = await params;
+    const conversationId = String(resolvedParams.conversationId);
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const session = await verifyJWT(token);
+    const rawUserId = session?.userId || session?.id;
+    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = String(rawUserId);
+
+    const participant = await prisma.directMessageParticipant.findUnique({
+      where: {
+        conversationId_userId: {
+          conversationId,
+          userId,
+        },
+      },
+    });
+
+    if (!participant) {
+      return NextResponse.json({ error: "Access denied to conversation" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { content, replyToId } = body;
+
+    if (!content || typeof content !== "string" || !content.trim()) {
+      return NextResponse.json({ error: "Message content cannot be empty" }, { status: 400 });
+    }
+
+    const message = await prisma.directMessage.create({
+      data: {
+        conversationId,
+        senderId: userId,
+        content: content.trim(),
+        state: "SENT",
+        replyToId: replyToId ? String(replyToId) : null,
+      },
+      include: {
+        sender: { select: { id: true, name: true } },
+        replyTo: { select: { id: true, content: true, senderId: true } },
+      },
+    });
+
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { updatedAt: new Date() },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: {
+        id: message.id,
+        content: message.content,
+        senderId: message.senderId,
+        senderName: message.sender.name,
+        state: message.state,
+        createdAt: message.createdAt,
+        replyTo: message.replyTo,
+      },
+    });
+  } catch (error: any) {
+    console.error("[MESSAGES_POST_ERROR]", error);
+    return NextResponse.json({ error: "Failed to send message", details: error?.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ conversationId: string }> | { conversationId: string } }
+) {
+  try {
+    const resolvedParams = await params;
+    const conversationId = String(resolvedParams.conversationId);
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const session = await verifyJWT(token);
+    const rawUserId = session?.userId || session?.id;
+    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = String(rawUserId);
+
+    const { searchParams } = new URL(request.url);
+    const messageId = searchParams.get("messageId");
+
+    if (!messageId) {
+      return NextResponse.json({ error: "Missing messageId parameter" }, { status: 400 });
+    }
+
+    const msg = await prisma.directMessage.findUnique({
+      where: { id: String(messageId) },
+    });
+
+    if (!msg || msg.conversationId !== conversationId) {
+      return NextResponse.json({ error: "Message not found" }, { status: 404 });
+    }
+
+    if (msg.senderId !== userId) {
+      return NextResponse.json({ error: "You can only delete your own messages" }, { status: 403 });
+    }
+
+    await prisma.directMessage.delete({
+      where: { id: String(messageId) },
+    });
+
+    return NextResponse.json({ success: true, message: "Message deleted" });
+  } catch (error: any) {
+    console.error("[MESSAGES_DELETE_ERROR]", error);
+    return NextResponse.json({ error: "Failed to delete message", details: error?.message }, { status: 500 });
+  }
+}
