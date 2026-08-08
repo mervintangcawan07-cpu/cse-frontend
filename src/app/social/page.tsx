@@ -19,6 +19,29 @@ export default function SocialDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<SocialTab>("OVERVIEW");
 
+  const [counts, setCounts] = useState({
+    unreadNotifications: 0,
+    pendingClassmates: 0,
+    unreadMessages: 0,
+    activeRooms: 0,
+    upcomingEvents: 0,
+    clubsCount: 0,
+  });
+
+  const fetchBadgeCounts = async () => {
+    try {
+      const res = await fetch("/api/social/counts");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.counts) {
+          setCounts(data.counts);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch badge counts:", err);
+    }
+  };
+
   useEffect(() => {
     async function checkAuth() {
       try {
@@ -41,6 +64,16 @@ export default function SocialDashboardPage() {
       }
     }
     checkAuth();
+    fetchBadgeCounts();
+
+    // Smart 15s polling that pauses when window/tab is hidden
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && !document.hidden) {
+        fetchBadgeCounts();
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
   }, [router]);
 
   if (loading) {
@@ -53,6 +86,44 @@ export default function SocialDashboardPage() {
       </div>
     );
   }
+
+  const getBadgeCount = (tabId: SocialTab) => {
+    switch (tabId) {
+      case "CLASSMATES":
+        return counts.pendingClassmates;
+      case "MESSAGES":
+        return counts.unreadMessages;
+      case "ROOMS":
+        return counts.activeRooms;
+      case "EVENTS":
+        return counts.upcomingEvents;
+      case "CLUBS":
+        return counts.clubsCount;
+      case "NOTIFICATIONS":
+        return counts.unreadNotifications;
+      default:
+        return 0;
+    }
+  };
+
+  const getBadgeColor = (tabId: SocialTab) => {
+    switch (tabId) {
+      case "CLASSMATES":
+        return "bg-amber-500 text-slate-950";
+      case "MESSAGES":
+        return "bg-rose-500 text-white animate-pulse";
+      case "ROOMS":
+        return "bg-emerald-500 text-slate-950";
+      case "EVENTS":
+        return "bg-purple-500 text-white";
+      case "CLUBS":
+        return "bg-indigo-500 text-white";
+      case "NOTIFICATIONS":
+        return "bg-rose-600 text-white animate-pulse";
+      default:
+        return "bg-blue-600 text-white";
+    }
+  };
 
   const tabs: { id: SocialTab; label: string; icon: string }[] = [
     { id: "OVERVIEW", label: "Overview", icon: "📊" },
@@ -89,21 +160,31 @@ export default function SocialDashboardPage() {
       </div>
 
       {/* SUB-NAVIGATION TABS */}
-      <div className="flex border-b border-slate-800 gap-1 overflow-x-auto pb-1 scrollbar-none">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 px-4 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer flex items-center gap-2 ${
-              activeTab === tab.id
-                ? "border-blue-500 text-blue-400 font-black"
-                : "border-transparent text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <span>{tab.icon}</span>
-            <span>{tab.label}</span>
-          </button>
-        ))}
+      <div className="flex border-b border-slate-800 gap-1 overflow-x-auto pb-1 scrollbar-none pt-2">
+        {tabs.map((tab) => {
+          const badgeCount = getBadgeCount(tab.id);
+          const badgeColor = getBadgeColor(tab.id);
+
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-3 px-4 text-xs font-bold transition border-b-2 whitespace-nowrap cursor-pointer flex items-center gap-2 relative ${
+                activeTab === tab.id
+                  ? "border-blue-500 text-blue-400 font-black"
+                  : "border-transparent text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+              {badgeCount > 0 && (
+                <span className={`px-1.5 py-0.5 text-[10px] font-black rounded-full leading-none shrink-0 ${badgeColor}`}>
+                  {badgeCount > 99 ? "99+" : badgeCount}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* TAB CONTENT AREAS */}
@@ -119,19 +200,21 @@ export default function SocialDashboardPage() {
 
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Active Rooms</span>
-              <span className="text-2xl font-black text-blue-400">0</span>
+              <span className="text-2xl font-black text-blue-400">{counts.activeRooms}</span>
               <span className="text-[10px] text-slate-500 block">Available now</span>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Pending Invites</span>
-              <span className="text-2xl font-black text-amber-400">0</span>
+              <span className="text-2xl font-black text-amber-400">{counts.pendingClassmates}</span>
               <span className="text-[10px] text-slate-500 block">Requests pending</span>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Next Event</span>
-              <span className="text-sm font-black text-slate-300 block truncate">None Scheduled</span>
+              <span className="text-sm font-black text-slate-300 block truncate">
+                {counts.upcomingEvents > 0 ? `${counts.upcomingEvents} Scheduled` : "None Scheduled"}
+              </span>
               <span className="text-[10px] text-slate-500 block">Check calendar</span>
             </div>
           </div>
