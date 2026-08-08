@@ -1,7 +1,11 @@
-{
+﻿{
   "crons": [
     {
       "path": "/api/csc/sync",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/db-storage-check",
       "schedule": "0 0 * * *"
     }
   ]
