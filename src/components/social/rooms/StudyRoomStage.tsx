@@ -23,9 +23,16 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
   const [isMuted, setIsMuted] = useState(true);
   const [isHandRaised, setIsHandRaised] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [incomingDelta, setIncomingDelta] = useState<DrawDelta | null>(null);
 
-  // Listen for LiveKit Data Channel messages (Real-time Whiteboard strokes)
+  // Whiteboard & Host permission states
+  const [allowMembersToDraw, setAllowMembersToDraw] = useState(false);
+  const [incomingDelta, setIncomingDelta] = useState<DrawDelta | null>(null);
+  const [incomingClearSignal, setIncomingClearSignal] = useState<number>(0);
+
+  // Determine drawing permission
+  const canDraw = isHost || allowMembersToDraw;
+
+  // Listen for LiveKit Data Channel messages
   useEffect(() => {
     if (!room) return;
 
@@ -33,8 +40,13 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
       try {
         const decoded = new TextDecoder().decode(payload);
         const data = JSON.parse(decoded);
+
         if (data.type === "WHITEBOARD_DRAW") {
           setIncomingDelta(data.delta);
+        } else if (data.type === "WHITEBOARD_CLEAR") {
+          setIncomingClearSignal(Date.now());
+        } else if (data.type === "WHITEBOARD_PERMISSIONS") {
+          setAllowMembersToDraw(Boolean(data.allowMembersToDraw));
         }
       } catch (err) {
         console.error("Failed to parse DataChannel message:", err);
@@ -47,15 +59,45 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
     };
   }, [room]);
 
-  // Broadcast whiteboard strokes to all other room participants
+  // Host toggle for drawing permissions
+  const toggleDrawingPermissions = () => {
+    if (!isHost || !room || !localParticipant) return;
+    const nextState = !allowMembersToDraw;
+    setAllowMembersToDraw(nextState);
+
+    try {
+      const payload = JSON.stringify({
+        type: "WHITEBOARD_PERMISSIONS",
+        allowMembersToDraw: nextState,
+      });
+      const encoded = new TextEncoder().encode(payload);
+      localParticipant.publishData(encoded, { reliable: true });
+    } catch (err) {
+      console.error("Failed to broadcast permissions:", err);
+    }
+  };
+
+  // Broadcast drawing strokes
   const handleDrawDelta = (delta: DrawDelta) => {
-    if (!room || !localParticipant) return;
+    if (!canDraw || !room || !localParticipant) return;
     try {
       const payload = JSON.stringify({ type: "WHITEBOARD_DRAW", delta });
       const encoded = new TextEncoder().encode(payload);
       localParticipant.publishData(encoded, { reliable: true });
     } catch (err) {
       console.error("Failed to publish stroke delta:", err);
+    }
+  };
+
+  // Broadcast clear board event
+  const handleClearBoard = () => {
+    if (!canDraw || !room || !localParticipant) return;
+    try {
+      const payload = JSON.stringify({ type: "WHITEBOARD_CLEAR" });
+      const encoded = new TextEncoder().encode(payload);
+      localParticipant.publishData(encoded, { reliable: true });
+    } catch (err) {
+      console.error("Failed to publish clear signal:", err);
     }
   };
 
@@ -96,10 +138,9 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
 
   return (
     <div className="flex flex-col h-full space-y-4">
-      {/* Live Audio Renderer ensures audio from remote participants plays */}
       <RoomAudioRenderer />
 
-      {/* STAGE HEADER & NAVIGATION */}
+      {/* STAGE HEADER */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 px-2.5 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
@@ -110,24 +151,27 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
 
         <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
           <button
+            type="button"
             onClick={() => setActiveTab("OVERVIEW")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
               activeTab === "OVERVIEW" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
             📊 Study Area
           </button>
           <button
+            type="button"
             onClick={() => setActiveTab("WHITEBOARD")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
               activeTab === "WHITEBOARD" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
             ✏️ Live Whiteboard
           </button>
           <button
+            type="button"
             onClick={toggleScreenShare}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition ${
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
               activeTab === "SCREEN_SHARE" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
@@ -146,7 +190,7 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
             <div className="max-w-md space-y-1">
               <h3 className="text-base font-bold text-white">Voice Study Session Active</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                You are connected to the LiveKit voice server. Unmute your microphone below to start speaking with room examinees.
+                You are connected to the LiveKit voice server. Unmute your microphone below to speak.
               </p>
             </div>
           </div>
@@ -155,8 +199,11 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
         {activeTab === "WHITEBOARD" && (
           <LiveWhiteboard
             isHost={isHost}
+            canDraw={canDraw}
             onDrawDelta={handleDrawDelta}
+            onClearBoard={handleClearBoard}
             incomingDelta={incomingDelta}
+            incomingClearSignal={incomingClearSignal}
           />
         )}
 
@@ -171,12 +218,13 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
         )}
       </div>
 
-      {/* AUDIO & MODERATION CONTROLS */}
+      {/* CONTROLS & HOST MODERATION */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={toggleMic}
-            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${
               isMuted
                 ? "bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30"
                 : "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
@@ -187,8 +235,9 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
           </button>
 
           <button
+            type="button"
             onClick={toggleRaiseHand}
-            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${
               isHandRaised
                 ? "bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20"
                 : "bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700"
@@ -200,9 +249,24 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
         </div>
 
         {isHost && (
-          <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-            👑 Room Host Controls Enabled
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleDrawingPermissions}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                allowMembersToDraw
+                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                  : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+              }`}
+            >
+              <span>{allowMembersToDraw ? "✏️" : "🔒"}</span>
+              <span>{allowMembersToDraw ? "Board: Everyone Can Draw" : "Board: Host Only"}</span>
+            </button>
+
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full hidden sm:inline-block">
+              👑 Host Controls
+            </span>
+          </div>
         )}
       </div>
     </div>
