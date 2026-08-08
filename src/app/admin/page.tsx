@@ -1,8 +1,10 @@
+// Relative Path: src/app/admin/page.tsx
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import UserActionModal from "@/components/admin/UserActionModal";
+import DatabaseStorageWidget from "@/components/admin/DatabaseStorageWidget";
 
 interface UserItem {
   id: string;
@@ -129,8 +131,8 @@ export default function AdminUsersPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-6 rounded-3xl shadow-sm">
         <div>
           <div className="flex items-center gap-2">
-            <Link href="/admin/dashboard" className="text-xs font-bold text-amber-400 hover:underline">
-              &larr; Control Center
+            <Link href="/dashboard" className="text-xs font-bold text-amber-400 hover:underline">
+              &larr; Return to Dashboard
             </Link>
           </div>
           <h1 className="text-2xl font-black mt-1">User Accounts, Access & Security</h1>
@@ -157,10 +159,14 @@ export default function AdminUsersPage() {
         </form>
       </div>
 
+      {/* Real-time Database Infrastructure & Capacity Monitor */}
+      <DatabaseStorageWidget />
+
       {/* Navigation Tabs & Filter Bar */}
       <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1 text-xs font-bold w-full sm:w-auto">
           <button
+            type="button"
             onClick={() => { setActiveTab("USERS"); setSearchQuery(""); setStatusFilter("ALL"); }}
             className={`px-4 py-2 rounded-xl transition cursor-pointer ${
               activeTab === "USERS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
@@ -169,6 +175,7 @@ export default function AdminUsersPage() {
             👥 User Accounts ({users.length})
           </button>
           <button
+            type="button"
             onClick={() => { setActiveTab("LOGIN_LOGS"); setSearchQuery(""); setStatusFilter("ALL"); }}
             className={`px-4 py-2 rounded-xl transition cursor-pointer ${
               activeTab === "LOGIN_LOGS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
@@ -291,6 +298,7 @@ export default function AdminUsersPage() {
                         <td className="p-3.5 text-right space-x-1 shrink-0">
                           {/* PRO Duration Extension Buttons */}
                           <button
+                            type="button"
                             onClick={() => handleUpdateAccess(u.id, "EXTEND_30")}
                             disabled={updatingId === u.id}
                             className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] rounded-lg border border-blue-200 transition disabled:opacity-50 cursor-pointer"
@@ -298,6 +306,7 @@ export default function AdminUsersPage() {
                             +30 Days
                           </button>
                           <button
+                            type="button"
                             onClick={() => handleUpdateAccess(u.id, "EXTEND_180")}
                             disabled={updatingId === u.id}
                             className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] rounded-lg border border-emerald-200 transition disabled:opacity-50 cursor-pointer"
@@ -305,6 +314,7 @@ export default function AdminUsersPage() {
                             +180 Days
                           </button>
                           <button
+                            type="button"
                             onClick={() => handleUpdateAccess(u.id, "EXTEND_365")}
                             disabled={updatingId === u.id}
                             className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-[10px] rounded-lg border border-purple-200 transition disabled:opacity-50 cursor-pointer"
@@ -313,6 +323,7 @@ export default function AdminUsersPage() {
                           </button>
                           {u.isPaid && (
                             <button
+                              type="button"
                               onClick={() => handleUpdateAccess(u.id, "REVOKE")}
                               disabled={updatingId === u.id}
                               className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[10px] rounded-lg border border-rose-200 transition disabled:opacity-50 cursor-pointer"
@@ -323,6 +334,7 @@ export default function AdminUsersPage() {
 
                           {/* Moderation Controls */}
                           <button
+                            type="button"
                             onClick={() => { setSelectedUser(u); setModalMode("RESET_PASSWORD"); }}
                             className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg border border-slate-200 transition cursor-pointer"
                           >
@@ -330,6 +342,7 @@ export default function AdminUsersPage() {
                           </button>
                           {u.isBanned ? (
                             <button
+                              type="button"
                               onClick={() => { setSelectedUser(u); setModalMode("UNBAN"); }}
                               className="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
                             >
@@ -337,6 +350,7 @@ export default function AdminUsersPage() {
                             </button>
                           ) : (
                             <button
+                              type="button"
                               onClick={() => { setSelectedUser(u); setModalMode("BAN"); }}
                               className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
                             >
