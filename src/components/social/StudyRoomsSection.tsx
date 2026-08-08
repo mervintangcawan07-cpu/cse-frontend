@@ -20,7 +20,7 @@ export default function StudyRoomsSection() {
   const [newChatMessage, setNewChatMessage] = useState("");
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [sendingChat, setSendingChat] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Form states for room creation
   const [roomName, setRoomName] = useState("");
@@ -87,8 +87,11 @@ export default function StudyRoomsSection() {
     return () => clearInterval(interval);
   }, [activeRoom?.id]);
 
+  // Container-only scroll fix (Prevents global window auto-scroll)
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [chatMessages]);
 
   const joinRoom = async (roomId?: string, code?: string) => {
@@ -289,7 +292,6 @@ export default function StudyRoomsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* LIVE GROUP CHAT PANEL */}
           <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl flex flex-col justify-between overflow-hidden min-h-[460px]">
-            {/* PINNED ANNOUNCEMENT BANNER */}
             {pinnedMessage && (
               <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-amber-200">
                 <div className="flex items-center gap-2 truncate">
@@ -307,8 +309,8 @@ export default function StudyRoomsSection() {
               </div>
             )}
 
-            {/* MESSAGE FEED */}
-            <div className="p-5 flex-1 overflow-y-auto max-h-[380px] space-y-3">
+            {/* MESSAGE FEED (Container Scroll Only) */}
+            <div ref={chatContainerRef} className="p-5 flex-1 overflow-y-auto max-h-[380px] space-y-3">
               {chatMessages.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 space-y-2">
                   <span className="text-4xl block">💬</span>
@@ -365,7 +367,6 @@ export default function StudyRoomsSection() {
                   );
                 })
               )}
-              <div ref={chatEndRef} />
             </div>
 
             {/* EMOJI BAR & INPUT FORM */}

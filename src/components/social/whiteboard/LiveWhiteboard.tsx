@@ -3,17 +3,24 @@
 
 import { useEffect, useRef, useState } from "react";
 
-interface DrawPoint {
+export interface DrawPoint {
   x: number;
   y: number;
 }
 
-interface LiveWhiteboardProps {
-  isHost?: boolean;
-  onDrawDelta?: (delta: { points: DrawPoint[]; color: string; width: number }) => void;
+export interface DrawDelta {
+  points: DrawPoint[];
+  color: string;
+  width: number;
 }
 
-export default function LiveWhiteboard({ isHost = false, onDrawDelta }: LiveWhiteboardProps) {
+interface LiveWhiteboardProps {
+  isHost?: boolean;
+  onDrawDelta?: (delta: DrawDelta) => void;
+  incomingDelta?: DrawDelta | null;
+}
+
+export default function LiveWhiteboard({ isHost = false, onDrawDelta, incomingDelta }: LiveWhiteboardProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#3b82f6");
@@ -30,6 +37,27 @@ export default function LiveWhiteboard({ isHost = false, onDrawDelta }: LiveWhit
       canvas.height = parent.clientHeight || 500;
     }
   }, []);
+
+  // Draw incoming strokes from remote users in real time
+  useEffect(() => {
+    if (!incomingDelta || !incomingDelta.points || incomingDelta.points.length === 0) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.strokeStyle = incomingDelta.color;
+    ctx.lineWidth = incomingDelta.width;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.beginPath();
+    incomingDelta.points.forEach((pt, idx) => {
+      if (idx === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    });
+    ctx.stroke();
+  }, [incomingDelta]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
