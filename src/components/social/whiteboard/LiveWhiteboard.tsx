@@ -12,6 +12,7 @@ export interface DrawDelta {
   points: DrawPoint[];
   color: string;
   width: number;
+  isEraser?: boolean;
 }
 
 interface LiveWhiteboardProps {
@@ -66,7 +67,7 @@ export default function LiveWhiteboard({
     }
   }, [incomingClearSignal]);
 
-  // Render incoming normalized strokes from remote devices
+  // Render incoming strokes/erases from remote devices
   useEffect(() => {
     if (!incomingDelta || !incomingDelta.points || incomingDelta.points.length === 0) return;
     const canvas = canvasRef.current;
@@ -77,8 +78,16 @@ export default function LiveWhiteboard({
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    ctx.strokeStyle = incomingDelta.color;
-    ctx.lineWidth = incomingDelta.width;
+    // Use destination-out composite mode for true pixel erasure
+    if (incomingDelta.isEraser) {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = incomingDelta.width;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = incomingDelta.color;
+      ctx.lineWidth = incomingDelta.width;
+    }
+
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
@@ -91,6 +100,9 @@ export default function LiveWhiteboard({
       else ctx.lineTo(localX, localY);
     });
     ctx.stroke();
+
+    // Reset default blend mode
+    ctx.globalCompositeOperation = "source-over";
   }, [incomingDelta]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -130,8 +142,15 @@ export default function LiveWhiteboard({
 
     const lastPoint = currentPointsRef.current[currentPointsRef.current.length - 1];
 
-    ctx.strokeStyle = isEraser ? "#0f172a" : color;
-    ctx.lineWidth = isEraser ? lineWidth * 5 : lineWidth;
+    if (isEraser) {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = lineWidth * 8;
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+    }
+
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
 
@@ -141,6 +160,9 @@ export default function LiveWhiteboard({
     }
     ctx.lineTo(px, py);
     ctx.stroke();
+
+    // Reset default blend mode
+    ctx.globalCompositeOperation = "source-over";
 
     currentPointsRef.current.push({ x: normX, y: normY });
   };
@@ -152,8 +174,9 @@ export default function LiveWhiteboard({
     if (onDrawDelta && currentPointsRef.current.length > 0) {
       onDrawDelta({
         points: [...currentPointsRef.current],
-        color: isEraser ? "#0f172a" : color,
-        width: isEraser ? lineWidth * 5 : lineWidth,
+        color: isEraser ? "#000000" : color,
+        width: isEraser ? lineWidth * 8 : lineWidth,
+        isEraser: isEraser,
       });
     }
     currentPointsRef.current = [];
