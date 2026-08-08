@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/db-storage-check",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/background-worker",
+      "schedule": "0 2 * * *"
     }
   ]
 }
