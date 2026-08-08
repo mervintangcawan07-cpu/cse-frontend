@@ -1,4 +1,4 @@
-// Relative Path: src/components/Navbar.tsx
+﻿// Relative Path: src/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -9,6 +9,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<{ name?: string; role?: string; isPaid?: boolean } | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     async function fetchMe() {
@@ -23,6 +24,11 @@ export default function Navbar() {
       }
     }
     fetchMe();
+  }, [pathname]);
+
+  // Close mobile navigation drawer on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -47,7 +53,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
+    <header className="bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="flex items-center gap-2 group">
@@ -59,6 +65,7 @@ export default function Navbar() {
             </span>
           </Link>
 
+          {/* DESKTOP NAVIGATION */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
@@ -79,7 +86,8 @@ export default function Navbar() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* DESKTOP ACTIONS */}
+        <div className="hidden md:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
               <Link
@@ -89,10 +97,11 @@ export default function Navbar() {
                 <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-blue-400 uppercase">
                   {user.name ? user.name[0] : "U"}
                 </div>
-                <span className="hidden sm:inline">{user.name || "My Account"}</span>
+                <span>{user.name || "My Account"}</span>
               </Link>
 
               <button
+                type="button"
                 onClick={handleLogout}
                 className="px-3 py-1.5 bg-slate-900 hover:bg-rose-950/40 hover:border-rose-500/30 border border-slate-800 text-slate-400 hover:text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
               >
@@ -108,7 +117,89 @@ export default function Navbar() {
             </Link>
           )}
         </div>
+
+        {/* MOBILE HAMBURGER BUTTON & ACCOUNT ICON */}
+        <div className="flex items-center gap-2 md:hidden">
+          {user && (
+            <Link
+              href="/profile"
+              className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase"
+            >
+              {user.name ? user.name[0] : "U"}
+            </Link>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* MOBILE DROPDOWN DRAWER */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-slate-950 border-b border-slate-800/80 px-4 pt-3 pb-5 space-y-3 shadow-2xl">
+          <nav className="flex flex-col space-y-1">
+            {navItems.map((item) => {
+              const isActive = pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between ${
+                    isActive
+                      ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider">&bull; Active</span>}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
+            {user ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase">
+                    {user.name ? user.name[0] : "U"}
+                  </div>
+                  <span className="text-xs font-bold text-slate-200">{user.name || "My Account"}</span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="px-3.5 py-1.5 bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                >
+                  Log Out
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="w-full text-center py-2 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-md"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
