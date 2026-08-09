@@ -1,6 +1,7 @@
 // Relative Path: src/lib/backup/backupStorage.ts
 import fs from "fs";
 import path from "path";
+import os from "os";
 import crypto from "crypto";
 
 export interface StorageObjectMeta {
@@ -14,9 +15,24 @@ export class BackupStorageProvider {
   private localBackupDir: string;
 
   constructor() {
-    this.localBackupDir = path.join(process.cwd(), "..", "csc_disaster_recovery_vault");
-    if (!fs.existsSync(this.localBackupDir)) {
-      fs.mkdirSync(this.localBackupDir, { recursive: true });
+    const isVercel = process.env.VERCEL === "1" || process.env.NODE_ENV === "production";
+
+    if (isVercel) {
+      this.localBackupDir = path.join(os.tmpdir(), "csc_disaster_recovery_vault");
+    } else {
+      this.localBackupDir = path.join(process.cwd(), "..", "csc_disaster_recovery_vault");
+    }
+
+    this.ensureVaultDirectory();
+  }
+
+  private ensureVaultDirectory() {
+    try {
+      if (!fs.existsSync(this.localBackupDir)) {
+        fs.mkdirSync(this.localBackupDir, { recursive: true });
+      }
+    } catch (err) {
+      console.error("[STORAGE_VAULT_ERROR] Failed to create vault directory:", err);
     }
   }
 
@@ -28,18 +44,18 @@ export class BackupStorageProvider {
   }
 
   /**
-   * Saves compressed backup payload to primary storage (Cloud or Local Vault Fallback)
+   * Saves compressed backup payload to storage vault.
    */
   public async saveBackup(
     filename: string,
     buffer: Buffer
   ): Promise<StorageObjectMeta> {
+    this.ensureVaultDirectory();
     const checksumSha256 = this.calculateChecksum(buffer);
     const storageKey = `backups/${new Date().getFullYear()}/${filename}`;
-    
-    // Save to isolated local disaster recovery vault
     const localFilePath = path.join(this.localBackupDir, filename);
-    fs.writeFileSync(localFilePath, buffer);
+    
+    await fs.promises.writeFile(localFilePath, buffer);
 
     return {
       key: storageKey,
@@ -50,26 +66,31 @@ export class BackupStorageProvider {
   }
 
   /**
-   * Reads a backup payload from disk/storage for verification or restoration.
+   * Reads a backup payload from vault storage for verification or restoration.
    */
   public async getBackupPayload(filename: string): Promise<Buffer> {
     const localFilePath = path.join(this.localBackupDir, filename);
     if (!fs.existsSync(localFilePath)) {
       throw new Error(`Backup file '${filename}' not found in recovery storage vault.`);
     }
-    return fs.readFileSync(localFilePath);
+    return await fs.promises.readFile(localFilePath);
   }
 
   /**
    * Deletes a backup object from storage vault.
    */
   public async deleteBackup(filename: string): Promise<boolean> {
-    const localFilePath = path.join(this.localBackupDir, filename);
-    if (fs.existsSync(localFilePath)) {
-      fs.unlinkSync(localFilePath);
-      return true;
+    try {
+      const localFilePath = path.join(this.localBackupDir, filename);
+      if (fs.existsSync(localFilePath)) {
+        await fs.promises.unlink(localFilePath);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error(`[STORAGE_VAULT_DELETE_ERROR] Failed to delete '${filename}':`, err);
+      return false;
     }
-    return false;
   }
 }
 
