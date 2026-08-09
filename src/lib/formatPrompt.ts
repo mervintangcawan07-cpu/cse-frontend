@@ -1,6 +1,6 @@
 /**
  * Utility to convert raw question prompt text into clean, styled HTML elements.
- * Features a vibrant, modern ed-tech theme for Light Mode while retaining clean Dark Mode.
+ * Uncluttered design optimized for high contrast in both Light and Dark mode.
  */
 export function formatPromptHTML(promptText: string): string {
   if (!promptText) return "";
@@ -9,15 +9,22 @@ export function formatPromptHTML(promptText: string): string {
     return promptText;
   }
 
-  const lines = promptText.split(/\r?\n/);
+  const lines = promptText.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   const htmlParts: string[] = [];
 
   let inTable = false;
   let tableHeaders: string[] = [];
   let tableRows: string[][] = [];
 
+  const isPassageItem = (line: string) => /^\([A-D0-9]\)/i.test(line) || /^Table \d+:/i.test(line);
+
+  const isQuestionDirective = (line: string) =>
+    line.endsWith("?") ||
+    line.includes("___") ||
+    /^(Which|What|How|Calculate|Determine|Find|Who|Choose|Select|Identify|Complete|Fill|In the sentence|Based on)\b/i.test(line);
+
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const line = lines[i];
 
     if (line.includes("|") && !line.startsWith("<")) {
       if (!inTable) {
@@ -25,7 +32,7 @@ export function formatPromptHTML(promptText: string): string {
         tableHeaders = line.split("|").map((c) => c.trim()).filter((c) => c !== "");
         tableRows = [];
 
-        if (i + 1 < lines.length && /^\|?[\s:-]+(\|+[\s:-]+)+\|?$/.test(lines[i + 1].trim())) {
+        if (i + 1 < lines.length && /^\|?[\s:-]+(\|+[\s:-]+)+\|?$/.test(lines[i + 1])) {
           i++;
         }
       } else {
@@ -44,23 +51,26 @@ export function formatPromptHTML(promptText: string): string {
         tableRows = [];
       }
 
-      if (line) {
-        if (line.includes("[") && line.includes("]") && (line.includes("█") || line.includes("="))) {
+      if (line.includes("[") && line.includes("]") && (line.includes("█") || line.includes("="))) {
+        htmlParts.push(
+          `<div class="my-3 p-3 rounded-xl bg-slate-900 text-amber-300 font-mono text-xs font-bold shadow-md flex items-center justify-between border border-slate-800"><span>${line}</span></div>`
+        );
+      } else {
+        if (isPassageItem(line)) {
+          // Clean, unboxed passage options
           htmlParts.push(
-            `<div class="my-2.5 p-3 rounded-xl bg-slate-900 text-amber-300 font-mono text-xs font-bold shadow-md flex items-center justify-between border border-slate-700"><span>${line}</span></div>`
+            `<p class="my-1.5 pl-2 text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed font-mono">${line}</p>`
+          );
+        } else if (isQuestionDirective(line) || lines.length === 1 || i === lines.length - 1) {
+          // Main Question Prompt: Clean, prominent text with a subtle left indigo accent bar
+          htmlParts.push(
+            `<div class="my-3.5 pl-3 py-1 border-l-3 border-indigo-500 text-slate-900 dark:text-white font-bold text-sm leading-relaxed">${line}</div>`
           );
         } else {
-          const isQuestion = line.endsWith("?") || /^(Which|What|How|Calculate|Determine|Find|Who)\b/i.test(line);
-
-          if (isQuestion) {
-            htmlParts.push(
-              `<div class="my-4 p-4 rounded-xl bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-blue-50/90 dark:from-slate-800 dark:to-slate-800/90 text-slate-900 dark:text-slate-100 font-bold text-sm leading-relaxed border-l-4 border-l-blue-600 dark:border-l-indigo-400 border-y border-r border-blue-200/70 dark:border-slate-700/80 shadow-xs">${line}</div>`
-            );
-          } else {
-            htmlParts.push(
-              `<p class="my-2.5 text-xs font-semibold text-slate-800 dark:text-slate-200 leading-relaxed">${line}</p>`
-            );
-          }
+          // Context / Reading passage paragraph
+          htmlParts.push(
+            `<p class="my-2 text-xs font-normal text-slate-700 dark:text-slate-300 leading-relaxed">${line}</p>`
+          );
         }
       }
     }
@@ -74,22 +84,22 @@ export function formatPromptHTML(promptText: string): string {
 }
 
 function renderHTMLTable(headers: string[], rows: string[][]): string {
-  let html = '<div class="overflow-x-auto my-4 rounded-2xl border border-blue-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 p-1.5 shadow-sm dark:shadow-xl">';
+  let html = '<div class="overflow-x-auto my-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-1 shadow-xs">';
   html += '<table class="w-full text-xs text-left border-collapse">';
 
   if (headers.length > 0) {
-    html += '<thead><tr class="bg-gradient-to-r from-blue-100/80 to-indigo-100/80 dark:from-slate-800 dark:to-slate-800 text-blue-950 dark:text-amber-400 font-black uppercase tracking-wider border-b border-blue-200 dark:border-slate-700/80">';
+    html += '<thead><tr class="bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">';
     headers.forEach((h) => {
-      html += `<th class="p-3 border-r border-blue-200/60 dark:border-slate-700/50 last:border-r-0">${h}</th>`;
+      html += `<th class="p-2.5 border-r border-slate-200 dark:border-slate-800 last:border-r-0">${h}</th>`;
     });
     html += '</tr></thead>';
   }
 
-  html += '<tbody class="divide-y divide-blue-100/80 dark:divide-slate-800/80">';
+  html += '<tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">';
   rows.forEach((row) => {
-    html += '<tr class="hover:bg-blue-50/50 dark:hover:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-medium transition-colors">';
+    html += '<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-800 dark:text-slate-200 font-medium transition-colors">';
     row.forEach((cell) => {
-      html += `<td class="p-3 border-r border-blue-100/60 dark:border-slate-800/60 last:border-r-0">${cell}</td>`;
+      html += `<td class="p-2.5 border-r border-slate-100 dark:border-slate-800/60 last:border-r-0">${cell}</td>`;
     });
     html += '</tr>';
   });

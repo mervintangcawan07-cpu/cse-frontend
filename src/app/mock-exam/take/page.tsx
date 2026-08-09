@@ -289,7 +289,7 @@ export default function TakeExamPage() {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center">
-        <p className="text-slate-500 font-medium animate-pulse">
+        <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">
           Loading exam configurations...
         </p>
       </div>
@@ -299,7 +299,7 @@ export default function TakeExamPage() {
   if (allQuestions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
-        <p className="text-slate-600 font-semibold">No questions found in database.</p>
+        <p className="text-slate-600 dark:text-slate-300 font-semibold">No questions found in database.</p>
         <Link href="/dashboard" className="text-blue-600 font-bold hover:underline text-sm">
           Return to Dashboard
         </Link>
@@ -314,7 +314,7 @@ export default function TakeExamPage() {
         <div className="flex justify-between items-center">
           <Link
             href="/dashboard"
-            className="text-xs font-extrabold text-slate-500 hover:text-slate-800 transition flex items-center gap-1"
+            className="text-xs font-extrabold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100 transition flex items-center gap-1"
           >
             ← Back to Dashboard
           </Link>
@@ -330,7 +330,7 @@ export default function TakeExamPage() {
             <h2 className="text-base font-extrabold text-slate-900 dark:text-slate-100">
               You have a saved exam session in progress!
             </h2>
-            <p className="text-xs text-slate-600 font-medium leading-relaxed">
+            <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
               Answered {Object.keys(savedSessionData.selectedAnswers || {}).length} of{" "}
               {savedSessionData.examQuestions?.length || 0} items.
             </p>
@@ -346,7 +346,7 @@ export default function TakeExamPage() {
                   localStorage.removeItem(LOCAL_STORAGE_KEY);
                   setSavedSessionData(null);
                 }}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs rounded-xl transition cursor-pointer"
+                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 Discard & Start Fresh
               </button>
@@ -356,8 +356,8 @@ export default function TakeExamPage() {
 
         <div className="bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-800">Configure Mock Exam</h1>
-            <p className="text-slate-500 text-sm mt-1">
+            <h1 className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">Configure Mock Exam</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
               Customize your practice session with smart non-repeating question queue.
             </p>
           </div>
@@ -370,7 +370,7 @@ export default function TakeExamPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500"
+                className="w-full p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 text-slate-800 dark:text-slate-100 font-medium outline-none focus:border-blue-500 focus:bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500"
               >
                 <option value="All">All Categories (170 Items - Smart Repetition)</option>
                 {categories.map((cat) => (
@@ -424,7 +424,7 @@ export default function TakeExamPage() {
   if (examQuestions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
-        <p className="text-slate-600 font-semibold">No questions available for this category.</p>
+        <p className="text-slate-600 dark:text-slate-300 font-semibold">No questions available for this category.</p>
         <button onClick={() => setIsSetupPhase(true)} className="text-blue-600 font-bold hover:underline cursor-pointer">
           Go back to Setup
         </button>
@@ -494,7 +494,7 @@ export default function TakeExamPage() {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 cursor-pointer ${
               isBookmarked
                 ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
-                : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800"
+                : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100"
             }`}
           >
             <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
@@ -503,7 +503,7 @@ export default function TakeExamPage() {
 
         {/* PROMPT RENDERING WITH HTML TABLE SUPPORT */}
         <div
-          className="text-lg font-bold text-slate-800 leading-relaxed overflow-x-auto"
+          className="text-lg font-bold text-slate-800 dark:text-slate-100 leading-relaxed overflow-x-auto"
           dangerouslySetInnerHTML={{ __html: formatPromptHTML(currentQ?.prompt || "") }}
         />
 
@@ -583,7 +583,7 @@ export default function TakeExamPage() {
               <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100">
                 Pause or Exit Exam?
               </h2>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Your exam timer is currently paused. What would you like to do?
               </p>
             </div>
@@ -619,7 +619,7 @@ export default function TakeExamPage() {
             <div className="pt-2 border-t border-slate-100 text-center">
               <button
                 onClick={() => setIsPauseModalOpen(false)}
-                className="px-5 py-2.5 text-slate-500 hover:text-slate-800 font-bold text-xs rounded-xl transition cursor-pointer"
+                className="px-5 py-2.5 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100 font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 ← Resume Exam Now
               </button>
