@@ -20,6 +20,16 @@ async function authenticateAdmin(request: NextRequest) {
   return user?.role === "ADMIN" ? user : null;
 }
 
+// Helper to safely serialize BigInt fields for JSON response
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function serializeBackup(backup: any) {
+  if (!backup) return backup;
+  return {
+    ...backup,
+    sizeBytes: backup.sizeBytes ? backup.sizeBytes.toString() : "0",
+  };
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -61,7 +71,7 @@ export async function POST(
         },
       });
 
-      return NextResponse.json({ success: true, backup: updated });
+      return NextResponse.json({ success: true, backup: serializeBackup(updated) });
     }
 
     if (action === "restore") {
@@ -113,7 +123,7 @@ export async function DELETE(
     // 2. Remove backup row from database
     await prisma.backup.delete({ where: { id } });
 
-    // 3. Log audit event with backupId set to null (since the record was removed)
+    // 3. Log audit event with backupId set to null (since record was removed)
     await prisma.backupAuditLog.create({
       data: {
         backupId: null,
