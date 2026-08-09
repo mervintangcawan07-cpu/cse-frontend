@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+
+
+
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-slate-100 via-blue-50/50 to-indigo-50/40 text-slate-900 antialiased min-h-screen transition-colors duration-200 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100;
+  }
+}
