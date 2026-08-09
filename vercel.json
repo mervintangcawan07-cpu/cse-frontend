@@ -1,20 +1,24 @@
 {
-  "crons": [
-    {
-      "path": "/api/csc/sync",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/db-storage-check",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/background-worker",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/health-monitor",
-      "schedule": "0 3 * * *"
-    }
-  ]
+    "crons":  [
+                  {
+                      "path":  "/api/csc/sync",
+                      "schedule":  "0 0 * * *"
+                  },
+                  {
+                      "path":  "/api/cron/db-storage-check",
+                      "schedule":  "0 0 * * *"
+                  },
+                  {
+                      "path":  "/api/cron/background-worker",
+                      "schedule":  "0 2 * * *"
+                  },
+                  {
+                      "path":  "/api/cron/health-monitor",
+                      "schedule":  "0 3 * * *"
+                  },
+                  {
+                      "path":  "/api/cron/daily-backup",
+                      "schedule":  "0 18 * * *"
+                  }
+              ]
 }

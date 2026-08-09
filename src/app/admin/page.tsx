@@ -1,431 +1,440 @@
 // Relative Path: src/app/admin/page.tsx
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import UserActionModal from "@/components/admin/UserActionModal";
-import DatabaseStorageWidget from "@/components/admin/DatabaseStorageWidget";
+import {
+  ShieldCheck,
+  Database,
+  Activity,
+  Sliders,
+  Users,
+  BookOpen,
+  Zap,
+  Layers,
+  RefreshCw,
+  HelpCircle,
+  TrendingUp,
+  ArrowRight,
+  Server,
+  Trash2,
+  DollarSign,
+  FileText,
+  BarChart3,
+  GraduationCap
+} from "lucide-react";
 
-interface UserItem {
-  id: string;
-  name: string | null;
-  email: string;
-  role: string;
-  isPaid: boolean;
-  planType: string | null;
-  paidUntil: string | null;
-  isBanned?: boolean;
-  banReason?: string | null;
-  createdAt: string;
+interface QuickStats {
+  totalUsers: number;
+  paidUsers: number;
+  totalQuestions: number;
+  systemHealth: string;
+  backupCount: number;
 }
 
-interface LoginLog {
-  id: string;
-  email: string;
-  ipAddress?: string | null;
-  userAgent?: string | null;
-  status: string;
-  reason?: string | null;
-  createdAt: string;
-}
-
-export default function AdminUsersPage() {
-  const [activeTab, setActiveTab] = useState<"USERS" | "LOGIN_LOGS">("USERS");
-  const [users, setUsers] = useState<UserItem[]>([]);
-  const [logs, setLogs] = useState<LoginLog[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
+export default function AdminDashboardHub() {
+  const [stats, setStats] = useState<QuickStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
-
-  // Moderation Modal State
-  const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
-  const [modalMode, setModalMode] = useState<"BAN" | "UNBAN" | "RESET_PASSWORD" | null>(null);
-
-  const fetchUsers = useCallback(async (query = "") => {
-    try {
-      setLoading(true);
-      const res = await fetch(`/api/admin/users?q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      if (res.ok && data.users) {
-        setUsers(data.users);
-      }
-    } catch (err) {
-      console.error("Failed to load users:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchLogs = useCallback(async (query = "", filter = "ALL") => {
-    try {
-      setLoading(true);
-      const res = await fetch(
-        `/api/admin/login-history?q=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`
-      );
-      const data = await res.json();
-      if (res.ok && data.history) {
-        setLogs(data.history);
-      }
-    } catch (err) {
-      console.error("Failed to load login logs:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   useEffect(() => {
-    if (activeTab === "USERS") {
-      fetchUsers(searchQuery);
-    } else {
-      fetchLogs(searchQuery, statusFilter);
-    }
-  }, [activeTab, fetchUsers, fetchLogs, statusFilter]);
+    async function fetchStats() {
+      try {
+        const [statsRes, backupsRes] = await Promise.all([
+          fetch("/api/admin/stats"),
+          fetch("/api/admin/backups")
+        ]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (activeTab === "USERS") {
-      fetchUsers(searchQuery);
-    } else {
-      fetchLogs(searchQuery, statusFilter);
-    }
-  };
+        const statsData = statsRes.ok ? await statsRes.json() : {};
+        const backupsData = backupsRes.ok ? await backupsRes.json() : {};
 
-  const handleUpdateAccess = async (userId: string, action: string) => {
-    if (
-      action === "REVOKE" &&
-      !confirm("Are you sure you want to revoke PRO access for this reviewee?")
-    ) {
-      return;
-    }
-
-    setUpdatingId(userId);
-    try {
-      const res = await fetch("/api/admin/users", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, action }),
-      });
-
-      if (res.ok) {
-        fetchUsers(searchQuery);
-      } else {
-        alert("Failed to update user access.");
+        setStats({
+          totalUsers: statsData.totalUsers || 0,
+          paidUsers: statsData.paidUsers || 0,
+          totalQuestions: statsData.totalQuestions || 0,
+          systemHealth: backupsData.health?.status || "HEALTHY",
+          backupCount: backupsData.backups?.length || 0,
+        });
+      } catch (err) {
+        console.error("Failed to load admin stats", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Update access error:", err);
-    } finally {
-      setUpdatingId(null);
     }
-  };
-
-  const filteredUsers = users.filter((u) => {
-    if (statusFilter === "BANNED") return u.isBanned;
-    if (statusFilter === "PRO") return u.isPaid;
-    return true;
-  });
+    fetchStats();
+  }, []);
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 space-y-6">
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-6 rounded-3xl shadow-sm">
+    <div className="p-6 max-w-7xl mx-auto space-y-10 text-slate-100">
+      {/* Top Title Banner */}
+      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Link href="/dashboard" className="text-xs font-bold text-amber-400 hover:underline">
-              &larr; Return to Dashboard
-            </Link>
+            <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 uppercase tracking-wide">
+              EXECUTIVE COMMAND CENTER
+            </span>
           </div>
-          <h1 className="text-2xl font-black mt-1">User Accounts, Access & Security</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Manage subscription extensions, enforce account bans, reset passwords, and audit login attempts.
+          <h1 className="text-3xl font-extrabold text-white mt-2">Admin Control Dashboard</h1>
+          <p className="text-slate-400 text-sm mt-1">
+            Categorized management hub for platform operations, disaster recovery, academic engines, and student services.
           </p>
         </div>
 
-        {/* Global Search */}
-        <form onSubmit={handleSearch} className="flex gap-2 w-full sm:w-auto">
-          <input
-            type="text"
-            placeholder={activeTab === "USERS" ? "Search email or name..." : "Search IP, email, or reason..."}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="p-2.5 px-4 bg-slate-800 border border-slate-700 text-white rounded-xl text-xs outline-none focus:border-amber-400 font-medium w-full sm:w-64 placeholder-slate-400"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow-sm shrink-0 cursor-pointer"
-          >
-            Search
-          </button>
-        </form>
-      </div>
-
-      {/* Real-time Database Infrastructure & Capacity Monitor */}
-      <DatabaseStorageWidget />
-
-      {/* Navigation Tabs & Filter Bar */}
-      <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1 text-xs font-bold w-full sm:w-auto">
-          <button
-            type="button"
-            onClick={() => { setActiveTab("USERS"); setSearchQuery(""); setStatusFilter("ALL"); }}
-            className={`px-4 py-2 rounded-xl transition cursor-pointer ${
-              activeTab === "USERS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
-            }`}
-          >
-            👥 User Accounts ({users.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => { setActiveTab("LOGIN_LOGS"); setSearchQuery(""); setStatusFilter("ALL"); }}
-            className={`px-4 py-2 rounded-xl transition cursor-pointer ${
-              activeTab === "LOGIN_LOGS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
-            }`}
-          >
-            🔐 Login Audit & Failed Attempts
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs font-bold">
-          <span className="text-slate-400 uppercase text-[10px]">Filter Status:</span>
-          {activeTab === "USERS" ? (
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none"
-            >
-              <option value="ALL">All Reviewees</option>
-              <option value="PRO">PRO Subscribers Only</option>
-              <option value="BANNED">🚨 Banned Users Only</option>
-            </select>
-          ) : (
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none"
-            >
-              <option value="ALL">All Login Logs</option>
-              <option value="FAILED">🚨 Failed Login Attempts Only</option>
-              <option value="SUCCESS">✅ Successful Logins Only</option>
-            </select>
-          )}
+        {/* Telemetry Indicator */}
+        <div className="flex items-center gap-3 bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-xl">
+          <Server className="w-5 h-5 text-sky-400" />
+          <div className="text-xs">
+            <div className="text-slate-400 font-medium">Platform Status</div>
+            <div className="font-bold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              {loading ? "Checking..." : `${stats?.systemHealth || "ONLINE"}`}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6">
-        {activeTab === "USERS" ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase">
-                  <th className="p-3.5 rounded-l-xl">User Details</th>
-                  <th className="p-3.5">Role</th>
-                  <th className="p-3.5">PRO Access</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5">Plan Expiration</th>
-                  <th className="p-3.5 text-right rounded-r-xl">Access & Moderation Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {loading ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400 font-medium animate-pulse">
-                      Loading reviewee accounts...
-                    </td>
-                  </tr>
-                ) : filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400">
-                      No reviewees matched your filter or search criteria.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((u) => {
-                    const isExpired = u.paidUntil && new Date(u.paidUntil) < new Date();
-                    const isActive = u.isPaid && !isExpired;
-
-                    return (
-                      <tr key={u.id} className="hover:bg-slate-50/80 transition">
-                        <td className="p-3.5">
-                          <p className="font-extrabold text-slate-800">{u.name || "Reviewee"}</p>
-                          <p className="text-slate-400 text-[11px] font-mono">{u.email}</p>
-                        </td>
-
-                        <td className="p-3.5">
-                          <span
-                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
-                              u.role === "ADMIN" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-600"
-                            }`}
-                          >
-                            {u.role}
-                          </span>
-                        </td>
-
-                        <td className="p-3.5">
-                          <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${
-                              isActive
-                                ? "bg-emerald-100 text-emerald-800"
-                                : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
-                            {isActive ? "✓ Paid PRO" : "Free Tier"}
-                          </span>
-                        </td>
-
-                        <td className="p-3.5">
-                          {u.isBanned ? (
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-red-100 text-red-800" title={u.banReason || ""}>
-                              🚨 Banned
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
-                              Active
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="p-3.5 text-slate-600 font-medium">
-                          {u.paidUntil
-                            ? new Date(u.paidUntil).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })
-                            : "N/A"}
-                        </td>
-
-                        <td className="p-3.5 text-right space-x-1 shrink-0">
-                          {/* PRO Duration Extension Buttons */}
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_30")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] rounded-lg border border-blue-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +30 Days
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_180")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] rounded-lg border border-emerald-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +180 Days
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_365")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-[10px] rounded-lg border border-purple-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +1 Year
-                          </button>
-                          {u.isPaid && (
-                            <button
-                              type="button"
-                              onClick={() => handleUpdateAccess(u.id, "REVOKE")}
-                              disabled={updatingId === u.id}
-                              className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[10px] rounded-lg border border-rose-200 transition disabled:opacity-50 cursor-pointer"
-                            >
-                              Revoke PRO
-                            </button>
-                          )}
-
-                          {/* Moderation Controls */}
-                          <button
-                            type="button"
-                            onClick={() => { setSelectedUser(u); setModalMode("RESET_PASSWORD"); }}
-                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg border border-slate-200 transition cursor-pointer"
-                          >
-                            🔑 Password
-                          </button>
-                          {u.isBanned ? (
-                            <button
-                              type="button"
-                              onClick={() => { setSelectedUser(u); setModalMode("UNBAN"); }}
-                              className="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
-                            >
-                              Unban
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => { setSelectedUser(u); setModalMode("BAN"); }}
-                              className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
-                            >
-                              Ban
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+      {/* Overview Metrics Header */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+            Total Examinees
+            <Users className="w-4 h-4 text-sky-400" />
           </div>
-        ) : (
-          /* Login Audit Table */
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase">
-                  <th className="p-3.5 rounded-l-xl">Timestamp</th>
-                  <th className="p-3.5">Email Attempted</th>
-                  <th className="p-3.5">Status</th>
-                  <th className="p-3.5">IP Address</th>
-                  <th className="p-3.5 rounded-r-xl">Failure Reason / Notes</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-medium">
-                {loading ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-400 font-medium animate-pulse">
-                      Loading audit logs...
-                    </td>
-                  </tr>
-                ) : logs.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-400">
-                      No login records match your filter criteria.
-                    </td>
-                  </tr>
-                ) : (
-                  logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 text-slate-400 font-mono text-[11px]">
-                        {new Date(log.createdAt).toLocaleString()}
-                      </td>
-                      <td className="p-3.5 font-bold text-slate-800">{log.email}</td>
-                      <td className="p-3.5">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                            log.status === "FAILED" ? "bg-red-100 text-red-800" : "bg-emerald-100 text-emerald-800"
-                          }`}
-                        >
-                          {log.status}
-                        </span>
-                      </td>
-                      <td className="p-3.5 font-mono text-slate-600">{log.ipAddress || "127.0.0.1"}</td>
-                      <td className="p-3.5 text-slate-500">{log.reason || "Authentication successful"}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+          <div className="text-2xl font-bold text-white mt-2">{loading ? "..." : stats?.totalUsers}</div>
+        </div>
+
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+            PRO Members
+            <TrendingUp className="w-4 h-4 text-emerald-400" />
           </div>
-        )}
+          <div className="text-2xl font-bold text-white mt-2">{loading ? "..." : stats?.paidUsers}</div>
+        </div>
+
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+            Question Bank Items
+            <BookOpen className="w-4 h-4 text-indigo-400" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2">{loading ? "..." : stats?.totalQuestions}</div>
+        </div>
+
+        <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium uppercase">
+            Active Vault Backups
+            <Database className="w-4 h-4 text-amber-400" />
+          </div>
+          <div className="text-2xl font-bold text-white mt-2">{loading ? "..." : stats?.backupCount}</div>
+        </div>
       </div>
 
-      {/* Moderation Action Modal */}
-      <UserActionModal
-        isOpen={modalMode !== null}
-        onClose={() => { setModalMode(null); setSelectedUser(null); }}
-        user={selectedUser}
-        mode={modalMode}
-        onSuccess={() => fetchUsers(searchQuery)}
-      />
+      {/* ========================================================================= */}
+      {/* HUB CATEGORY 1: SYSTEM, SECURITY & PLATFORM OPERATIONS */}
+      {/* ========================================================================= */}
+      <div className="space-y-6 bg-slate-900/50 border border-slate-800/80 p-6 rounded-2xl">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-sky-950 text-sky-400 border border-sky-800">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">1. System, Security & Platform Operations Hub</h2>
+              <p className="text-xs text-slate-400 mt-0.5">Disaster recovery, telemetry, configuration flags, trash bin, and pricing models.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Subcategory 1.1: Analytics & System Telemetry */}
+        <div className="space-y-3">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+            Subcategory: Telemetry & Infrastructure Health
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/dashboard"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-sky-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <BarChart3 className="w-5 h-5 text-sky-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">ANALYTICS</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-sky-400 transition">Overview & Analytics</h3>
+                <p className="text-xs text-slate-400 mt-1">Examinee engagement trends, exam completion rates, and upgrade metrics.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-sky-400">
+                View Analytics <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/health"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Activity className="w-5 h-5 text-emerald-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">HEALTH</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-emerald-400 transition">Infrastructure & System Health</h3>
+                <p className="text-xs text-slate-400 mt-1">Database latency, memory usage, API error rates, and connection status.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
+                Check Telemetry <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Subcategory 1.2: Security & Data Vault */}
+        <div className="space-y-3 pt-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Subcategory: Disaster Recovery & Data Vault
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/backups"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Database className="w-5 h-5 text-emerald-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">VAULT</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-emerald-400 transition">Disaster Recovery & Backups</h3>
+                <p className="text-xs text-slate-400 mt-1">Automated snapshots, Gzip compression, SHA-256 verifications, and Restores.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
+                Open Vault <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/trash"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-red-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Trash2 className="w-5 h-5 text-red-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-800">RECYCLE</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-red-400 transition">Recycled Items & Trash Bin</h3>
+                <p className="text-xs text-slate-400 mt-1">Soft-deleted items, restore deleted questions, and permanent purge tools.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-red-400">
+                View Trash Bin <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Subcategory 1.3: System Configurations & Pricing */}
+        <div className="space-y-3 pt-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+            Subcategory: Configurations & Revenue Control
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/system"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-indigo-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Sliders className="w-5 h-5 text-indigo-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800">FLAGS</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-indigo-400 transition">System Configs & Feature Flags</h3>
+                <p className="text-xs text-slate-400 mt-1">Toggle AI Tutor, Duels, maintenance banners, and review support desk tickets.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-indigo-400">
+                Manage Configs <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/pricing"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-amber-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <DollarSign className="w-5 h-5 text-amber-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800">PRO PLANS</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-amber-400 transition">Pricing & Subscriptions</h3>
+                <p className="text-xs text-slate-400 mt-1">Configure PRO upgrade prices, access duration rules, and payment tier parameters.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-amber-400">
+                Manage Pricing <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* HUB CATEGORY 2: ACADEMIC, CONTENT & EXAM ENGINE */}
+      {/* ========================================================================= */}
+      <div className="space-y-6 bg-slate-900/50 border border-slate-800/80 p-6 rounded-2xl">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-purple-950 text-purple-400 border border-purple-800">
+              <GraduationCap className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">2. Academic, Content & Exam Engine Hub</h2>
+              <p className="text-xs text-slate-400 mt-0.5">Question banks, elimination drills, flashcard decks, study materials, examinee accounts, and CSC sync.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Subcategory 2.1: Practice & Arena Engines */}
+        <div className="space-y-3">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+            Subcategory: Question Banks & Gamified Practice
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/questions"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-purple-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <FileText className="w-5 h-5 text-purple-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-purple-950 text-purple-400 border border-purple-800">ITEMS</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-purple-400 transition">Question Bank Management</h3>
+                <p className="text-xs text-slate-400 mt-1">Create, edit, tag, and publish items across Numerical, Verbal, and Analytical domains.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-purple-400">
+                Open Questions <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/elimination-drills"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-amber-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Zap className="w-5 h-5 text-amber-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800">ARENA</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-amber-400 transition">Elimination Drills & 1v1 Duels</h3>
+                <p className="text-xs text-slate-400 mt-1">Real-time match history, ELO rating multipliers, and duel arena parameters.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-amber-400">
+                Manage Arena <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/flashcards"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Layers className="w-5 h-5 text-emerald-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">MEMORIZE</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-emerald-400 transition">Spaced Repetition Flashcards</h3>
+                <p className="text-xs text-slate-400 mt-1">Flashcard decks for PH Constitution, RA 6713, and Vocabulary drills.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
+                Manage Decks <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Subcategory 2.2: Learning Materials & Reviewers */}
+        <div className="space-y-3 pt-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+            Subcategory: Learning Materials & Handbooks
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/reviewer"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-indigo-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <BookOpen className="w-5 h-5 text-indigo-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800">REVIEWER</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-indigo-400 transition">Reviewer Modules & Notes</h3>
+                <p className="text-xs text-slate-400 mt-1">Structured study notes, topic guides, and exam subject breakdowns.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-indigo-400">
+                Manage Reviewers <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/reading-materials"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-pink-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <FileText className="w-5 h-5 text-pink-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-950 text-pink-400 border border-pink-800">READING</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-pink-400 transition">Reading Materials & Downloads</h3>
+                <p className="text-xs text-slate-400 mt-1">PDF handbooks, downloadable practice sets, and official reference guides.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-pink-400">
+                Manage Materials <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Subcategory 2.3: Student Body & Official Integrations */}
+        <div className="space-y-3 pt-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+            Subcategory: Student Body & Official Data
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/admin/users"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-cyan-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <Users className="w-5 h-5 text-cyan-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">ACCOUNTS</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-cyan-400 transition">Examinee Accounts & Roles</h3>
+                <p className="text-xs text-slate-400 mt-1">Elevate user roles, grant PRO access, check activity logs, and review login history.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-cyan-400">
+                Manage Accounts <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/csc-sync"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-pink-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <RefreshCw className="w-5 h-5 text-pink-400" />
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-950 text-pink-400 border border-pink-800">OFFICIAL</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-pink-400 transition">CSC Sync & Official Schedules</h3>
+                <p className="text-xs text-slate-400 mt-1">Scrape official Civil Service Commission announcements, schedules, and downloads.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-pink-400">
+                Manage CSC Sync <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

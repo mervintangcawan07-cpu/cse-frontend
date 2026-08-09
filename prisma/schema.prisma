@@ -647,3 +647,82 @@ model CSCDownload {
 
   @@index([category])
 }
+// ==========================================
+// DISASTER RECOVERY & BACKUP SYSTEM MODELS
+// ==========================================
+
+enum BackupType {
+  DAILY
+  MANUAL
+  PRE_RESTORE_EMERGENCY
+  WEEKLY
+  MONTHLY
+}
+
+enum BackupStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  VERIFYING
+  VERIFIED
+  FAILED
+  VERIFICATION_FAILED
+  RESTORE_PENDING
+  RESTORING
+  RESTORED
+  RESTORE_FAILED
+}
+
+enum BackupVerificationStatus {
+  UNVERIFIED
+  PASSED
+  FAILED
+  SKIPPED
+}
+
+model Backup {
+  id                  String                   @id @default(cuid())
+  backupType          BackupType               @default(MANUAL)
+  status              BackupStatus             @default(PENDING)
+  filename            String
+  storageKey          String
+  storageProvider     String                   @default("s3")
+  sizeBytes           BigInt                   @default(0)
+  checksum            String?
+  databaseVersion     String?                  @default("PostgreSQL")
+  schemaVersion       String?                  @default("1.0.0")
+  verificationStatus  BackupVerificationStatus @default(UNVERIFIED)
+  verificationMessage String?                  @db.Text
+  verifiedAt          DateTime?
+  triggeredBy         String?                  @default("SYSTEM")
+  errorMessage        String?                  @db.Text
+  expiresAt           DateTime?
+  protected           Boolean                  @default(false)
+  createdAt           DateTime                 @default(now())
+  completedAt         DateTime?
+  restoredAt          DateTime?
+
+  auditLogs           BackupAuditLog[]
+
+  @@index([status])
+  @@index([backupType])
+  @@index([createdAt(sort: Desc)])
+  @@index([verificationStatus])
+}
+
+model BackupAuditLog {
+  id         String   @id @default(cuid())
+  backupId   String?
+  backup     Backup?  @relation(fields: [backupId], references: [id], onDelete: Cascade)
+  actorId    String?
+  actorEmail String?
+  action     String
+  status     String   @default("SUCCESS")
+  details    String?  @db.Text
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([backupId])
+  @@index([createdAt(sort: Desc)])
+  @@index([action])
+}

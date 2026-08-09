@@ -1,4 +1,5 @@
-﻿import { cookies } from "next/headers";
+// Relative Path: src/app/admin/layout.tsx
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { verifyJWT } from "@/lib/auth";
@@ -28,107 +29,83 @@ export default async function AdminLayout({
   return (
     <SudoProvider>
       <div className="min-h-screen bg-slate-950 text-slate-100">
-        {/* Persistent Admin Header */}
-        <header className="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white sticky top-0 z-50 shadow-xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Top Meta Header */}
-            <div className="flex items-center justify-between h-14 border-b border-slate-800/80 text-xs gap-3">
-              <div className="flex items-center gap-2.5">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        {/* Categorized Sticky Top Navigation Bar */}
+        <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-6 py-3">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            {/* Logo / Title */}
+            <div className="flex items-center gap-3">
+              <Link href="/admin" className="flex items-center gap-2 font-bold text-white hover:text-emerald-400 transition">
+                <span className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs">
+                  🛡️
                 </span>
-                <span className="font-black tracking-wider text-amber-400 uppercase">
-                  ADMIN CONTROL CENTER
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 hidden md:inline text-[11px]">
-                  Admin: <strong className="text-white font-mono">{user.email}</strong>
-                </span>
-                <Link
-                  href="/dashboard"
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl border border-slate-700 font-extrabold transition text-[11px] flex items-center gap-1.5 shadow-sm"
-                >
-                  <span>👁️</span>
-                  <span>Exit Admin View</span>
-                </Link>
-              </div>
+                <span>Admin Command Center</span>
+              </Link>
             </div>
 
-            {/* Persistent Admin Sub-Navigation */}
-            <nav className="flex items-center gap-1.5 py-2.5 overflow-x-auto text-xs font-bold scrollbar-none">
+            {/* Quick Navigation Links */}
+            <nav className="hidden md:flex items-center gap-1 text-xs font-medium">
               <Link
-                href="/admin/dashboard"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
+                href="/admin"
+                className="px-2.5 py-1.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition"
               >
-                <span>📊</span> Overview & Analytics
+                Hub
               </Link>
-
+              <div className="h-4 w-px bg-slate-800 my-auto"></div>
+              
+              <span className="text-[10px] text-slate-500 uppercase tracking-wider px-1.5">Ops:</span>
+              <Link
+                href="/admin/backups"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-emerald-400 hover:text-emerald-300 transition"
+              >
+                Backups
+              </Link>
               <Link
                 href="/admin/health"
-                className="px-3.5 py-2 rounded-xl text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 transition whitespace-nowrap flex items-center gap-1.5 font-black shadow-sm"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-sky-400 hover:text-sky-300 transition"
               >
-                <span className="text-sm">💓</span> System Health
+                Health
               </Link>
-
-              <Link
-                href="/admin/elimination-drills"
-                className="px-3.5 py-2 rounded-xl text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 transition whitespace-nowrap flex items-center gap-1.5 font-black shadow-sm"
-              >
-                <span className="text-sm">⚡</span> Elimination Drills
-              </Link>
-
-              <Link
-                href="/admin/questions"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
-              >
-                <span>❓</span> Questions
-              </Link>
-
-              <Link
-                href="/admin/users"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
-              >
-                <span>👥</span> Users
-              </Link>
-
-              <Link
-                href="/admin/trash"
-                className="px-3.5 py-2 rounded-xl text-rose-400 bg-rose-500/10 border border-rose-500/30 hover:bg-rose-500/20 transition whitespace-nowrap flex items-center gap-1.5 font-black shadow-sm"
-              >
-                <span>🗑️</span> Trash Bin
-              </Link>
-
-              <Link
-                href="/admin/flashcards"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
-              >
-                <span>🎴</span> Flashcards
-              </Link>
-
-              <Link
-                href="/admin/csc-sync"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
-              >
-                <span>🔄</span> CSC Sync
-              </Link>
-
               <Link
                 href="/admin/system"
-                className="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition whitespace-nowrap flex items-center gap-1.5"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-indigo-400 hover:text-indigo-300 transition"
               >
-                <span>⚙️</span> System Config
+                Config
+              </Link>
+
+              <div className="h-4 w-px bg-slate-800 my-auto"></div>
+              <span className="text-[10px] text-slate-500 uppercase tracking-wider px-1.5">Academic:</span>
+              <Link
+                href="/admin/questions"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-purple-400 hover:text-purple-300 transition"
+              >
+                Questions
+              </Link>
+              <Link
+                href="/admin/elimination-drills"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-amber-400 hover:text-amber-300 transition"
+              >
+                Drills
+              </Link>
+              <Link
+                href="/admin/users"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-cyan-400 hover:text-cyan-300 transition"
+              >
+                Examinees
               </Link>
             </nav>
+
+            {/* Exit Button */}
+            <Link
+              href="/dashboard"
+              className="text-xs px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 rounded-lg transition"
+            >
+              Exit to Student App ➔
+            </Link>
           </div>
         </header>
 
-        {/* Main Content Viewport */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {children}
-        </main>
+        {/* Viewport */}
+        <main>{children}</main>
       </div>
     </SudoProvider>
   );
