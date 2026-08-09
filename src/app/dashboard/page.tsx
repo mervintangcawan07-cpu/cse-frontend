@@ -195,7 +195,7 @@ function DashboardContent() {
       {/* ADMIN QUICK SWITCH BANNER */}
       {isAdmin && (
         <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 p-4 rounded-2xl flex justify-between items-center text-amber-300 text-xs font-bold backdrop-blur-sm">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-1 bg-amber-500/20 rounded-lg text-amber-400">⚙️</span>
             <span>Logged in with Administrator privileges.</span>
           </div>
@@ -212,13 +212,13 @@ function DashboardContent() {
       <ResumeExamBanner />
 
       {/* WELCOME HERO HEADER */}
-      <div className="relative bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4 z-30">
+      <div className="relative bg-slate-900 text-white p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4 z-30 overflow-hidden">
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 w-full">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[11px] font-black uppercase tracking-wider px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 shadow-inner">
@@ -245,12 +245,12 @@ function DashboardContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0 flex-wrap relative z-20">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap max-w-full relative z-20 mt-2 xl:mt-0">
             <NotificationBell />
 
             <Link
               href="/readiness-card"
-              className="px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs rounded-2xl transition shrink-0 flex items-center gap-1.5 backdrop-blur-sm"
+              className="px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs rounded-2xl transition flex items-center gap-1.5 backdrop-blur-sm whitespace-nowrap"
             >
               <span>🏆</span>
               <span>Flex Readiness Card</span>
@@ -268,7 +268,7 @@ function DashboardContent() {
                 )}
                 <Link
                   href="/practice"
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-blue-600/30 transition shrink-0 flex items-center gap-1.5"
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-blue-600/30 transition flex items-center gap-1.5 whitespace-nowrap"
                 >
                   <span>⚡</span>
                   <span>Practice Center</span>
@@ -277,7 +277,7 @@ function DashboardContent() {
             ) : (
               <button
                 onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg shadow-amber-500/20 transition shrink-0 cursor-pointer"
+                className="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg shadow-amber-500/20 transition cursor-pointer whitespace-nowrap"
               >
                 🔒 Upgrade to PRO
               </button>
