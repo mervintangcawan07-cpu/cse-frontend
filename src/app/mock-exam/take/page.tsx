@@ -327,7 +327,7 @@ export default function TakeExamPage() {
                 ⏸️ Unfinished Exam Found
               </span>
             </div>
-            <h2 className="text-base font-extrabold text-slate-900">
+            <h2 className="text-base font-extrabold text-slate-900 dark:text-slate-100">
               You have a saved exam session in progress!
             </h2>
             <p className="text-xs text-slate-600 font-medium leading-relaxed">
@@ -354,7 +354,7 @@ export default function TakeExamPage() {
           </div>
         )}
 
-        <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-8">
+        <div className="bg-white dark:bg-slate-900 p-8 md:p-10 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
           <div>
             <h1 className="text-2xl font-extrabold text-slate-800">Configure Mock Exam</h1>
             <p className="text-slate-500 text-sm mt-1">
@@ -370,7 +370,7 @@ export default function TakeExamPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full p-4 border border-slate-200 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white transition"
+                className="w-full p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 text-slate-800 font-medium outline-none focus:border-blue-500 focus:bg-white dark:bg-slate-900 transition"
               >
                 <option value="All">All Categories (170 Items - Smart Repetition)</option>
                 {categories.map((cat) => (
@@ -398,7 +398,7 @@ export default function TakeExamPage() {
                     className={`p-3 rounded-xl border text-sm font-bold transition cursor-pointer ${
                       timerMinutes === timer.value
                         ? "border-blue-600 bg-blue-50 text-blue-700"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                     }`}
                   >
                     {timer.label}
@@ -483,7 +483,7 @@ export default function TakeExamPage() {
       </div>
 
       {/* EXAM QUESTION CARD */}
-      <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+      <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
         <div className="flex justify-between items-center border-b border-slate-100 pb-3">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Question #{currentIndex + 1} • {currentQ?.category}
@@ -494,7 +494,7 @@ export default function TakeExamPage() {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 cursor-pointer ${
               isBookmarked
                 ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
-                : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-800"
+                : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800"
             }`}
           >
             <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
@@ -509,7 +509,7 @@ export default function TakeExamPage() {
 
         {/* CHART / GRAPH IMAGE DISPLAY */}
         {currentQ?.imageUrl && (
-          <div className="my-4 flex justify-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
+          <div className="my-4 flex justify-center bg-slate-50 p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
             <img
               src={currentQ.imageUrl}
               alt="Question Diagram or Chart"
@@ -528,7 +528,7 @@ export default function TakeExamPage() {
                 className={`w-full text-left p-4 rounded-2xl border text-sm font-medium transition flex items-center justify-between cursor-pointer ${
                   isSelected
                     ? "border-blue-600 bg-blue-50/50 text-blue-900 font-bold"
-                    : "border-slate-200 hover:border-slate-300 text-slate-700 bg-slate-50/50"
+                    : "border-slate-200 dark:border-slate-800 hover:border-slate-300 text-slate-700 bg-slate-50/50"
                 }`}
               >
                 <span>{opt}</span>
@@ -575,12 +575,12 @@ export default function TakeExamPage() {
       {/* PAUSE / EXIT MODAL OVERLAY */}
       {isPauseModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full border border-slate-200 shadow-2xl space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl space-y-6">
             <div className="text-center space-y-2">
               <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-2xl mx-auto">
                 ⏸️
               </div>
-              <h2 className="text-xl font-extrabold text-slate-900">
+              <h2 className="text-xl font-extrabold text-slate-900 dark:text-slate-100">
                 Pause or Exit Exam?
               </h2>
               <p className="text-xs text-slate-500 font-medium">

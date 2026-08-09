@@ -1,7 +1,6 @@
 /**
  * Utility to convert raw question prompt text into clean, styled HTML elements.
- * Correctly parses Markdown tables (| Header | ... \n |---|...) and highlights
- * ASCII bar charts and trailing question prompts.
+ * Fully supports both Light Mode and Dark Mode with high-contrast, responsive colors.
  */
 export function formatPromptHTML(promptText: string): string {
   if (!promptText) return "";
@@ -50,21 +49,25 @@ export function formatPromptHTML(promptText: string): string {
       }
 
       if (line) {
-        // Render ASCII bar graph lines cleanly (e.g., Quarter 1: [████████] 160 MT)
+        // Render ASCII bar graph lines cleanly
         if (line.includes("[") && line.includes("]") && (line.includes("█") || line.includes("="))) {
           htmlParts.push(
-            `<div class="my-1.5 p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-between text-xs font-mono text-amber-300 font-bold shadow-sm"><span>${line}</span></div>`
+            `<div class="my-2 p-3 rounded-xl bg-slate-900 text-amber-300 font-mono text-xs font-bold shadow-md flex items-center justify-between border border-slate-700"><span>${line}</span></div>`
           );
         } else {
-          // Highlight trailing question sentences prominently
+          // Check if this line is the main question sentence
           const isQuestion = line.endsWith("?") || /^(Which|What|How|Calculate|Determine|Find|Who)\b/i.test(line);
-          htmlParts.push(
-            `<p class="${
-              isQuestion
-                ? "my-3 text-sm font-extrabold text-slate-100 leading-relaxed bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/80 shadow-md"
-                : "my-2 text-xs font-medium text-slate-200 leading-relaxed"
-            }">${line}</p>`
-          );
+
+          if (isQuestion) {
+            htmlParts.push(
+              `<div class="my-3.5 p-4 rounded-xl bg-slate-100 dark:bg-slate-800/90 text-slate-900 dark:text-slate-100 font-bold text-sm leading-relaxed border border-slate-300 dark:border-slate-700/80 shadow-sm">${line}</div>`
+            );
+          } else {
+            // Adaptive text: bold dark navy in light mode, crisp white in dark mode
+            htmlParts.push(
+              `<p class="my-2.5 text-xs font-bold text-slate-900 dark:text-slate-100 leading-relaxed">${line}</p>`
+            );
+          }
         }
       }
     }
@@ -78,22 +81,22 @@ export function formatPromptHTML(promptText: string): string {
 }
 
 function renderHTMLTable(headers: string[], rows: string[][]): string {
-  let html = '<div class="overflow-x-auto my-4 rounded-2xl border border-slate-700 bg-slate-900/95 p-1 shadow-xl">';
+  let html = '<div class="overflow-x-auto my-4 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-1 shadow-md">';
   html += '<table class="w-full text-xs text-left border-collapse">';
 
   if (headers.length > 0) {
-    html += '<thead><tr class="bg-slate-800/90 text-amber-400 font-black uppercase tracking-wider border-b border-slate-700/80">';
+    html += '<thead><tr class="bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-amber-400 font-black uppercase tracking-wider border-b border-slate-300 dark:border-slate-700/80">';
     headers.forEach((h) => {
-      html += `<th class="p-3 border-r border-slate-700/50 last:border-r-0">${h}</th>`;
+      html += `<th class="p-3 border-r border-slate-300 dark:border-slate-700/50 last:border-r-0">${h}</th>`;
     });
     html += '</tr></thead>';
   }
 
-  html += '<tbody class="divide-y divide-slate-800/80">';
+  html += '<tbody class="divide-y divide-slate-200 dark:divide-slate-800/80">';
   rows.forEach((row) => {
-    html += '<tr class="hover:bg-slate-800/50 text-slate-200 font-medium transition-colors">';
+    html += '<tr class="hover:bg-slate-100 dark:hover:bg-slate-800/50 text-slate-800 dark:text-slate-200 font-medium transition-colors">';
     row.forEach((cell) => {
-      html += `<td class="p-3 border-r border-slate-800/60 last:border-r-0">${cell}</td>`;
+      html += `<td class="p-3 border-r border-slate-200 dark:border-slate-800/60 last:border-r-0">${cell}</td>`;
     });
     html += '</tr>';
   });
