@@ -1,0 +1,331 @@
+category,subtopic,prompt,optionA,optionB,optionC,optionD,answerIndex,explanation
+NUMERICAL REASONING,Data Interpretation,"The table below presents the annual budget allocation (in Pesos) for four barangays in FY 2024:
+
+| Barangay | Health | Education | Infrastructure |
+| --- | --- | --- | --- |
+| Barangay A | 400,000 | 600,000 | 1,000,000 |
+| Barangay B | 500,000 | 800,000 | 1,200,000 |
+| Barangay C | 300,000 | 500,000 | 700,000 |
+| Barangay D | 600,000 | 900,000 | 1,500,000 |
+
+What percentage of the total municipal budget across all four barangays is allocated specifically to Infrastructure?",40%,44%,48%,52%,2,"• Health = 1,800,000 | Education = 2,800,000 | Infrastructure = 4,400,000
+• Total Municipal Budget = ₱9,000,000
+• Infrastructure Share = (4,400,000 / 9,000,000) × 100 = 48.89% ≈ 48.89%"
+NUMERICAL REASONING,Data Interpretation,"The text bar graph below represents quarterly rice production (in metric tons, MT) for Region V over one agricultural year:
+
+Quarter 1: [████████] 160 MT
+Quarter 2: [████████████] 240 MT
+Quarter 3: [████████████████] 320 MT
+Quarter 4: [██████████] 200 MT
+
+By what percentage did rice production increase from Quarter 1 to Quarter 3?",50%,75%,100%,120%,2,"• Q1 Production = 160 MT
+• Q3 Production = 320 MT
+• Absolute Increase = 320 − 160 = 160 MT
+• Percentage Increase = (160 / 160) × 100 = 100%"
+NUMERICAL REASONING,Data Interpretation,"The text representation below details monthly electricity consumption (in MWh) of a provincial capitol building from January to June:
+
+| Month | Power (MWh) |
+| --- | --- |
+| Jan | 120 |
+| Feb | 135 |
+| Mar | 150 |
+| Apr | 180 |
+| May | 210 |
+| Jun | 195 |
+
+What was the average monthly electricity consumption (in MWh) of the capitol building over this six-month period?",155 MWh,165 MWh,170 MWh,175 MWh,1,"• Total Consumption = 120 + 135 + 150 + 180 + 210 + 195 = 990 MWh
+• Months = 6
+• Average = 990 / 6 = 165 MWh"
+NUMERICAL REASONING,Data Interpretation,"The breakdown below represents the daily solid waste composition (totaling 1,200 metric tons) collected in a highly urbanized city:
+
+| Waste Category | Percentage Share |
+| --- | --- |
+| Biodegradable | 45% |
+| Recyclable Plastics | 25% |
+| Paper & Cardboard | 15% |
+| Residual Waste | 10% |
+| Special / Hazardous | 5% |
+
+How many metric tons of daily waste consist of Recyclable Plastics and Paper & Cardboard combined?",360 MT,420 MT,480 MT,540 MT,2,"• Recyclable Plastics (25%) + Paper & Cardboard (15%) = 40%
+• Total Daily Waste = 1,200 MT
+• Combined Weight = 1,200 × 0.40 = 480 MT"
+NUMERICAL REASONING,Data Interpretation,"The tables below show civil service review course enrollment and the subsequent exam passing rate for four review centers:
+
+Table 1: Enrollment per Center
+| Center | Enrolled Students |
+| --- | --- |
+| Center W | 500 |
+| Center X | 800 |
+| Center Y | 600 |
+| Center Z | 400 |
+
+Table 2: Exam Passing Rate (%)
+| Center | Passing Rate (%) |
+| --- | --- |
+| Center W | 60% |
+| Center X | 45% |
+| Center Y | 70% |
+| Center Z | 75% |
+
+Which review center produced the highest absolute number of successful exam passers?",Center W,Center X,Center Y,Center Z,2,"• Passers Center W = 500 × 0.60 = 300
+• Passers Center X = 800 × 0.45 = 360
+• Passers Center Y = 600 × 0.70 = 420
+• Passers Center Z = 400 × 0.75 = 300
+• Center Y produced the highest number of passers (420)."
+NUMERICAL REASONING,Data Interpretation,"A state university press recorded the following financial performance over two consecutive fiscal years:
+
+| Fiscal Year | Gross Revenue (₱) | Operating Expenses (₱) |
+| --- | --- | --- |
+| FY 2023 | 5,000,000 | 3,800,000 |
+| FY 2024 | 6,200,000 | 4,400,000 |
+
+By what percentage did the net profit (Revenue − Expenses) increase from FY 2023 to FY 2024?",40%,45%,50%,55%,2,"• FY 2023 Net Profit = 5,000,000 − 3,800,000 = ₱1,200,000
+• FY 2024 Net Profit = 6,200,000 − 4,400,000 = ₱1,800,000
+• Increase = 1,800,000 − 1,200,000 = ₱600,000
+• Percentage Increase = (600,000 / 1,200,000) × 100 = 50%"
+NUMERICAL REASONING,Data Interpretation,"The table below lists the number of Administrative Officers and Technical Specialists in three regional government offices:
+
+| Office | Administrative Officers | Technical Specialists |
+| --- | --- | --- |
+| Region I | 45 | 105 |
+| Region II | 30 | 90 |
+| Region III | 60 | 120 |
+
+Which region has the lowest ratio of Administrative Officers to Technical Specialists?",Region I,Region II,Region III,Region I & Region II,1,"• Region I Ratio = 45 / 105 = 0.428 (3:7)
+• Region II Ratio = 30 / 90 = 0.333 (1:3)
+• Region III Ratio = 60 / 120 = 0.500 (1:2)
+• Region II has the lowest ratio (0.333)."
+NUMERICAL REASONING,Data Interpretation,"The table below shows annual corn crop yields (in metric tons) for four agricultural provinces from 2021 to 2023:
+
+| Province | 2021 | 2022 | 2023 |
+| --- | --- | --- | --- |
+| Province A | 1,200 | 1,500 | 1,800 |
+| Province B | 1,400 | 1,600 | 1,500 |
+| Province C | 1,000 | 1,300 | 1,900 |
+| Province D | 1,600 | 1,700 | 1,800 |
+
+Which province achieved the highest 3-year average corn crop yield?",Province A,Province B,Province C,Province D,3,"• Province A Average = (1200+1500+1800)/3 = 1,500 MT
+• Province B Average = (1400+1600+1500)/3 = 1,500 MT
+• Province C Average = (1000+1300+1900)/3 = 1,400 MT
+• Province D Average = (1600+1700+1800)/3 = 1,700 MT
+• Province D achieved the highest average (1,700 MT)."
+NUMERICAL REASONING,Data Interpretation,"The table below shows authorized bed capacity and average occupied beds for four provincial public hospitals:
+
+| Hospital | Authorized Bed Capacity | Average Occupied Beds |
+| --- | --- | --- |
+| Hospital W | 200 | 180 |
+| Hospital X | 150 | 141 |
+| Hospital Y | 300 | 255 |
+| Hospital Z | 250 | 230 |
+
+Which hospital recorded the highest bed occupancy rate (percentage of authorized capacity occupied)?",Hospital W,Hospital X,Hospital Y,Hospital Z,1,"• Hospital W Rate = 180 / 200 = 90.0%
+• Hospital X Rate = 141 / 150 = 94.0%
+• Hospital Y Rate = 255 / 300 = 85.0%
+• Hospital Z Rate = 230 / 250 = 92.0%
+• Hospital X achieved the highest occupancy rate (94.0%)."
+NUMERICAL REASONING,Data Interpretation,"The table below summarizes four road paving projects undertaken by a regional DPWH district office:
+
+| Project | Road Length (km) | Total Project Cost (₱) |
+| --- | --- | --- |
+| Project Alpha | 12 | 48,000,000 |
+| Project Beta | 15 | 75,000,000 |
+| Project Gamma | 20 | 90,000,000 |
+| Project Delta | 8 | 36,000,000 |
+
+If the office selects the project with the lowest cost per kilometer and expands its length by an additional 5 kilometers at that exact same unit cost, what will be the total cost of this expanded project?","₱52,000,000","₱60,000,000","₱68,000,000","₱75,000,000",2,"• Unit Costs per km:
+  - Alpha: 48M / 12 = ₱4.0M/km
+  - Beta: 75M / 15 = ₱5.0M/km
+  - Gamma: 90M / 20 = ₱4.5M/km
+  - Delta: 36M / 8 = ₱4.5M/km
+• Lowest cost project = Project Alpha (₱4.0M/km)
+• Expanded Length = 12 + 5 = 17 km
+• Total Cost = 17 km × ₱4,000,000/km = ₱68,000,000"
+NUMERICAL REASONING,Data Interpretation,"The table below presents DOST research grant distributions across four scientific fields over two fiscal years:
+
+| Field | FY 2023 Grant (₱) | FY 2024 Grant (₱) |
+| --- | --- | --- |
+| Biotechnology | 12,000,000 | 15,000,000 |
+| Renewable Energy | 18,000,000 | 22,000,000 |
+| Agriculture & Aquaculture | 20,000,000 | 25,000,000 |
+| Information Technology | 10,000,000 | 18,000,000 |
+
+Which scientific field experienced the highest percentage growth in research grant funding from FY 2023 to FY 2024?",Biotechnology,Renewable Energy,Agriculture & Aquaculture,Information Technology,3,"• Biotech Growth = (3M / 12M) × 100 = 25.0%
+• Renewable Energy = (4M / 18M) × 100 = 22.2%
+• Agriculture = (5M / 20M) × 100 = 25.0%
+• IT Growth = (8M / 10M) × 100 = 80.0%
+• Information Technology experienced the highest percentage growth (80%)."
+NUMERICAL REASONING,Data Interpretation,"The text bar chart below shows driver's license applications processed at an LTO licensing center over five months:
+
+January: [████████████] 2,400
+February: [██████████] 2,000
+March: [████████████████] 3,200
+April: [██████████████] 2,800
+May: [██████████████████] 3,600
+
+What is the absolute difference between the highest and lowest monthly application volumes processed during this period?","1,200","1,400","1,600","1,800",2,"• Highest Month = May (3,600)
+• Lowest Month = February (2,000)
+• Absolute Difference = 3,600 − 2,000 = 1,600 applications"
+NUMERICAL REASONING,Data Interpretation,"The textual line graph data below tracks headline inflation rates (%) recorded at the end of four consecutive quarters:
+
+| Quarter | Headline Inflation Rate (%) |
+| --- | --- |
+| Q1 2023 | 8.6% |
+| Q2 2023 | 5.4% |
+| Q3 2023 | 6.1% |
+| Q4 2023 | 3.9% |
+
+What was the percentage point reduction in headline inflation rate from Q1 2023 to Q4 2023?",3.2 percentage points,4.7 percentage points,5.1 percentage points,5.5 percentage points,1,"• Q1 2023 Rate = 8.6%
+• Q4 2023 Rate = 3.9%
+• Reduction = 8.6% − 3.9% = 4.7 percentage points"
+NUMERICAL REASONING,Data Interpretation,"A police district office has a total personnel strength of 800 officers distributed across operational units as follows:
+
+| Unit | Percentage Share |
+| --- | --- |
+| Patrol & Field Operations | 50% |
+| Criminal Investigation | 20% |
+| Traffic Enforcement | 15% |
+| Administrative Services | 10% |
+| Special Weapons & Tactics | 5% |
+
+What is the ratio of officers in Patrol & Field Operations to officers in Administrative Services?",3 : 1,4 : 1,5 : 1,6 : 1,2,"• Patrol Officers = 800 × 50% = 400
+• Administrative Officers = 800 × 10% = 80
+• Ratio = 400 : 80 = 5 : 1"
+NUMERICAL REASONING,Data Interpretation,"The textual summary below reports job fair results organized by DOLE across three industry sectors:
+
+| Sector | Total Applicants | Hired-on-the-Spot Rate (%) |
+| --- | --- | --- |
+| Manufacturing | 1,500 | 12% |
+| Services | 2,000 | 15% |
+| Information Technology | 1,000 | 25% |
+
+What percentage of the overall total applicants across all three sectors were hired on the spot?",14.2%,16.2%,17.3%,18.5%,1,"• Hired Manufacturing = 1,500 × 0.12 = 180
+• Hired Services = 2,000 × 0.15 = 300
+• Hired IT = 1,000 × 0.25 = 250
+• Total Hired = 180 + 300 + 250 = 730
+• Total Applicants = 1,500 + 2,000 + 1,000 = 4,500
+• Overall Rate = (730 / 4,500) × 100 = 16.22%"
+NUMERICAL REASONING,Data Interpretation,"The table below shows fully immunized child coverage rates in four provinces over two health campaign years:
+
+| Province | Year 1 Coverage | Year 2 Coverage |
+| --- | --- | --- |
+| Province X | 65% | 78% |
+| Province Y | 70% | 81% |
+| Province Z | 55% | 72% |
+| Province W | 80% | 90% |
+
+Which province achieved the largest percentage point gain in child immunization coverage between Year 1 and Year 2?",Province X,Province Y,Province Z,Province W,2,"• Province X Gain = 78% − 65% = 13 percentage points
+• Province Y Gain = 81% − 70% = 11 percentage points
+• Province Z Gain = 72% − 55% = 17 percentage points
+• Province W Gain = 90% − 80% = 10 percentage points
+• Province Z achieved the largest gain (17 percentage points)."
+NUMERICAL REASONING,Data Interpretation,"The table below shows public school enrollment and teacher counts in four division districts:
+
+| District | Enrolled Students | Plantilla Teachers |
+| --- | --- | --- |
+| District 1 | 9,000 | 200 |
+| District 2 | 12,000 | 300 |
+| District 3 | 15,000 | 250 |
+| District 4 | 8,000 | 160 |
+
+The Department of Education sets a standard target ratio of 35 students per teacher. Which district currently exceeds this ratio by the largest margin?",District 1,District 2,District 3,District 4,2,"• District 1 Ratio = 9,000 / 200 = 45 (Exceeds target by 10)
+• District 2 Ratio = 12,000 / 300 = 40 (Exceeds target by 5)
+• District 3 Ratio = 15,000 / 250 = 60 (Exceeds target by 25)
+• District 4 Ratio = 8,000 / 160 = 50 (Exceeds target by 15)
+• District 3 exceeds the target ratio by the largest margin (60 students per teacher vs target 35)."
+NUMERICAL REASONING,Data Interpretation,"The table below records emergency dispatch response times (in minutes) for four fire stations across three city sectors during emergency drills:
+
+| Fire Station | Sector A | Sector B | Sector C |
+| --- | --- | --- | --- |
+| Station 101 | 8.5 | 9.0 | 7.5 |
+| Station 102 | 6.0 | 8.0 | 10.0 |
+| Station 103 | 7.0 | 6.5 | 7.5 |
+| Station 104 | 9.0 | 8.5 | 8.0 |
+
+Which fire station demonstrated the fastest overall average emergency response time across all three sectors?",Station 101,Station 102,Station 103,Station 104,2,"• Station 101 Avg = (8.5 + 9.0 + 7.5) / 3 = 8.33 min
+• Station 102 Avg = (6.0 + 8.0 + 10.0) / 3 = 8.00 min
+• Station 103 Avg = (7.0 + 6.5 + 7.5) / 3 = 7.00 min
+• Station 104 Avg = (9.0 + 8.5 + 8.0) / 3 = 8.50 min
+• Station 103 has the fastest average response time (7.0 minutes)."
+NUMERICAL REASONING,Data Interpretation,"The table below compares monthly customs revenue collection targets and actual collections (in million Pesos) for a major port entry:
+
+| Month | Revenue Target (₱M) | Actual Collection (₱M) |
+| --- | --- | --- |
+| January | 450 | 480 |
+| February | 400 | 420 |
+| March | 500 | 490 |
+| April | 450 | 460 |
+
+Across the entire 4-month period, what was the total net revenue surplus (or deficit) compared to the cumulative target?",₱30M Surplus,₱40M Surplus,₱50M Surplus,₱60M Surplus,2,"• Total Revenue Target = 450 + 400 + 500 + 450 = ₱1,800M
+• Total Actual Collection = 480 + 420 + 490 + 460 = ₱1,850M
+• Net Surplus = 1,850M − 1,800M = ₱50M Surplus"
+NUMERICAL REASONING,Data Interpretation,"The Bureau of Fisheries and Aquatic Resources (BFAR) categorizes registered commercial fishing vessels and collects annual license fees as follows:
+
+| Category | Tonnage Range | Annual Base Fee per Vessel | Active Registered Vessels |
+| --- | --- | --- | --- |
+| Small Scale | 3.1 to 20 gross tons | ₱5,000 | 120 |
+| Medium Scale | 20.1 to 150 gross tons | ₱12,000 | 80 |
+| Large Scale | Above 150 gross tons | ₱25,000 | 40 |
+
+If BFAR increases the license fee for Large Scale vessels by 20% and Medium Scale vessels by 10% while keeping Small Scale fees unchanged, what will be the new total annual revenue generated from all registered vessels?","₱2,656,000","₱2,856,000","₱2,920,000","₱3,056,000",1,"• Small Scale = 120 × ₱5,000 = ₱600,000
+• Medium Scale New Fee = ₱12,000 × 1.10 = ₱13,200 → 80 × ₱13,200 = ₱1,056,000
+• Large Scale New Fee = ₱25,000 × 1.20 = ₱30,000 → 40 × ₱30,000 = ₱1,200,000
+• Total Revenue = 600,000 + 1,056,000 + 1,200,000 = ₱2,856,000"
+NUMERICAL REASONING,Data Interpretation,"The Department of Agriculture distributed organic fertilizer sacks to three agrarian cooperatives across four quarters:
+
+| Cooperative | Q1 | Q2 | Q3 | Q4 |
+| --- | --- | --- | --- | --- |
+| Co-op Alpha | 250 | 300 | 350 | 300 |
+| Co-op Beta | 400 | 450 | 500 | 450 |
+| Co-op Gamma | 150 | 200 | 250 | 200 |
+
+What was the overall average number of fertilizer sacks distributed per quarter across ALL three cooperatives combined?",900 sacks,950 sacks,"1,000 sacks","1,050 sacks",1,"• Total Q1 = 800 | Total Q2 = 950 | Total Q3 = 1,100 | Total Q4 = 950
+• Grand Total Sacks = 3,800 sacks
+• Average per quarter = 3,800 / 4 = 950 sacks"
+NUMERICAL REASONING,Data Interpretation,"The textual bar graph below displays public Free Wi-Fi hotspots established by DICT in four provinces:
+
+Province A: [██████████] 500
+Province B: [████████████████] 800
+Province C: [████████████] 600
+Province D: [██████████████] 700
+
+What percentage share of the total hotspots established across all four provinces is contributed by Province B and Province D combined?",53.6%,57.7%,61.5%,65.2%,1,"• Total Hotspots = 500 + 800 + 600 + 700 = 2,600
+• Combined B & D = 800 + 700 = 1,500
+• Percentage Share = (1,500 / 2,600) × 100 = 57.69%"
+NUMERICAL REASONING,Data Interpretation,"The table below tracks quarterly container traffic (in Twenty-Foot Equivalent Units, TEUs) handled at a major seaport:
+
+| Quarter | Container Volume (TEUs) |
+| --- | --- |
+| Q1 | 45,000 |
+| Q2 | 54,000 |
+| Q3 | 60,000 |
+| Q4 | 48,000 |
+
+What was the percentage decrease in container volume from Quarter 3 to Quarter 4?",15.0%,18.0%,20.0%,22.5%,2,"• Q3 Volume = 60,000 TEUs
+• Q4 Volume = 48,000 TEUs
+• Volume Decrease = 60,000 − 48,000 = 12,000 TEUs
+• Percentage Decrease = (12,000 / 60,000) × 100 = 20.0%"
+NUMERICAL REASONING,Data Interpretation,"The pie chart breakdown below shows the allocation of a ₱50,000,000 DENR Forest Management Fund:
+
+| Program Area | Allocation Share |
+| --- | --- |
+| Reforestation & Tree Planting | 40% |
+| Forest Protection & Patrol | 30% |
+| Community Agroforestry | 15% |
+| Biodiversity Monitoring | 10% |
+| Administrative Support | 5% |
+
+How much money in Pesos is allocated specifically to Reforestation & Tree Planting?","₱15,000,000","₱20,000,000","₱25,000,000","₱30,000,000",1,"• Total Fund = ₱50,000,000
+• Reforestation Share = 40%
+• Allocated Amount = ₱50,000,000 × 0.40 = ₱20,000,000"
+NUMERICAL REASONING,Data Interpretation,"A municipal DSWD office distributes monthly cash grants to 200 Pantawid Pamilya beneficiary households under the following grant rules:
+
+| Grant Type | Monthly Rate per Household | Eligible Households |
+| --- | --- | --- |
+| Health & Nutrition Grant | ₱750 | All 200 households |
+| Primary Education Grant | ₱300 per child | 120 households (1 child each) |
+| Junior High Education Grant | ₱500 per child | 80 households (1 child each) |
+
+What is the total combined monthly cash grant payout disbursed by the DSWD office to all 200 households?","₱216,000","₱226,000","₱236,000","₱246,000",1,"• Health Grant Total = 200 × ₱750 = ₱150,000
+• Primary Ed Grant Total = 120 × ₱300 = ₱36,000
+• Junior High Ed Grant Total = 80 × ₱500 = ₱40,000
+• Grand Total = 150,000 + 36,000 + 40,000 = ₱226,000"
