@@ -20,7 +20,7 @@ const SAMPLE_QUESTIONS: DrillQuestion[] = [
     prompt: "What is 15% of 300?",
     options: ["A. 45", "B. 3,000", "C. -15", "D. 90"],
     answerIndex: 0,
-    explanation: "15% of 300 = 0.15 × 300 = 45.",
+    explanation: "15% of 300 = 0.15 Ã— 300 = 45.",
     eliminationNotes: {
       1: "3,000 is larger than 300. A percentage less than 100% cannot be larger than the original number.",
       2: "-15 is negative. Taking a positive percentage of a positive number yields a positive result.",
@@ -54,7 +54,7 @@ export default function EliminationTrainerPage() {
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔄 Load drill questions from browser cache or single API request
+  // ðŸ”„ Load drill questions from browser cache or single API request
   useEffect(() => {
     loadDrillSession();
   }, []);
@@ -162,7 +162,7 @@ export default function EliminationTrainerPage() {
     }
   };
 
-  // 🚀 Local State Navigation: ZERO DB calls on "Next Question"
+  // ðŸš€ Local State Navigation: ZERO DB calls on "Next Question"
   const handleNextQuestion = () => {
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex((prev) => prev + 1);
@@ -204,7 +204,14 @@ export default function EliminationTrainerPage() {
             Option Elimination Trainer
           </span>
           <h1 className="text-xl font-black mt-1">Option Elimination Trainer</h1>
-          <p className="text-xs text-slate-400">Strike out 2 wrong choices to reveal the strategy breakdown!</p>
+          <div className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-xl bg-amber-500/15 px-3.5 py-2 border border-amber-500/30 text-amber-200 text-xs sm:text-sm font-medium shadow-sm">
+  <span className="inline-flex items-center gap-1 rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-slate-950">
+    ⚡ DRILL GOAL
+  </span>
+  <span>
+    Click to <strong className="text-amber-300 font-extrabold underline decoration-amber-400 decoration-2 underline-offset-2">strike out 2 wrong choices</strong> to reveal the strategy breakdown!
+  </span>
+</div>
         </div>
       </div>
 
@@ -249,10 +256,10 @@ export default function EliminationTrainerPage() {
                   className={`p-4 rounded-2xl font-bold text-xs text-left transition border flex items-center justify-between ${cardStyle}`}
                 >
                   <span>{opt}</span>
-                  {isEliminated && !isRevealed && <span className="text-red-600 font-black text-sm">✕</span>}
+                  {isEliminated && !isRevealed && <span className="text-red-600 font-black text-sm">âœ•</span>}
                   {isRevealed && isCorrectAnswer && (
                     <span className="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-md">
-                      ✓ Correct Choice
+                      âœ“ Correct Choice
                     </span>
                   )}
                 </button>
@@ -260,12 +267,12 @@ export default function EliminationTrainerPage() {
             })}
           </div>
 
-          {/* 💡 IMMEDIATE ELIMINATION & ANSWER REVIEW BOX */}
+          {/* ðŸ’¡ IMMEDIATE ELIMINATION & ANSWER REVIEW BOX */}
           {isRevealed && (
             <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4 border border-slate-800 animate-in fade-in duration-200">
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <span>💡</span> Elimination Strategy Breakdown
+                  <span>ðŸ’¡</span> Elimination Strategy Breakdown
                 </span>
                 <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
                   Correct Answer: {currentQ.options[currentQ.answerIndex]}
@@ -290,7 +297,7 @@ export default function EliminationTrainerPage() {
                 onClick={handleNextQuestion}
                 className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer"
               >
-                {currentIndex + 1 < questions.length ? "Next Question →" : "View Final Review →"}
+                {currentIndex + 1 < questions.length ? "Next Question â†’" : "View Final Review â†’"}
               </button>
             ) : (
               <button
@@ -304,7 +311,7 @@ export default function EliminationTrainerPage() {
           </div>
         </div>
       ) : (
-        /* 🏆 FINAL DRILL SUMMARY */
+        /* ðŸ† FINAL DRILL SUMMARY */
         <div className="space-y-6">
           <div className="bg-slate-900 text-white p-8 rounded-3xl text-center space-y-4 border border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -320,7 +327,7 @@ export default function EliminationTrainerPage() {
                 onClick={() => loadDrillSession(true)}
                 className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition cursor-pointer"
               >
-                ⚡ Start Next 10-Item Drill
+                âš¡ Start Next 10-Item Drill
               </button>
               <Link
                 href="/dashboard"
