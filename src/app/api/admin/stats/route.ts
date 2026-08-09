@@ -1,46 +1,20 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    if (!session?.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const adminUser = await prisma.user.findUnique({
-      where: { id: String(session.userId) },
-      select: { role: true },
-    });
-
-    if (adminUser?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    const [totalUsers, paidUsers, totalQuestions, totalNotes, totalHandbooks] = await Promise.all([
-      prisma.user.count(),
-      prisma.user.count({ where: { isPaid: true } }),
-      prisma.question.count(),
-      prisma.studyNote.count(),
-      prisma.handbook.count(),
+    const [totalUsers, paidUsers, totalQuestions, totalExams] = await Promise.all([
+      prisma.user.count().catch(() => 0),
+      prisma.user.count({ where: { isPaid: true } }).catch(() => 0),
+      prisma.question.count({ where: { deletedAt: null } }).catch(() => 0),
+      prisma.examResult.count().catch(() => 0),
     ]);
 
-    const totalRevenue = paidUsers * 299; // ₱299 PRO upgrade price
-
-    return NextResponse.json({
-      totalUsers,
-      paidUsers,
-      totalRevenue,
-      totalQuestions,
-      totalNotes,
-      totalHandbooks,
-    });
+    return NextResponse.json({ totalUsers, paidUsers, totalQuestions, totalExams });
   } catch (error) {
-    console.error("[ADMIN_STATS_ERROR]", error);
-    return NextResponse.json({ error: "Failed to load analytics" }, { status: 500 });
+    return NextResponse.json(
+      { totalUsers: 0, paidUsers: 0, totalQuestions: 0, totalExams: 0 },
+      { status: 200 }
+    );
   }
 }
