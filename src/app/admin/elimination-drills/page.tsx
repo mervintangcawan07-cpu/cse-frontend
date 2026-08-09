@@ -22,6 +22,15 @@ export default function AdminEliminationDrillsPage() {
   const [uploadMode, setUploadMode] = useState<"CSV_FILE" | "CSV_PASTE" | "JSON">("CSV_FILE");
   const [inputText, setInputText] = useState("");
   const [existingDrills, setExistingDrills] = useState<DrillItem[]>([]);
+  const [isFallback, setIsFallback] = useState(false);
+  const [editingDrill, setEditingDrill] = useState<DrillItem | null>(null);
+  const [editPrompt, setEditPrompt] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editSubtopic, setEditSubtopic] = useState("");
+  const [editOptions, setEditOptions] = useState<string[]>(["", "", "", ""]);
+  const [editAnswerIdx, setEditAnswerIdx] = useState(0);
+  const [editExplanation, setEditExplanation] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -288,7 +297,51 @@ export default function AdminEliminationDrillsPage() {
     }
   };
 
-  const handleDownloadSampleCSV = () => {
+  
+    const handleStartEdit = (drill: DrillItem) => {
+      setEditingDrill(drill);
+      setEditPrompt(drill.prompt || "");
+      setEditCategory(drill.category || "Elimination Drill");
+      setEditSubtopic(drill.subtopic || "General");
+      setEditOptions(Array.isArray(drill.options) && drill.options.length >= 2 ? [...drill.options] : ["", "", "", ""]);
+      setEditAnswerIdx(typeof drill.answerIndex === "number" ? drill.answerIndex : 0);
+      setEditExplanation(drill.explanation || "");
+    };
+
+    const handleSaveEdit = async () => {
+      if (!editingDrill) return;
+      setSavingEdit(true);
+      try {
+        const res = await fetch("/api/admin/elimination-drills", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: editingDrill.id,
+            prompt: editPrompt,
+            category: editCategory,
+            subtopic: editSubtopic,
+            options: editOptions.filter(Boolean),
+            answerIndex: editAnswerIdx,
+            explanation: editExplanation,
+          }),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setMessage({ type: "success", text: "✓ Question updated successfully!" });
+          setEditingDrill(null);
+          fetchDrills();
+        } else {
+          setMessage({ type: "error", text: data.error || "Failed to update question." });
+        }
+      } catch (err) {
+        setMessage({ type: "error", text: "Error saving question update." });
+      } finally {
+        setSavingEdit(false);
+      }
+    };
+
+
+    const handleDownloadSampleCSV = () => {
     const blob = new Blob([SAMPLE_CSV], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -431,6 +484,11 @@ export default function AdminEliminationDrillsPage() {
           <h2 className="text-lg font-black text-white flex items-center gap-2">
             <span>📚</span>
             <span>Live Elimination Drill Question Bank ({existingDrills.length})</span>
+              {isFallback && (
+                <span className="text-[10px] font-black px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30 animate-pulse">
+                  ⚠️ Fallback Pool (Showing Main Question Bank Items)
+                </span>
+              )}
           </h2>
 
           <div className="flex items-center gap-2">

@@ -40,7 +40,7 @@ export async function GET() {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
-    const drills = await prisma.question.findMany({
+    let drills = await prisma.question.findMany({
       where: {
         deletedAt: null,
         OR: [
@@ -51,7 +51,17 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json({ success: true, drills });
+    let isFallback = false;
+      if (drills.length === 0) {
+        drills = await prisma.question.findMany({
+          where: { deletedAt: null },
+          take: 50,
+          orderBy: { createdAt: "desc" },
+        });
+        isFallback = true;
+      }
+
+      return NextResponse.json({ success: true, drills, isFallback });
   } catch (error: unknown) {
     console.error("[ADMIN_DRILL_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch drill questions." }, { status: 500 });
@@ -263,6 +273,50 @@ export async function DELETE(request: Request) {
     console.error("[ADMIN_DRILL_DELETE_ERROR]", err);
     return NextResponse.json(
       { error: "Failed to delete drill questions.", details: err?.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const session = await verifyJWT(token);
+    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+      return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { id, prompt, category, subtopic, options, answerIndex, explanation } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing question ID for update." }, { status: 400 });
+    }
+
+    const updated = await prisma.question.update({
+      where: { id },
+      data: {
+        ...(prompt !== undefined && { prompt }),
+        ...(category !== undefined && { category }),
+        ...(subtopic !== undefined && { subtopic }),
+        ...(options !== undefined && { options }),
+        ...(answerIndex !== undefined && { answerIndex: Number(answerIndex) }),
+        ...(explanation !== undefined && { explanation }),
+      },
+    });
+
+    return NextResponse.json({ success: true, question: updated });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[ADMIN_DRILL_PUT_ERROR]", err);
+    return NextResponse.json(
+      { error: "Failed to update question.", details: err?.message },
       { status: 500 }
     );
   }
