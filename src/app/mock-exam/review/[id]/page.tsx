@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPromptHTML } from "@/lib/formatPrompt";
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -187,7 +188,7 @@ export default function ExamReviewPage({
               {/* Prompt with HTML Table Support */}
               <div
                 className="text-sm font-extrabold text-white mb-4 leading-relaxed overflow-x-auto"
-                dangerouslySetInnerHTML={{ __html: q.prompt }}
+                dangerouslySetInnerHTML={{ __html: formatPromptHTML(q.prompt) }}
               />
 
               {/* Chart / Graph Image Display */}

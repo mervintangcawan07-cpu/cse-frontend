@@ -1,5 +1,6 @@
 "use client";
 
+import { formatPromptHTML } from "@/lib/formatPrompt";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -224,7 +225,7 @@ export default function EliminationTrainerPage() {
             <span className="text-xs font-black text-blue-600 uppercase">{currentQ.category}</span>
           </div>
 
-          <h2 className="text-lg font-black text-slate-900">{currentQ.prompt}</h2>
+          <div className="text-lg font-black text-slate-900" dangerouslySetInnerHTML={{ __html: formatPromptHTML(currentQ.prompt) }} />
 
           {/* Option Choices Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
