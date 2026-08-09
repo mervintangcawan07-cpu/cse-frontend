@@ -17,6 +17,25 @@ export interface RestoreResult {
 
 export class BackupRestoreService {
   /**
+   * Wrapper method for UI execution requiring explicit "RESTORE" confirmation text.
+   */
+  public async executeRestore(
+    backupId: string,
+    confirmationText: string,
+    actorInfo: { actorId?: string; actorEmail?: string; ipAddress?: string } = {}
+  ): Promise<RestoreResult> {
+    if (confirmationText !== "RESTORE") {
+      return {
+        success: false,
+        backupId,
+        message: "Restoration aborted. Confirmation text must match 'RESTORE' exactly.",
+      };
+    }
+
+    return await this.restoreFromBackup(backupId, actorInfo);
+  }
+
+  /**
    * Restores database state from a verified backup with emergency snapshot shield and auto-rollback.
    */
   public async restoreFromBackup(
@@ -176,11 +195,9 @@ export class BackupRestoreService {
   private async applySnapshotToDatabase(tables: Record<string, unknown[]>): Promise<number> {
     let syncedTables = 0;
 
-    // Apply tables sequentially inside transactional wrappers
     for (const [tableName, records] of Object.entries(tables)) {
       if (!Array.isArray(records)) continue;
 
-      // Table-specific handling where models exist
       if (tableName === "pricingPlans" && records.length > 0) {
         await prisma.pricingPlan.deleteMany();
         for (const item of records) {
