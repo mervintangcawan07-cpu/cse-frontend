@@ -1,5 +1,6 @@
 "use client";
 
+import LiveWaitingRoom from "@/components/cse/LiveWaitingRoom";
 import React, { useState, useEffect } from "react";
 import { formatPromptHTML } from "@/lib/formatPrompt";
 import { CORE_SUBJECTS, DIFFICULTY_LEVELS, getDifficultyBadgeStyle } from "@/components/cse/CategoryTagging";
@@ -45,6 +46,7 @@ export interface ScheduledEvent {
   itemCount: number;
   durationMinutes: number;
   scheduledTime: string;
+  endTime?: string;
   hostName: string;
   attendeesCount: number;
   isAttending: boolean;
@@ -81,6 +83,7 @@ export default function StudyEventsSection() {
   ]);
 
   const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [waitingRoomEvent, setWaitingRoomEvent] = useState<ScheduledEvent | null>(null);
   const [activeDrillEvent, setActiveDrillEvent] = useState<ScheduledEvent | null>(null);
   const [eventToDelete, setEventToDelete] = useState<{ id: string; title: string } | null>(null);
 
@@ -92,6 +95,7 @@ export default function StudyEventsSection() {
   const [formItemCount, setFormItemCount] = useState<number>(20);
   const [formDuration, setFormDuration] = useState<number>(15);
   const [formTime, setFormTime] = useState("");
+  const [formEndTime, setFormEndTime] = useState("");
 
   // Live Drill Player State
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
@@ -136,6 +140,7 @@ export default function StudyEventsSection() {
       itemCount: formItemCount,
       durationMinutes: formDuration,
       scheduledTime: formTime ? new Date(formTime).toISOString() : new Date().toISOString(),
+      endTime: formEndTime ? new Date(formEndTime).toISOString() : new Date(Date.now() + 3600 * 1000 * 2).toISOString(),
       hostName: "System Admin",
       attendeesCount: 1,
       isAttending: true
@@ -231,24 +236,20 @@ export default function StudyEventsSection() {
                 <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-3">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Host: {ev.hostName}</span>
                   {isLive ? (
-                    <button
-                      onClick={() => handleLaunchDrill(ev)}
-                      className="px-5 py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 animate-bounce transition-all flex items-center gap-1.5"
-                    >
-                      <span>??</span> Join Live Session
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setEvents(events.map(e => e.id === ev.id ? { ...e, isAttending: !e.isAttending } : e))}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                        ev.isAttending
-                          ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                          : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                      }`}
-                    >
-                      {ev.isAttending ? "? Attending" : "RSVP Event"}
-                    </button>
-                  )}
+                  <button
+                    onClick={() => handleLaunchDrill(ev)}
+                    className="px-5 py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 animate-bounce transition-all flex items-center gap-1.5"
+                  >
+                    <span>??</span> Join Live Session
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setWaitingRoomEvent(ev)}
+                    className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 flex items-center gap-1.5"
+                  >
+                    <span>?</span> Enter Pre-Event Lobby
+                  </button>
+                )}
                 </div>
               </div>
             );
@@ -302,7 +303,9 @@ export default function StudyEventsSection() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            
+            {/* Drill Configuration Row */}
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Item Count</label>
                 <select
@@ -330,7 +333,10 @@ export default function StudyEventsSection() {
                   <option value={60}>60 Mins</option>
                 </select>
               </div>
+            </div>
 
+            {/* Start Time & End Time Pickers */}
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Start Time</label>
                 <input
@@ -338,6 +344,17 @@ export default function StudyEventsSection() {
                   required
                   value={formTime}
                   onChange={(e) => setFormTime(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">End Time</label>
+                <input
+                  type="datetime-local"
+                  required
+                  value={formEndTime}
+                  onChange={(e) => setFormEndTime(e.target.value)}
                   className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white"
                 />
               </div>
@@ -481,6 +498,21 @@ export default function StudyEventsSection() {
         }}
         onCancel={() => setEventToDelete(null)}
       />
-    </div>
+    
+      {/* Pre-Event Live Waiting Room Lobby */}
+      {waitingRoomEvent && (
+        <LiveWaitingRoom
+          eventName={waitingRoomEvent.title}
+          startTime={new Date(waitingRoomEvent.scheduledTime)}
+          initialUserCount={waitingRoomEvent.attendeesCount || 42}
+          onEventStart={() => {
+            const ev = waitingRoomEvent;
+            setWaitingRoomEvent(null);
+            handleLaunchDrill(ev);
+          }}
+          onClose={() => setWaitingRoomEvent(null)}
+        />
+      )}
+</div>
   );
 }

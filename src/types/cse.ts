@@ -1,5 +1,5 @@
 /**
- * Civil Service Exam (CSE) Category & Live Speed Drill Type Definitions
+ * Civil Service Exam (CSE) Category, Drill, and Study Together Event Types
  */
 
 export type CoreSubject =
@@ -17,9 +17,9 @@ export interface Question {
   subtopic: string;
   prompt: string;
   options: string[];
-  correctAnswer: number; // 0-indexed option index
+  correctAnswer: number;
   explanation?: string;
-  legalReference?: string; // e.g., "RA 6713 Sec. 4" or "1987 PH Constitution Art. III"
+  legalReference?: string;
 }
 
 export interface SubtopicGroup {
@@ -30,16 +30,16 @@ export interface SubtopicGroup {
 export interface DrillConfig {
   coreSubject: CoreSubject;
   difficulty: DifficultyLevel;
-  itemCount: number; // e.g., 10, 20, 30, 50
-  durationMinutes: number; // e.g., 10, 15, 30
+  itemCount: number;
+  durationMinutes: number;
 }
 
 export interface LiveDrillParticipant {
   userId: string;
   name: string;
   avatarUrl?: string;
-  answers: Record<number, number>; // questionIndex -> selectedOption
-  responseTimes: Record<number, number>; // questionIndex -> time taken in seconds
+  answers: Record<number, number>;
+  responseTimes: Record<number, number>;
   score: number;
   submittedAt?: string;
 }
@@ -49,13 +49,51 @@ export interface LiveDrillSession {
   title: string;
   description?: string;
   config: DrillConfig;
-  startTime: string; // ISO String
-  endTime: string; // ISO String
+  startTime: string;
+  endTime: string;
   hostUserId: string;
   hostName: string;
   questions: Question[];
   participants: Record<string, LiveDrillParticipant>;
   status: "scheduled" | "live" | "completed";
+}
+
+export interface UserEventResult {
+  score: number;
+  totalItems: number;
+  accuracyPercent: number;
+  timeSpentSeconds: number;
+  completedAt: string;
+  answers: Record<number, number>;
+}
+
+export interface LeaderboardEntry {
+  userId: string;
+  name: string;
+  avatarUrl?: string;
+  rank?: number;
+  score: number;
+  totalItems: number;
+  accuracyPercent: number;
+  timeSpentSeconds: number;
+  submittedAt: string;
+}
+
+export interface StudyTogetherEvent {
+  id: string;
+  title: string;
+  description: string;
+  categories: CoreSubject[];
+  difficulty: DifficultyLevel;
+  itemCount: number;
+  quizDurationMinutes: number;
+  scheduledStartTime: string;
+  activeDurationHours: number;
+  hostName: string;
+  hostUserId: string;
+  participantsCount: number;
+  isCompletedByCurrentUser?: boolean;
+  currentUserResult?: UserEventResult;
 }
 
 export interface ErrorReviewItem {
@@ -64,7 +102,7 @@ export interface ErrorReviewItem {
   subtopic: string;
   totalAttempts: number;
   incorrectPercentage: number;
-  optionDistribution: Record<number, number>; // percentage per option
+  optionDistribution: Record<number, number>;
   correctAnswerIndex: number;
   correctAnswerText: string;
   stepByStepSolution: string;
@@ -75,7 +113,7 @@ export interface EventNotification {
   id: string;
   eventId: string;
   eventTitle: string;
-  startTime: string;
+  scheduledStartTime: string;
   triggerType: "15min" | "5min" | "started";
   message: string;
   read: boolean;

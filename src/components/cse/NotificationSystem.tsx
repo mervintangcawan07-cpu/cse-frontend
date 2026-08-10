@@ -27,7 +27,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       setPushPermission(permission);
       if (permission === "granted") {
         new Notification("CSC Reviewer Pro Alerts Enabled", {
-          body: "You will receive live speed drill reminders 15m and 5m before start time.",
+          body: "You will receive reminders 15m and 5m before live events begin.",
           icon: "/favicon.ico",
         });
       }
@@ -38,13 +38,12 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
 
   return (
     <div className="relative inline-block">
-      {/* Bell Icon Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
         aria-label="Event Notifications"
       >
-        <span className="text-base">🔔</span>
+        <span className="text-base">??</span>
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose-600 text-[10px] font-black text-white ring-2 ring-white dark:ring-slate-900">
             {unreadCount}
@@ -52,7 +51,6 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
         )}
       </button>
 
-      {/* Dropdown Drawer */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl z-50 p-4">
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 mb-3">
@@ -71,7 +69,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
 
           <div className="max-h-80 overflow-y-auto space-y-2">
             {notifications.length === 0 ? (
-              <p className="text-xs text-center text-slate-500 py-4">No upcoming drill notifications.</p>
+              <p className="text-xs text-center text-slate-500 py-4">No upcoming notifications.</p>
             ) : (
               notifications.map((n) => (
                 <div
@@ -86,10 +84,10 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-bold text-[10px] uppercase text-blue-600 dark:text-blue-400">
                       {n.triggerType === "15min"
-                        ? "⏰ 15-Minute Alert"
+                        ? "? 15m Reminder"
                         : n.triggerType === "5min"
-                        ? "🔥 5-Minute Final Call"
-                        : "🚀 Live Now"}
+                        ? "?? 5m Urgent Call"
+                        : "?? Live Now"}
                     </span>
                     <span className="text-[10px] opacity-70">{n.createdAt}</span>
                   </div>
