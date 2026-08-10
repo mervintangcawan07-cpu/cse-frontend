@@ -1,10 +1,10 @@
 "use client";
 
-import LiveWaitingRoom from "@/components/cse/LiveWaitingRoom";
 import React, { useState, useEffect } from "react";
 import { formatPromptHTML } from "@/lib/formatPrompt";
 import { CORE_SUBJECTS, DIFFICULTY_LEVELS, getDifficultyBadgeStyle } from "@/components/cse/CategoryTagging";
 import { DeleteEventModal } from "@/components/cse/DeleteEventModal";
+import LiveWaitingRoom from "@/components/cse/LiveWaitingRoom";
 import { CoreSubject, DifficultyLevel, Question } from "@/types/cse";
 
 const SAMPLE_DRILL_QUESTIONS: Question[] = [
@@ -25,15 +25,6 @@ const SAMPLE_DRILL_QUESTIONS: Question[] = [
     options: ["A", "B", "C", "D"],
     correctAnswer: 2,
     explanation: "Subject is 'regional director' (singular). Verb should be 'is planning', not 'are planning'."
-  },
-  {
-    id: "drill-3",
-    category: "General Information & PH Constitution",
-    subtopic: "RA 6713",
-    prompt: "Under RA 6713 (Code of Conduct and Ethical Standards for Public Officials and Employees), within how many days must public officials respond to letters and requests sent by the public?",
-    options: ["5 working days", "10 working days", "15 working days", "30 working days"],
-    correctAnswer: 2,
-    explanation: "Section 5(a) of RA 6713 mandates that all public officials shall respond to requests within 15 working days from receipt."
   }
 ];
 
@@ -48,46 +39,69 @@ export interface ScheduledEvent {
   scheduledTime: string;
   endTime?: string;
   hostName: string;
+  hostUserId?: string;
   attendeesCount: number;
   isAttending: boolean;
 }
 
+const INITIAL_DEFAULT_EVENTS: ScheduledEvent[] = [
+  {
+    id: "ev-1",
+    title: "Numerical Reasoning Speed Drill",
+    description: "Synchronous review event with timed word problems and speed calculations.",
+    category: "Numerical Reasoning",
+    difficulty: "Intermediate Drill",
+    itemCount: 20,
+    durationMinutes: 15,
+    scheduledTime: new Date(Date.now() + 1000 * 60 * 15).toISOString(),
+    endTime: new Date(Date.now() + 1000 * 60 * 135).toISOString(),
+    hostName: "System Admin",
+    hostUserId: "admin-1",
+    attendeesCount: 3,
+    isAttending: true
+  },
+  {
+    id: "ev-2",
+    title: "Verbal & Grammar Masterclass",
+    description: "Group drill targeting error identification and subject-verb agreement.",
+    category: "Verbal Ability",
+    difficulty: "Hard/Speed Test",
+    itemCount: 30,
+    durationMinutes: 30,
+    scheduledTime: new Date(Date.now() + 1000 * 60 * 60).toISOString(),
+    endTime: new Date(Date.now() + 1000 * 60 * 180).toISOString(),
+    hostName: "System Admin",
+    hostUserId: "admin-1",
+    attendeesCount: 5,
+    isAttending: true
+  }
+];
+
 export default function StudyEventsSection() {
-  const [events, setEvents] = useState<ScheduledEvent[]>([
-    {
-      id: "ev-1",
-      title: "Numerical Reasoning Speed Drill",
-      description: "Synchronous review event with timed word problems and speed calculations.",
-      category: "Numerical Reasoning",
-      difficulty: "Intermediate Drill",
-      itemCount: 20,
-      durationMinutes: 15,
-      scheduledTime: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
-      hostName: "System Admin",
-      attendeesCount: 3,
-      isAttending: true
-    },
-    {
-      id: "ev-2",
-      title: "Verbal & Grammar Masterclass",
-      description: "Group drill targeting error identification and subject-verb agreement.",
-      category: "Verbal Ability",
-      difficulty: "Hard/Speed Test",
-      itemCount: 30,
-      durationMinutes: 30,
-      scheduledTime: new Date(Date.now() + 1000 * 60 * 45).toISOString(),
-      hostName: "System Admin",
-      attendeesCount: 5,
-      isAttending: true
+  // Current Active User (Default: System Admin)
+  const currentUserName = "System Admin";
+
+  // 1. Initialize State with LocalStorage Persistence
+  const [events, setEvents] = useState<ScheduledEvent[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("cse_events_v2");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse saved events", e);
+        }
+      }
     }
-  ]);
+    return INITIAL_DEFAULT_EVENTS;
+  });
 
   const [showScheduleModal, setShowScheduleModal] = useState(false);
-  const [waitingRoomEvent, setWaitingRoomEvent] = useState<ScheduledEvent | null>(null);
   const [activeDrillEvent, setActiveDrillEvent] = useState<ScheduledEvent | null>(null);
+  const [waitingRoomEvent, setWaitingRoomEvent] = useState<ScheduledEvent | null>(null);
   const [eventToDelete, setEventToDelete] = useState<{ id: string; title: string } | null>(null);
 
-  // New Event Form State
+  // Form State
   const [formTitle, setFormTitle] = useState("");
   const [formDesc, setFormDesc] = useState("");
   const [formCategory, setFormCategory] = useState<CoreSubject>("Numerical Reasoning");
@@ -97,11 +111,18 @@ export default function StudyEventsSection() {
   const [formTime, setFormTime] = useState("");
   const [formEndTime, setFormEndTime] = useState("");
 
-  // Live Drill Player State
+  // Live Drill State
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<number, number>>({});
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+
+  // Auto-Save Events to LocalStorage on Any Change (Create / Delete)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cse_events_v2", JSON.stringify(events));
+    }
+  }, [events]);
 
   const handleLaunchDrill = (ev: ScheduledEvent) => {
     setActiveDrillEvent(ev);
@@ -131,6 +152,11 @@ export default function StudyEventsSection() {
 
   const handleCreateEvent = (e: React.FormEvent) => {
     e.preventDefault();
+    const startIso = formTime ? new Date(formTime).toISOString() : new Date().toISOString();
+    const endIso = formEndTime
+      ? new Date(formEndTime).toISOString()
+      : new Date(new Date(startIso).getTime() + 3600 * 1000 * 2).toISOString();
+
     const newEv: ScheduledEvent = {
       id: `ev-${Date.now()}`,
       title: formTitle || "Live CSE Speed Drill",
@@ -139,16 +165,20 @@ export default function StudyEventsSection() {
       difficulty: formDifficulty,
       itemCount: formItemCount,
       durationMinutes: formDuration,
-      scheduledTime: formTime ? new Date(formTime).toISOString() : new Date().toISOString(),
-      endTime: formEndTime ? new Date(formEndTime).toISOString() : new Date(Date.now() + 3600 * 1000 * 2).toISOString(),
-      hostName: "System Admin",
+      scheduledTime: startIso,
+      endTime: endIso,
+      hostName: currentUserName,
+      hostUserId: "admin-1",
       attendeesCount: 1,
       isAttending: true
     };
+
     setEvents([newEv, ...events]);
     setShowScheduleModal(false);
     setFormTitle("");
     setFormDesc("");
+    setFormTime("");
+    setFormEndTime("");
   };
 
   return (
@@ -177,7 +207,11 @@ export default function StudyEventsSection() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {events.map((ev) => {
-            const isLive = new Date().getTime() >= new Date(ev.scheduledTime).getTime() - 1000 * 60 * 5;
+            const nowMs = new Date().getTime();
+            const startMs = new Date(ev.scheduledTime).getTime();
+            const isLive = nowMs >= startMs;
+            const isHost = ev.hostName === currentUserName;
+
             return (
               <div
                 key={ev.id}
@@ -192,28 +226,20 @@ export default function StudyEventsSection() {
                       <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border ${getDifficultyBadgeStyle(ev.difficulty)}`}>
                         {ev.difficulty}
                       </span>
-                      {/* Futuristic Glassmorphic Purge Button */}
-                      <button
-                        onClick={() => handleDeleteEvent(ev.id, ev.title)}
-                        className="group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold text-rose-400 hover:text-rose-200 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 hover:border-rose-400/80 shadow-xs hover:shadow-rose-500/25 hover:shadow-md transition-all duration-300 backdrop-blur-md overflow-hidden"
-                        title="Purge Event"
-                      >
-                        <span className="absolute inset-0 bg-gradient-to-r from-rose-500/0 via-rose-500/15 to-rose-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        <svg
-                          className="w-3 h-3 text-rose-400 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
+                      
+                      {/* Host-Only Purge Button */}
+                      {isHost && (
+                        <button
+                          onClick={() => handleDeleteEvent(ev.id, ev.title)}
+                          className="group relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold text-rose-400 hover:text-rose-200 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 hover:border-rose-400/80 shadow-xs hover:shadow-rose-500/25 transition-all duration-300 backdrop-blur-md overflow-hidden"
+                          title="Purge Event (Host Only)"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                        <span className="tracking-wider uppercase font-extrabold">Purge</span>
-                      </button>
+                          <svg className="w-3 h-3 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          <span className="tracking-wider uppercase font-extrabold">Purge</span>
+                        </button>
+                      )}
                     </div>
                   </div>
 
@@ -222,9 +248,15 @@ export default function StudyEventsSection() {
 
                   <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 text-xs font-bold space-y-1">
                     <div className="flex items-center justify-between text-slate-700 dark:text-slate-300">
-                      <span>?? Scheduled Time:</span>
+                      <span>?? Start Time:</span>
                       <span className="font-mono">{new Date(ev.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
+                    {ev.endTime && (
+                      <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                        <span>?? End Time:</span>
+                        <span className="font-mono">{new Date(ev.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
                       <span>?? Drill Limit:</span>
                       <span>{ev.itemCount} Items ({ev.durationMinutes} Mins)</span>
@@ -236,20 +268,20 @@ export default function StudyEventsSection() {
                 <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-3">
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Host: {ev.hostName}</span>
                   {isLive ? (
-                  <button
-                    onClick={() => handleLaunchDrill(ev)}
-                    className="px-5 py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 animate-bounce transition-all flex items-center gap-1.5"
-                  >
-                    <span>??</span> Join Live Session
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setWaitingRoomEvent(ev)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 flex items-center gap-1.5"
-                  >
-                    <span>?</span> Enter Pre-Event Lobby
-                  </button>
-                )}
+                    <button
+                      onClick={() => handleLaunchDrill(ev)}
+                      className="px-5 py-2.5 rounded-xl text-xs font-black bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 animate-bounce transition-all flex items-center gap-1.5"
+                    >
+                      <span>??</span> Join Live Session
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setWaitingRoomEvent(ev)}
+                      className="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 flex items-center gap-1.5"
+                    >
+                      <span>?</span> Enter Pre-Event Lobby
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -303,8 +335,6 @@ export default function StudyEventsSection() {
               </div>
             </div>
 
-            
-            {/* Drill Configuration Row */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Item Count</label>
@@ -335,7 +365,6 @@ export default function StudyEventsSection() {
               </div>
             </div>
 
-            {/* Start Time & End Time Pickers */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Start Time</label>
@@ -467,13 +496,6 @@ export default function StudyEventsSection() {
                   Your live answers have been submitted to the group scoreboard.
                 </p>
 
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 max-w-sm mx-auto">
-                  <div className="text-2xl font-mono font-black text-emerald-600 dark:text-emerald-400">
-                    {Object.keys(userAnswers).length} / {activeDrillEvent.itemCount} Answered
-                  </div>
-                  <div className="text-[11px] font-bold text-slate-500 mt-1">Speed Accuracy Score: 1,420 Points</div>
-                </div>
-
                 <button
                   onClick={() => setActiveDrillEvent(null)}
                   className="px-6 py-2.5 rounded-xl text-xs font-black bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 shadow-md"
@@ -486,19 +508,6 @@ export default function StudyEventsSection() {
         </div>
       )}
 
-      {/* Delete Event Confirmation Modal */}
-      <DeleteEventModal
-        isOpen={!!eventToDelete}
-        eventTitle={eventToDelete?.title || ""}
-        onConfirm={() => {
-          if (eventToDelete) {
-            setEvents((prev) => prev.filter((e) => e.id !== eventToDelete.id));
-            setEventToDelete(null);
-          }
-        }}
-        onCancel={() => setEventToDelete(null)}
-      />
-    
       {/* Pre-Event Live Waiting Room Lobby */}
       {waitingRoomEvent && (
         <LiveWaitingRoom
@@ -513,6 +522,19 @@ export default function StudyEventsSection() {
           onClose={() => setWaitingRoomEvent(null)}
         />
       )}
-</div>
+
+      {/* Delete Event Confirmation Modal */}
+      <DeleteEventModal
+        isOpen={!!eventToDelete}
+        eventTitle={eventToDelete?.title || ""}
+        onConfirm={() => {
+          if (eventToDelete) {
+            setEvents((prev) => prev.filter((e) => e.id !== eventToDelete.id));
+            setEventToDelete(null);
+          }
+        }}
+        onCancel={() => setEventToDelete(null)}
+      />
+    </div>
   );
 }

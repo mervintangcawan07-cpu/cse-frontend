@@ -16,7 +16,15 @@ interface LiveWaitingRoomProps {
   onClose?: () => void;
 }
 
-const AVAILABLE_EMOTES = ["??", "??", "??", "??", "??", "?"];
+// Explicit Unicode escaping + Unique Item IDs to prevent shell character corruption & key collision
+const AVAILABLE_EMOTES = [
+  { id: "fire", symbol: "🔥" },      // ??
+  { id: "clap", symbol: "👏" },      // ??
+  { id: "bulb", symbol: "💡" },      // ??
+  { id: "mindblown", symbol: "🤯" }, // ??
+  { id: "flex", symbol: "💪" },      // ??
+  { id: "hourglass", symbol: "⏳" }       // ?
+];
 
 export const LiveWaitingRoom: React.FC<LiveWaitingRoomProps> = ({
   eventName,
@@ -130,7 +138,7 @@ export const LiveWaitingRoom: React.FC<LiveWaitingRoomProps> = ({
         {/* Header */}
         <header className="w-full p-6 flex justify-between items-center border-b border-gray-800 z-20 bg-gray-950/80 backdrop-blur-sm sticky top-0">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">??</span>
+            <span className="text-2xl">🤝</span>
             <h1 className="text-xl font-bold tracking-tight">Study Together Event Lobby</h1>
           </div>
 
@@ -207,14 +215,14 @@ export const LiveWaitingRoom: React.FC<LiveWaitingRoomProps> = ({
               ) : (
                 <>
                   <h3 className="text-4xl md:text-5xl font-black text-white animate-pulse">
-                    GO! GO! GO! ??
+                    GO! GO! GO! 🚀
                   </h3>
                   <p className="text-xl text-purple-200 mt-4">The drill has officially unlocked.</p>
                   <button
                     className="mt-6 px-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white text-lg font-black rounded-full transition-all shadow-lg hover:scale-105"
                     onClick={() => onEventStart?.()}
                   >
-                    ?? Launch Exam Drill Now
+                    🚀 Launch Exam Drill Now
                   </button>
                 </>
               )}
@@ -231,14 +239,14 @@ export const LiveWaitingRoom: React.FC<LiveWaitingRoomProps> = ({
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tap to Hype Lobby</p>
 
           <div className="flex items-center gap-3 sm:gap-6 p-2.5 bg-gray-900 rounded-full border border-gray-800 shadow-inner">
-            {AVAILABLE_EMOTES.map((symbol) => (
+            {AVAILABLE_EMOTES.map((item) => (
               <button
-                key={symbol}
-                onClick={() => handleAddEmote(symbol)}
+                key={item.id}
+                onClick={() => handleAddEmote(item.symbol)}
                 className="text-3xl md:text-4xl transform hover:scale-125 transition-transform duration-150 active:scale-95 active:opacity-70 focus:outline-none"
-                aria-label={`React with ${symbol}`}
+                aria-label={`React with ${item.id}`}
               >
-                {symbol}
+                {item.symbol}
               </button>
             ))}
           </div>
