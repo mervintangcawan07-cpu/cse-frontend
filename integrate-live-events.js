@@ -1,8 +1,34 @@
-"use client";
+const fs = require("fs");
+const path = require("path");
+
+// Search for the Events tab component file containing "Scheduled Review Events"
+function findFileWithText(dir, searchStr) {
+  const files = fs.readdirSync(dir);
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      const found = findFileWithText(fullPath, searchStr);
+      if (found) return found;
+    } else if (file.endsWith(".tsx") || file.endsWith(".jsx")) {
+      const content = fs.readFileSync(fullPath, "utf8");
+      if (content.includes(searchStr)) {
+        return fullPath;
+      }
+    }
+  }
+  return null;
+}
+
+const targetFile = findFileWithText("src", "Scheduled Review Events") || "src/app/social/page.tsx";
+console.log(`🎯 Found Events view file at: ${targetFile}`);
+
+const integratedEventsCode = `"use client";
 
 import React, { useState, useEffect } from "react";
 import { formatPromptHTML } from "@/lib/formatPrompt";
 import { CORE_SUBJECTS, DIFFICULTY_LEVELS, getDifficultyBadgeStyle } from "@/components/cse/CategoryTagging";
+import { selectBalancedDrillQuestions, calculateLiveDrillScore } from "@/services/questionBankService";
 import { CoreSubject, DifficultyLevel, Question } from "@/types/cse";
 
 // Sample Question Pool for Live Drills
@@ -20,7 +46,7 @@ const SAMPLE_DRILL_QUESTIONS: Question[] = [
     id: "drill-2",
     category: "Verbal Ability",
     subtopic: "Grammar Errors",
-    prompt: "(A) The regional director\n(B) along with several field officers\n(C) are planning to inspect\n(D) the disaster relief centers tomorrow.\n\nWhich part of the sentence contains the grammatical error?",
+    prompt: "(A) The regional director\\n(B) along with several field officers\\n(C) are planning to inspect\\n(D) the disaster relief centers tomorrow.\\n\\nWhich part of the sentence contains the grammatical error?",
     options: ["A", "B", "C", "D"],
     correctAnswer: 2,
     explanation: "Subject is 'regional director' (singular). Verb should be 'is planning', not 'are planning'."
@@ -125,7 +151,7 @@ export default function IntegratedEventsTab() {
   const handleCreateEvent = (e: React.FormEvent) => {
     e.preventDefault();
     const newEv: ScheduledEvent = {
-      id: `ev-${Date.now()}`,
+      id: \`ev-\${Date.now()}\`,
       title: formTitle || "Live CSE Speed Drill",
       description: formDesc || "Synchronous review event with timed practice items.",
       category: formCategory,
@@ -175,7 +201,7 @@ export default function IntegratedEventsTab() {
                   <span className="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-900 dark:bg-blue-950/80 dark:text-blue-300">
                     {ev.category}
                   </span>
-                  <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border ${getDifficultyBadgeStyle(ev.difficulty)}`}>
+                  <span className={\`px-2.5 py-1 rounded-lg text-[10px] font-bold border \${getDifficultyBadgeStyle(ev.difficulty)}\`}>
                     {ev.difficulty}
                   </span>
                 </div>
@@ -208,11 +234,11 @@ export default function IntegratedEventsTab() {
                 ) : (
                   <button
                     onClick={() => setEvents(events.map(e => e.id === ev.id ? { ...e, isAttending: !e.isAttending } : e))}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    className={\`px-4 py-2 rounded-xl text-xs font-bold transition-all \${
                       ev.isAttending
                         ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
                         : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"
-                    }`}
+                    }\`}
                   >
                     {ev.isAttending ? "✓ Attending" : "RSVP Event"}
                   </button>
@@ -443,3 +469,7 @@ export default function IntegratedEventsTab() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync(targetFile, integratedEventsCode, "utf8");
+console.log(`✅ Fully integrated Live Events & Drill player into ${targetFile}`);
