@@ -183,7 +183,7 @@ export default function LandingPage() {
               Sign In
             </Link>
             <Link
-              href="/register"
+              href="/signup"
               className="px-4 py-2 font-bold text-xs text-white bg-blue-600 rounded-xl hover:bg-blue-500 transition shadow-md"
             >
               Start Free
@@ -210,7 +210,7 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row justify-center items-center gap-3 pt-4">
               <Link
-                href="/register"
+                href="/signup"
                 className="w-full sm:w-auto px-8 py-4 font-black text-sm text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-2xl shadow-xl transition"
               >
                 🚀 Start Reviewing Now
@@ -450,7 +450,7 @@ export default function LandingPage() {
                     </div>
 
                     <Link
-                      href="/register"
+                      href="/signup"
                       className={`w-full py-3 text-center text-xs font-bold rounded-xl transition ${
                         plan.popular
                           ? "bg-amber-500 hover:bg-amber-400 text-slate-950 font-black"
@@ -519,7 +519,7 @@ export default function LandingPage() {
 
               <div className="pt-2">
                 <Link
-                  href="/register"
+                  href="/signup"
                   className="inline-block px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-xl transition hover:scale-105"
                 >
                   Create Your Free Account Now 🇵🇭
