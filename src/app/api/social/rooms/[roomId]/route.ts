@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/rooms/[roomId]/route.ts
+// Relative Path: src/app/api/social/rooms/[roomId]/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -141,49 +141,36 @@ export async function DELETE(
     if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = String(rawUserId);
 
-    const participant = await prisma.studyRoomParticipant.findUnique({
-      where: { roomId_userId: { roomId, userId } },
+    const room = await prisma.studyRoom.findUnique({
+      where: { id: roomId },
     });
 
-    if (!participant) {
-      return NextResponse.json({ error: "You are not in this room" }, { status: 404 });
+    if (!room) {
+      return NextResponse.json({ error: "Study room not found" }, { status: 404 });
     }
 
-    // Remove user from room
-    await prisma.studyRoomParticipant.delete({
-      where: { roomId_userId: { roomId, userId } },
+    // 🔒 Strictly enforce that ONLY the room host (or ADMIN) can delete the study room
+    if (room.hostId !== userId && session?.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Forbidden: Only the room host can delete this study room" },
+        { status: 403 }
+      );
+    }
+
+    // Cascade deletion of participants and messages is handled by DB schema relations
+    await prisma.studyRoom.delete({
+      where: { id: roomId },
     });
 
-    // If host leaves and members remain, assign host role to next participant
-    if (participant.role === "HOST") {
-      const remaining = await prisma.studyRoomParticipant.findFirst({
-        where: { roomId },
-        orderBy: { joinedAt: "asc" },
-      });
-
-      if (remaining) {
-        await prisma.$transaction([
-          prisma.studyRoomParticipant.update({
-            where: { id: remaining.id },
-            data: { role: "HOST" },
-          }),
-          prisma.studyRoom.update({
-            where: { id: roomId },
-            data: { hostId: remaining.userId },
-          }),
-        ]);
-      } else {
-        // Close empty room
-        await prisma.studyRoom.update({
-          where: { id: roomId },
-          data: { state: "ENDED" },
-        });
-      }
-    }
-
-    return NextResponse.json({ success: true, message: "Left Study Room" });
+    return NextResponse.json({
+      success: true,
+      message: "Study Room deleted successfully",
+    });
   } catch (error: any) {
-    console.error("[ROOM_LEAVE_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to leave room", details: error?.message }, { status: 500 });
+    console.error("[ROOM_DELETE_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to delete study room", details: error?.message },
+      { status: 500 }
+    );
   }
 }

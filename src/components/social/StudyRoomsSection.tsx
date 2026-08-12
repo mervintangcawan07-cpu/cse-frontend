@@ -1,8 +1,9 @@
-﻿// Relative Path: src/components/social/StudyRoomsSection.tsx
+// Relative Path: src/components/social/StudyRoomsSection.tsx
 "use client";
 
 import { useEffect, useState, useRef } from "react";
 import StudyRoomStage from "@/components/social/rooms/StudyRoomStage";
+import { DeleteRoomModal } from "@/components/social/DeleteRoomModal";
 
 export default function StudyRoomsSection() {
   const [rooms, setRooms] = useState<any[]>([]);
@@ -13,6 +14,8 @@ export default function StudyRoomsSection() {
   const [joiningCode, setJoiningCode] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [activeRoom, setActiveRoom] = useState<any>(null);
+  const [roomToDelete, setRoomToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingRoom, setDeletingRoom] = useState(false);
   
   // Room Live Chat States
   const [chatMessages, setChatMessages] = useState<any[]>([]);
@@ -162,7 +165,7 @@ export default function StudyRoomsSection() {
 
   const leaveRoom = async (roomId: string) => {
     try {
-      const res = await fetch(`/api/social/rooms/${roomId}`, { method: "DELETE" });
+      const res = await fetch(`/api/social/rooms/${roomId}/leave`, { method: "POST" });
       if (res.ok) {
         setActiveRoom(null);
         setChatMessages([]);
@@ -171,6 +174,34 @@ export default function StudyRoomsSection() {
       }
     } catch (err) {
       console.error("Failed to leave room:", err);
+    }
+  };
+
+  const confirmDeleteRoom = async () => {
+    if (!roomToDelete?.id || deletingRoom) return;
+
+    setDeletingRoom(true);
+    try {
+      const res = await fetch(`/api/social/rooms/${roomToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        if (activeRoom?.id === roomToDelete.id) {
+          setActiveRoom(null);
+          setChatMessages([]);
+          setPinnedMessage(null);
+        }
+        setRoomToDelete(null);
+        await fetchRooms();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to delete study room");
+      }
+    } catch (err) {
+      console.error("Failed to delete room:", err);
+    } finally {
+      setDeletingRoom(false);
     }
   };
 
@@ -265,13 +296,24 @@ export default function StudyRoomsSection() {
             )}
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => leaveRoom(activeRoom.id)}
-              className="px-4 py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
-            >
-              Leave Room
-            </button>
+          <div className="flex flex-wrap items-center gap-2">
+            {(activeRoom.isHost || activeRoom.hostId === currentUserId) ? (
+              <button
+                onClick={() => setRoomToDelete({ id: activeRoom.id, name: activeRoom.name })}
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-md shadow-rose-600/20 flex items-center gap-1.5"
+                title="Delete Study Room"
+              >
+                <span>🗑️</span>
+                <span>Delete Room</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => leaveRoom(activeRoom.id)}
+                className="px-4 py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
+              >
+                Leave Room
+              </button>
+            )}
             <button
               onClick={() => setActiveRoom(null)}
               className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition cursor-pointer"
@@ -528,26 +570,38 @@ export default function StudyRoomsSection() {
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
-                <span className="text-[10px] text-slate-500 font-semibold">
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                <span className="text-[10px] text-slate-500 font-semibold truncate">
                   Host: {room.host?.name || "Examinee"}
                 </span>
 
-                {room.isMember ? (
-                  <button
-                    onClick={() => openRoomView(room.id)}
-                    className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition cursor-pointer"
-                  >
-                    Open Room
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => joinRoom(room.id)}
-                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer"
-                  >
-                    Join Room
-                  </button>
-                )}
+                <div className="flex items-center gap-2 shrink-0">
+                  {(room.isHost || room.host?.id === currentUserId) && (
+                    <button
+                      onClick={() => setRoomToDelete({ id: room.id, name: room.name })}
+                      className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 rounded-lg transition cursor-pointer text-xs"
+                      title="Delete Room"
+                    >
+                      🗑️
+                    </button>
+                  )}
+
+                  {room.isMember ? (
+                    <button
+                      onClick={() => openRoomView(room.id)}
+                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition cursor-pointer"
+                    >
+                      Open Room
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => joinRoom(room.id)}
+                      className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                    >
+                      Join Room
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -647,6 +701,14 @@ export default function StudyRoomsSection() {
           </div>
         </div>
       )}
+      {/* DELETE CONFIRMATION MODAL */}
+      <DeleteRoomModal
+        isOpen={!!roomToDelete}
+        roomName={roomToDelete?.name || ""}
+        isDeleting={deletingRoom}
+        onConfirm={confirmDeleteRoom}
+        onCancel={() => setRoomToDelete(null)}
+      />
     </div>
   );
 }
