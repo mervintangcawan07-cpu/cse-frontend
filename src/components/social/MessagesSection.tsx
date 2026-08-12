@@ -1,7 +1,8 @@
-﻿// Relative Path: src/components/social/MessagesSection.tsx
+// Relative Path: src/components/social/MessagesSection.tsx
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { DeleteConversationModal } from "@/components/social/DeleteConversationModal";
 
 export default function MessagesSection() {
   const [conversations, setConversations] = useState<any[]>([]);
@@ -9,6 +10,8 @@ export default function MessagesSection() {
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [activeConversation, setActiveConversation] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
+  const [convToDelete, setConvToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingConv, setDeletingConv] = useState(false);
   
   const [loadingConv, setLoadingConv] = useState(true);
   const [loadingChat, setLoadingChat] = useState(false);
@@ -150,6 +153,34 @@ export default function MessagesSection() {
     }
   };
 
+  const confirmDeleteConversation = async () => {
+    if (!convToDelete?.id || deletingConv) return;
+
+    setDeletingConv(true);
+    try {
+      const res = await fetch(`/api/social/messages/${convToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        if (activeConvId === convToDelete.id) {
+          setActiveConvId(null);
+          setActiveConversation(null);
+          setMessages([]);
+        }
+        setConvToDelete(null);
+        await loadConversations();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to delete conversation");
+      }
+    } catch (err) {
+      console.error("Failed to delete conversation:", err);
+    } finally {
+      setDeletingConv(false);
+    }
+  };
+
   const addEmoji = (emoji: string) => {
     setNewMessage((prev) => prev + emoji);
   };
@@ -175,20 +206,20 @@ export default function MessagesSection() {
             {conversations.map((c) => {
               const isActive = activeConvId === c.id;
               return (
-                <button
+                <div
                   key={c.id}
                   onClick={() => selectConversation(c.id)}
-                  className={`w-full p-3 rounded-xl transition text-left flex items-center justify-between gap-3 cursor-pointer ${
+                  className={`w-full p-3 rounded-xl transition text-left flex items-center justify-between gap-3 cursor-pointer group ${
                     isActive
                       ? "bg-blue-600/20 border border-blue-500/40 text-white"
                       : "bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-slate-300"
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 overflow-hidden">
+                  <div className="flex items-center gap-2.5 overflow-hidden flex-1">
                     <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
                       {c.otherUser?.name ? c.otherUser.name[0] : "C"}
                     </div>
-                    <div className="overflow-hidden">
+                    <div className="overflow-hidden flex-1">
                       <p className="text-xs font-bold truncate">{c.otherUser?.name || "Classmate"}</p>
                       <p className="text-[10px] text-slate-400 truncate">
                         {c.lastMessage ? c.lastMessage.content : "Start chatting..."}
@@ -196,12 +227,25 @@ export default function MessagesSection() {
                     </div>
                   </div>
 
-                  {c.unreadCount > 0 && (
-                    <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
-                      {c.unreadCount}
-                    </span>
-                  )}
-                </button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {c.unreadCount > 0 && (
+                      <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                        {c.unreadCount}
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setConvToDelete({ id: c.id, name: c.otherUser?.name || "Classmate" });
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 rounded transition cursor-pointer text-xs"
+                      title="Delete Conversation"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
               );
             })}
           </div>
@@ -247,12 +291,28 @@ export default function MessagesSection() {
                 </div>
               </div>
 
-              <button
-                onClick={() => setActiveConvId(null)}
-                className="text-xs text-slate-400 hover:text-white px-2 py-1 rounded-lg hover:bg-slate-800 cursor-pointer"
-              >
-                ✕ Close
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setConvToDelete({
+                      id: activeConvId,
+                      name: activeConversation.name || "Classmate",
+                    })
+                  }
+                  className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1"
+                  title="Delete Conversation"
+                >
+                  <span>🗑️</span>
+                  <span>Delete Chat</span>
+                </button>
+                <button
+                  onClick={() => setActiveConvId(null)}
+                  className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+                >
+                  ✕ Close
+                </button>
+              </div>
             </div>
 
             {/* MESSAGES FEED */}
@@ -375,6 +435,14 @@ export default function MessagesSection() {
           </div>
         )}
       </div>
+      {/* DELETE CONVERSATION CONFIRMATION MODAL */}
+      <DeleteConversationModal
+        isOpen={!!convToDelete}
+        classmateName={convToDelete?.name || ""}
+        isDeleting={deletingConv}
+        onConfirm={confirmDeleteConversation}
+        onCancel={() => setConvToDelete(null)}
+      />
     </div>
   );
 }

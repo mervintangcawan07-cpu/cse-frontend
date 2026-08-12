@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/messages/[conversationId]/route.ts
+// Relative Path: src/app/api/social/messages/[conversationId]/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -186,29 +186,49 @@ export async function DELETE(
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
 
-    if (!messageId) {
-      return NextResponse.json({ error: "Missing messageId parameter" }, { status: 400 });
+    // 1. Single message deletion if messageId is provided
+    if (messageId) {
+      const msg = await prisma.directMessage.findUnique({
+        where: { id: String(messageId) },
+      });
+
+      if (!msg || msg.conversationId !== conversationId) {
+        return NextResponse.json({ error: "Message not found" }, { status: 404 });
+      }
+
+      if (msg.senderId !== userId && session?.role !== "ADMIN") {
+        return NextResponse.json({ error: "You can only delete your own messages" }, { status: 403 });
+      }
+
+      await prisma.directMessage.delete({
+        where: { id: String(messageId) },
+      });
+
+      return NextResponse.json({ success: true, message: "Message deleted" });
     }
 
-    const msg = await prisma.directMessage.findUnique({
-      where: { id: String(messageId) },
+    // 2. Full conversation deletion (Authorized for either classmate participant or ADMIN)
+    const isParticipant = await prisma.directMessageParticipant.findUnique({
+      where: {
+        conversationId_userId: {
+          conversationId,
+          userId,
+        },
+      },
     });
 
-    if (!msg || msg.conversationId !== conversationId) {
-      return NextResponse.json({ error: "Message not found" }, { status: 404 });
+    if (!isParticipant && session?.role !== "ADMIN") {
+      return NextResponse.json({ error: "Access denied: You are not a participant in this conversation" }, { status: 403 });
     }
 
-    if (msg.senderId !== userId) {
-      return NextResponse.json({ error: "You can only delete your own messages" }, { status: 403 });
-    }
-
-    await prisma.directMessage.delete({
-      where: { id: String(messageId) },
+    // Cascade deletion of messages and participants is handled by DB schema relation
+    await prisma.conversation.delete({
+      where: { id: conversationId },
     });
 
-    return NextResponse.json({ success: true, message: "Message deleted" });
+    return NextResponse.json({ success: true, message: "Conversation deleted successfully" });
   } catch (error: any) {
     console.error("[MESSAGES_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete message", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete message or conversation", details: error?.message }, { status: 500 });
   }
 }
