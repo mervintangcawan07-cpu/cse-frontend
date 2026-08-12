@@ -1,7 +1,8 @@
-﻿// Relative Path: src/components/social/StudyClubsSection.tsx
+// Relative Path: src/components/social/StudyClubsSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+import { DeleteClubModal } from "@/components/social/DeleteClubModal";
 
 export default function StudyClubsSection() {
   const [clubs, setClubs] = useState<any[]>([]);
@@ -9,6 +10,8 @@ export default function StudyClubsSection() {
   const [filter, setFilter] = useState<"all" | "mine">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [clubToDelete, setClubToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingClub, setDeletingClub] = useState(false);
 
   // Form state
   const [name, setName] = useState("");
@@ -60,6 +63,29 @@ export default function StudyClubsSection() {
       }
     } catch (err) {
       console.error("Failed to toggle club membership:", err);
+    }
+  };
+
+  const confirmDeleteClub = async () => {
+    if (!clubToDelete?.id || deletingClub) return;
+
+    setDeletingClub(true);
+    try {
+      const res = await fetch(`/api/social/clubs/${clubToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        setClubToDelete(null);
+        await fetchClubs();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to delete study club");
+      }
+    } catch (err) {
+      console.error("Failed to delete club:", err);
+    } finally {
+      setDeletingClub(false);
     }
   };
 
@@ -178,15 +204,24 @@ export default function StudyClubsSection() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                <span className="text-[10px] text-slate-500 font-semibold">
+              <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+                <span className="text-[10px] text-slate-500 font-semibold truncate">
                   Founder: {club.owner?.name || "Examinee"}
                 </span>
 
                 {club.isOwner ? (
-                  <span className="text-[10px] font-extrabold text-amber-400 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                    👑 Owner
-                  </span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-[10px] font-extrabold text-amber-400 px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                      👑 Owner
+                    </span>
+                    <button
+                      onClick={() => setClubToDelete({ id: club.id, name: club.name })}
+                      className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 rounded-lg transition cursor-pointer text-xs"
+                      title="Delete Study Club"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 ) : (
                   <button
                     onClick={() => toggleMembership(club.id, club.isMember)}
@@ -272,6 +307,14 @@ export default function StudyClubsSection() {
           </div>
         </div>
       )}
+      {/* DELETE CLUB CONFIRMATION MODAL */}
+      <DeleteClubModal
+        isOpen={!!clubToDelete}
+        clubName={clubToDelete?.name || ""}
+        isDeleting={deletingClub}
+        onConfirm={confirmDeleteClub}
+        onCancel={() => setClubToDelete(null)}
+      />
     </div>
   );
 }
