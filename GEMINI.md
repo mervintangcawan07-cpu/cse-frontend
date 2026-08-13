@@ -1,1421 +1,1581 @@
 # 🚨 PERMANENT WEBSITE DEVELOPMENT MASTER PROMPT
 
-## SAFE DEVELOPMENT • GIT BACKUP • FILE PRESERVATION • DIFF VERIFICATION • DATABASE SAFETY • ROLLBACK
+# SAFE DEVELOPMENT • AUTOMATIC WORKFLOW • FILE PRESERVATION
+# GIT SAFETY • DATABASE SAFETY • DIFF VERIFICATION • TESTING
+# ROLLBACK • SECURITY • MINIMAL MODIFICATION
 
-### VERSION 3.0 — PERMANENT PROJECT-WIDE DEVELOPMENT RULES
+==================================================
+PERMANENT AUTOMATIC DEVELOPMENT WORKFLOW
+==================================================
 
-You are the **lead software architect, senior developer, code reviewer, QA engineer, database safety engineer, and Git/version-control assistant** for my website project.
+These rules are PERMANENT and apply automatically to EVERY
+development request in this repository.
 
-These instructions are **PERMANENT DEVELOPMENT RULES** for the entire lifetime of this project.
+The user does NOT need to repeat or reference this workflow.
 
-They apply to:
+The user's development request itself is considered the TASK
+REQUEST.
 
-* Every feature
-* Every bug fix
-* Every redesign
-* Every refactor
-* Every database change
-* Every API change
-* Every UI change
-* Every dependency update
-* Every configuration change
-* Every security change
-* Every future development session
+The user must NOT be required to say:
 
-Do NOT treat these instructions as applying only to the current task.
+"Use my permanent development workflow."
 
----
+"Start with Phase 1."
 
-# 1. PERMANENT DEVELOPMENT PHILOSOPHY
+"Follow my GEMINI.md."
 
-The existing website is an evolving production application.
+"Inspect first."
 
-Your responsibility is NOT simply to generate code.
+The workflow must happen automatically.
 
-Your responsibility is to:
+Examples of development requests include:
 
-> **UNDERSTAND → PROTECT → BACK UP → MODIFY SAFELY → VERIFY → TEST → DOCUMENT**
+- New features
+- Bug fixes
+- UI changes
+- UX improvements
+- Redesigns
+- Refactors
+- API changes
+- Database changes
+- Authentication changes
+- Authorization changes
+- Payment changes
+- Security changes
+- Performance improvements
+- Configuration changes
+- Dependency changes
+- Study Together features
+- Exam features
+- Admin features
+- User features
 
-The existing codebase must always be treated as valuable existing work.
+==================================================
+AUTOMATIC TASK INTERPRETATION
+==================================================
+
+When the user provides a feature request, automatically interpret
+it as:
+
+USER REQUEST
+↓
+ENVIRONMENT CHECK
+↓
+GIT SAFETY CHECK
+↓
+READ-ONLY INSPECTION
+↓
+CURRENT CODE UNDERSTANDING
+↓
+DEPENDENCY / REFERENCE CHECK
+↓
+IMPACT ANALYSIS
+↓
+DATABASE SAFETY ANALYSIS
+↓
+IMPLEMENTATION PLAN
+↓
+STOP FOR USER APPROVAL
+↓
+IMPLEMENTATION
+↓
+POST-CHANGE INSPECTION
+↓
+DIFF VERIFICATION
+↓
+VALIDATION
+↓
+FUNCTIONAL VERIFICATION
+↓
+FINAL REVIEW
+↓
+COMMIT WHEN APPROPRIATE
+↓
+ROLLBACK INFORMATION
+↓
+FINAL REPORT
+
+The user should only need to describe WHAT they want.
+
+==================================================
+ABSOLUTE APPROVAL RULE
+==================================================
+
+The workflow automatically performs inspection and planning.
+
+However:
+
+NO significant modification may occur before explicit user
+approval of the implementation plan.
+
+Approval examples:
+
+"Yes"
+
+"Proceed"
+
+"Implement it"
+
+"Go ahead"
+
+"Approved"
+
+"Do it"
+
+If the user changes the requirements before approval:
+
+STOP.
+
+Re-evaluate the affected parts.
+
+Update the plan.
+
+Wait for approval again.
+
+==================================================
+MASTER DEVELOPMENT PHILOSOPHY
+==================================================
+
+The existing website is valuable existing work.
+
+The responsibility is:
+
+UNDERSTAND
+→ PROTECT
+→ PLAN
+→ MODIFY SAFELY
+→ VERIFY
+→ TEST
+→ DOCUMENT
 
 The default assumption is:
 
-> **Existing functionality must remain unless I explicitly request its removal.**
+EXISTING FUNCTIONALITY MUST REMAIN.
 
----
+Never remove existing functionality unless the user explicitly
+requests its removal or the implementation plan clearly
+requires replacement.
 
-# 2. ABSOLUTE SOURCE-OF-TRUTH RULE
+==================================================
+SOURCE OF TRUTH
+==================================================
 
-The actual files currently present in the project are ALWAYS the source of truth.
+The actual files currently present in the repository are ALWAYS
+the source of truth.
 
-Never assume that the current project matches:
+Never assume the project matches:
 
-* Previous conversations
-* Previous AI-generated code
-* Previous versions
-* GitHub versions
-* Your memory
-* Example code
-* Earlier screenshots
-* Earlier file contents
-* A standard framework template
+- Previous conversations
+- Previous AI output
+- Previous screenshots
+- Previous code
+- GitHub
+- Memory
+- Framework templates
+- Example implementations
+- Earlier versions
 
 Before modifying an existing file:
 
-> **INSPECT THE CURRENT FILE FIRST.**
+INSPECT THE CURRENT FILE FIRST.
 
----
+==================================================
+ENVIRONMENT
+==================================================
 
-# 3. PERMANENT DEVELOPMENT ENVIRONMENT RULE
+CURRENT DEFAULT ENVIRONMENT:
 
-I may change development environments during the lifetime of this project.
+Windows
++
+VS Code
++
+Windows PowerShell
 
-My environments may include:
+Unless the user explicitly says otherwise, use Windows
+PowerShell-compatible commands.
 
-### CURRENT ENVIRONMENT
+FUTURE ENVIRONMENT:
 
-**Windows + VS Code + Windows PowerShell**
+GitHub Codespaces
++
+VS Code
++
+Codespaces/Linux terminal
 
-This is my current environment.
+When the user says they switched to Codespaces:
 
-### FUTURE ENVIRONMENT
+Immediately adapt terminal commands to the actual environment.
 
-**GitHub Codespaces + VS Code**
+DO NOT weaken any safety rule when changing environments.
 
-I may switch to Codespaces later.
+==================================================
+ENVIRONMENT DETECTION
+==================================================
 
----
+At the beginning of a development task determine:
 
-# 4. ENVIRONMENT-AWARE COMMAND RULE
-
-Before providing terminal commands, determine which development environment I am currently using.
-
-If I tell you:
-
-> "I am using Windows PowerShell"
-
-Use:
-
-**Windows PowerShell-compatible commands.**
-
-If I tell you:
-
-> "I am using GitHub Codespaces"
-
-Use:
-
-**Codespaces/Linux-compatible terminal commands.**
-
-If I tell you:
-
-> "I switched to Codespaces"
-
-Immediately adapt the commands to the new environment.
-
-Do NOT assume that commands from Windows PowerShell can automatically be used in Codespaces.
-
----
-
-# 5. CURRENT ENVIRONMENT
-
-Unless I explicitly tell you otherwise:
-
-> **Assume I am currently using Windows PowerShell inside VS Code.**
-
-Therefore:
-
-* Commands must work in Windows PowerShell.
-* File creation commands must be PowerShell-compatible.
-* Directory creation commands must be PowerShell-compatible.
-* Inspection commands must be PowerShell-compatible.
-* Git commands must work in PowerShell.
-* npm commands must work in PowerShell.
-
----
-
-# 6. FUTURE CODESPACES ENVIRONMENT
-
-When I switch to GitHub Codespaces:
-
-Automatically adapt to the Codespaces terminal.
-
-Use commands appropriate for the Codespaces environment.
-
-Do not modify the development workflow.
-
-Only the terminal syntax/environment should change.
-
-The safety workflow remains exactly the same.
-
----
-
-# 7. ENVIRONMENT SWITCHING RULE
-
-When changing environments:
-
-DO NOT:
-
-* Reset the repository
-* Delete files
-* Reinstall everything unnecessarily
-* Overwrite configuration
-* Replace `.env` files
-* Change the database unnecessarily
-* Modify application code merely because the environment changed
-
-First inspect the current environment.
-
-Then determine what is actually required.
-
----
-
-# 8. MASTER UPDATE WORKFLOW
-
-EVERY development request MUST follow this sequence:
-
-## PHASE 0
-
-Environment Detection
-
-↓
-
-## PHASE 1
-
-Project Safety Inspection
-
-↓
-
-## PHASE 2
-
-Git Status Inspection
-
-↓
-
-## PHASE 3
-
-Git Backup / Recovery Point
-
-↓
-
-## PHASE 4
-
-Project Structure Inspection
-
-↓
-
-## PHASE 5
-
-Affected File Inspection
-
-↓
-
-## PHASE 6
-
-Dependency & Reference Inspection
-
-↓
-
-## PHASE 7
-
-Before-Change Snapshot
-
-↓
-
-## PHASE 8
-
-Impact Analysis
-
-↓
-
-## PHASE 9
-
-Database Safety Analysis
-
-↓
-
-## PHASE 10
-
-Implementation Plan
-
-↓
-
-## PHASE 11
-
-New File Creation / Existing File Modification
-
-↓
-
-## PHASE 12
-
-Post-Modification Inspection
-
-↓
-
-## PHASE 13
-
-Before-vs-After Diff
-
-↓
-
-## PHASE 14
-
-Lint / Type Check / Build / Tests
-
-↓
-
-## PHASE 15
-
-Functional Verification
-
-↓
-
-## PHASE 16
-
-Final Diff Review
-
-↓
-
-## PHASE 17
-
-Final Git Commit
-
-↓
-
-## PHASE 18
-
-Rollback Information
-
-↓
-
-## PHASE 19
-
-Final Development Report
-
----
-
-# 9. DO NOT SKIP PHASES
-
-Never jump directly from:
-
-USER REQUEST
-
-to:
-
-CODE GENERATION.
-
-You must first understand the current implementation.
-
-If a phase is not applicable, explicitly state:
-
-> "PHASE X — NOT APPLICABLE"
-
-and explain why.
-
----
-
-# 10. PHASE 0 — ENVIRONMENT DETECTION
-
-Determine:
-
-* Operating environment
-* Terminal
-* Project directory
-* Git availability
-* Node/npm availability
-* Package manager
-* Framework
-* Database
-* ORM
-* Build system
+- Operating system
+- Terminal
+- Project directory
+- Git availability
+- Node version
+- npm version
+- Package manager
+- Framework
+- Database
+- ORM
+- Build system
 
 Current default:
 
-**Windows PowerShell + VS Code**
+Windows PowerShell + VS Code.
 
----
+==================================================
+PHASE 0 — ENVIRONMENT CHECK
+==================================================
 
-# 11. PHASE 1 — PROJECT SAFETY INSPECTION
+Before implementation:
 
-Before making changes, inspect the project.
+Determine the current environment.
 
-Check:
+When using Windows PowerShell, commands should be compatible
+with PowerShell.
 
-```powershell
-Get-Location
-```
+When using Codespaces, commands should be compatible with the
+actual Codespaces terminal.
 
-Check Git:
+Never assume the environment.
 
-```powershell
-git --version
-```
+==================================================
+PHASE 1 — READ-ONLY PROJECT INSPECTION
+==================================================
 
-Check Node:
+Immediately begin with read-only inspection.
 
-```powershell
-node --version
-```
-
-Check npm:
-
-```powershell
-npm --version
-```
-
-Do not assume these commands are available.
-
-If a command fails, report the failure before continuing.
-
----
-
-# 12. PHASE 2 — GIT STATUS INSPECTION
-
-Always check:
-
-```powershell
-git status
-```
-
-Then:
-
-```powershell
-git branch --show-current
-```
-
-Then:
-
-```powershell
-git log --oneline -5
-```
-
-Determine:
-
-* Current branch
-* Current commit
-* Uncommitted files
-* Staged files
-* Untracked files
-
----
-
-# 13. PROTECT PRE-EXISTING USER CHANGES
-
-This is CRITICAL.
-
-If the project already contains uncommitted changes BEFORE the requested update:
-
-DO NOT:
-
-* Delete them
-* Reset them
-* Restore them
-* Overwrite them
-* Assume they belong to the current task
-
-Clearly separate:
-
-### PRE-EXISTING CHANGES
-
-from:
-
-### CHANGES CREATED BY THIS TASK
-
-Never destroy user work.
-
----
-
-# 14. PHASE 3 — GIT BACKUP
-
-Before modifying project files, create a recoverable checkpoint whenever safe.
-
-First record:
-
-```powershell
-git rev-parse HEAD
-```
-
-Store this as:
-
-**PRE_UPDATE_COMMIT**
-
-If there are no uncommitted changes, create a backup commit if appropriate.
-
-Example:
-
-```powershell
-git add .
-git commit -m "backup: before development update"
-```
-
-Then record:
-
-```powershell
-git rev-parse HEAD
-```
-
-This becomes the primary rollback point.
-
----
-
-# 15. NEVER USE DESTRUCTIVE GIT COMMANDS AUTOMATICALLY
-
-NEVER automatically execute:
-
-```powershell
-git reset --hard
-```
-
-```powershell
-git clean -fd
-```
-
-```powershell
-git restore .
-```
-
-```powershell
-git checkout .
-```
-
-```powershell
-git push --force
-```
-
-These require explicit authorization.
-
----
-
-# 16. GITHUB BACKUP
-
-If GitHub is configured:
+DO NOT modify project files during this phase.
 
 Inspect:
 
-```powershell
+- Current directory
+- Git repository
+- package.json
+- Project structure
+- Relevant routes
+- Relevant pages
+- Relevant components
+- Relevant APIs
+- Services
+- Utilities
+- Database
+- Prisma
+- Authentication
+- Authorization
+- Payment systems
+- Configuration
+- Environment references
+- Related features
+
+Read GEMINI.md before performing development work.
+
+Never modify anything during the inspection phase.
+
+==================================================
+PHASE 2 — GIT STATUS INSPECTION
+==================================================
+
+Run:
+
+git status
+
+Then:
+
+git branch --show-current
+
+Then:
+
+git rev-parse HEAD
+
+Then:
+
+git log --oneline -5
+
+Determine:
+
+- Current branch
+- Current HEAD
+- Staged files
+- Modified files
+- Untracked files
+- Pre-existing changes
+
+Do NOT automatically modify or clean the repository.
+
+==================================================
+PRE-EXISTING CHANGE PROTECTION
+==================================================
+
+This is CRITICAL.
+
+If files are already modified before the current task:
+
+Treat those changes as:
+
+PRE-EXISTING USER CHANGES
+
+Do NOT:
+
+- Reset them
+- Restore them
+- Delete them
+- Overwrite them
+- Stage them automatically
+- Commit them automatically
+- Assume they belong to the current task
+
+Separate:
+
+PRE-EXISTING CHANGES
+
+from:
+
+CURRENT TASK CHANGES
+
+Never destroy user work.
+
+==================================================
+PHASE 3 — GIT BACKUP / RECOVERY CHECKPOINT
+==================================================
+
+IMPORTANT:
+
+DO NOT automatically create a backup commit before every
+development request.
+
+A backup commit is NOT required for every:
+
+- Small feature
+- Bug fix
+- UI adjustment
+- Text change
+- Styling change
+- Minor component change
+- Localized code modification
+
+The purpose of a checkpoint is to provide a reliable rollback
+point without unnecessarily polluting Git history.
+
+--------------------------------------------------
+CURRENT COMMIT
+--------------------------------------------------
+
+Always record:
+
+git rev-parse HEAD
+
+Store internally as:
+
+PRE_UPDATE_COMMIT
+
+This is the initial rollback reference.
+
+--------------------------------------------------
+WHEN A BACKUP COMMIT IS NOT REQUIRED
+--------------------------------------------------
+
+Do NOT create a backup commit when:
+
+- The task is small.
+- The task is localized.
+- HEAD is already a reliable rollback point.
+- The working tree is clean.
+- The change can safely be committed as one normal task commit.
+- A backup commit would unnecessarily clutter Git history.
+
+In these cases:
+
+Record PRE_UPDATE_COMMIT.
+
+Continue with the normal workflow.
+
+--------------------------------------------------
+WHEN A SAFETY CHECKPOINT MAY BE APPROPRIATE
+--------------------------------------------------
+
+Consider a separate checkpoint for:
+
+- Major architectural changes
+- Large multi-file features
+- Database schema changes
+- Authentication changes
+- Authorization/RBAC changes
+- Payment changes
+- Large API changes
+- Large refactors
+- Major UI redesigns
+- Dependency upgrades
+- Security-sensitive changes
+- Changes affecting many critical systems
+
+Before creating such a checkpoint:
+
+1. Check Git status.
+2. Identify pre-existing changes.
+3. Ensure unrelated user work will not be included.
+4. Explain why the checkpoint is recommended.
+5. Request approval if staging/committing existing user work
+   would be necessary.
+
+NEVER create a checkpoint that captures unrelated user work.
+
+--------------------------------------------------
+NO ARTIFICIAL BACKUP COMMITS
+--------------------------------------------------
+
+NEVER create repetitive commits such as:
+
+backup: before every feature
+
+backup: temporary
+
+backup: safety
+
+backup: before update
+
+unless an actual safety checkpoint is necessary.
+
+Avoid unnecessary Git history pollution.
+
+Preferred normal workflow:
+
+ONE TASK
+↓
+IMPLEMENTATION
+↓
+VERIFICATION
+↓
+ONE FINAL TASK COMMIT
+
+when practical.
+
+==================================================
+CURRENT PROJECT BASELINE
+==================================================
+
+Current known rollback point:
+
+71e9f08 fix: route registration links to signup
+
+Current branch:
+
+main
+
+Current known state:
+
+Working tree clean at the time this baseline was established.
+
+The local branch was one commit ahead of origin/main at that
+time.
+
+Do NOT:
+
+- Amend this commit
+- Rewrite this commit
+- Reset this commit automatically
+- Squash this commit automatically
+- Force-push this commit
+
+Treat it as a valid rollback point unless a newer approved
+commit becomes the appropriate rollback point.
+
+==================================================
+DESTRUCTIVE GIT COMMANDS
+==================================================
+
+NEVER automatically execute:
+
+git reset --hard
+
+git clean -fd
+
+git restore .
+
+git checkout .
+
+git push --force
+
+git rebase
+
+history rewriting commands
+
+unless explicitly authorized.
+
+Never automatically destroy user work.
+
+==================================================
+GITHUB / REMOTE SAFETY
+==================================================
+
+Inspect remote when relevant:
+
 git remote -v
-```
 
 Never assume the remote.
 
 Never force-push.
 
-If remote backup is appropriate and authorized:
+Never automatically push.
 
-```powershell
-git push
-```
+The user must explicitly instruct:
 
-Never push secrets.
+"push"
 
----
+before executing git push.
 
-# 17. PHASE 4 — PROJECT STRUCTURE INSPECTION
+==================================================
+PHASE 4 — PROJECT STRUCTURE INSPECTION
+==================================================
 
-Inspect the project structure.
+Inspect relevant project structure.
 
 Identify:
 
-* Frontend
-* Backend
-* API
-* Pages
-* Routes
-* Components
-* Utilities
-* Database
-* Prisma
-* Authentication
-* Admin system
-* User system
-* Payment system
-* Tests
-* Configuration
-* Environment files
-* Deployment configuration
+- App routes
+- Pages
+- Components
+- API routes
+- Server actions
+- Services
+- Utilities
+- Database
+- Prisma
+- Authentication
+- Authorization
+- Admin system
+- User system
+- Payment system
+- Study Together system
+- Exam system
+- Question bank
+- Reading modules
+- Analytics
+- Tests
+- Configuration
+- Deployment files
 
-Do not modify anything yet.
+Do not modify files during inspection.
 
----
+==================================================
+PHASE 5 — AFFECTED FILE INSPECTION
+==================================================
 
-# 18. PHASE 5 — AFFECTED FILE INSPECTION
+Identify every existing file that may be affected.
 
-Identify every file that could be affected.
+For every existing file that may be modified:
 
-For every EXISTING file:
+INSPECT THE COMPLETE CURRENT CONTENT.
 
-1. Inspect its current contents.
-2. Understand its purpose.
-3. Identify dependencies.
-4. Identify imports.
-5. Identify exports.
-6. Identify functions.
-7. Identify components.
-8. Identify API calls.
-9. Identify database calls.
-10. Identify validation.
-11. Identify error handling.
-12. Identify authentication.
-13. Identify authorization.
-14. Identify security controls.
+Determine:
 
----
+- Purpose
+- Imports
+- Exports
+- Functions
+- Components
+- State
+- API calls
+- Database calls
+- Authentication
+- Authorization
+- Validation
+- Error handling
+- Security
+- Existing UI
+- Existing functionality
+- Dependencies
+- Consumers
 
-# 19. NO BLIND FILE REPLACEMENT
+NEVER assume the contents.
 
-NEVER replace an entire existing file merely because you have generated a new version.
+==================================================
+NO BLIND FILE REPLACEMENT
+==================================================
 
-Before modification:
+NEVER replace an entire existing file merely because a new
+version was generated.
 
-**READ CURRENT FILE**
+Required sequence:
 
-Then:
+READ CURRENT FILE
+↓
+UNDERSTAND CURRENT FILE
+↓
+IDENTIFY REQUIRED CHANGE
+↓
+MAKE MINIMAL MODIFICATION
+↓
+INSPECT RESULT
+↓
+REVIEW DIFF
 
-**COMPARE CURRENT FILE WITH REQUEST**
+==================================================
+MINIMAL MODIFICATION PRINCIPLE
+==================================================
 
-Then:
+Use the smallest safe change required.
 
-**MODIFY ONLY WHAT IS REQUIRED**
-
----
-
-# 20. MINIMAL MODIFICATION PRINCIPLE
-
-If the requested change affects 10 lines:
+If a feature affects 10 lines:
 
 Do not rewrite 500 lines.
 
-If one component needs modification:
+If one component requires modification:
 
 Do not rewrite unrelated components.
 
-If one function needs modification:
+If one function requires modification:
 
 Do not replace the entire file.
 
 Preserve unrelated code.
 
----
+==================================================
+EXISTING FUNCTIONALITY PRESERVATION
+==================================================
 
-# 21. EXISTING FUNCTIONALITY PRESERVATION
+Before implementation identify functionality that must remain.
 
-Before modifying a file, identify important existing functionality.
+Examples:
 
-For example:
+- Authentication
+- Authorization
+- Admin controls
+- User dashboard
+- Premium access
+- PayMongo
+- Payment verification
+- Mock exams
+- Question bank
+- Reading modules
+- Analytics
+- User progress
+- Study Together
+- Study rooms
+- Group chat
+- Voice rooms
+- Whiteboard
+- AI study assistant
+- Synchronized quizzes
+- API routes
+- Database operations
 
-* Authentication
-* Authorization
-* Admin controls
-* User dashboard
-* Payment verification
-* Premium access
-* Mock exams
-* Question bank
-* Reading modules
-* Analytics
-* User progress
-* Study features
-* API routes
-* Database queries
+Never remove these merely to simplify implementation.
 
-These must remain functional unless explicitly instructed otherwise.
+==================================================
+PHASE 6 — DEPENDENCY & REFERENCE INSPECTION
+==================================================
 
----
+Before changing or removing:
 
-# 22. PHASE 6 — DEPENDENCY & REFERENCE INSPECTION
+- Components
+- Functions
+- Routes
+- APIs
+- Database models
+- Variables
+- Exports
+- Utilities
 
-Before removing or changing:
-
-* Function
-* Component
-* Route
-* API
-* Database model
-* Variable
-* Export
-* Utility
-
-Search the project for references.
+Search for references.
 
 Determine:
 
-> "What else depends on this?"
+"What else depends on this?"
 
 Never remove something without checking its consumers.
 
----
+==================================================
+PHASE 7 — BEFORE-CHANGE SNAPSHOT
+==================================================
 
-# 23. PHASE 7 — BEFORE-CHANGE SNAPSHOT
+Before modifying an existing file:
 
-Before modification, establish the baseline.
+Record its current state.
 
-Use:
+When useful, compare:
 
-```powershell
-git diff
-```
-
-For a specific file:
-
-```powershell
-git diff -- "path/to/file"
-```
-
-Compare against HEAD when appropriate:
-
-```powershell
 git show HEAD:"path/to/file"
-```
 
-If there are pre-existing changes, clearly identify them.
+and:
 
----
+git diff -- "path/to/file"
 
-# 24. PHASE 8 — IMPACT ANALYSIS
+Clearly identify:
 
-Determine whether the requested change affects:
+ADDED
+CHANGED
+REMOVED
+PRESERVED
 
-* Frontend
-* Backend
-* API
-* Database
-* Authentication
-* Authorization
-* Payments
-* Admin functionality
-* User functionality
-* Navigation
-* Dashboard
-* Responsive design
-* Mobile
-* Desktop
-* Environment variables
-* Dependencies
-* Deployment
+If pre-existing changes exist, separate them from current-task
+changes.
 
-Explain possible side effects before implementation.
+==================================================
+PHASE 8 — IMPACT ANALYSIS
+==================================================
 
----
+Determine whether the task affects:
 
-# 25. PHASE 9 — DATABASE SAFETY
+- Frontend
+- Backend
+- API
+- Database
+- Authentication
+- Authorization
+- Payments
+- Admin
+- Users
+- Navigation
+- Dashboard
+- Mobile
+- Tablet
+- Desktop
+- Environment variables
+- Dependencies
+- Deployment
+- Performance
+- Security
 
-If ANY database functionality is affected:
+Identify possible side effects.
+
+==================================================
+PHASE 9 — DATABASE SAFETY
+==================================================
+
+If the task affects database functionality:
 
 STOP and inspect first.
 
-Check:
+Inspect:
 
-* Prisma schema
-* Migrations
-* Models
-* Relations
-* Foreign keys
-* Unique constraints
-* Indexes
-* Seed files
-* Queries
-* API routes
+- prisma/schema.prisma
+- prisma.config.ts
+- Prisma client implementation
+- Existing migrations
+- Models
+- Relations
+- Foreign keys
+- Unique constraints
+- Indexes
+- Seed files
+- Database queries
+- API routes using affected models
 
----
+==================================================
+DATABASE CHANGE CLASSIFICATION
+==================================================
 
-# 26. DATABASE RULES
+Classify database changes as:
 
-NEVER automatically:
+ADDITIVE
 
-* Delete database records
-* Delete models
-* Delete columns
-* Delete migrations
-* Reset the database
-* Drop tables
-* Destroy production data
-* Rewrite historical migrations
+Examples:
 
-Never automatically execute:
+- New table
+- New optional field
+- New index
+- New relation
 
-```powershell
-npx prisma migrate reset
-```
+MODIFICATION
 
----
+Examples:
 
-# 27. DATABASE CHANGE CLASSIFICATION
+- Changing existing field
+- Changing relationship
+- Changing constraint
 
-Every database change must be classified as:
+DESTRUCTIVE
 
-### ADDITIVE
+Examples:
 
-Safe addition such as:
-
-* New table
-* New optional field
-* New index
-* New relation
-
-### MODIFICATION
-
-Existing structure changes.
-
-### DESTRUCTIVE
-
-Potential data loss.
+- Removing field
+- Removing table
+- Removing data
+- Dropping constraints
+- Destructive migration
 
 If destructive:
 
-> STOP AND REQUEST EXPLICIT AUTHORIZATION.
+STOP.
 
----
+Explain the risk.
 
-# 28. DATABASE BACKUP
+Request explicit authorization.
 
-Before significant database changes, determine whether a database backup/export is available and appropriate.
+==================================================
+DATABASE SAFETY
+==================================================
 
-Never assume the database can be safely restored.
+NEVER automatically execute:
 
-Never claim that a database is backed up unless verified.
+npx prisma migrate reset
 
----
+Database deletion
 
-# 29. PAYMENT SAFETY
+Database reset
 
-For PayMongo/payment-related changes:
+Destructive SQL
 
-Inspect:
+Dropping production tables
 
-* Payment creation
-* Payment verification
-* Webhooks
-* Server-side verification
-* User entitlement
-* Premium access
-* Payment status
-* Database payment records
+Deleting production data
+
+Destructive migrations
+
+without explicit authorization.
+
+Never assume a migration is safe.
+
+Protect existing user data.
+
+==================================================
+DATABASE BACKUP
+==================================================
+
+Before significant database changes:
+
+Determine whether a verified database backup/export exists.
+
+Never claim a database is backed up unless verified.
+
+==================================================
+PAYMENT SAFETY
+==================================================
+
+For PayMongo/payment changes inspect:
+
+- Payment creation
+- Payment verification
+- Webhooks
+- Server-side verification
+- Payment status
+- User entitlement
+- Premium access
+- Database payment records
 
 Never trust frontend payment success alone.
 
 Never remove server-side verification.
 
----
-
-# 30. AUTHENTICATION SAFETY
+==================================================
+AUTHENTICATION SAFETY
+==================================================
 
 For authentication changes inspect:
 
-* Login
-* Registration
-* Password handling
-* Sessions
-* Cookies
-* Middleware
-* Protected routes
-* Admin routes
-* User roles
-* Authorization
+- Registration
+- Login
+- Password handling
+- Sessions
+- Cookies
+- Middleware
+- Protected routes
+- Admin routes
+- User roles
+- Authorization
 
-Never accidentally expose protected functionality.
+Never expose protected functionality.
 
----
+==================================================
+PHASE 10 — IMPLEMENTATION PLAN
+==================================================
 
-# 31. PHASE 10 — IMPLEMENTATION PLAN
+After inspection and impact analysis, provide a concise plan.
 
-Before implementation, provide:
+The plan MUST include:
 
-### FILES TO MODIFY
+1. What will be changed.
+2. Files to modify.
+3. Files to create.
+4. Files to delete, if any.
+5. Files to rename, if any.
+6. Database changes.
+7. Dependencies.
+8. Existing functionality to preserve.
+9. Risks.
+10. Validation steps.
+11. Expected user-facing result.
 
-List exact paths.
+Then STOP.
 
-### FILES TO CREATE
+==================================================
+APPROVAL GATE
+==================================================
 
-List exact paths.
+DO NOT modify anything after the plan until the user explicitly
+approves.
 
-### DATABASE CHANGES
+Valid approval includes:
 
-List exact changes.
+"Yes"
 
-### DEPENDENCIES
+"Proceed"
 
-List packages.
+"Implement it"
 
-### PRESERVATION REQUIREMENTS
+"Go ahead"
 
-List existing functionality that must remain.
+"Approved"
 
-### RISKS
+"Do it"
 
-List potential problems.
+If the user changes the request:
 
-### VERIFICATION
+Return to inspection/planning as necessary.
 
-List tests/checks.
+==================================================
+PHASE 11 — IMPLEMENTATION
+==================================================
 
----
+After explicit approval:
 
-# 32. PHASE 11 — NEW FILE CREATION
+1. Reconfirm Git status.
+2. Record PRE_UPDATE_COMMIT.
+3. Create a safety checkpoint only if appropriate.
+4. Record BEFORE state.
+5. Modify only required files.
+6. Preserve unrelated functionality.
+7. Never overwrite an existing file without inspection.
+8. Never modify secrets.
+9. Never install unnecessary dependencies.
+10. Never perform destructive database operations without
+    authorization.
 
-Whenever a new file is required:
+==================================================
+NEW FILE CREATION
+==================================================
 
-ALWAYS create it using a terminal command.
+For every NEW file:
 
-For the CURRENT environment:
+1. Determine exact path.
+2. Create directory if necessary.
+3. Create file using terminal command.
+4. Then write approved code.
+5. Verify file exists.
+6. Inspect the resulting file.
 
-**Windows PowerShell**
+Windows PowerShell example:
 
-Example:
-
-```powershell
 New-Item -ItemType Directory -Path ".\src\components" -Force
+
 New-Item -ItemType File -Path ".\src\components\Example.tsx" -Force
-```
 
-The command must be ready to paste into VS Code PowerShell.
+Never create unnecessary duplicate files.
 
----
+==================================================
+CODESPACES FILE CREATION
+==================================================
 
-# 33. NEW FILE RULE
+When using Codespaces, use appropriate Linux-compatible
+commands such as:
 
-Never tell me:
+mkdir -p src/components
 
-> "Create a new file called..."
+touch src/components/Example.tsx
 
-without also providing the PowerShell command.
+Adapt to the actual environment.
 
-The command must:
-
-1. Create the directory if necessary.
-2. Create the file.
-3. Avoid overwriting unrelated files.
-4. Be compatible with the current environment.
-
----
-
-# 34. CODESPACES FILE CREATION
-
-When I switch to GitHub Codespaces, adapt the command syntax to the Codespaces terminal.
-
-The workflow remains:
-
-**CREATE DIRECTORY → CREATE FILE → INSERT CODE → INSPECT → VERIFY**
-
----
-
-# 35. PHASE 11B — EXISTING FILE MODIFICATION
+==================================================
+EXISTING FILE MODIFICATION
+==================================================
 
 For an existing file:
 
-1. Inspect current file.
-2. Identify exact modification area.
-3. Make minimal modification.
-4. Preserve unrelated content.
-5. Inspect resulting file.
+INSPECT
+↓
+IDENTIFY EXACT AREA
+↓
+MODIFY MINIMALLY
+↓
+INSPECT RESULT
+↓
+COMPARE DIFF
 
----
+Do not rewrite the entire file unless genuinely required.
 
-# 36. PHASE 12 — POST-MODIFICATION INSPECTION
+==================================================
+PHASE 12 — POST-MODIFICATION INSPECTION
+==================================================
 
-After every modification:
-
-Inspect the actual resulting file.
+After modification inspect the actual resulting files.
 
 Verify:
 
-* Complete file exists
-* No truncation
-* No accidental deletion
-* Imports correct
-* Exports correct
-* Functions preserved
-* Components preserved
-* Routes preserved
-* Validation preserved
-* Error handling preserved
-* Security preserved
-* New functionality exists
+- File exists
+- No truncation
+- No accidental deletion
+- Imports correct
+- Exports correct
+- Functions preserved
+- Components preserved
+- Routes preserved
+- Validation preserved
+- Error handling preserved
+- Authentication preserved
+- Authorization preserved
+- Security preserved
+- New feature exists
 
----
+==================================================
+PHASE 13 — BEFORE vs AFTER DIFF
+==================================================
 
-# 37. PHASE 13 — BEFORE vs AFTER DIFF
+After implementation run:
 
-This is MANDATORY.
+git status
 
-Run:
+git diff --stat
 
-```powershell
 git diff
-```
 
-For individual files:
+For specific files:
 
-```powershell
 git diff -- "path/to/file"
-```
 
-Review:
+Compare:
 
-### ADDITIONS
+BEFORE
+vs
+AFTER
 
-What was added?
+Verify every changed line is intentional.
 
-### MODIFICATIONS
+==================================================
+UNEXPECTED DELETION RULE
+==================================================
 
-What changed?
-
-### DELETIONS
-
-What was removed?
-
----
-
-# 38. UNEXPECTED DELETION RULE
-
-Any unexpected deletion is a STOP condition.
-
-If the diff shows a large deletion:
+If a diff shows unexpected large deletion:
 
 STOP.
 
+Do not automatically revert.
+
 Inspect the file.
 
-Determine whether the deletion was intentional.
+Determine why the deletion occurred.
 
-If not intentional:
+Report the issue.
 
-Restore the missing functionality before continuing.
+Wait for instructions if necessary.
 
----
+==================================================
+DIFF SIZE WARNING
+==================================================
 
-# 39. DIFF SIZE WARNING
-
-If a small feature request produces a huge diff:
+If a small request produces a very large diff:
 
 STOP AND INVESTIGATE.
 
 Possible causes:
 
-* File replacement
-* Formatting conversion
-* Encoding change
-* Line-ending change
-* Accidental truncation
-* Wrong file modification
+- Whole-file replacement
+- Formatting conversion
+- Encoding change
+- Line-ending conversion
+- Accidental truncation
+- Wrong file modification
+- Generated file replacement
 
-Do not continue until the reason is understood.
+Do not continue until understood.
 
----
+==================================================
+PHASE 14 — VALIDATION
+==================================================
 
-# 40. PHASE 14 — TESTING
+Inspect package.json first.
 
-Inspect `package.json`.
+Determine the project's valid commands.
 
-Determine available scripts.
+Run only validations relevant to the task.
 
-Use only available commands.
+Possible checks:
 
-Possible commands:
+TypeScript:
 
-```powershell
-npm run lint
-```
+npx tsc --noEmit
 
-```powershell
-npm run build
-```
+ESLint:
 
-```powershell
-npm test
-```
+Use the project's CURRENT VALID ESLint command.
 
-For TypeScript:
+Do not assume "next lint" is valid on every Next.js version.
 
-Run the appropriate type-checking process if available.
+If the project contains a known invalid lint command:
 
----
+Do not modify package.json merely to make lint pass.
 
-# 41. TEST FAILURE RULE
+Determine the correct ESLint command from the actual project
+configuration.
 
-If testing fails:
+Production build when appropriate:
 
-1. STOP.
-2. Capture the error.
-3. Determine whether it existed before the update.
-4. Determine whether the update caused it.
-5. Fix the issue.
-6. Re-run the test.
+npx next build
 
-Never ignore errors.
+Tests when available:
 
----
+Use the project's actual test command.
 
-# 42. PHASE 15 — FUNCTIONAL VERIFICATION
+==================================================
+VALIDATION SCOPE
+==================================================
 
-Verify:
+Do not unnecessarily run every possible expensive check for
+every trivial change.
 
-* New feature
-* Existing related feature
-* Authentication
-* Authorization
-* API
-* Database
-* Payment
-* Dashboard
-* Navigation
-* Responsive behavior
+For small localized changes:
 
-Only claim success when actually verified.
+Run the relevant lightweight validation.
 
----
+For significant changes:
 
-# 43. PHASE 16 — FINAL DIFF REVIEW
+Run appropriate type-check, lint, build, and tests.
 
-Before final commit:
+For database/auth/payment/security changes:
 
-```powershell
+Use stronger validation.
+
+Always explain skipped validation.
+
+If something was not run:
+
+NOT VERIFIED
+
+Never falsely claim success.
+
+==================================================
+TEST FAILURE RULE
+==================================================
+
+If validation fails:
+
+1. Capture the exact error.
+2. Determine whether it existed before the task.
+3. Determine whether the task caused it.
+4. Do not automatically fix unrelated issues.
+5. Fix task-related issues when appropriate.
+6. Re-run validation.
+
+Do not hide errors.
+
+==================================================
+PHASE 15 — FUNCTIONAL VERIFICATION
+==================================================
+
+Verify the actual requested functionality.
+
+When relevant verify:
+
+- New feature
+- Related feature
+- Authentication
+- Authorization
+- API
+- Database
+- Payments
+- Dashboard
+- Navigation
+- Mobile
+- Tablet
+- Desktop
+- Error handling
+- Security
+
+Only claim functionality is verified when actually checked.
+
+==================================================
+PHASE 16 — FINAL DIFF REVIEW
+==================================================
+
+Before committing:
+
+Run:
+
 git status
-```
 
-Then:
-
-```powershell
 git diff --stat
-```
 
-Then:
-
-```powershell
 git diff
-```
 
 Confirm:
 
-* Only intended files changed
-* No secrets added
-* No unrelated files changed
-* No accidental deletions
-* No debugging code
-* No temporary files
-* No accidental environment files
+- Only task-related files changed
+- No secrets added
+- No .env files added
+- No unrelated files changed
+- No accidental deletions
+- No temporary files
+- No debugging code
+- No unrelated refactoring
+- No accidental configuration changes
 
----
+==================================================
+ENVIRONMENT FILE PROTECTION
+==================================================
 
-# 44. ENVIRONMENT FILE PROTECTION
+NEVER expose:
 
-Never expose or commit:
+.env
 
-* `.env`
-* `.env.local`
-* API keys
-* Database passwords
-* PayMongo secrets
-* Authentication secrets
-* Private tokens
+.env.local
+
+API keys
+
+Database passwords
+
+PayMongo secrets
+
+Authentication secrets
+
+Private tokens
 
 If an environment file unexpectedly appears in Git changes:
 
 STOP.
 
-Inspect `.gitignore`.
+Inspect .gitignore.
 
-Do not expose secret values.
+Never expose secret values.
 
----
+==================================================
+PHASE 17 — FINAL GIT COMMIT
+==================================================
 
-# 45. PHASE 17 — FINAL GIT COMMIT
+Commit only changes belonging to the current task.
 
-Only after:
+Use a conventional commit message.
 
-* Diff verification
-* Testing
-* Build verification
-* Functional verification
+Examples:
 
-commit the changes.
+feat: add study together profile
 
-Example:
+feat: add study room reactions
 
-```powershell
-git add .
-git commit -m "feat: describe completed update"
-```
+fix: resolve exam scoring issue
 
-Use an accurate commit message.
+fix: correct profile loading
 
-Never commit failed or unverified work unless explicitly instructed.
+refactor: improve question loading
 
----
+db: add study profile fields
 
-# 46. PHASE 18 — ROLLBACK SYSTEM
+security: improve authorization
 
-Every update must have a rollback point.
+docs: update development rules
 
-Record:
+Do NOT automatically create a backup commit immediately before
+every final task commit.
 
-```powershell
-git rev-parse HEAD
-```
+Normal workflow should preferably be:
 
-before the update.
+TASK
+→ IMPLEMENT
+→ VERIFY
+→ FINAL TASK COMMIT
 
-Store:
+==================================================
+COMMIT REQUIREMENTS
+==================================================
 
-**PRE_UPDATE_COMMIT**
+Before committing:
 
-After the update, record:
+- Diff reviewed
+- Task-related files confirmed
+- Validation completed as appropriate
+- No secrets exposed
+- No unrelated changes
+- User approval exists
+- Commit message is accurate
 
-**POST_UPDATE_COMMIT**
+Never commit unrelated work.
 
-This creates:
+Never amend existing commits automatically.
 
-**BEFORE**
+Never rewrite history.
 
-↓
+==================================================
+PHASE 18 — ROLLBACK INFORMATION
+==================================================
 
-**UPDATE**
+At the beginning record:
 
-↓
+PRE_UPDATE_COMMIT
 
-**AFTER**
+After successful commit record:
 
----
+POST_UPDATE_COMMIT
 
-# 47. ROLLBACK RULE
+If a separate safety checkpoint was created:
 
-If the update causes problems:
+SAFETY_CHECKPOINT_COMMIT
+
+Report all verified hashes.
+
+Never claim a rollback point exists unless verified.
+
+==================================================
+ROLLBACK RULE
+==================================================
+
+If the update causes a problem:
 
 STOP.
 
-Do not immediately reset the entire project.
-
 First inspect:
 
-```powershell
 git status
-```
 
-and:
-
-```powershell
 git diff
-```
 
-Determine whether pre-existing user work exists.
+Protect pre-existing user changes.
 
----
+Do not immediately reset the repository.
 
-# 48. SAFE ROLLBACK
+Determine which changes belong to the current task.
 
-If there were pre-existing changes:
+==================================================
+SAFE ROLLBACK
+==================================================
 
-Protect them.
+NEVER automatically run:
 
-Restore only changes belonging to the current update whenever possible.
-
-If there were NO pre-existing changes and I explicitly authorize full rollback:
-
-```powershell
 git reset --hard PRE_UPDATE_COMMIT
-```
 
-Then verify:
+A destructive rollback requires explicit authorization.
 
-```powershell
-git status
-```
+Before any rollback:
 
-Never perform this destructive command automatically.
+- Inspect status
+- Identify pre-existing changes
+- Protect user work
+- Confirm rollback target
+- Explain consequences
+- Obtain authorization when destructive action is required
 
----
+==================================================
+NO FALSE CLAIMS
+==================================================
 
-# 49. ROLLBACK REPORT
+Never claim:
 
-If rollback occurs, report:
+"Build passed"
 
-### REASON
+"Tests passed"
 
-Why rollback was necessary.
+"Feature works"
 
-### PRE-UPDATE COMMIT
+"Database backup completed"
 
-Git hash.
+"GitHub backup completed"
 
-### FAILED UPDATE
+"Rollback completed"
 
-What changed.
-
-### ROLLBACK METHOD
-
-What was restored.
-
-### CURRENT STATUS
-
-Whether the project is clean and functional.
-
----
-
-# 50. NO FALSE CLAIMS
-
-Never say:
-
-* "Build passed"
-* "Tests passed"
-* "Feature works"
-* "Rollback completed"
-* "GitHub backup completed"
-* "Database backup completed"
-
-unless it was actually verified.
+unless actually verified.
 
 Use:
 
-> **NOT VERIFIED**
+NOT VERIFIED
 
-when necessary.
+when appropriate.
 
----
+==================================================
+NO UNNECESSARY REFACTORING
+==================================================
 
-# 51. PERMANENT PROJECT MEMORY
+When the user requests:
 
-Treat important project architecture as persistent context during every future development session.
-
-Before starting a new task, inspect the current project rather than relying only on remembered architecture.
-
-The project files remain the final authority.
-
----
-
-# 52. DEVELOPMENT HISTORY
-
-Maintain clear Git history.
-
-Prefer commits such as:
-
-```text
-feat: add study room
-fix: correct exam scoring
-refactor: improve question loading
-chore: update dependency
-security: improve authorization
-db: add exam history relation
-backup: before development update
-```
-
-Commit messages must describe the actual change.
-
----
-
-# 53. NO UNNECESSARY REFACTORING
-
-If I request:
-
-> "Add feature X"
+"Add feature X"
 
 Do NOT automatically:
 
-* Redesign unrelated pages
-* Refactor unrelated components
-* Upgrade packages
-* Change database architecture
-* Rename unrelated files
-* Change styling system
-* Rewrite working functionality
+- Redesign unrelated pages
+- Refactor unrelated components
+- Upgrade dependencies
+- Change database architecture
+- Rename unrelated files
+- Change styling systems
+- Rewrite working features
 
-Keep the scope controlled.
+Keep scope controlled.
 
----
+==================================================
+FEATURE SCOPE CONTROL
+==================================================
 
-# 54. FEATURE SCOPE CONTROL
+Determine:
 
-Before implementation ask:
-
-> "What is the minimum safe change required to accomplish this request?"
+"What is the minimum safe change required?"
 
 Implement that first.
 
-Additional improvements must be clearly identified as optional and must not be silently included.
+Optional improvements must be clearly identified.
 
----
+Do not silently include optional improvements.
 
-# 55. SECURITY-FIRST RULE
+==================================================
+SECURITY-FIRST RULE
+==================================================
 
 Never sacrifice security for convenience.
 
 Never disable:
 
-* Authentication
-* Authorization
-* Input validation
-* CSRF protection where applicable
-* Rate limiting where applicable
-* Payment verification
-* Admin protection
-* Database security
-* Secret protection
+- Authentication
+- Authorization
+- Input validation
+- CSRF protection where applicable
+- Rate limiting where applicable
+- Payment verification
+- Admin protection
+- Database security
+- Secret protection
 
-just to make development easier.
+==================================================
+PERFORMANCE SAFETY
+==================================================
 
----
+For performance-sensitive changes inspect:
 
-# 56. PERFORMANCE SAFETY
+- Database queries
+- API requests
+- Rendering
+- Large datasets
+- Question banks
+- Mock exams
+- Analytics
+- Admin dashboards
+- Study Together activity
 
-When changing performance-sensitive areas:
+Avoid unnecessary database queries and duplicate API requests.
 
-Check whether the change affects:
+==================================================
+RESPONSIVE DESIGN SAFETY
+==================================================
 
-* Database queries
-* API requests
-* Rendering
-* Large datasets
-* Question banks
-* Mock exams
-* User analytics
-* Admin dashboards
+For UI changes verify appropriate behavior across:
 
-Avoid unnecessary database calls and duplicated API requests.
-
----
-
-# 57. RESPONSIVE DESIGN SAFETY
-
-When modifying UI:
-
-Verify that existing behavior is preserved for:
-
-* Desktop
-* Tablet
-* Mobile
+- Desktop
+- Tablet
+- Mobile
 
 Do not fix one screen size by unnecessarily breaking another.
 
----
+==================================================
+STUDY TOGETHER SAFETY
+==================================================
 
-# 58. FINAL DEVELOPMENT REPORT
+Study Together features may include:
 
-After every completed update, provide:
+- User profiles
+- Display names
+- Avatars
+- Bios
+- Study groups
+- Friend requests
+- Private messaging
+- Group chat
+- Voice rooms
+- Screen sharing
+- Live whiteboard
+- AI study assistant
+- Synchronized quizzes
+- Study room invitations
+- Study room permissions
+- Participant limits
+- Host controls
+
+When modifying Study Together functionality:
+
+Inspect the existing implementation first.
+
+Preserve:
+
+- Existing authentication
+- Existing room membership
+- Existing permissions
+- Existing participant handling
+- Existing messaging
+- Existing real-time behavior
+- Existing database relationships
+- Existing UI behavior
+
+Never assume Study Together architecture.
+
+==================================================
+USER PROFILE SAFETY
+==================================================
+
+For profile-related features inspect:
+
+- Existing user model
+- Authentication identity
+- Existing account information
+- Profile data
+- Privacy controls
+- Authorization
+- Database relationships
+- Profile APIs
+- Existing profile UI
+
+Avoid collecting unnecessary personal information.
+
+Only collect profile information that has a clear product purpose.
+
+Sensitive or unnecessary information must not be collected
+without a legitimate reason and explicit product requirement.
+
+==================================================
+PHASE 19 — FINAL DEVELOPMENT REPORT
+==================================================
+
+After a completed task provide:
 
 ## ENVIRONMENT
 
-Current development environment.
+Current environment.
 
 ## GIT STATUS
 
-Current branch and status.
+Current branch and working-tree status.
 
 ## PRE-UPDATE COMMIT
 
-Git hash.
+Verified Git hash.
+
+## SAFETY CHECKPOINT
+
+State whether one was created.
 
 ## FILES MODIFIED
 
-List.
+List exact paths.
 
 ## FILES CREATED
 
-List.
+List exact paths.
+
+## FILES DELETED
+
+List exact paths, if any.
+
+## FILES RENAMED
+
+List exact paths, if any.
 
 ## DATABASE CHANGES
 
-List.
+Describe exact database changes.
 
 ## DEPENDENCIES
 
-List.
+List added/changed dependencies.
 
 ## FEATURES ADDED
 
@@ -1431,15 +1591,15 @@ List.
 
 ## DIFF REVIEW
 
-Explain important additions/modifications/deletions.
+Summarize important additions, modifications, and deletions.
 
-## TESTS
+## VALIDATION
 
-List commands actually run.
+List commands actually executed and their results.
 
 ## BUILD
 
-Actual result.
+Actual result or NOT VERIFIED.
 
 ## FUNCTIONAL VERIFICATION
 
@@ -1447,250 +1607,382 @@ Actual result.
 
 ## POST-UPDATE COMMIT
 
-Git hash.
+Verified hash if committed.
 
 ## ROLLBACK POINT
 
-Pre-update Git hash.
+Verified Git hash.
 
 ## REMAINING ISSUES
 
-List anything unresolved.
+List unresolved issues.
 
----
+==================================================
+REQUIRED RESPONSE STRUCTURE
+==================================================
 
-# 59. REQUIRED UPDATE RESPONSE STRUCTURE
-
-Every future development task should begin with:
+Every new development request begins with:
 
 ## 1. ENVIRONMENT
 
-What terminal/environment is currently being used.
-
 ## 2. GIT SAFETY
 
-Current branch, status, and backup point.
-
-## 3. PROJECT INSPECTION
-
-Relevant project structure.
+## 3. READ-ONLY PROJECT INSPECTION
 
 ## 4. CURRENT IMPLEMENTATION
 
-What the existing code currently does.
+## 5. DEPENDENCY / REFERENCE ANALYSIS
 
-## 5. IMPACT ANALYSIS
+## 6. IMPACT ANALYSIS
 
-What could be affected.
+## 7. DATABASE SAFETY
 
-## 6. DATABASE SAFETY
+## 8. IMPLEMENTATION PLAN
 
-Whether database changes are involved.
+Then:
 
-## 7. IMPLEMENTATION PLAN
+STOP AND WAIT FOR USER APPROVAL.
 
-Exact files and changes.
+After approval:
 
-Then implementation begins.
+## 9. IMPLEMENTATION
 
-After implementation:
+## 10. POST-CHANGE INSPECTION
 
-## 8. POST-CHANGE INSPECTION
+## 11. BEFORE vs AFTER DIFF
 
-## 9. BEFORE vs AFTER DIFF
+## 12. VALIDATION
 
-## 10. TESTING
+## 13. BUILD
 
-## 11. BUILD
+## 14. FUNCTIONAL VERIFICATION
 
-## 12. FUNCTIONAL VERIFICATION
+## 15. FINAL GIT REVIEW
 
-## 13. FINAL GIT STATUS
+## 16. COMMIT
 
-## 14. COMMIT
+## 17. ROLLBACK POINT
 
-## 15. ROLLBACK POINT
+## 18. FINAL REPORT
 
-## 16. FINAL REPORT
-
----
-
-# 60. ABSOLUTE STOP CONDITIONS
+==================================================
+ABSOLUTE STOP CONDITIONS
+==================================================
 
 STOP immediately if:
 
-* Current file cannot be inspected
-* User changes may be overwritten
-* Database data could be destroyed
-* Security could be weakened
-* Payment verification could be broken
-* Unexpected large deletion appears
-* File appears truncated
-* Build failure cannot be explained
-* Test failure cannot be explained
-* Required dependency is unclear
-* Rollback could destroy unrelated work
-* Secrets may be exposed
-* Destructive command is required without authorization
+- Current file cannot be inspected
+- User work may be overwritten
+- Database data may be destroyed
+- Security may be weakened
+- Payment verification may be broken
+- Unexpected large deletion appears
+- File appears truncated
+- Required dependency is unclear
+- Required architecture is unclear
+- Secrets may be exposed
+- Destructive command is required without authorization
+- Unexpected unrelated modifications appear
+- Validation failure cannot be explained
+- Rollback may destroy unrelated work
 
-Explain the problem before continuing.
+Explain the issue before continuing.
 
----
+==================================================
+NO AUTOMATIC PUSH
+==================================================
 
-# 61. FINAL GOLDEN RULE
+NEVER run:
 
-The following rule applies to EVERY development session for the entire lifetime of this website:
+git push
 
-> **NEVER MODIFY WHAT YOU HAVE NOT INSPECTED.**
->
-> **NEVER DELETE WHAT YOU HAVE NOT VERIFIED.**
->
-> **NEVER OVERWRITE USER WORK.**
->
-> **NEVER MODIFY DATABASE DATA DESTRUCTIVELY WITHOUT AUTHORIZATION.**
->
-> **NEVER COMMIT UNVERIFIED CHANGES.**
->
-> **ALWAYS CREATE A RECOVERY POINT.**
->
-> **ALWAYS INSPECT THE BEFORE STATE.**
->
-> **ALWAYS INSPECT THE AFTER STATE.**
->
-> **ALWAYS REVIEW THE DIFF.**
->
-> **ALWAYS VERIFY THE BUILD/TESTS WHEN AVAILABLE.**
->
-> **ALWAYS PROVIDE A ROLLBACK POINT.**
+unless the user explicitly instructs:
 
----
+"push"
 
-# 62. PERMANENT DEVELOPMENT PIPELINE
+or equivalent explicit authorization.
 
-Every future update follows:
+==================================================
+NO HISTORY REWRITING
+==================================================
 
-**ENVIRONMENT CHECK**
+Never automatically:
 
-↓
+- Amend commits
+- Rebase
+- Squash
+- Force push
+- Rewrite history
+- Reset to another commit
 
-**GIT STATUS**
+unless explicitly authorized.
 
-↓
+==================================================
+PERMANENT FILE-PRESERVATION RULE
+==================================================
 
-**BACKUP / RECOVERY POINT**
+The most important rule:
 
-↓
+NEVER MODIFY WHAT YOU HAVE NOT INSPECTED.
 
-**PROJECT INSPECTION**
+NEVER DELETE WHAT YOU HAVE NOT VERIFIED.
 
-↓
+NEVER OVERWRITE USER WORK.
 
-**CURRENT FILE INSPECTION**
+NEVER REPLACE AN EXISTING FILE BLINDLY.
 
-↓
+NEVER MODIFY DATABASE DATA DESTRUCTIVELY WITHOUT AUTHORIZATION.
 
-**REFERENCE / DEPENDENCY CHECK**
+NEVER COMMIT UNVERIFIED CHANGES.
 
-↓
+ALWAYS INSPECT THE BEFORE STATE.
 
-**BEFORE SNAPSHOT**
+ALWAYS INSPECT THE AFTER STATE.
 
-↓
+ALWAYS REVIEW THE DIFF.
 
-**IMPACT ANALYSIS**
+ALWAYS PROTECT PRE-EXISTING USER CHANGES.
 
-↓
+ALWAYS PROVIDE A VERIFIED ROLLBACK POINT.
 
-**DATABASE SAFETY CHECK**
+==================================================
+PERMANENT DEVELOPMENT PIPELINE
+==================================================
+
+Every development request follows:
+
+USER FEATURE REQUEST
 
 ↓
 
-**IMPLEMENTATION PLAN**
+ENVIRONMENT CHECK
 
 ↓
 
-**CREATE NEW FILES**
+GIT STATUS
 
 ↓
 
-**MODIFY EXISTING FILES**
+CURRENT HEAD
 
 ↓
 
-**RE-INSPECT FILES**
+READ-ONLY PROJECT INSPECTION
 
 ↓
 
-**BEFORE vs AFTER DIFF**
+CURRENT FILE INSPECTION
 
 ↓
 
-**LINT**
+REFERENCE / DEPENDENCY CHECK
 
 ↓
 
-**TYPE CHECK**
+BEFORE SNAPSHOT
 
 ↓
 
-**BUILD**
+IMPACT ANALYSIS
 
 ↓
 
-**TEST**
+DATABASE SAFETY
 
 ↓
 
-**FUNCTIONAL VERIFICATION**
+IMPLEMENTATION PLAN
 
 ↓
 
-**FINAL DIFF**
+STOP FOR USER APPROVAL
 
 ↓
 
-**GIT COMMIT**
+SAFETY CHECKPOINT WHEN APPROPRIATE
 
 ↓
 
-**ROLLBACK POINT**
+IMPLEMENTATION
 
 ↓
 
-**FINAL REPORT**
+NEW FILE CREATION
 
----
+↓
 
-# 63. CURRENT PROJECT TERMINAL RULE
+EXISTING FILE MODIFICATION
 
-For now, I am using:
+↓
 
-> **VS Code → Windows PowerShell**
+POST-CHANGE INSPECTION
 
-Therefore, all terminal commands you provide must be ready to paste into the **VS Code Windows PowerShell terminal**.
+↓
 
-In the future, I may tell you:
+GIT DIFF
 
-> **"I switched to GitHub Codespaces."**
+↓
 
-When that happens, automatically switch terminal commands to the appropriate Codespaces environment while preserving ALL of the safety, inspection, Git, database, diff, testing, and rollback rules in this master prompt.
+GIT DIFF --STAT
 
----
+↓
 
-# FINAL INSTRUCTION
+TYPE CHECK
 
-These are not temporary instructions.
+↓
 
-These are the:
+ESLINT
 
-# PERMANENT DEVELOPMENT RULES FOR THIS ENTIRE WEBSITE PROJECT.
+↓
 
-Apply them to every future development request unless I explicitly override a specific rule.
+BUILD WHEN APPROPRIATE
+
+↓
+
+TEST WHEN AVAILABLE
+
+↓
+
+FUNCTIONAL VERIFICATION
+
+↓
+
+FINAL DIFF REVIEW
+
+↓
+
+FINAL GIT STATUS
+
+↓
+
+TASK COMMIT WHEN APPROPRIATE
+
+↓
+
+ROLLBACK INFORMATION
+
+↓
+
+FINAL DEVELOPMENT REPORT
+
+==================================================
+IMPORTANT AUTOMATION RULE
+==================================================
+
+The user should be able to submit ONLY the feature description.
+
+Example:
+
+"Add a leaderboard to the Study Together Hub."
+
+Automatically interpret this as:
+
+INSPECT
+→ IMPACT ANALYSIS
+→ PLAN
+→ WAIT FOR APPROVAL
+→ IMPLEMENT
+→ VERIFY
+→ TEST
+→ BUILD WHEN APPROPRIATE
+→ FINAL REVIEW
+→ COMMIT WHEN APPROPRIATE
+
+The user must NOT repeat the workflow.
+
+The user must NOT say:
+
+"Use my permanent workflow."
+
+The user must NOT say:
+
+"Start Phase 1."
+
+The user must NOT repeat safety rules.
+
+==================================================
+FINAL GOLDEN RULE
+==================================================
+
+PROTECT THE EXISTING WEBSITE.
+
+UNDERSTAND BEFORE MODIFYING.
+
+INSPECT BEFORE OVERWRITING.
+
+PRESERVE USER WORK.
+
+MAKE THE SMALLEST SAFE CHANGE.
+
+USE GIT STRATEGICALLY, NOT MECHANICALLY.
+
+DO NOT CREATE UNNECESSARY BACKUP COMMITS.
+
+DO NOT AUTOMATICALLY PUSH.
+
+DO NOT REWRITE HISTORY.
+
+DO NOT PERFORM DESTRUCTIVE DATABASE OPERATIONS WITHOUT
+AUTHORIZATION.
+
+DO NOT CLAIM VERIFICATION WITHOUT ACTUALLY VERIFYING.
+
+ALWAYS REVIEW THE DIFF.
+
+ALWAYS PROTECT THE BEFORE STATE.
+
+ALWAYS INSPECT THE AFTER STATE.
+
+ALWAYS PROVIDE VERIFIED ROLLBACK INFORMATION.
+
+==================================================
+CURRENT PROJECT
+==================================================
+
+Project:
+
+cse-frontend
+
+Current environment:
+
+VS Code + Windows PowerShell
+
+Known baseline:
+
+71e9f08 fix: route registration links to signup
+
+Future environment may be:
+
+GitHub Codespaces + VS Code
+
+When the environment changes, adapt terminal commands while
+maintaining every safety rule in this document.
+
+==================================================
+FINAL INSTRUCTION
+==================================================
+
+These are PERMANENT DEVELOPMENT RULES for the entire lifetime
+of this website project.
+
+Apply them automatically to every future development request.
 
 The highest priority is:
 
-> **PROTECT THE EXISTING WEBSITE WHILE SAFELY BUILDING NEW FUNCTIONALITY.**
+PROTECT THE EXISTING WEBSITE WHILE SAFELY BUILDING NEW
+FUNCTIONALITY.
 
-The required development philosophy is permanently:
+The required philosophy is:
 
-**INSPECT → BACK UP → UNDERSTAND → PLAN → MODIFY MINIMALLY → RE-INSPECT → DIFF → TEST → VERIFY → COMMIT → DOCUMENT → MAINTAIN ROLLBACK**
+INSPECT
+→ UNDERSTAND
+→ PLAN
+→ APPROVE
+→ MODIFY MINIMALLY
+→ RE-INSPECT
+→ DIFF
+→ VALIDATE
+→ VERIFY
+→ COMMIT WHEN APPROPRIATE
+→ DOCUMENT
+→ MAINTAIN ROLLBACK INFORMATION
