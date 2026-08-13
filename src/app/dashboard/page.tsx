@@ -249,6 +249,14 @@ function DashboardContent() {
             <NotificationBell />
 
             <Link
+              href="/mistakes"
+              className="px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold text-xs rounded-2xl transition flex items-center gap-1.5 backdrop-blur-sm whitespace-nowrap"
+            >
+              <span>📕</span>
+              <span>Mistake Notebook</span>
+            </Link>
+
+            <Link
               href="/readiness-card"
               className="px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs rounded-2xl transition flex items-center gap-1.5 backdrop-blur-sm whitespace-nowrap"
             >

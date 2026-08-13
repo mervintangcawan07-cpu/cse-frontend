@@ -35,7 +35,7 @@ export default function PracticeAndPrepPage() {
       </div>
 
       {/* Futuristic Launcher Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* CARD 1: PRACTICE MOCK EXAM */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/40 transition-all duration-300">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
@@ -79,7 +79,34 @@ export default function PracticeAndPrepPage() {
           </div>
         </div>
 
-        {/* CARD 2: SPECIALIZED STRATEGY & TECHNIQUE DRILLS */}
+        {/* CARD 2: SMART MISTAKE NOTEBOOK (BALIK-ARAL) */}
+        <div className="bg-slate-900 text-white p-6 rounded-3xl border border-rose-500/30 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-rose-500/50 transition-all duration-300">
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-rose-500/20 text-rose-400 rounded-md border border-rose-500/30 font-mono tracking-wider">
+                BALIK-ARAL
+              </span>
+              <span className="text-xs font-bold text-rose-400">Error Tracker 📕</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-3">
+              Mistake Notebook
+            </h2>
+            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              <strong className="text-rose-400 font-bold">Never repeat the same error!</strong> Automatically captures every missed question from mock exams. Drill mistakes until you achieve 100% mastery.
+            </p>
+          </div>
+          <div className="pt-2 relative z-10">
+            <Link
+              href="/mistakes"
+              className="inline-block w-full py-3 bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-rose-600/30"
+            >
+              Open Mistake Notebook ⚡
+            </Link>
+          </div>
+        </div>
+
+        {/* CARD 3: SPECIALIZED STRATEGY & TECHNIQUE DRILLS */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-emerald-500/30 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-300">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
           <div className="relative z-10">
@@ -90,10 +117,10 @@ export default function PracticeAndPrepPage() {
               <span className="text-xs font-bold text-emerald-400">Technique Center</span>
             </div>
             <h2 className="text-xl font-extrabold text-white mt-3">
-              Specialized Strategy & Technique Drills
+              Strategy & Technique Drills
             </h2>
             <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-emerald-400 font-bold">Master exam strategy!</strong> Train option elimination tactics and keyword passage scanning to boost your educated guessing accuracy and scan speed.
+              <strong className="text-emerald-400 font-bold">Master exam strategy!</strong> Train option elimination tactics and keyword passage scanning to boost your educated guessing accuracy.
             </p>
           </div>
           <div className="pt-2 relative z-10">
@@ -115,7 +142,7 @@ export default function PracticeAndPrepPage() {
           </div>
         </div>
 
-        {/* CARD 3: 1v1 STUDY DUELS */}
+        {/* CARD 4: 1v1 STUDY DUELS */}
         <div className="bg-slate-900 border border-amber-500/30 p-6 rounded-3xl shadow-xl space-y-4 text-white flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/50 transition-all duration-300">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
           <div className="relative z-10">
@@ -127,13 +154,13 @@ export default function PracticeAndPrepPage() {
             </div>
             <h2 className="text-xl font-extrabold text-white mt-3">1v1 Study Duels</h2>
             <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
-              <strong className="text-white font-bold">Compete head-to-head in real time!</strong> Test your recall against fellow examinees in 5-round speed quizzes. Win duels, earn XP, and rule the leaderboard.
+              <strong className="text-white font-bold">Compete head-to-head in real time!</strong> Test your recall against fellow examinees in 5-round speed quizzes. Win duels and climb the ranks.
             </p>
           </div>
           <div className="pt-2 relative z-10">
             {isPaid ? (
               <Link
-                href="/1v1"
+                href="/duels"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-lg shadow-amber-500/20"
               >
                 Enter Battle Arena ⚔️

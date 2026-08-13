@@ -1,4 +1,4 @@
-﻿// Relative Path: src/components/Sidebar.tsx
+// Relative Path: src/components/Sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -68,6 +68,17 @@ export default function Sidebar() {
             Quick Actions
           </p>
           <div className="space-y-1">
+            <Link
+              href="/mistakes"
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold transition ${
+                pathname === "/mistakes"
+                  ? "bg-rose-600/20 text-rose-400 border border-rose-500/30 font-black shadow-md shadow-rose-500/10"
+                  : "text-slate-400 hover:text-rose-400 hover:bg-slate-900/80"
+              }`}
+            >
+              <span>📕</span>
+              <span>Mistake Notebook</span>
+            </Link>
             <Link
               href="/mock-exam/take"
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-amber-400 hover:bg-slate-900/80 transition"

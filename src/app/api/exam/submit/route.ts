@@ -130,6 +130,44 @@ export async function POST(request: Request) {
       },
     });
 
+    // 4. Ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral)
+    const incorrectItems = detailsSnapshot.filter(
+      (item) => item.selectedIndex !== null && item.selectedIndex !== item.answerIndex
+    );
+
+    if (incorrectItems.length > 0) {
+      await Promise.all(
+        incorrectItems.map(async (item) => {
+          try {
+            await prisma.userMistake.upsert({
+              where: {
+                userId_questionId: {
+                  userId,
+                  questionId: item.id,
+                },
+              },
+              create: {
+                userId,
+                questionId: item.id,
+                userAnswer: item.selectedIndex,
+                incorrectCount: 1,
+                isMastered: false,
+                lastAttemptAt: new Date(),
+              },
+              update: {
+                userAnswer: item.selectedIndex,
+                incorrectCount: { increment: 1 },
+                isMastered: false,
+                lastAttemptAt: new Date(),
+              },
+            });
+          } catch (e) {
+            console.error("Failed to record mistake for question", item.id, e);
+          }
+        })
+      );
+    }
+
     // Record active study streak
     const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);
 
