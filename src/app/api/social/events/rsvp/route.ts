@@ -1,8 +1,9 @@
-﻿// Relative Path: src/app/api/social/events/rsvp/route.ts
+// Relative Path: src/app/api/social/events/rsvp/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -46,6 +47,16 @@ export async function POST(request: Request) {
           userId,
           status,
         },
+      });
+    }
+
+    // 🔔 Dispatch event reminder alert if attending
+    if (status === "ATTENDING") {
+      await createNotification({
+        userId,
+        type: "EVENT_RSVP",
+        title: "Event RSVP Confirmed 📅",
+        message: `You're confirmed for "${event.title}" on ${new Date(event.scheduledAt).toLocaleDateString([], { month: "short", day: "numeric" })} at ${new Date(event.scheduledAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}.`,
       });
     }
 

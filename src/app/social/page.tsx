@@ -426,7 +426,9 @@ export default function SocialDashboardPage() {
       {activeTab === "ROOMS" && <StudyRoomsSection />}
       {activeTab === "EVENTS" && <StudyEventsSection />}
       {activeTab === "CLUBS" && <StudyClubsSection />}
-      {activeTab === "NOTIFICATIONS" && <NotificationsSection />}
+      {activeTab === "NOTIFICATIONS" && (
+        <NotificationsSection onNavigateTab={(tab) => setActiveTab(tab)} />
+      )}
 
       {/* EDIT STUDY PROFILE MODAL */}
       <EditStudyProfileModal

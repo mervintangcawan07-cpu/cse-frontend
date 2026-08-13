@@ -1,8 +1,9 @@
-﻿// Relative Path: src/app/api/social/classmates/respond/route.ts
+// Relative Path: src/app/api/social/classmates/respond/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -34,10 +35,30 @@ export async function POST(request: Request) {
       if (relation.receiverId !== userId) {
         return NextResponse.json({ error: "Only the recipient can accept a request" }, { status: 403 });
       }
+
       await prisma.classmateRelation.update({
         where: { id: String(relationId) },
         data: { status: "ACCEPTED" },
       });
+
+      // 🔔 Dispatch notification to original sender
+      const accepter = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          name: true,
+          studyProfile: { select: { displayName: true } },
+        },
+      });
+
+      const accepterDisplayName = accepter?.studyProfile?.displayName || accepter?.name || "A classmate";
+
+      await createNotification({
+        userId: relation.senderId,
+        type: "CLASSMATE_ACCEPTED",
+        title: "Classmate Request Accepted! 🎉",
+        message: `${accepterDisplayName} accepted your classmate request. You can now chat and study together!`,
+      });
+
       return NextResponse.json({ success: true, message: "Classmate request accepted!" });
     }
 

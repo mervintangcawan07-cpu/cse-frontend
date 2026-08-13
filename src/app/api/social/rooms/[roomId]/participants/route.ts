@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function PATCH(
   request: Request,
@@ -83,6 +84,16 @@ export async function PATCH(
       },
       data: updateData,
     });
+
+    // 🔔 Dispatch notification if promoted to Moderator
+    if (role === "MODERATOR") {
+      await createNotification({
+        userId: String(targetUserId),
+        type: "STUDY_ROOM_MODERATOR",
+        title: "Promoted to Room Moderator! 🛡️",
+        message: `You were promoted to Moderator in study room "${room.name}". You now have participant moderation and drawing control privileges.`,
+      });
+    }
 
     return NextResponse.json({ success: true, participant: updated });
   } catch (error: any) {

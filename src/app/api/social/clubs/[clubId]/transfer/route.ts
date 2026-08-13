@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(
   request: Request,
@@ -81,6 +82,14 @@ export async function POST(
           });
         }
       }
+    });
+
+    // 🔔 Dispatch notification to new owner
+    await createNotification({
+      userId: newOwnerId,
+      type: "STUDY_CLUB_TRANSFER",
+      title: "You are now the Club Owner! 👑",
+      message: `Ownership of "${club.name}" was transferred to you. You have full leadership and administrative controls over the club.`,
     });
 
     return NextResponse.json({

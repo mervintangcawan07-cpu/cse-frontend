@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 
 export async function GET(
   request: Request,
@@ -48,7 +49,14 @@ export async function GET(
     const messages = await prisma.directMessage.findMany({
       where: { conversationId },
       include: {
-        sender: { select: { id: true, name: true, email: true } },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            studyProfile: { select: { displayName: true, avatar: true } },
+          },
+        },
         replyTo: { select: { id: true, content: true, senderId: true } },
       },
       orderBy: { createdAt: "asc" },
@@ -59,7 +67,16 @@ export async function GET(
       include: {
         participants: {
           include: {
-            user: { select: { id: true, name: true, email: true, isPaid: true, lastActiveAt: true } },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                isPaid: true,
+                lastActiveAt: true,
+                studyProfile: { select: { displayName: true, avatar: true } },
+              },
+            },
           },
         },
       },
@@ -74,7 +91,7 @@ export async function GET(
         id: m.id,
         content: m.content,
         senderId: m.senderId,
-        senderName: m.sender.name,
+        senderName: m.sender.studyProfile?.displayName || m.sender.name,
         state: m.state,
         createdAt: m.createdAt,
         replyTo: m.replyTo
@@ -138,7 +155,13 @@ export async function POST(
         replyToId: replyToId ? String(replyToId) : null,
       },
       include: {
-        sender: { select: { id: true, name: true } },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            studyProfile: { select: { displayName: true } },
+          },
+        },
         replyTo: { select: { id: true, content: true, senderId: true } },
       },
     });
@@ -148,13 +171,34 @@ export async function POST(
       data: { updatedAt: new Date() },
     });
 
+    // 🔔 Dispatch direct message notification to the other participant
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: {
+        participants: true,
+      },
+    });
+
+    const otherParticipant = conversation?.participants.find((p) => p.userId !== userId);
+    if (otherParticipant) {
+      const senderName = message.sender.studyProfile?.displayName || message.sender.name || "A classmate";
+      const preview = content.trim().length > 65 ? `${content.trim().slice(0, 62)}...` : content.trim();
+
+      await createNotification({
+        userId: otherParticipant.userId,
+        type: "DIRECT_MESSAGE",
+        title: `New Message from ${senderName}`,
+        message: `"${preview}"`,
+      });
+    }
+
     return NextResponse.json({
       success: true,
       message: {
         id: message.id,
         content: message.content,
         senderId: message.senderId,
-        senderName: message.sender.name,
+        senderName: message.sender.studyProfile?.displayName || message.sender.name,
         state: message.state,
         createdAt: message.createdAt,
         replyTo: message.replyTo,
