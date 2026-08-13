@@ -1,8 +1,8 @@
 "use client";
 
 import { formatPromptHTML } from "@/lib/formatPrompt";
-import { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 interface Question {
@@ -17,8 +17,9 @@ interface Question {
 
 const LOCAL_STORAGE_KEY = "cse_active_exam_session";
 
-export default function TakeExamPage() {
+function TakeExamPageInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Data States
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
@@ -37,6 +38,9 @@ export default function TakeExamPage() {
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [timerMinutes, setTimerMinutes] = useState(0); // 0 means untimed
+  // Custom quiz metadata (from builder)
+  const [isCustomQuiz, setIsCustomQuiz] = useState(false);
+  const [customQuizLabel, setCustomQuizLabel] = useState("");
   const [timeLeft, setTimeLeft] = useState(0); // In seconds
 
   // Exam States
@@ -217,7 +221,63 @@ export default function TakeExamPage() {
     setIsSetupPhase(false);
   }
 
-  // 4. Start New Smart Exam Session (Spaced Repetition Engine)
+  // 4. Auto-start custom quiz if URL params are present
+  useEffect(() => {
+    const itemCount = searchParams.get("itemCount");
+    const categories = searchParams.get("categories");
+    const pool = searchParams.get("pool");
+    const mode = searchParams.get("mode");
+
+    if (itemCount && categories && pool && mode) {
+      setIsCustomQuiz(true);
+      const modeLabel = mode === "SELF_PACED" ? "Self-Paced" : "Timed";
+      setCustomQuizLabel(`${itemCount}-item ${modeLabel} Quiz`);
+      // Auto-launch
+      void handleStartCustomExam(itemCount, categories, pool, mode);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleStartCustomExam(
+    itemCount: string,
+    categories: string,
+    pool: string,
+    mode: string
+  ) {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    setSavedSessionData(null);
+    setStartingExam(true);
+
+    const isTimed = mode === "TIMED";
+    const count = parseInt(itemCount, 10) || 20;
+    const mins = isTimed ? Math.ceil((count * 45) / 60) : 0;
+    setTimerMinutes(mins);
+
+    try {
+      const params = new URLSearchParams({ itemCount, categories, pool, mode });
+      const res = await fetch(`/api/exam/start?${params.toString()}`);
+      const data = await res.json();
+
+      if (res.ok && data.questions && data.questions.length > 0) {
+        setExamQuestions(data.questions);
+        setCurrentIndex(0);
+        setSelectedAnswers({});
+        setTimeLeft(mins * 60);
+        setIsSetupPhase(false);
+      } else {
+        alert("Unable to generate custom quiz questions. Please try again.");
+        router.push("/practice/custom");
+      }
+    } catch (err) {
+      console.error("Error starting custom exam:", err);
+      alert("Connection error starting exam.");
+      router.push("/practice/custom");
+    } finally {
+      setStartingExam(false);
+    }
+  }
+
+  // 5. Start New Smart Exam Session (Spaced Repetition Engine)
   async function handleStartExam() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
@@ -628,5 +688,17 @@ export default function TakeExamPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function TakeExamPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        Preparing your exam...
+      </div>
+    }>
+      <TakeExamPageInner />
+    </Suspense>
   );
 }

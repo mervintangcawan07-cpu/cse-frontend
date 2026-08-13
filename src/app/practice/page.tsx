@@ -35,7 +35,7 @@ export default function PracticeAndPrepPage() {
       </div>
 
       {/* Futuristic Launcher Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* CARD 1: PRACTICE MOCK EXAM */}
         <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-xl space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/40 transition-all duration-300">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
@@ -173,6 +173,30 @@ export default function PracticeAndPrepPage() {
                 🔒 Unlock 1v1 Duels
               </Link>
             )}
+          </div>
+        </div>
+        {/* CARD 5: CUSTOM PRACTICE QUIZ BUILDER */}
+        <div className="bg-slate-900 border border-violet-500/30 p-6 rounded-3xl shadow-xl space-y-4 text-white flex flex-col justify-between relative overflow-hidden group hover:border-violet-500/50 transition-all duration-300 sm:col-span-2 lg:col-span-1">
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl group-hover:bg-violet-500/20 transition-all"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-violet-500/20 text-violet-400 rounded-md border border-violet-500/30">
+                Custom Builder
+              </span>
+              <span className="text-xs font-bold text-slate-400">🎛️ Configurable</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-white mt-3">Custom Practice Quiz</h2>
+            <p className="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              <strong className="text-violet-400 font-bold">Your quiz, your rules!</strong> Choose your topics, item count (10–170), question pool (All, Unattempted, or Mistakes), and mode (Timed or Self-Paced).
+            </p>
+          </div>
+          <div className="pt-2 relative z-10">
+            <Link
+              href="/practice/custom"
+              className="inline-block w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-violet-600/30"
+            >
+              Build Custom Quiz 🎛️
+            </Link>
           </div>
         </div>
       </div>

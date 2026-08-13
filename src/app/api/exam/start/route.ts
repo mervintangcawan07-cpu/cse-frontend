@@ -12,6 +12,8 @@ const CSE_CATEGORY_QUOTAS: Record<string, number> = {
   "General Information": 30,
 };
 
+const ALL_CATEGORIES = Object.keys(CSE_CATEGORY_QUOTAS);
+
 // Fisher-Yates Shuffle Utility
 function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -39,15 +41,27 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
+
+    // --- Original param ---
     const selectedCategory = searchParams.get("category") || "All";
 
-    // 1. Get IDs of all questions the user answered CORRECTLY in past exams
+    // --- Custom Quiz Builder params ---
+    const itemCountParam = searchParams.get("itemCount");
+    const categoriesParam = searchParams.get("categories"); // comma-separated or null
+    const pool = (searchParams.get("pool") || "ALL").toUpperCase(); // ALL | UNATTEMPTED | MISTAKES_ONLY
+    const mode = (searchParams.get("mode") || "TIMED").toUpperCase(); // TIMED | SELF_PACED
+    const isCustom = Boolean(itemCountParam || categoriesParam || pool !== "ALL" || mode !== "TIMED");
+
+    const targetItemCount = itemCountParam ? Math.min(Math.max(parseInt(itemCountParam, 10) || 20, 1), 170) : null;
+
+    // 1. Gather question IDs from user history for pool filtering
     const userResults = await prisma.examResult.findMany({
       where: { userId },
       select: { detailsJson: true },
     });
 
     const correctlyAnsweredIds = new Set<string>();
+    const attemptedIds = new Set<string>();
 
     userResults.forEach((result: { detailsJson: string | null }) => {
       if (result.detailsJson) {
@@ -56,13 +70,15 @@ export async function GET(request: Request) {
           if (Array.isArray(details)) {
             details.forEach(
               (item: { id?: string; selectedIndex?: number | null; answerIndex?: number }) => {
-                if (
-                  item.id &&
-                  item.selectedIndex !== null &&
-                  item.selectedIndex !== undefined &&
-                  item.selectedIndex === item.answerIndex
-                ) {
-                  correctlyAnsweredIds.add(String(item.id));
+                if (item.id) {
+                  attemptedIds.add(String(item.id));
+                  if (
+                    item.selectedIndex !== null &&
+                    item.selectedIndex !== undefined &&
+                    item.selectedIndex === item.answerIndex
+                  ) {
+                    correctlyAnsweredIds.add(String(item.id));
+                  }
                 }
               }
             );
@@ -73,15 +89,31 @@ export async function GET(request: Request) {
       }
     });
 
-    // Determine target category quotas
-    const activeQuotas: Record<string, number> =
-      selectedCategory === "All"
-        ? CSE_CATEGORY_QUOTAS
-        : { [selectedCategory]: 170 };
+    // For MISTAKES_ONLY pool: get user's mistake question IDs
+    let mistakeQuestionIds: Set<string> = new Set();
+    if (pool === "MISTAKES_ONLY") {
+      const mistakes = await prisma.userMistake.findMany({
+        where: { userId, isMastered: false },
+        select: { questionId: true },
+      });
+      mistakes.forEach((m) => mistakeQuestionIds.add(m.questionId));
+    }
 
-    const requiredCategories = Object.keys(activeQuotas);
+    // 2. Determine active categories
+    let requiredCategories: string[];
+    if (isCustom && categoriesParam) {
+      requiredCategories = categoriesParam
+        .split(",")
+        .map((c) => c.trim())
+        .filter((c) => ALL_CATEGORIES.includes(c));
+      if (requiredCategories.length === 0) requiredCategories = ALL_CATEGORIES;
+    } else if (selectedCategory === "All") {
+      requiredCategories = ALL_CATEGORIES;
+    } else {
+      requiredCategories = [selectedCategory];
+    }
 
-    // 2. Fetch ALL non-deleted questions matching active categories in 1 SINGLE DB QUERY
+    // 3. Fetch ALL matching non-deleted questions in one DB query
     const allQuestions = await prisma.question.findMany({
       where: {
         deletedAt: null,
@@ -90,6 +122,10 @@ export async function GET(request: Request) {
           { category: { equals: "Elimination Drill", mode: "insensitive" } },
           { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
         ],
+        // Pool filtering: MISTAKES_ONLY filter at DB level for efficiency
+        ...(pool === "MISTAKES_ONLY" && mistakeQuestionIds.size > 0
+          ? { id: { in: Array.from(mistakeQuestionIds) } }
+          : {}),
       },
       select: {
         id: true,
@@ -107,6 +143,97 @@ export async function GET(request: Request) {
       },
     });
 
+    // 4. Apply UNATTEMPTED pool filter in memory
+    const filteredQuestions = pool === "UNATTEMPTED"
+      ? allQuestions.filter((q) => !attemptedIds.has(q.id))
+      : allQuestions;
+
+    // --- Custom Quiz path: flat shuffle, proportional or equal distribution ---
+    if (isCustom && targetItemCount) {
+      // Proportional distribution across selected categories
+      const categoryMap: Record<string, typeof filteredQuestions> = {};
+      for (const q of filteredQuestions) {
+        const cat = q.category || "General Information";
+        const matchedKey = requiredCategories.find((c) => c.toLowerCase() === cat.toLowerCase()) || cat;
+        if (!categoryMap[matchedKey]) categoryMap[matchedKey] = [];
+        categoryMap[matchedKey].push(q);
+      }
+
+      // Distribute targetItemCount proportionally across categories
+      const totalPool = filteredQuestions.length;
+      let pickedQuestions: typeof filteredQuestions = [];
+
+      if (totalPool <= targetItemCount) {
+        // Pool smaller than requested — take everything available
+        pickedQuestions = shuffleArray(filteredQuestions);
+      } else {
+        const catKeys = Object.keys(categoryMap).filter((k) => categoryMap[k].length > 0);
+        const perCat = Math.floor(targetItemCount / catKeys.length);
+        let remainder = targetItemCount % catKeys.length;
+        const pickedIds = new Set<string>();
+
+        for (const cat of catKeys) {
+          const quota = perCat + (remainder > 0 ? 1 : 0);
+          if (remainder > 0) remainder--;
+          const shuffled = shuffleArray(categoryMap[cat]);
+          const picked = shuffled.slice(0, quota);
+          picked.forEach((q) => {
+            if (!pickedIds.has(q.id)) {
+              pickedQuestions.push(q);
+              pickedIds.add(q.id);
+            }
+          });
+        }
+
+        // Top-up if still short due to small category pools
+        if (pickedQuestions.length < targetItemCount) {
+          const remaining = shuffleArray(filteredQuestions.filter((q) => !pickedIds.has(q.id)));
+          const needed = targetItemCount - pickedQuestions.length;
+          pickedQuestions.push(...remaining.slice(0, needed));
+        }
+
+        pickedQuestions = shuffleArray(pickedQuestions);
+      }
+
+      const preparedQuestions = pickedQuestions.slice(0, targetItemCount).map((q: any) => {
+        const resolvedOptions: string[] =
+          Array.isArray(q.options) && q.options.length > 0
+            ? (q.options as string[])
+            : ([q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean) as string[]);
+
+        const indexedOptions = resolvedOptions.map((opt: string, idx: number) => ({
+          text: opt,
+          isCorrect: idx === q.answerIndex,
+        }));
+
+        const shuffledOptions = shuffleArray(indexedOptions);
+
+        return {
+          id: q.id,
+          category: q.category || "General",
+          subtopic: q.subtopic || "General",
+          prompt: q.prompt,
+          options: shuffledOptions.map((o) => o.text),
+          answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
+          explanation: q.explanation || null,
+          imageUrl: q.imageUrl || null,
+        };
+      });
+
+      return NextResponse.json({
+        success: true,
+        totalItems: preparedQuestions.length,
+        questions: preparedQuestions,
+        meta: { mode, pool, isCustom: true },
+      });
+    }
+
+    // --- Standard Full Exam path (unchanged behavior) ---
+    const activeQuotas: Record<string, number> =
+      selectedCategory === "All"
+        ? CSE_CATEGORY_QUOTAS
+        : { [selectedCategory]: 170 };
+
     // Group questions by category in memory
     const categoryMap: Record<string, typeof allQuestions> = {};
     for (const q of allQuestions) {
@@ -122,7 +249,7 @@ export async function GET(request: Request) {
 
     let finalExamQuestions: any[] = [];
 
-    // 3. Process subtopics and quotas in memory
+    // Process subtopics and quotas in memory
     for (const [catName, catQuota] of Object.entries(activeQuotas)) {
       const catQuestions = categoryMap[catName] || [];
       if (catQuestions.length === 0) continue;
