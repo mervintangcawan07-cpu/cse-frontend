@@ -7,6 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
 import ResumeExamBanner from "@/components/dashboard/ResumeExamBanner";
 import CSCCountdownWidget from "@/components/CSCCountdownWidget";
+import CSCDailyQuestionWidget from "@/components/cse/CSCDailyQuestionWidget";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -296,6 +297,9 @@ function DashboardContent() {
 
       {/* AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
       <CSCCountdownWidget />
+
+      {/* DAILY QUESTION OF THE DAY CHALLENGE WIDGET */}
+      <CSCDailyQuestionWidget />
 
       {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (

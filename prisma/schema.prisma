@@ -81,6 +81,7 @@ model User {
   examDraft                ExamDraft?
   transactions             Transaction[]
   mistakes                 UserMistake[]
+  dailyQuestionAttempts    DailyQuestionAttempt[]
 
   // Classmate Relations
   sentClassmateRequests     ClassmateRelation[] @relation("SentClassmateRequests")
@@ -404,7 +405,8 @@ model Question {
   explanation String?   @db.Text
   imageUrl    String?
 
-  userMistakes UserMistake[]
+  userMistakes          UserMistake[]
+  dailyQuestionAttempts DailyQuestionAttempt[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -415,6 +417,23 @@ model Question {
   @@index([subtopic])
   @@index([category, subtopic])
   @@index([deletedAt])
+}
+
+model DailyQuestionAttempt {
+  id         String   @id @default(cuid())
+  userId     String
+  dateString String
+  questionId String
+  userAnswer Int
+  isCorrect  Boolean
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dateString])
+  @@index([dateString])
+  @@index([questionId])
 }
 
 model UserMistake {
