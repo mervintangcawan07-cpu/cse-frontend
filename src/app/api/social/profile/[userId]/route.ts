@@ -37,6 +37,16 @@ export async function GET(
             studyPreferences: true,
             availability: true,
             language: true,
+            ageRange: true,
+            gender: true,
+            showAgeRange: true,
+            showGender: true,
+            showBio: true,
+            showStudyGoal: true,
+            showInterests: true,
+            showPreferences: true,
+            showAvailability: true,
+            showActivity: true,
             createdAt: true,
           },
         },
@@ -47,21 +57,26 @@ export async function GET(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // 🔒 PRIVACY ENFORCEMENT: Never expose email, password, payment details, exact age, or gender
+    const sp = targetUser.studyProfile;
+
+    // 🔒 PRIVACY-ENFORCED PUBLIC STUDY CARD:
+    // Respects user's privacy visibility preferences while hiding all sensitive account details
     const publicProfile = {
       id: targetUser.id,
-      displayName: targetUser.studyProfile?.displayName || targetUser.name || "Examinee",
-      avatar: targetUser.studyProfile?.avatar || null,
-      bio: targetUser.studyProfile?.bio || "Preparing for the Civil Service Exam.",
-      studyGoal: targetUser.studyProfile?.studyGoal || "Civil Service Exam",
-      studyInterests: targetUser.studyProfile?.studyInterests || [],
-      experienceLevel: targetUser.studyProfile?.experienceLevel || "Examinee",
-      studyPreferences: targetUser.studyProfile?.studyPreferences || [],
-      availability: targetUser.studyProfile?.availability || [],
-      language: targetUser.studyProfile?.language || "English",
+      displayName: sp?.displayName || targetUser.name || "Examinee",
+      avatar: sp?.avatar || null,
+      bio: sp?.showBio ? (sp?.bio || null) : null,
+      studyGoal: sp?.showStudyGoal ? (sp?.studyGoal || "Civil Service Exam Review") : null,
+      studyInterests: sp?.showInterests ? (sp?.studyInterests || []) : [],
+      experienceLevel: sp?.experienceLevel || "Examinee",
+      studyPreferences: sp?.showPreferences ? (sp?.studyPreferences || []) : [],
+      availability: sp?.showAvailability ? (sp?.availability || []) : [],
+      language: sp?.language || "English",
+      ageRange: sp?.showAgeRange ? (sp?.ageRange || null) : null,
+      gender: sp?.showGender ? (sp?.gender || null) : null,
       isPro: targetUser.isPaid,
-      joinedAt: targetUser.studyProfile?.createdAt,
-      isOnline: targetUser.lastActiveAt
+      joinedAt: sp?.createdAt,
+      isOnline: (sp?.showActivity !== false && targetUser.lastActiveAt)
         ? new Date().getTime() - new Date(targetUser.lastActiveAt).getTime() < 1000 * 60 * 5
         : false,
     };

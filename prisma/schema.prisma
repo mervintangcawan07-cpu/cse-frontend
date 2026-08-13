@@ -123,6 +123,17 @@ model StudyTogetherProfile {
   availability     String[]  @default([])
   language         String?   @default("English")
   profileCompleted Boolean   @default(false)
+
+  // Privacy & Visibility Controls (User controls what other study partners can see)
+  showAgeRange     Boolean   @default(false)
+  showGender       Boolean   @default(false)
+  showBio          Boolean   @default(true)
+  showStudyGoal    Boolean   @default(true)
+  showInterests    Boolean   @default(true)
+  showPreferences  Boolean   @default(true)
+  showAvailability Boolean   @default(true)
+  showActivity     Boolean   @default(true)
+
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

@@ -64,31 +64,41 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
           </div>
         ) : profile ? (
           <div className="space-y-4">
+            {/* Identity Header */}
             <div className="flex items-center gap-3.5">
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarInfo.bg} flex items-center justify-center text-2xl shadow-lg shrink-0`}>
                 {avatarInfo.emoji}
               </div>
               <div className="overflow-hidden">
-                <h3 className="text-base font-black text-white truncate">
-                  {profile.displayName}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-black text-white truncate">
+                    {profile.displayName}
+                  </h3>
+                  {profile.isPro && (
+                    <span className="px-1.5 py-0.2 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[9px] font-black rounded">
+                      PRO
+                    </span>
+                  )}
+                </div>
                 <p className="text-[11px] font-bold text-blue-400 truncate">
-                  {profile.studyGoal}
+                  {profile.studyGoal || "Civil Service Exam Review"}
                 </p>
                 <span className={`text-[10px] font-semibold flex items-center gap-1 mt-0.5 ${
                   profile.isOnline ? "text-emerald-400" : "text-slate-500"
                 }`}>
-                  ● {profile.isOnline ? "Online Now" : "Examinee"}
+                  ● {profile.isOnline ? "Online Now" : "Civil Service Examinee"}
                 </span>
               </div>
             </div>
 
+            {/* Bio (Respects Privacy) */}
             {profile.bio && (
               <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-slate-300 italic leading-relaxed">
                 "{profile.bio}"
               </div>
             )}
 
+            {/* Focus Subjects (Respects Privacy) */}
             {profile.studyInterests && profile.studyInterests.length > 0 && (
               <div className="space-y-1.5">
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
@@ -107,6 +117,35 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
               </div>
             )}
 
+            {/* Schedule Availability (Respects Privacy) */}
+            {profile.availability && profile.availability.length > 0 && (
+              <div className="space-y-1">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  Study Schedule
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {profile.availability.map((time: string) => (
+                    <span
+                      key={time}
+                      className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold rounded-lg"
+                    >
+                      {time}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Optional Demographics (Respects Privacy) */}
+            {(profile.ageRange || profile.gender) && (
+              <div className="flex items-center gap-2 text-[10px] text-slate-400 pt-1">
+                {profile.ageRange && <span>Age: {profile.ageRange}</span>}
+                {profile.ageRange && profile.gender && <span>•</span>}
+                {profile.gender && <span>{profile.gender}</span>}
+              </div>
+            )}
+
+            {/* General Meta */}
             <div className="grid grid-cols-2 gap-2 text-[10px] pt-2 border-t border-slate-800 text-slate-400">
               <div>
                 <span className="text-slate-500 block">Level:</span>

@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { calculateProfileCompletion } from "@/lib/social/profileCompletion";
 
 // Whitelists for privacy and data integrity
 const ALLOWED_AGE_RANGES = [
@@ -101,11 +102,14 @@ export async function GET() {
       select: { id: true, name: true, isPaid: true },
     });
 
+    const completionData = calculateProfileCompletion(profile);
+
     return NextResponse.json({
       success: true,
       profile: profile || null,
       profileCompleted: profile?.profileCompleted || false,
       userDefaultName: user?.name || "Examinee",
+      completion: completionData,
     });
   } catch (error: any) {
     console.error("[STUDY_PROFILE_GET_ERROR]", error);
@@ -141,6 +145,15 @@ export async function POST(request: Request) {
       availability,
       language,
       profileCompleted = true,
+      // Privacy & Visibility Toggles
+      showAgeRange = false,
+      showGender = false,
+      showBio = true,
+      showStudyGoal = true,
+      showInterests = true,
+      showPreferences = true,
+      showAvailability = true,
+      showActivity = true,
     } = body;
 
     // 1. Validate Display Name (Required: 3–30 characters)
@@ -244,6 +257,14 @@ export async function POST(request: Request) {
         availability,
         language: language || "English",
         profileCompleted: Boolean(profileCompleted),
+        showAgeRange: Boolean(showAgeRange),
+        showGender: Boolean(showGender),
+        showBio: Boolean(showBio),
+        showStudyGoal: Boolean(showStudyGoal),
+        showInterests: Boolean(showInterests),
+        showPreferences: Boolean(showPreferences),
+        showAvailability: Boolean(showAvailability),
+        showActivity: Boolean(showActivity),
       },
       update: {
         displayName,
@@ -258,13 +279,24 @@ export async function POST(request: Request) {
         availability,
         language: language || "English",
         profileCompleted: Boolean(profileCompleted),
+        showAgeRange: Boolean(showAgeRange),
+        showGender: Boolean(showGender),
+        showBio: Boolean(showBio),
+        showStudyGoal: Boolean(showStudyGoal),
+        showInterests: Boolean(showInterests),
+        showPreferences: Boolean(showPreferences),
+        showAvailability: Boolean(showAvailability),
+        showActivity: Boolean(showActivity),
       },
     });
+
+    const completionData = calculateProfileCompletion(profile);
 
     return NextResponse.json({
       success: true,
       message: "Study Together profile saved successfully!",
       profile,
+      completion: completionData,
     });
   } catch (error: any) {
     console.error("[STUDY_PROFILE_SAVE_ERROR]", error);

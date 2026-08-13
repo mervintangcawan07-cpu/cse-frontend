@@ -12,6 +12,8 @@ import StudyClubsSection from "@/components/social/StudyClubsSection";
 import NotificationsSection from "@/components/social/NotificationsSection";
 import StudyTogetherOnboarding from "@/components/social/profile/StudyTogetherOnboarding";
 import { EditStudyProfileModal } from "@/components/social/profile/EditStudyProfileModal";
+import { ProfileCompletionCard } from "@/components/social/profile/ProfileCompletionCard";
+import { ProfileCompletionResult } from "@/lib/social/profileCompletion";
 
 type SocialTab = "OVERVIEW" | "CLASSMATES" | "MESSAGES" | "ROOMS" | "EVENTS" | "CLUBS" | "NOTIFICATIONS";
 
@@ -31,6 +33,7 @@ export default function SocialDashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [studyProfile, setStudyProfile] = useState<any>(null);
   const [profileCompleted, setProfileCompleted] = useState<boolean | null>(null);
+  const [completionData, setCompletionData] = useState<ProfileCompletionResult | null>(null);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<SocialTab>("OVERVIEW");
@@ -51,6 +54,9 @@ export default function SocialDashboardPage() {
         const data = await res.json();
         setStudyProfile(data.profile || null);
         setProfileCompleted(Boolean(data.profileCompleted));
+        if (data.completion) {
+          setCompletionData(data.completion);
+        }
       }
     } catch (err) {
       console.error("Failed to fetch study profile:", err);
@@ -200,6 +206,15 @@ export default function SocialDashboardPage() {
                 <span className="font-extrabold text-white truncate max-w-[140px]">
                   {studyProfile.displayName}
                 </span>
+                {completionData && (
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+                    completionData.isFullyComplete
+                      ? "bg-emerald-500/20 text-emerald-300"
+                      : "bg-blue-500/20 text-blue-300"
+                  }`}>
+                    {completionData.percentage}%
+                  </span>
+                )}
                 <span className="text-[10px] text-emerald-400 font-bold">● Active</span>
               </div>
             )}
@@ -264,6 +279,12 @@ export default function SocialDashboardPage() {
       {/* TAB CONTENT AREAS */}
       {activeTab === "OVERVIEW" && (
         <div className="space-y-6">
+          {/* PROFILE COMPLETION & IDENTITY CARD */}
+          <ProfileCompletionCard
+            completion={completionData}
+            onOpenEditModal={() => setShowEditProfileModal(true)}
+          />
+
           {/* STATS SUMMARY GRID */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
