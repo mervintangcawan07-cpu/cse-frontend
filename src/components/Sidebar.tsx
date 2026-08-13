@@ -80,6 +80,17 @@ export default function Sidebar() {
               <span>Mistake Notebook</span>
             </Link>
             <Link
+              href="/badges"
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold transition ${
+                pathname === "/badges"
+                  ? "bg-amber-600/20 text-amber-400 border border-amber-500/30 font-black shadow-md shadow-amber-500/10"
+                  : "text-slate-400 hover:text-amber-400 hover:bg-slate-900/80"
+              }`}
+            >
+              <span>🏆</span>
+              <span>Achievements</span>
+            </Link>
+            <Link
               href="/mock-exam/take"
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-amber-400 hover:bg-slate-900/80 transition"
             >

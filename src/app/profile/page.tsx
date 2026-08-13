@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import BadgeDisplay from "@/components/profile/BadgeDisplay";
 
 interface UserProfile {
   name: string;
@@ -17,7 +18,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"account" | "subscription" | "faqs" | "about" | "terms">("account");
+  const [activeTab, setActiveTab] = useState<"account" | "achievements" | "subscription" | "faqs" | "about" | "terms">("account");
 
   // Form states
   const [name, setName] = useState("");
@@ -178,6 +179,16 @@ export default function ProfilePage() {
           }`}
         >
           💳 My Subscription
+        </button>
+        <button
+          onClick={() => setActiveTab("achievements")}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 ${
+            activeTab === "achievements"
+              ? "bg-amber-500 text-slate-950 shadow-md font-black"
+              : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
+          }`}
+        >
+          🏆 Achievements
         </button>
         <button
           onClick={() => setActiveTab("faqs")}
@@ -361,6 +372,13 @@ export default function ProfilePage() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {/* TAB: ACHIEVEMENTS & BADGES */}
+      {activeTab === "achievements" && (
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
+          <BadgeDisplay />
         </div>
       )}
 

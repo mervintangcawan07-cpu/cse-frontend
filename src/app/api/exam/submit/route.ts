@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
+import { evaluateAndAwardBadges } from "@/lib/badges";
 
 interface SubmittedAnswer {
   questionId: string;
@@ -170,6 +171,9 @@ export async function POST(request: Request) {
 
     // Record active study streak
     const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);
+
+    // Evaluate and award badges (fire-and-forget, non-blocking)
+    evaluateAndAwardBadges(userId).catch(() => null);
 
     // Clear active exam draft
     await prisma.examDraft.delete({

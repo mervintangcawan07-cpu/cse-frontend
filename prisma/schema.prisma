@@ -83,6 +83,7 @@ model User {
   mistakes                 UserMistake[]
   dailyQuestionAttempts    DailyQuestionAttempt[]
   questionFlags            QuestionFlag[]
+  badges                   UserBadge[]
 
   // Classmate Relations
   sentClassmateRequests     ClassmateRelation[] @relation("SentClassmateRequests")
@@ -454,6 +455,18 @@ model QuestionFlag {
   @@unique([userId, questionId])
   @@index([status])
   @@index([questionId])
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
 }
 
 model UserMistake {
