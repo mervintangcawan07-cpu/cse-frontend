@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { calculateProfileCompletion } from "@/lib/social/profileCompletion";
+import { resolveUserPresence } from "@/lib/social/presence";
 
 // Whitelists for privacy and data integrity
 const ALLOWED_AGE_RANGES = [
@@ -76,6 +77,8 @@ const ALLOWED_AVAILABILITY = [
   "Flexible",
 ];
 
+const ALLOWED_PRESENCE_STATUSES = ["ONLINE", "AWAY", "BUSY", "OFFLINE"];
+
 function sanitizeString(str: string): string {
   return str
     .replace(/<[^>]*>?/gm, "") // Remove HTML tags
@@ -99,10 +102,11 @@ export async function GET() {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, name: true, isPaid: true },
+      select: { id: true, name: true, isPaid: true, lastActiveAt: true },
     });
 
     const completionData = calculateProfileCompletion(profile);
+    const presence = resolveUserPresence(user?.lastActiveAt, profile);
 
     return NextResponse.json({
       success: true,
@@ -110,6 +114,7 @@ export async function GET() {
       profileCompleted: profile?.profileCompleted || false,
       userDefaultName: user?.name || "Examinee",
       completion: completionData,
+      presence,
     });
   } catch (error: any) {
     console.error("[STUDY_PROFILE_GET_ERROR]", error);
@@ -154,6 +159,10 @@ export async function POST(request: Request) {
       showPreferences = true,
       showAvailability = true,
       showActivity = true,
+      // Presence Settings
+      presenceStatus = "ONLINE",
+      customStatusText = null,
+      customStatusEmoji = null,
     } = body;
 
     // 1. Validate Display Name (Required: 3–30 characters)
@@ -240,6 +249,22 @@ export async function POST(request: Request) {
       avatar = sanitizeString(avatar).slice(0, 50);
     }
 
+    if (presenceStatus && !ALLOWED_PRESENCE_STATUSES.includes(presenceStatus)) {
+      presenceStatus = "ONLINE";
+    }
+
+    if (customStatusText && typeof customStatusText === "string") {
+      customStatusText = sanitizeString(customStatusText).slice(0, 60);
+    } else {
+      customStatusText = null;
+    }
+
+    if (customStatusEmoji && typeof customStatusEmoji === "string") {
+      customStatusEmoji = customStatusEmoji.trim().slice(0, 10);
+    } else {
+      customStatusEmoji = null;
+    }
+
     // 8. Upsert Study Together Profile in database
     const profile = await prisma.studyTogetherProfile.upsert({
       where: { userId },
@@ -265,6 +290,9 @@ export async function POST(request: Request) {
         showPreferences: Boolean(showPreferences),
         showAvailability: Boolean(showAvailability),
         showActivity: Boolean(showActivity),
+        presenceStatus: presenceStatus || "ONLINE",
+        customStatusText,
+        customStatusEmoji,
       },
       update: {
         displayName,
@@ -287,6 +315,9 @@ export async function POST(request: Request) {
         showPreferences: Boolean(showPreferences),
         showAvailability: Boolean(showAvailability),
         showActivity: Boolean(showActivity),
+        presenceStatus: presenceStatus || "ONLINE",
+        customStatusText,
+        customStatusEmoji,
       },
     });
 

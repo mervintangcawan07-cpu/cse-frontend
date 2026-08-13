@@ -4,6 +4,41 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
+import { resolveUserPresence } from "@/lib/social/presence";
+
+const USER_STUDY_SELECT = {
+  id: true,
+  name: true,
+  isPaid: true,
+  lastActiveAt: true,
+  studyProfile: {
+    select: {
+      displayName: true,
+      avatar: true,
+      bio: true,
+      studyGoal: true,
+      studyInterests: true,
+      experienceLevel: true,
+      presenceStatus: true,
+      customStatusText: true,
+      customStatusEmoji: true,
+      showActivity: true,
+      showBio: true,
+      showStudyGoal: true,
+      showInterests: true,
+    },
+  },
+};
+
+function formatUserWithPresence(user: any) {
+  if (!user) return null;
+  const presence = resolveUserPresence(user.lastActiveAt, user.studyProfile);
+  return {
+    ...user,
+    presence,
+    isOnline: presence.isOnline,
+  };
+}
 
 export async function GET(request: Request) {
   try {
@@ -25,42 +60,8 @@ export async function GET(request: Request) {
         OR: [{ senderId: userId }, { receiverId: userId }],
       },
       include: {
-        sender: {
-          select: {
-            id: true,
-            name: true,
-            isPaid: true,
-            lastActiveAt: true,
-            studyProfile: {
-              select: {
-                displayName: true,
-                avatar: true,
-                bio: true,
-                studyGoal: true,
-                studyInterests: true,
-                experienceLevel: true,
-              },
-            },
-          },
-        },
-        receiver: {
-          select: {
-            id: true,
-            name: true,
-            isPaid: true,
-            lastActiveAt: true,
-            studyProfile: {
-              select: {
-                displayName: true,
-                avatar: true,
-                bio: true,
-                studyGoal: true,
-                studyInterests: true,
-                experienceLevel: true,
-              },
-            },
-          },
-        },
+        sender: { select: USER_STUDY_SELECT },
+        receiver: { select: USER_STUDY_SELECT },
       },
     });
 
@@ -71,30 +72,16 @@ export async function GET(request: Request) {
     });
 
     if (type === "suggested") {
-      const suggested = await prisma.user.findMany({
+      const rawSuggested = await prisma.user.findMany({
         where: {
           id: { notIn: Array.from(relatedUserIds) },
         },
-        select: {
-          id: true,
-          name: true,
-          isPaid: true,
-          lastActiveAt: true,
-          studyProfile: {
-            select: {
-              displayName: true,
-              avatar: true,
-              bio: true,
-              studyGoal: true,
-              studyInterests: true,
-              experienceLevel: true,
-            },
-          },
-        },
+        select: USER_STUDY_SELECT,
         orderBy: { lastActiveAt: "desc" },
         take: 10,
       });
 
+      const suggested = rawSuggested.map(formatUserWithPresence);
       return NextResponse.json({ success: true, suggested });
     }
 
@@ -107,22 +94,7 @@ export async function GET(request: Request) {
             { studyProfile: { displayName: { contains: query, mode: "insensitive" } } },
           ],
         },
-        select: {
-          id: true,
-          name: true,
-          isPaid: true,
-          lastActiveAt: true,
-          studyProfile: {
-            select: {
-              displayName: true,
-              avatar: true,
-              bio: true,
-              studyGoal: true,
-              studyInterests: true,
-              experienceLevel: true,
-            },
-          },
-        },
+        select: USER_STUDY_SELECT,
         take: 15,
       });
 
@@ -130,8 +102,9 @@ export async function GET(request: Request) {
         const rel = relations.find(
           (r) => (r.senderId === u.id && r.receiverId === userId) || (r.senderId === userId && r.receiverId === u.id)
         );
+        const userWithPres = formatUserWithPresence(u);
         return {
-          ...u,
+          ...userWithPres,
           relationStatus: rel ? rel.status : null,
           relationId: rel ? rel.id : null,
           isSender: rel ? rel.senderId === userId : false,
@@ -147,41 +120,29 @@ export async function GET(request: Request) {
 
     relations.forEach((r) => {
       const otherUser = r.senderId === userId ? r.receiver : r.sender;
+      const formattedOther = formatUserWithPresence(otherUser);
 
       if (r.status === "ACCEPTED") {
-        classmates.push({ relationId: r.id, user: otherUser });
+        classmates.push({ relationId: r.id, user: formattedOther });
       } else if (r.status === "PENDING") {
         if (r.receiverId === userId) {
-          pendingIncoming.push({ relationId: r.id, sender: r.sender, createdAt: r.createdAt });
+          pendingIncoming.push({ relationId: r.id, sender: formattedOther, createdAt: r.createdAt });
         } else {
-          pendingOutgoing.push({ relationId: r.id, receiver: r.receiver, createdAt: r.createdAt });
+          pendingOutgoing.push({ relationId: r.id, receiver: formattedOther, createdAt: r.createdAt });
         }
       }
     });
 
-    const suggested = await prisma.user.findMany({
+    const rawSuggested = await prisma.user.findMany({
       where: {
         id: { notIn: Array.from(relatedUserIds) },
       },
-      select: {
-        id: true,
-        name: true,
-        isPaid: true,
-        lastActiveAt: true,
-        studyProfile: {
-          select: {
-            displayName: true,
-            avatar: true,
-            bio: true,
-            studyGoal: true,
-            studyInterests: true,
-            experienceLevel: true,
-          },
-        },
-      },
+      select: USER_STUDY_SELECT,
       orderBy: { lastActiveAt: "desc" },
       take: 8,
     });
+
+    const suggested = rawSuggested.map(formatUserWithPresence);
 
     return NextResponse.json({
       success: true,
@@ -210,8 +171,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { targetUserId } = body;
 
-    if (!targetUserId || typeof targetUserId !== "string" || targetUserId === userId) {
-      return NextResponse.json({ error: "Invalid classmate target user ID" }, { status: 400 });
+    if (!targetUserId || targetUserId === userId) {
+      return NextResponse.json({ error: "Invalid target user" }, { status: 400 });
     }
 
     const existing = await prisma.classmateRelation.findFirst({
@@ -224,41 +185,38 @@ export async function POST(request: Request) {
     });
 
     if (existing) {
-      if (existing.status === "BLOCKED") {
-        return NextResponse.json({ error: "Cannot send request to this user." }, { status: 403 });
-      }
-      if (existing.status === "ACCEPTED") {
-        return NextResponse.json({ error: "Already connected as classmates." }, { status: 400 });
-      }
-      if (existing.status === "PENDING") {
-        return NextResponse.json({ error: "A classmate request is already pending." }, { status: 400 });
-      }
+      return NextResponse.json({ error: "Relation already exists", status: existing.status }, { status: 400 });
     }
 
-    const senderUser = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { name: true },
-    });
-
-    const newRelation = await prisma.classmateRelation.create({
+    const relation = await prisma.classmateRelation.create({
       data: {
         senderId: userId,
         receiverId: targetUserId,
         status: "PENDING",
       },
+      include: {
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            studyProfile: { select: { displayName: true } },
+          },
+        },
+      },
     });
 
-    // Notify recipient
+    const senderDisplayName = relation.sender.studyProfile?.displayName || relation.sender.name || "A fellow examinee";
+
     await createNotification({
       userId: targetUserId,
-      title: "New Classmate Invitation",
-      message: `${senderUser?.name || "An examinee"} sent you a classmate request.`,
       type: "CLASSMATE_REQUEST",
+      title: "New Classmate Request",
+      message: `${senderDisplayName} sent you a study classmate invitation!`,
     });
 
-    return NextResponse.json({ success: true, relation: newRelation, message: "Classmate request sent!" });
+    return NextResponse.json({ success: true, relation });
   } catch (error: any) {
-    console.error("[CLASSMATE_REQUEST_POST_ERROR]", error);
+    console.error("[CLASSMATES_POST_ERROR]", error);
     return NextResponse.json({ error: "Failed to send classmate request", details: error?.message }, { status: 500 });
   }
 }

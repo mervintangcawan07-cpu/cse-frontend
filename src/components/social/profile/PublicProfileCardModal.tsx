@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 
 interface PublicProfileCardModalProps {
   userId: string | null;
@@ -66,10 +67,17 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
           <div className="space-y-4">
             {/* Identity Header */}
             <div className="flex items-center gap-3.5">
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarInfo.bg} flex items-center justify-center text-2xl shadow-lg shrink-0`}>
-                {avatarInfo.emoji}
+              <div className="relative shrink-0">
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarInfo.bg} flex items-center justify-center text-2xl shadow-lg`}>
+                  {avatarInfo.emoji}
+                </div>
+                {profile.presence && (
+                  <span className="absolute -bottom-1 -right-1 border-2 border-slate-900 rounded-full">
+                    <PresenceBadge presence={profile.presence} variant="dot-only" size="md" />
+                  </span>
+                )}
               </div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden space-y-0.5">
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-black text-white truncate">
                     {profile.displayName}
@@ -83,11 +91,9 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
                 <p className="text-[11px] font-bold text-blue-400 truncate">
                   {profile.studyGoal || "Civil Service Exam Review"}
                 </p>
-                <span className={`text-[10px] font-semibold flex items-center gap-1 mt-0.5 ${
-                  profile.isOnline ? "text-emerald-400" : "text-slate-500"
-                }`}>
-                  ● {profile.isOnline ? "Online Now" : "Civil Service Examinee"}
-                </span>
+                <div className="pt-0.5">
+                  <PresenceBadge presence={profile.presence} variant="full" size="sm" />
+                </div>
               </div>
             </div>
 

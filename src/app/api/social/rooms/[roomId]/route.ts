@@ -24,10 +24,45 @@ export async function GET(
     const room = await prisma.studyRoom.findUnique({
       where: { id: roomId },
       include: {
-        host: { select: { id: true, name: true, email: true } },
+        host: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            lastActiveAt: true,
+            studyProfile: {
+              select: {
+                displayName: true,
+                avatar: true,
+                presenceStatus: true,
+                customStatusText: true,
+                customStatusEmoji: true,
+                showActivity: true,
+              },
+            },
+          },
+        },
         participants: {
           include: {
-            user: { select: { id: true, name: true, email: true, isPaid: true, lastActiveAt: true } },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                isPaid: true,
+                lastActiveAt: true,
+                studyProfile: {
+                  select: {
+                    displayName: true,
+                    avatar: true,
+                    presenceStatus: true,
+                    customStatusText: true,
+                    customStatusEmoji: true,
+                    showActivity: true,
+                  },
+                },
+              },
+            },
           },
           orderBy: { joinedAt: "asc" },
         },
@@ -54,7 +89,11 @@ export async function GET(
         maxParticipants: room.maxParticipants,
         inviteCode: room.inviteCode,
         state: room.state,
-        host: room.host,
+        host: {
+          id: room.host.id,
+          name: room.host.studyProfile?.displayName || room.host.name,
+          studyProfile: room.host.studyProfile,
+        },
         hostId: room.hostId,
         isHost: room.hostId === userId,
         isMember,
@@ -62,8 +101,10 @@ export async function GET(
           id: p.id,
           userId: p.userId,
           role: p.role,
-          name: p.user.name,
-          email: p.user.email,
+          name: p.user.studyProfile?.displayName || p.user.name,
+          displayName: p.user.studyProfile?.displayName || p.user.name,
+          avatar: p.user.studyProfile?.avatar || null,
+          studyProfile: p.user.studyProfile,
           isPaid: p.user.isPaid,
           lastActiveAt: p.user.lastActiveAt,
           joinedAt: p.joinedAt,

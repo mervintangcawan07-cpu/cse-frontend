@@ -134,6 +134,11 @@ model StudyTogetherProfile {
   showAvailability Boolean   @default(true)
   showActivity     Boolean   @default(true)
 
+  // Presence & Study Availability
+  presenceStatus   String?   @default("ONLINE") // "ONLINE" | "AWAY" | "BUSY" | "OFFLINE"
+  customStatusText String?   @db.VarChar(60)     // e.g. "Reviewing Math", "Open for Duels"
+  customStatusEmoji String?  @db.VarChar(10)     // e.g. "📖", "☕", "🎯"
+
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

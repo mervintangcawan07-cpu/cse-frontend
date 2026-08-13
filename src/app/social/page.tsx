@@ -14,6 +14,8 @@ import StudyTogetherOnboarding from "@/components/social/profile/StudyTogetherOn
 import { EditStudyProfileModal } from "@/components/social/profile/EditStudyProfileModal";
 import { ProfileCompletionCard } from "@/components/social/profile/ProfileCompletionCard";
 import { ProfileCompletionResult } from "@/lib/social/profileCompletion";
+import { ResolvedPresence } from "@/lib/social/presence";
+import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 
 type SocialTab = "OVERVIEW" | "CLASSMATES" | "MESSAGES" | "ROOMS" | "EVENTS" | "CLUBS" | "NOTIFICATIONS";
 
@@ -28,12 +30,21 @@ const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
   "avatar-star": { emoji: "⭐", bg: "from-yellow-600 to-amber-400" },
 };
 
+const PRESENCE_CHOICES = [
+  { id: "ONLINE", label: "Online", desc: "Available for study", dot: "bg-emerald-400", emoji: "🟢" },
+  { id: "AWAY", label: "Away", desc: "Taking a break", dot: "bg-amber-400", emoji: "🟡" },
+  { id: "BUSY", label: "Busy", desc: "In focus mode", dot: "bg-rose-500", emoji: "🔴" },
+  { id: "OFFLINE", label: "Invisible", desc: "Appear offline", dot: "bg-slate-500", emoji: "⚪" },
+];
+
 export default function SocialDashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [studyProfile, setStudyProfile] = useState<any>(null);
   const [profileCompleted, setProfileCompleted] = useState<boolean | null>(null);
   const [completionData, setCompletionData] = useState<ProfileCompletionResult | null>(null);
+  const [presence, setPresence] = useState<ResolvedPresence | null>(null);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<SocialTab>("OVERVIEW");
@@ -57,9 +68,31 @@ export default function SocialDashboardPage() {
         if (data.completion) {
           setCompletionData(data.completion);
         }
+        if (data.presence) {
+          setPresence(data.presence);
+        }
       }
     } catch (err) {
       console.error("Failed to fetch study profile:", err);
+    }
+  };
+
+  const updatePresenceStatus = async (newStatus: string) => {
+    setShowStatusDropdown(false);
+    try {
+      const res = await fetch("/api/social/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ presenceStatus: newStatus }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.presence) {
+          setPresence(data.presence);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to update status:", err);
     }
   };
 
@@ -191,7 +224,7 @@ export default function SocialDashboardPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 space-y-8 text-slate-100">
-      {/* HEADER BANNER WITH USER STUDY IDENTITY CHIP */}
+      {/* HEADER BANNER WITH USER STUDY IDENTITY & STATUS CONTROLS */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xl">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -201,11 +234,12 @@ export default function SocialDashboardPage() {
 
             {/* Study Profile Identity Chip */}
             {studyProfile && (
-              <div className="flex items-center gap-2 px-3 py-1 bg-slate-950/80 border border-slate-800 rounded-full text-xs">
+              <div className="flex items-center gap-2 px-3 py-1 bg-slate-950/80 border border-slate-800 rounded-full text-xs relative">
                 <span className="text-base">{currentAvatarInfo.emoji}</span>
                 <span className="font-extrabold text-white truncate max-w-[140px]">
                   {studyProfile.displayName}
                 </span>
+
                 {completionData && (
                   <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
                     completionData.isFullyComplete
@@ -215,7 +249,43 @@ export default function SocialDashboardPage() {
                     {completionData.percentage}%
                   </span>
                 )}
-                <span className="text-[10px] text-emerald-400 font-bold">● Active</span>
+
+                {/* Interactive Status Selector Pill */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+                    className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 hover:border-slate-600 text-[10px] font-bold cursor-pointer transition"
+                    title="Change Availability Status"
+                  >
+                    <span className={`w-2 h-2 rounded-full ${presence?.dotColor || "bg-emerald-400"}`} />
+                    <span>{presence?.label || "Online"}</span>
+                    <span className="text-[8px] text-slate-500">▼</span>
+                  </button>
+
+                  {/* Status Dropdown Menu */}
+                  {showStatusDropdown && (
+                    <div className="absolute top-full right-0 mt-2 w-48 bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 animate-fade-in">
+                      <div className="px-2.5 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                        Set Availability
+                      </div>
+                      {PRESENCE_CHOICES.map((choice) => (
+                        <button
+                          key={choice.id}
+                          type="button"
+                          onClick={() => updatePresenceStatus(choice.id)}
+                          className="w-full px-2.5 py-1.5 rounded-xl hover:bg-slate-900 flex items-center justify-between text-xs text-left cursor-pointer transition"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={`w-2 h-2 rounded-full ${choice.dot}`} />
+                            <span className="font-bold text-slate-200">{choice.label}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-500">{choice.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -233,7 +303,7 @@ export default function SocialDashboardPage() {
             type="button"
             onClick={() => setShowEditProfileModal(true)}
             className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer flex items-center gap-1.5"
-            title="Edit Study Together Profile"
+            title="Edit Study Together Profile & Status"
           >
             <span>✏️</span>
             <span>Edit Study Profile</span>

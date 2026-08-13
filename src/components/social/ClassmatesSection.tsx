@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { PublicProfileCardModal } from "@/components/social/profile/PublicProfileCardModal";
+import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 
 const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
   "avatar-owl": { emoji: "🦉", bg: "from-amber-600 to-yellow-500" },
@@ -109,18 +110,26 @@ export default function ClassmatesSection() {
 
   const renderAvatar = (userObj: any) => {
     const avatarKey = userObj?.studyProfile?.avatar;
-    if (avatarKey && AVATAR_MAP[avatarKey]) {
-      return (
-        <div className={`w-9 h-9 rounded-2xl bg-gradient-to-br ${AVATAR_MAP[avatarKey].bg} flex items-center justify-center text-lg shadow-sm shrink-0`}>
-          {AVATAR_MAP[avatarKey].emoji}
-        </div>
-      );
-    }
+    const presence = userObj?.presence;
 
-    const name = userObj?.studyProfile?.displayName || userObj?.name || "U";
     return (
-      <div className="w-9 h-9 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-black text-blue-400 text-xs uppercase shrink-0">
-        {name[0]}
+      <div className="relative shrink-0">
+        {avatarKey && AVATAR_MAP[avatarKey] ? (
+          <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${AVATAR_MAP[avatarKey].bg} flex items-center justify-center text-lg shadow-sm`}>
+            {AVATAR_MAP[avatarKey].emoji}
+          </div>
+        ) : (
+          <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-black text-blue-400 text-xs uppercase">
+            {(userObj?.studyProfile?.displayName || userObj?.name || "U")[0]}
+          </div>
+        )}
+
+        {/* Presence Dot Overlay */}
+        {presence && (
+          <span className="absolute -bottom-0.5 -right-0.5 border-2 border-slate-900 rounded-full">
+            <PresenceBadge presence={presence} variant="dot-only" size="sm" />
+          </span>
+        )}
       </div>
     );
   };
@@ -174,11 +183,9 @@ export default function ClassmatesSection() {
                     className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
                   >
                     {renderAvatar(user)}
-                    <div className="overflow-hidden flex-1">
+                    <div className="overflow-hidden flex-1 space-y-0.5">
                       <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
-                      <span className="text-[10px] text-slate-500 block truncate">
-                        {user.studyProfile?.studyGoal || "Civil Service Reviewer"}
-                      </span>
+                      <PresenceBadge presence={user.presence} variant="pill" size="sm" />
                     </div>
                   </div>
 
@@ -223,9 +230,9 @@ export default function ClassmatesSection() {
                     className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
                   >
                     {renderAvatar(req.sender)}
-                    <div className="overflow-hidden flex-1">
+                    <div className="overflow-hidden flex-1 space-y-0.5">
                       <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
-                      <span className="text-[10px] text-slate-500 block truncate">Wants to be study partners</span>
+                      <PresenceBadge presence={req.sender?.presence} variant="pill" size="sm" />
                     </div>
                   </div>
 
@@ -277,9 +284,9 @@ export default function ClassmatesSection() {
                     className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
                   >
                     {renderAvatar(c.user)}
-                    <div className="overflow-hidden flex-1">
+                    <div className="overflow-hidden flex-1 space-y-0.5">
                       <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
-                      <span className="text-[10px] text-emerald-400 font-semibold block truncate">● Connected</span>
+                      <PresenceBadge presence={c.user?.presence} variant="pill" size="sm" />
                     </div>
                   </div>
 
@@ -314,11 +321,9 @@ export default function ClassmatesSection() {
                     className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
                   >
                     {renderAvatar(s)}
-                    <div className="overflow-hidden flex-1">
+                    <div className="overflow-hidden flex-1 space-y-0.5">
                       <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
-                      <span className="text-[10px] text-slate-400 block truncate">
-                        {s.studyProfile?.studyGoal || "Civil Service Reviewer"}
-                      </span>
+                      <PresenceBadge presence={s.presence} variant="pill" size="sm" />
                     </div>
                   </div>
 

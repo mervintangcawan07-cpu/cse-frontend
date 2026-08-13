@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { resolveUserPresence } from "@/lib/social/presence";
 
 export async function GET(
   request: Request,
@@ -47,6 +48,9 @@ export async function GET(
             showPreferences: true,
             showAvailability: true,
             showActivity: true,
+            presenceStatus: true,
+            customStatusText: true,
+            customStatusEmoji: true,
             createdAt: true,
           },
         },
@@ -58,6 +62,7 @@ export async function GET(
     }
 
     const sp = targetUser.studyProfile;
+    const presence = resolveUserPresence(targetUser.lastActiveAt, sp);
 
     // 🔒 PRIVACY-ENFORCED PUBLIC STUDY CARD:
     // Respects user's privacy visibility preferences while hiding all sensitive account details
@@ -76,9 +81,8 @@ export async function GET(
       gender: sp?.showGender ? (sp?.gender || null) : null,
       isPro: targetUser.isPaid,
       joinedAt: sp?.createdAt,
-      isOnline: (sp?.showActivity !== false && targetUser.lastActiveAt)
-        ? new Date().getTime() - new Date(targetUser.lastActiveAt).getTime() < 1000 * 60 * 5
-        : false,
+      presence,
+      isOnline: presence.isOnline,
     };
 
     return NextResponse.json({

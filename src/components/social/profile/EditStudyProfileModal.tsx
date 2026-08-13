@@ -96,6 +96,15 @@ const LANGUAGES = [
   "Bilingual",
 ];
 
+const PRESENCE_OPTIONS = [
+  { id: "ONLINE", label: "Online", desc: "Available for study sessions", dot: "bg-emerald-400", emoji: "🟢" },
+  { id: "AWAY", label: "Away", desc: "Taking a short break", dot: "bg-amber-400", emoji: "🟡" },
+  { id: "BUSY", label: "Busy / In Focus", desc: "Studying intensely / In exam", dot: "bg-rose-500", emoji: "🔴" },
+  { id: "OFFLINE", label: "Appear Offline", desc: "Browse silently", dot: "bg-slate-500", emoji: "⚪" },
+];
+
+const QUICK_STATUS_EMOJIS = ["📖", "🎯", "☕", "🔥", "💡", "🧠", "📝", "🚀"];
+
 export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
   isOpen,
   initialProfile,
@@ -113,6 +122,11 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
   const [studyPreferences, setStudyPreferences] = useState<string[]>([]);
   const [availability, setAvailability] = useState<string[]>([]);
   const [language, setLanguage] = useState("English");
+
+  // Presence & Status
+  const [presenceStatus, setPresenceStatus] = useState("ONLINE");
+  const [customStatusText, setCustomStatusText] = useState("");
+  const [customStatusEmoji, setCustomStatusEmoji] = useState("📖");
 
   // Privacy & Visibility Toggles
   const [showAgeRange, setShowAgeRange] = useState(false);
@@ -140,6 +154,10 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
       setStudyPreferences(initialProfile.studyPreferences || []);
       setAvailability(initialProfile.availability || []);
       setLanguage(initialProfile.language || "English");
+
+      setPresenceStatus(initialProfile.presenceStatus || "ONLINE");
+      setCustomStatusText(initialProfile.customStatusText || "");
+      setCustomStatusEmoji(initialProfile.customStatusEmoji || "📖");
 
       setShowAgeRange(initialProfile.showAgeRange ?? false);
       setShowGender(initialProfile.showGender ?? false);
@@ -194,6 +212,9 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
           availability,
           language,
           profileCompleted: true,
+          presenceStatus,
+          customStatusText: customStatusText.trim() || null,
+          customStatusEmoji: customStatusEmoji || null,
           showAgeRange,
           showGender,
           showBio,
@@ -227,10 +248,10 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
         <div className="flex justify-between items-center border-b border-slate-800 pb-3">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <span>✏️</span> Edit Study Together Profile & Identity
+              <span>✏️</span> Edit Study Together Profile & Presence
             </h3>
             <p className="text-xs text-slate-400">
-              Customize how classmates recognize you and control your privacy preferences.
+              Customize your study identity, availability status, and privacy settings.
             </p>
           </div>
           <button
@@ -249,7 +270,71 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
         )}
 
         <form onSubmit={handleSave} className="space-y-6">
-          {/* SECTION 1: REQUIRED ACCOUNT INFO */}
+          {/* SECTION 1: STUDY AVAILABILITY & PRESENCE STATUS */}
+          <div className="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+            <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span>🟢</span> Study Availability & Current Status
+            </span>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {PRESENCE_OPTIONS.map((opt) => {
+                const isSelected = presenceStatus === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setPresenceStatus(opt.id)}
+                    className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col gap-1 ${
+                      isSelected
+                        ? "bg-blue-600/20 border-blue-500 shadow-md"
+                        : "bg-slate-900 border-slate-800 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full ${opt.dot}`} />
+                      <span className="text-xs font-black text-white">{opt.label}</span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 leading-tight">{opt.desc}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Custom Status Message */}
+            <div className="pt-2 border-t border-slate-800/80 space-y-2">
+              <label className="text-[11px] font-bold text-slate-300 block">
+                Custom Study Note / Activity (Optional)
+              </label>
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none shrink-0">
+                  {QUICK_STATUS_EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => setCustomStatusEmoji(emoji)}
+                      className={`w-7 h-7 rounded-lg text-sm flex items-center justify-center transition border ${
+                        customStatusEmoji === emoji
+                          ? "bg-blue-600/30 border-blue-500 scale-110"
+                          : "bg-slate-900 border-slate-800 hover:bg-slate-800"
+                      }`}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+                <input
+                  type="text"
+                  value={customStatusText}
+                  onChange={(e) => setCustomStatusText(e.target.value)}
+                  maxLength={60}
+                  placeholder="e.g. Practicing Math word problems"
+                  className="flex-1 px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION 2: REQUIRED ACCOUNT INFO */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -281,7 +366,7 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
             </div>
           </div>
 
-          {/* SECTION 2: RECOMMENDED STUDY INFO */}
+          {/* SECTION 3: RECOMMENDED STUDY INFO */}
           <div className="space-y-4 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -387,7 +472,7 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
             </div>
           </div>
 
-          {/* SECTION 3: OPTIONAL STUDY PREFERENCES */}
+          {/* SECTION 4: OPTIONAL STUDY PREFERENCES */}
           <div className="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -487,7 +572,7 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
             </div>
           </div>
 
-          {/* SECTION 4: PRIVACY & VISIBILITY CONTROLS */}
+          {/* SECTION 5: PRIVACY & VISIBILITY CONTROLS */}
           <div className="space-y-3 bg-slate-950/80 p-4 rounded-2xl border border-blue-500/30">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2">
               <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
@@ -557,6 +642,16 @@ export const EditStudyProfileModal: React.FC<EditStudyProfileModalProps> = ({
                   className="rounded text-blue-600 focus:ring-0 cursor-pointer"
                 />
                 <span className="text-slate-300 text-[11px]">Show Gender (Hidden by default)</span>
+              </label>
+
+              <label className="flex items-center gap-2 p-2 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-slate-700">
+                <input
+                  type="checkbox"
+                  checked={showActivity}
+                  onChange={(e) => setShowActivity(e.target.checked)}
+                  className="rounded text-blue-600 focus:ring-0 cursor-pointer"
+                />
+                <span className="text-slate-300 text-[11px]">Show Online/Away Activity Status</span>
               </label>
             </div>
           </div>
