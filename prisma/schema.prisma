@@ -82,6 +82,7 @@ model User {
   transactions             Transaction[]
   mistakes                 UserMistake[]
   dailyQuestionAttempts    DailyQuestionAttempt[]
+  questionFlags            QuestionFlag[]
 
   // Classmate Relations
   sentClassmateRequests     ClassmateRelation[] @relation("SentClassmateRequests")
@@ -407,6 +408,7 @@ model Question {
 
   userMistakes          UserMistake[]
   dailyQuestionAttempts DailyQuestionAttempt[]
+  flags                 QuestionFlag[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -433,6 +435,24 @@ model DailyQuestionAttempt {
 
   @@unique([userId, dateString])
   @@index([dateString])
+  @@index([questionId])
+}
+
+model QuestionFlag {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  reason     String
+  notes      String?  @db.Text
+  status     String   @default("PENDING") // PENDING | DISMISSED | RESOLVED
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([status])
   @@index([questionId])
 }
 

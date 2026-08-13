@@ -4,6 +4,7 @@ import { formatPromptHTML } from "@/lib/formatPrompt";
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import FlagQuestionButton from "@/components/exam/FlagQuestionButton";
 
 interface Question {
   id: string;
@@ -549,16 +550,19 @@ function TakeExamPageInner() {
             Question #{currentIndex + 1} • {currentQ?.category}
           </span>
 
-          <button
-            onClick={() => currentQ && toggleBookmark(currentQ.id)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 cursor-pointer ${
-              isBookmarked
-                ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
-                : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100"
-            }`}
-          >
-            <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {currentQ && <FlagQuestionButton questionId={currentQ.id} compact />}
+            <button
+              onClick={() => currentQ && toggleBookmark(currentQ.id)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 cursor-pointer ${
+                isBookmarked
+                  ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
+                  : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100"
+              }`}
+            >
+              <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
+            </button>
+          </div>
         </div>
 
         {/* PROMPT RENDERING WITH HTML TABLE SUPPORT */}
