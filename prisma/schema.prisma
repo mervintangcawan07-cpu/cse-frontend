@@ -100,9 +100,36 @@ model User {
   ownedClubs                StudyClub[]            @relation("OwnedClubs")
   clubMemberships           StudyClubMember[]
 
+  // Study Together Profile (Separate from main authentication/account)
+  studyProfile              StudyTogetherProfile?
+
   @@index([email])
   @@index([role])
   @@index([deletedAt])
+}
+
+model StudyTogetherProfile {
+  id               String    @id @default(cuid())
+  userId           String    @unique
+  displayName      String
+  avatar           String?
+  ageRange         String?
+  gender           String?
+  bio              String?   @db.VarChar(160)
+  studyGoal        String?
+  studyInterests   String[]  @default([])
+  experienceLevel  String?
+  studyPreferences String[]  @default([])
+  availability     String[]  @default([])
+  language         String?   @default("English")
+  profileCompleted Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([profileCompleted])
 }
 
 model ClassmateRelation {
@@ -725,4 +752,10 @@ model BackupAuditLog {
   @@index([backupId])
   @@index([createdAt(sort: Desc)])
   @@index([action])
+}
+
+model BackupPayload {
+  filename  String   @id
+  payload   String   @db.Text
+  createdAt DateTime @default(now())
 }

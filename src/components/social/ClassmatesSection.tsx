@@ -1,7 +1,19 @@
-﻿// Relative Path: src/components/social/ClassmatesSection.tsx
+// Relative Path: src/components/social/ClassmatesSection.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+import { PublicProfileCardModal } from "@/components/social/profile/PublicProfileCardModal";
+
+const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
+  "avatar-owl": { emoji: "🦉", bg: "from-amber-600 to-yellow-500" },
+  "avatar-scholar": { emoji: "📚", bg: "from-blue-600 to-indigo-500" },
+  "avatar-grad": { emoji: "🧑‍🎓", bg: "from-emerald-600 to-teal-500" },
+  "avatar-brain": { emoji: "🧠", bg: "from-purple-600 to-pink-500" },
+  "avatar-rocket": { emoji: "🚀", bg: "from-rose-600 to-orange-500" },
+  "avatar-target": { emoji: "🎯", bg: "from-cyan-600 to-blue-500" },
+  "avatar-fox": { emoji: "🦊", bg: "from-orange-600 to-amber-500" },
+  "avatar-star": { emoji: "⭐", bg: "from-yellow-600 to-amber-400" },
+};
 
 export default function ClassmatesSection() {
   const [loading, setLoading] = useState(true);
@@ -14,6 +26,7 @@ export default function ClassmatesSection() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const fetchClassmateData = async () => {
     try {
@@ -94,6 +107,24 @@ export default function ClassmatesSection() {
     }
   };
 
+  const renderAvatar = (userObj: any) => {
+    const avatarKey = userObj?.studyProfile?.avatar;
+    if (avatarKey && AVATAR_MAP[avatarKey]) {
+      return (
+        <div className={`w-9 h-9 rounded-2xl bg-gradient-to-br ${AVATAR_MAP[avatarKey].bg} flex items-center justify-center text-lg shadow-sm shrink-0`}>
+          {AVATAR_MAP[avatarKey].emoji}
+        </div>
+      );
+    }
+
+    const name = userObj?.studyProfile?.displayName || userObj?.name || "U";
+    return (
+      <div className="w-9 h-9 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-black text-blue-400 text-xs uppercase shrink-0">
+        {name[0]}
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse">
@@ -103,21 +134,21 @@ export default function ClassmatesSection() {
   }
 
   return (
-    <div className="space-y-8">
-      {/* SEARCH BAR & HEADER */}
-      <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6">
+      {/* HEADER & SEARCH BAR */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
         <div>
-          <h3 className="text-sm font-bold text-white">Classmates & Study Partners</h3>
-          <p className="text-xs text-slate-400">Search examinees, manage invitations, or add suggested study buddies.</p>
+          <h3 className="text-sm font-bold text-white">Find Classmates & Study Buddies</h3>
+          <p className="text-xs text-slate-400">Search for examinees preparing for the same Civil Service Exam.</p>
         </div>
 
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form onSubmit={handleSearch} className="flex gap-2 w-full sm:w-auto">
           <input
             type="text"
-            placeholder="Search examinees by name..."
+            placeholder="Search by name or study handle..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-60"
+            className="px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64"
           />
           <button
             type="submit"
@@ -134,37 +165,43 @@ export default function ClassmatesSection() {
         <div className="space-y-3">
           <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Search Results ({searchResults.length})</h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {searchResults.map((user) => (
-              <div key={user.id} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-9 h-9 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
-                    {user.name ? user.name[0] : "U"}
+            {searchResults.map((user) => {
+              const displayName = user.studyProfile?.displayName || user.name || "Examinee";
+              return (
+                <div key={user.id} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3">
+                  <div
+                    onClick={() => setSelectedUserId(user.id)}
+                    className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
+                  >
+                    {renderAvatar(user)}
+                    <div className="overflow-hidden flex-1">
+                      <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
+                      <span className="text-[10px] text-slate-500 block truncate">
+                        {user.studyProfile?.studyGoal || "Civil Service Reviewer"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-white truncate">{user.name || "Examinee"}</p>
-                    <span className="text-[10px] text-slate-500 block truncate">{user.email}</span>
-                  </div>
-                </div>
 
-                <div>
-                  {user.relationStatus === "ACCEPTED" ? (
-                    <span className="text-[10px] font-bold text-emerald-400 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">Classmate</span>
-                  ) : user.relationStatus === "PENDING" ? (
-                    <span className="text-[10px] font-bold text-amber-400 px-2 py-1 bg-amber-500/10 rounded-lg border border-amber-500/20">
-                      {user.isSender ? "Sent" : "Pending"}
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => sendRequest(user.id)}
-                      disabled={actionLoadingId === user.id}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
-                    >
-                      + Add
-                    </button>
-                  )}
+                  <div>
+                    {user.relationStatus === "ACCEPTED" ? (
+                      <span className="text-[10px] font-bold text-emerald-400 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">Classmate</span>
+                    ) : user.relationStatus === "PENDING" ? (
+                      <span className="text-[10px] font-bold text-amber-400 px-2 py-1 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                        {user.isSender ? "Sent" : "Pending"}
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => sendRequest(user.id)}
+                        disabled={actionLoadingId === user.id}
+                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+                      >
+                        + Add
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -177,36 +214,40 @@ export default function ClassmatesSection() {
             <span className="px-2 py-0.5 bg-amber-500/20 rounded-full text-[10px] font-black">{pendingIncoming.length}</span>
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pendingIncoming.map((req) => (
-              <div key={req.relationId} className="bg-slate-900 border border-amber-500/30 p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg shadow-amber-500/5">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center font-bold text-amber-400 text-xs uppercase shrink-0">
-                    {req.sender.name ? req.sender.name[0] : "U"}
+            {pendingIncoming.map((req) => {
+              const displayName = req.sender?.studyProfile?.displayName || req.sender?.name || "Examinee";
+              return (
+                <div key={req.relationId} className="bg-slate-900 border border-amber-500/30 p-4 rounded-2xl flex items-center justify-between gap-3 shadow-lg shadow-amber-500/5">
+                  <div
+                    onClick={() => setSelectedUserId(req.sender.id)}
+                    className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
+                  >
+                    {renderAvatar(req.sender)}
+                    <div className="overflow-hidden flex-1">
+                      <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
+                      <span className="text-[10px] text-slate-500 block truncate">Wants to be study partners</span>
+                    </div>
                   </div>
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-white truncate">{req.sender.name || "Examinee"}</p>
-                    <span className="text-[10px] text-slate-500 block truncate">Wants to be study partners</span>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => respondRelation(req.relationId, "ACCEPT")}
-                    disabled={actionLoadingId === req.relationId}
-                    className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-extrabold rounded-lg transition cursor-pointer"
-                  >
-                    Accept
-                  </button>
-                  <button
-                    onClick={() => respondRelation(req.relationId, "REJECT")}
-                    disabled={actionLoadingId === req.relationId}
-                    className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg transition cursor-pointer"
-                  >
-                    Decline
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => respondRelation(req.relationId, "ACCEPT")}
+                      disabled={actionLoadingId === req.relationId}
+                      className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-extrabold rounded-lg transition cursor-pointer"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => respondRelation(req.relationId, "REJECT")}
+                      disabled={actionLoadingId === req.relationId}
+                      className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg transition cursor-pointer"
+                    >
+                      Decline
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -227,27 +268,31 @@ export default function ClassmatesSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {classmates.map((c) => (
-              <div key={c.relationId} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
-                    {c.user.name ? c.user.name[0] : "U"}
+            {classmates.map((c) => {
+              const displayName = c.user?.studyProfile?.displayName || c.user?.name || "Classmate";
+              return (
+                <div key={c.relationId} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3">
+                  <div
+                    onClick={() => setSelectedUserId(c.user.id)}
+                    className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
+                  >
+                    {renderAvatar(c.user)}
+                    <div className="overflow-hidden flex-1">
+                      <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
+                      <span className="text-[10px] text-emerald-400 font-semibold block truncate">● Connected</span>
+                    </div>
                   </div>
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-white truncate">{c.user.name || "Classmate"}</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold block truncate">● Connected</span>
-                  </div>
-                </div>
 
-                <button
-                  onClick={() => respondRelation(c.relationId, "REMOVE")}
-                  disabled={actionLoadingId === c.relationId}
-                  className="px-2.5 py-1 bg-slate-950 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-800 text-slate-400 text-[10px] font-bold rounded-lg transition cursor-pointer"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+                  <button
+                    onClick={() => respondRelation(c.relationId, "REMOVE")}
+                    disabled={actionLoadingId === c.relationId}
+                    className="px-2.5 py-1 bg-slate-950 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-800 text-slate-400 text-[10px] font-bold rounded-lg transition cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -260,32 +305,42 @@ export default function ClassmatesSection() {
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {suggested.map((s) => (
-              <div key={s.id} className="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3 hover:border-slate-700 transition">
-                <div className="flex items-center gap-3 overflow-hidden">
-                  <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-300 text-xs uppercase shrink-0">
-                    {s.name ? s.name[0] : "E"}
+            {suggested.map((s) => {
+              const displayName = s.studyProfile?.displayName || s.name || "Examinee";
+              return (
+                <div key={s.id} className="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex items-center justify-between gap-3 hover:border-slate-700 transition">
+                  <div
+                    onClick={() => setSelectedUserId(s.id)}
+                    className="flex items-center gap-3 overflow-hidden cursor-pointer flex-1"
+                  >
+                    {renderAvatar(s)}
+                    <div className="overflow-hidden flex-1">
+                      <p className="text-xs font-bold text-white truncate hover:text-blue-400 transition">{displayName}</p>
+                      <span className="text-[10px] text-slate-400 block truncate">
+                        {s.studyProfile?.studyGoal || "Civil Service Reviewer"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="overflow-hidden">
-                    <p className="text-xs font-bold text-white truncate">{s.name || "Examinee"}</p>
-                    <span className="text-[10px] text-slate-500 block truncate">
-                      {s.isPaid ? "PRO Member" : "Free Member"}
-                    </span>
-                  </div>
-                </div>
 
-                <button
-                  onClick={() => sendRequest(s.id)}
-                  disabled={actionLoadingId === s.id}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50"
-                >
-                  + Add
-                </button>
-              </div>
-            ))}
+                  <button
+                    onClick={() => sendRequest(s.id)}
+                    disabled={actionLoadingId === s.id}
+                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50"
+                  >
+                    + Add
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
+
+      {/* PUBLIC PROFILE CARD MODAL */}
+      <PublicProfileCardModal
+        userId={selectedUserId}
+        onClose={() => setSelectedUserId(null)}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/social/page.tsx
+// Relative Path: src/app/social/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,12 +10,28 @@ import StudyRoomsSection from "@/components/social/StudyRoomsSection";
 import StudyEventsSection from "@/components/social/StudyEventsSection";
 import StudyClubsSection from "@/components/social/StudyClubsSection";
 import NotificationsSection from "@/components/social/NotificationsSection";
+import StudyTogetherOnboarding from "@/components/social/profile/StudyTogetherOnboarding";
+import { EditStudyProfileModal } from "@/components/social/profile/EditStudyProfileModal";
 
 type SocialTab = "OVERVIEW" | "CLASSMATES" | "MESSAGES" | "ROOMS" | "EVENTS" | "CLUBS" | "NOTIFICATIONS";
+
+const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
+  "avatar-owl": { emoji: "🦉", bg: "from-amber-600 to-yellow-500" },
+  "avatar-scholar": { emoji: "📚", bg: "from-blue-600 to-indigo-500" },
+  "avatar-grad": { emoji: "🧑‍🎓", bg: "from-emerald-600 to-teal-500" },
+  "avatar-brain": { emoji: "🧠", bg: "from-purple-600 to-pink-500" },
+  "avatar-rocket": { emoji: "🚀", bg: "from-rose-600 to-orange-500" },
+  "avatar-target": { emoji: "🎯", bg: "from-cyan-600 to-blue-500" },
+  "avatar-fox": { emoji: "🦊", bg: "from-orange-600 to-amber-500" },
+  "avatar-star": { emoji: "⭐", bg: "from-yellow-600 to-amber-400" },
+};
 
 export default function SocialDashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [studyProfile, setStudyProfile] = useState<any>(null);
+  const [profileCompleted, setProfileCompleted] = useState<boolean | null>(null);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<SocialTab>("OVERVIEW");
 
@@ -27,6 +43,19 @@ export default function SocialDashboardPage() {
     upcomingEvents: 0,
     clubsCount: 0,
   });
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch("/api/social/profile");
+      if (res.ok) {
+        const data = await res.json();
+        setStudyProfile(data.profile || null);
+        setProfileCompleted(Boolean(data.profileCompleted));
+      }
+    } catch (err) {
+      console.error("Failed to fetch study profile:", err);
+    }
+  };
 
   const fetchBadgeCounts = async () => {
     try {
@@ -43,13 +72,14 @@ export default function SocialDashboardPage() {
   };
 
   useEffect(() => {
-    async function checkAuth() {
+    async function checkAuthAndProfile() {
       try {
         const res = await fetch("/api/auth/me");
         if (res.ok) {
           const data = await res.json();
           if (data.user) {
             setUser(data.user);
+            await fetchProfile();
           } else {
             router.push("/login");
           }
@@ -63,7 +93,8 @@ export default function SocialDashboardPage() {
         setLoading(false);
       }
     }
-    checkAuth();
+
+    checkAuthAndProfile();
     fetchBadgeCounts();
 
     // Smart 15s polling that pauses when window/tab is hidden
@@ -84,6 +115,19 @@ export default function SocialDashboardPage() {
           Loading Study Together Hub...
         </p>
       </div>
+    );
+  }
+
+  // 🔒 FIRST-TIME ENTRY GUARD: If user has not completed their Study Together profile, show friendly onboarding flow
+  if (profileCompleted === false) {
+    return (
+      <StudyTogetherOnboarding
+        initialDisplayName={user?.name || ""}
+        onComplete={async () => {
+          await fetchProfile();
+          await fetchBadgeCounts();
+        }}
+      />
     );
   }
 
@@ -135,28 +179,58 @@ export default function SocialDashboardPage() {
     { id: "NOTIFICATIONS", label: "Alerts", icon: "🔔" },
   ];
 
+  const currentAvatarInfo = studyProfile?.avatar && AVATAR_MAP[studyProfile.avatar]
+    ? AVATAR_MAP[studyProfile.avatar]
+    : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
+
   return (
     <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 space-y-8 text-slate-100">
-      {/* HEADER BANNER */}
+      {/* HEADER BANNER WITH USER STUDY IDENTITY CHIP */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-xl">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            Collaborative Study System
-          </span>
-          <h1 className="text-2xl md:text-3xl font-black text-white mt-2">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+              Collaborative Study System
+            </span>
+
+            {/* Study Profile Identity Chip */}
+            {studyProfile && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-slate-950/80 border border-slate-800 rounded-full text-xs">
+                <span className="text-base">{currentAvatarInfo.emoji}</span>
+                <span className="font-extrabold text-white truncate max-w-[140px]">
+                  {studyProfile.displayName}
+                </span>
+                <span className="text-[10px] text-emerald-400 font-bold">● Active</span>
+              </div>
+            )}
+          </div>
+
+          <h1 className="text-2xl md:text-3xl font-black text-white mt-1">
             Study Together Hub
           </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs md:text-sm text-slate-400 max-w-xl leading-relaxed">
             Review Civil Service topics alongside fellow examinees and classmates. Form study rooms, share practice questions, and track group progress.
           </p>
         </div>
 
-        <Link
-          href="/dashboard"
-          className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 shrink-0"
-        >
-          &larr; Return to Dashboard
-        </Link>
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => setShowEditProfileModal(true)}
+            className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer flex items-center gap-1.5"
+            title="Edit Study Together Profile"
+          >
+            <span>✏️</span>
+            <span>Edit Study Profile</span>
+          </button>
+
+          <Link
+            href="/dashboard"
+            className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+          >
+            &larr; Return to Dashboard
+          </Link>
+        </div>
       </div>
 
       {/* SUB-NAVIGATION TABS */}
@@ -262,6 +336,16 @@ export default function SocialDashboardPage() {
       {activeTab === "EVENTS" && <StudyEventsSection />}
       {activeTab === "CLUBS" && <StudyClubsSection />}
       {activeTab === "NOTIFICATIONS" && <NotificationsSection />}
+
+      {/* EDIT STUDY PROFILE MODAL */}
+      <EditStudyProfileModal
+        isOpen={showEditProfileModal}
+        initialProfile={studyProfile}
+        onClose={() => setShowEditProfileModal(false)}
+        onProfileUpdated={async () => {
+          await fetchProfile();
+        }}
+      />
     </div>
   );
 }

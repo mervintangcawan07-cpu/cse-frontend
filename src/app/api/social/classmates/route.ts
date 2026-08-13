@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/classmates/route.ts
+// Relative Path: src/app/api/social/classmates/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -25,8 +25,42 @@ export async function GET(request: Request) {
         OR: [{ senderId: userId }, { receiverId: userId }],
       },
       include: {
-        sender: { select: { id: true, name: true, email: true, isPaid: true, lastActiveAt: true } },
-        receiver: { select: { id: true, name: true, email: true, isPaid: true, lastActiveAt: true } },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            isPaid: true,
+            lastActiveAt: true,
+            studyProfile: {
+              select: {
+                displayName: true,
+                avatar: true,
+                bio: true,
+                studyGoal: true,
+                studyInterests: true,
+                experienceLevel: true,
+              },
+            },
+          },
+        },
+        receiver: {
+          select: {
+            id: true,
+            name: true,
+            isPaid: true,
+            lastActiveAt: true,
+            studyProfile: {
+              select: {
+                displayName: true,
+                avatar: true,
+                bio: true,
+                studyGoal: true,
+                studyInterests: true,
+                experienceLevel: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -44,9 +78,18 @@ export async function GET(request: Request) {
         select: {
           id: true,
           name: true,
-          email: true,
           isPaid: true,
           lastActiveAt: true,
+          studyProfile: {
+            select: {
+              displayName: true,
+              avatar: true,
+              bio: true,
+              studyGoal: true,
+              studyInterests: true,
+              experienceLevel: true,
+            },
+          },
         },
         orderBy: { lastActiveAt: "desc" },
         take: 10,
@@ -61,15 +104,24 @@ export async function GET(request: Request) {
           id: { not: userId },
           OR: [
             { name: { contains: query, mode: "insensitive" } },
-            { email: { contains: query, mode: "insensitive" } },
+            { studyProfile: { displayName: { contains: query, mode: "insensitive" } } },
           ],
         },
         select: {
           id: true,
           name: true,
-          email: true,
           isPaid: true,
           lastActiveAt: true,
+          studyProfile: {
+            select: {
+              displayName: true,
+              avatar: true,
+              bio: true,
+              studyGoal: true,
+              studyInterests: true,
+              experienceLevel: true,
+            },
+          },
         },
         take: 15,
       });
@@ -114,12 +166,21 @@ export async function GET(request: Request) {
       select: {
         id: true,
         name: true,
-        email: true,
         isPaid: true,
         lastActiveAt: true,
+        studyProfile: {
+          select: {
+            displayName: true,
+            avatar: true,
+            bio: true,
+            studyGoal: true,
+            studyInterests: true,
+            experienceLevel: true,
+          },
+        },
       },
       orderBy: { lastActiveAt: "desc" },
-      take: 6,
+      take: 8,
     });
 
     return NextResponse.json({
