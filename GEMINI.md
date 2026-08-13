@@ -1,4 +1,4 @@
-# 🚨 PERMANENT WEBSITE DEVELOPMENT MASTER PROMPT
+﻿# 🚨 PERMANENT WEBSITE DEVELOPMENT MASTER PROMPT
 
 # SAFE DEVELOPMENT • AUTOMATIC WORKFLOW • FILE PRESERVATION
 # GIT SAFETY • DATABASE SAFETY • DIFF VERIFICATION • TESTING
@@ -1986,3 +1986,185 @@ INSPECT
 → COMMIT WHEN APPROPRIATE
 → DOCUMENT
 → MAINTAIN ROLLBACK INFORMATION
+
+==================================================
+MULTI-MODEL COMPATIBILITY RULE
+==================================================
+
+This project may be developed using any model available through
+Google Antigravity, including but not limited to:
+
+- Gemini models
+- Claude models
+- GPT models
+
+The development workflow defined in this GEMINI.md is
+MODEL-AGNOSTIC.
+
+ALL AI MODELS MUST FOLLOW THE SAME PROJECT DEVELOPMENT RULES.
+
+The selected AI model is an implementation assistant.
+It is NOT the source of truth.
+
+The actual repository files are ALWAYS the source of truth.
+
+When switching between AI models:
+
+1. Inspect the current repository state.
+2. Inspect Git status and existing user changes.
+3. Read the relevant existing files before modifying them.
+4. Continue from the actual current implementation.
+5. Do not assume previous AI-generated code is correct.
+6. Do not repeat completed work unnecessarily.
+7. Preserve existing functionality.
+8. Follow the same approval gate.
+9. Review Git diff before claiming completion.
+10. Run appropriate validation after modifications.
+
+A model switch MUST NOT trigger:
+
+- Repository reset
+- Git history rewriting
+- Automatic rollback
+- Deletion of previous work
+- Replacement of existing files without inspection
+- Database reset
+- Unnecessary refactoring
+- Removal of existing functionality
+
+The selected model may change, but the development
+standards and safety requirements MUST remain unchanged.
+
+==================================================
+MODEL SWITCH CONTINUITY RULE
+==================================================
+
+When another AI model continues work previously started by
+another model, the new model MUST treat the current repository
+state as the source of truth.
+
+The new model MUST NOT assume that:
+
+- Previous code is correct
+- Previous plans were fully implemented
+- Previous changes were complete
+- Previous model decisions should automatically be preserved
+- Previous model decisions should automatically be reverted
+
+Instead:
+
+INSPECT CURRENT STATE
+→ UNDERSTAND CURRENT IMPLEMENTATION
+→ CHECK GIT STATUS
+→ CHECK DIFF
+→ IDENTIFY COMPLETED WORK
+→ IDENTIFY REMAINING WORK
+→ CONTINUE SAFELY
+
+Do not undo working code merely because another model created it.
+
+Do not continue incomplete work blindly.
+
+Do not overwrite files simply to produce a cleaner version.
+
+==================================================
+MODEL FALLBACK RULE
+==================================================
+
+If the preferred AI model reaches its available usage limit,
+the user may switch to another available model.
+
+Switching models is permitted without restarting the project
+workflow.
+
+The fallback model MUST continue following this GEMINI.md.
+
+Example:
+
+Gemini
+→ Claude
+→ GPT
+
+or:
+
+Gemini
+→ Claude
+→ Gemini
+
+or any other available model sequence.
+
+The model switch does NOT constitute approval to modify files.
+
+The existing approval gate remains active.
+
+==================================================
+AI MODEL LIMIT RULE
+==================================================
+
+AI model usage limits are external platform limitations.
+
+If a model reaches its usage limit:
+
+1. Do not attempt to bypass the platform limit.
+2. Do not modify project configuration to circumvent limits.
+3. Inform the user that the model limit has been reached when
+   necessary.
+4. The user may manually select another available model.
+5. The replacement model must continue using this workflow.
+
+==================================================
+FINAL MULTI-MODEL RULE
+==================================================
+
+Regardless of whether the selected model is Gemini, Claude,
+GPT, or another supported model:
+
+UNDERSTAND
+→ INSPECT
+→ PROTECT
+→ PLAN
+→ WAIT FOR APPROVAL
+→ IMPLEMENT
+→ INSPECT
+→ DIFF
+→ TEST
+→ VERIFY
+→ REVIEW
+→ COMMIT WHEN APPROPRIATE
+→ REPORT
+
+The model name does not change the development workflow.
+
+The repository remains the source of truth.
+==================================================
+
+==================================================
+MODEL-AGNOSTIC PROJECT RULE
+==================================================
+
+The filename GEMINI.md does NOT mean that this workflow is
+restricted to Gemini models.
+
+This file defines the development rules for the ENTIRE
+repository.
+
+These rules apply equally to:
+
+- Gemini
+- Claude
+- GPT
+- Any other AI coding model supported by the development environment
+
+The currently selected model MUST treat GEMINI.md as the
+authoritative project development workflow.
+
+The selected model MUST NOT weaken, bypass, ignore, or replace
+these rules because of model-specific behavior.
+
+If the selected model cannot complete a task safely under these
+rules, it MUST stop and explain the limitation rather than
+bypassing the workflow.
+
+==================================================
+END OF PERMANENT DEVELOPMENT RULES
+==================================================
