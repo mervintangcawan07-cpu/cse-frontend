@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import ChallengeDuelModal from "@/components/social/ChallengeDuelModal";
 
 interface Question {
   id: string;
@@ -27,14 +29,45 @@ interface MatchState {
   winnerId?: string | null;
 }
 
-export default function DuelsArenaPage() {
+function DuelsArenaInner() {
+  const searchParams = useSearchParams();
   const [match, setMatch] = useState<MatchState | null>(null);
   const [playerRole, setPlayerRole] = useState<"P1" | "P2">("P1");
   const [searching, setSearching] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [responding, setResponding] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answeredRound, setAnsweredRound] = useState(false);
   const [roundTimeLeft, setRoundTimeLeft] = useState(10); // 10 seconds per round
+
+  // 0. Load Current User & Auto-Join URL matchId if present
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.user) setCurrentUserId(d.user.id);
+      })
+      .catch(() => {});
+
+    const matchIdParam = searchParams.get("matchId");
+    if (matchIdParam) {
+      fetch(`/api/duels/${matchIdParam}`)
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success && d.match) {
+            setMatch(d.match);
+            if (currentUserId && d.match.player2Id === currentUserId) {
+              setPlayerRole("P2");
+            } else {
+              setPlayerRole("P1");
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [searchParams, currentUserId]);
 
   // 1. Join Matchmaking
   const handleStartMatchmaking = async () => {
@@ -134,6 +167,9 @@ export default function DuelsArenaPage() {
 
   // UI STATE 1: LOBBY & MATCHMAKING RADAR
   if (!match || searching) {
+    const isPendingChallenge = match && match.status === ("WAITING_FOR_ACCEPT" as any);
+    const challengeMatch = match;
+
     return (
       <div className="max-w-xl mx-auto py-16 px-4 text-center font-sans space-y-8">
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl space-y-6">
@@ -157,14 +193,77 @@ export default function DuelsArenaPage() {
                 Searching for online opponent...
               </p>
             </div>
+          ) : isPendingChallenge && challengeMatch ? (
+            <div className="space-y-4 py-4 bg-slate-950 border border-slate-800 rounded-2xl p-6">
+              <span className="text-3xl block">⚔️</span>
+              <p className="text-sm font-black text-white">
+                {challengeMatch.player1Id === currentUserId
+                  ? `Waiting for opponent to accept...`
+                  : `${challengeMatch.player1Name} has challenged you to a 1v1 Duel!`}
+              </p>
+              {challengeMatch.player1Id !== currentUserId ? (
+                <div className="flex gap-3 justify-center pt-2">
+                  <button
+                    type="button"
+                    disabled={responding}
+                    onClick={async () => {
+                      setResponding(true);
+                      const res = await fetch("/api/duels/challenge/respond", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ matchId: challengeMatch.id, action: "DECLINE" }),
+                      });
+                      if (res.ok) setMatch(null);
+                      setResponding(false);
+                    }}
+                    className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer"
+                  >
+                    Decline
+                  </button>
+                  <button
+                    type="button"
+                    disabled={responding}
+                    onClick={async () => {
+                      setResponding(true);
+                      const res = await fetch("/api/duels/challenge/respond", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ matchId: challengeMatch.id, action: "ACCEPT" }),
+                      });
+                      const data = await res.json();
+                      if (res.ok && data.match) {
+                        setMatch(data.match);
+                        setPlayerRole("P2");
+                      }
+                      setResponding(false);
+                    }}
+                    className="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition cursor-pointer"
+                  >
+                    Accept Duel ⚔️
+                  </button>
+                </div>
+              ) : (
+                <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mt-3" />
+              )}
+            </div>
           ) : (
-            <button
-              onClick={handleStartMatchmaking}
-              className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-base rounded-2xl shadow-xl transition transform hover:scale-105"
-            >
-              ⚔️ Find Match Now
-            </button>
+            <div className="space-y-3">
+              <button
+                onClick={handleStartMatchmaking}
+                className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-base rounded-2xl shadow-xl transition transform hover:scale-105 cursor-pointer"
+              >
+                ⚔️ Random Matchmaking
+              </button>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-2xl border border-slate-700 transition cursor-pointer"
+              >
+                👥 Challenge a Classmate Direct
+              </button>
+            </div>
           )}
+
+          <ChallengeDuelModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
           <div className="pt-2">
             <Link
@@ -340,5 +439,19 @@ export default function DuelsArenaPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function DuelsArenaPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-20 text-center font-bold text-slate-400 animate-pulse">
+          Loading Duels Arena...
+        </div>
+      }
+    >
+      <DuelsArenaInner />
+    </Suspense>
   );
 }

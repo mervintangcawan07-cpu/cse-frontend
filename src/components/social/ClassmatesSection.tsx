@@ -380,13 +380,38 @@ export default function ClassmatesSection() {
                     >
                       View Profile
                     </button>
-                    <button
-                      onClick={() => respondRelation(c.relationId, "REMOVE")}
-                      disabled={actionLoadingId === c.relationId}
-                      className="px-2.5 py-1 bg-slate-950 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-800 text-slate-400 text-[10px] font-bold rounded-lg transition cursor-pointer"
-                    >
-                      Remove
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            const res = await fetch("/api/duels/challenge", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ targetUserId: c.user.id }),
+                            });
+                            const data = await res.json();
+                            if (res.ok && data.match) {
+                              window.location.href = `/duels?matchId=${data.match.id}`;
+                            } else {
+                              alert(data.error || "Failed to challenge classmate.");
+                            }
+                          } catch (err) {
+                            alert("Failed to send challenge.");
+                          }
+                        }}
+                        className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 border border-amber-500/30 text-[10px] font-black rounded-lg transition cursor-pointer"
+                      >
+                        ⚔️ Duel
+                      </button>
+                      <button
+                        onClick={() => respondRelation(c.relationId, "REMOVE")}
+                        disabled={actionLoadingId === c.relationId}
+                        className="px-2.5 py-1 bg-slate-950 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-800 text-slate-400 text-[10px] font-bold rounded-lg transition cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
