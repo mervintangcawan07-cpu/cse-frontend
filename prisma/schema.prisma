@@ -211,22 +211,27 @@ model DirectMessage {
 }
 
 model StudyRoom {
-  id              String                 @id @default(cuid())
-  name            String
-  description     String?                @db.Text
-  topic           String                 @default("General Review")
-  isPublic        Boolean                @default(true)
-  maxParticipants Int                    @default(10)
-  inviteCode      String                 @unique
-  scheduledFor    DateTime?
-  state           RoomState              @default(ACTIVE)
-  hostId          String
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @updatedAt
+  id                     String                 @id @default(cuid())
+  name                   String
+  description            String?                @db.Text
+  topic                  String                 @default("General Review")
+  isPublic               Boolean                @default(true)
+  maxParticipants        Int                    @default(10)
+  inviteCode             String                 @unique
+  scheduledFor           DateTime?
+  state                  RoomState              @default(ACTIVE)
+  hostId                 String
+  // Room Permissions & Policy Controls
+  allowMemberWhiteboard  Boolean                @default(true)
+  allowMemberScreenShare Boolean                @default(true)
+  allowMemberChat        Boolean                @default(true)
+  isLocked               Boolean                @default(false)
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
 
-  host            User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
-  participants    StudyRoomParticipant[]
-  messages        StudyRoomMessage[]
+  host                   User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  participants           StudyRoomParticipant[]
+  messages               StudyRoomMessage[]
 
   @@index([hostId])
   @@index([state])
@@ -239,6 +244,9 @@ model StudyRoomParticipant {
   roomId    String
   userId    String
   role      RoomParticipantRole @default(MEMBER)
+  isMuted   Boolean             @default(false)
+  canDraw   Boolean             @default(true)
+  canShare  Boolean             @default(true)
   joinedAt  DateTime            @default(now())
 
   room      StudyRoom           @relation(fields: [roomId], references: [id], onDelete: Cascade)

@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/rooms/join/route.ts
+// Relative Path: src/app/api/social/rooms/join/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -43,6 +43,14 @@ export async function POST(request: Request) {
     const existing = room.participants.find((p) => p.userId === userId);
     if (existing) {
       return NextResponse.json({ success: true, roomId: room.id, message: "Already in room" });
+    }
+
+    // Check if room is locked by host
+    if (room.isLocked && room.hostId !== userId) {
+      return NextResponse.json(
+        { error: "This study room is currently locked by the host." },
+        { status: 403 }
+      );
     }
 
     // Check participant capacity

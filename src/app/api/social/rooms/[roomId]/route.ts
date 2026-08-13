@@ -73,10 +73,13 @@ export async function GET(
       return NextResponse.json({ error: "Study room not found" }, { status: 404 });
     }
 
-    const isMember = room.participants.some((p) => p.userId === userId);
+    const currentParticipant = room.participants.find((p) => p.userId === userId);
+    const isMember = Boolean(currentParticipant);
     if (!room.isPublic && !isMember) {
       return NextResponse.json({ error: "Access denied to private room" }, { status: 403 });
     }
+
+    const currentUserRole = room.hostId === userId ? "HOST" : (currentParticipant?.role || "MEMBER");
 
     return NextResponse.json({
       success: true,
@@ -89,6 +92,10 @@ export async function GET(
         maxParticipants: room.maxParticipants,
         inviteCode: room.inviteCode,
         state: room.state,
+        allowMemberWhiteboard: room.allowMemberWhiteboard ?? true,
+        allowMemberScreenShare: room.allowMemberScreenShare ?? true,
+        allowMemberChat: room.allowMemberChat ?? true,
+        isLocked: room.isLocked ?? false,
         host: {
           id: room.host.id,
           name: room.host.studyProfile?.displayName || room.host.name,
@@ -96,11 +103,15 @@ export async function GET(
         },
         hostId: room.hostId,
         isHost: room.hostId === userId,
+        currentUserRole,
         isMember,
         participants: room.participants.map((p) => ({
           id: p.id,
           userId: p.userId,
-          role: p.role,
+          role: p.userId === room.hostId ? "HOST" : p.role,
+          canDraw: p.canDraw ?? true,
+          canShare: p.canShare ?? true,
+          isMuted: p.isMuted ?? false,
           name: p.user.studyProfile?.displayName || p.user.name,
           displayName: p.user.studyProfile?.displayName || p.user.name,
           avatar: p.user.studyProfile?.avatar || null,
@@ -142,7 +153,17 @@ export async function PATCH(
     }
 
     const body = await request.json();
-    const { name, description, topic, isPublic, state } = body;
+    const {
+      name,
+      description,
+      topic,
+      isPublic,
+      state,
+      allowMemberWhiteboard,
+      allowMemberScreenShare,
+      allowMemberChat,
+      isLocked,
+    } = body;
 
     const updateData: any = {};
     if (name) updateData.name = String(name).trim();
@@ -152,6 +173,10 @@ export async function PATCH(
     if (state && ["SCHEDULED", "ACTIVE", "ENDED", "CANCELLED"].includes(state)) {
       updateData.state = state;
     }
+    if (allowMemberWhiteboard !== undefined) updateData.allowMemberWhiteboard = Boolean(allowMemberWhiteboard);
+    if (allowMemberScreenShare !== undefined) updateData.allowMemberScreenShare = Boolean(allowMemberScreenShare);
+    if (allowMemberChat !== undefined) updateData.allowMemberChat = Boolean(allowMemberChat);
+    if (isLocked !== undefined) updateData.isLocked = Boolean(isLocked);
 
     const updatedRoom = await prisma.studyRoom.update({
       where: { id: roomId },

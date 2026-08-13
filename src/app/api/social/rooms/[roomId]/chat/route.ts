@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/rooms/[roomId]/chat/route.ts
+// Relative Path: src/app/api/social/rooms/[roomId]/chat/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -32,7 +32,15 @@ export async function GET(
     const messages = await prisma.studyRoomMessage.findMany({
       where: { roomId },
       include: {
-        sender: { select: { id: true, name: true, role: true, isPaid: true } },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            role: true,
+            isPaid: true,
+            studyProfile: { select: { displayName: true } },
+          },
+        },
       },
       orderBy: { createdAt: "asc" },
       take: 100,
@@ -46,7 +54,7 @@ export async function GET(
         id: m.id,
         content: m.content,
         senderId: m.senderId,
-        senderName: m.sender.name || "Examinee",
+        senderName: m.sender.studyProfile?.displayName || m.sender.name || "Examinee",
         isPaid: m.sender.isPaid,
         isPinned: m.isPinned,
         createdAt: m.createdAt,
@@ -55,7 +63,7 @@ export async function GET(
         ? {
             id: pinnedMessage.id,
             content: pinnedMessage.content,
-            senderName: pinnedMessage.sender.name || "Examinee",
+            senderName: pinnedMessage.sender.studyProfile?.displayName || pinnedMessage.sender.name || "Examinee",
           }
         : null,
     });
@@ -82,12 +90,31 @@ export async function POST(
     if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = String(rawUserId);
 
-    const participant = await prisma.studyRoomParticipant.findUnique({
-      where: { roomId_userId: { roomId, userId } },
+    const room = await prisma.studyRoom.findUnique({
+      where: { id: roomId },
+      include: {
+        participants: true,
+      },
     });
 
+    if (!room) {
+      return NextResponse.json({ error: "Room not found" }, { status: 404 });
+    }
+
+    const participant = room.participants.find((p) => p.userId === userId);
     if (!participant) {
       return NextResponse.json({ error: "Must be a room participant to send messages" }, { status: 403 });
+    }
+
+    const isHost = room.hostId === userId;
+    const isModerator = participant.role === "MODERATOR";
+
+    // If chat is locked to members, only Host and Moderators can send
+    if (room.allowMemberChat === false && !isHost && !isModerator) {
+      return NextResponse.json(
+        { error: "Room chat is currently locked by the host." },
+        { status: 403 }
+      );
     }
 
     const body = await request.json();
@@ -104,7 +131,14 @@ export async function POST(
         content: content.trim(),
       },
       include: {
-        sender: { select: { id: true, name: true, isPaid: true } },
+        sender: {
+          select: {
+            id: true,
+            name: true,
+            isPaid: true,
+            studyProfile: { select: { displayName: true } },
+          },
+        },
       },
     });
 
@@ -114,7 +148,7 @@ export async function POST(
         id: message.id,
         content: message.content,
         senderId: message.senderId,
-        senderName: message.sender.name || "Examinee",
+        senderName: message.sender.studyProfile?.displayName || message.sender.name || "Examinee",
         isPaid: message.sender.isPaid,
         isPinned: message.isPinned,
         createdAt: message.createdAt,
@@ -143,11 +177,18 @@ export async function PATCH(
     if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = String(rawUserId);
 
-    const room = await prisma.studyRoom.findUnique({ where: { id: roomId } });
+    const room = await prisma.studyRoom.findUnique({
+      where: { id: roomId },
+      include: { participants: true },
+    });
     if (!room) return NextResponse.json({ error: "Room not found" }, { status: 404 });
 
-    if (room.hostId !== userId) {
-      return NextResponse.json({ error: "Only room host can pin messages" }, { status: 403 });
+    const isHost = room.hostId === userId;
+    const participant = room.participants.find((p) => p.userId === userId);
+    const isModerator = participant?.role === "MODERATOR";
+
+    if (!isHost && !isModerator) {
+      return NextResponse.json({ error: "Only room host or moderators can pin messages" }, { status: 403 });
     }
 
     const body = await request.json();
@@ -210,16 +251,27 @@ export async function DELETE(
       return NextResponse.json({ error: "Missing messageId parameter" }, { status: 400 });
     }
 
+    const room = await prisma.studyRoom.findUnique({
+      where: { id: roomId },
+      include: { participants: true },
+    });
+
+    if (!room) return NextResponse.json({ error: "Room not found" }, { status: 404 });
+
+    const isHost = room.hostId === userId;
+    const participant = room.participants.find((p) => p.userId === userId);
+    const isModerator = participant?.role === "MODERATOR";
+
     const msg = await prisma.studyRoomMessage.findUnique({
       where: { id: String(messageId) },
-      include: { room: { select: { hostId: true } } },
     });
 
     if (!msg || msg.roomId !== roomId) {
       return NextResponse.json({ error: "Message not found" }, { status: 404 });
     }
 
-    if (msg.senderId !== userId && msg.room.hostId !== userId) {
+    // Author, Host, or Moderator can delete
+    if (msg.senderId !== userId && !isHost && !isModerator) {
       return NextResponse.json({ error: "Forbidden from deleting this message" }, { status: 403 });
     }
 

@@ -1,4 +1,4 @@
-﻿// Relative Path: src/components/social/rooms/StudyRoomStage.tsx
+// Relative Path: src/components/social/rooms/StudyRoomStage.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -9,14 +9,33 @@ import {
   useRoomContext,
 } from "@livekit/components-react";
 import LiveWhiteboard, { DrawDelta } from "@/components/social/whiteboard/LiveWhiteboard";
+import { RoomRoleBadge } from "@/components/social/rooms/RoomRoleBadge";
 
 interface StudyRoomStageProps {
   roomId: string;
   roomName: string;
   isHost?: boolean;
+  userRole?: "HOST" | "MODERATOR" | "MEMBER";
+  allowMemberWhiteboard?: boolean;
+  allowMemberScreenShare?: boolean;
+  canUserDraw?: boolean;
+  canUserShare?: boolean;
+  isUserForceMuted?: boolean;
+  onOpenSettings?: () => void;
 }
 
-function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomStageProps) {
+function RealtimeStageContent({
+  roomId,
+  roomName,
+  isHost = false,
+  userRole = "MEMBER",
+  allowMemberWhiteboard = true,
+  allowMemberScreenShare = true,
+  canUserDraw = true,
+  canUserShare = true,
+  isUserForceMuted = false,
+  onOpenSettings,
+}: StudyRoomStageProps) {
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
   const [activeTab, setActiveTab] = useState<"OVERVIEW" | "WHITEBOARD" | "SCREEN_SHARE">("OVERVIEW");
@@ -24,13 +43,25 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
   const [isHandRaised, setIsHandRaised] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
 
-  // Whiteboard & Host permission states
-  const [allowMembersToDraw, setAllowMembersToDraw] = useState(false);
+  // Live Whiteboard sync states
   const [incomingDelta, setIncomingDelta] = useState<DrawDelta | null>(null);
   const [incomingClearSignal, setIncomingClearSignal] = useState<number>(0);
+  const [handRaiseAlerts, setHandRaiseAlerts] = useState<string[]>([]);
 
-  // Determine drawing permission
-  const canDraw = isHost || allowMembersToDraw;
+  const isModerator = userRole === "MODERATOR";
+  const isHostOrMod = isHost || isModerator;
+
+  // Determine drawing and screen share permissions
+  const canDraw = isHostOrMod || (allowMemberWhiteboard && canUserDraw);
+  const canShare = isHostOrMod || (allowMemberScreenShare && canUserShare);
+
+  // Handle force-mute from Host/Mod
+  useEffect(() => {
+    if (isUserForceMuted && localParticipant) {
+      localParticipant.setMicrophoneEnabled(false).catch(() => {});
+      setIsMuted(true);
+    }
+  }, [isUserForceMuted, localParticipant]);
 
   // Listen for LiveKit Data Channel messages
   useEffect(() => {
@@ -45,8 +76,10 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
           setIncomingDelta(data.delta);
         } else if (data.type === "WHITEBOARD_CLEAR") {
           setIncomingClearSignal(Date.now());
-        } else if (data.type === "WHITEBOARD_PERMISSIONS") {
-          setAllowMembersToDraw(Boolean(data.allowMembersToDraw));
+        } else if (data.type === "HAND_RAISE") {
+          if (data.userName) {
+            setHandRaiseAlerts((prev) => [...prev.slice(-4), data.userName]);
+          }
         }
       } catch (err) {
         console.error("Failed to parse DataChannel message:", err);
@@ -58,24 +91,6 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
       room.off("dataReceived", handleData);
     };
   }, [room]);
-
-  // Host toggle for drawing permissions
-  const toggleDrawingPermissions = () => {
-    if (!isHost || !room || !localParticipant) return;
-    const nextState = !allowMembersToDraw;
-    setAllowMembersToDraw(nextState);
-
-    try {
-      const payload = JSON.stringify({
-        type: "WHITEBOARD_PERMISSIONS",
-        allowMembersToDraw: nextState,
-      });
-      const encoded = new TextEncoder().encode(payload);
-      localParticipant.publishData(encoded, { reliable: true });
-    } catch (err) {
-      console.error("Failed to broadcast permissions:", err);
-    }
-  };
 
   // Broadcast drawing strokes
   const handleDrawDelta = (delta: DrawDelta) => {
@@ -104,6 +119,10 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
   // Toggle Microphones
   const toggleMic = async () => {
     if (!localParticipant) return;
+    if (isUserForceMuted) {
+      alert("You have been muted by a host or moderator.");
+      return;
+    }
     const nextState = !isMuted;
     try {
       await localParticipant.setMicrophoneEnabled(!nextState);
@@ -115,12 +134,31 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
 
   // Toggle Raise Hand
   const toggleRaiseHand = () => {
-    setIsHandRaised(!isHandRaised);
+    const nextRaised = !isHandRaised;
+    setIsHandRaised(nextRaised);
+
+    if (nextRaised && room && localParticipant) {
+      try {
+        const payload = JSON.stringify({
+          type: "HAND_RAISE",
+          userName: localParticipant.name || "A member",
+        });
+        const encoded = new TextEncoder().encode(payload);
+        localParticipant.publishData(encoded, { reliable: true });
+      } catch (err) {
+        console.error("Failed to broadcast hand raise:", err);
+      }
+    }
   };
 
   // Toggle Screen Share
   const toggleScreenShare = async () => {
     if (!localParticipant) return;
+    if (!canShare) {
+      alert("Screen sharing is restricted to hosts and moderators in this room.");
+      return;
+    }
+
     try {
       if (!isScreenSharing) {
         await localParticipant.setScreenShareEnabled(true);
@@ -142,43 +180,86 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
 
       {/* STAGE HEADER */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 px-2.5 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
-            Interactive Study Stage
-          </span>
-          <h2 className="text-lg font-black text-white mt-1">{roomName}</h2>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 px-2.5 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
+              Interactive Study Stage
+            </span>
+            <RoomRoleBadge role={userRole} size="sm" />
+          </div>
+          <h2 className="text-lg font-black text-white">{roomName}</h2>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
-          <button
-            type="button"
-            onClick={() => setActiveTab("OVERVIEW")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-              activeTab === "OVERVIEW" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            📊 Study Area
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab("WHITEBOARD")}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-              activeTab === "WHITEBOARD" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            ✏️ Live Whiteboard
-          </button>
-          <button
-            type="button"
-            onClick={toggleScreenShare}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-              activeTab === "SCREEN_SHARE" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            🖥️ {isScreenSharing ? "Screen Active" : "Share Screen"}
-          </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* TAB BUTTONS */}
+          <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <button
+              type="button"
+              onClick={() => setActiveTab("OVERVIEW")}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
+                activeTab === "OVERVIEW" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              📊 Overview
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("WHITEBOARD")}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
+                activeTab === "WHITEBOARD" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              ✏️ Whiteboard
+            </button>
+            <button
+              type="button"
+              onClick={toggleScreenShare}
+              disabled={!canShare && !isScreenSharing}
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-40 ${
+                activeTab === "SCREEN_SHARE"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : canShare
+                  ? "text-slate-400 hover:text-white"
+                  : "text-slate-600 cursor-not-allowed"
+              }`}
+              title={!canShare ? "Screen sharing disabled by room policy" : undefined}
+            >
+              🖥️ {isScreenSharing ? "Screen Active" : "Share Screen"}
+            </button>
+          </div>
+
+          {/* Host Room Policy Settings Button */}
+          {isHost && onOpenSettings && (
+            <button
+              type="button"
+              onClick={onOpenSettings}
+              className="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+              title="Manage Room Permissions & Policies"
+            >
+              <span>👑</span>
+              <span className="hidden sm:inline">Room Policies</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* HAND RAISED ALERTS FOR HOST/MOD */}
+      {isHostOrMod && handRaiseAlerts.length > 0 && (
+        <div className="bg-amber-500/15 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between text-xs text-amber-300 animate-fade-in">
+          <div className="flex items-center gap-2">
+            <span>✋</span>
+            <span>
+              <strong>{handRaiseAlerts[handRaiseAlerts.length - 1]}</strong> raised their hand to speak or share!
+            </span>
+          </div>
+          <button
+            onClick={() => setHandRaiseAlerts([])}
+            className="text-[10px] font-bold text-amber-400 hover:text-white px-2 py-0.5 rounded cursor-pointer"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {/* DISPLAY STAGE */}
       <div className="flex-1 min-h-[420px] bg-slate-900 border border-slate-800 rounded-3xl p-4 relative overflow-hidden flex flex-col">
@@ -190,21 +271,29 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
             <div className="max-w-md space-y-1">
               <h3 className="text-base font-bold text-white">Voice Study Session Active</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
-                You are connected to the LiveKit voice server. Unmute your microphone below to speak.
+                You are connected to the LiveKit voice server. Unmute your microphone below to collaborate.
               </p>
             </div>
           </div>
         )}
 
         {activeTab === "WHITEBOARD" && (
-          <LiveWhiteboard
-            isHost={isHost}
-            canDraw={canDraw}
-            onDrawDelta={handleDrawDelta}
-            onClearBoard={handleClearBoard}
-            incomingDelta={incomingDelta}
-            incomingClearSignal={incomingClearSignal}
-          />
+          <div className="flex-1 flex flex-col">
+            {!canDraw && (
+              <div className="mb-2 p-2 bg-slate-950 border border-slate-800 rounded-xl text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                <span>🔒</span>
+                <span>Whiteboard drawing is currently restricted by the host. (View only)</span>
+              </div>
+            )}
+            <LiveWhiteboard
+              isHost={isHostOrMod}
+              canDraw={canDraw}
+              onDrawDelta={handleDrawDelta}
+              onClearBoard={handleClearBoard}
+              incomingDelta={incomingDelta}
+              incomingClearSignal={incomingClearSignal}
+            />
+          </div>
         )}
 
         {activeTab === "SCREEN_SHARE" && (
@@ -218,20 +307,23 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
         )}
       </div>
 
-      {/* CONTROLS & HOST MODERATION */}
+      {/* CONTROLS & VOICE TOOLBAR */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={toggleMic}
-            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer ${
-              isMuted
+            disabled={isUserForceMuted}
+            className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition flex items-center gap-2 cursor-pointer disabled:opacity-50 ${
+              isUserForceMuted
+                ? "bg-slate-800 text-rose-400 border border-rose-500/20 cursor-not-allowed"
+                : isMuted
                 ? "bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30"
                 : "bg-emerald-600 text-white shadow-lg shadow-emerald-600/20"
             }`}
           >
-            <span>{isMuted ? "🎤❌" : "🎤"}</span>
-            <span>{isMuted ? "Unmute Mic" : "Microphone On"}</span>
+            <span>{isUserForceMuted ? "🔇 Force Muted" : isMuted ? "🎤❌" : "🎤"}</span>
+            <span>{isUserForceMuted ? "Muted by Host" : isMuted ? "Unmute Mic" : "Microphone On"}</span>
           </button>
 
           <button
@@ -248,32 +340,27 @@ function RealtimeStageContent({ roomId, roomName, isHost = false }: StudyRoomSta
           </button>
         </div>
 
-        {isHost && (
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={toggleDrawingPermissions}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                allowMembersToDraw
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
-                  : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-              }`}
-            >
-              <span>{allowMembersToDraw ? "✏️" : "🔒"}</span>
-              <span>{allowMembersToDraw ? "Board: Everyone Can Draw" : "Board: Host Only"}</span>
-            </button>
-
-            <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full hidden sm:inline-block">
-              👑 Host Controls
+        <div className="flex items-center gap-2 text-xs">
+          {isHost ? (
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+              👑 Room Host
             </span>
-          </div>
-        )}
+          ) : isModerator ? (
+            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">
+              🛡️ Moderator
+            </span>
+          ) : (
+            <span className="text-[10px] font-bold text-slate-400">
+              {canDraw ? "✏️ Drawing Enabled" : "🔒 View Only"}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-export default function StudyRoomStage({ roomId, roomName, isHost = false }: StudyRoomStageProps) {
+export default function StudyRoomStage(props: StudyRoomStageProps) {
   const [token, setToken] = useState<string | null>(null);
   const [loadingToken, setLoadingToken] = useState(true);
 
@@ -281,7 +368,7 @@ export default function StudyRoomStage({ roomId, roomName, isHost = false }: Stu
     let isMounted = true;
     const fetchToken = async () => {
       try {
-        const res = await fetch(`/api/social/rooms/${roomId}/voice-token`);
+        const res = await fetch(`/api/social/rooms/${props.roomId}/voice-token`);
         if (res.ok) {
           const data = await res.json();
           if (isMounted && data.token) setToken(data.token);
@@ -296,7 +383,7 @@ export default function StudyRoomStage({ roomId, roomName, isHost = false }: Stu
     return () => {
       isMounted = false;
     };
-  }, [roomId]);
+  }, [props.roomId]);
 
   const serverUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL;
 
@@ -326,7 +413,7 @@ export default function StudyRoomStage({ roomId, roomName, isHost = false }: Stu
       video={false}
       className="w-full"
     >
-      <RealtimeStageContent roomId={roomId} roomName={roomName} isHost={isHost} />
+      <RealtimeStageContent {...props} />
     </LiveKitRoom>
   );
 }

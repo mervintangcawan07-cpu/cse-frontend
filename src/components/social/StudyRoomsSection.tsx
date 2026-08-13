@@ -1,57 +1,56 @@
 // Relative Path: src/components/social/StudyRoomsSection.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import StudyRoomStage from "@/components/social/rooms/StudyRoomStage";
-import { DeleteRoomModal } from "@/components/social/DeleteRoomModal";
+import { RoomRoleBadge } from "@/components/social/rooms/RoomRoleBadge";
+import { RoomSettingsModal } from "@/components/social/rooms/RoomSettingsModal";
+import { ParticipantActionsMenu } from "@/components/social/rooms/ParticipantActionsMenu";
+import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 
 export default function StudyRoomsSection() {
-  const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<"all" | "public" | "mine">("all");
-  
-  const [inviteCodeInput, setInviteCodeInput] = useState("");
-  const [joiningCode, setJoiningCode] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [activeRoom, setActiveRoom] = useState<any>(null);
-  const [roomToDelete, setRoomToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [deletingRoom, setDeletingRoom] = useState(false);
-  
-  // Room Live Chat States
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
-  const [pinnedMessage, setPinnedMessage] = useState<any>(null);
-  const [newChatMessage, setNewChatMessage] = useState("");
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [sendingChat, setSendingChat] = useState(false);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [filter, setFilter] = useState<"all" | "mine">("all");
+  const [currentUserId, setCurrentUserId] = useState<string>("");
 
-  // Form states for room creation
+  // Create room modal state
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [roomDesc, setRoomDesc] = useState("");
-  const [roomTopic, setRoomTopic] = useState("Numerical Reasoning");
+  const [roomTopic, setRoomTopic] = useState("General Review");
   const [isPublic, setIsPublic] = useState(true);
   const [maxMembers, setMaxMembers] = useState(10);
   const [creating, setCreating] = useState(false);
 
-  const topicOptions = [
-    "Numerical Reasoning",
-    "Verbal Ability",
-    "Analytical Reasoning",
-    "General Information",
-    "Philippine Constitution",
-    "Full Mock Drill",
-  ];
+  // Active room view state
+  const [activeRoom, setActiveRoom] = useState<any | null>(null);
+  const [inviteCodeInput, setInviteCodeInput] = useState("");
+  const [joiningCode, setJoiningCode] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
-  const quickEmojis = ["👍", "🔥", "💡", "❓", "👏", "💯", "✍️", "🎉"];
+  // Delete room state
+  const [roomToDelete, setRoomToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingRoom, setDeletingRoom] = useState(false);
+
+  // Room chat state
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [pinnedMessage, setPinnedMessage] = useState<any | null>(null);
+  const [newChatMessage, setNewChatMessage] = useState("");
+  const [sendingChat, setSendingChat] = useState(false);
+
+  useEffect(() => {
+    // Fetch current user id
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user?.id) setCurrentUserId(String(data.user.id));
+      })
+      .catch(() => {});
+  }, []);
 
   const fetchRooms = async () => {
     try {
-      const meRes = await fetch("/api/auth/me");
-      if (meRes.ok) {
-        const meData = await meRes.json();
-        setCurrentUserId(meData.user?.id || null);
-      }
-
       const res = await fetch(`/api/social/rooms?filter=${filter}`);
       if (res.ok) {
         const data = await res.json();
@@ -68,34 +67,38 @@ export default function StudyRoomsSection() {
     fetchRooms();
   }, [filter]);
 
-  // Live polling for room messages every 3 seconds
+  // Poll room details & chat when active
   useEffect(() => {
     if (!activeRoom?.id) return;
 
+    let isMounted = true;
     const fetchChat = async () => {
       try {
         const res = await fetch(`/api/social/rooms/${activeRoom.id}/chat`);
         if (res.ok) {
           const data = await res.json();
-          setChatMessages(data.messages || []);
-          setPinnedMessage(data.pinnedMessage || null);
+          if (isMounted) {
+            setChatMessages(data.messages || []);
+            setPinnedMessage(data.pinnedMessage || null);
+          }
         }
       } catch (err) {
-        console.error("Failed to load room chat:", err);
+        console.error("Chat poll error:", err);
       }
     };
 
     fetchChat();
-    const interval = setInterval(fetchChat, 3000);
-    return () => clearInterval(interval);
-  }, [activeRoom?.id]);
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && !document.hidden) {
+        fetchChat();
+      }
+    }, 4000);
 
-  // Container-only scroll fix (Prevents global window auto-scroll)
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [activeRoom?.id]);
 
   const joinRoom = async (roomId?: string, code?: string) => {
     setJoiningCode(true);
@@ -110,6 +113,9 @@ export default function StudyRoomsSection() {
         setInviteCodeInput("");
         await openRoomView(data.roomId);
         await fetchRooms();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to join room");
       }
     } catch (err) {
       console.error("Failed to join room:", err);
@@ -160,6 +166,12 @@ export default function StudyRoomsSection() {
       }
     } catch (err) {
       console.error("Failed to fetch room view:", err);
+    }
+  };
+
+  const refreshActiveRoom = async () => {
+    if (activeRoom?.id) {
+      await openRoomView(activeRoom.id);
     }
   };
 
@@ -220,6 +232,9 @@ export default function StudyRoomsSection() {
         setNewChatMessage("");
         const data = await res.json();
         setChatMessages((prev) => [...prev, data.message]);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to send message");
       }
     } catch (err) {
       console.error("Failed to send room chat:", err);
@@ -263,87 +278,127 @@ export default function StudyRoomsSection() {
     }
   };
 
-  const kickParticipant = async (roomId: string, targetUserId: string) => {
-    try {
-      const res = await fetch(`/api/social/rooms/${roomId}/participants?targetUserId=${targetUserId}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        await openRoomView(roomId);
-      }
-    } catch (err) {
-      console.error("Failed to kick participant:", err);
-    }
-  };
-
+  // ACTIVE ROOM VIEW
   if (activeRoom) {
+    const currentUserRole = activeRoom.currentUserRole || (activeRoom.isHost ? "HOST" : "MEMBER");
+    const isHost = currentUserRole === "HOST";
+    const isModerator = currentUserRole === "MODERATOR";
+    const isHostOrMod = isHost || isModerator;
+
+    const currentParticipant = activeRoom.participants.find((p: any) => p.userId === currentUserId);
+    const canUserDraw = currentParticipant?.canDraw ?? true;
+    const canUserShare = currentParticipant?.canShare ?? true;
+    const isUserForceMuted = currentParticipant?.isMuted ?? false;
+
     return (
-      <div className="space-y-6">
-        {/* ROOM ACTIVE VIEW HEADER */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-xl">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+      <div className="space-y-6 animate-fade-in">
+        {/* ROOM TOP BAR */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 px-2.5 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
                 {activeRoom.topic}
               </span>
-              <span className="text-[10px] font-bold text-slate-400">
-                Invite Code: <code className="text-white font-mono bg-slate-950 px-2 py-0.5 rounded border border-slate-800">{activeRoom.inviteCode}</code>
-              </span>
+              <RoomRoleBadge role={currentUserRole} size="sm" />
+              {activeRoom.isLocked && (
+                <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                  🔒 Locked
+                </span>
+              )}
             </div>
-            <h2 className="text-xl font-black text-white">{activeRoom.name}</h2>
+            <h3 className="text-lg font-black text-white flex items-center gap-2">
+              <span>{activeRoom.name}</span>
+            </h3>
             {activeRoom.description && (
-              <p className="text-xs text-slate-400 mt-1 max-w-xl">{activeRoom.description}</p>
+              <p className="text-xs text-slate-400 max-w-xl">{activeRoom.description}</p>
             )}
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {(activeRoom.isHost || activeRoom.hostId === currentUserId) ? (
+            <div className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-300 flex items-center gap-1.5">
+              <span className="text-slate-500 text-[10px]">Invite Code:</span>
+              <span className="font-bold text-white">{activeRoom.inviteCode}</span>
+            </div>
+
+            {/* Room Host Settings Button */}
+            {isHost && (
               <button
-                onClick={() => setRoomToDelete({ id: activeRoom.id, name: activeRoom.name })}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-md shadow-rose-600/20 flex items-center gap-1.5"
-                title="Delete Study Room"
+                type="button"
+                onClick={() => setShowSettingsModal(true)}
+                className="px-3.5 py-2 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+                title="Room Settings & Policies"
               >
-                <span>🗑️</span>
-                <span>Delete Room</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => leaveRoom(activeRoom.id)}
-                className="px-4 py-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
-              >
-                Leave Room
+                <span>👑</span>
+                <span>Policies</span>
               </button>
             )}
+
+            {/* Delete Room Button (Host Only) */}
+            {activeRoom.isHost && (
+              <button
+                type="button"
+                onClick={() => setRoomToDelete({ id: activeRoom.id, name: activeRoom.name })}
+                className="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-500/30 text-xs font-bold rounded-xl transition cursor-pointer"
+                title="Permanently Delete Study Room"
+              >
+                Delete Room
+              </button>
+            )}
+
             <button
-              onClick={() => setActiveRoom(null)}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition cursor-pointer"
+              type="button"
+              onClick={() => leaveRoom(activeRoom.id)}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer"
             >
-              &larr; Back to Directory
+              Leave Room
             </button>
           </div>
         </div>
 
-        {/* INTERACTIVE VOICE, SCREEN SHARE, AND LIVE WHITEBOARD STAGE */}
+        {/* INTERACTIVE STUDY STAGE */}
         <StudyRoomStage
           roomId={activeRoom.id}
           roomName={activeRoom.name}
-          isHost={activeRoom.isHost || activeRoom.hostId === currentUserId}
+          isHost={isHost}
+          userRole={currentUserRole}
+          allowMemberWhiteboard={activeRoom.allowMemberWhiteboard}
+          allowMemberScreenShare={activeRoom.allowMemberScreenShare}
+          canUserDraw={canUserDraw}
+          canUserShare={canUserShare}
+          isUserForceMuted={isUserForceMuted}
+          onOpenSettings={() => setShowSettingsModal(true)}
         />
 
-        {/* WORKSPACE & LIVE GROUP CHAT */}
+        {/* TWO COLUMN: LIVE CHAT & PARTICIPANTS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* LIVE GROUP CHAT PANEL */}
-          <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl flex flex-col justify-between overflow-hidden min-h-[460px]">
+          {/* ROOM LIVE CHAT */}
+          <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4 flex flex-col h-[480px]">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <span>💬 Live Study Chat</span>
+                <span className="text-[10px] text-slate-500 font-normal">({chatMessages.length} msgs)</span>
+              </h4>
+              {activeRoom.allowMemberChat === false && (
+                <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                  🔒 Chat Restricted to Host/Mods
+                </span>
+              )}
+            </div>
+
+            {/* PINNED MESSAGE BANNER */}
             {pinnedMessage && (
-              <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-2.5 flex items-center justify-between gap-3 text-xs text-amber-200">
-                <div className="flex items-center gap-2 truncate">
-                  <span className="shrink-0">📌</span>
-                  <span className="truncate"><b>{pinnedMessage.senderName}:</b> {pinnedMessage.content}</span>
+              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-between gap-2 text-xs text-amber-300">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <span className="text-sm">📌</span>
+                  <div className="truncate">
+                    <span className="font-bold">{pinnedMessage.senderName}: </span>
+                    <span>{pinnedMessage.content}</span>
+                  </div>
                 </div>
-                {activeRoom.isHost && (
+                {isHostOrMod && (
                   <button
                     onClick={() => togglePinMessage(pinnedMessage.id)}
-                    className="text-[10px] text-amber-400 hover:text-white font-bold shrink-0 cursor-pointer"
+                    className="text-[10px] font-bold text-amber-400 hover:text-white cursor-pointer px-2 py-0.5 rounded"
                   >
                     Unpin
                   </button>
@@ -351,97 +406,94 @@ export default function StudyRoomsSection() {
               </div>
             )}
 
-            {/* MESSAGE FEED (Container Scroll Only) */}
-            <div ref={chatContainerRef} className="p-5 flex-1 overflow-y-auto max-h-[380px] space-y-3">
+            {/* MESSAGE STREAM */}
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
               {chatMessages.length === 0 ? (
-                <div className="text-center py-16 text-slate-500 space-y-2">
-                  <span className="text-4xl block">💬</span>
-                  <p className="text-xs font-bold text-slate-300">Room Chat Ready</p>
-                  <p className="text-[10px] font-semibold text-slate-500">Ask questions or share solutions with room participants.</p>
+                <div className="h-full flex items-center justify-center text-xs text-slate-500 italic">
+                  No messages yet. Start collaborating by saying hi!
                 </div>
               ) : (
                 chatMessages.map((msg) => {
                   const isMine = msg.senderId === currentUserId;
-                  const isRoomHostMsg = msg.senderId === activeRoom.hostId;
                   return (
-                    <div key={msg.id} className={`flex flex-col ${isMine ? "items-end" : "items-start"} group space-y-1`}>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400 px-1">
-                        <span className="font-bold text-white">{msg.senderName}</span>
-                        {isRoomHostMsg && (
-                          <span className="text-[9px] font-black uppercase text-amber-400 px-1.5 py-0.2 bg-amber-500/10 rounded border border-amber-500/20">
-                            Host
-                          </span>
-                        )}
-                        <span>{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2 max-w-[85%]">
-                        {(isMine || activeRoom.isHost) && (
-                          <div className="opacity-0 group-hover:opacity-100 flex gap-1 transition">
-                            {activeRoom.isHost && (
-                              <button
-                                onClick={() => togglePinMessage(msg.id)}
-                                className="text-[10px] text-slate-400 hover:text-amber-400 cursor-pointer"
-                                title="Pin Message"
-                              >
-                                📌
-                              </button>
-                            )}
+                    <div
+                      key={msg.id}
+                      className={`group p-3 rounded-2xl border text-xs flex flex-col space-y-1 relative ${
+                        isMine
+                          ? "bg-blue-600/15 border-blue-500/30 ml-8"
+                          : "bg-slate-950 border-slate-800/80 mr-8"
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="font-extrabold text-slate-300 flex items-center gap-1.5">
+                          <span>{msg.senderName}</span>
+                          {msg.isPinned && <span className="text-[10px]">📌</span>}
+                        </span>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                          {isHostOrMod && (
+                            <button
+                              onClick={() => togglePinMessage(msg.id)}
+                              className="text-[10px] text-amber-400 hover:text-amber-300 cursor-pointer"
+                              title={msg.isPinned ? "Unpin" : "Pin message"}
+                            >
+                              📌
+                            </button>
+                          )}
+                          {(isMine || isHostOrMod) && (
                             <button
                               onClick={() => deleteRoomMessage(msg.id)}
-                              className="text-[10px] text-slate-400 hover:text-rose-400 cursor-pointer"
-                              title="Delete Message"
+                              className="text-[10px] text-rose-400 hover:text-rose-300 cursor-pointer"
+                              title="Delete message"
                             >
                               🗑️
                             </button>
-                          </div>
-                        )}
-
-                        <div className={`p-3 rounded-2xl text-xs leading-relaxed ${
-                          isMine
-                            ? "bg-blue-600 text-white rounded-br-none"
-                            : "bg-slate-950 border border-slate-800 text-slate-200 rounded-bl-none"
-                        }`}>
-                          {msg.content}
+                          )}
                         </div>
                       </div>
+                      <p className="text-slate-200 leading-relaxed break-words">{msg.content}</p>
                     </div>
                   );
                 })
               )}
             </div>
 
-            {/* EMOJI BAR & INPUT FORM */}
-            <div className="p-3 bg-slate-950 border-t border-slate-800 space-y-2">
+            {/* CHAT INPUT */}
+            <div className="space-y-2 pt-2 border-t border-slate-800">
               <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
-                {quickEmojis.map((e) => (
+                {["👍 Got it", "❓ Need help with Q12", "💡 Good explanation!", "🎯 Let's review Math"].map((e) => (
                   <button
                     key={e}
                     type="button"
-                    onClick={() => setNewChatMessage((prev) => prev + e)}
-                    className="px-2 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-xs transition cursor-pointer shrink-0"
+                    onClick={() => setNewChatMessage((prev) => prev + (prev ? " " : "") + e)}
+                    className="px-2 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[10px] text-slate-300 transition cursor-pointer shrink-0 border border-slate-800"
                   >
                     {e}
                   </button>
                 ))}
               </div>
 
-              <form onSubmit={sendRoomMessage} className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Ask a question or explain a solution..."
-                  value={newChatMessage}
-                  onChange={(e) => setNewChatMessage(e.target.value)}
-                  className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1"
-                />
-                <button
-                  type="submit"
-                  disabled={sendingChat || !newChatMessage.trim()}
-                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0"
-                >
-                  {sendingChat ? "..." : "Send"}
-                </button>
-              </form>
+              {activeRoom.allowMemberChat === false && !isHostOrMod ? (
+                <div className="p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-center text-xs text-slate-400">
+                  🔒 Chat is locked to Host and Moderators.
+                </div>
+              ) : (
+                <form onSubmit={sendRoomMessage} className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Ask a question or explain a solution..."
+                    value={newChatMessage}
+                    onChange={(e) => setNewChatMessage(e.target.value)}
+                    className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1"
+                  />
+                  <button
+                    type="submit"
+                    disabled={sendingChat || !newChatMessage.trim()}
+                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0"
+                  >
+                    {sendingChat ? "..." : "Send"}
+                  </button>
+                </form>
+              )}
             </div>
           </div>
 
@@ -457,33 +509,67 @@ export default function StudyRoomsSection() {
                 <div key={p.id} className="bg-slate-950 p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 overflow-hidden">
                     <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
-                      {p.name ? p.name[0] : "U"}
+                      {p.displayName ? p.displayName[0] : p.name ? p.name[0] : "U"}
                     </div>
-                    <div className="overflow-hidden">
-                      <p className="text-xs font-bold text-white truncate">{p.name || "Examinee"}</p>
-                      <span className="text-[10px] text-slate-500 block">
-                        {p.role === "HOST" ? "👑 Room Host" : "Member"}
-                      </span>
+                    <div className="overflow-hidden space-y-0.5">
+                      <div className="flex items-center gap-1.5">
+                        <p className="text-xs font-bold text-white truncate">{p.displayName || p.name || "Examinee"}</p>
+                        <RoomRoleBadge role={p.role} size="sm" showLabel={false} />
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                        <span>{p.role === "HOST" ? "Host" : p.role === "MODERATOR" ? "Moderator" : "Member"}</span>
+                        {p.isMuted && <span className="text-rose-400">• Muted</span>}
+                        {p.canDraw === false && <span className="text-amber-400">• No Draw</span>}
+                      </div>
                     </div>
                   </div>
 
-                  {activeRoom.isHost && p.userId !== activeRoom.hostId && (
-                    <button
-                      onClick={() => kickParticipant(activeRoom.id, p.userId)}
-                      className="text-[10px] font-bold text-rose-400 hover:text-rose-300 p-1 cursor-pointer"
-                    >
-                      Kick
-                    </button>
-                  )}
+                  {/* Actions Menu for Host and Moderators */}
+                  <ParticipantActionsMenu
+                    roomId={activeRoom.id}
+                    currentUserRole={currentUserRole}
+                    currentUserId={currentUserId}
+                    participant={{
+                      id: p.id,
+                      userId: p.userId,
+                      role: p.role,
+                      name: p.displayName || p.name || "Examinee",
+                      canDraw: p.canDraw,
+                      canShare: p.canShare,
+                      isMuted: p.isMuted,
+                    }}
+                    onActionComplete={refreshActiveRoom}
+                  />
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* ROOM SETTINGS MODAL (HOST ONLY) */}
+        {isHost && (
+          <RoomSettingsModal
+            isOpen={showSettingsModal}
+            roomId={activeRoom.id}
+            initialSettings={{
+              name: activeRoom.name,
+              description: activeRoom.description,
+              topic: activeRoom.topic,
+              isPublic: activeRoom.isPublic,
+              allowMemberWhiteboard: activeRoom.allowMemberWhiteboard,
+              allowMemberScreenShare: activeRoom.allowMemberScreenShare,
+              allowMemberChat: activeRoom.allowMemberChat,
+              isLocked: activeRoom.isLocked,
+            }}
+            onClose={() => setShowSettingsModal(false)}
+            onSettingsSaved={refreshActiveRoom}
+          />
+        )}
       </div>
     );
   }
 
+  // ROOM DIRECTORY VIEW
   return (
     <div className="space-y-6">
       {/* HEADER BAR & CONTROLS */}
@@ -555,50 +641,59 @@ export default function StudyRoomsSection() {
           {rooms.map((room) => (
             <div key={room.id} className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-4 hover:border-slate-700 transition">
               <div className="flex justify-between items-start">
-                <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
-                  {room.topic}
-                </span>
-                <span className="text-[10px] font-bold text-slate-500">
-                  {room.participantCount}/{room.maxParticipants} Examinees
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
+                    {room.topic}
+                  </span>
+                  {room.isLocked && (
+                    <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                      🔒 Locked
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-slate-400">
+                  👥 {room.participantCount}/{room.maxParticipants}
                 </span>
               </div>
 
               <div>
-                <h4 className="text-sm font-bold text-white truncate">{room.name}</h4>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2 min-h-[32px]">
-                  {room.description || "Interactive group practice and problem solving."}
+                <h4 className="text-base font-bold text-white truncate">{room.name}</h4>
+                <p className="text-xs text-slate-400 line-clamp-2 mt-1 min-h-[32px]">
+                  {room.description || "Interactive group review room for Civil Service Exam preparation."}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
-                <span className="text-[10px] text-slate-500 font-semibold truncate">
-                  Host: {room.host?.name || "Examinee"}
-                </span>
+              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5 text-slate-400">
+                  <span>👑</span>
+                  <span className="truncate max-w-[100px]">{room.host?.name || "Host"}</span>
+                </div>
 
-                <div className="flex items-center gap-2 shrink-0">
-                  {(room.isHost || room.host?.id === currentUserId) && (
+                <div className="flex items-center gap-1.5">
+                  {room.isHost && (
                     <button
                       onClick={() => setRoomToDelete({ id: room.id, name: room.name })}
-                      className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 rounded-lg transition cursor-pointer text-xs"
-                      title="Delete Room"
+                      className="px-2.5 py-1 text-[11px] font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 rounded-lg transition cursor-pointer"
+                      title="Permanently Delete Room"
                     >
-                      🗑️
+                      Delete
                     </button>
                   )}
 
                   {room.isMember ? (
                     <button
                       onClick={() => openRoomView(room.id)}
-                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition cursor-pointer"
+                      className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer shadow-md"
                     >
-                      Open Room
+                      Enter Room &rarr;
                     </button>
                   ) : (
                     <button
                       onClick={() => joinRoom(room.id)}
-                      className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                      disabled={room.isLocked}
+                      className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-40"
                     >
-                      Join Room
+                      {room.isLocked ? "🔒 Locked" : "Join Room"}
                     </button>
                   )}
                 </div>
@@ -610,105 +705,144 @@ export default function StudyRoomsSection() {
 
       {/* CREATE ROOM MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-4">
             <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white">Create New Study Room</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white text-xs cursor-pointer">
-                &times;
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <span>🎧</span> Create Study Room
+              </h3>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded-lg hover:bg-slate-800 cursor-pointer"
+              >
+                ✕
               </button>
             </div>
 
-            <form onSubmit={createRoom} className="space-y-4">
+            <form onSubmit={createRoom} className="space-y-4 text-xs">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Room Title *</label>
+                <label className="text-slate-300 font-bold block mb-1">Room Name *</label>
                 <input
                   type="text"
-                  placeholder="e.g., Numerical Reasoning Marathon"
+                  required
+                  placeholder="e.g., Numerical Reasoning Sprint"
                   value={roomName}
                   onChange={(e) => setRoomName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
-                  required
+                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Study Topic</label>
-                <select
-                  value={roomTopic}
-                  onChange={(e) => setRoomTopic(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
-                >
-                  {topicOptions.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Description (Optional)</label>
+                <label className="text-slate-300 font-bold block mb-1">Description (Optional)</label>
                 <textarea
-                  placeholder="What will your group focus on during this session?"
+                  placeholder="Briefly describe what you'll review together..."
                   value={roomDesc}
                   onChange={(e) => setRoomDesc(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 h-20"
+                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 h-20"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Capacity Limit</label>
-                  <input
-                    type="number"
-                    min="2"
-                    max="50"
-                    value={maxMembers}
-                    onChange={(e) => setMaxMembers(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
-                  />
+                  <label className="text-slate-300 font-bold block mb-1">Topic</label>
+                  <select
+                    value={roomTopic}
+                    onChange={(e) => setRoomTopic(e.target.value)}
+                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  >
+                    <option value="General Review">General Review</option>
+                    <option value="Numerical Reasoning">Numerical Reasoning</option>
+                    <option value="Verbal Ability">Verbal Ability</option>
+                    <option value="Analytical Reasoning">Analytical Reasoning</option>
+                    <option value="Philippine Constitution">Philippine Constitution</option>
+                  </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Privacy</label>
+                  <label className="text-slate-300 font-bold block mb-1">Max Capacity</label>
                   <select
-                    value={isPublic ? "public" : "private"}
-                    onChange={(e) => setIsPublic(e.target.value === "public")}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                    value={maxMembers}
+                    onChange={(e) => setMaxMembers(Number(e.target.value))}
+                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
                   >
-                    <option value="public">Public Directory</option>
-                    <option value="private">Private (Invite Only)</option>
+                    <option value={5}>5 Participants</option>
+                    <option value={10}>10 Participants</option>
+                    <option value={20}>20 Participants</option>
+                    <option value={30}>30 Participants</option>
                   </select>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+              <div className="pt-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isPublic}
+                    onChange={(e) => setIsPublic(e.target.checked)}
+                    className="rounded text-blue-600 focus:ring-0"
+                  />
+                  <span className="text-slate-300">Make room public (Listed in Study Together Hub)</span>
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                  className="px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-xl font-bold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating || !roomName.trim()}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold rounded-xl transition cursor-pointer disabled:opacity-50"
                 >
-                  {creating ? "Creating..." : "Launch Room"}
+                  {creating ? "Creating..." : "Create Room"}
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
-      {/* DELETE CONFIRMATION MODAL */}
-      <DeleteRoomModal
-        isOpen={!!roomToDelete}
-        roomName={roomToDelete?.name || ""}
-        isDeleting={deletingRoom}
-        onConfirm={confirmDeleteRoom}
-        onCancel={() => setRoomToDelete(null)}
-      />
+
+      {/* CONFIRM DELETE STUDY ROOM MODAL */}
+      {roomToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-sm p-6 rounded-3xl bg-slate-900 border border-rose-500/30 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-xl">⚠️</span>
+              <div>
+                <h3 className="text-sm font-bold text-white">Delete Study Room?</h3>
+                <p className="text-xs text-slate-400">This action cannot be undone.</p>
+              </div>
+            </div>
+
+            <p className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+              Are you sure you want to permanently delete <strong>{roomToDelete.name}</strong>?
+            </p>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => setRoomToDelete(null)}
+                disabled={deletingRoom}
+                className="px-3.5 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 rounded-xl transition cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteRoom}
+                disabled={deletingRoom}
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-rose-600/20 transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {deletingRoom ? "Deleting..." : "Delete Room"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
