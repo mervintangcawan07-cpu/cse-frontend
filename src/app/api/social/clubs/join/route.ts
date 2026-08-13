@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/clubs/join/route.ts
+// Relative Path: src/app/api/social/clubs/join/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -52,12 +52,23 @@ export async function POST(request: Request) {
       if (!existingMember) {
         return NextResponse.json({ error: "Not a member of this club" }, { status: 400 });
       }
-      if (existingMember.role === "OWNER") {
-        return NextResponse.json({ error: "Club owner cannot leave without transferring ownership" }, { status: 400 });
+
+      // 🔒 Prevent Club Owner from leaving without transferring ownership
+      if (existingMember.role === "OWNER" || club.ownerId === userId) {
+        return NextResponse.json(
+          {
+            error: "Club owner cannot leave without transferring ownership. Please transfer ownership or delete the club.",
+            code: "OWNER_MUST_TRANSFER",
+            requireTransfer: true,
+          },
+          { status: 400 }
+        );
       }
+
       await prisma.studyClubMember.delete({
         where: { id: existingMember.id },
       });
+
       return NextResponse.json({ success: true, message: "Left Study Club" });
     }
 

@@ -4,6 +4,105 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+) {
+  try {
+    const resolvedParams = await params;
+    const clubId = String(resolvedParams.clubId);
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const session = await verifyJWT(token);
+    const rawUserId = session?.userId || session?.id;
+    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = String(rawUserId);
+
+    const club = await prisma.studyClub.findUnique({
+      where: { id: clubId },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            studyProfile: {
+              select: {
+                displayName: true,
+                avatar: true,
+                presenceStatus: true,
+              },
+            },
+          },
+        },
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                studyProfile: {
+                  select: {
+                    displayName: true,
+                    avatar: true,
+                    presenceStatus: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: { joinedAt: "asc" },
+        },
+      },
+    });
+
+    if (!club) {
+      return NextResponse.json({ error: "Study club not found" }, { status: 404 });
+    }
+
+    const currentMember = club.members.find((m) => m.userId === userId);
+    const isOwner = club.ownerId === userId;
+    const isMember = Boolean(currentMember);
+
+    return NextResponse.json({
+      success: true,
+      club: {
+        id: club.id,
+        name: club.name,
+        description: club.description,
+        category: club.category,
+        isPublic: club.isPublic,
+        ownerId: club.ownerId,
+        isOwner,
+        isMember,
+        currentUserRole: isOwner ? "OWNER" : (currentMember?.role || null),
+        memberCount: club.members.length,
+        owner: {
+          id: club.owner.id,
+          name: club.owner.studyProfile?.displayName || club.owner.name,
+          studyProfile: club.owner.studyProfile,
+        },
+        members: club.members.map((m) => ({
+          id: m.id,
+          userId: m.userId,
+          role: m.userId === club.ownerId ? "OWNER" : m.role,
+          name: m.user.studyProfile?.displayName || m.user.name || "Examinee",
+          displayName: m.user.studyProfile?.displayName || m.user.name || "Examinee",
+          avatar: m.user.studyProfile?.avatar || null,
+          joinedAt: m.joinedAt,
+        })),
+      },
+    });
+  } catch (error: any) {
+    console.error("[CLUB_GET_ERROR]", error);
+    return NextResponse.json({ error: "Failed to fetch study club", details: error?.message }, { status: 500 });
+  }
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ clubId: string }> | { clubId: string } }

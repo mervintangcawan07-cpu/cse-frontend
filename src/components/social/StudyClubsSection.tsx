@@ -3,21 +3,31 @@
 
 import { useEffect, useState } from "react";
 import { DeleteClubModal } from "@/components/social/DeleteClubModal";
+import { LeaveClubModal } from "@/components/social/LeaveClubModal";
+import { OwnerLeaveClubModal } from "@/components/social/OwnerLeaveClubModal";
 
 export default function StudyClubsSection() {
   const [clubs, setClubs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "mine">("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [clubToDelete, setClubToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [deletingClub, setDeletingClub] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string>("");
 
-  // Form state
+  // Create Modal
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Professional Level");
   const [creating, setCreating] = useState(false);
+
+  // Leave Modals State
+  const [clubToLeave, setClubToLeave] = useState<{ id: string; name: string } | null>(null);
+  const [isLeavingClub, setIsLeavingClub] = useState(false);
+  const [ownerClubToLeave, setOwnerClubToLeave] = useState<{ id: string; name: string } | null>(null);
+
+  // Delete Modal State
+  const [clubToDelete, setClubToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingClub, setDeletingClub] = useState(false);
 
   const categories = [
     "Professional Level",
@@ -27,6 +37,15 @@ export default function StudyClubsSection() {
     "Grammar & Verbal Excellence",
     "Weekend Intensive Reviewers",
   ];
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user?.id) setCurrentUserId(String(data.user.id));
+      })
+      .catch(() => {});
+  }, []);
 
   const fetchClubs = async () => {
     try {
@@ -51,18 +70,59 @@ export default function StudyClubsSection() {
     fetchClubs();
   };
 
-  const toggleMembership = async (clubId: string, isMember: boolean) => {
+  const handleMembershipClick = (club: any) => {
+    if (club.isOwner) {
+      // Owner leave flow (triggers ownership transfer or deletion)
+      setOwnerClubToLeave({ id: club.id, name: club.name });
+    } else if (club.isMember) {
+      // Regular member leave confirmation
+      setClubToLeave({ id: club.id, name: club.name });
+    } else {
+      // Join club
+      joinClubDirect(club.id);
+    }
+  };
+
+  const joinClubDirect = async (clubId: string) => {
     try {
       const res = await fetch("/api/social/clubs/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ clubId, action: isMember ? "LEAVE" : "JOIN" }),
+        body: JSON.stringify({ clubId, action: "JOIN" }),
       });
       if (res.ok) {
         await fetchClubs();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to join study club");
       }
     } catch (err) {
-      console.error("Failed to toggle club membership:", err);
+      console.error("Join club error:", err);
+    }
+  };
+
+  const confirmLeaveRegularClub = async () => {
+    if (!clubToLeave?.id || isLeavingClub) return;
+
+    setIsLeavingClub(true);
+    try {
+      const res = await fetch("/api/social/clubs/join", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clubId: clubToLeave.id, action: "LEAVE" }),
+      });
+
+      if (res.ok) {
+        setClubToLeave(null);
+        await fetchClubs();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to leave study club");
+      }
+    } catch (err) {
+      console.error("Failed to leave club:", err);
+    } finally {
+      setIsLeavingClub(false);
     }
   };
 
@@ -192,7 +252,7 @@ export default function StudyClubsSection() {
                     {club.category}
                   </span>
                   <span className="text-[10px] font-bold text-slate-400">
-                    👥 {club.memberCount} Members
+                    👥 {club.memberCount} {club.memberCount === 1 ? "Member" : "Members"}
                   </span>
                 </div>
 
@@ -211,10 +271,19 @@ export default function StudyClubsSection() {
 
                 {club.isOwner ? (
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[10px] font-extrabold text-amber-400 px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                    <span className="text-[10px] font-extrabold text-amber-400 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                       👑 Owner
                     </span>
                     <button
+                      type="button"
+                      onClick={() => handleMembershipClick(club)}
+                      className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[10px] font-bold rounded-xl transition cursor-pointer"
+                      title="Leave or transfer ownership of this club"
+                    >
+                      Leave
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setClubToDelete({ id: club.id, name: club.name })}
                       className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 rounded-lg transition cursor-pointer text-xs"
                       title="Delete Study Club"
@@ -224,7 +293,8 @@ export default function StudyClubsSection() {
                   </div>
                 ) : (
                   <button
-                    onClick={() => toggleMembership(club.id, club.isMember)}
+                    type="button"
+                    onClick={() => handleMembershipClick(club)}
                     className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer ${
                       club.isMember
                         ? "bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-700 text-slate-300"
@@ -307,6 +377,32 @@ export default function StudyClubsSection() {
           </div>
         </div>
       )}
+
+      {/* REGULAR MEMBER LEAVE MODAL */}
+      <LeaveClubModal
+        isOpen={!!clubToLeave}
+        clubName={clubToLeave?.name || ""}
+        isLeaving={isLeavingClub}
+        onConfirm={confirmLeaveRegularClub}
+        onCancel={() => setClubToLeave(null)}
+      />
+
+      {/* OWNER LEAVE / TRANSFER OWNERSHIP MODAL */}
+      {ownerClubToLeave && (
+        <OwnerLeaveClubModal
+          isOpen={!!ownerClubToLeave}
+          clubId={ownerClubToLeave.id}
+          clubName={ownerClubToLeave.name}
+          currentUserId={currentUserId}
+          onClose={() => setOwnerClubToLeave(null)}
+          onSuccess={fetchClubs}
+          onDeleteClubRequest={() => {
+            setClubToDelete(ownerClubToLeave);
+            setOwnerClubToLeave(null);
+          }}
+        />
+      )}
+
       {/* DELETE CLUB CONFIRMATION MODAL */}
       <DeleteClubModal
         isOpen={!!clubToDelete}
