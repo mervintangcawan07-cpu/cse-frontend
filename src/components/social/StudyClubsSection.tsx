@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { DeleteClubModal } from "@/components/social/DeleteClubModal";
 import { LeaveClubModal } from "@/components/social/LeaveClubModal";
 import { OwnerLeaveClubModal } from "@/components/social/OwnerLeaveClubModal";
+import { ClubMembersModal } from "@/components/social/ClubMembersModal";
 
 export default function StudyClubsSection() {
   const [clubs, setClubs] = useState<any[]>([]);
@@ -19,6 +20,9 @@ export default function StudyClubsSection() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Professional Level");
   const [creating, setCreating] = useState(false);
+
+  // Roster Modal State
+  const [selectedClubForMembers, setSelectedClubForMembers] = useState<{ id: string; name: string } | null>(null);
 
   // Leave Modals State
   const [clubToLeave, setClubToLeave] = useState<{ id: string; name: string } | null>(null);
@@ -251,9 +255,15 @@ export default function StudyClubsSection() {
                   <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
                     {club.category}
                   </span>
-                  <span className="text-[10px] font-bold text-slate-400">
-                    👥 {club.memberCount} {club.memberCount === 1 ? "Member" : "Members"}
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedClubForMembers({ id: club.id, name: club.name })}
+                    className="text-[10px] font-bold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2 py-0.5 rounded-lg border border-blue-500/20 transition cursor-pointer flex items-center gap-1"
+                    title="View and Manage Club Members"
+                  >
+                    <span>👥</span>
+                    <span>{club.memberCount} {club.memberCount === 1 ? "Member" : "Members"}</span>
+                  </button>
                 </div>
 
                 <div>
@@ -271,7 +281,7 @@ export default function StudyClubsSection() {
 
                 {club.isOwner ? (
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[10px] font-extrabold text-amber-400 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                    <span className="text-[10px] font-extrabold text-amber-400 px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                       👑 Owner
                     </span>
                     <button
@@ -376,6 +386,18 @@ export default function StudyClubsSection() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* CLUB MEMBERS ROSTER & MODERATION MODAL */}
+      {selectedClubForMembers && (
+        <ClubMembersModal
+          isOpen={!!selectedClubForMembers}
+          clubId={selectedClubForMembers.id}
+          clubName={selectedClubForMembers.name}
+          currentUserId={currentUserId}
+          onClose={() => setSelectedClubForMembers(null)}
+          onRosterUpdated={fetchClubs}
+        />
       )}
 
       {/* REGULAR MEMBER LEAVE MODAL */}

@@ -33,8 +33,9 @@ export async function PATCH(
     const isHost = room.hostId === userId;
     const callerParticipant = room.participants.find((p) => p.userId === userId);
     const isModerator = callerParticipant?.role === "MODERATOR";
+    const isPlatformAdmin = session?.role === "ADMIN";
 
-    if (!isHost && !isModerator) {
+    if (!isHost && !isModerator && !isPlatformAdmin) {
       return NextResponse.json({ error: "Only Host and Moderators can manage participant controls" }, { status: 403 });
     }
 
@@ -51,7 +52,7 @@ export async function PATCH(
     }
 
     // Moderators cannot manage host or other moderators
-    if (isModerator && !isHost) {
+    if (isModerator && !isHost && !isPlatformAdmin) {
       if (targetParticipant.userId === room.hostId || targetParticipant.role === "MODERATOR") {
         return NextResponse.json({ error: "Moderators cannot modify Host or other Moderators" }, { status: 403 });
       }
@@ -59,9 +60,9 @@ export async function PATCH(
 
     const updateData: any = {};
 
-    // Only Host can change participant roles (Promote to Moderator / Demote to Member)
+    // Only Host or Platform Admin can change participant roles (Promote to Moderator / Demote to Member)
     if (role !== undefined) {
-      if (!isHost) {
+      if (!isHost && !isPlatformAdmin) {
         return NextResponse.json({ error: "Only the Room Host can promote or demote roles" }, { status: 403 });
       }
       if (role === "MODERATOR" || role === "MEMBER") {
@@ -126,13 +127,19 @@ export async function DELETE(
     const isHost = room.hostId === userId;
     const callerParticipant = room.participants.find((p) => p.userId === userId);
     const isModerator = callerParticipant?.role === "MODERATOR";
+    const isPlatformAdmin = session?.role === "ADMIN";
 
-    if (!isHost && !isModerator) {
-      return NextResponse.json({ error: "Only the host or moderators can remove participants" }, { status: 403 });
+    // 🔒 STRICT GATE: Regular members cannot remove participants
+    if (!isHost && !isModerator && !isPlatformAdmin) {
+      return NextResponse.json({ error: "Forbidden: Only the host or moderators can remove participants." }, { status: 403 });
     }
 
     if (targetUserId === room.hostId) {
       return NextResponse.json({ error: "The Room Host cannot be removed" }, { status: 400 });
+    }
+
+    if (targetUserId === userId) {
+      return NextResponse.json({ error: "Cannot kick yourself. Please use Leave Room instead." }, { status: 400 });
     }
 
     const targetParticipant = room.participants.find((p) => p.userId === String(targetUserId));
@@ -141,7 +148,7 @@ export async function DELETE(
     }
 
     // Moderators cannot remove other moderators
-    if (isModerator && !isHost && targetParticipant.role === "MODERATOR") {
+    if (isModerator && !isHost && !isPlatformAdmin && targetParticipant.role === "MODERATOR") {
       return NextResponse.json({ error: "Moderators cannot remove other moderators" }, { status: 403 });
     }
 
