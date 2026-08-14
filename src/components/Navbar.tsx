@@ -1,4 +1,4 @@
-﻿// Relative Path: src/components/Navbar.tsx
+// Relative Path: src/components/Navbar.tsx
 "use client";
 
 import Link from "next/link";
@@ -150,26 +150,69 @@ export default function Navbar() {
 
       {/* MOBILE DROPDOWN DRAWER */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-950 border-b border-slate-800/80 px-4 pt-3 pb-5 space-y-3 shadow-2xl">
-          <nav className="flex flex-col space-y-1">
-            {navItems.map((item) => {
-              const isActive = pathname.startsWith(item.href);
-              return (
+        <div className="md:hidden bg-slate-950 border-b border-slate-800/80 px-4 pt-3 pb-5 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+          <div>
+            <p className="px-1 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
+              Navigation
+            </p>
+            <nav className="flex flex-col space-y-1">
+              {navItems.map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between ${
+                      isActive
+                        ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
+                        : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    {isActive && <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider">&bull; Active</span>}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          {user && (
+            <div className="pt-2 border-t border-slate-900">
+              <p className="px-1 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
+                Quick Review Tools
+              </p>
+              <div className="grid grid-cols-2 gap-2">
                 <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between ${
-                    isActive
-                      ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
-                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
-                  }`}
+                  href="/mistakes"
+                  className="px-3 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition"
                 >
-                  <span>{item.label}</span>
-                  {isActive && <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider">&bull; Active</span>}
+                  <span>📕</span>
+                  <span>Mistakes</span>
                 </Link>
-              );
-            })}
-          </nav>
+                <Link
+                  href="/badges"
+                  className="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition"
+                >
+                  <span>🏆</span>
+                  <span>Badges</span>
+                </Link>
+                <Link
+                  href="/practice"
+                  className="px-3 py-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition"
+                >
+                  <span>⚡</span>
+                  <span>Practice</span>
+                </Link>
+                <Link
+                  href="/profile"
+                  className="px-3 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition"
+                >
+                  <span>⚙️</span>
+                  <span>Account</span>
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
             {user ? (

@@ -111,7 +111,7 @@ export default function CSCDailyQuestionWidget() {
   const isCorrect = userAttempt?.isCorrect;
 
   return (
-    <div className="bg-slate-900 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+    <div className="bg-slate-900 border border-blue-500/30 rounded-3xl p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden">
       {/* Glow Effects */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -130,7 +130,7 @@ export default function CSCDailyQuestionWidget() {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-center">
           {hasAnswered ? (
             <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20 flex items-center gap-1">
               <span>✓</span> Completed Today
@@ -144,12 +144,12 @@ export default function CSCDailyQuestionWidget() {
       </div>
 
       {/* Question Prompt */}
-      <div className="space-y-4">
-        <FormattedPrompt text={question.prompt} className="text-base md:text-lg font-bold text-white leading-relaxed" />
+      <div className="space-y-3">
+        <FormattedPrompt text={question.prompt} className="text-sm sm:text-base md:text-lg font-bold text-white leading-relaxed" />
       </div>
 
       {/* Options Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
         {question.options.map((opt, idx) => {
           const letter = ["A", "B", "C", "D", "E"][idx] || `${idx + 1}`;
           let style = "bg-slate-950/80 border-slate-800 text-slate-200 hover:border-slate-700 hover:bg-slate-900";
@@ -177,9 +177,9 @@ export default function CSCDailyQuestionWidget() {
               type="button"
               disabled={hasAnswered || submitting}
               onClick={() => setSelectedOption(idx)}
-              className={`p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer flex flex-col justify-between gap-2 ${style}`}
+              className={`p-3.5 sm:p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer flex flex-col justify-between gap-2 ${style}`}
             >
-              <div className="flex items-start gap-3 w-full">
+              <div className="flex items-start gap-2.5 sm:gap-3 w-full">
                 <span className="w-6 h-6 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                   {letter}
                 </span>
@@ -199,7 +199,7 @@ export default function CSCDailyQuestionWidget() {
 
       {/* Answer Feedback & Community Stats */}
       {hasAnswered && (
-        <div className={`p-5 rounded-2xl border space-y-3 animate-fade-in ${
+        <div className={`p-4 sm:p-5 rounded-2xl border space-y-3 animate-fade-in ${
           isCorrect
             ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-300"
             : "bg-rose-950/30 border-rose-500/40 text-rose-300"
@@ -244,7 +244,7 @@ export default function CSCDailyQuestionWidget() {
           )}
 
           {!isCorrect && (
-            <div className="flex items-center justify-between text-xs pt-1 border-t border-rose-500/20">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs pt-1 border-t border-rose-500/20 gap-1.5">
               <span className="text-rose-300 font-medium">
                 📕 This question was automatically saved to your Mistake Notebook.
               </span>
@@ -258,14 +258,14 @@ export default function CSCDailyQuestionWidget() {
 
       {/* Widget Footer Action */}
       {!hasAnswered && (
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
           <span className="text-xs text-slate-400">
             Select your answer and submit to earn streak points.
           </span>
           <button
             onClick={handleSubmit}
             disabled={selectedOption === null || submitting}
-            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30 disabled:opacity-50"
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30 disabled:opacity-50 text-center"
           >
             {submitting ? "Evaluating..." : "Submit Daily Answer ⚡"}
           </button>
