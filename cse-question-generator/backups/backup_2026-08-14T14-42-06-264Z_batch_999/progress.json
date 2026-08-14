@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "generation_status": "IN_PROGRESS",
+  "current_category": "SYNTHETIC_VERBAL",
+  "current_component": "SYNTHETIC_READING",
+  "current_subtopic": "SYNTHETIC_CAUSE",
+  "current_micro_subtopic": "SYNTHETIC_EFFECT",
+  "current_batch_number": 999,
+  "current_batch_id": "TEST-BATCH-999",
+  "current_batch_status": "COMPLETED",
+  "last_confirmed_completed_batch": 999,
+  "completed_batches": [
+    999
+  ],
+  "completed_micro_subtopics": [],
+  "total_completed_questions": 10,
+  "total_generated_csv_files": 1,
+  "current_model": "Gemini 3.6 Flash",
+  "available_models": [],
+  "exhausted_models": [],
+  "last_successful_file": "batch_999_SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.csv",
+  "last_error": null,
+  "last_update": "2026-08-14T14:42:06.262Z"
+}

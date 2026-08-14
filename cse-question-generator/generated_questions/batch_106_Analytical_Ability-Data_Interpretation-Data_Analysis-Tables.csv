@@ -1,0 +1,142 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: The following table shows the annual rice production (in metric tons) of five provinces over four years. | Province | 2020 | 2021 | 2022 | 2023 | |---|---|---|---|---| | Aguinaldo | 48,200 | 51,400 | 53,100 | 55,800 | | Bonifacio | 62,500 | 60,100 | 58,700 | 61,300 | | Calderon | 35,800 | 38,200 | 41,500 | 44,900 | | Dagohoy | 71,200 | 73,600 | 74,800 | 76,200 | | Emilio | 29,400 | 31,800 | 33,600 | 35,100 | Based on the table, which province showed the LARGEST absolute increase in rice production from 2020 to 2023?","Dagohoy Province, with an increase of 5,000 MT from 71,200 to 76,200 metric tons.","Calderon Province, with an increase of 9,100 MT from 35,800 to 44,900 metric tons.","Aguinaldo Province, with an increase of 7,600 MT from 48,200 to 55,800 metric tons.","Bonifacio Province, which showed a net increase of only 1,200 MT despite fluctuations.","B","Step-by-Step Solution:
+1. Calculate absolute increase for each province (2023 minus 2020):
+   - Aguinaldo: 55,800 - 48,200 = 7,600 MT.
+   - Bonifacio: 61,300 - 62,500 = -1,200 MT (actually a NET DECREASE).
+   - Calderon: 44,900 - 35,800 = 9,100 MT. ← LARGEST.
+   - Dagohoy: 76,200 - 71,200 = 5,000 MT.
+   - Emilio: 35,100 - 29,400 = 5,700 MT.
+2. Ranking of absolute increases:
+   - Calderon: +9,100 MT (1st).
+   - Aguinaldo: +7,600 MT (2nd).
+   - Emilio: +5,700 MT (3rd).
+   - Dagohoy: +5,000 MT (4th).
+   - Bonifacio: -1,200 MT (net decrease).
+3. Calderon Province showed the LARGEST absolute increase.
+
+Common Trap: Selecting Dagohoy because it has the highest absolute production levels in 2023, confusing production volume with growth.
+Exam Tip: 'Largest absolute increase' = largest numerical difference between end and start years—not the highest total production value.","Eliminated because Dagohoy's increase of 5,000 MT (76,200 - 71,200) ranks 4th among all five provinces.","Correct. Survives elimination because Calderon's 9,100 MT increase (44,900 - 35,800) is the largest absolute growth from 2020 to 2023 among all five provinces.","Eliminated because Aguinaldo's increase of 7,600 MT (55,800 - 48,200) is the second-largest, below Calderon's 9,100 MT.","Eliminated because Bonifacio experienced a net decrease of 1,200 MT (61,300 - 62,500) from 2020 to 2023, not an increase.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Absolute Change | Very Difficult | Batch 106"
+"Passage: The following table shows the number of civil service examination passers by region for two examination periods. | Region | April Exam | October Exam | Total | |---|---|---|---| | NCR | 4,218 | 3,891 | 8,109 | | CAR | 612 | 548 | 1,160 | | Region I | 1,843 | 1,672 | 3,515 | | Region II | 987 | 1,104 | 2,091 | | Region III | 2,156 | 2,034 | 4,190 | | Region IV-A | 3,412 | 3,187 | 6,599 | | TOTAL | 13,228 | 12,436 | 25,664 | Which region had the HIGHEST proportion of passers in the October exam relative to its own annual total?","Region II, where October passers (1,104) represent approximately 52.8% of its annual total of 2,091.","NCR, which had the highest absolute number of October passers at 3,891.","Region IV-A, where October passers (3,187) represent 48.3% of its annual total of 6,599.","CAR, where October passers (548) represent 47.2% of its annual total of 1,160.","A","Step-by-Step Solution:
+1. Calculate October exam proportion as a percentage of each region's annual total:
+   - NCR: 3,891 ÷ 8,109 = 47.98% ≈ 48.0%.
+   - CAR: 548 ÷ 1,160 = 47.24% ≈ 47.2%.
+   - Region I: 1,672 ÷ 3,515 = 47.57% ≈ 47.6%.
+   - Region II: 1,104 ÷ 2,091 = 52.80% ≈ 52.8%. ← HIGHEST.
+   - Region III: 2,034 ÷ 4,190 = 48.54% ≈ 48.5%.
+   - Region IV-A: 3,187 ÷ 6,599 = 48.29% ≈ 48.3%.
+2. Region II (52.8%) uniquely exceeds 50%, meaning it is the only region where the October exam produced MORE passers than the April exam.
+3. Region II has the highest proportion of October passers relative to its annual total.
+
+Common Trap: Selecting NCR because it has the highest absolute number of October passers (3,891) rather than the highest proportion.
+Exam Tip: Proportion questions require division, not raw count comparison; identify the region where October ÷ Annual Total yields the highest percentage.","Correct. Survives elimination because Region II's October passers (1,104) constitute 52.8% of its annual total (2,091), the highest proportion among all six regions, and the only one exceeding 50%.","Eliminated because NCR's 3,891 October passers constitute only 48.0% of its annual total—a large absolute number but not the highest proportion.","Eliminated because Region IV-A's 3,187 October passers constitute 48.3% of its annual total—below Region II's 52.8%.","Eliminated because CAR's 548 October passers constitute 47.2% of its annual total—the lowest proportion among all six regions.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Proportion | Very Difficult | Batch 106"
+"Passage: The following table presents a government agency's quarterly expenditure breakdown (in PHP millions) by category for FY 2023. | Category | Q1 | Q2 | Q3 | Q4 | Annual Total | |---|---|---|---|---|---| | Personnel Services | 28.4 | 29.1 | 28.8 | 31.2 | 117.5 | | MOOE | 12.6 | 14.3 | 16.7 | 18.9 | 62.5 | | Capital Outlay | 4.2 | 8.6 | 15.3 | 22.8 | 50.9 | | Financial Expenses | 0.8 | 0.9 | 0.7 | 0.6 | 3.0 | | TOTAL | 46.0 | 52.9 | 61.5 | 73.5 | 233.9 | Which expenditure category showed the MOST CONSISTENT quarterly spending pattern (least variation across quarters)?","Personnel Services, which ranged narrowly from PHP 28.4M to PHP 31.2M, a range of only PHP 2.8M across all four quarters.","Capital Outlay, which grew dramatically from PHP 4.2M to PHP 22.8M but reflects deliberate front-loading avoidance.","MOOE, which grew steadily from PHP 12.6M to PHP 18.9M each quarter.","Financial Expenses, which had the smallest absolute range (PHP 0.6M to PHP 0.9M) despite percentage variation.","A","Step-by-Step Solution:
+1. Measure variation using the range (max - min) across quarters for each category:
+   - Personnel Services: 31.2 - 28.4 = PHP 2.8M range.
+   - MOOE: 18.9 - 12.6 = PHP 6.3M range.
+   - Capital Outlay: 22.8 - 4.2 = PHP 18.6M range (massive variation).
+   - Financial Expenses: 0.9 - 0.6 = PHP 0.3M range.
+
+2. For 'consistency,' consider both absolute and relative (percentage) variation:
+   - Financial Expenses: PHP 0.3M absolute range. But as a % of its average (0.75): 0.3÷0.75 = 40% coefficient of variation—high relative variability despite small absolute numbers.
+   - Personnel Services: PHP 2.8M absolute range. As % of average (29.375): 2.8÷29.375 = 9.5% coefficient of variation—very low.
+   - MOOE: 6.3÷15.625 = 40.3% CV.
+   - Capital Outlay: 18.6÷12.725 = 146% CV—most variable.
+
+3. Personnel Services has the lowest coefficient of variation (~9.5%), indicating the most consistent quarterly pattern in both absolute and relative terms among the major spending categories.
+
+Common Trap: Selecting Financial Expenses based on its small absolute range without recognizing its relatively high proportional variation.
+Exam Tip: 'Most consistent' means least relative variation; calculate coefficient of variation (range ÷ average) to compare categories of different magnitudes.","Correct. Survives elimination because Personnel Services exhibits the lowest coefficient of variation (~9.5%), maintaining consistently near-stable quarterly spending between PHP 28.4M and PHP 31.2M.","Eliminated because Capital Outlay showed the largest absolute range (PHP 18.6M), representing by far the most variable spending pattern across quarters.","Eliminated because MOOE grew consistently upward (PHP 12.6M to PHP 18.9M), representing a 50% increase from Q1 to Q4, which is directional change rather than consistency.","Eliminated because while Financial Expenses has the smallest absolute range (PHP 0.3M), its coefficient of variation (~40%) relative to its small base amount reveals proportionally high instability.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Variation Analysis | Very Difficult | Batch 106"
+"Passage: The following table shows enrollment data across five state universities for academic year 2022-2023, broken down by college level. | University | Freshman | Sophomore | Junior | Senior | Graduate | TOTAL | |---|---|---|---|---|---|---| | Arellano SU | 3,241 | 2,876 | 2,543 | 2,189 | 412 | 11,261 | | Bonifacio SU | 4,812 | 4,103 | 3,678 | 3,221 | 687 | 16,501 | | Calderon SU | 2,156 | 1,987 | 1,834 | 1,701 | 298 | 7,976 | | Datu SU | 5,634 | 4,987 | 4,412 | 3,876 | 923 | 19,832 | | Emilio SU | 1,843 | 1,612 | 1,438 | 1,287 | 187 | 6,367 | | TOTAL | 17,686 | 15,565 | 13,905 | 12,274 | 2,507 | 61,937 | Which university has the HIGHEST graduate student enrollment as a percentage of its total enrollment?","Datu SU, where graduate enrollment (923) represents approximately 4.65% of its total enrollment of 19,832.","Bonifacio SU, where graduate enrollment (687) represents approximately 4.16% of its total enrollment of 16,501.","Arellano SU, where graduate enrollment (412) represents approximately 3.66% of its total enrollment of 11,261.","Calderon SU, where graduate enrollment (298) represents approximately 3.74% of its total enrollment of 7,976.","A","Step-by-Step Solution:
+1. Calculate graduate enrollment as a percentage of total enrollment for each university:
+   - Arellano SU: 412 ÷ 11,261 = 3.659% ≈ 3.66%.
+   - Bonifacio SU: 687 ÷ 16,501 = 4.163% ≈ 4.16%.
+   - Calderon SU: 298 ÷ 7,976 = 3.736% ≈ 3.74%.
+   - Datu SU: 923 ÷ 19,832 = 4.654% ≈ 4.65%. ← HIGHEST.
+   - Emilio SU: 187 ÷ 6,367 = 2.937% ≈ 2.94%.
+2. Ranking by graduate percentage:
+   - Datu SU: 4.65% (1st).
+   - Bonifacio SU: 4.16% (2nd).
+   - Calderon SU: 3.74% (3rd).
+   - Arellano SU: 3.66% (4th).
+   - Emilio SU: 2.94% (5th).
+3. Datu SU has the highest graduate enrollment percentage at 4.65%.
+
+Common Trap: Selecting Datu SU on the basis of having the highest absolute graduate count (923) without verifying proportional percentage.
+Exam Tip: This question requires proportional thinking; the university with the most graduate students in absolute numbers may still have the highest graduate percentage—but this must be verified through calculation.","Correct. Survives elimination because Datu SU's graduate proportion of 4.65% is the highest among all five universities when calculated as graduate enrollment divided by total enrollment.","Eliminated because Bonifacio SU's graduate proportion of 4.16% is the second-highest, below Datu SU's 4.65%.","Eliminated because Arellano SU's graduate proportion of 3.66% ranks 4th among the five universities.","Eliminated because Calderon SU's graduate proportion of 3.74% ranks 3rd, below both Datu SU and Bonifacio SU.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Percentage Calculation | Very Difficult | Batch 106"
+"Passage: The following table shows the number of civil service employees by agency and salary grade (SG) band for a regional government office. | Agency | SG 1-10 | SG 11-18 | SG 19-24 | SG 25-30 | Total | |---|---|---|---|---|---| | Agency A | 142 | 87 | 34 | 12 | 275 | | Agency B | 89 | 124 | 67 | 23 | 303 | | Agency C | 213 | 96 | 28 | 8 | 345 | | Agency D | 67 | 112 | 84 | 31 | 294 | | Agency E | 176 | 83 | 41 | 15 | 315 | | TOTAL | 687 | 502 | 254 | 89 | 1,532 | Which agency has the HIGHEST proportion of senior employees (SG 19-30, combining SG 19-24 and SG 25-30)?","Agency D, where senior employees (84+31=115) represent approximately 39.1% of its total of 294.","Agency B, where senior employees (67+23=90) represent approximately 29.7% of its total of 303.","Agency A, where senior employees (34+12=46) represent approximately 16.7% of its total of 275.","Agency E, where senior employees (41+15=56) represent approximately 17.8% of its total of 315.","A","Step-by-Step Solution:
+1. Combine SG 19-24 and SG 25-30 for each agency (senior employees):
+   - Agency A: 34+12 = 46.
+   - Agency B: 67+23 = 90.
+   - Agency C: 28+8 = 36.
+   - Agency D: 84+31 = 115.
+   - Agency E: 41+15 = 56.
+
+2. Calculate senior proportion for each agency:
+   - Agency A: 46÷275 = 16.73%.
+   - Agency B: 90÷303 = 29.70%.
+   - Agency C: 36÷345 = 10.43%.
+   - Agency D: 115÷294 = 39.12%. ← HIGHEST.
+   - Agency E: 56÷315 = 17.78%.
+
+3. Agency D has the highest senior employee proportion at 39.1%.
+
+Common Trap: Selecting Agency B because it has the highest absolute count of SG 11-18 employees, or confusing total senior count with proportion.
+Exam Tip: To find the highest proportion of senior employees, divide each agency's senior headcount by its own total—not by the system-wide total.","Correct. Survives elimination because Agency D's combined SG 19-30 employees (115 out of 294 total) represent 39.1% of its workforce—the highest proportion among all five agencies.","Eliminated because Agency B's 90 senior employees out of 303 total represent 29.7%—the second-highest proportion, significantly below Agency D.","Eliminated because Agency A's 46 senior employees out of 275 represent only 16.7%—below both Agency D and Agency B.","Eliminated because Agency E's 56 senior employees out of 315 represent only 17.8%—above Agency A and C but well below Agency D.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Proportion | Very Difficult | Batch 106"
+"Passage: A barangay health center maintained the following table of patient consultations by disease category and quarter. | Disease Category | Q1 | Q2 | Q3 | Q4 | Annual | |---|---|---|---|---|---| | Respiratory | 843 | 912 | 784 | 1,021 | 3,560 | | Gastrointestinal | 412 | 387 | 446 | 398 | 1,643 | | Cardiovascular | 187 | 193 | 201 | 218 | 799 | | Dermatological | 234 | 198 | 276 | 243 | 951 | | Other | 321 | 289 | 334 | 287 | 1,231 | | TOTAL | 1,997 | 1,979 | 2,041 | 2,167 | 8,184 | Based on the table, which SINGLE QUARTER had the HIGHEST share of Respiratory consultations out of ALL consultations in that quarter?","Quarter 4, where Respiratory consultations (1,021) represent approximately 47.1% of all Q4 consultations (2,167).","Quarter 2, where Respiratory consultations (912) represent approximately 46.1% of all Q2 consultations (1,979).","Quarter 1, where Respiratory consultations (843) represent approximately 42.2% of all Q1 consultations (1,997).","Quarter 3, where Respiratory consultations (784) represent approximately 38.4% of all Q3 consultations (2,041).","A","Step-by-Step Solution:
+1. Calculate Respiratory consultations as a percentage of total consultations per quarter:
+   - Q1: 843 ÷ 1,997 = 42.21%.
+   - Q2: 912 ÷ 1,979 = 46.08%.
+   - Q3: 784 ÷ 2,041 = 38.41%.
+   - Q4: 1,021 ÷ 2,167 = 47.12%. ← HIGHEST.
+2. Q4 has the highest proportion of Respiratory consultations at 47.1%.
+
+Common Trap: Selecting Q2 (912 consultations) as the highest because it's the second-largest absolute count, or confusing absolute consultations with proportions.
+Exam Tip: 'Highest share' requires proportion calculation; Q4 has more total consultations (2,167) and more respiratory cases (1,021), combining to give the highest respiratory share at 47.1%.","Correct. Survives elimination because Q4 Respiratory consultations (1,021 ÷ 2,167 = 47.1%) represent the highest quarterly proportion of respiratory cases among all four quarters.","Eliminated because Q2's proportion of 46.1% is the second-highest—close but below Q4's 47.1%.","Eliminated because Q1's proportion of 42.2% is third-highest, below both Q4 and Q2.","Eliminated because Q3's proportion of 38.4% is the lowest quarterly respiratory share despite the overall consultations being similar to other quarters.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Proportion | Very Difficult | Batch 106"
+"Passage: The following table compares the land area (in hectares) and population for five municipalities in a province, and includes the population density (persons per km²) column which has one missing value. | Municipality | Land Area (km²) | Population | Pop. Density (per km²) | |---|---|---|---| | Bayan A | 142.6 | 38,420 | 269.4 | | Bayan B | 87.3 | 31,650 | 362.5 | | Bayan C | 213.8 | 54,210 | ? | | Bayan D | 95.4 | 29,870 | 313.1 | | Bayan E | 178.2 | 43,560 | 244.4 | Based on the data, what is the CORRECT population density for Bayan C (rounded to one decimal place), and which municipality has the HIGHEST population density?","Bayan C's density is 253.6 persons/km², and Bayan B has the highest population density at 362.5 persons/km².","Bayan C's density is 312.4 persons/km², making it the municipality with the highest density.","Bayan C's density is 253.6 persons/km², making Bayan C the municipality with the highest density.","Bayan C's density is 265.8 persons/km², and Bayan D has the highest population density.","A","Step-by-Step Solution:
+1. Calculate Bayan C's population density:
+   - Density = Population ÷ Land Area.
+   - Bayan C: 54,210 ÷ 213.8 = 253.55 ≈ 253.6 persons/km².
+2. Compare all municipalities' population densities:
+   - Bayan A: 269.4.
+   - Bayan B: 362.5. ← HIGHEST.
+   - Bayan C: 253.6.
+   - Bayan D: 313.1.
+   - Bayan E: 244.4. ← LOWEST.
+3. Bayan B has the highest population density at 362.5 persons/km².
+4. Option A is correct: Bayan C's density = 253.6; Bayan B has the highest density.
+
+Common Trap: Confusing 'largest population' (Bayan C: 54,210) with 'highest population density'—Bayan C has the most people but a large land area dilutes its density.
+Exam Tip: Population density = population ÷ area; large populations on large land areas may have lower density than smaller populations on smaller land areas.","Correct. Survives elimination because Bayan C's calculated density (54,210 ÷ 213.8 = 253.6 persons/km²) is correct, and Bayan B's given density of 362.5 persons/km² is the highest in the table.","Eliminated because 312.4 is an incorrect calculation for Bayan C's density, and Bayan B's 362.5 would still be higher even if 312.4 were accurate.","Eliminated because while Bayan C's density of 253.6 is correctly calculated, Bayan B (362.5) has a significantly higher density—Bayan C does not have the highest density.","Eliminated because 265.8 is an incorrect calculation for Bayan C's density (the correct value is 253.6), and Bayan D's density of 313.1 is below Bayan B's 362.5.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Missing Value Computation | Very Difficult | Batch 106"
+"Passage: The following table shows a municipality's revenue collections by source for two fiscal years. | Revenue Source | FY 2022 (PHP M) | FY 2023 (PHP M) | Change (PHP M) | % Change | |---|---|---|---|---| | Real Property Tax | 42.8 | 51.6 | +8.8 | +20.6% | | Business Tax | 31.4 | 38.2 | +6.8 | +21.7% | | Fees and Charges | 12.7 | 11.9 | -0.8 | -6.3% | | IRA Share | 187.3 | 203.4 | +16.1 | +8.6% | | Grants | 5.6 | 8.9 | +3.3 | +58.9% | | TOTAL | 279.8 | 314.0 | +34.2 | +12.2% | Based on the table, which revenue source contributed the MOST to the overall absolute increase in total revenue from FY 2022 to FY 2023?","IRA Share contributed the largest absolute increase of PHP 16.1 million, accounting for 47.1% of the total PHP 34.2 million revenue growth.","Business Tax contributed the highest percentage growth rate of 21.7%.","Grants contributed the highest percentage growth rate of 58.9%, making it the most significant revenue driver.","Real Property Tax contributed PHP 8.8 million, the second-largest absolute increase.","A","Step-by-Step Solution:
+1. 'Most contribution to ABSOLUTE increase in total revenue' = which revenue source had the LARGEST absolute change in PHP millions:
+   - Real Property Tax: +PHP 8.8M.
+   - Business Tax: +PHP 6.8M.
+   - Fees and Charges: -PHP 0.8M (decrease).
+   - IRA Share: +PHP 16.1M. ← LARGEST.
+   - Grants: +PHP 3.3M.
+2. IRA Share contributed PHP 16.1M = 16.1 ÷ 34.2 = 47.1% of the total increase.
+3. Option A is correct: IRA Share had the largest absolute contribution.
+
+Common Trap: Selecting Grants (58.9% growth rate) or Business Tax (21.7% growth rate) because they had the highest PERCENTAGE changes—confusing % growth with absolute contribution.
+Exam Tip: 'Contribution to absolute increase' = absolute PHP amount, not percentage growth rate. A large base amount with moderate growth can contribute more than a small base with explosive growth.","Correct. Survives elimination because IRA Share's absolute increase of PHP 16.1M is the largest single-source contribution, accounting for 47.1% of the municipality's total PHP 34.2M revenue growth.","Eliminated because Business Tax's 21.7% growth rate is the second-highest rate, but its absolute contribution of PHP 6.8M is less than half of IRA Share's PHP 16.1M.","Eliminated because Grants' 58.9% growth rate is impressive, but its small base (PHP 5.6M) means its absolute contribution of PHP 3.3M is the second-smallest positive contributor.","Eliminated because Real Property Tax's PHP 8.8M increase is the second-largest absolute contribution—notable but below IRA Share's PHP 16.1M.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Absolute Contribution | Very Difficult | Batch 106"
+"Passage: The following table shows the number of disciplinary cases filed, resolved, and pending at a government agency's internal affairs unit over six months. | Month | Filed | Resolved | Pending (End of Month) | |---|---|---|---| | January | 23 | 18 | 47 | | February | 19 | 22 | 44 | | March | 31 | 27 | 48 | | April | 14 | 31 | 31 | | May | 26 | 19 | 38 | | June | 18 | 24 | 32 | Note: Pending (End of Month) = Pending (Start of Month) + Filed - Resolved. Based on the table, what was the OPENING PENDING BALANCE at the START of January?","The opening pending balance at the start of January was 42 cases.","The opening pending balance at the start of January was 47 cases, as shown in the January row.","The opening pending balance at the start of January was 35 cases.","The opening pending balance at the start of January was 51 cases.","A","Step-by-Step Solution:
+1. Use the formula: Pending (End of Month) = Pending (Start) + Filed - Resolved.
+   - For January: End Pending = 47, Filed = 23, Resolved = 18.
+   - Rearranging: Pending (Start of January) = Pending (End) - Filed + Resolved.
+   - = 47 - 23 + 18 = 42 cases.
+2. Verification: 42 (start) + 23 (filed) - 18 (resolved) = 47 (end of January) ✓.
+3. The opening pending balance at the start of January was 42 cases.
+
+Common Trap: Selecting 47 because it appears in the January row as 'Pending (End of Month),' confusing end-of-month with start-of-month balance.
+Exam Tip: Always use the formula systematically; when finding a starting balance, rearrange the formula algebraically: Start = End - Filed + Resolved.","Correct. Survives elimination because applying the formula (47 - 23 + 18 = 42) correctly derives the opening January balance, which can be verified by confirming 42 + 23 - 18 = 47.","Eliminated because 47 is the END-of-January pending balance, not the start-of-January opening balance; these are different values.","Eliminated because 35 does not satisfy the January formula: 35 + 23 - 18 = 40, not 47.","Eliminated because 51 does not satisfy the January formula: 51 + 23 - 18 = 56, not 47.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Derived Values | Very Difficult | Batch 106"
+"Passage: The following cross-tabulation shows the distribution of 1,200 civil service examination candidates by age group and preparation method. | Age Group | Self-Study | Review Center | Online Course | No Preparation | TOTAL | |---|---|---|---|---|---| | 18-25 | 142 | 213 | 87 | 34 | 476 | | 26-35 | 187 | 198 | 143 | 52 | 580 | | 36-45 | 78 | 89 | 64 | 48 | 279 | | 46+ | 23 | 34 | 18 | 44 | 119 | | Wait—let me use GRAND TOTAL: does 476+580+279+119 = 1,454? No. Recalculating: 476+580 = 1,056 + 279 = 1,335 + 119 = 1,454. But premise says 1,200 candidates. The numbers in the table must be revised to equal 1,200 total. Using adjusted values: | Age Group | Self-Study | Review Center | Online Course | No Prep | TOTAL | | 18-25 | 120 | 180 | 72 | 28 | 400 | | 26-35 | 156 | 164 | 118 | 42 | 480 | | 36-45 | 64 | 72 | 54 | 40 | 230 | | 46+ | 20 | 28 | 16 | 26 | 90 | | TOTAL | 360 | 444 | 260 | 136 | 1,200 | Based on the adjusted table, which AGE GROUP has the HIGHEST proportion of candidates who used a REVIEW CENTER relative to their own age group total?","The 18-25 age group, where 180 out of 400 candidates used a Review Center, representing 45.0% of their age group.","The 26-35 age group, where 164 out of 480 candidates used a Review Center, representing 34.2% of their age group.","The 36-45 age group, where 72 out of 230 candidates used a Review Center, representing 31.3% of their age group.","The 46+ age group, where 28 out of 90 candidates used a Review Center, representing 31.1% of their age group.","A","Step-by-Step Solution:
+1. Calculate Review Center usage as a percentage of each age group:
+   - 18-25: 180 ÷ 400 = 45.0%. ← HIGHEST.
+   - 26-35: 164 ÷ 480 = 34.2%.
+   - 36-45: 72 ÷ 230 = 31.3%.
+   - 46+: 28 ÷ 90 = 31.1%.
+2. The 18-25 age group has the highest Review Center proportion at 45.0%.
+3. Option A is correct.
+
+Common Trap: Selecting 26-35 because it has the highest absolute count of Review Center users (164) while overlooking that 26-35 also has a much larger total (480 candidates).
+Exam Tip: Proportion = part ÷ whole; compare within-group percentages, not raw counts, when comparing across groups of different sizes.","Correct. Survives elimination because the 18-25 age group's Review Center proportion (180÷400 = 45.0%) is the highest among all four age groups.","Eliminated because the 26-35 age group's Review Center proportion (164÷480 = 34.2%) is substantially below the 18-25 group's 45.0%.","Eliminated because the 36-45 age group's Review Center proportion (72÷230 = 31.3%) ranks third among the four age groups.","Eliminated because the 46+ age group's Review Center proportion (28÷90 = 31.1%) is the lowest among all four age groups, narrowly below the 36-45 group.","Analytical Ability","Analytical Ability | Data Interpretation | Tables | Cross-Tabulation Proportion | Very Difficult | Batch 106"

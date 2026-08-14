@@ -1,0 +1,151 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"When auditing a public construction invoice, an accountant computes an exact gross retention fee of ₱348,765.485. Under Philippine government accounting standards requiring rounding to the nearest centavo using the standard round-half-up rule, what is the rounded payment, and what is the exact rounding error introduced?","₱348,765.49 and +₱0.005","₱348,765.48 and -₱0.005","₱348,765.50 and +₱0.015","₱348,765.00 and -₱0.485","A","Step-by-Step Solution:
+1. Identify the target rounding place: Nearest centavo corresponds to two decimal places (hundredths place).
+2. Examine the test digit immediately following the hundredths digit:
+   - The exact number is $348,765.485$.
+   - Hundredths digit $= 8$.
+   - Thousandths digit (test digit) $= 5$.
+3. Apply standard Round-Half-Up rule:
+   - Since the test digit is $\ge 5$, round the hundredths digit up from 8 to 9.
+   - Rounded Value $= ₱348,765.49$.
+4. Calculate rounding error:
+   - $\text{Error} = \text{Rounded Value} - \text{Exact Value} = 348,765.490 - 348,765.485 = +₱0.005$.
+
+Common Trap: Truncating/flooring the number to ₱348,765.48 (Option B), which introduces a negative bias of -₱0.005.
+Exam Tip: Round-half-up means any fractional remainder $\ge 0.005$ rounds upward to the next hundredth.","Correct. Survives elimination because the thousandths digit 5 rounds 8 up to 9, giving ₱348,765.49 and a +₱0.005 error.","Eliminated because truncating without rounding gives ₱348,765.48 and negative error.","Eliminated because rounding to the tenths place gives ₱348,765.50, violating centavo precision.","Eliminated because rounding to whole pesos eliminates centavos entirely.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"Evaluate the integer expression containing greatest integer (floor) and least integer (ceiling) step functions:
+
+$$E = \lfloor -3.7 \rfloor + \lceil 4.2 \rceil - \lfloor 5.9 \rfloor + \lceil -2.1 \rceil$$","-6","-4","-5","-7","A","Step-by-Step Solution:
+1. Define Floor Function $\lfloor x \rfloor$: The greatest integer less than or equal to $x$.
+   - For negative decimals: $\lfloor -3.7 \rfloor = -4$ (since $-4 < -3.7 < -3$).
+   - For positive decimals: $\lfloor 5.9 \rfloor = 5$.
+2. Define Ceiling Function $\lceil x \rceil$: The least integer greater than or equal to $x$.
+   - For positive decimals: $\lceil 4.2 \rceil = 5$ (since $4 < 4.2 < 5$).
+   - For negative decimals: $\lceil -2.1 \rceil = -2$ (since $-3 < -2.1 < -2$).
+3. Combine all evaluated integer terms:
+   - $E = (-4) + (5) - (5) + (-2)$.
+   - $E = -4 + 0 - 2 = -6$.
+
+Common Trap: Evaluating $\lfloor -3.7 \rfloor$ as $-3$ and $\lceil -2.1 \rceil$ as $-3$, confusing magnitude truncation with directional integer bounds on the real number line.
+Exam Tip: On a number line, Floor always rounds left ($\leftarrow$), and Ceiling always rounds right ($\rightarrow$).","Correct. Survives elimination because floor(-3.7) = -4, ceil(4.2) = 5, floor(5.9) = 5, ceil(-2.1) = -2, giving -4 + 5 - 5 - 2 = -6.","Eliminated because truncating towards zero yields -3 + 5 - 5 - 1 = -4, violating formal step function definitions.","Eliminated because arithmetic error in signed integer addition yields -5.","Eliminated because evaluating ceil(-2.1) as -3 yields -7.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"A laboratory spectrophotometer measures the concentration of a chemical reagent as $0.00405802\text{ mg/L}$. What is this measurement correctly expressed to exactly four (4) significant figures in standard scientific notation?","4.058 \times 10^{-3}\text{ mg/L}","4.0580 \times 10^{-3}\text{ mg/L}","4.06 \times 10^{-3}\text{ mg/L}","4.05802 \times 10^{-3}\text{ mg/L}","A","Step-by-Step Solution:
+1. Rules for Significant Figures:
+   - Leading zeros before the first non-zero digit are place holders and NOT significant.
+   - The first significant figure is 4.
+2. Count four significant figures starting from 4:
+   - 1st digit: 4
+   - 2nd digit: 0 (zeros between non-zeros are significant)
+   - 3rd digit: 5
+   - 4th digit: 8
+3. Examine the 5th digit to round:
+   - 5th digit is 0 (< 5), so round down (leave 8 unchanged).
+   - Significant digits: $4.058$.
+4. Convert to scientific notation:
+   - $0.004058 = 4.058 \times 10^{-3}\text{ mg/L}$.
+
+Common Trap: Counting leading zeros as significant figures (e.g., stopping at $0.0040 = 2$ sig figs), or providing five sig figs (Option B).
+Exam Tip: Leading zeros in decimals ($0.00\dots$) never count toward significant figures.","Correct. Survives elimination because 4.058 contains exactly four significant digits (4, 0, 5, 8) and correctly shifts by 10^-3.","Eliminated because 4.0580 contains five significant figures.","Eliminated because 4.06 contains only three significant figures.","Eliminated because 4.05802 contains six significant figures.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"If $x = 14.6$ and $y = 8.4$ are each measurements rounded to the nearest tenth, what is the maximum possible absolute difference between the true product $(x \cdot y)$ and the nominal product ($14.6 \times 8.4 = 122.64$)?","1.1525","0.05","0.575","2.305","A","Step-by-Step Solution:
+1. Determine the uncertainty intervals for $x$ and $y$ rounded to nearest tenth ($\pm 0.05$):
+   - $14.55 \le x < 14.65$
+   - $8.35 \le y < 8.45$
+2. Nominal calculated product:
+   - $P_{\text{nom}} = 14.6 \times 8.4 = 122.64$.
+3. Compute maximum upper product bound:
+   - $P_{\text{max}} = 14.65 \times 8.45 = 123.7925$.
+   - Upper Error $= 123.7925 - 122.64 = 1.1525$.
+4. Compute minimum lower product bound:
+   - $P_{\text{min}} = 14.55 \times 8.35 = 121.4925$.
+   - Lower Error $= 122.64 - 121.4925 = 1.1475$.
+5. Maximum absolute error $= \max(1.1525, 1.1475) = 1.1525$.
+
+Common Trap: Adding uncertainties linearly ($0.05 + 0.05 = 0.10$) rather than multiplying boundary bounds.
+Exam Tip: In product error propagation, $\Delta P \approx x \Delta y + y \Delta x = (14.6)(0.05) + (8.4)(0.05) = 0.73 + 0.42 = 1.15$.","Correct. Survives elimination because 14.65 * 8.45 - 122.64 = 123.7925 - 122.64 = 1.1525.","Eliminated because 0.05 is the individual linear measurement tolerance, not the propagated product error.","Eliminated because halving the error gives 0.575.","Eliminated because doubling the error span gives 2.305.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"Using the IEEE 754 Round-Half-to-Even (Banker's Rounding) standard, round each of the following four rational numbers to the nearest whole integer, and determine their total sum:
+
+$$N_1 = 3.5, \quad N_2 = 4.5, \quad N_3 = 7.5, \quad N_4 = 8.5$$","24","26","25","23","A","Step-by-Step Solution:
+1. Definition of Round-Half-to-Even: When a number is exactly halfway between two integers (ending in $.5$), it rounds to the nearest EVEN integer.
+2. Apply rule to each number:
+   - $N_1 = 3.5$: Halfway between 3 and 4. The nearest even integer is 4. $\implies 4$.
+   - $N_2 = 4.5$: Halfway between 4 and 5. The nearest even integer is 4. $\implies 4$.
+   - $N_3 = 7.5$: Halfway between 7 and 8. The nearest even integer is 8. $\implies 8$.
+   - $N_4 = 8.5$: Halfway between 8 and 9. The nearest even integer is 8. $\implies 8$.
+3. Sum the rounded integers:
+   - $\text{Total} = 4 + 4 + 8 + 8 = 24$.
+
+Common Trap: Using standard Round-Half-Up (which always rounds $.5$ upward to $4 + 5 + 8 + 9 = 26$, Option B).
+Exam Tip: Banker's rounding prevents upward statistical bias by rounding odd $.5$ up and even $.5$ down.","Correct. Survives elimination because 3.5 -> 4, 4.5 -> 4, 7.5 -> 8, 8.5 -> 8, summing to 24.","Eliminated because round-half-up yields 4 + 5 + 8 + 9 = 26.","Eliminated because arithmetic error in the Banker's sum yields 25.","Eliminated because truncating all four values yields 3 + 4 + 7 + 8 = 22 or 23.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"Evaluate the exact finite sum of integer square roots:
+
+$$S = \lfloor \sqrt{1} \rfloor + \lfloor \sqrt{2} \rfloor + \lfloor \sqrt{3} \rfloor + \lfloor \sqrt{4} \rfloor + \cdots + \lfloor \sqrt{15} \rfloor$$","34","36","30","40","A","Step-by-Step Solution:
+1. Group integers by their integer square root $\lfloor \sqrt{n} \rfloor$:
+   - For $n \in [1, 3]$: $\lfloor \sqrt{n} \rfloor = 1$ (Values: $n = 1, 2, 3 \implies 3\text{ terms}$).
+     - Subtotal $= 3 \times 1 = 3$.
+   - For $n \in [4, 8]$: $\lfloor \sqrt{n} \rfloor = 2$ (Values: $n = 4, 5, 6, 7, 8 \implies 5\text{ terms}$).
+     - Subtotal $= 5 \times 2 = 10$.
+   - For $n \in [9, 15]$: $\lfloor \sqrt{n} \rfloor = 3$ (Values: $n = 9, 10, 11, 12, 13, 14, 15 \implies 7\text{ terms}$).
+     - Subtotal $= 7 \times 3 = 21$.
+2. Sum all subtotals:
+   - $S = 3 + 10 + 21 = 34$.
+
+Common Trap: Forgetting that the number of integers having square root $k$ is $(k+1)^2 - k^2 = 2k + 1$.
+Exam Tip: Count terms between consecutive squares: 3 terms of 1, 5 terms of 2, 7 terms of 3.","Correct. Survives elimination because (3 * 1) + (5 * 2) + (7 * 3) = 3 + 10 + 21 = 34.","Eliminated because including n = 16 (sqrt=4) gives 34 + 4 = 38 or 36.","Eliminated because undercounting terms in the third block yields 30.","Eliminated because overestimating integer root ranges yields 40.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"A municipal procurement inventory lists 18,476 bags of Portland cement. Express this quantity rounded to the nearest hundred, nearest thousand, and nearest ten thousand respectively.","18,500; 18,000; 20,000","18,400; 18,000; 10,000","18,500; 19,000; 20,000","18,480; 18,000; 20,000","A","Step-by-Step Solution:
+1. Nearest Hundred:
+   - Base number: $18,476$.
+   - Hundreds digit is 4, followed by 7. Since $7 \ge 5$, round 4 up to 5.
+   - Rounded Value $= 18,500$.
+2. Nearest Thousand:
+   - Thousands digit is 8, followed by 4. Since $4 < 5$, round down (keep 8).
+   - Rounded Value $= 18,000$.
+3. Nearest Ten Thousand:
+   - Ten-thousands digit is 1, followed by 8. Since $8 \ge 5$, round 1 up to 2.
+   - Rounded Value $= 20,000$.
+4. Combined Sequence: $18,500;\ 18,000;\ 20,000$.
+
+Common Trap: Rounding sequentially (e.g., using the rounded 18,500 to round to 19,000 for the thousands place), which causes double rounding error.
+Exam Tip: Always round directly from the original unrounded base number ($18,476$).","Correct. Survives elimination because rounding 18,476 independently gives 18,500 (hundreds), 18,000 (thousands), and 20,000 (ten thousands).","Eliminated because truncating the hundreds place gives 18,400.","Eliminated because double rounding 18,500 to 19,000 for the thousands place is invalid.","Eliminated because 18,480 is rounded to the nearest ten, not nearest hundred.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"Determine the exact interval of real values for $x$ that satisfies the floor inequality:
+
+$$\lfloor 2x - 1 \rfloor = 5$$","3 \le x < 3.5","3 < x \le 3.5","2.5 \le x < 3.5","x = 3","A","Step-by-Step Solution:
+1. Apply the fundamental algebraic definition of the floor function:
+   - $\lfloor u \rfloor = k \iff k \le u < k + 1$.
+2. Here, $u = 2x - 1$ and $k = 5$:
+   - $5 \le 2x - 1 < 6$.
+3. Add 1 to all three parts of the compound inequality:
+   - $5 + 1 \le 2x < 6 + 1$.
+   - $6 \le 2x < 7$.
+4. Divide all parts by 2:
+   - $\frac{6}{2} \le x < \frac{7}{2}$.
+   - $3 \le x < 3.5$ (or interval $[3, 3.5)$).
+
+Common Trap: Writing $2x - 1 = 5 \implies x = 3$ (Option D), forgetting that floor functions describe half-open continuous intervals.
+Exam Tip: Floor function solutions are always closed on the lower bound and open on the upper bound $[a, b)$.","Correct. Survives elimination because 5 <= 2x - 1 < 6 simplifies to 6 <= 2x < 7, so 3 <= x < 3.5.","Eliminated because inverting the inequality boundaries to open-closed (3, 3.5] violates floor definition.","Eliminated because arithmetic error in adding 1 yields 2.5.","Eliminated because x = 3 is only a single discrete point in a continuous infinite interval.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"When the rational fraction $\frac{17}{7}$ is converted to its decimal expansion ($2.42857142857\dots$), what is its value rounded to three (3) decimal places, and what is its value rounded to three (3) significant figures?","2.429 and 2.43","2.428 and 2.42","2.429 and 2.429","2.43 and 2.429","A","Step-by-Step Solution:
+1. Three Decimal Places:
+   - Decimal: $2.42857\dots$
+   - 3rd decimal digit $= 8$.
+   - 4th decimal digit (test digit) $= 5$.
+   - Since $5 \ge 5$, round 8 up to 9.
+   - Value to 3 decimal places $= 2.429$.
+2. Three Significant Figures:
+   - Digits: 2 (1st), 4 (2nd), 2 (3rd).
+   - 4th digit (test digit) $= 8$.
+   - Since $8 \ge 5$, round the 3rd significant digit (2) up to 3.
+   - Value to 3 significant figures $= 2.43$.
+3. Combined result: $2.429$ and $2.43$.
+
+Common Trap: Treating 'decimal places' and 'significant figures' as interchangeable terms.
+Exam Tip: Decimal places count digits to the right of the decimal point; significant figures count all valid digits starting from the first non-zero number.","Correct. Survives elimination because 3 decimal places is 2.429 (4th decimal digit is 5) and 3 sig figs is 2.43 (4th sig digit is 8).","Eliminated because truncating without rounding gives 2.428 and 2.42.","Eliminated because 3 sig figs requires only two decimal places (2.43).","Eliminated because the two values are listed in reversed order.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"
+"The fractional part function is defined as $\{x\} = x - \lfloor x \rfloor$. If $x = -4.35$, what is the exact numerical value of $\{x\}$?","0.65","-0.35","0.35","-0.65","A","Step-by-Step Solution:
+1. State the formula: $\{x\} = x - \lfloor x \rfloor$.
+2. Evaluate the floor of $-4.35$:
+   - On the real number line, the greatest integer $\le -4.35$ is $-5$.
+   - $\lfloor -4.35 \rfloor = -5$.
+3. Compute $\{x\}$:
+   - $\{x\} = -4.35 - (-5)$.
+   - $\{x\} = -4.35 + 5 = 0.65$.
+4. Note that by definition, the fractional part $\{x\}$ must always satisfy $0 \le \{x\} < 1$.
+
+Common Trap: Assuming the fractional part of $-4.35$ is $-0.35$ or $+0.35$, forgetting that fractional parts must be strictly non-negative ($[0, 1)$).
+Exam Tip: For negative numbers, $\{x\} = 1 - \text{decimal portion} = 1 - 0.35 = 0.65$.","Correct. Survives elimination because -4.35 - (-5) = +0.65, satisfying the strict range 0 <= {x} < 1.","Eliminated because fractional parts cannot be negative (-0.35 is invalid).","Eliminated because 0.35 ignores the negative floor shift to -5.","Eliminated because sign inversion gives -0.65.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Rounding | Very Difficult | Batch 015"

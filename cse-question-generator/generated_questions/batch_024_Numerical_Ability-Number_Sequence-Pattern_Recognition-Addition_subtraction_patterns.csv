@@ -1,0 +1,171 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Identify the next number in the accelerating addition sequence:
+
+$$7, \quad 10, \quad 16, \quad 25, \quad 37, \quad 52, \quad \textbf{?}$$","70","68","72","75","A","Step-by-Step Solution:
+1. Determine consecutive differences:
+   - $10 - 7 = 3$
+   - $16 - 10 = 6$
+   - $25 - 16 = 9$
+   - $37 - 25 = 12$
+   - $52 - 37 = 15$.
+2. The differences form an arithmetic sequence of multiples of 3 ($3, 6, 9, 12, 15$).
+3. The next difference is $15 + 3 = 18$.
+4. Compute the 7th term:
+   - $T_7 = 52 + 18 = 70$.
+
+Common Trap: Adding 15 again ($52 + 15 = 67$) or miscalculating the arithmetic increment.
+Exam Tip: Second difference is constant ($+3$), indicating a quadratic sequence $T_n = 1.5n^2 - 1.5n + 7$.","Correct. Survives elimination because the next difference is 18, giving 52 + 18 = 70.","Eliminated because adding 16 yields 68.","Eliminated because adding 20 yields 72.","Eliminated because adding 23 yields 75.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Find the missing number in the alternating expanding addition-subtraction sequence:
+
+$$50, \quad 53, \quad 47, \quad 56, \quad 44, \quad 59, \quad \textbf{?}$$","41","43","39","77","A","Step-by-Step Solution:
+1. Examine operations between successive terms:
+   - $50 + 3 = 53$
+   - $53 - 6 = 47$
+   - $47 + 9 = 56$
+   - $56 - 12 = 44$
+   - $44 + 15 = 59$.
+2. The operational pattern alternates signs $(+, -, +, -, +)$ while the magnitude increases as multiples of 3 ($3, 6, 9, 12, 15$).
+3. The next operation is $-18$:
+   - $T_7 = 59 - 18 = 41$.
+
+Common Trap: Adding 18 instead of subtracting ($59 + 18 = 77$, Option D).
+Exam Tip: Track operator alternation: $+3 \to -6 \to +9 \to -12 \to +15 \to -18$.","Correct. Survives elimination because the next operation is -18, yielding 59 - 18 = 41.","Eliminated because subtracting 16 yields 43.","Eliminated because subtracting 20 yields 39.","Eliminated because adding 18 gives 77, violating sign alternation.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"What is the 8th term in the square-addition sequence:
+
+$$10, \quad 11, \quad 15, \quad 24, \quad 40, \quad 65, \quad 101, \quad \textbf{?}$$","150","149","152","145","A","Step-by-Step Solution:
+1. Calculate differences between consecutive terms:
+   - $11 - 10 = 1 = 1^2$
+   - $15 - 11 = 4 = 2^2$
+   - $24 - 15 = 9 = 3^2$
+   - $40 - 24 = 16 = 4^2$
+   - $65 - 40 = 25 = 5^2$
+   - $101 - 65 = 36 = 6^2$.
+2. The increments are consecutive perfect squares ($1^2, 2^2, 3^2, 4^2, 5^2, 6^2$).
+3. The next increment is $7^2 = 49$.
+4. Compute the 8th term:
+   - $T_8 = 101 + 49 = 150$.
+
+Common Trap: Adding $6^2 = 36$ again ($101 + 36 = 137$) or adding $8^2 = 64$ ($101 + 64 = 165$).
+Exam Tip: Formulate $T_n = 10 + \sum_{k=1}^{n-1} k^2$. For $n = 8$, $T_8 = 10 + \frac{7 \times 8 \times 15}{6} = 10 + 140 = 150$.","Correct. Survives elimination because the next difference is 7^2 = 49, giving 101 + 49 = 150.","Eliminated because arithmetic error gives 149.","Eliminated because adding 51 yields 152.","Eliminated because adding 44 yields 145.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Find the missing number in the prime-addition sequence:
+
+$$15, \quad 17, \quad 20, \quad 25, \quad 32, \quad 43, \quad 56, \quad \textbf{?}$$","73","71","75","69","A","Step-by-Step Solution:
+1. Examine differences between consecutive numbers:
+   - $17 - 15 = 2$
+   - $20 - 17 = 3$
+   - $25 - 20 = 5$
+   - $32 - 25 = 7$
+   - $43 - 32 = 11$
+   - $56 - 43 = 13$.
+2. The differences are consecutive prime numbers: $2, 3, 5, 7, 11, 13$.
+3. Identify the next prime number after 13:
+   - The next prime number is 17 (since 15 is composite).
+4. Compute the 8th term:
+   - $T_8 = 56 + 17 = 73$.
+
+Common Trap: Adding 15 ($56 + 15 = 71$, Option B) assuming odd-number differences, missing that 15 is divisible by 3 and 5.
+Exam Tip: Consecutive primes skip composite odd numbers ($9, 15, 21$).","Correct. Survives elimination because the next prime difference is 17, giving 56 + 17 = 73.","Eliminated because adding 15 (composite odd) yields 71.","Eliminated because adding 19 yields 75.","Eliminated because adding 13 yields 69.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Determine the next term in the cubic-addition sequence:
+
+$$5, \quad 6, \quad 14, \quad 41, \quad 105, \quad 230, \quad \textbf{?}$$","446","440","456","430","A","Step-by-Step Solution:
+1. Calculate differences between consecutive terms:
+   - $6 - 5 = 1 = 1^3$
+   - $14 - 6 = 8 = 2^3$
+   - $41 - 14 = 27 = 3^3$
+   - $105 - 41 = 64 = 4^3$
+   - $230 - 105 = 125 = 5^3$.
+2. The added increments are consecutive perfect cubes ($1^3, 2^3, 3^3, 4^3, 5^3$).
+3. The next increment is $6^3 = 216$.
+4. Compute the 7th term:
+   - $T_7 = 230 + 216 = 446$.
+
+Common Trap: Adding $6^2 = 36$ ($230 + 36 = 266$) or miscalculating $6^3 = 216$.
+Exam Tip: Cumulative sum of cubes satisfies $T_n = 5 + \left(\frac{n(n-1)}{2}\right)^2$. For $n = 7$, $T_7 = 5 + 21^2 = 5 + 441 = 446$.","Correct. Survives elimination because the next cube increment is 6^3 = 216, giving 230 + 216 = 446.","Eliminated because arithmetic error gives 440.","Eliminated because adding 226 gives 456.","Eliminated because adding 200 gives 430.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Find the missing number in the accelerating subtraction sequence:
+
+$$100, \quad 99, \quad 95, \quad 86, \quad 70, \quad 45, \quad \textbf{?}$$","9","15","5","0","A","Step-by-Step Solution:
+1. Calculate the successive subtrahends (decrements):
+   - $100 - 99 = 1 = 1^2$
+   - $99 - 95 = 4 = 2^2$
+   - $95 - 86 = 9 = 3^2$
+   - $86 - 70 = 16 = 4^2$
+   - $70 - 45 = 25 = 5^2$.
+2. The subtrahends are consecutive perfect squares ($1^2, 2^2, 3^2, 4^2, 5^2$).
+3. The next subtrahend is $6^2 = 36$.
+4. Compute the 7th term:
+   - $T_7 = 45 - 36 = 9$.
+
+Common Trap: Subtracting 30 ($45 - 30 = 15$, Option B) by assuming linear increments of 5.
+Exam Tip: Track square subtrahends: $-1, -4, -9, -16, -25, -36$.","Correct. Survives elimination because 45 - 6^2 = 45 - 36 = 9.","Eliminated because subtracting 30 gives 15.","Eliminated because subtracting 40 gives 5.","Eliminated because assuming the sequence zeroes out is false.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"What is the 8th term in the Fibonacci-difference additive sequence:
+
+$$10, \quad 11, \quad 12, \quad 14, \quad 17, \quad 22, \quad 30, \quad \textbf{?}$$","43","41","45","38","A","Step-by-Step Solution:
+1. Determine consecutive differences:
+   - $11 - 10 = 1$
+   - $12 - 11 = 1$
+   - $14 - 12 = 2$
+   - $17 - 14 = 3$
+   - $22 - 17 = 5$
+   - $30 - 22 = 8$.
+2. The differences form the standard Fibonacci sequence: $1, 1, 2, 3, 5, 8$.
+3. The next Fibonacci difference is $5 + 8 = 13$.
+4. Compute the 8th term:
+   - $T_8 = 30 + 13 = 43$.
+
+Common Trap: Adding 11 ($30 + 11 = 41$, Option B) assuming prime or odd differences.
+Exam Tip: Recognize Fibonacci differences ($1, 1, 2, 3, 5, 8, 13, 21$) where each difference is the sum of the two preceding differences.","Correct. Survives elimination because the next Fibonacci difference is 13, giving 30 + 13 = 43.","Eliminated because adding 11 yields 41.","Eliminated because adding 15 yields 45.","Eliminated because repeating +8 yields 38.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Find the missing term in the second-difference expansion sequence:
+
+$$3, \quad 8, \quad 18, \quad 35, \quad 61, \quad 98, \quad \textbf{?}$$","148","145","152","139","A","Step-by-Step Solution:
+1. Calculate first-level differences:
+   - $8 - 3 = 5$
+   - $18 - 8 = 10$
+   - $35 - 18 = 17$
+   - $61 - 35 = 26$
+   - $98 - 61 = 37$.
+2. Calculate second-level differences:
+   - $10 - 5 = 5$
+   - $17 - 10 = 7$
+   - $26 - 17 = 9$
+   - $37 - 26 = 11$.
+3. The second differences are consecutive odd numbers ($5, 7, 9, 11$).
+4. The next second difference is 13.
+5. Compute the next first difference:
+   - $\text{Next First Difference} = 37 + 13 = 50$ (Note: $50 = 7^2 + 1$).
+6. Compute the 7th term:
+   - $T_7 = 98 + 50 = 148$.
+
+Common Trap: Adding 47 instead of 50 ($98 + 47 = 145$, Option B).
+Exam Tip: Notice first differences follow $n^2 + 1$ ($2^2+1=5, 3^2+1=10, 4^2+1=17, 5^2+1=26, 6^2+1=37, 7^2+1=50$).","Correct. Survives elimination because the next first difference is 50, giving 98 + 50 = 148.","Eliminated because adding 47 yields 145.","Eliminated because adding 54 yields 152.","Eliminated because arithmetic error gives 139.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Determine the next number in the non-linear subtraction sequence:
+
+$$80, \quad 78, \quad 73, \quad 63, \quad 46, \quad 20, \quad \textbf{?}$$","-17","-15","-20","-12","A","Step-by-Step Solution:
+1. Calculate consecutive subtrahends:
+   - $80 - 78 = 2 = 1^2 + 1$
+   - $78 - 73 = 5 = 2^2 + 1$
+   - $73 - 63 = 10 = 3^2 + 1$
+   - $63 - 46 = 17 = 4^2 + 1$
+   - $46 - 20 = 26 = 5^2 + 1$.
+2. The subtrahends follow the algebraic formula $d_n = n^2 + 1$.
+3. The next subtrahend for $n = 6$ is:
+   - $d_6 = 6^2 + 1 = 36 + 1 = 37$.
+4. Compute the 7th term:
+   - $T_7 = 20 - 37 = -17$.
+
+Common Trap: Subtracting 35 ($20 - 35 = -15$, Option B) or assuming the sequence cannot be negative.
+Exam Tip: When subtrahend exceeds the current term ($37 > 20$), the sequence crosses into negative integers.","Correct. Survives elimination because 20 - (6^2 + 1) = 20 - 37 = -17.","Eliminated because subtracting 35 yields -15.","Eliminated because subtracting 40 yields -20.","Eliminated because subtracting 32 yields -12.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"
+"Find the 7th term in the alternating powers-of-two addition/subtraction sequence:
+
+$$50, \quad 52, \quad 48, \quad 56, \quad 40, \quad 72, \quad \textbf{?}$$","8","104","6","16","A","Step-by-Step Solution:
+1. Analyze operations connecting successive terms:
+   - $50 + 2 = 52$ ($+2^1$)
+   - $52 - 4 = 48$ ($-2^2$)
+   - $48 + 8 = 56$ ($+2^3$)
+   - $56 - 16 = 40$ ($-2^4$)
+   - $40 + 32 = 72$ ($+2^5$).
+2. The operation alternates signs $(+, -, +, -, +)$ while the magnitude doubles ($2, 4, 8, 16, 32$).
+3. The next operation is $-64$ ($-2^6$):
+   - $T_7 = 72 - 64 = 8$.
+
+Common Trap: Adding 32 again or adding 64 ($72 + 64 = 136$), failing to alternate the sign.
+Exam Tip: Operational step is $(-1)^{n+1} \cdot 2^n$. For $n = 6$, operation is $-2^6 = -64$.","Correct. Survives elimination because 72 - 64 = 8.","Eliminated because adding 32 gives 104.","Eliminated because arithmetic error gives 6.","Eliminated because subtracting 56 gives 16.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Addition/subtraction patterns | Very Difficult | Batch 024"

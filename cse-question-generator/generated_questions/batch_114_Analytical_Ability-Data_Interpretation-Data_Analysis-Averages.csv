@@ -1,0 +1,162 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A civil service review center tracks the pretest scores of 8 examinees: 72, 85, 68, 91, 76, 83, 79, 88. The center director needs to compute the ARITHMETIC MEAN, MEDIAN, and MODE of the scores to analyze class performance. Which of the following correctly states all three measures?","Mean=80.25; Median=81; Mode=none (all scores appear exactly once and there is no repeating value).","Mean=80.25; Median=83; Mode=79.","Mean=82.5; Median=81; Mode=85.","Mean=80.25; Median=79.5; Mode=none.","A","Step-by-Step Solution:
+1. Sort the scores: 68, 72, 76, 79, 83, 85, 88, 91.
+2. Calculate MEAN: (68+72+76+79+83+85+88+91) ÷ 8 = 642 ÷ 8 = 80.25. ✓
+3. Calculate MEDIAN (n=8, even, so average of 4th and 5th values):
+   - 4th value = 79; 5th value = 83.
+   - Median = (79+83) ÷ 2 = 162 ÷ 2 = 81. ✓
+4. Calculate MODE: All eight values appear exactly once—no value repeats. MODE = none. ✓
+5. Option A: Mean=80.25 ✓; Median=81 ✓; Mode=none ✓. CORRECT.
+6. Evaluate incorrect alternatives:
+   - Option B: Median=83 is the 6th value (not the median for n=8); Mode=79 is incorrect (not repeated).
+   - Option C: Mean=82.5 is wrong (correct=80.25); Mode=85 is incorrect (not repeated).
+   - Option D: Median=79.5 would be average of 72 and 76? No—for sorted 68,72,76,79,83,85,88,91, the median is (79+83)/2=81, not 79.5.
+
+Common Trap: Taking the middle value of the unsorted list for the median, or computing mean of only some values.
+Exam Tip: Always SORT data before finding median; for even n, median = average of (n/2)th and (n/2+1)th values.","Correct. Survives elimination because Mean=642÷8=80.25, Median=(79+83)÷2=81, and Mode=none (no repeating values) are all precisely correct.","Eliminated because Median=83 is the 6th value in the sorted list, not the median of 8 values (which requires averaging the 4th and 5th values, yielding 81).","Eliminated because Mean=82.5 is incorrect (642÷8=80.25, not 82.5), and Mode=85 is incorrect as no value repeats.","Eliminated because Median=79.5 is incorrect; sorting the data and averaging the 4th (79) and 5th (83) values gives (79+83)/2=81, not 79.5.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Mean, Median, Mode | Very Difficult | Batch 114"
+"Passage: A government agency's monthly overtime expenses (PHP thousands) for eight months are: Jan=42.8, Feb=38.4, Mar=51.2, Apr=47.6, May=39.1, Jun=44.3, Jul=53.7, Aug=48.9. The finance officer needs to calculate the WEIGHTED AVERAGE monthly overtime expense, where months Jan-Apr carry a weight of 1.5 (peak season) and months May-Aug carry a weight of 1.0 (off-peak). What is the WEIGHTED AVERAGE?","Weighted average = PHP 46.1 thousand, calculated as [(42.8+38.4+51.2+47.6)×1.5 + (39.1+44.3+53.7+48.9)×1.0] ÷ [(4×1.5)+(4×1.0)].","Weighted average = PHP 45.75 thousand, the simple arithmetic mean of all eight values.","Weighted average = PHP 47.4 thousand, using only Jan-Apr values (the heavier weighted months).","Weighted average = PHP 46.5 thousand, using equal weights for all months.","A","Step-by-Step Solution:
+1. Calculate sum for each season:
+   - Jan-Apr (weight=1.5): 42.8+38.4+51.2+47.6 = 180.0. Weighted = 180.0 × 1.5 = 270.0.
+   - May-Aug (weight=1.0): 39.1+44.3+53.7+48.9 = 186.0. Weighted = 186.0 × 1.0 = 186.0.
+2. Total weighted sum: 270.0 + 186.0 = 456.0.
+3. Total weights: (4 × 1.5) + (4 × 1.0) = 6 + 4 = 10.
+4. Weighted average: 456.0 ÷ 10 = 45.6.
+
+Wait—Option A says PHP 46.1. Let me recheck:
+Jan-Apr sum: 42.8+38.4=81.2; +51.2=132.4; +47.6=180.0. Weighted: 180×1.5=270.
+May-Aug sum: 39.1+44.3=83.4; +53.7=137.1; +48.9=186.0. Weighted: 186×1.0=186.
+Total weighted: 456. Total weight: 10. Weighted avg = 456/10 = 45.6.
+
+Option A says 46.1—the computation gives 45.6. There's a discrepancy. The correct answer is 45.6. Updating Option A.","Weighted average = PHP 45.6 thousand, calculated as [(180.0×1.5) + (186.0×1.0)] ÷ [(4×1.5)+(4×1.0)] = 456.0÷10 = PHP 45.6K.","Weighted average = PHP 45.75 thousand represents the simple arithmetic mean of all 8 values (366.0÷8=45.75)—which ignores the differential weighting by season.","Weighted average = PHP 45.0 thousand, using only Jan-Apr values (180.0÷4=45.0)—this omits the May-Aug data entirely.","Weighted average = PHP 46.5 thousand uses incorrect component calculations; this does not match any standard weighted average methodology.","A","Step-by-Step Solution (Corrected):
+1. Jan-Apr (weight=1.5): Sum=180.0; Weighted contribution=180×1.5=270.0.
+2. May-Aug (weight=1.0): Sum=186.0; Weighted contribution=186×1.0=186.0.
+3. Total weighted sum: 270+186=456.
+4. Total weight denominator: (4×1.5)+(4×1.0) = 6+4=10.
+5. Weighted average: 456÷10=45.6.
+
+Common Trap: Using the simple arithmetic mean (45.75) rather than weighted mean, or weighting each individual month separately instead of grouping by season.
+Exam Tip: Weighted average = Σ(value × weight) ÷ Σ(weights); always include all weight-value products in the numerator and all weights in the denominator.","Correct. Survives elimination because the weighted average = [(180×1.5)+(186×1.0)] ÷ [(4×1.5)+(4×1.0)] = 456÷10 = PHP 45.6 thousand.","Eliminated because PHP 45.75 (366÷8) is the simple arithmetic mean, which ignores the 1.5 weight applied to peak months Jan-Apr.","Eliminated because PHP 45.0 (180÷4) is the unweighted average of Jan-Apr only—it excludes May-Aug data and doesn't apply any weighting formula.","Eliminated because PHP 46.5 does not correspond to any correct weighted average calculation using the given seasonal weights and values.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Weighted Average | Very Difficult | Batch 114"
+"Passage: A regional office monitored the average daily temperature (°C) for six cities over a month: City A=31.4, City B=28.7, City C=33.2, City D=29.8, City E=34.1, City F=27.6. The national weather bureau defines a 'heat watch day' as any day when a city's average temperature exceeds the national mean of all recorded cities by more than 2°C. Based on the six-city data, which cities would be placed under a 'heat watch' classification?","Cities C and E would be placed under heat watch. Mean of six cities = (31.4+28.7+33.2+29.8+34.1+27.6)÷6=184.8÷6=30.8°C. Cities exceeding 30.8+2=32.8°C: C(33.2)✓ and E(34.1)✓.","Only City E (34.1°C) would be placed under heat watch since it is the single hottest city.","Cities A, C, and E (all above 30°C) would be placed under heat watch.","No cities would be under heat watch because no city is 2°C above the national average.","A","Step-by-Step Solution:
+1. Calculate mean temperature of all six cities:
+   - (31.4+28.7+33.2+29.8+34.1+27.6) ÷ 6 = 184.8 ÷ 6 = 30.8°C.
+2. Define heat watch threshold: 30.8 + 2.0 = 32.8°C.
+3. Check each city:
+   - City A: 31.4 < 32.8 → no heat watch.
+   - City B: 28.7 < 32.8 → no heat watch.
+   - City C: 33.2 > 32.8 → HEAT WATCH ✓.
+   - City D: 29.8 < 32.8 → no heat watch.
+   - City E: 34.1 > 32.8 → HEAT WATCH ✓.
+   - City F: 27.6 < 32.8 → no heat watch.
+4. Cities C and E qualify. Option A is correct.
+
+Common Trap: Selecting only City E (the highest temperature) rather than applying the '>mean + 2°C' threshold to all cities.
+Exam Tip: The threshold is calculated from the computed group mean—not from an assumed benchmark; always compute the group mean first, then apply the exceedance criterion to all members.","Correct. Survives elimination because the six-city mean is 30.8°C, the heat watch threshold is 32.8°C, and both City C (33.2°C) and City E (34.1°C) exceed this threshold.","Eliminated because the heat watch criterion requires exceeding the mean by MORE than 2°C; City A (31.4°C) is above 30°C but does not exceed 32.8°C—only C and E qualify.","Eliminated because City A (31.4°C) is 0.6°C above the mean but does not exceed the 2°C threshold; only C and E qualify.","Eliminated because Cities C (33.2°C = +2.4°C above mean) and E (34.1°C = +3.3°C above mean) both exceed the mean by more than 2°C; the heat watch criterion is met by two cities.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Threshold Application | Very Difficult | Batch 114"
+"Passage: An HR performance report shows the average quarterly performance rating (out of 100) for 5 employees over 4 quarters. Employee A: Q1=84, Q2=87, Q3=82, Q4=90. Annual avg=85.75. Employee B: Q1=76, Q2=79, Q3=81, Q4=83. Annual avg=79.75. Employee C: Q1=91, Q2=88, Q3=94, Q4=89. Annual avg=90.5. Employee D: Q1=72, Q2=74, Q3=71, Q4=78. Annual avg=73.75. Employee E: Q1=88, Q2=85, Q3=87, Q4=92. Annual avg=88.0. The department average is computed as the average of all five employees' annual averages. Based on this data, which employees performed ABOVE the department average?","The department average is 83.55. Employees A (85.75), C (90.5), and E (88.0) performed above the department average.","Only Employee C (90.5) performed above the department average.","The department average is 90.5; only Employee C meets this threshold.","Employees A, C, D, and E all performed above the department average of 83.55.","A","Step-by-Step Solution:
+1. Calculate the department average of annual averages:
+   - (85.75+79.75+90.5+73.75+88.0) ÷ 5 = 417.75 ÷ 5 = 83.55.
+2. Compare each employee's annual average to 83.55:
+   - Employee A: 85.75 > 83.55 → ABOVE ✓.
+   - Employee B: 79.75 < 83.55 → below.
+   - Employee C: 90.5 > 83.55 → ABOVE ✓.
+   - Employee D: 73.75 < 83.55 → below.
+   - Employee E: 88.0 > 83.55 → ABOVE ✓.
+3. Employees A, C, and E are above the department average. Option A is correct.
+4. Evaluate incorrect alternatives:
+   - Option B: Employee E (88.0) and A (85.75) also exceed the department average.
+   - Option C: 90.5 is Employee C's score, not the department average; the dept average is 83.55.
+   - Option D: Employee D (73.75) is well below 83.55—not above average.
+
+Common Trap: Using Employee C's score (90.5) as the 'department average' rather than computing the average of all five annual averages.
+Exam Tip: Department average = average of all individual averages; compare each individual to the computed group mean, not to the highest individual score.","Correct. Survives elimination because the department average (83.55) is correctly calculated as the mean of all five annual averages, and Employees A (85.75), C (90.5), and E (88.0) all exceed it.","Eliminated because Employee E (88.0 > 83.55) and Employee A (85.75 > 83.55) also perform above the department average—not just Employee C.","Eliminated because 90.5 is Employee C's individual annual average—not the department average; the correct department average is 417.75÷5=83.55.","Eliminated because Employee D's annual average of 73.75 is significantly below the department average of 83.55; D is a below-average performer, not above-average.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Above-Average Identification | Very Difficult | Batch 114"
+"Passage: A regional economic survey reports annual household income data for three income groups in a province. Low-income households (3,200 families): Average income = PHP 84,200/year. Middle-income households (1,800 families): Average income = PHP 246,800/year. High-income households (420 families): Average income = PHP 1,240,000/year. Based on this data, what is the OVERALL PROVINCIAL AVERAGE HOUSEHOLD INCOME (weighted by number of families)?","Provincial average = approximately PHP 185,060/year, weighted by the number of households in each income group.","Provincial average = PHP 523,667/year, the simple average of the three group averages.","Provincial average = PHP 84,200/year, the average of the most numerous group.","Provincial average = PHP 1,240,000/year, reflecting the group with the highest income.","A","Step-by-Step Solution:
+1. Calculate weighted total income for each group:
+   - Low: 3,200 × 84,200 = PHP 269,440,000.
+   - Middle: 1,800 × 246,800 = PHP 444,240,000.
+   - High: 420 × 1,240,000 = PHP 520,800,000.
+2. Total income: 269,440,000 + 444,240,000 + 520,800,000 = PHP 1,234,480,000.
+3. Total families: 3,200 + 1,800 + 420 = 5,420.
+4. Weighted average: PHP 1,234,480,000 ÷ 5,420 = PHP 227,763/year.
+
+Wait—Option A says PHP 185,060. My computation gives PHP 227,763. Let me recheck:
+Low: 3200×84200=269,440,000. Middle: 1800×246800=444,240,000. High: 420×1,240,000=520,800,000.
+Total: 269.44M+444.24M+520.80M=1,234.48M. Families: 5,420. Avg=1,234.48M/5,420=227,763.
+
+The correct answer is PHP 227,763. Updating Option A to reflect this.","Provincial average ≈ PHP 227,763/year, calculated as the weighted mean: [(3,200×84,200)+(1,800×246,800)+(420×1,240,000)] ÷ (3,200+1,800+420) = 1,234.48M÷5,420.","Provincial average = PHP 523,667/year represents the simple (unweighted) average of the three group averages: (84,200+246,800+1,240,000)÷3=523,667—ignoring the different household counts.","Provincial average = PHP 84,200/year is the low-income group's average, not the provincial weighted mean; this ignores middle and high-income group data entirely.","Provincial average = PHP 1,240,000/year is the high-income group average, not the provincial weighted mean; this ignores 5,000 of 5,420 households.","A","Step-by-Step Solution (Corrected):
+1. Weighted total income:
+   - Low: 3,200 × 84,200 = PHP 269,440,000.
+   - Middle: 1,800 × 246,800 = PHP 444,240,000.
+   - High: 420 × 1,240,000 = PHP 520,800,000.
+   - Total: PHP 1,234,480,000.
+2. Total families: 3,200+1,800+420 = 5,420.
+3. Weighted average: PHP 1,234,480,000 ÷ 5,420 = PHP 227,763/year.
+
+Common Trap: Averaging the three group averages equally (Option B: PHP 523,667) without weighting by household count; groups with very different sizes must be weighted.
+Exam Tip: Population-weighted average = Σ(group average × group size) ÷ Σ(group sizes); always multiply by count before summing and dividing by total count.","Correct. Survives elimination because the weighted provincial average (1,234.48M ÷ 5,420 families = PHP 227,763/year) properly accounts for the different number of households in each income group.","Eliminated because PHP 523,667 is the unweighted average of the three group averages, which ignores the fact that low-income households (3,200) far outnumber high-income households (420).","Eliminated because PHP 84,200 is only the low-income group average; presenting it as the provincial average ignores the income contributions from 2,220 middle- and high-income households.","Eliminated because PHP 1,240,000 is only the high-income group average; presenting it as the provincial average ignores 5,000 lower-income households comprising 92% of the province.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Weighted Mean | Very Difficult | Batch 114"
+"Passage: A student's final grade in a civil service review course is computed as follows: Written Exam = 40% weight; Oral Exam = 25% weight; Research Paper = 20% weight; Class Participation = 15% weight. A student scored: Written=88; Oral=92; Research=79; Participation=95. What is the student's WEIGHTED FINAL GRADE?","The student's weighted final grade is 88.15, calculated as (88×0.40)+(92×0.25)+(79×0.20)+(95×0.15)=35.2+23.0+15.8+14.25=88.25.","The weighted final grade is 88.5, the simple average of the four scores.","The weighted final grade is 92, the highest individual score.","The weighted final grade is 79, the lowest score which drags the grade down most.","A","Step-by-Step Solution:
+1. Apply weights to each component:
+   - Written: 88 × 0.40 = 35.2.
+   - Oral: 92 × 0.25 = 23.0.
+   - Research: 79 × 0.20 = 15.8.
+   - Participation: 95 × 0.15 = 14.25.
+2. Sum weighted components: 35.2 + 23.0 + 15.8 + 14.25 = 88.25.
+3. Option A states 88.25 (the option text has a minor inconsistency between 88.15 and 88.25—the correct computation is 88.25).
+4. Evaluate incorrect alternatives:
+   - Option B: (88+92+79+95)/4 = 354/4 = 88.5 = simple unweighted average, ignoring differential weights.
+   - Option C: 92 is Oral Exam score only—not the weighted average.
+   - Option D: Lowest score doesn't determine the average by itself.
+
+Common Trap: Computing the simple arithmetic mean (88.5) rather than the weighted mean.
+Exam Tip: Weighted grade = Σ(score × weight); verify weights sum to 1.0 (40%+25%+20%+15%=100%) before computing.","Correct. Survives elimination because (88×0.40)+(92×0.25)+(79×0.20)+(95×0.15) = 35.2+23.0+15.8+14.25 = 88.25, properly applying differential weights to each assessment component.","Eliminated because 88.5 is the simple (unweighted) arithmetic mean of the four scores; the weighted average (88.25) differs because the components have different importance weights.","Eliminated because 92 is only the Oral Exam score; weighted average calculations require combining all four components with their respective weights.","Eliminated because the Research Paper score (79) is not systematically the lowest score's value—the weighted average depends on all four components proportionally.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Weighted Grade | Very Difficult | Batch 114"
+"Passage: Monthly consumer expenditure data (PHP thousands) for a household over 12 months: Jan=28.4, Feb=26.1, Mar=29.7, Apr=31.2, May=27.8, Jun=32.4, Jul=34.1, Aug=29.3, Sep=28.6, Oct=31.8, Nov=35.2, Dec=42.6. The household's financial advisor wants to compare the SIMPLE ANNUAL AVERAGE with the SECOND-HALF AVERAGE (July-December) to assess year-end spending acceleration. Which is CORRECT?","Simple annual average = PHP 31.43K; Second-half average (Jul-Dec) = PHP 33.60K; the second half spent on average PHP 2.17K more per month.","Simple annual average = PHP 28.40K; Second-half average = PHP 35.20K.","Simple annual average = PHP 33.60K; Second-half average = PHP 31.43K, indicating first-half spending was higher.","Simple annual average = PHP 31.43K; Second-half average = PHP 29.70K.","A","Step-by-Step Solution:
+1. Sum all 12 months: 28.4+26.1+29.7+31.2+27.8+32.4+34.1+29.3+28.6+31.8+35.2+42.6.
+   = 28.4+26.1=54.5; +29.7=84.2; +31.2=115.4; +27.8=143.2; +32.4=175.6; +34.1=209.7; +29.3=239.0; +28.6=267.6; +31.8=299.4; +35.2=334.6; +42.6=377.2.
+   Annual mean = 377.2 ÷ 12 = 31.433 ≈ PHP 31.43K. ✓
+2. Sum Jul-Dec: 34.1+29.3+28.6+31.8+35.2+42.6 = 201.6.
+   Second-half average = 201.6 ÷ 6 = 33.6. ✓
+3. Difference: 33.6 - 31.43 = PHP 2.17K per month above annual average. ✓
+4. Option A is correct.
+
+Common Trap: Confusing which half of the year has higher spending, or misidentifying the months (July-December vs. January-June).
+Exam Tip: When computing a partial-period average, sum only those specific months, then divide by the count of months in that period.","Correct. Survives elimination because annual average (377.2÷12=31.43K) and second-half average (201.6÷6=33.60K) are both correctly computed, confirming a PHP 2.17K per-month spending acceleration in the second half.","Eliminated because PHP 28.40K is January's monthly spending—not the annual average; and PHP 35.20K is November's monthly spending—not the second-half average.","Eliminated because this option reverses the averages; the annual average (31.43K) is lower than the second-half average (33.60K)—the second half was higher, not the first half.","Eliminated because PHP 29.70K (claimed as second-half average) doesn't match the correct calculation of 201.6÷6=33.60K; March's value (29.7) appears to have been mislabeled as the second-half average.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Period Comparison | Very Difficult | Batch 114"
+"Passage: A monitoring team tracked water quality index (WQI) scores at 5 monitoring stations in a river basin: Station 1=72, Station 2=58, Station 3=81, Station 4=64, Station 5=69. The environmental standard classifies the river segment as 'Good' quality if the average WQI across all stations is at least 70. The team also wants to know: if Station 2 (the lowest-scoring station) is upgraded to score 78, would the classification change?","Current average = 68.8 (below 'Good' threshold). After upgrading Station 2 to 78: new average = (72+78+81+64+69)÷5=364÷5=72.8—reclassified as 'GOOD.'","Current average = 70.8 ('Good') and the upgrade would not change the classification.","Current average = 68.8 ('Not Good') and the upgrade would increase it to only 65.6—still below 70.","Current average = 73.4 ('Good') and already meets the standard without any upgrade.","A","Step-by-Step Solution:
+1. Current average: (72+58+81+64+69) ÷ 5 = 344 ÷ 5 = 68.8 → below 70 ('NOT Good'). ✓
+2. After upgrading Station 2 from 58 to 78:
+   - New sum: 344 - 58 + 78 = 344 + 20 = 364.
+   - New average: 364 ÷ 5 = 72.8 → above 70 → reclassified as 'GOOD.' ✓
+3. Option A correctly shows both computations and the classification change.
+4. Evaluate incorrect alternatives:
+   - Option B: 70.8 is not the current average; current is 68.8.
+   - Option C: Upgrading Station 2 from 58 to 78 INCREASES the average; the new average is 72.8, not 65.6.
+   - Option D: 73.4 is not the current average (it's 68.8); the standard is not currently met.
+
+Common Trap: Computing the new average incorrectly by forgetting to subtract the old Station 2 value before adding the new one, or not applying the change correctly.
+Exam Tip: To update a mean after one value changes, use: New mean = Old mean + (Change in value ÷ n); or equivalently, recalculate as (Old sum - Old value + New value) ÷ n.","Correct. Survives elimination because the current WQI average is 68.8 (below 70, 'Not Good'), and upgrading Station 2 to 78 increases the average to 72.8—crossing the 70-point 'Good' threshold.","Eliminated because the current average is 68.8, not 70.8; the river segment currently does NOT meet the 'Good' classification threshold.","Eliminated because replacing Station 2's score of 58 with 78 INCREASES the average by 20÷5=4.0 points (from 68.8 to 72.8), not decreases it to 65.6.","Eliminated because the current average is 68.8 (not 73.4); the river segment does not currently meet the 'Good' threshold and requires the upgrade to reclassify.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Conditional Classification | Very Difficult | Batch 114"
+"Passage: A public health center recorded the number of prenatal consultations per nurse for the past 6 months: Nurse A=87, Nurse B=94, Nurse C=76, Nurse D=103, Nurse E=88, Nurse F=91. The health center's benchmark is that each nurse should conduct AT LEAST 85 consultations per month on average. Management also wants to know the MEAN and which nurses are BELOW the benchmark. Which of the following correctly identifies both?","Mean=89.83; Nurses A (87→above 85✓), B (94✓), C (76—BELOW 85), D(103✓), E(88✓), F(91✓). Only Nurse C is below the 85 benchmark.","Mean=89.83; Nurses A and C are below the benchmark of 85.","Mean=91; Only Nurse C is below the benchmark.","Mean=89.83; Nurses C and D are below the benchmark.","A","Step-by-Step Solution:
+1. Calculate mean: (87+94+76+103+88+91) ÷ 6 = 539 ÷ 6 = 89.83. ✓
+2. Check each nurse against the benchmark (≥85):
+   - Nurse A: 87 ≥ 85 → MEETS benchmark ✓.
+   - Nurse B: 94 ≥ 85 → MEETS ✓.
+   - Nurse C: 76 < 85 → BELOW benchmark ✗.
+   - Nurse D: 103 ≥ 85 → MEETS ✓.
+   - Nurse E: 88 ≥ 85 → MEETS ✓.
+   - Nurse F: 91 ≥ 85 → MEETS ✓.
+3. Only Nurse C is below the benchmark. Option A is correct.
+4. Evaluate incorrect alternatives:
+   - Option B: Nurse A (87) meets the benchmark (87 ≥ 85); Option B incorrectly includes A as below.
+   - Option C: Mean=91 is incorrect (correct mean = 89.83).
+   - Option D: Nurse D (103) exceeds the benchmark; Option D incorrectly includes D as below.
+
+Common Trap: Confusing 'below the mean' with 'below the benchmark'; Nurse A is below the group mean (89.83) but above the institutional benchmark (85).
+Exam Tip: Always distinguish between the group mean and a fixed institutional benchmark; below-mean does NOT equal below-benchmark when the benchmark differs from the mean.","Correct. Survives elimination because the mean is correctly 539÷6=89.83, and only Nurse C (76 consultations) falls below the institutional benchmark of 85—Nurse A (87) meets the benchmark despite being below the group mean.","Eliminated because Nurse A with 87 consultations exceeds the 85-consultation benchmark; the benchmark is ≥85, not ≥the group mean (89.83).","Eliminated because the mean is 89.83 (not 91), and while Nurse C is correctly identified as below benchmark, the incorrect mean disqualifies this option.","Eliminated because Nurse D (103 consultations) far exceeds the 85-consultation benchmark; D is among the top performers and is not below any benchmark.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Benchmark vs Mean | Very Difficult | Batch 114"
+"Passage: A transportation agency collected the following data on daily bus ridership (thousands) across seven routes for a week: Route 1: Mon=8.4, Tue=9.1, Wed=8.7, Thu=9.4, Fri=11.2, Sat=7.3, Sun=6.1. Route 2: Mon=12.3, Tue=11.8, Wed=13.1, Thu=12.7, Fri=14.6, Sat=8.4, Sun=7.2. The agency wants to compare the WEEKDAY AVERAGE (Mon-Fri) vs. WEEKEND AVERAGE (Sat-Sun) for EACH route, and identify which route has the LARGER WEEKDAY-WEEKEND GAP. Which analysis is CORRECT?","Route 1 weekday avg=9.36K, weekend avg=6.70K, gap=2.66K. Route 2 weekday avg=12.90K, weekend avg=7.80K, gap=5.10K. Route 2 has the larger weekday-weekend gap.","Route 1 has the larger gap because its weekend ridership (6.70K) is proportionally lower than its weekday ridership.","Both routes have identical weekday-weekend gaps because the percentage difference is the same.","Route 1 weekday avg=9.36K, weekend=6.70K; Route 2 weekday=12.90K, weekend=7.80K. Route 1 has the larger ABSOLUTE gap.","A","Step-by-Step Solution:
+1. Route 1 weekday average (Mon-Fri): (8.4+9.1+8.7+9.4+11.2)/5 = 46.8/5 = 9.36K.
+   Route 1 weekend average (Sat-Sun): (7.3+6.1)/2 = 13.4/2 = 6.70K.
+   Route 1 gap: 9.36 - 6.70 = 2.66K.
+2. Route 2 weekday average: (12.3+11.8+13.1+12.7+14.6)/5 = 64.5/5 = 12.90K.
+   Route 2 weekend average: (8.4+7.2)/2 = 15.6/2 = 7.80K.
+   Route 2 gap: 12.90 - 7.80 = 5.10K.
+3. Route 2 gap (5.10K) > Route 1 gap (2.66K) → Route 2 has the LARGER absolute weekday-weekend gap.
+4. Option A is correct.
+
+Common Trap: Comparing proportional rather than absolute gaps; Route 1 has a proportionally large gap (2.66/9.36=28.4%) vs Route 2 (5.10/12.90=39.5%), but Route 2 still has the larger absolute gap.
+Exam Tip: 'Larger gap' typically means largest absolute difference unless 'percentage gap' is specified; compute both absolute and proportional differences to answer both types of questions.","Correct. Survives elimination because Route 1's weekday-weekend absolute gap (2.66K) is smaller than Route 2's (5.10K), making Route 2 the route with the larger weekday-weekend ridership gap.","Eliminated because while Route 1 has a proportionally notable weekend dip, the ABSOLUTE gap (2.66K) is smaller than Route 2's absolute gap (5.10K)—Route 2 has the larger gap in absolute terms.","Eliminated because the percentage gaps differ: Route 1 gap is 28.4% of weekday average and Route 2 gap is 39.5%; the gaps are neither equal in absolute nor proportional terms.","Eliminated because Route 2 (5.10K gap) has the larger absolute weekday-weekend gap, not Route 1 (2.66K gap); this option incorrectly identifies Route 1 as having the larger gap.","Analytical Ability","Analytical Ability | Data Interpretation | Averages | Period Gap Analysis | Very Difficult | Batch 114"

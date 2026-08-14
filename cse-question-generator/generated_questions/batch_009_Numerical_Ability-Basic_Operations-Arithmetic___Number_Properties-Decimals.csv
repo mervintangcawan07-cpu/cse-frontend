@@ -1,0 +1,150 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Evaluate the high-precision decimal fraction:
+
+$$\frac{0.0036 \times 0.045 \times 0.008}{0.00012 \times 0.0009 \times 0.002}$$","6,000","600","60,000","60","A","Step-by-Step Solution:
+1. Convert each decimal to scientific notation / integer powers of 10:
+   - Numerator:
+     - $0.0036 = 36 \times 10^{-4}$
+     - $0.045 = 45 \times 10^{-3}$
+     - $0.008 = 8 \times 10^{-3}$
+     - Numerator $= (36 \times 45 \times 8) \times 10^{-4-3-3} = 12,960 \times 10^{-10}$.
+   - Denominator:
+     - $0.00012 = 12 \times 10^{-5}$
+     - $0.0009 = 9 \times 10^{-4}$
+     - $0.002 = 2 \times 10^{-3}$
+     - Denominator $= (12 \times 9 \times 2) \times 10^{-5-4-3} = 216 \times 10^{-12}$.
+2. Perform the division:
+   - $\frac{12,960 \times 10^{-10}}{216 \times 10^{-12}} = \left(\frac{12,960}{216}\right) \times 10^{-10 - (-12)}$.
+   - $\frac{12,960}{216} = 60$.
+   - $10^{-10 + 12} = 10^2 = 100$.
+   - Final Value $= 60 \times 100 = 6,000$.
+
+Common Trap: Miscounting the number of decimal places when multiplying strings of small decimals.
+Exam Tip: Always convert long decimal strings into scientific notation ($a \times 10^n$) to make cancellation trivial and error-free.","Correct. Survives elimination because the integer quotient is 60 and the exponent difference yields 10^2 = 100, totaling 6,000.","Eliminated because miscounting decimal places by a factor of 10 yields 600.","Eliminated because miscounting the power difference as 10^3 gives 60,000.","Eliminated because failing to apply the power of 10 multiplier leaves only 60.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Determine the exact value of the algebraic decimal identity:
+
+$$\frac{(0.75)^3 + (0.25)^3}{(0.75)^2 - 0.75 \times 0.25 + (0.25)^2}$$","1.0","0.5","1.25","0.75","A","Step-by-Step Solution:
+1. Recognize the sum of cubes factorization identity:
+   - $a^3 + b^3 = (a + b)(a^2 - ab + b^2)$.
+2. Let $a = 0.75$ and $b = 0.25$.
+3. Substitute into the expression:
+   - $\frac{(a + b)(a^2 - ab + b^2)}{a^2 - ab + b^2} = a + b$.
+4. Calculate $a + b$:
+   - $0.75 + 0.25 = 1.00$.
+
+Common Trap: Tediously computing cubes and squares of decimals by hand ($0.75^3 = 0.421875$), which consumes excessive time and invites calculation errors.
+Exam Tip: Look for the algebraic structures $\frac{a^3 + b^3}{a^2 - ab + b^2} = a + b$ and $\frac{a^3 - b^3}{a^2 + ab + b^2} = a - b$ in decimal arithmetic questions.","Correct. Survives elimination because the algebraic expression simplifies directly to a + b = 0.75 + 0.25 = 1.0.","Eliminated because subtracting instead of adding yields 0.5.","Eliminated because arithmetic error in the base sum gives 1.25.","Eliminated because setting the result equal to the leading term yields 0.75.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Evaluate the mixed decimal operational expression:
+
+$$\frac{0.144 \div 0.012 - 0.08 \times 2.5}{0.05 \times 0.4 + 0.03}$$","236","23.6","2.36","2360","A","Step-by-Step Solution:
+1. Numerator:
+   - Division: $0.144 \div 0.012 = \frac{144}{12} = 12$.
+   - Multiplication: $0.08 \times 2.5 = 0.20$.
+   - Numerator Difference $= 12 - 0.20 = 11.80$.
+2. Denominator:
+   - Multiplication: $0.05 \times 0.4 = 0.02$.
+   - Addition: $0.02 + 0.03 = 0.05$.
+3. Final Division:
+   - $\frac{11.80}{0.05} = \frac{1180}{5} = 236$.
+
+Common Trap: Shifting the decimal point incorrectly when dividing $11.8$ by $0.05$ (e.g., getting 23.6 or 2.36).
+Exam Tip: To divide by $0.05$, multiply the numerator by 20 ($\frac{11.8}{0.05} = 11.8 \times 20 = 236$).","Correct. Survives elimination because numerator is 11.8 and denominator is 0.05, giving 11.8 / 0.05 = 236.","Eliminated because decimal place shift error by 1 place yields 23.6.","Eliminated because decimal place shift error by 2 places yields 2.36.","Eliminated because multiplying by 200 instead of 20 yields 2360.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"If $M = \sqrt{0.000049 \times 0.000144}$, find the value of $M$ in exact standard decimal notation.","0.000084","0.00084","0.0000084","0.0084","A","Step-by-Step Solution:
+1. Take the square root of each factor individually using $\sqrt{a \times b} = \sqrt{a} \times \sqrt{b}$:
+   - $\sqrt{0.000049} = \sqrt{49 \times 10^{-6}} = 7 \times 10^{-3} = 0.007$.
+   - $\sqrt{0.000144} = \sqrt{144 \times 10^{-6}} = 12 \times 10^{-3} = 0.012$.
+2. Multiply the square roots:
+   - $M = 0.007 \times 0.012 = (7 \times 12) \times 10^{-3-3} = 84 \times 10^{-6}$.
+3. Express in decimal notation:
+   - $84 \times 10^{-6} = 0.000084$ (6 decimal places).
+
+Common Trap: Miscounting the number of zeros under the radical (an even number of decimal places divides by 2 when taking the square root).
+Exam Tip: For $\sqrt{10^{-2k}}$, the root is always $10^{-k}$.","Correct. Survives elimination because 0.007 * 0.012 = 0.000084.","Eliminated because 5 decimal places instead of 6 gives 0.00084.","Eliminated because 7 decimal places gives 0.0000084.","Eliminated because 4 decimal places gives 0.0084.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Simplify the following decimal fraction using difference of squares:
+
+$$\frac{(2.4)^2 - (1.6)^2}{0.2 \times 0.8 + 0.64}$$","4","2","0.4","8","A","Step-by-Step Solution:
+1. Numerator: Factor using difference of squares $x^2 - y^2 = (x - y)(x + y)$:
+   - $(2.4)^2 - (1.6)^2 = (2.4 - 1.6)(2.4 + 1.6)$.
+   - $2.4 - 1.6 = 0.8$.
+   - $2.4 + 1.6 = 4.0$.
+   - Numerator $= 0.8 \times 4.0 = 3.2$.
+2. Denominator:
+   - $0.2 \times 0.8 = 0.16$.
+   - $0.16 + 0.64 = 0.80$.
+3. Divide:
+   - $\frac{3.2}{0.8} = 4$.
+
+Common Trap: Squaring $2.4$ and $1.6$ directly ($5.76 - 2.56 = 3.2$), which is prone to manual arithmetic slips.
+Exam Tip: Factoring $(x-y)(x+y)$ instantly creates terms like 0.8 that cancel directly with the denominator.","Correct. Survives elimination because the numerator is 3.2 and denominator is 0.8, yielding 4.","Eliminated because miscalculating the numerator sum as 2.0 gives 2.","Eliminated because decimal shift errors yield 0.4.","Eliminated because doubling the result yields 8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Compute the exact value of the following expression using fractional conversions:
+
+$$E = 0.875 \times 64 + 0.625 \times 48 - 0.375 \times 32$$","74","72","76","68","A","Step-by-Step Solution:
+1. Convert the common eighths decimals to fractions:
+   - $0.875 = \frac{7}{8}$
+   - $0.625 = \frac{5}{8}$
+   - $0.375 = \frac{3}{8}$
+2. Evaluate each term:
+   - First Term: $\frac{7}{8} \times 64 = 7 \times 8 = 56$.
+   - Second Term: $\frac{5}{8} \times 48 = 5 \times 6 = 30$.
+   - Third Term: $\frac{3}{8} \times 32 = 3 \times 4 = 12$.
+3. Combine the terms:
+   - $E = 56 + 30 - 12 = 86 - 12 = 74$.
+
+Common Trap: Multiplying three-digit decimals by two-digit integers longhand.
+Exam Tip: Memorize the decimal values of eighths ($1/8=0.125, 3/8=0.375, 5/8=0.625, 7/8=0.875$) for instant conversion.","Correct. Survives elimination because 56 + 30 - 12 = 74.","Eliminated because subtraction error (86 - 14) gives 72.","Eliminated because arithmetic error in the first term gives 76.","Eliminated because subtracting the second term instead of adding gives 68.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Evaluate the exact repeating decimal difference:
+
+$$D = 3.\overline{72} - 1.\overline{27}$$","2.\overline{45}","2.\overline{44}","2.45","2.\overline{54}","A","Step-by-Step Solution:
+1. Convert repeating decimals to mixed fractions:
+   - $3.\overline{72} = 3 + \frac{72}{99} = 3 + \frac{8}{11} = \frac{41}{11}$.
+   - $1.\overline{27} = 1 + \frac{27}{99} = 1 + \frac{3}{11} = \frac{14}{11}$.
+2. Subtract fractions:
+   - $D = \frac{41}{11} - \frac{14}{11} = \frac{27}{11}$.
+3. Convert back to repeating decimal:
+   - $\frac{27}{11} = 2\frac{5}{11} = 2 + \frac{45}{99} = 2.\overline{45}$.
+
+Common Trap: Subtracting digits directly as $3.72 - 1.27 = 2.45$ without the repeating vinculum bar.
+Exam Tip: The fraction $\frac{k}{11} = \frac{9k}{99} = 0.\overline{(9k)}$. For $\frac{5}{11}$, it is $0.\overline{45}$.","Correct. Survives elimination because the difference 27/11 equals the repeating decimal 2.454545... = 2.45bar.","Eliminated because off-by-one recurring error gives 2.44bar.","Eliminated because omitting the recurring bar treats it as a terminating decimal, which is inaccurate.","Eliminated because inverting the decimal digits gives 2.54bar.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Find the value of $K$:
+
+$$K = \frac{0.005 \times (0.02)^2}{10^{-5}} + \frac{0.06 \div 0.003}{0.5}$$","40.2","42.0","4.02","402","A","Step-by-Step Solution:
+1. First Term: $\frac{0.005 \times (0.02)^2}{10^{-5}}$
+   - $(0.02)^2 = (2 \times 10^{-2})^2 = 4 \times 10^{-4}$.
+   - $0.005 = 5 \times 10^{-3}$.
+   - Numerator $= (5 \times 10^{-3}) \times (4 \times 10^{-4}) = 20 \times 10^{-7} = 2 \times 10^{-6}$.
+   - Divide by $10^{-5}$: $\frac{2 \times 10^{-6}}{10^{-5}} = 2 \times 10^{-1} = 0.2$.
+2. Second Term: $\frac{0.06 \div 0.003}{0.5}$
+   - $0.06 \div 0.003 = \frac{60}{3} = 20$.
+   - $20 \div 0.5 = 20 \times 2 = 40$.
+3. Sum: $K = 0.2 + 40 = 40.2$.
+
+Common Trap: In the second term, calculating $20 \div 0.5$ as 10 (multiplying by 0.5 instead of dividing).
+Exam Tip: Dividing by $0.5$ is mathematically identical to multiplying by 2.","Correct. Survives elimination because the first term is 0.2 and the second term is 40, giving 40.2.","Eliminated because adding 2 instead of 0.2 gives 42.0.","Eliminated because shifting the decimal point of the sum gives 4.02.","Eliminated because multiplying by 10 gives 402.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Determine the exact fractional and repeating decimal value of the infinite sum:
+
+$$S = 0.4 + 0.04 + 0.004 + 0.0004 + \cdots$$","0.\overline{4} \text{ (or } \frac{4}{9}\text{)}","0.44","0.45","\frac{4}{10}","A","Step-by-Step Solution:
+1. Recognize this as an infinite geometric series with:
+   - First term $a = 0.4 = \frac{4}{10}$.
+   - Common ratio $r = 0.1 = \frac{1}{10}$.
+2. Apply the infinite sum formula $S = \frac{a}{1 - r}$:
+   - $S = \frac{0.4}{1 - 0.1} = \frac{0.4}{0.9}$.
+3. Simplify the fraction:
+   - $\frac{0.4}{0.9} = \frac{4}{9}$.
+4. In repeating decimal form:
+   - $\frac{4}{9} = 0.4444\dots = 0.\overline{4}$.
+
+Common Trap: Truncating the infinite series at two decimal places to get $0.44$ (Option B).
+Exam Tip: Infinite recurring single-digit sums like $0.d + 0.0d + \dots$ always converge to $\frac{d}{9} = 0.\overline{d}$.","Correct. Survives elimination because the infinite geometric series converges to 4/9 = 0.444... = 0.4bar.","Eliminated because 0.44 truncates the infinite series after two terms.","Eliminated because 0.45 introduces extraneous digits.","Eliminated because 4/10 represents only the very first term.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"
+"Evaluate the following expression:
+
+$$\frac{(0.05)^3 + (0.01)^3}{(0.05)^2 - 0.05 \times 0.01 + (0.01)^2} \times 100$$","6","0.6","60","0.06","A","Step-by-Step Solution:
+1. Apply the algebraic identity:
+   - $\frac{a^3 + b^3}{a^2 - ab + b^2} = a + b$.
+2. Here, $a = 0.05$ and $b = 0.01$.
+3. The fractional expression simplifies directly to:
+   - $a + b = 0.05 + 0.01 = 0.06$.
+4. Multiply by 100:
+   - $0.06 \times 100 = 6$.
+
+Common Trap: Attempting to calculate $0.05^3 = 0.000125$ manually rather than canceling algebraically.
+Exam Tip: When decimal bases are small powers, look for standard cubic factorizations to avoid manual cubic multiplication.","Correct. Survives elimination because the fraction simplifies to a + b = 0.06, and 0.06 * 100 = 6.","Eliminated because forgetting to multiply by 100 gives 0.06, or dividing by 10 gives 0.6.","Eliminated because multiplying by 1000 gives 60.","Eliminated because this is the value before multiplying by 100.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Decimals | Very Difficult | Batch 009"

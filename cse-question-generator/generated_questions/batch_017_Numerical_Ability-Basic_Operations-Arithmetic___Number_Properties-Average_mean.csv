@@ -1,0 +1,142 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"In a civil service promotional assessment, an applicant's final composite rating is computed as a weighted arithmetic mean: Written Examination (weight 40%), Technical Competency Interview (weight 30%), Performance Rating (weight 20%), and Leadership Portfolio (weight 10%). If a candidate scored 86 on the Written Exam, 92 on the Interview, and 88 on the Performance Rating, what minimum score must the candidate achieve on the Leadership Portfolio to attain an overall composite rating of at least 89.0?","94","92","96","90","A","Step-by-Step Solution:
+1. Weighted Mean Formula: $\bar{X}_w = w_1 x_1 + w_2 x_2 + w_3 x_3 + w_4 x_4 \ge 89.0$.
+2. Calculate weighted scores of the first three components:
+   - Written Exam: $0.40 \times 86 = 34.40$.
+   - Technical Interview: $0.30 \times 92 = 27.60$.
+   - Performance Rating: $0.20 \times 88 = 17.60$.
+3. Sum the three weighted contributions:
+   - $\text{Subtotal} = 34.40 + 27.60 + 17.60 = 79.60$.
+4. Set up inequality for Leadership Portfolio score $L$:
+   - $79.60 + 0.10 L \ge 89.00$.
+   - $0.10 L \ge 89.00 - 79.60 = 9.40$.
+   - $L \ge \frac{9.40}{0.10} = 94$.
+5. The candidate must achieve a minimum score of 94.
+
+Common Trap: Using a simple unweighted arithmetic mean: $\frac{86 + 92 + 88 + L}{4} = 89 \implies 266 + L = 356 \implies L = 90$ (Option D).
+Exam Tip: In civil service weighting questions, always multiply raw scores by their decimal weights ($0.40, 0.30, 0.20, 0.10$) before summing.","Correct. Survives elimination because the candidate needs 9.40 weighted points from the 10% portfolio, requiring 9.40 / 0.10 = 94.","Eliminated because a score of 92 yields a composite rating of only 88.8.","Eliminated because 96 exceeds the minimum required threshold.","Eliminated because 90 is the score required under an unweighted simple average, which is invalid here.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"The average age of a committee of 12 regional directors is 54 years. When two senior directors aged 62 and 66 retire and are replaced by three newly appointed assistant directors aged 38, 42, and 46, what is the new average age of the reconstituted 13-member committee?","49\frac{9}{13}\text{ years (approx. 49.69)}","50.50 years","48.75 years","51.20 years","A","Step-by-Step Solution:
+1. Calculate original total aggregate age of 12 directors:
+   - $\text{Initial Total} = 12 \times 54 = 648\text{ years}$.
+2. Deduct the ages of the 2 retiring directors:
+   - $\text{Total After Retirements} = 648 - (62 + 66) = 648 - 128 = 520\text{ years}$.
+3. Add the ages of the 3 new assistant directors:
+   - $\text{New Aggregate Total} = 520 + (38 + 42 + 46) = 520 + 126 = 646\text{ years}$.
+4. Determine new total committee size:
+   - $N_{\text{new}} = 12 - 2 + 3 = 13\text{ members}$.
+5. Compute new average age:
+   - $\bar{X}_{\text{new}} = \frac{646}{13} = 49\frac{9}{13} \approx 49.6923\text{ years}$.
+
+Common Trap: Dividing by 12 members instead of 13 members ($\frac{646}{12} = 53.83$), forgetting that 3 members replaced 2.
+Exam Tip: Track both aggregate sum changes and total population ($N$) shifts carefully.","Correct. Survives elimination because new aggregate age is 646 years across 13 members, yielding exactly 49 9/13 years (49.69).","Eliminated because rounding errors yield 50.50.","Eliminated because dividing 646 by 13.25 yields 48.75.","Eliminated because arithmetic error in the retiree sum yields 51.20.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"A disaster surveillance drone flies from Station A to Station B at an average cruising speed of $60\text{ km/h}$ and immediately returns along the exact identical flight path from Station B to Station A at an average speed of $40\text{ km/h}$. What is the average speed of the drone for the entire round-trip flight?","48 km/h","50 km/h","45 km/h","52 km/h","A","Step-by-Step Solution:
+1. Note: Average speed over equal distances is the Harmonic Mean, NOT the simple arithmetic mean.
+2. Harmonic Mean Formula for two speeds:
+   - $S_{\text{avg}} = \frac{2 S_1 S_2}{S_1 + S_2}$.
+3. Substitute $S_1 = 60\text{ km/h}$ and $S_2 = 40\text{ km/h}$:
+   - $S_{\text{avg}} = \frac{2 \times 60 \times 40}{60 + 40} = \frac{4,800}{100} = 48\text{ km/h}$.
+4. Verification by distance:
+   - Let distance $D = 120\text{ km}$.
+   - Time outbound $= \frac{120}{60} = 2\text{ hours}$.
+   - Time return $= \frac{120}{40} = 3\text{ hours}$.
+   - Total distance $= 240\text{ km}$, Total time $= 5\text{ hours}$.
+   - $S_{\text{avg}} = \frac{240}{5} = 48\text{ km/h}$.
+
+Common Trap: Taking the simple arithmetic average: $\frac{60 + 40}{2} = 50\text{ km/h}$ (Option B), which ignores the fact that more time is spent flying at the slower speed.
+Exam Tip: For equal distances traveled at different speeds, always use $S_{\text{avg}} = \frac{2 v_1 v_2}{v_1 + v_2}$.","Correct. Survives elimination because the harmonic mean of 60 and 40 is 2(60)(40)/100 = 48 km/h.","Eliminated because 50 km/h is the simple arithmetic mean, which is false for round-trip travel.","Eliminated because geometric mean is sqrt(2400) = 48.99 km/h.","Eliminated because arithmetic error in the product yields 52 km/h.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"The average of 9 consecutive odd integers is 37. If the next 3 consecutive odd integers are included in the dataset, what will be the new average of all 12 integers?","40","39","41","42","A","Step-by-Step Solution:
+1. In an arithmetic sequence with an odd number of terms, the average equals the exact median (middle term).
+2. For 9 terms with mean 37:
+   - 5th term $= 37$.
+   - The 9 consecutive odd integers are: $29, 31, 33, 35, 37, 39, 41, 43, 45$.
+3. The next 3 consecutive odd integers are: $47, 49, 51$.
+4. The expanded dataset consists of 12 consecutive odd integers starting at 29 and ending at 51.
+5. Compute the mean of the 12-term arithmetic sequence:
+   - $\bar{X} = \frac{\text{First Term} + \text{Last Term}}{2} = \frac{29 + 51}{2} = \frac{80}{2} = 40$.
+
+Common Trap: Adding 3 directly to 37 to get 40 by luck without understanding the boundary shifts, or assuming the average shifts to 39.
+Exam Tip: For any arithmetic progression, the average is always $\frac{a_1 + a_n}{2}$.","Correct. Survives elimination because the sequence spans from 29 to 51, and (29 + 51) / 2 = 40.","Eliminated because assuming the average shifts by only 2 yields 39.","Eliminated because adding 4 yields 41.","Eliminated because overestimating the impact of the 3 added terms yields 42.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"In a national leadership cohort, Section A has 40 trainees with an average test score of 82, Section B has 50 trainees with an average score of 85, and Section C has 60 trainees with an average score of 91. What is the combined grand average score of all 150 trainees across the three sections?","86.6","86.0","87.2","85.8","A","Step-by-Step Solution:
+1. Compute total aggregate points for each section:
+   - Section A: $40 \times 82 = 3,280\text{ points}$.
+   - Section B: $50 \times 85 = 4,250\text{ points}$.
+   - Section C: $60 \times 91 = 5,460\text{ points}$.
+2. Sum the points across all sections:
+   - $\text{Grand Total Points} = 3,280 + 4,250 + 5,460 = 12,990\text{ points}$.
+3. Sum total number of trainees:
+   - $N_{\text{total}} = 40 + 50 + 60 = 150\text{ trainees}$.
+4. Calculate Grand Average:
+   - $\bar{X}_{\text{grand}} = \frac{12,990}{150} = \frac{1,299}{15} = 86.6$.
+
+Common Trap: Averaging the three averages directly: $\frac{82 + 85 + 91}{3} = \frac{258}{3} = 86.0$ (Option B), which fails to account for unequal class sizes (40 vs 50 vs 60).
+Exam Tip: Never average averages unless group sizes ($N_i$) are perfectly identical.","Correct. Survives elimination because weighted total is 12,990 across 150 students, giving 12990 / 150 = 86.6.","Eliminated because 86.0 is the unweighted average of the three section means (82+85+91)/3, which ignores unequal class sizes.","Eliminated because over-weighting Section C yields 87.2.","Eliminated because arithmetic error in the grand sum gives 85.8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"The geometric mean of three positive real numbers $x, y,$ and $z$ is 12. If $x = 8$ and $y = 18$, what is the exact value of $z$?","12","16","14","18","A","Step-by-Step Solution:
+1. Definition of Geometric Mean for 3 terms:
+   - $\text{GM} = \sqrt[3]{x \cdot y \cdot z} = 12$.
+2. Cube both sides to eliminate the radical:
+   - $x \cdot y \cdot z = 12^3 = 1,728$.
+3. Substitute $x = 8$ and $y = 18$:
+   - $8 \times 18 \times z = 1,728$.
+   - $144 \times z = 1,728$.
+4. Solve for $z$:
+   - $z = \frac{1,728}{144} = 12$.
+
+Common Trap: Confusing geometric mean with arithmetic mean ($\frac{8 + 18 + z}{3} = 12 \implies z = 10$).
+Exam Tip: Recognize that $144 \times 12 = 1,728$ ($12^2 \times 12 = 12^3$) for immediate verification.","Correct. Survives elimination because 8 * 18 * 12 = 144 * 12 = 1,728, and (1728)^(1/3) = 12.","Eliminated because 144 * 16 = 2304 != 1728.","Eliminated because 144 * 14 = 2016 != 1728.","Eliminated because setting z equal to y gives 18, which is incorrect.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"The average score of 25 examinees in a promotional qualifying examination was calculated as 74.0. During a subsequent administrative audit, it was discovered that a score of 88 was misread as 58, and a score of 45 was misread as 65. What is the true corrected average of the 25 examinees?","74.4","73.6","74.0","75.2","A","Step-by-Step Solution:
+1. Calculate original total score:
+   - $\text{Initial Total} = 25 \times 74.0 = 1,850\text{ points}$.
+2. Analyze the two data entry errors:
+   - Error 1: 88 was recorded as 58 $\implies$ Add $(88 - 58) = +30\text{ points}$.
+   - Error 2: 45 was recorded as 65 $\implies$ Deduct $(45 - 65) = -20\text{ points}$.
+3. Net total score adjustment:
+   - $\text{Net Adjustment} = +30 - 20 = +10\text{ points}$.
+4. Compute corrected total:
+   - $\text{Corrected Total} = 1,850 + 10 = 1,860\text{ points}$.
+5. Calculate corrected average:
+   - $\bar{X}_{\text{corrected}} = \frac{1,860}{25} = 74.4$.
+   - (Equivalently: $\bar{X}_{\text{new}} = 74.0 + \frac{+10}{25} = 74.0 + 0.4 = 74.4$).
+
+Common Trap: Subtracting 10 points instead of adding, resulting in $73.6$ (Option B).
+Exam Tip: Compute $\Delta \bar{X} = \frac{\text{Net Score Change}}{N} = \frac{+10}{25} = +0.4 \implies 74.0 + 0.4 = 74.4$.","Correct. Survives elimination because net point gain is +10, adding +10/25 = +0.4 to the mean, giving 74.4.","Eliminated because subtracting the adjustment yields 73.6.","Eliminated because assuming the two errors cancel out gives 74.0.","Eliminated because adding +30 without deducting -20 yields 75.2.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"Determine the exact harmonic mean of the four numbers 4, 6, 12, and 20.","\frac{80}{11} \text{ (or } 7\frac{3}{11}\text{)}","\frac{80}{13}","8.0","\frac{60}{11}","A","Step-by-Step Solution:
+1. Definition of Harmonic Mean:
+   - $\text{HM} = \frac{n}{\sum_{i=1}^n \frac{1}{x_i}} = \frac{4}{\frac{1}{4} + \frac{1}{6} + \frac{1}{12} + \frac{1}{20}}$.
+2. Sum the reciprocals with common denominator (60):
+   - $\frac{1}{4} = \frac{15}{60}$
+   - $\frac{1}{6} = \frac{10}{60}$
+   - $\frac{1}{12} = \frac{5}{60}$
+   - $\frac{1}{20} = \frac{3}{60}$
+   - $\text{Sum of Reciprocals} = \frac{15 + 10 + 5 + 3}{60} = \frac{33}{60} = \frac{11}{20}$.
+3. Compute Harmonic Mean:
+   - $\text{HM} = \frac{4}{11/20} = 4 \times \frac{20}{11} = \frac{80}{11} = 7\frac{3}{11} \approx 7.27$.
+
+Common Trap: Calculating the arithmetic mean $\frac{4 + 6 + 12 + 20}{4} = \frac{42}{4} = 10.5$.
+Exam Tip: Inverting $\frac{11}{20}$ to $\frac{20}{11}$ before multiplying by $n = 4$ is the key step.","Correct. Survives elimination because the sum of reciprocals is 11/20, and 4 / (11/20) = 80/11 = 7 3/11.","Eliminated because arithmetic error in reciprocal addition gives 13/20, yielding 80/13.","Eliminated because 8.0 is an approximation of the geometric mean.","Eliminated because using n = 3 gives 60/11.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"In an eight-round regional skills competition, a participant obtains the following scores: 68, 72, 75, 80, 84, 88, 92, 98. If a 25% trimmed mean is applied (where the lowest 25% and highest 25% of the data points are removed), what is the trimmed mean of the participant's scores?","81.75","82.125","80.50","83.25","A","Step-by-Step Solution:
+1. Sort data in ascending order (already sorted):
+   - $68, 72, 75, 80, 84, 88, 92, 98$ ($N = 8$).
+2. Determine number of values to trim:
+   - $25\% \text{ of } 8 = 2\text{ values}$ trimmed from each end.
+   - Remove lowest 2: 68 and 72.
+   - Remove highest 2: 92 and 98.
+3. Isolate remaining central 50% subset:
+   - $75, 80, 84, 88$ ($4\text{ values}$).
+4. Compute arithmetic mean of remaining subset:
+   - $\text{Sum} = 75 + 80 + 84 + 88 = 327$.
+   - $\bar{X}_{\text{trimmed}} = \frac{327}{4} = 81.75$.
+
+Common Trap: Trimming only 1 value from each end or computing the overall untrimmed mean ($\frac{657}{8} = 82.125$, Option B).
+Exam Tip: A $p\%$ trimmed mean discards $p\%$ from the bottom AND $p\%$ from the top.","Correct. Survives elimination because trimming the 2 lowest (68, 72) and 2 highest (92, 98) leaves (75+80+84+88)/4 = 327/4 = 81.75.","Eliminated because 82.125 is the untrimmed mean of all 8 numbers.","Eliminated because arithmetic error in the subset sum yields 80.50.","Eliminated because trimming only the bottom 2 values yields 83.25.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"
+"The average monthly revenue of a municipal public enterprise for the first 8 months of the fiscal year was ₱1,250,000. To achieve a target annual average monthly revenue of ₱1,400,000 across the entire 12-month fiscal year, what must be the average monthly revenue generated over the remaining 4 months?","₱1,700,000","₱1,650,000","₱1,800,000","₱1,550,000","A","Step-by-Step Solution:
+1. Calculate target total revenue for the full 12 months:
+   - $\text{Total Annual Target} = 12 \times ₱1,400,000 = ₱16,800,000$.
+2. Calculate total revenue generated during the first 8 months:
+   - $\text{Revenue (Months 1-8)} = 8 \times ₱1,250,000 = ₱10,000,000$.
+3. Compute required revenue for the remaining 4 months:
+   - $\text{Required Revenue (Months 9-12)} = 16,800,000 - 10,000,000 = ₱6,800,000$.
+4. Calculate required monthly average for the remaining 4 months:
+   - $\bar{X}_{\text{remaining}} = \frac{₱6,800,000}{4} = ₱1,700,000\text{ per month}$.
+
+Common Trap: Adding the difference between targets ($1.4\text{M} - 1.25\text{M} = 150\text{k}$) to 1.4M to get 1.55M (Option D), which ignores the 2:1 weighting ratio between 8 months and 4 months.
+Exam Tip: Set up equation: $8(1.25\text{M}) + 4(X) = 12(1.40\text{M}) \implies 10\text{M} + 4X = 16.8\text{M} \implies X = 1.70\text{M}$.","Correct. Survives elimination because 12 * 1.4M - 8 * 1.25M = 16.8M - 10.0M = 6.8M, and 6.8M / 4 = ₱1,700,000.","Eliminated because arithmetic error in the quarterly division yields ₱1,650,000.","Eliminated because overestimating required target yields ₱1,800,000.","Eliminated because adding 150k directly to 1.4M gives ₱1,550,000, ignoring time weighting.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Average/mean | Very Difficult | Batch 017"

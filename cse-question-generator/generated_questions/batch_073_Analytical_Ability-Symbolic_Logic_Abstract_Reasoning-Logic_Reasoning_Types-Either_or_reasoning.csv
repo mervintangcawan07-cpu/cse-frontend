@@ -1,0 +1,176 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Given the disjunctive premise: \"Either the local government unit implements flood control project $A$ ($A$) OR it constructs water catchment basin $B$ ($B$).\" If environmental engineering assessment proves that project $A$ CANNOT be implemented ($\neg A$), what must be logically TRUE?","The local government unit constructs water catchment basin B ($B$).","The local government unit does not construct water catchment basin B ($\neg B$).","The local government unit constructs both project A and basin B.","No valid conclusion can be drawn regarding basin B.","A","Step-by-Step Solution:
+1. Represent the premises symbolically:
+   - Premise 1: $A \lor B$ (Disjunction).
+   - Premise 2: $\neg A$ (Denial of first disjunct).
+2. Recall the classical Rule of Inference known as \"DISJUNCTIVE SYLLOGISM\":
+   - In formal logic: $P \lor Q, \neg P \vdash Q$ (and $P \lor Q, \neg Q \vdash P$).
+3. Apply the rule:
+   - Since $A \lor B$ is True, at least one of $A$ or $B$ must be True.
+   - Since $A$ is given to be False ($\neg A$), the other disjunct $B$ MUST be True.
+4. Conclude:
+   - Proposition $B$ (\"The local government unit constructs water catchment basin $B$\") is deductively certain.
+5. Evaluate incorrect alternatives:
+   - Option B ($\neg B$): Directly contradicts Disjunctive Syllogism.
+   - Option C: Contradicts the given fact that $A$ cannot be implemented ($\neg A$).
+   - Option D: Incorrect because $B$ is definitively proven.
+
+Common Trap: Assuming the failure of option $A$ leaves the situation unresolved without realizing $B$ is forced to occur.
+Exam Tip: Disjunctive Syllogism: $(A \lor B) \land \neg A \implies B$.","Correct. Survives elimination because by the classical rule of Disjunctive Syllogism, denying one disjunct (~A) forces the other disjunct (B) to be True.","Eliminated because ~B would make the entire disjunction False.","Eliminated because A cannot be implemented.","Eliminated because B is deductively forced to be True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"In formal symbolic logic, when the compound connective \"EITHER... OR...\" is explicitly specified as EXCLUSIVE OR ($P \oplus Q$ / XOR), which of the following truth conditions accurately defines the statement?","Exactly one of P or Q is TRUE, but both cannot be true simultaneously.","At least one of P or Q is TRUE, including the condition where both are true.","Both P and Q must be TRUE simultaneously.","Both P and Q must be FALSE simultaneously.","A","Step-by-Step Solution:
+1. Define Exclusive OR ($P \oplus Q$):
+   - Exclusive disjunction asserts that one and only one of the two propositions holds true.
+   - Symbolic formulation: $(P \lor Q) \land \neg(P \land Q)$.
+2. Analyze the truth table for $P \oplus Q$:
+   - $P = \text{True}, Q = \text{False} \implies \text{True}$.
+   - $P = \text{False}, Q = \text{True} \implies \text{True}$.
+   - $P = \text{True}, Q = \text{True} \implies \text{FALSE}$ (Excluded).
+   - $P = \text{False}, Q = \text{False} \implies \text{FALSE}$.
+3. Contrast with Inclusive OR ($P \lor Q$):
+   - Inclusive OR permits both $P$ and $Q$ to be True simultaneously.
+   - Exclusive OR forbids the case where both are True.
+4. Evaluate incorrect alternatives:
+   - Option B: Defines Inclusive OR ($P \lor Q$).
+   - Option C: Defines Conjunction ($P \land Q$).
+   - Option D: Defines Joint Negation / NOR ($\neg P \land \neg Q$).
+
+Common Trap: Confusing Inclusive OR (where both can be true) with Exclusive OR (where only one can be true).
+Exam Tip: Exclusive OR (XOR) = Exactly one is true; Inclusive OR = At least one is true.","Correct. Survives elimination because XOR is formally defined as true if and only if exactly one proposition is true and both cannot be true at once.","Eliminated because this is the definition of Inclusive OR.","Eliminated because this is the definition of Logical Conjunction (AND).","Eliminated because this is the definition of Logical NOR.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Given the two disjunctive clauses: (1) Either budget allocation $X$ is increased ($X$) OR capital outlay $Y$ is reduced ($Y$) [$X \lor Y$]. (2) Either capital outlay $Y$ is NOT reduced ($\neg Y$) OR employee bonus $Z$ is approved ($Z$) [$\neg Y \lor Z$]. By applying the formal Logical Resolution Principle, which resolved clause is validly derived?","X \lor Z","X \land Z","X \implies \neg Z","\neg X \lor \neg Z","A","Step-by-Step Solution:
+1. State the Resolution Rule of propositional inference:
+   - Given two disjunctive clauses containing complementary literals ($L$ and $\neg L$):
+   - Clause 1: $(P \lor L)$
+   - Clause 2: $(\neg L \lor Q)$
+   - Resolvent: $(P \lor Q)$.
+2. Identify the complementary literals in the given premises:
+   - Clause 1: $X \lor Y$ (where $L = Y$).
+   - Clause 2: $\neg Y \lor Z$ (where $\neg L = \neg Y$).
+3. Eliminate the complementary pair $(Y, \neg Y)$ and resolve the remaining disjuncts:
+   - Resolvent: $X \lor Z$.
+4. Validate through Case Analysis:
+   - If $Y$ is True, by Clause 2 ($\neg Y \lor Z$), $Z$ must be True.
+   - If $Y$ is False ($\neg Y$), by Clause 1 ($X \lor Y$), $X$ must be True.
+   - In either case, at least one of $X$ or $Z$ MUST be True: $X \lor Z$.
+5. Evaluate incorrect alternatives:
+   - Option B ($X \land Z$): Resolution yields a disjunction, not a conjunction.
+   - Options C and D: Invalid transformations.
+
+Common Trap: Assuming resolution combines terms with AND ($\land$) instead of OR ($\lor$).
+Exam Tip: Propositional Resolution: $(A \lor B) \land (\neg B \lor C) \vdash A \lor C$.","Correct. Survives elimination because the formal propositional Resolution Rule resolves complementary literals Y and ~Y to produce the resolvent X or Z.","Eliminated because resolution produces a disjunction, not a conjunction X and Z.","Eliminated because X -> ~Z is equivalent to ~X or ~Z.","Eliminated because ~X or ~Z negates both remaining terms.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Consider the premises: (1) Either manager $M$ attends the summit ($M$) OR assistant manager $N$ attends ($N$) [$M \lor N$]. (2) If manager $M$ attends ($M$), then regional report $R$ is presented ($R$). (3) If assistant manager $N$ attends ($N$), then financial audit $F$ is presented ($F$). Financial audit $F$ was NOT presented ($\neg F$). What can be conclusively deduced?","Manager M attended the summit ($M$), and regional report R was presented ($R$).","Assistant manager N attended the summit ($N$).","Neither manager M nor assistant manager N attended.","Regional report R was not presented ($\neg R$).","A","Step-by-Step Solution:
+1. Translate to symbolic logic:
+   - Premise 1: $M \lor N$.
+   - Premise 2: $M \implies R$.
+   - Premise 3: $N \implies F$.
+   - Fact: $\neg F$ (Audit $F$ not presented).
+2. Step 1 - Apply Modus Tollens to Premise 3:
+   - $N \implies F$ and $\neg F \vdash \neg N$ (Assistant manager $N$ did NOT attend).
+3. Step 2 - Apply Disjunctive Syllogism to Premise 1:
+   - $(M \lor N) = \text{True}$ and $\neg N = \text{True} \vdash M = \text{True}$ (Manager $M$ DID attend).
+4. Step 3 - Apply Modus Ponens to Premise 2:
+   - $M \implies R$ and $M = \text{True} \vdash R = \text{True}$ (Regional report $R$ WAS presented).
+5. Conclude:
+   - Both $M$ and $R$ are deductively proven to be TRUE.
+
+Common Trap: Stopping after proving $M$ is True and failing to realize $R$ is also triggered.
+Exam Tip: $\neg F \implies \neg N$; $(M \lor N) \land \neg N \implies M \implies R$.","Correct. Survives elimination because ~F proves ~N by Modus Tollens, forcing M to be True by Disjunctive Syllogism, which triggers M -> R to prove R is True.","Eliminated because N is proven False by Modus Tollens on Premise 3.","Eliminated because M is proven True.","Eliminated because R is proven True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"What is the exact logical negation of the inclusive disjunctive proposition: \"Either the petitioner files an appeal ($A$) OR the judgment becomes final and executory ($F$)\"?","The petitioner does not file an appeal ($\neg A$) AND the judgment does not become final and executory ($\neg F$).","The petitioner does not file an appeal ($\neg A$) OR the judgment does not become final and executory ($\neg F$).","If the petitioner files an appeal ($A$), then the judgment becomes final and executory ($F$).","The petitioner files an appeal ($A$) and the judgment becomes final and executory ($F$).","A","Step-by-Step Solution:
+1. Represent the given statement symbolically:
+   - Disjunction: $A \lor F$.
+2. Apply De Morgan's Law for Negation of Disjunctions:
+   - $\neg(P \lor Q) \equiv \neg P \land \neg Q$.
+3. Substitute variables $A$ and $F$:
+   - $\neg(A \lor F) \equiv \neg A \land \neg F$.
+4. Translate into natural language:
+   - \"The petitioner does not file an appeal ($\neg A$) AND the judgment does not become final and executory ($\neg F$).\"
+5. Evaluate incorrect alternatives:
+   - Option B ($\neg A \lor \neg F$): Fails to change the operator from OR to AND.
+   - Option C ($A \implies F$): Equivalent to $\neg A \lor F$.
+   - Option D ($A \land F$): Conjunction without negations.
+
+Common Trap: Forgetting to flip the OR ($\lor$) into an AND ($\land$) when negating a disjunction.
+Exam Tip: The negation of (A OR B) is strictly (~A AND ~B).","Correct. Survives elimination because by De Morgan's Law, ~(A or F) is strictly equivalent to (~A and ~F).","Eliminated because ~A or ~F fails to change the disjunction to a conjunction under negation.","Eliminated because A -> F is a conditional statement.","Eliminated because A and F affirms both disjuncts rather than negating them.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Given the Exclusive OR condition: \"An administrative officer is assigned to either Regional Office East ($E$) OR Regional Office West ($W$), but not both ($E \oplus W$).\" If personnel records confirm that the officer was assigned to Regional Office East ($E$), what is the exact status of the assignment to Regional Office West?","The officer is definitively NOT assigned to Regional Office West ($\neg W$).","The officer is also assigned to Regional Office West ($W$).","The officer's assignment to Regional Office West is optional.","The assignment to Regional Office West is indeterminate.","A","Step-by-Step Solution:
+1. Analyze the Exclusive OR premise ($E \oplus W$):
+   - $E \oplus W$ means: $(E \lor W) \land \neg(E \land W)$.
+   - The second clause $\neg(E \land W)$ specifies that $E$ and $W$ CANNOT both be True simultaneously.
+2. Apply the given fact ($E = \text{True}$):
+   - Since $E$ is True, for $\neg(E \land W)$ to remain True, $W$ MUST be FALSE.
+3. Conclude:
+   - $\neg W$ = \"The officer is definitively NOT assigned to Regional Office West.\"
+4. Evaluate incorrect alternatives:
+   - Option B ($W$): Directly violates the Exclusive OR restriction $\neg(E \land W)$.
+   - Options C and D: Ignore the strict constraint imposed by XOR.
+
+Common Trap: Treating Exclusive OR as Inclusive OR and assuming $W$ could still be True.
+Exam Tip: In Exclusive OR ($A \oplus B$), knowing $A$ is True immediately proves $B$ is FALSE.","Correct. Survives elimination because in an Exclusive OR relationship, affirming one disjunct (E) conclusively negates the other (~W).","Eliminated because W would violate the explicit \"not both\" condition of XOR.","Eliminated because dual assignment is strictly prohibited.","Eliminated because W's non-assignment is deductively certain.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Given the three premises: (1) $A \lor B \lor C$ (At least one of $A, B,$ or $C$ is true). (2) If $A$ is true, then $D$ is true ($A \implies D$). (3) If $B$ is true, then $D$ is true ($B \implies D$). (4) Condition $C$ is known to be FALSE ($\neg C$). What conclusion necessarily follows?","Condition D is TRUE ($D$).","Condition D is FALSE ($\neg D$).","Condition A is FALSE ($\neg A$).","Condition B is FALSE ($\neg B$).","A","Step-by-Step Solution:
+1. State the premises symbolically:
+   - Premise 1: $A \lor B \lor C$.
+   - Premise 2: $A \implies D$.
+   - Premise 3: $B \implies D$.
+   - Fact: $\neg C$ ($C$ is False).
+2. Step 1 - Apply Disjunctive Syllogism to Premise 1:
+   - $(A \lor B \lor C)$ and $\neg C \vdash (A \lor B) = \text{True}$.
+3. Step 2 - Apply Simple Constructive Dilemma:
+   - We have the reduced disjunction: $A \lor B$.
+   - If $A$ is True $\implies D$ is True (Premise 2).
+   - If $B$ is True $\implies D$ is True (Premise 3).
+   - Since at least one of $A$ or $B$ MUST be True, in all possible cases, $D$ MUST be TRUE.
+4. Conclude:
+   - Condition $D$ is deductively proven to be TRUE.
+
+Common Trap: Assuming no conclusion can be reached without knowing whether $A$ or $B$ specifically is the true disjunct.
+Exam Tip: When all remaining disjunctive options lead to the identical conclusion ($D$), that conclusion ($D$) is unconditionally TRUE.","Correct. Survives elimination because ~C reduces the disjunction to (A or B), and both A and B independently imply D, proving D is True.","Eliminated because D is proven True.","Eliminated because A could be the true disjunct.","Eliminated because B could be the true disjunct.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Consider the following argument: Premise 1: Either policy $P$ is enacted ($P$) OR policy $Q$ is enacted ($Q$) [$P \lor Q$]. Premise 2: Policy $P$ was enacted ($P$). Conclusion: Therefore, policy $Q$ was NOT enacted ($\neg Q$). Under standard INCLUSIVE OR propositional logic, why is this argument INVALID (committing the Fallacy of Affirming a Disjunct)?","Inclusive OR allows both disjuncts P and Q to be true simultaneously.","Disjunctive statements cannot have true premises.","Policy P and Policy Q are mutually contradictory.","The premise requires a third policy to be valid.","A","Step-by-Step Solution:
+1. Analyze the argument form:
+   - Premise 1: $P \lor Q$ (Inclusive Disjunction).
+   - Premise 2: $P$ (Affirmation of Disjunct).
+   - Invalid Conclusion: $\neg Q$.
+2. Identify the logical fallacy:
+   - This commits the formal \"FALLACY OF AFFIRMING A DISJUNCT\".
+3. Explain why it is invalid:
+   - In standard formal logic, the connective \"OR\" ($\lor$) is inclusive by default, meaning $(P \lor Q)$ is True when:
+     - $P$ is True and $Q$ is False,
+     - $P$ is False and $Q$ is True, OR
+     - BOTH $P$ and $Q$ ARE TRUE.
+   - Knowing that $P$ is True satisfies the requirement for $(P \lor Q)$ to be True, but it provides ZERO information about $Q$; $Q$ could easily be True as well.
+4. Evaluate incorrect alternatives:
+   - Options B, C, and D state logically false assertions about disjunctions.
+
+Common Trap: Mistaking an inclusive OR for an exclusive OR and assuming affirming one disjunct eliminates the other.
+Exam Tip: Affirming a Disjunct ($P \lor Q, P \vdash \neg Q$) is an INVALID FALLACY under inclusive OR.","Correct. Survives elimination because inclusive OR permits both disjuncts to be True simultaneously, so affirming P does not prove ~Q.","Eliminated because disjunctions can certainly have true premises.","Eliminated because P and Q are not assumed contradictory.","Eliminated because two disjuncts form a complete valid proposition.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Given the following three premises: (1) $P \lor Q$ (2) $\neg P \lor R$ (3) $\neg R$. What propositional truth value is deductively certain?","Q is TRUE.","P is TRUE.","R is TRUE.","Q is FALSE.","A","Step-by-Step Solution:
+1. List the given premises:
+   - Premise 1: $P \lor Q$.
+   - Premise 2: $\neg P \lor R$.
+   - Premise 3: $\neg R$ ($R$ is False).
+2. Step 1 - Apply Disjunctive Syllogism to Premise 2:
+   - $(\neg P \lor R)$ and $\neg R \vdash \neg P = \text{True}$ ($P$ is False).
+3. Step 2 - Apply Disjunctive Syllogism to Premise 1:
+   - $(P \lor Q)$ and $\neg P \vdash Q = \text{True}$ ($Q$ is True).
+4. Conclude:
+   - Proposition $Q$ is deductively proven to be TRUE.
+5. Evaluate incorrect alternatives:
+   - Option B ($P$ is True): Contradicted by Step 1 ($\neg P$ is True).
+   - Option C ($R$ is True): Contradicted by Premise 3 ($\neg R$).
+   - Option D ($Q$ is False): Contradicted by Step 2.
+
+Common Trap: Trying to solve Premise 1 first before using Premise 3 to eliminate terms in Premise 2.
+Exam Tip: Start with the unit literal ($\neg R$), propagate to $(\neg P \lor R)$ to find $\neg P$, then propagate to $(P \lor Q)$ to find $Q$.","Correct. Survives elimination because ~R combined with (~P or R) proves ~P, and ~P combined with (P or Q) proves Q is True.","Eliminated because P is proven False (~P is True).","Eliminated because R is given as False (~R).","Eliminated because Q is proven True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
+"Given the complex disjunctive system rule: \"Either system anomaly $A$ is active ($A$) OR both components $B$ and $C$ are offline [$(B \land C)$]\" [$A \lor (B \land C)$]. Automated diagnostics confirm that component $B$ is ONLINE ($\neg B$). What conclusion is mathematically and logically CERTAIN?","System anomaly A is active ($A$).","Component C is offline ($C$).","System anomaly A is inactive ($\neg A$).","Both components B and C are offline.","A","Step-by-Step Solution:
+1. Formulate the premises:
+   - Premise 1: $A \lor (B \land C)$ (Master Disjunction).
+   - Fact: $\neg B$ (Component $B$ is not offline, i.e., $B$ is False).
+2. Evaluate the compound disjunct $(B \land C)$:
+   - A conjunction $(B \land C)$ is True if and only if BOTH $B$ is True AND $C$ is True.
+   - Since $B$ is False ($\neg B$), the conjunction $(B \land C)$ is FALSE regardless of the value of $C$.
+3. Apply Disjunctive Syllogism to Premise 1:
+   - We have: $A \lor (B \land C) = \text{True}$.
+   - We know: $(B \land C) = \text{False}$.
+   - By Disjunctive Syllogism: $A$ MUST be TRUE.
+4. Conclude:
+   - \"System anomaly $A$ is active ($A$)\" is deductively certain.
+
+Common Trap: Assuming we cannot evaluate the statement without knowing the status of component $C$.
+Exam Tip: If one term of a conjunction is False ($\neg B$), the entire conjunction $(B \land C)$ is False, triggering Disjunctive Syllogism for $A$.","Correct. Survives elimination because ~B falsifies the conjunction (B and C), forcing the disjunct A to be True by Disjunctive Syllogism.","Eliminated because C's status is unconstrained and irrelevant to the deduction.","Eliminated because A is proven True.","Eliminated because B is online (~B), directly contradicting dual offline status.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"

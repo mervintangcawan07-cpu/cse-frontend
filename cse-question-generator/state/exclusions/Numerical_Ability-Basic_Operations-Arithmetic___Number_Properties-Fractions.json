@@ -1,0 +1,30 @@
+{
+  "scope_key": "Numerical_Ability-Basic_Operations-Arithmetic___Number_Properties-Fractions",
+  "created_at": "2026-08-14T14:54:16.000Z",
+  "updated_at": "2026-08-14T14:54:16.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "12f384a56b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e",
+    "23a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4",
+    "34b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5",
+    "45c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6",
+    "56d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7",
+    "67e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8",
+    "78f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9",
+    "89a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0",
+    "90b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1",
+    "01c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2"
+  ],
+  "records": [
+    { "id": "q_008_1", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_2", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_3", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_4", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_5", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_6", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_7", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_8", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_9", "added_at": "2026-08-14T14:54:16.000Z" },
+    { "id": "q_008_10", "added_at": "2026-08-14T14:54:16.000Z" }
+  ]
+}

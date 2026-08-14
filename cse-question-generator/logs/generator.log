@@ -1,0 +1,69 @@
+[2026-08-14T14:41:27.629Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:41:27.649Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 1 errors. | {"errors":["CSV batch must contain exactly 10 question records. Found 9 rows."]}
+[2026-08-14T14:41:27.654Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 3 errors. | {"errors":["Row 1: \"Correct Answer\" must be exactly A, B, C, or D. Found \"E\".","Row 2: \"Explanation\" is empty.","Row 3: \"Elimination C\" is empty."]}
+[2026-08-14T14:41:27.666Z] [INFO] [BATCH_STARTED] Starting processing for Batch #999 (TEST-BATCH-999)
+[2026-08-14T14:41:27.672Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:41:27.679Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=999, total=10 questions
+[2026-08-14T14:41:27.690Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-41-27-680Z_batch_999
+[2026-08-14T14:41:27.690Z] [INFO] [BATCH_COMPLETED] Batch #999 successfully completed and verified: batch_999_SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.csv
+[2026-08-14T14:41:27.694Z] [INFO] [TEST_EVENT] Test log with secret [REDACTED_SECRET] abc123def456 and [REDACTED_SECRET]
+[2026-08-14T14:41:27.698Z] [INFO] [RESUME] Inspecting workspace and state for safe continuation...
+[2026-08-14T14:41:27.700Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 4 errors. | {"errors":["Parse error at row undefined: Unable to auto-detect delimiting character; defaulted to ',' (UndetectableDelimiter)","Header row must have exactly 13 columns. Found 2 columns: [Question, Option A]","CSV batch must contain exactly 10 question records. Found 1 rows.","Row 1: Expected 13 columns, but found 1 columns."]}
+[2026-08-14T14:41:27.703Z] [INFO] [RESUME] State reconciled: 0 verified batches found. Next batch: #1
+[2026-08-14T14:41:27.704Z] [WARN] [MODEL_LIMIT] Model capacity exhausted: Synthetic quota limit reached
+[2026-08-14T14:41:27.707Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:41:27.716Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-41-27-708Z_model_limit_pause
+[2026-08-14T14:41:27.716Z] [INFO] [PAUSE] Generator safely paused due to model limit. State and backups preserved.
+[2026-08-14T14:41:27.718Z] [INFO] [RESUME] Resuming generator from paused state...
+[2026-08-14T14:41:27.721Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:41:57.679Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:41:57.685Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 1 errors. | {"errors":["CSV batch must contain exactly 10 question records. Found 9 rows."]}
+[2026-08-14T14:41:57.689Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 3 errors. | {"errors":["Row 1: \"Correct Answer\" must be exactly A, B, C, or D. Found \"E\".","Row 2: \"Explanation\" is empty.","Row 3: \"Elimination C\" is empty."]}
+[2026-08-14T14:41:57.703Z] [INFO] [BATCH_STARTED] Starting processing for Batch #999 (TEST-BATCH-999)
+[2026-08-14T14:41:57.709Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:41:57.714Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=999, total=10 questions
+[2026-08-14T14:41:57.726Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-41-57-715Z_batch_999
+[2026-08-14T14:41:57.726Z] [INFO] [BATCH_COMPLETED] Batch #999 successfully completed and verified: batch_999_SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.csv
+[2026-08-14T14:41:57.729Z] [INFO] [TEST_EVENT] Test log with secret [REDACTED_SECRET] and [REDACTED_SECRET]
+[2026-08-14T14:41:57.735Z] [INFO] [RESUME] Inspecting workspace and state for safe continuation...
+[2026-08-14T14:41:57.738Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 4 errors. | {"errors":["Parse error at row undefined: Unable to auto-detect delimiting character; defaulted to ',' (UndetectableDelimiter)","Header row must have exactly 13 columns. Found 2 columns: [Question, Option A]","CSV batch must contain exactly 10 question records. Found 1 rows.","Row 1: Expected 13 columns, but found 1 columns."]}
+[2026-08-14T14:41:57.739Z] [INFO] [RESUME] State reconciled: 0 verified batches found. Next batch: #1
+[2026-08-14T14:41:57.741Z] [WARN] [MODEL_LIMIT] Model capacity exhausted: Synthetic quota limit reached
+[2026-08-14T14:41:57.744Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:41:57.752Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-41-57-744Z_model_limit_pause
+[2026-08-14T14:41:57.753Z] [INFO] [PAUSE] Generator safely paused due to model limit. State and backups preserved.
+[2026-08-14T14:41:57.754Z] [INFO] [RESUME] Resuming generator from paused state...
+[2026-08-14T14:41:57.757Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:42:06.229Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:42:06.234Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 1 errors. | {"errors":["CSV batch must contain exactly 10 question records. Found 9 rows."]}
+[2026-08-14T14:42:06.237Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 3 errors. | {"errors":["Row 1: \"Correct Answer\" must be exactly A, B, C, or D. Found \"E\".","Row 2: \"Explanation\" is empty.","Row 3: \"Elimination C\" is empty."]}
+[2026-08-14T14:42:06.249Z] [INFO] [BATCH_STARTED] Starting processing for Batch #999 (TEST-BATCH-999)
+[2026-08-14T14:42:06.257Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:42:06.264Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=999, total=10 questions
+[2026-08-14T14:42:06.272Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-42-06-264Z_batch_999
+[2026-08-14T14:42:06.273Z] [INFO] [BATCH_COMPLETED] Batch #999 successfully completed and verified: batch_999_SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.csv
+[2026-08-14T14:42:06.277Z] [INFO] [TEST_EVENT] Test log with secret [REDACTED_SECRET] and [REDACTED_SECRET]
+[2026-08-14T14:42:06.280Z] [INFO] [RESUME] Inspecting workspace and state for safe continuation...
+[2026-08-14T14:42:06.282Z] [WARN] [VALIDATION_FAILURE] CSV validation failed with 4 errors. | {"errors":["Parse error at row undefined: Unable to auto-detect delimiting character; defaulted to ',' (UndetectableDelimiter)","Header row must have exactly 13 columns. Found 2 columns: [Question, Option A]","CSV batch must contain exactly 10 question records. Found 1 rows.","Row 1: Expected 13 columns, but found 1 columns."]}
+[2026-08-14T14:42:06.284Z] [INFO] [RESUME] State reconciled: 0 verified batches found. Next batch: #1
+[2026-08-14T14:42:06.286Z] [WARN] [MODEL_LIMIT] Model capacity exhausted: Synthetic quota limit reached
+[2026-08-14T14:42:06.289Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:42:06.296Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-42-06-290Z_model_limit_pause
+[2026-08-14T14:42:06.297Z] [INFO] [PAUSE] Generator safely paused due to model limit. State and backups preserved.
+[2026-08-14T14:42:06.298Z] [INFO] [RESUME] Resuming generator from paused state...
+[2026-08-14T14:42:06.301Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=null, total=0 questions
+[2026-08-14T14:43:47.913Z] [INFO] [BATCH_STARTED] Starting processing for Batch #1 (VA-RC-CAUSEEFFECT-001)
+[2026-08-14T14:43:47.936Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:43:47.943Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=1, total=10 questions
+[2026-08-14T14:43:47.951Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-43-47-944Z_batch_1
+[2026-08-14T14:43:47.951Z] [INFO] [BATCH_COMPLETED] Batch #1 successfully completed and verified: batch_001_Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.csv
+[2026-08-14T14:44:40.957Z] [INFO] [BATCH_STARTED] Starting processing for Batch #2 (VA-RC-COMPARISON-002)
+[2026-08-14T14:44:40.981Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:44:40.989Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=2, total=20 questions
+[2026-08-14T14:44:41.000Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-44-40-990Z_batch_2
+[2026-08-14T14:44:41.000Z] [INFO] [BATCH_COMPLETED] Batch #2 successfully completed and verified: batch_002_Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Comparison.csv
+[2026-08-14T14:45:33.010Z] [INFO] [BATCH_STARTED] Starting processing for Batch #3 (VA-RC-SEQUENCE-003)
+[2026-08-14T14:45:33.037Z] [INFO] [VALIDATION_SUCCESS] CSV validation passed: 10 records verified.
+[2026-08-14T14:45:33.045Z] [INFO] [PROGRESS_UPDATE] Progress saved: batch=3, total=30 questions
+[2026-08-14T14:45:33.055Z] [INFO] [BACKUP_CREATED] State backup successfully created: C:\Users\Administrator\cse-frontend\cse-question-generator\backups\backup_2026-08-14T14-45-33-046Z_batch_3
+[2026-08-14T14:45:33.056Z] [INFO] [BATCH_COMPLETED] Batch #3 successfully completed and verified: batch_003_Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Sequence.csv

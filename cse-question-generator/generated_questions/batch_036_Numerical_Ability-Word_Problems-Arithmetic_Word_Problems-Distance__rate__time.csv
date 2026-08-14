@@ -1,0 +1,137 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A disaster relief truck travels from City A to City B at an average speed of 60.0 km/h and returns along the identical route from City B to City A at an average speed of 90.0 km/h. What is the average speed of the truck for the entire round trip?","72.0 km/h","75.0 km/h","70.0 km/h","74.5 km/h","A","Step-by-Step Solution:
+1. Identify that the outbound and return distances are identical ($D$).
+2. Apply the harmonic mean formula for equal-distance round trips:
+   - $V_{\text{avg}} = \frac{2 v_1 v_2}{v_1 + v_2}$.
+3. Substitute $v_1 = 60.0\text{ km/h}$ and $v_2 = 90.0\text{ km/h}$:
+   - $V_{\text{avg}} = \frac{2(60.0)(90.0)}{60.0 + 90.0} = \frac{10,800.0}{150.0} = 72.0\text{ km/h}$.
+4. (Verification via assumed distance $D = 180\text{ km}$: $t_1 = \frac{180}{60} = 3\text{ hrs}$, $t_2 = \frac{180}{90} = 2\text{ hrs}$. Total $D = 360\text{ km}$, Total $T = 5\text{ hrs} \implies \frac{360}{5} = 72.0\text{ km/h}$).
+
+Common Trap: Taking the simple arithmetic mean $\frac{60 + 90}{2} = 75.0\text{ km/h}$ (Option B), which ignores the fact that more time is spent traveling at the slower speed.
+Exam Tip: Average speed for equal distance round-trip is always strictly less than the arithmetic mean ($72 < 75$).","Correct. Survives elimination because 2(60)(90)/(60 + 90) = 10800 / 150 = 72.0 km/h.","Eliminated because 75.0 km/h is the false arithmetic mean.","Eliminated because 70.0 km/h is an underestimate.","Eliminated because 74.5 km/h is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"Two official inspection vehicles, Car 1 and Car 2, start simultaneously from two regional centers separated by 450.0 km and travel towards each other on a straight highway. Car 1 travels at 70.0 km/h and Car 2 travels at 80.0 km/h. How many hours will elapse before they cross each other, and at what distance from Car 1's starting point will this encounter occur?","Time: 3.0 hours; Distance from Car 1: 210.0 km","Time: 3.0 hours; Distance from Car 1: 240.0 km","Time: 2.5 hours; Distance from Car 1: 175.0 km","Time: 3.5 hours; Distance from Car 1: 245.0 km","A","Step-by-Step Solution:
+1. Determine relative speed for objects moving towards each other:
+   - $V_{\text{rel}} = v_1 + v_2 = 70.0 + 80.0 = 150.0\text{ km/h}$.
+2. Calculate time to meet:
+   - $T = \frac{\text{Total Distance}}{V_{\text{rel}}} = \frac{450.0\text{ km}}{150.0\text{ km/h}} = 3.0\text{ hours}$.
+3. Calculate distance traveled by Car 1 from its starting point:
+   - $D_1 = v_1 \times T = 70.0\text{ km/h} \times 3.0\text{ hours} = 210.0\text{ km}$.
+4. (Car 2 travels $80.0 \times 3.0 = 240.0\text{ km}$; $210.0 + 240.0 = 450.0\text{ km}$).
+
+Common Trap: Selecting the distance from Car 2's starting point ($240.0\text{ km}$, Option B) instead of Car 1.
+Exam Tip: Distance from Car 1 is $v_1 \times t = 70 \times 3 = 210\text{ km}$.","Correct. Survives elimination because relative speed is 150 km/h (450/150 = 3.0 hrs), and Car 1 travels 70 * 3 = 210.0 km.","Eliminated because 240.0 km is the distance from Car 2's starting point.","Eliminated because 2.5 hours gives total distance 375 km.","Eliminated because 3.5 hours gives total distance 525 km.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A maritime patrol boat travels 36.0 km upstream against a river current in 4.0 hours, and returns the same 36.0 km downstream with the current in 2.0 hours. What is the speed of the patrol boat in still water and the speed of the river current?","Boat: 13.5 km/h; Current: 4.5 km/h","Boat: 12.0 km/h; Current: 6.0 km/h","Boat: 14.0 km/h; Current: 4.0 km/h","Boat: 15.0 km/h; Current: 3.0 km/h","A","Step-by-Step Solution:
+1. Calculate upstream and downstream ground speeds:
+   - Upstream speed: $v_u = \frac{36.0\text{ km}}{4.0\text{ hrs}} = 9.0\text{ km/h}$.
+   - Downstream speed: $v_d = \frac{36.0\text{ km}}{2.0\text{ hrs}} = 18.0\text{ km/h}$.
+2. Express in terms of boat speed ($v_b$) and current speed ($v_c$):
+   - $v_b - v_c = 9.0$ (Equation 1)
+   - $v_b + v_c = 18.0$ (Equation 2).
+3. Sum the equations to solve for $v_b$:
+   - $2 v_b = 27.0 \implies v_b = \frac{27.0}{2} = 13.5\text{ km/h}$.
+4. Subtract the equations to solve for $v_c$:
+   - $2 v_c = 18.0 - 9.0 = 9.0 \implies v_c = \frac{9.0}{2} = 4.5\text{ km/h}$.
+
+Common Trap: Dividing the sum/difference by 4 instead of 2 or confusing boat and current values.
+Exam Tip: $v_b = \frac{v_d + v_u}{2} = \frac{18 + 9}{2} = 13.5\text{ km/h}$; $v_c = \frac{v_d - v_u}{2} = \frac{18 - 9}{2} = 4.5\text{ km/h}$.","Correct. Survives elimination because vb = (18 + 9)/2 = 13.5 km/h and vc = (18 - 9)/2 = 4.5 km/h.","Eliminated because 12.0 and 6.0 give upstream speed 6 != 9.","Eliminated because 14.0 and 4.0 give downstream speed 18 but upstream speed 10 != 9.","Eliminated because 15.0 and 3.0 give upstream speed 12 != 9.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A passenger train 250.0 meters long traveling at a constant velocity of 72.0 km/h completely crosses a railway bridge in exactly 30.0 seconds. What is the length of the railway bridge in meters?","350.0 meters","400.0 meters","300.0 meters","450.0 meters","A","Step-by-Step Solution:
+1. Convert train speed from km/h to m/s:
+   - $v = 72.0 \times \frac{5}{18} = 4 \times 5 = 20.0\text{ m/s}$.
+2. Calculate total distance covered in 30.0 seconds:
+   - $\text{Total Distance} = v \times t = 20.0\text{ m/s} \times 30.0\text{ s} = 600.0\text{ meters}$.
+3. Relate total distance to train length ($L_{\text{train}}$) and bridge length ($L_{\text{bridge}}$):
+   - $\text{Total Distance} = L_{\text{train}} + L_{\text{bridge}}$.
+   - $600.0 = 250.0 + L_{\text{bridge}}$.
+4. Solve for $L_{\text{bridge}}$:
+   - $L_{\text{bridge}} = 600.0 - 250.0 = 350.0\text{ meters}$.
+
+Common Trap: Forgetting to subtract train length from the total distance traveled ($600\text{ m}$).
+Exam Tip: To clear a bridge, the train must cover its own length plus the bridge length ($L_T + L_B = v \cdot t$).","Correct. Survives elimination because 72 km/h = 20 m/s, total distance in 30 s is 600 m, and bridge length is 600 - 250 = 350.0 meters.","Eliminated because 400 m assumes train length is 200 m.","Eliminated because 300 m is an arithmetic slip.","Eliminated because 450 m assumes 700 m total distance.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A government courier departs on a motorcycle at 8:00 AM traveling at 45.0 km/h. At 9:20 AM (1 hour and 20 minutes later), a supervisor departs in an automobile from the same point along the same route at 75.0 km/h. At what time will the supervisor overtake the courier, and at what distance from the starting point?","11:20 AM (at 150.0 km)","11:00 AM (at 125.0 km)","11:40 AM (at 175.0 km)","10:50 AM (at 112.5 km)","A","Step-by-Step Solution:
+1. Convert head start time to hours:
+   - $1\text{ hr } 20\text{ min} = 1 + \frac{20}{60} = 1 + \frac{1}{3} = \frac{4}{3}\text{ hours}$.
+2. Calculate courier's head start distance ($d_0$):
+   - $d_0 = 45.0\text{ km/h} \times \frac{4}{3}\text{ hours} = 60.0\text{ km}$.
+3. Calculate relative speed of pursuit:
+   - $V_{\text{rel}} = 75.0 - 45.0 = 30.0\text{ km/h}$.
+4. Compute time required to overtake:
+   - $T_{\text{pursuit}} = \frac{d_0}{V_{\text{rel}}} = \frac{60.0\text{ km}}{30.0\text{ km/h}} = 2.0\text{ hours}$.
+5. Determine clock time of overtaking:
+   - $\text{Time} = 9:20\text{ AM} + 2.0\text{ hours} = 11:20\text{ AM}$.
+6. Determine distance from start:
+   - $\text{Distance} = 75.0\text{ km/h} \times 2.0\text{ hours} = 150.0\text{ km}$.
+
+Common Trap: Adding the 2 hours to 8:00 AM instead of 9:20 AM ($10:00\text{ AM}$) or miscalculating head start time.
+Exam Tip: Pursuit time begins when the pursuing vehicle departs (9:20 AM + 2 hrs = 11:20 AM).","Correct. Survives elimination because 60 km head start / 30 km/h relative speed = 2.0 hours pursuit, giving 9:20 AM + 2:00 = 11:20 AM at 75 * 2 = 150.0 km.","Eliminated because 11:00 AM assumes only 1 hr 40 min pursuit.","Eliminated because 11:40 AM assumes 2 hrs 20 min pursuit.","Eliminated because 10:50 AM is an arithmetic error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A field auditor travels a total distance of 300.0 km in exactly 5.0 hours. If he travels the first 120.0 km by regional bus at an average speed of 60.0 km/h and the remaining 180.0 km by train, what must be the average speed of the train to complete the trip on schedule?","60.0 km/h","65.0 km/h","70.0 km/h","55.0 km/h","A","Step-by-Step Solution:
+1. Calculate time spent on the bus:
+   - $t_{\text{bus}} = \frac{\text{Distance}_{\text{bus}}}{v_{\text{bus}}} = \frac{120.0\text{ km}}{60.0\text{ km/h}} = 2.0\text{ hours}$.
+2. Calculate time remaining for the train:
+   - $t_{\text{train}} = \text{Total Time} - t_{\text{bus}} = 5.0 - 2.0 = 3.0\text{ hours}$.
+3. Calculate distance remaining for the train:
+   - $\text{Distance}_{\text{train}} = 300.0 - 120.0 = 180.0\text{ km}$.
+4. Compute required average speed of the train:
+   - $v_{\text{train}} = \frac{\text{Distance}_{\text{train}}}{t_{\text{train}}} = \frac{180.0\text{ km}}{3.0\text{ hours}} = 60.0\text{ km/h}$.
+
+Common Trap: Dividing remaining distance by total time ($180 / 5 = 36\text{ km/h}$) or averaging speeds.
+Exam Tip: Remaining speed is $\frac{\text{Remaining Distance}}{\text{Remaining Time}} = \frac{180}{3} = 60\text{ km/h}$.","Correct. Survives elimination because bus takes 120/60 = 2.0 hrs, leaving 3.0 hrs for 180 km, requiring 180/3 = 60.0 km/h.","Eliminated because 65.0 km/h would take only 2.77 hrs (finishing early).","Eliminated because 70.0 km/h takes 2.57 hrs.","Eliminated because 55.0 km/h takes 3.27 hrs (arriving late).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"If an administrative staff member walks from home to office at 4.0 km/h, he arrives 10.0 minutes late. If he increases his walking speed to 6.0 km/h, he arrives 15.0 minutes early. What is the exact distance between his home and the office?","5.0 km","6.0 km","4.5 km","7.5 km","A","Step-by-Step Solution:
+1. Express time difference between the two scenarios:
+   - $\text{Time Difference} = 10.0\text{ min late} - (-15.0\text{ min early}) = 25.0\text{ minutes}$.
+   - Convert to hours: $\Delta t = \frac{25.0}{60.0}\text{ hours} = \frac{5}{12}\text{ hours}$.
+2. Set up the time difference equation:
+   - $\frac{D}{v_1} - \frac{D}{v_2} = \Delta t$.
+   - $\frac{D}{4.0} - \frac{D}{6.0} = \frac{5}{12}$.
+3. Solve for $D$:
+   - $\frac{3D - 2D}{12.0} = \frac{5}{12}$.
+   - $\frac{D}{12.0} = \frac{5}{12} \implies D = 5.0\text{ km}$.
+4. Verify:
+   - At 4 km/h: $t = 5 / 4 = 1.25\text{ hrs} = 75\text{ min}$ (scheduled time $= 65\text{ min}$).
+   - At 6 km/h: $t = 5 / 6 = 50\text{ min}$ (15 min early compared to 65 min scheduled time).
+
+Common Trap: Taking the difference as $15 - 10 = 5\text{ minutes}$ ($\frac{5}{60}\text{ hr} \implies D = 1\text{ km}$), failing to recognize that late ($+$) and early ($-$) add together.
+Exam Tip: Late to early time difference is $\text{Late} + \text{Early} = 10 + 15 = 25\text{ minutes} = \frac{5}{12}\text{ hours}$.","Correct. Survives elimination because D/4 - D/6 = 25/60 = 5/12 gives D = 5.0 km.","Eliminated because 6.0 km yields time difference of 30 minutes.","Eliminated because 4.5 km yields time difference of 22.5 minutes.","Eliminated because 7.5 km yields time difference of 37.5 minutes.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"Two trains, 180.0 meters and 220.0 meters long, run in opposite directions on parallel tracks at speeds of 54.0 km/h and 90.0 km/h respectively. How many seconds will they take to completely pass each other from the moment their locomotives meet?","10.0 seconds","12.0 seconds","8.0 seconds","15.0 seconds","A","Step-by-Step Solution:
+1. Calculate total distance to be covered for complete clearance:
+   - $\text{Total Distance} = L_1 + L_2 = 180.0 + 220.0 = 400.0\text{ meters}$.
+2. Calculate relative speed for opposite directions:
+   - $V_{\text{rel}} = 54.0 + 90.0 = 144.0\text{ km/h}$.
+3. Convert relative speed to meters per second:
+   - $V_{\text{rel}} = 144.0 \times \frac{5}{18} = 8 \times 5 = 40.0\text{ m/s}$.
+4. Compute time required:
+   - $T = \frac{\text{Total Distance}}{V_{\text{rel}}} = \frac{400.0\text{ m}}{40.0\text{ m/s}} = 10.0\text{ seconds}$.
+
+Common Trap: Subtracting speeds ($90 - 54 = 36\text{ km/h} = 10\text{ m/s} \implies 40\text{ s}$), confusing opposite direction with same direction.
+Exam Tip: Opposite directions = Add speeds ($54 + 90 = 144\text{ km/h} = 40\text{ m/s}$). Time $= 400 / 40 = 10\text{ s}$.","Correct. Survives elimination because relative speed is 40 m/s and total clearance distance is 400 m, yielding 400 / 40 = 10.0 seconds.","Eliminated because 12.0 seconds is an overestimate.","Eliminated because 8.0 seconds is an underestimate.","Eliminated because 15.0 seconds uses single train length.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A delivery van travels the first $\frac{1}{3}$ of its journey at 30.0 km/h, the second $\frac{1}{3}$ at 40.0 km/h, and the final $\frac{1}{3}$ at 60.0 km/h. What is the average speed of the van over the entire journey?","40.0 km/h","43.3 km/h","45.0 km/h","38.5 km/h","A","Step-by-Step Solution:
+1. Let each $\frac{1}{3}$ segment have distance $D$ (Total distance $= 3D$).
+2. Compute time spent on each segment:
+   - $t_1 = \frac{D}{30.0}$
+   - $t_2 = \frac{D}{40.0}$
+   - $t_3 = \frac{D}{60.0}$.
+3. Sum total travel time:
+   - $T_{\text{total}} = D \left(\frac{1}{30.0} + \frac{1}{40.0} + \frac{1}{60.0}\right)$.
+   - $\text{LCD} = 120.0 \implies T_{\text{total}} = D \left(\frac{4 + 3 + 2}{120.0}\right) = D \left(\frac{9}{120.0}\right) = \frac{3D}{40.0}$.
+4. Compute average speed:
+   - $V_{\text{avg}} = \frac{\text{Total Distance}}{T_{\text{total}}} = \frac{3D}{\frac{3D}{40.0}} = 40.0\text{ km/h}$.
+
+Common Trap: Taking the simple arithmetic mean $\frac{30 + 40 + 60}{3} = \frac{130}{3} = 43.33\text{ km/h}$ (Option B).
+Exam Tip: For 3 equal distance segments, $V_{\text{avg}} = \frac{3}{\frac{1}{v_1} + \frac{1}{v_2} + \frac{1}{v_3}} = \frac{3}{9/120} = 40.0\text{ km/h}$.","Correct. Survives elimination because harmonic mean of 30, 40, 60 is 3 / (1/30 + 1/40 + 1/60) = 3 / (9/120) = 40.0 km/h.","Eliminated because 43.3 km/h is the false arithmetic mean (130/3).","Eliminated because 45.0 km/h is (30 + 60)/2.","Eliminated because 38.5 km/h is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"
+"A municipal health officer rides a bicycle from Town P to Town Q at 15.0 km/h and returns along the same route at 10.0 km/h. If the entire round trip takes exactly 5.0 hours total, what is the one-way distance between Town P and Town Q?","30.0 km","25.0 km","35.0 km","40.0 km","A","Step-by-Step Solution:
+1. Let $D$ be the one-way distance between Town P and Town Q.
+2. Formulate the total time equation:
+   - Outbound time: $t_1 = \frac{D}{15.0}$.
+   - Inbound time: $t_2 = \frac{D}{10.0}$.
+   - Total time: $t_1 + t_2 = 5.0\text{ hours}$.
+3. Combine fractions with $\text{LCD} = 30.0$:
+   - $\frac{2D + 3D}{30.0} = 5.0$.
+   - $\frac{5D}{30.0} = 5.0 \implies \frac{D}{6.0} = 5.0$.
+4. Solve for $D$:
+   - $D = 5.0 \times 6.0 = 30.0\text{ km}$.
+5. Verify:
+   - $t_1 = 30 / 15 = 2.0\text{ hrs}$.
+   - $t_2 = 30 / 10 = 3.0\text{ hrs}$.
+   - $2.0 + 3.0 = 5.0\text{ hrs}$ (Confirmed!).
+
+Common Trap: Finding total round-trip distance ($60.0\text{ km}$) instead of one-way distance ($30.0\text{ km}$).
+Exam Tip: $\frac{D}{15} + \frac{D}{10} = 5 \implies D = 30\text{ km}$.","Correct. Survives elimination because 30/15 + 30/10 = 2 + 3 = 5.0 hours total time.","Eliminated because 25 km yields 25/15 + 25/10 = 1.67 + 2.5 = 4.17 hrs != 5 hrs.","Eliminated because 35 km yields 5.83 hrs.","Eliminated because 40 km yields 6.67 hrs.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Distance, rate, time | Very Difficult | Batch 036"

@@ -1,0 +1,69 @@
+{
+  "version": "4.0",
+  "profile_name": "CSE-PPT Professional Master Generation Profile",
+  "created_at": "2026-08-14T22:42:00.000Z",
+  "status": "AWAITING_ACTIVATION",
+  "scope": {
+    "level": "PROFESSIONAL_ONLY",
+    "prohibited_content": ["Clerical Ability", "Subprofessional-only"]
+  },
+  "csv_specification": {
+    "required_columns_count": 13,
+    "headers": [
+      "Question",
+      "Option A",
+      "Option B",
+      "Option C",
+      "Option D",
+      "Correct Answer",
+      "Explanation",
+      "Elimination A",
+      "Elimination B",
+      "Elimination C",
+      "Elimination D",
+      "Category",
+      "Tags"
+    ],
+    "batch_size": 10,
+    "encoding": "UTF-8"
+  },
+  "tag_format": "Category | Component | Subtopic | Micro-subtopic | Difficulty | Batch",
+  "difficulty_standard": "VERY_DIFFICULT",
+  "rules_compact": {
+    "question_integrity": {
+      "options_count": 4,
+      "valid_answers": ["A", "B", "C", "D"],
+      "explanation_required": true,
+      "all_eliminations_required": true,
+      "category_required": true,
+      "tags_required": true
+    },
+    "duplicate_prevention": {
+      "scope": "MICRO_SUBTOPIC_SCOPED",
+      "hash_algorithm": "SHA-256",
+      "normalization": "lowercase_alphanumeric_trimmed",
+      "reject_rules": [
+        "exact_duplicates",
+        "paraphrased_duplicates",
+        "same_scenario_name_swap",
+        "same_numerical_structure_number_swap",
+        "same_passage_chart_table",
+        "same_reasoning_pathway"
+      ]
+    },
+    "batch_policy": {
+      "atomic_completion": true,
+      "auto_backup_on_batch_complete": true,
+      "master_prompt_reread_prohibited": true
+    }
+  },
+  "starting_point": {
+    "category": "Verbal Ability",
+    "component": "Reading Comprehension",
+    "subtopic": "Core Reading Skills",
+    "micro_subtopic": "Cause and Effect",
+    "batch_number": 1,
+    "batch_id": "VA-RC-CAUSEEFFECT-001",
+    "batch_size": 10
+  }
+}

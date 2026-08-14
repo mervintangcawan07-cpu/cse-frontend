@@ -1,0 +1,182 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Three regional directors (Aris, Ben, Cora) are assigned to three regional offices (Region 1, Region 2, Region 3) and drive three distinct vehicles (Sedan, SUV, Pickup): (1) Aris is not in Region 1. (2) The director in Region 2 drives the Pickup. (3) Ben drives the Sedan. (4) Cora is not in Region 2. (5) Cora is assigned to Region 3. Which director is assigned to Region 1, and what vehicle does that director drive?","Ben, Sedan","Aris, SUV","Cora, Pickup","Aris, Sedan","A","Step-by-Step Solution:
+1. Deduce Region 2 assignment:
+   - Rule 2 states the director in Region 2 drives the Pickup.
+   - Rule 3 states Ben drives the Sedan $\implies$ Ben cannot be in Region 2.
+   - Rule 4 states Cora is not in Region 2.
+   - Therefore, Aris MUST be assigned to Region 2 and drives the Pickup.
+2. Deduce Region 3 assignment:
+   - By Rule 5, Cora is assigned to Region 3.
+   - Available vehicles remaining: SUV and Sedan.
+   - Since Ben drives the Sedan, Cora MUST drive the SUV.
+3. Deduce Region 1 assignment:
+   - The only remaining open region is Region 1.
+   - The only remaining director is Ben, who drives the Sedan.
+   - Complete mapping:
+     - Region 1: Ben, Sedan
+     - Region 2: Aris, Pickup
+     - Region 3: Cora, SUV
+4. Conclude:
+   - Director Ben is assigned to Region 1 and drives the Sedan.
+
+Common Trap: Placing Cora in Region 1 without checking the Region 3 assignment.
+Exam Tip: Cross-reference negative constraints to eliminate candidates from Region 2 first, which unlocks the entire grid.","Correct. Survives elimination because Aris is forced into Region 2 (Pickup) and Cora into Region 3 (SUV), leaving Region 1 for Ben (Sedan).","Eliminated because Aris is in Region 2 driving the Pickup.","Eliminated because Cora is in Region 3 driving the SUV.","Eliminated because Ben drives the Sedan.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Four civil servants (W, X, Y, Z) wear badges of four colors (Red, Blue, Green, Yellow) and work in four departments (Finance, HR, IT, Legal): (1) W works in Finance and does not wear Red. (2) IT officer wears Blue. (3) Y wears Green. (4) HR officer wears Red. (5) Z does not work in Legal. Which department does Y work in?","Legal","HR","IT","Finance","A","Step-by-Step Solution:
+1. Map known department-color pairs:
+   - $\text{IT} \leftrightarrow \text{Blue}$.
+   - $\text{HR} \leftrightarrow \text{Red}$.
+2. Analyze candidate Y:
+   - Given: Y wears a Green badge.
+   - Since Y has a Green badge, Y CANNOT work in IT (which requires Blue) or HR (which requires Red).
+   - Since W works in Finance, Y CANNOT work in Finance.
+   - Therefore, by elimination of the other three departments, Y MUST work in LEGAL!
+3. Trace full configuration:
+   - Y: Legal, Green badge.
+   - W: Finance, Yellow badge (since Red/Blue/Green are taken).
+   - Z: IT, Blue badge (since Z cannot be Legal).
+   - X: HR, Red badge.
+4. Conclude:
+   - Officer Y works in the Legal department.
+
+Common Trap: Trying to place Y in HR or IT despite mismatched badge colors.
+Exam Tip: Cross-referencing 1-to-1 attribute pairs immediately eliminates IT and HR for the green badge holder.","Correct. Survives elimination because Y's Green badge eliminates IT (Blue) and HR (Red), and Finance is occupied by W, forcing Y into Legal.","Eliminated because HR requires a Red badge.","Eliminated because IT requires a Blue badge.","Eliminated because Finance is occupied by W.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Three investigators (D, E, F) handle three cases (Case 101, Case 102, Case 103) located in three cities (Manila, Cebu, Davao): (1) Case 101 is located in Davao. (2) Investigator D handles Case 102. (3) Case 103 is NOT located in Cebu. Where is Case 102 located?","Cebu","Davao","Manila","Cannot be determined","A","Step-by-Step Solution:
+1. List the available cities: {Manila, Cebu, Davao}.
+2. Apply Rule 1:
+   - Case 101 is in Davao.
+   - Remaining cities for Case 102 and Case 103: {Manila, Cebu}.
+3. Apply Rule 3:
+   - Case 103 is NOT in Cebu.
+   - Therefore, Case 103 MUST be in Manila.
+4. Deduce Case 102 location:
+   - Since Case 101 is in Davao and Case 103 is in Manila, Case 102 MUST be located in CEBU.
+5. Conclude:
+   - Case 102 is located in Cebu.
+
+Common Trap: Confusing Case 102 with Case 103.
+Exam Tip: When 3 entities have 1 fixed (Davao), a negative constraint on the second entity uniquely fixes both remaining entities.","Correct. Survives elimination because Case 101 is in Davao and Case 103 cannot be in Cebu (forcing 103 to Manila), leaving Case 102 in Cebu.","Eliminated because Case 101 is in Davao.","Eliminated because Case 103 is in Manila.","Eliminated because the location is uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"In a 4x4 Latin-square logic grid with numbers {1, 2, 3, 4} appearing exactly once per row and column: Row 1: [ 1, 2, 3, 4 ] Row 2: [ 3, 4, 1, 2 ] Row 3: [ 2, 1, 4, 3 ] Row 4: [ 4, 3, 2, ? ] What number must replace the question mark in Row 4, Column 4?","1","2","3","4","A","Step-by-Step Solution:
+1. Examine Row 4 entries:
+   - Row 4 contains: [ 4, 3, 2, ? ].
+   - The set of valid numbers is $\{1, 2, 3, 4\}$.
+   - The only missing number in Row 4 is 1.
+2. Cross-verify with Column 4 entries:
+   - Column 4 contains: Row 1 (4), Row 2 (2), Row 3 (3), Row 4 (?).
+   - Numbers present in Column 4: $\{4, 2, 3\}$.
+   - The only missing number in Column 4 is 1.
+3. Conclude:
+   - Both row and column constraints uniquely force 1 into Row 4, Column 4.
+
+Common Trap: Overlooking column verification.
+Exam Tip: In a Latin square, find the single missing element from $\{1, 2, 3, 4\}$ in both the target row and column.","Correct. Survives elimination because 1 is the unique number missing from both Row 4 and Column 4.","Eliminated because 2 is already present in Row 4 and Column 4.","Eliminated because 3 is already present in Row 4 and Column 4.","Eliminated because 4 is already present in Row 4 and Column 4.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Four public servants (P, Q, R, S) are assigned to four distinct building floors (Floors 1, 2, 3, 4): (1) P is higher than Q ($P > Q$). (2) R is higher than S ($R > S$). (3) S is higher than P ($S > P$). Which floor is assigned to Officer R?","Floor 4","Floor 3","Floor 2","Floor 1","A","Step-by-Step Solution:
+1. Formulate the strict height inequalities:
+   - Rule 1: $P > Q$.
+   - Rule 3: $S > P \implies S > P > Q$.
+   - Rule 2: $R > S \implies R > S > P > Q$.
+2. Map the 4 officers to the 4 distinct floors (1 to 4):
+   - Floor 1 (Lowest): Officer Q
+   - Floor 2: Officer P
+   - Floor 3: Officer S
+   - Floor 4 (Highest): Officer R
+3. Conclude:
+   - Officer R is assigned to Floor 4.
+
+Common Trap: Placing S on Floor 4 instead of R.
+Exam Tip: Chain the inequalities: $R(4) > S(3) > P(2) > Q(1)$. Officer R is on the top floor.","Correct. Survives elimination because the strict inequality chain R > S > P > Q uniquely assigns Officer R to Floor 4.","Eliminated because Floor 3 is assigned to Officer S.","Eliminated because Floor 2 is assigned to Officer P.","Eliminated because Floor 1 is assigned to Officer Q.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Five candidates (A, B, C, D, E) must be assigned 5 distinct ID numbers from {10, 20, 30, 40, 50}: (1) E's ID is 50. (2) A's ID is twice B's ID ($A = 2B$). (3) C's ID is 10 greater than D's ID ($C = D + 10$). What is the exact ID number of Candidate D?","30","20","40","10","A","Step-by-Step Solution:
+1. Track available ID numbers after assigning E = 50:
+   - Available IDs for {A, B, C, D}: $\{10, 20, 30, 40\}$.
+2. Test valid $(A, B)$ pairs where $A = 2B$:
+   - Case 1: $B = 10 \implies A = 20$.
+     - Remaining IDs for C and D: $\{30, 40\}$.
+     - Condition $C = D + 10 \implies D = 30$ and $C = 40$ (Valid!).
+   - Case 2: $B = 20 \implies A = 40$.
+     - Remaining IDs for C and D: $\{10, 30\}$.
+     - Difference is $30 - 10 = 20 \neq 10$ (Fails!).
+3. Confirm unique assignment:
+   - $A = 20, B = 10, C = 40, D = 30, E = 50$.
+4. Conclude:
+   - Candidate D's ID number is 30.
+
+Common Trap: Trying Case 2 without checking if the remaining difference matches 10.
+Exam Tip: Test the multiplicative constraint first, then verify if remaining elements satisfy the arithmetic difference.","Correct. Survives elimination because B=10, A=20 leaves 30 and 40 for D and C, satisfying C = D + 10 with D = 30.","Eliminated because 20 is assigned to A.","Eliminated because 40 is assigned to C.","Eliminated because 10 is assigned to B.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Three analysts (Ken, Lea, Max) specialize in three areas (Data, Policy, Operations) and use three tools (Python, R, SQL): (1) Policy specialist uses Python. (2) Max is the Operations specialist. (3) Lea does not use Python. (4) Max uses SQL. Which software tool does Lea use?","R","Python","SQL","Cannot be determined","A","Step-by-Step Solution:
+1. Determine the Policy specialist:
+   - Rule 1: $\text{Policy} \leftrightarrow \text{Python}$.
+   - Rule 2: Max is Operations $\implies$ Max is not Policy.
+   - Rule 3: Lea does not use Python $\implies$ Lea is not Policy.
+   - Therefore, Ken MUST be the Policy specialist and uses Python!
+2. Determine tool for Max:
+   - By Rule 4, Max uses SQL.
+3. Determine tool for Lea:
+   - Available tools remaining: R (since Python is with Ken, and SQL is with Max).
+   - Therefore, Lea MUST use R.
+4. Complete mapping:
+   - Ken: Policy, Python
+   - Max: Operations, SQL
+   - Lea: Data, R
+5. Conclude:
+   - Lea uses R.
+
+Common Trap: Assuming Lea uses SQL.
+Exam Tip: Solve for the paired attribute ($\text{Policy} \leftrightarrow \text{Python}$) first via negative elimination, then assign the remaining tool.","Correct. Survives elimination because Ken takes Python and Max takes SQL, leaving R as the only tool for Lea.","Eliminated because Python is used by Ken (Policy).","Eliminated because SQL is used by Max (Operations).","Eliminated because the assignment is uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Four delegates (1, 2, 3, 4) wear badges of shapes {Circle, Square, Triangle, Hexagon}: (1) Delegate 2 wears Hexagon. (2) Delegate 1 does not wear Circle or Square. (3) Delegate 3 does not wear Square. Which badge shape does Delegate 4 wear?","Square","Triangle","Circle","Hexagon","A","Step-by-Step Solution:
+1. Lock fixed assignment:
+   - Delegate 2 = Hexagon.
+   - Open shapes for Delegates 1, 3, 4: {Circle, Square, Triangle}.
+2. Assign Delegate 1:
+   - Delegate 1 wears neither Circle nor Square.
+   - Therefore, Delegate 1 MUST wear the TRIANGLE badge.
+3. Assign Delegate 3:
+   - Remaining shapes for Delegates 3 and 4: {Circle, Square}.
+   - Delegate 3 does not wear Square.
+   - Therefore, Delegate 3 MUST wear the CIRCLE badge.
+4. Assign Delegate 4:
+   - The only remaining shape is SQUARE.
+   - Therefore, Delegate 4 MUST wear the Square badge.
+5. Conclude:
+   - Delegate 4 wears the Square badge.
+
+Common Trap: Forgetting to eliminate Triangle after assigning it to Delegate 1.
+Exam Tip: Cascade negative eliminations: Delegate 1 takes Triangle $\implies$ Delegate 3 takes Circle $\implies$ Delegate 4 takes Square.","Correct. Survives elimination because Delegate 1 takes Triangle and Delegate 3 takes Circle, leaving Square uniquely for Delegate 4.","Eliminated because Triangle is worn by Delegate 1.","Eliminated because Circle is worn by Delegate 3.","Eliminated because Hexagon is worn by Delegate 2.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"Five audit teams (T1, T2, T3, T4, T5) are assigned to five branches (A, B, C, D, E): (1) T2 audits Branch C. (2) T3 audits Branch D. (3) T1 cannot audit Branch A or Branch B. (4) T4 cannot audit Branch A. Which audit team audits Branch A?","T5","T1","T4","T2","A","Step-by-Step Solution:
+1. Identify teams already assigned to other branches:
+   - Team T2 audits Branch C.
+   - Team T3 audits Branch D.
+2. Identify remaining candidate teams for Branch A:
+   - Available teams: {T1, T4, T5}.
+3. Apply negative constraints for Branch A:
+   - By Rule 3: Team T1 CANNOT audit Branch A.
+   - By Rule 4: Team T4 CANNOT audit Branch A.
+4. Deduce Branch A assignment:
+   - Since T1, T2, T3, and T4 are all disqualified from Branch A, Team T5 MUST audit Branch A!
+5. Conclude:
+   - Team T5 audits Branch A.
+
+Common Trap: Trying to determine assignments for Branch B and E before solving Branch A.
+Exam Tip: Focus solely on the constraints relevant to the target entity (Branch A) to solve by direct elimination.","Correct. Survives elimination because T2 and T3 are committed elsewhere, and T1 and T4 are explicitly prohibited, forcing T5 to audit Branch A.","Eliminated because T1 cannot audit Branch A (Rule 3).","Eliminated because T4 cannot audit Branch A (Rule 4).","Eliminated because T2 audits Branch C (Rule 1).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"
+"In a 3-person committee (Noel, Oscar, Pam) with distinct professions (Doctor, Lawyer, Engineer) and distinct ages: (1) Pam is the youngest of the three. (2) Noel is older than the Engineer. (3) The Lawyer is younger than Oscar. What is Oscar's profession?","Engineer","Doctor","Lawyer","Cannot be determined","A","Step-by-Step Solution:
+1. Establish the relative age hierarchy:
+   - By Rule 1: Pam is the youngest (3rd place in age).
+   - Ages: 1st (Oldest), 2nd (Middle), 3rd (Youngest = Pam).
+   - Noel and Oscar occupy the 1st and 2nd positions.
+2. Determine the Lawyer's identity:
+   - By Rule 3: The Lawyer is younger than Oscar.
+   - Since Oscar is at most 2nd oldest, the Lawyer MUST be the 3rd person (Pam)!
+   - Therefore: Pam = Lawyer.
+3. Determine Noel and Oscar's professions:
+   - Professions remaining: Doctor and Engineer.
+   - By Rule 2: Noel is older than the Engineer $\implies$ Noel cannot be the Engineer.
+   - Therefore, Noel MUST be the Doctor, and Oscar MUST be the Engineer!
+4. Verify complete age-profession profile:
+   - 1st (Oldest): Noel (Doctor)
+   - 2nd (Middle): Oscar (Engineer)
+   - 3rd (Youngest): Pam (Lawyer)
+   - Noel (1st) > Engineer (Oscar, 2nd) $\implies$ satisfied!
+   - Lawyer (Pam, 3rd) < Oscar (2nd) $\implies$ satisfied!
+5. Conclude:
+   - Oscar is the Engineer.
+
+Common Trap: Assuming Oscar is the Doctor.
+Exam Tip: The relative age constraints combined with youngest placement fix Pam as Lawyer, which immediately resolves Noel as Doctor and Oscar as Engineer.","Correct. Survives elimination because Pam is the Lawyer (younger than Oscar), Noel is the Doctor (older than the Engineer), forcing Oscar to be the Engineer.","Eliminated because Noel is the Doctor.","Eliminated because Pam is the Lawyer.","Eliminated because Oscar's profession is uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Constraint satisfaction | Very Difficult | Batch 085"

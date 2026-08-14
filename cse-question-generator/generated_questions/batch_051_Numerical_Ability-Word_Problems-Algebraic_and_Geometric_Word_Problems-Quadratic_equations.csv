@@ -1,0 +1,199 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"The product of two consecutive positive even integers is exactly 288. What is the sum of these two integers?","34","36","32","38","A","Step-by-Step Solution:
+1. Define algebraic variables for consecutive positive even integers:
+   - Let the smaller even integer be $x$.
+   - The next consecutive even integer is $x + 2$.
+2. Formulate the quadratic product equation:
+   - $x(x + 2) = 288$.
+3. Expand and arrange in standard quadratic form ($ax^2 + bx + c = 0$):
+   - $x^2 + 2x - 288 = 0$.
+4. Factor the quadratic equation:
+   - Find two numbers that multiply to $-288$ and add to $+2$: $+18$ and $-16$.
+   - $(x + 18)(x - 16) = 0$.
+5. Solve for positive root:
+   - $x = 16$ (since $x > 0$, discard $x = -18$).
+6. Identify the two integers and compute their sum:
+   - Integers: $16$ and $18$.
+   - $\text{Sum} = 16 + 18 = 34$.
+7. Verify:
+   - $16 \times 18 = 288$ (Confirmed!).
+
+Common Trap: Finding the smaller integer 16 and adding 16 + 16 = 32 (Option C) or finding the product of consecutive odd integers.
+Exam Tip: Factor $x^2 + 2x - 288 = (x-16)(x+18) = 0 \implies \text{Sum} = 16 + 18 = 34$.","Correct. Survives elimination because the integers are 16 and 18 (16 * 18 = 288), whose sum is 34.","Eliminated because 36 is the sum of 17 and 19 (17 * 19 = 323 != 288).","Eliminated because 32 is 16 + 16.","Eliminated because 38 is the sum of 18 and 20 (18 * 20 = 360).","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"The length of a rectangular municipal park is 6.0 meters longer than twice its width ($L = 2W + 6.0$). If the total surface area of the park is 540.0 square meters, what is the perimeter of the park in meters?","102.0 meters","108.0 meters","96.0 meters","114.0 meters","A","Step-by-Step Solution:
+1. Define variables:
+   - Let width $= W$.
+   - Length $L = 2W + 6.0$.
+2. Formulate the area equation:
+   - $\text{Area} = W \cdot L = W(2W + 6.0) = 540.0$.
+3. Expand and arrange into standard quadratic form:
+   - $2W^2 + 6W - 540.0 = 0$.
+4. Divide the entire equation by 2:
+   - $W^2 + 3W - 270.0 = 0$.
+5. Factor the quadratic equation:
+   - Find factors of $-270$ that sum to $+3$: $+18$ and $-15$.
+   - $(W + 18)(W - 15) = 0$.
+6. Select the positive physical dimension:
+   - $W = 15.0\text{ meters}$.
+7. Compute length $L$:
+   - $L = 2(15.0) + 6.0 = 30.0 + 6.0 = 36.0\text{ meters}$.
+8. Calculate total perimeter:
+   - $\text{Perimeter} = 2(L + W) = 2(36.0 + 15.0) = 2(51.0) = 102.0\text{ meters}$.
+9. Verify:
+   - $\text{Area} = 36.0 \times 15.0 = 540.0\text{ m}^2$ (Confirmed!).
+
+Common Trap: Adding $L + W = 51.0$ without multiplying by 2 for perimeter.
+Exam Tip: $W^2 + 3W - 270 = (W-15)(W+18) = 0 \implies W = 15, L = 36 \implies P = 2(36 + 15) = 102.0\text{ m}$.","Correct. Survives elimination because W = 15 m and L = 36 m (Area = 540 m^2), giving perimeter 2(36 + 15) = 102.0 meters.","Eliminated because 108.0 meters assumes W = 16, L = 38.","Eliminated because 96.0 meters assumes W = 14, L = 34.","Eliminated because 114.0 meters is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"If the quadratic equation $3x^2 - kx + 12 = 0$ possesses two equal real roots (a single repeated root), what are the possible exact values of the constant $k$?","k = \pm 12","k = \pm 6","k = \pm 18","k = \pm 24","A","Step-by-Step Solution:
+1. Identify the discriminant condition for equal real roots in $ax^2 + bx + c = 0$:
+   - A quadratic equation has equal real roots if and only if its discriminant $D = b^2 - 4ac = 0$.
+2. Extract coefficients:
+   - $a = 3, \quad b = -k, \quad c = 12$.
+3. Substitute into the discriminant formula:
+   - $D = (-k)^2 - 4(3)(12) = 0$.
+4. Simplify the algebraic equation:
+   - $k^2 - 144 = 0$.
+5. Solve for $k$:
+   - $k^2 = 144 \implies k = \pm \sqrt{144} = \pm 12$.
+6. Verify:
+   - For $k = +12$: $3x^2 - 12x + 12 = 3(x - 2)^2 = 0 \implies x = 2$ (Repeated root!).
+   - For $k = -12$: $3x^2 + 12x + 12 = 3(x + 2)^2 = 0 \implies x = -2$ (Repeated root!).
+
+Common Trap: Omitting the negative root $k = -12$ or computing $4ac = 4(3)(12) = 144$ and taking square root without $\pm$.
+Exam Tip: Equal roots $\iff b^2 = 4ac \implies k^2 = 4(3)(12) = 144 \implies k = \pm 12$.","Correct. Survives elimination because D = k^2 - 4(3)(12) = k^2 - 144 = 0, giving k = \pm 12.","Eliminated because k = \pm 6 yields D = 36 - 144 = -108 < 0 (complex roots).","Eliminated because k = \pm 18 yields D = 324 - 144 = 180 > 0 (distinct roots).","Eliminated because k = \pm 24 yields distinct roots.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"If $\alpha$ and $\beta$ are the roots of the quadratic equation $2x^2 - 7x + 4 = 0$, what is the exact algebraic value of $\frac{1}{\alpha^2} + \frac{1}{\beta^2}$?","\frac{33}{16} \text{ (or } 2.0625\text{)}","\frac{49}{16}","\frac{17}{16}","\frac{33}{8}","A","Step-by-Step Solution:
+1. Apply Vieta's formulas for $2x^2 - 7x + 4 = 0$:
+   - Sum of roots: $\alpha + \beta = -\frac{b}{a} = -\frac{-7}{2} = \frac{7}{2}$.
+   - Product of roots: $\alpha \beta = \frac{c}{a} = \frac{4}{2} = 2$.
+2. Express $\frac{1}{\alpha^2} + \frac{1}{\beta^2}$ with a common denominator:
+   - $\frac{1}{\alpha^2} + \frac{1}{\beta^2} = \frac{\alpha^2 + \beta^2}{(\alpha \beta)^2}$.
+3. Express $\alpha^2 + \beta^2$ in terms of $(\alpha + \beta)$ and $\alpha \beta$:
+   - $\alpha^2 + \beta^2 = (\alpha + \beta)^2 - 2\alpha \beta$.
+   - $\alpha^2 + \beta^2 = \left(\frac{7}{2}\right)^2 - 2(2) = \frac{49}{4} - 4 = \frac{49 - 16}{4} = \frac{33}{4}$.
+4. Compute the denominator $(\alpha \beta)^2$:
+   - $(\alpha \beta)^2 = (2)^2 = 4$.
+5. Evaluate the full expression:
+   - $\frac{1}{\alpha^2} + \frac{1}{\beta^2} = \frac{33/4}{4} = \frac{33}{16} = 2.0625$.
+
+Common Trap: Computing $\frac{(\alpha + \beta)^2}{(\alpha \beta)^2} = \frac{49/4}{4} = \frac{49}{16}$ (Option B), forgetting to subtract $2\alpha\beta$.
+Exam Tip: $\alpha^2 + \beta^2 = \frac{49}{4} - 4 = \frac{33}{4} \implies \frac{\alpha^2 + \beta^2}{(\alpha\beta)^2} = \frac{33/4}{4} = \frac{33}{16}$.","Correct. Survives elimination because alpha + beta = 7/2 and alpha * beta = 2, yielding (alpha^2 + beta^2)/(alpha*beta)^2 = (33/4) / 4 = 33/16 (2.0625).","Eliminated because 49/16 omits the -2(alpha*beta) term in the numerator.","Eliminated because 17/16 subtracts 4(alpha*beta).","Eliminated because 33/8 divides by 2 instead of 4.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"An emergency supply drone ascends vertically such that its altitude $h(t)$ in meters after $t$ seconds is modeled by the kinematic equation $h(t) = 40t - 5t^2$. After how many seconds will the drone FIRST reach an altitude of 60.0 meters above the launch pad?","2.0 seconds","6.0 seconds","4.0 seconds","3.0 seconds","A","Step-by-Step Solution:
+1. Set the kinematic height function equal to the target altitude ($h = 60.0\text{ m}$):
+   - $40t - 5t^2 = 60.0$.
+2. Rearrange into standard quadratic form:
+   - $5t^2 - 40t + 60.0 = 0$.
+3. Divide the entire equation by 5:
+   - $t^2 - 8t + 12 = 0$.
+4. Factor the quadratic:
+   - $(t - 2)(t - 6) = 0$.
+5. Solve for roots:
+   - $t = 2.0\text{ seconds}$ and $t = 6.0\text{ seconds}$.
+6. Interpret the physical meaning of the roots:
+   - The drone reaches 60.0 meters at $t = 2.0\text{ s}$ while ascending.
+   - The drone reaches its peak at $t = 4.0\text{ s}$ ($h = 80\text{ m}$).
+   - The drone returns to 60.0 meters at $t = 6.0\text{ s}$ while descending.
+   - The drone FIRST reaches 60.0 meters at $t = 2.0\text{ seconds}$.
+
+Common Trap: Selecting $t = 6.0\text{ seconds}$ (Option B), which is the second time the drone passes 60 m on its descent.
+Exam Tip: \"First reach\" means the smaller positive root: $t = 2.0\text{ seconds}$.","Correct. Survives elimination because t^2 - 8t + 12 = 0 factors to (t - 2)(t - 6) = 0, with the drone first reaching 60 m at t = 2.0 seconds.","Eliminated because 6.0 seconds is the time on the downward trajectory.","Eliminated because 4.0 seconds is the time of maximum altitude (80 m).","Eliminated because 3.0 seconds yields h = 75 m != 60 m.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"A department division planned a team training activity with a total fixed venue cost of ₱18,000.00 shared equally among all 30 enrolled participants. On the event date, several participants were unable to attend, causing the cost per remaining attendee to increase by exactly ₱150.00. How many participants actually attended the training activity?","24 participants","20 participants","25 participants","22 participants","A","Step-by-Step Solution:
+1. Calculate the original planned contribution per person:
+   - $\text{Original Share} = \frac{₱18,000.00}{30} = ₱600.00\text{/person}$.
+2. Calculate the actual contribution paid per attendee after the ₱150.00 increase:
+   - $\text{Actual Share} = ₱600.00 + ₱150.00 = ₱750.00\text{/person}$.
+3. Determine the number of participants $N$ who actually attended:
+   - $N = \frac{\text{Total Cost}}{\text{Actual Share}} = \frac{₱18,000.00}{₱750.00} = 24\text{ participants}$.
+4. (Verification of quadratic modeling: Let $x$ be absentees. $\frac{18,000}{30 - x} - \frac{18,000}{30} = 150 \implies \frac{18,000}{30 - x} = 750 \implies 30 - x = 24 \implies x = 6\text{ absentees}$).
+
+Common Trap: Answering the number of absent members ($6$) or calculating $\frac{18,000}{600 + 150} = 24$.
+Exam Tip: $\text{Actual Attendees} = \frac{18,000}{600 + 150} = \frac{18,000}{750} = 24\text{ participants}$.","Correct. Survives elimination because 24 attendees paying ₱750 each covers the ₱18,000 cost, representing a ₱150 increase over the original ₱600 share.","Eliminated because 20 attendees yields share ₱900 (+₱300 increase).","Eliminated because 25 attendees yields share ₱720 (+₱120 increase).","Eliminated because 22 attendees yields non-integer share.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"The hypotenuse of a right-angled triangle is exactly 25.0 cm. If one of the perpendicular legs is 5.0 cm longer than the other leg, what are the exact lengths of the two legs?","15.0 cm and 20.0 cm","12.0 cm and 17.0 cm","14.0 cm and 19.0 cm","16.0 cm and 21.0 cm","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let the shorter leg be $x$.
+   - The longer leg is $x + 5.0$.
+2. Apply the Pythagorean theorem:
+   - $x^2 + (x + 5.0)^2 = (25.0)^2$.
+3. Expand and simplify:
+   - $x^2 + x^2 + 10x + 25.0 = 625.0$.
+   - $2x^2 + 10x - 600.0 = 0$.
+4. Divide the equation by 2:
+   - $x^2 + 5x - 300.0 = 0$.
+5. Factor the quadratic:
+   - Find two numbers multiplying to $-300$ and adding to $+5$: $+20$ and $-15$.
+   - $(x + 20)(x - 15) = 0$.
+6. Select the positive physical length:
+   - $x = 15.0\text{ cm}$.
+7. Compute the longer leg:
+   - $\text{Longer Leg} = 15.0 + 5.0 = 20.0\text{ cm}$.
+8. Verify:
+   - $(15.0)^2 + (20.0)^2 = 225.0 + 400.0 = 625.0 = (25.0)^2$ (Confirmed!).
+
+Common Trap: Guessing $12\text{ cm}$ and $17\text{ cm}$ ($(12)^2 + (17)^2 = 144 + 289 = 433 \neq 625$).
+Exam Tip: Pythagorean triple $3-4-5$ scaled by 5: $15 - 20 - 25$. Leg difference is $20 - 15 = 5.0\text{ cm}$.","Correct. Survives elimination because 15^2 + 20^2 = 225 + 400 = 625 = 25^2, and 20 cm is exactly 5 cm longer than 15 cm.","Eliminated because 12^2 + 17^2 = 433 != 625.","Eliminated because 14^2 + 19^2 = 557 != 625.","Eliminated because 16^2 + 21^2 = 697 != 625.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"Find the positive value of $x$ (where $x > 1.0$) that satisfies the reciprocal quadratic equation: $x + \frac{1}{x} = \frac{29}{10}$.","\frac{5}{2} \text{ (or } 2.5\text{)}","\frac{7}{2}","\frac{9}{4}","\frac{8}{3}","A","Step-by-Step Solution:
+1. Multiply the entire equation by $10x$ to clear all denominators:
+   - $10x \left(x + \frac{1}{x}\right) = 10x \left(\frac{29}{10}\right)$.
+2. Expand and simplify:
+   - $10x^2 + 10 = 29x$.
+3. Arrange into standard quadratic form:
+   - $10x^2 - 29x + 10 = 0$.
+4. Factor the quadratic:
+   - Product $= 10 \times 10 = 100$; Sum $= -29$.
+   - Factors: $-25$ and $-4$.
+   - $10x^2 - 25x - 4x + 10 = 0$.
+   - $5x(2x - 5) - 2(2x - 5) = 0$.
+   - $(2x - 5)(5x - 2) = 0$.
+5. Solve for roots:
+   - $x_1 = \frac{5}{2} = 2.5$
+   - $x_2 = \frac{2}{5} = 0.4$.
+6. Apply the constraint $x > 1.0$:
+   - $x = \frac{5}{2} = 2.5$.
+7. Verify:
+   - $\frac{5}{2} + \frac{2}{5} = \frac{25 + 4}{10} = \frac{29}{10}$ (Confirmed!).
+
+Common Trap: Selecting the reciprocal root $0.4$ without checking the condition $x > 1.0$.
+Exam Tip: $10x^2 - 29x + 10 = (2x - 5)(5x - 2) = 0 \implies x = \frac{5}{2} = 2.5$.","Correct. Survives elimination because x = 5/2 = 2.5 gives 5/2 + 2/5 = 29/10, and satisfies x > 1.","Eliminated because 7/2 yields 7/2 + 2/7 = 53/14 != 29/10.","Eliminated because 9/4 yields 9/4 + 4/9 = 97/36.","Eliminated because 8/3 yields 8/3 + 3/8 = 73/24.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"An express rail train completes a 600.0 km route in 2.0 hours less time than a slower freight train. If the speed of the express train is 10.0 km/h faster than that of the freight train, what is the speed of the freight train?","50.0 km/h","40.0 km/h","55.0 km/h","45.0 km/h","A","Step-by-Step Solution:
+1. Define variables:
+   - Let freight train speed $= v$ (in km/h).
+   - Express train speed $= v + 10.0$ (in km/h).
+2. Formulate time equation ($\text{Time} = \frac{\text{Distance}}{\text{Speed}}$):
+   - $\text{Time}_{\text{freight}} - \text{Time}_{\text{express}} = 2.0\text{ hours}$.
+   - $\frac{600.0}{v} - \frac{600.0}{v + 10.0} = 2.0$.
+3. Factor out 600.0 and combine fractions:
+   - $600.0 \left(\frac{(v + 10.0) - v}{v(v + 10.0)}\right) = 2.0$.
+   - $\frac{6,000.0}{v^2 + 10v} = 2.0$.
+4. Cross-multiply and rearrange into quadratic form:
+   - $2(v^2 + 10v) = 6,000.0 \implies v^2 + 10v = 3,000.0$.
+   - $v^2 + 10v - 3,000.0 = 0$.
+5. Factor the quadratic:
+   - $(v + 60.0)(v - 50.0) = 0$.
+6. Select the positive speed:
+   - $v = 50.0\text{ km/h}$.
+7. Verify:
+   - Freight time: $\frac{600}{50} = 12.0\text{ hours}$.
+   - Express time: $\frac{600}{60} = 10.0\text{ hours}$.
+   - Time difference: $12.0 - 10.0 = 2.0\text{ hours}$ (Confirmed!).
+
+Common Trap: Answering the speed of the express train ($60.0\text{ km/h}$) instead of the freight train ($50.0\text{ km/h}$).
+Exam Tip: $v^2 + 10v - 3,000 = (v-50)(v+60) = 0 \implies v = 50.0\text{ km/h}$.","Correct. Survives elimination because freight speed of 50 km/h (12 hrs) and express speed of 60 km/h (10 hrs) gives exactly a 2.0 hour time difference over 600 km.","Eliminated because 40.0 km/h yields freight time 15 hrs and express time 12 hrs (diff 3 hrs != 2 hrs).","Eliminated because 55.0 km/h yields non-integer hours.","Eliminated because 45.0 km/h yields non-integer hours.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"
+"For what range of real values of $m$ does the quadratic equation $(m - 1)x^2 + 2(m - 1)x + 1 = 0$ possess NO real roots (strictly complex conjugate roots with discriminant $D < 0$)?","1 < m < 2","m < 1 \text{ or } m > 2","m > 2","-2 < m < -1","A","Step-by-Step Solution:
+1. Extract coefficients for $ax^2 + bx + c = 0$:
+   - $a = m - 1$ (with $m \neq 1$ for a valid quadratic equation).
+   - $b = 2(m - 1)$.
+   - $c = 1$.
+2. Formulate the discriminant $D = b^2 - 4ac$:
+   - $D = [2(m - 1)]^2 - 4(m - 1)(1)$.
+   - $D = 4(m - 1)^2 - 4(m - 1)$.
+3. Factor the discriminant expression:
+   - $D = 4(m - 1)[(m - 1) - 1] = 4(m - 1)(m - 2)$.
+4. Set condition for NO real roots ($D < 0$):
+   - $4(m - 1)(m - 2) < 0$.
+5. Determine sign intervals:
+   - The roots of $D = 0$ are $m = 1$ and $m = 2$.
+   - The parabola opens upward ($+4m^2$).
+   - Therefore, $D < 0$ strictly between the roots: $1 < m < 2$.
+6. (Check: For $m = 1.5$: $(0.5)x^2 + x + 1 = 0 \implies D = 1^2 - 4(0.5)(1) = 1 - 2 = -1 < 0$).
+
+Common Trap: Inverting the inequality to $m < 1 \text{ or } m > 2$ (Option B), which corresponds to $D > 0$ (two distinct real roots).
+Exam Tip: For $D = 4(m-1)(m-2) < 0$, the solution is the bounded interior interval $1 < m < 2$.","Correct. Survives elimination because the discriminant D = 4(m - 1)(m - 2) is strictly negative when 1 < m < 2.","Eliminated because m < 1 or m > 2 yields D > 0 (two distinct real roots).","Eliminated because m > 2 is only half of the positive discriminant region.","Eliminated because -2 < m < -1 yields D > 0.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Quadratic equations | Very Difficult | Batch 051"

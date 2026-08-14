@@ -1,0 +1,207 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Six officials (A, B, C, D, E, F) sit around a circular conference table facing the center: (1) A sits directly opposite D. (2) B sits immediately to the right of A. (3) C is not adjacent to A or B. (4) E sits immediately to the left of D. Who sits directly opposite B?","C","E","F","D","A","Step-by-Step Solution:
+1. Set up a 6-seat circular reference framework (numbered 1 to 6 clockwise):
+   - Opposite pairs in a 6-seat circle are: $(1, 4), (2, 5), (3, 6)$.
+2. Place initial fixed points:
+   - Place official A at Seat 1.
+   - By Rule 1, D sits directly opposite A $\implies$ D is at Seat 4.
+3. Position B and E using directional orientation (facing center):
+   - From Seat 1 facing inward, \"right\" is counter-clockwise (Seat 6).
+   - By Rule 2, B sits immediately to the right of A $\implies$ B is at Seat 6.
+   - From Seat 4 facing inward, \"left\" is clockwise (Seat 5).
+   - By Rule 4, E sits immediately to the left of D $\implies$ E is at Seat 5.
+4. Place C and F in remaining seats (Seats 2 and 3):
+   - By Rule 3, C cannot sit adjacent to A (Seat 1) or B (Seat 6).
+   - Therefore, C cannot be at Seat 2 (adjacent to Seat 1).
+   - C must be at Seat 3, leaving F at Seat 2.
+5. Identify the official opposite B (Seat 6):
+   - The seat directly opposite Seat 6 is Seat 3.
+   - Official C occupies Seat 3.
+6. Conclude:
+   - Official C sits directly opposite official B.
+
+Common Trap: Mixing up clockwise vs counter-clockwise orientation when facing the center of a circular table.
+Exam Tip: In a 6-seat circle, Seat $k$ is opposite Seat $(k+3) \pmod 6$. Seat 6 is directly opposite Seat 3.","Correct. Survives elimination because assigning positions yields A at 1, F at 2, C at 3, D at 4, E at 5, B at 6, placing C directly opposite B.","Eliminated because E is at Seat 5, opposite F.","Eliminated because F is at Seat 2, opposite E.","Eliminated because D is at Seat 4, opposite A.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Five bureau directors (P, Q, R, S, T) sit in a row of five adjacent seats facing North: (1) R sits in the exact middle seat. (2) P sits immediately to the left of R. (3) Q sits at one of the extreme ends. (4) T is not adjacent to P. (5) Q does not sit adjacent to P. Who sits at the extreme right end of the row (Seat 5)?","Q","S","T","P","A","Step-by-Step Solution:
+1. Number the 5 seats from left to right: [Seat 1, Seat 2, Seat 3, Seat 4, Seat 5].
+2. Place directors based on definitive positional rules:
+   - By Rule 1: R is in the middle $\implies$ Seat 3 = R.
+   - By Rule 2: P is immediately to the left of R $\implies$ Seat 2 = P.
+3. Determine Q's position:
+   - By Rule 3, Q is at an extreme end (Seat 1 or Seat 5).
+   - By Rule 5, Q cannot sit adjacent to P (Seat 2).
+   - Therefore, Q cannot occupy Seat 1.
+   - Q MUST occupy Seat 5.
+4. Place remaining directors (S and T):
+   - Available seats: Seat 1 and Seat 4.
+   - By Rule 4, T cannot sit adjacent to P (Seat 2), so T cannot be in Seat 1.
+   - Therefore, T must occupy Seat 4, leaving S at Seat 1.
+5. Verify complete row arrangement:
+   - [Seat 1: S, Seat 2: P, Seat 3: R, Seat 4: T, Seat 5: Q].
+6. Conclude:
+   - Director Q sits at the extreme right end (Seat 5).
+
+Common Trap: Placing Q at Seat 1 without checking the non-adjacency constraint with P.
+Exam Tip: Fill in definite anchors (middle and adjacent) first, then apply negative elimination constraints.","Correct. Survives elimination because Q must be at an extreme end and cannot be adjacent to P at Seat 2, forcing Q into Seat 5.","Eliminated because S sits at Seat 1.","Eliminated because T sits at Seat 4.","Eliminated because P sits at Seat 2.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Six civil servants (U, V, W, X, Y, Z) sit in a single row of six seats facing North: (1) U sits at the extreme left end (Seat 1). (2) Z sits at the extreme right end (Seat 6). (3) V sits immediately to the left of W. (4) X sits between W and Y. (5) Y is adjacent to Z. Who sits in Seat 3?","W","V","X","Y","A","Step-by-Step Solution:
+1. Number the seats 1 to 6 from left to right: [1, 2, 3, 4, 5, 6].
+2. Place outer anchors:
+   - By Rule 1: Seat 1 = U.
+   - By Rule 2: Seat 6 = Z.
+3. Place adjacent neighbor to Z:
+   - By Rule 5: Y is adjacent to Z(6) $\implies$ Seat 5 = Y.
+4. Arrange intermediate block (V, W, X) across Seats 2, 3, 4:
+   - By Rule 3: V sits immediately left of W $\implies$ (V, W) are consecutive.
+   - By Rule 4: X sits between W and Y(5) $\implies$ W, X, Y must be in sequence.
+   - Combining these forces: Seat 2 = V, Seat 3 = W, Seat 4 = X.
+5. Verify complete arrangement:
+   - [Seat 1: U, Seat 2: V, Seat 3: W, Seat 4: X, Seat 5: Y, Seat 6: Z].
+6. Conclude:
+   - Officer W sits in Seat 3.
+
+Common Trap: Swapping V and W or placing X in Seat 3.
+Exam Tip: Treat contiguous blocks (like V-W-X-Y) as a rigid unit between the fixed endpoints.","Correct. Survives elimination because placing U at 1, Z at 6, and Y at 5 forces the consecutive sequence V(2), W(3), X(4), placing W in Seat 3.","Eliminated because V sits in Seat 2.","Eliminated because X sits in Seat 4.","Eliminated because Y sits in Seat 5.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Four executives (M, N, O, P) sit around a square table, one on each side, all facing inward toward the center: (1) M sits opposite O. (2) N sits to the right of M. Who sits immediately to the right of N?","O","M","P","Cannot be determined","A","Step-by-Step Solution:
+1. Define the 4 cardinal sides of the square table facing inward:
+   - South side (facing North), North side (facing South), East side (facing West), West side (facing East).
+2. Fix M's position:
+   - Place M at the South side facing North.
+3. Apply Rule 1 (M opposite O):
+   - O sits at the North side facing South.
+4. Apply Rule 2 (N to the right of M):
+   - M is at South facing North. To M's right is the East side.
+   - Therefore, N sits at the East side facing West.
+   - Executive P takes the remaining West side facing East.
+5. Determine who sits to the right of N:
+   - Executive N is at the East side facing West (inward).
+   - Facing West, N's right hand points toward the North side.
+   - Executive O sits at the North side.
+6. Conclude:
+   - Executive O sits immediately to the right of N.
+
+Common Trap: Determining right/left from the reader's perspective rather than the inward-facing person's perspective.
+Exam Tip: When facing West, \"Right\" is North; when facing North, \"Right\" is East.","Correct. Survives elimination because N sits on the East side facing West, making the North side (occupied by O) immediately to N's right.","Eliminated because M sits to the left of N.","Eliminated because P sits directly opposite N.","Eliminated because the seating positions are uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Eight regional directors (A, B, C, D, E, F, G, H) sit around a circular table facing the center: (1) A sits directly opposite E. (2) C sits immediately to the right of A. (3) G sits directly opposite C. (4) B sits adjacent to neither A nor C. (5) D sits immediately to the left of E. (6) F sits immediately to the left of A. Who sits directly opposite D?","F","B","H","G","A","Step-by-Step Solution:
+1. Set up an 8-seat circular table (Seats 1 to 8 clockwise):
+   - Opposite pairs: $(1, 5), (2, 6), (3, 7), (4, 8)$.
+2. Position A and E:
+   - Place A at Seat 1 $\implies$ E is at Seat 5 (opposite A).
+3. Position C and G:
+   - Facing center from Seat 1, \"right\" is Seat 8 (counter-clockwise).
+   - C is at Seat 8.
+   - G is opposite C (Seat 8) $\implies$ G is at Seat 4.
+4. Position D and F:
+   - Facing center from Seat 5, \"left\" is Seat 6 (clockwise) $\implies$ D is at Seat 6.
+   - Facing center from Seat 1, \"left\" is Seat 2 (clockwise) $\implies$ F is at Seat 2.
+5. Position B and H in remaining seats (Seats 3 and 7):
+   - By Rule 4, B cannot sit adjacent to A (Seat 1) or C (Seat 8).
+   - Therefore, B cannot be at Seat 7 (adjacent to Seat 8).
+   - B must be at Seat 3, leaving H at Seat 7.
+6. Complete seating chart:
+   - [1: A, 2: F, 3: B, 4: G, 5: E, 6: D, 7: H, 8: C].
+7. Identify director opposite D (Seat 6):
+   - Seat opposite 6 is Seat 2, which is occupied by F.
+8. Conclude:
+   - Director F sits directly opposite director D.
+
+Common Trap: Confusing seat opposites on an 8-seat circle (opposite of 6 is $6 - 4 = 2$).
+Exam Tip: In an 8-seat circle, Seat $k$ is directly opposite Seat $(k+4) \pmod 8$. Opposite of Seat 6 is Seat 2 (F).","Correct. Survives elimination because D occupies Seat 6 and F occupies Seat 2, making them exact direct opposites across the 8-seat table.","Eliminated because B occupies Seat 3 (opposite H at 7).","Eliminated because H occupies Seat 7 (opposite B at 3).","Eliminated because G occupies Seat 4 (opposite C at 8).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Five candidates (J, K, L, M, N) are lined up in a single-file interview queue: (1) M is ahead of J, and L is immediately between M and J. (2) J is ahead of K. (3) N is immediately behind K. Who is at the very front (1st position) of the queue?","M","J","L","N","A","Step-by-Step Solution:
+1. Parse the contiguous sequential blocks:
+   - Rule 1: \"L is immediately between M and J, with M ahead of J\" $\implies$ Sequence: [M, L, J].
+2. Add candidate K:
+   - Rule 2: \"J is ahead of K\" $\implies$ Sequence: [M, L, J, K].
+3. Add candidate N:
+   - Rule 3: \"N is immediately behind K\" $\implies$ Sequence: [M, L, J, K, N].
+4. Verify total queue positions:
+   - 1st Position (Front): M
+   - 2nd Position: L
+   - 3rd Position: J
+   - 4th Position: K
+   - 5th Position (Back): N
+5. Conclude:
+   - Candidate M is at the very front (1st position) of the queue.
+
+Common Trap: Placing L ahead of M instead of between M and J.
+Exam Tip: Link the linear inequality relations into a single chain: $M > L > J > K > N$.","Correct. Survives elimination because chaining the queue constraints establishes the complete order M -> L -> J -> K -> N, placing M in the 1st position.","Eliminated because J is in the 3rd position.","Eliminated because L is in the 2nd position.","Eliminated because N is in the 5th (last) position.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Six delegates (P, Q, R, S, T, U) are seated in two parallel rows of three chairs each facing each other: Row 1 (Chairs 1, 2, 3 facing South) and Row 2 (Chairs 4, 5, 6 facing North), where Chair 1 faces 4, Chair 2 faces 5, and Chair 3 faces 6: (1) P sits in Chair 1. (2) T sits in Chair 4 directly opposite P. (3) R sits in the middle of Row 1 (Chair 2). (4) S sits directly opposite Q. (5) U sits in Row 2. Who sits in Chair 6?","S","Q","U","R","A","Step-by-Step Solution:
+1. Map out the two facing rows of chairs:
+   - Row 1: [Chair 1, Chair 2, Chair 3]
+   - Row 2: [Chair 4, Chair 5, Chair 6]
+   - Opposing facing pairs: $(1 \leftrightarrow 4), (2 \leftrightarrow 5), (3 \leftrightarrow 6)$.
+2. Fill known seat assignments:
+   - By Rule 1: Chair 1 = P.
+   - By Rule 2: Chair 4 = T.
+   - By Rule 3: Chair 2 = R.
+3. Determine assignments for Row 1:
+   - Row 1 has Chair 3 open.
+   - By Rule 5, U sits in Row 2, so U cannot be in Chair 3.
+   - Therefore, either Q or S must be in Chair 3.
+4. Apply Rule 4 (S directly opposite Q):
+   - Since Q and S face each other, one must be in Chair 3 and the other in Chair 6.
+   - Since U is in Row 2, U must take the remaining middle seat in Row 2: Chair 5 = U.
+   - If Q is in Chair 3, S is in Chair 6.
+5. Verify complete seating configuration:
+   - Row 1: [1: P, 2: R, 3: Q]
+   - Row 2: [4: T, 5: U, 6: S]
+6. Conclude:
+   - Delegate S sits in Chair 6.
+
+Common Trap: Placing U in Chair 6 instead of the middle Chair 5.
+Exam Tip: Identify the dedicated opposing pair $(Q \leftrightarrow S)$ to immediately lock in the remaining outer column.","Correct. Survives elimination because Row 1 contains P(1), R(2), Q(3) and Row 2 contains T(4), U(5), S(6), placing S in Chair 6.","Eliminated because Q sits in Chair 3.","Eliminated because U sits in Chair 5.","Eliminated because R sits in Chair 2.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Five vehicles (Green, Red, Yellow, White, Blue) are parked in a row of five parking bays numbered 1 to 5 from left to right: (1) Green is in Bay 1. (2) Yellow is in Bay 3. (3) Red is parked between Green and Yellow. (4) White is not in Bay 5. In which parking bay is the Blue vehicle parked?","Bay 5","Bay 4","Bay 2","Bay 1","A","Step-by-Step Solution:
+1. Represent the 5 parking bays: [Bay 1, Bay 2, Bay 3, Bay 4, Bay 5].
+2. Place vehicles with direct assignments:
+   - By Rule 1: Bay 1 = Green.
+   - By Rule 2: Bay 3 = Yellow.
+3. Place Red vehicle:
+   - By Rule 3: Red is between Green (Bay 1) and Yellow (Bay 3) $\implies$ Bay 2 = Red.
+4. Place White and Blue in remaining bays (Bay 4 and Bay 5):
+   - By Rule 4: White cannot be in Bay 5 $\implies$ Bay 4 = White.
+   - Therefore, Blue must occupy the remaining bay: Bay 5 = Blue.
+5. Verify complete parking arrangement:
+   - [Bay 1: Green, Bay 2: Red, Bay 3: Yellow, Bay 4: White, Bay 5: Blue].
+6. Conclude:
+   - The Blue vehicle is parked in Bay 5.
+
+Common Trap: Misplacing White in Bay 5 and Blue in Bay 4.
+Exam Tip: When only two slots remain, a negative restriction on one vehicle immediately resolves both slots.","Correct. Survives elimination because placing Green at 1, Red at 2, Yellow at 3, and White at 4 forces Blue into Bay 5.","Eliminated because Bay 4 is occupied by White.","Eliminated because Bay 2 is occupied by Red.","Eliminated because Bay 1 is occupied by Green.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Six students (A, B, C, D, E, F) sit in a circle facing inward: (1) A sits between B and C. (2) D sits directly opposite A. (3) E sits between D and B. Who sits between D and C?","F","E","B","A","A","Step-by-Step Solution:
+1. Number 6 circular positions clockwise: [1, 2, 3, 4, 5, 6].
+2. Fix A and D:
+   - Place A at Seat 1.
+   - By Rule 2, D is directly opposite A $\implies$ D is at Seat 4.
+3. Place B and C around A:
+   - By Rule 1, A (Seat 1) is between B and C $\implies$ B and C occupy Seats 2 and 6.
+4. Position E:
+   - By Rule 3, E sits between D (Seat 4) and B.
+   - For E to sit between Seat 4 and B, B MUST be at Seat 2, and E must be at Seat 3!
+   - Consequently, C must occupy Seat 6.
+5. Determine the student between D (Seat 4) and C (Seat 6):
+   - Seat 5 lies between Seat 4 (D) and Seat 6 (C).
+   - Student F is the only remaining student, so F occupies Seat 5.
+6. Conclude:
+   - Student F sits between D and C.
+
+Common Trap: Swapping B and C, which would place E on the wrong side of the circle.
+Exam Tip: Use the constraint that E must sit between D and B to determine which side of A is occupied by B.","Correct. Survives elimination because positioning B at 2 and E at 3 leaves Seat 5 (between D at 4 and C at 6) uniquely occupied by F.","Eliminated because E sits between D and B (Seat 3).","Eliminated because B sits between A and E (Seat 2).","Eliminated because A sits opposite D (Seat 1).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"
+"Seven committee members (1, 2, 3, 4, 5, 6, 7) sit in a straight row of seven chairs facing North: (1) Member 4 is in the center seat (Seat 4). (2) Member 1 is at the extreme left (Seat 1). (3) Member 7 is at the extreme right (Seat 7). (4) Member 2 is immediately to the right of Member 1. (5) Member 6 is immediately to the left of Member 7. (6) Member 3 is between Member 2 and Member 4. Who sits in Seat 5?","Member 5","Member 3","Member 6","Member 2","A","Step-by-Step Solution:
+1. Set up the 7-seat array: [Seat 1, Seat 2, Seat 3, Seat 4, Seat 5, Seat 6, Seat 7].
+2. Place anchors:
+   - By Rule 1: Seat 4 = Member 4.
+   - By Rule 2: Seat 1 = Member 1.
+   - By Rule 3: Seat 7 = Member 7.
+3. Fill adjacent positions from left and right:
+   - By Rule 4: Member 2 is immediately right of Member 1 $\implies$ Seat 2 = Member 2.
+   - By Rule 5: Member 6 is immediately left of Member 7 $\implies$ Seat 6 = Member 6.
+4. Place Member 3:
+   - By Rule 6: Member 3 is between Member 2 (Seat 2) and Member 4 (Seat 4) $\implies$ Seat 3 = Member 3.
+5. Identify the occupant of Seat 5:
+   - The only remaining unoccupied chair is Seat 5.
+   - The only remaining committee member is Member 5.
+   - Therefore, Member 5 sits in Seat 5.
+6. Verify full row order:
+   - [1, 2, 3, 4, 5, 6, 7].
+
+Common Trap: Confusing Seat 5 with Seat 3 or Seat 6.
+Exam Tip: Placing all constrained members systematically leaves the unmentioned member in the remaining slot.","Correct. Survives elimination because systematically filling Seats 1, 2, 3, 4, 6, 7 leaves Seat 5 uniquely occupied by Member 5.","Eliminated because Member 3 sits in Seat 3.","Eliminated because Member 6 sits in Seat 6.","Eliminated because Member 2 sits in Seat 2.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Arrangement logic | Very Difficult | Batch 080"

@@ -1,0 +1,30 @@
+{
+  "scope_key": "Analytical_Ability-Symbolic_Logic_Abstract_Reasoning-Logic_Reasoning_Types-Conditional_statements",
+  "created_at": "2026-08-14T15:27:06.000Z",
+  "updated_at": "2026-08-14T15:27:06.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+    "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c",
+    "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d",
+    "4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e",
+    "5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f",
+    "6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a",
+    "7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b",
+    "8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c",
+    "9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d",
+    "0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e"
+  ],
+  "records": [
+    { "id": "q_071_1", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_2", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_3", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_4", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_5", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_6", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_7", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_8", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_9", "added_at": "2026-08-14T15:27:06.000Z" },
+    { "id": "q_071_10", "added_at": "2026-08-14T15:27:06.000Z" }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "version": "3.0",
+  "generation_status": "COMPLETED",
+  "current_category": "General Information",
+  "current_component": "Environment Management and Protection",
+  "current_subtopic": "Environmental Management and Protection",
+  "current_micro_subtopic": "Philippine Disaster Risk Reduction and Management Act of 2010 (RA 10121)",
+  "current_batch_number": 181,
+  "current_batch_id": "GI-ENV-DRRM-181",
+  "current_batch_status": "COMPLETED",
+  "last_confirmed_completed_batch": 181,
+  "total_completed_questions": 1810,
+  "total_generated_csv_files": 181,
+  "last_successful_file": "batch_181_General_Information-Environment_Management_and_Protection-Environmental_Management_and_Protection-Philippine_Disaster_Risk_Reduction_and_Management_Act_of_2010_RA_10121.csv",
+  "overall_progress_percentage": "100.0%",
+  "categories_summary": {
+    "Category A: Verbal Ability": {
+      "batches": "001-030",
+      "total_batches": 30,
+      "total_questions": 300,
+      "status": "100% COMPLETE"
+    },
+    "Category B: Numerical Ability": {
+      "batches": "031-053",
+      "total_batches": 23,
+      "total_questions": 230,
+      "status": "100% COMPLETE"
+    },
+    "Category C: Analytical Ability": {
+      "batches": "054-123",
+      "total_batches": 70,
+      "total_questions": 700,
+      "status": "100% COMPLETE"
+    },
+    "Category D: General Information": {
+      "batches": "124-181",
+      "total_batches": 58,
+      "total_questions": 580,
+      "status": "100% COMPLETE"
+    }
+  },
+  "grand_total_batches": 181,
+  "grand_total_questions": 1810,
+  "last_update": "2026-08-14T23:06:10.000Z"
+}

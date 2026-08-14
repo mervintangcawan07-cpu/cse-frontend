@@ -1,0 +1,22 @@
+{
+  "version": "3.0",
+  "generation_status": "PAUSED",
+  "current_category": "SYNTHETIC_VERBAL",
+  "current_component": "SYNTHETIC_READING",
+  "current_subtopic": "SYNTHETIC_CAUSE",
+  "current_micro_subtopic": "SYNTHETIC_EFFECT",
+  "current_batch_number": null,
+  "current_batch_id": "TEST-BATCH-999",
+  "current_batch_status": "MODEL_LIMIT",
+  "last_confirmed_completed_batch": null,
+  "completed_batches": [],
+  "completed_micro_subtopics": [],
+  "total_completed_questions": 0,
+  "total_generated_csv_files": 0,
+  "current_model": "Gemini 3.6 Flash",
+  "available_models": [],
+  "exhausted_models": [],
+  "last_successful_file": "batch_999_SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.csv",
+  "last_error": "Generation paused: Synthetic quota limit reached",
+  "last_update": "2026-08-14T14:41:27.705Z"
+}

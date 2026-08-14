@@ -1,0 +1,160 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Find the 10th term of the Lucas sequence where $L_1 = 2$ and $L_2 = 1$, following the additive rule $L_n = L_{n-1} + L_{n-2}$:
+
+$$2, \quad 1, \quad 3, \quad 4, \quad 7, \quad 11, \quad 18, \quad 29, \quad 47, \quad \textbf{?}$$","76","74","80","71","A","Step-by-Step Solution:
+1. Trace the Lucas additive progression step-by-step:
+   - $L_1 = 2$
+   - $L_2 = 1$
+   - $L_3 = 2 + 1 = 3$
+   - $L_4 = 1 + 3 = 4$
+   - $L_5 = 3 + 4 = 7$
+   - $L_6 = 4 + 7 = 11$
+   - $L_7 = 7 + 11 = 18$
+   - $L_8 = 11 + 18 = 29$
+   - $L_9 = 18 + 29 = 47$.
+2. Compute the 10th term ($L_{10}$):
+   - $L_{10} = L_8 + L_9 = 29 + 47 = 76$.
+
+Common Trap: Adding $18 + 47 = 65$ or arithmetic error in addition ($29 + 47 = 74$, Option B).
+Exam Tip: The Lucas sequence is closely related to Fibonacci numbers ($L_n = F_{n-1} + F_{n+1}$). For $n = 10$, $F_9 + F_{11} = 34 + 89 \implies$ check $L_{10} = 76$.","Correct. Survives elimination because 29 + 47 = 76.","Eliminated because addition error yields 74.","Eliminated because adding 33 yields 80.","Eliminated because arithmetic error gives 71.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"Find the 8th term in the Tribonacci sequence where each term is the sum of the three preceding terms:
+
+$$0, \quad 1, \quad 1, \quad 2, \quad 4, \quad 7, \quad 13, \quad \textbf{?}$$","24","26","20","28","A","Step-by-Step Solution:
+1. Identify the 3-term additive recurrence: $T_n = T_{n-1} + T_{n-2} + T_{n-3}$.
+2. Verify initial terms:
+   - $T_4 = 0 + 1 + 1 = 2$
+   - $T_5 = 1 + 1 + 2 = 4$
+   - $T_6 = 1 + 2 + 4 = 7$
+   - $T_7 = 2 + 4 + 7 = 13$.
+3. Compute the 8th term ($T_8$):
+   - $T_8 = T_5 + T_6 + T_7 = 4 + 7 + 13$.
+   - $4 + 7 = 11$.
+   - $11 + 13 = 24$.
+
+Common Trap: Adding only the previous two terms ($7 + 13 = 20$, Option C), treating it as a standard 2-term Fibonacci sequence.
+Exam Tip: In Tribonacci sequences, ALWAYS sum exactly THREE prior numbers ($4 + 7 + 13 = 24$).","Correct. Survives elimination because the Tribonacci recurrence sums the last three terms (4 + 7 + 13 = 24).","Eliminated because arithmetic error gives 26.","Eliminated because 20 is 7 + 13 (sum of only two prior terms).","Eliminated because adding 15 yields 28.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"What is the 7th term in the generalized linear recurrence sequence where $T_1 = 3, T_2 = 5$, and $T_n = 2 T_{n-1} + T_{n-2}$ for $n \ge 3$:
+
+$$3, \quad 5, \quad 13, \quad 31, \quad 75, \quad 181, \quad \textbf{?}$$","437","432","441","412","A","Step-by-Step Solution:
+1. Verify the recursive transitions:
+   - $T_3 = 2(5) + 3 = 10 + 3 = 13$
+   - $T_4 = 2(13) + 5 = 26 + 5 = 31$
+   - $T_5 = 2(31) + 13 = 62 + 13 = 75$
+   - $T_6 = 2(75) + 31 = 150 + 31 = 181$.
+2. Compute the 7th term ($T_7$):
+   - $T_7 = 2(T_6) + T_5 = 2(181) + 75$.
+   - $2 \times 181 = 362$.
+   - $362 + 75 = 437$.
+
+Common Trap: Adding without doubling the previous term ($181 + 75 = 256$) or arithmetic error ($362 + 75 = 432$, Option B).
+Exam Tip: Track the multiplier 2 on the immediate predecessor ($2 \times 181$) before adding the second predecessor ($75$).","Correct. Survives elimination because 2 * 181 + 75 = 362 + 75 = 437.","Eliminated because arithmetic error in the sum yields 432.","Eliminated because addition error yields 441.","Eliminated because doubling 75 instead of 181 yields 412.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"Identify the next number in the Fibonacci-style sequence:
+
+$$1, \quad 4, \quad 5, \quad 9, \quad 14, \quad 23, \quad 37, \quad \textbf{?}$$","60","58","64","61","A","Step-by-Step Solution:
+1. Identify the additive recurrence:
+   - $1 + 4 = 5$
+   - $4 + 5 = 9$
+   - $5 + 9 = 14$
+   - $9 + 14 = 23$
+   - $14 + 23 = 37$.
+2. Each term is the sum of the two preceding terms: $T_n = T_{n-1} + T_{n-2}$.
+3. Compute the 8th term ($T_8$):
+   - $T_8 = T_6 + T_7 = 23 + 37 = 60$.
+
+Common Trap: Adding $14 + 37 = 51$ or arithmetic slip resulting in 58 (Option B).
+Exam Tip: Sum the last two visible terms: $23 + 37 = 60$.","Correct. Survives elimination because 23 + 37 = 60.","Eliminated because arithmetic error yields 58.","Eliminated because adding 27 yields 64.","Eliminated because adding 24 yields 61.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"Find the exact sum of the first 10 terms of the standard Fibonacci sequence ($F_1 = 1, F_2 = 1, F_3 = 2, \dots$):","143","144","142","138","A","Step-by-Step Solution:
+1. Apply the fundamental Fibonacci summation identity:
+   - $\sum_{k=1}^n F_k = F_{n+2} - 1$.
+2. For $n = 10$, the sum is $S_{10} = F_{12} - 1$.
+3. List Fibonacci numbers up to $F_{12}$:
+   - $F_1 = 1, F_2 = 1, F_3 = 2, F_4 = 3, F_5 = 5, F_6 = 8, F_7 = 13, F_8 = 21, F_9 = 34, F_{10} = 55, F_{11} = 89, F_{12} = 144$.
+4. Calculate sum:
+   - $S_{10} = F_{12} - 1 = 144 - 1 = 143$.
+   - (Verification via manual sum: $1+1+2+3+5+8+13+21+34+55 = 143$).
+
+Common Trap: Answering $F_{12} = 144$ (Option B), forgetting to subtract 1.
+Exam Tip: The sum of any first $n$ Fibonacci numbers is always 1 less than $F_{n+2}$.","Correct. Survives elimination because the sum is F12 - 1 = 144 - 1 = 143.","Eliminated because 144 is F12 without subtracting 1.","Eliminated because subtracting 2 yields 142.","Eliminated because sum calculation error yields 138.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"What is the 8th term in the multiplicative Fibonacci sequence:
+
+$$1, \quad 2, \quad 2, \quad 4, \quad 8, \quad 32, \quad 256, \quad \textbf{?}$$","8,192","4,096","16,384","6,144","A","Step-by-Step Solution:
+1. Identify the multiplicative recurrence:
+   - Each term is the product of the previous two terms: $T_n = T_{n-1} \times T_{n-2}$.
+2. Express in powers of 2:
+   - $T_1 = 2^0 = 1$
+   - $T_2 = 2^1 = 2$
+   - $T_3 = 2^1 = 2$
+   - $T_4 = 2^2 = 4$
+   - $T_5 = 2^3 = 8$
+   - $T_6 = 2^5 = 32$
+   - $T_7 = 2^8 = 256$.
+   - (Note that the exponents follow the Fibonacci sequence: $0, 1, 1, 2, 3, 5, 8, 13$).
+3. Compute the 8th term ($T_8$):
+   - $T_8 = T_6 \times T_7 = 32 \times 256 = 2^5 \times 2^8 = 2^{13}$.
+4. Evaluate $2^{13}$:
+   - $2^{13} = 8,192$.
+
+Common Trap: Multiplying $256 \times 16 = 4,096$ (Option B) or squaring $256^2 = 65,536$.
+Exam Tip: Exponents add when multiplying powers of the same base ($5 + 8 = 13 \implies 2^{13} = 8,192$).","Correct. Survives elimination because 32 * 256 = 2^13 = 8,192.","Eliminated because 4,096 is 2^12.","Eliminated because 16,384 is 2^14.","Eliminated because arithmetic error gives 6,144.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"Determine the next number in the absolute difference sequence:
+
+$$100, \quad 62, \quad 38, \quad 24, \quad 14, \quad 10, \quad 4, \quad 6, \quad \textbf{?}$$","2","4","0","1","A","Step-by-Step Solution:
+1. Trace the subtractive Euclidean recurrence:
+   - Each term is the absolute difference of the two preceding terms: $T_n = |T_{n-2} - T_{n-1}|$.
+2. Verify transitions:
+   - $|100 - 62| = 38$
+   - $|62 - 38| = 24$
+   - $|38 - 24| = 14$
+   - $|24 - 14| = 10$
+   - $|14 - 10| = 4$
+   - $|10 - 4| = 6$.
+3. Compute the 9th term ($T_9$):
+   - $T_9 = |T_7 - T_8| = |4 - 6| = |-2| = 2$.
+
+Common Trap: Subtracting $6 - 4 = 2$ and assigning a negative sign, or guessing 0 (Option C).
+Exam Tip: Absolute difference guarantees all terms remain non-negative real integers ($|-2| = 2$).","Correct. Survives elimination because |4 - 6| = |-2| = 2.","Eliminated because 4 is T7.","Eliminated because the difference is 2, not 0.","Eliminated because 1 is not the difference between 4 and 6.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"In the recursive squaring sequence where $T_1 = 1, T_2 = 1$, and $T_n = (T_{n-1} + T_{n-2})^2$ for $n \ge 3$, what is the 5th term ($T_5$)?","841","729","961","625","A","Step-by-Step Solution:
+1. Apply the recursive rule sequentially:
+   - $T_1 = 1$
+   - $T_2 = 1$
+   - $T_3 = (T_2 + T_1)^2 = (1 + 1)^2 = 2^2 = 4$
+   - $T_4 = (T_3 + T_2)^2 = (4 + 1)^2 = 5^2 = 25$.
+2. Compute the 5th term ($T_5$):
+   - $T_5 = (T_4 + T_3)^2 = (25 + 4)^2 = 29^2$.
+3. Evaluate $29^2$:
+   - $29^2 = (30 - 1)^2 = 900 - 60 + 1 = 841$.
+
+Common Trap: Squaring $27^2 = 729$ (Option B) or $31^2 = 961$ (Option C) due to arithmetic error in summing $25 + 4$.
+Exam Tip: $(30 - 1)^2 = 900 - 60 + 1 = 841$.","Correct. Survives elimination because (25 + 4)^2 = 29^2 = 841.","Eliminated because 729 is 27^2.","Eliminated because 961 is 31^2.","Eliminated because 625 is 25^2.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"What is the exact numerical value of Cassini's identity expression $F_{n+1} F_{n-1} - F_n^2$ for the 9th Fibonacci number ($n = 9$)?","-1","1","0","-2","A","Step-by-Step Solution:
+1. State Cassini's Identity for Fibonacci numbers:
+   - $F_{n+1} F_{n-1} - F_n^2 = (-1)^n$.
+2. For $n = 9$ (an odd integer):
+   - $(-1)^9 = -1$.
+3. Verify directly using standard Fibonacci values:
+   - $F_8 = 21$
+   - $F_9 = 34$
+   - $F_{10} = 55$.
+4. Substitute values:
+   - $F_{10} \cdot F_8 - F_9^2 = 55 \times 21 - 34^2$.
+   - $55 \times 21 = 1,155$.
+   - $34^2 = 1,156$.
+   - $1,155 - 1,156 = -1$.
+
+Common Trap: Answering $+1$ (Option B) by assuming all square difference identities evaluate to positive unity.
+Exam Tip: Cassini's identity alternates signs: $+1$ for even $n$, and $-1$ for odd $n$.","Correct. Survives elimination because (-1)^9 = -1 (and 55 * 21 - 34^2 = 1,155 - 1,156 = -1).","Eliminated because +1 is the identity value for even n (e.g. n = 8 or 10).","Eliminated because the expression never evaluates to 0 for non-trivial terms.","Eliminated because difference is strictly unitary magnitude (+/- 1).","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"
+"In the combined linear sequence defined by $T_n = 3 F_n + 2 L_n$ (where $F_n$ is the $n$-th Fibonacci number and $L_n$ is the $n$-th Lucas number), what is the exact value of the 6th term ($T_6$)?","46","44","48","52","A","Step-by-Step Solution:
+1. Identify the 6th Fibonacci number ($F_6$):
+   - $F_1=1, F_2=1, F_3=2, F_4=3, F_5=5, F_6=8$.
+2. Identify the 6th Lucas number ($L_6$):
+   - $L_1=2, L_2=1, L_3=3, L_4=4, L_5=7, L_6=11$.
+3. Substitute into the defined linear combination:
+   - $T_6 = 3 F_6 + 2 L_6$.
+   - $T_6 = 3(8) + 2(11)$.
+   - $3 \times 8 = 24$.
+   - $2 \times 11 = 22$.
+4. Sum the components:
+   - $T_6 = 24 + 22 = 46$.
+
+Common Trap: Swapping coefficients ($2 F_6 + 3 L_6 = 16 + 33 = 49$) or misidentifying $L_6$ as 12.
+Exam Tip: $F_6 = 8$ and $L_6 = 11$ are foundational benchmarks.","Correct. Survives elimination because T6 = 3(8) + 2(11) = 24 + 22 = 46.","Eliminated because arithmetic error in the sum yields 44.","Eliminated because using F6 = 8, L6 = 12 yields 48.","Eliminated because calculation slip gives 52.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Fibonacci-like patterns | Very Difficult | Batch 027"

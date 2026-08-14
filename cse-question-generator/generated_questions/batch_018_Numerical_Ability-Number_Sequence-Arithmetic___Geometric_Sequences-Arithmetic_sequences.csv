@@ -1,0 +1,168 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Find the 45th term ($a_{45}$) of an arithmetic sequence where the 7th term ($a_7$) is 29 and the 19th term ($a_{19}$) is 77.","181","185","177","189","A","Step-by-Step Solution:
+1. Standard formula for the $n$-th term of an arithmetic sequence: $a_n = a_1 + (n - 1)d$.
+2. Formulate equations for given terms:
+   - $a_7 = a_1 + 6d = 29$ (Equation 1).
+   - $a_{19} = a_1 + 18d = 77$ (Equation 2).
+3. Subtract Equation 1 from Equation 2:
+   - $(a_1 + 18d) - (a_1 + 6d) = 77 - 29$.
+   - $12d = 48 \implies d = 4$.
+4. Solve for the first term $a_1$:
+   - $a_1 + 6(4) = 29 \implies a_1 + 24 = 29 \implies a_1 = 5$.
+5. Compute the 45th term ($a_{45}$):
+   - $a_{45} = a_1 + (45 - 1)d = 5 + 44(4) = 5 + 176 = 181$.
+
+Common Trap: Using $45d$ instead of $(n - 1)d = 44d$ ($5 + 45(4) = 185$, Option B).
+Exam Tip: Compute $a_{45}$ directly from $a_{19}$: $a_{45} = a_{19} + (45 - 19)d = 77 + 26(4) = 77 + 104 = 181$.","Correct. Survives elimination because d = 4, a1 = 5, and a45 = 5 + 44(4) = 181.","Eliminated because multiplying by n = 45 instead of (n - 1) = 44 yields 185.","Eliminated because arithmetic error in the difference gives 177.","Eliminated because using d = 5 yields 189.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"In an arithmetic progression, the sum of the first 15 terms is 465, and the sum of the subsequent 15 terms (terms 16 through 30) is 1,140. Find the first term ($a_1$) and the common difference ($d$).","a_1 = 10, \quad d = 3","a_1 = 8, \quad d = 4","a_1 = 12, \quad d = 3","a_1 = 10, \quad d = 4","A","Step-by-Step Solution:
+1. Formula for sum of first $n$ terms: $S_n = \frac{n}{2}[2a_1 + (n - 1)d]$.
+2. For $n = 15$:
+   - $S_{15} = \frac{15}{2}[2a_1 + 14d] = 15(a_1 + 7d) = 465$.
+   - $a_1 + 7d = \frac{465}{15} = 31$ (Equation 1).
+3. Sum of first 30 terms ($S_{30}$):
+   - $S_{30} = S_{15} + S_{\text{next 15}} = 465 + 1,140 = 1,605$.
+   - $S_{30} = \frac{30}{2}[2a_1 + 29d] = 15(2a_1 + 29d) = 1,605$.
+   - $2a_1 + 29d = \frac{1,605}{15} = 107$ (Equation 2).
+4. Multiply Equation 1 by 2:
+   - $2a_1 + 14d = 62$ (Equation 3).
+5. Subtract Equation 3 from Equation 2:
+   - $(2a_1 + 29d) - (2a_1 + 14d) = 107 - 62$.
+   - $15d = 45 \implies d = 3$.
+6. Solve for $a_1$:
+   - $a_1 = 31 - 7(3) = 31 - 21 = 10$.
+
+Common Trap: Equating $S_{16-30}$ directly to $\frac{15}{2}[2a_{16} + 14d] = 1140$ without properly substituting $a_{16} = a_1 + 15d$.
+Exam Tip: Summing $S_{15} + S_{\text{next 15}} = S_{30}$ allows immediate standard $S_n$ formula application.","Correct. Survives elimination because a1 + 7d = 31 and 2a1 + 29d = 107 resolve uniquely to a1 = 10 and d = 3.","Eliminated because a1 = 8, d = 4 yields S15 = 480 != 465.","Eliminated because a1 = 12, d = 3 yields S15 = 495.","Eliminated because a1 = 10, d = 4 yields S15 = 570.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"How many three-digit positive integers leave a remainder of 3 when divided by 7?","129","128","130","127","A","Step-by-Step Solution:
+1. Define the algebraic form of numbers leaving remainder 3 upon division by 7:
+   - $N = 7k + 3$, where $k$ is an integer.
+2. Establish bounding inequality for three-digit integers ($100 \le N \le 999$):
+   - $100 \le 7k + 3 \le 999$.
+3. Subtract 3 from all sides:
+   - $97 \le 7k \le 996$.
+4. Divide all sides by 7:
+   - $\frac{97}{7} \le k \le \frac{996}{7}$.
+   - $13.857 \le k \le 142.285$.
+5. Identify integer bounds for $k$:
+   - Smallest integer $k_{\text{min}} = 14$ ($N_{\text{first}} = 7(14) + 3 = 101$).
+   - Largest integer $k_{\text{max}} = 142$ ($N_{\text{last}} = 7(142) + 3 = 997$).
+6. Count total terms:
+   - $\text{Total Terms} = k_{\text{max}} - k_{\text{min}} + 1 = 142 - 14 + 1 = 129$.
+
+Common Trap: Forgetting the $+1$ when counting inclusive integers ($142 - 14 = 128$, Option B).
+Exam Tip: Number of integers in $[a, b]$ is always $(b - a + 1)$.","Correct. Survives elimination because k ranges from 14 to 142 inclusive, giving 142 - 14 + 1 = 129 integers.","Eliminated because forgetting to add 1 for inclusive counting yields 128.","Eliminated because rounding k_min down to 13 gives 130 (including 94, a 2-digit number).","Eliminated because double boundary truncation yields 127.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"Find the missing term in the complex fractional arithmetic sequence:
+
+$$14\frac{1}{2}, \quad 18\frac{1}{4}, \quad 22, \quad \textbf{?}, \quad 29\frac{1}{2}, \quad 33\frac{1}{4}$$","25\frac{3}{4}","25\frac{1}{2}","26\frac{1}{4}","26","A","Step-by-Step Solution:
+1. Convert terms to decimal notation to inspect differences:
+   - $T_1 = 14.50$
+   - $T_2 = 18.25$
+   - $T_3 = 22.00$
+2. Calculate common difference ($d$):
+   - $d = 18.25 - 14.50 = 3.75 = 3\frac{3}{4}$.
+   - Check next difference: $22.00 - 18.25 = 3.75$.
+3. Compute the 4th term ($T_4$):
+   - $T_4 = 22.00 + 3.75 = 25.75 = 25\frac{3}{4}$.
+4. Verify succeeding terms:
+   - $T_5 = 25.75 + 3.75 = 29.50 = 29\frac{1}{2}$ (Matches!).
+   - $T_6 = 29.50 + 3.75 = 33.25 = 33\frac{1}{4}$ (Matches!).
+
+Common Trap: Assuming the sequence increments by $3\frac{1}{2}$ ($25\frac{1}{2}$, Option B).
+Exam Tip: Convert fractional sequence terms to decimals with common quarter steps ($0.25, 0.50, 0.75$).","Correct. Survives elimination because the constant difference is +3.75 (+3 3/4), making the 4th term 22 + 3.75 = 25.75 = 25 3/4.","Eliminated because adding 3.5 gives 25 1/2.","Eliminated because adding 4.25 gives 26 1/4.","Eliminated because adding 4 gives 26.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"If $m$ arithmetic means are inserted between 3 and 39 such that the ratio of the first inserted mean to the last inserted mean is $1 : 5$, find the value of $m$.","8","7","9","6","A","Step-by-Step Solution:
+1. The full sequence contains $N = m + 2$ terms:
+   - $a_1 = 3$
+   - $a_{m+2} = 39$.
+2. Express the common difference $d$ in terms of $m$:
+   - $d = \frac{a_{m+2} - a_1}{m + 1} = \frac{39 - 3}{m + 1} = \frac{36}{m + 1}$.
+3. Formulate the first and last inserted means:
+   - First mean: $A_1 = 3 + d = 3 + \frac{36}{m + 1} = \frac{3m + 3 + 36}{m + 1} = \frac{3m + 39}{m + 1}$.
+   - Last mean: $A_m = 39 - d = 39 - \frac{36}{m + 1} = \frac{39m + 39 - 36}{m + 1} = \frac{39m + 3}{m + 1}$.
+4. Set up the given ratio $\frac{A_1}{A_m} = \frac{1}{5}$:
+   - $\frac{3m + 39}{39m + 3} = \frac{1}{5}$.
+5. Cross-multiply and solve for $m$:
+   - $5(3m + 39) = 1(39m + 3)$.
+   - $15m + 195 = 39m + 3$.
+   - $39m - 15m = 195 - 3 \implies 24m = 192 \implies m = 8$.
+
+Common Trap: Setting total terms to $m$ instead of $m + 2$, giving denominator $m$ instead of $m + 1$.
+Exam Tip: Inserting $m$ means creates $m + 1$ equal intervals ($d = \frac{b - a}{m + 1}$).","Correct. Survives elimination because d = 36/(8+1) = 4, giving A1 = 7 and A8 = 35, where 7/35 = 1/5. Thus m = 8.","Eliminated because m = 7 yields d = 36/8 = 4.5, A1 = 7.5, A7 = 34.5 (ratio 7.5/34.5 != 1/5).","Eliminated because m = 9 yields d = 3.6, A1 = 6.6, A9 = 35.4.","Eliminated because m = 6 yields non-integer values failing the 1:5 ratio.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"The sum of three consecutive terms of an arithmetic progression is 33, and their product is 1,155. What is the value of the largest of these three numbers?","15","17","13","19","A","Step-by-Step Solution:
+1. Define the three symmetric consecutive terms:
+   - $(a - d), \quad a, \quad (a + d)$.
+2. Apply the sum condition:
+   - $(a - d) + a + (a + d) = 33$.
+   - $3a = 33 \implies a = 11$.
+3. Apply the product condition:
+   - $(11 - d) \times 11 \times (11 + d) = 1,155$.
+4. Simplify using difference of squares:
+   - $11(121 - d^2) = 1,155$.
+   - $121 - d^2 = \frac{1,155}{11} = 105$.
+   - $d^2 = 121 - 105 = 16 \implies d = 4$.
+5. Identify the three terms:
+   - Smallest: $11 - 4 = 7$.
+   - Middle: $11$.
+   - Largest: $11 + 4 = 15$.
+
+Common Trap: Setting the terms as $x, x+d, x+2d$ which creates a difficult non-symmetric cubic equation.
+Exam Tip: Always represent 3 consecutive AP terms as $(a - d, a, a + d)$ so the sum immediately isolates $a$.","Correct. Survives elimination because the three numbers are 7, 11, and 15 (sum = 33, product = 7 * 11 * 15 = 1,155). The largest is 15.","Eliminated because 17 gives 11 + 6, with product 5 * 11 * 17 = 935 != 1155.","Eliminated because 13 is too small.","Eliminated because 19 gives product 3 * 11 * 19 = 627.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"Find the exact sum of all multiples of 6 situated strictly between 100 and 500.","20,100","20,400","19,800","20,700","A","Step-by-Step Solution:
+1. Identify the first multiple of 6 greater than 100:
+   - $\frac{100}{6} = 16.67 \implies k_1 = 17$.
+   - $a_1 = 17 \times 6 = 102$.
+2. Identify the last multiple of 6 less than 500:
+   - $\frac{500}{6} = 83.33 \implies k_n = 83$.
+   - $a_n = 83 \times 6 = 498$.
+3. Determine the number of terms ($n$):
+   - $n = 83 - 17 + 1 = 67\text{ terms}$.
+4. Apply arithmetic series sum formula:
+   - $S = \frac{n}{2}(a_1 + a_n)$.
+   - $S = \frac{67}{2}(102 + 498) = \frac{67}{2}(600) = 67 \times 300 = 20,100$.
+
+Common Trap: Calculating $n$ as $83 - 17 = 66$ terms, yielding $66 \times 300 = 19,800$ (Option C).
+Exam Tip: Number of multiples of $m$ in $[A, B]$ is $\lfloor B/m \rfloor - \lfloor (A-1)/m \rfloor = 83 - 16 = 67$.","Correct. Survives elimination because there are 67 multiples of 6 between 100 and 500, summing to 67 * 300 = 20,100.","Eliminated because using 68 terms yields 20,400.","Eliminated because off-by-one counting error (66 terms) yields 19,800.","Eliminated because arithmetic error gives 20,700.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"In an arithmetic progression, the $p$-th term is $q$ and the $q$-th term is $p$ (where $p \neq q$). What is the exact mathematical value of the $(p + q)$-th term?","0","p + q","p - q","1","A","Step-by-Step Solution:
+1. Formulate expressions for the $p$-th and $q$-th terms:
+   - $a_p = a_1 + (p - 1)d = q$ (Equation 1).
+   - $a_q = a_1 + (q - 1)d = p$ (Equation 2).
+2. Subtract Equation 2 from Equation 1:
+   - $(p - 1)d - (q - 1)d = q - p$.
+   - $(p - q)d = -(p - q)$.
+   - Since $p \neq q$, divide by $(p - q)$: $d = -1$.
+3. Find the first term $a_1$:
+   - $a_1 + (p - 1)(-1) = q \implies a_1 - p + 1 = q \implies a_1 = p + q - 1$.
+4. Compute the $(p + q)$-th term:
+   - $a_{p+q} = a_1 + (p + q - 1)d$.
+   - $a_{p+q} = (p + q - 1) + (p + q - 1)(-1) = (p + q - 1) - (p + q - 1) = 0$.
+
+Common Trap: Assuming the $(p+q)$-th term is $p + q$ (Option B) by false linear intuition.
+Exam Tip: Classic algebraic AP identity: If $a_p = q$ and $a_q = p$, then $d = -1$ and $a_{p+q} = 0$.","Correct. Survives elimination because common difference d = -1 and first term a1 = p + q - 1, forcing a_{p+q} = 0.","Eliminated because p + q represents a1 + 1, not the (p+q)-th term.","Eliminated because p - q is undefined when p = q.","Eliminated because the term vanishes completely to 0, not 1.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"If the $n$-th term of an arithmetic sequence is given by the general formula $T_n = \frac{5n - 7}{3}$, what is the common difference ($d$) and the sum of the first 30 terms ($S_{30}$)?","d = \frac{5}{3} \text{ and } S_{30} = 705","d = 5 \text{ and } S_{30} = 720","d = \frac{5}{3} \text{ and } S_{30} = 690","d = \frac{7}{3} \text{ and } S_{30} = 705","A","Step-by-Step Solution:
+1. Determine the common difference $d$:
+   - $T_1 = \frac{5(1) - 7}{3} = -\frac{2}{3}$.
+   - $T_2 = \frac{5(2) - 7}{3} = \frac{3}{3} = 1$.
+   - $d = T_2 - T_1 = 1 - \left(-\frac{2}{3}\right) = \frac{5}{3}$.
+   - (Note: In $T_n = An + B$, the common difference is always the linear coefficient $A = \frac{5}{3}$).
+2. Compute the 30th term ($T_{30}$):
+   - $T_{30} = \frac{5(30) - 7}{3} = \frac{150 - 7}{3} = \frac{143}{3}$.
+3. Calculate the sum of the first 30 terms ($S_{30}$):
+   - $S_{30} = \frac{n}{2}(T_1 + T_{30}) = \frac{30}{2}\left(-\frac{2}{3} + \frac{143}{3}\right)$.
+   - $S_{30} = 15 \times \left(\frac{141}{3}\right) = 15 \times 47 = 705$.
+
+Common Trap: Taking $d = 5$ by looking only at the numerator coefficient while ignoring the denominator 3.
+Exam Tip: The common difference is always the slope (rate of change with respect to $n$).","Correct. Survives elimination because the linear coefficient of n is 5/3, and S30 = 15 * (141/3) = 15 * 47 = 705.","Eliminated because ignoring the denominator 3 gives d = 5.","Eliminated because arithmetic error in the sum yields 690.","Eliminated because using the constant term 7 yields d = 7/3.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"
+"A provincial government enacts a 10-year road rehabilitation plan. The budgetary allocation in Year 1 is ₱45.0 Million, and it increases by an exact constant arithmetic increment of ₱7.5 Million each succeeding year. What is the cumulative total budget allocated over the entire 10-year period?","₱787.5 Million","₱825.0 Million","₱750.0 Million","₱812.5 Million","A","Step-by-Step Solution:
+1. Identify arithmetic parameters:
+   - Initial term $a_1 = 45.0\text{ Million}$.
+   - Common difference $d = 7.5\text{ Million}$.
+   - Number of years $n = 10$.
+2. Apply the arithmetic series formula:
+   - $S_n = \frac{n}{2}[2a_1 + (n - 1)d]$.
+3. Substitute the values:
+   - $S_{10} = \frac{10}{2}[2(45.0) + (10 - 1)(7.5)]$.
+   - $S_{10} = 5[90.0 + 9(7.5)]$.
+   - $9 \times 7.5 = 67.5$.
+   - $S_{10} = 5[90.0 + 67.5] = 5[157.5] = ₱787.5\text{ Million}$.
+
+Common Trap: Using $10d$ instead of $9d$ ($5[90 + 75] = 825\text{M}$, Option B), which incorrectly includes an 11th year increment.
+Exam Tip: Year 10 allocation is $a_{10} = 45 + 9(7.5) = 112.5\text{M}$. Sum $= 10 \times \frac{45 + 112.5}{2} = 5 \times 157.5 = 787.5\text{M}$.","Correct. Survives elimination because S10 = 5 * (90 + 67.5) = 5 * 157.5 = ₱787.5 Million.","Eliminated because using 10d instead of 9d gives ₱825.0 Million.","Eliminated because underestimating cumulative increments yields ₱750.0 Million.","Eliminated because arithmetic error in multiplying 5 * 157.5 yields ₱812.5 Million.","Numerical Ability","Numerical Ability | Number Sequence | Arithmetic & Geometric Sequences | Arithmetic sequences | Very Difficult | Batch 018"

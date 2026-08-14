@@ -1,0 +1,24 @@
+{
+  "version": "3.0",
+  "generation_status": "IN_PROGRESS",
+  "current_category": "Verbal Ability",
+  "current_component": "Reading Comprehension",
+  "current_subtopic": "Core Reading Skills",
+  "current_micro_subtopic": "Cause and Effect",
+  "current_batch_number": 1,
+  "current_batch_id": "VA-RC-CAUSEEFFECT-001",
+  "current_batch_status": "COMPLETED",
+  "last_confirmed_completed_batch": 1,
+  "completed_batches": [
+    1
+  ],
+  "completed_micro_subtopics": [],
+  "total_completed_questions": 10,
+  "total_generated_csv_files": 1,
+  "current_model": "Gemini 3.6 Flash",
+  "available_models": [],
+  "exhausted_models": [],
+  "last_successful_file": "batch_001_Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.csv",
+  "last_error": null,
+  "last_update": "2026-08-14T14:43:47.941Z"
+}

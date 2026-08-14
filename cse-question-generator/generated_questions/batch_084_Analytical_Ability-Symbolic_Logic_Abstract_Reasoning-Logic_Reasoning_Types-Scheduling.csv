@@ -1,0 +1,190 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Five department meetings (Admin, Budget, HR, IT, Planning) must be scheduled from Monday to Friday, exactly one meeting per day: (1) IT meeting is on Wednesday. (2) Budget meeting is immediately after Admin meeting. (3) Planning meeting cannot be on Friday. (4) HR meeting is immediately before IT meeting (on Tuesday). On which day is the Planning meeting scheduled?","Monday","Tuesday","Thursday","Friday","A","Step-by-Step Solution:
+1. Map the 5 weekdays: [Monday, Tuesday, Wednesday, Thursday, Friday].
+2. Place direct calendar assignments:
+   - By Rule 1: Wednesday = IT.
+   - By Rule 4: Tuesday = HR (immediately before Wednesday IT).
+3. Place consecutive block (Admin, Budget):
+   - By Rule 2: Budget is immediately after Admin $\implies$ (Admin, Budget) must occupy consecutive days.
+   - The only remaining consecutive pair of days is Thursday and Friday.
+   - Therefore: Thursday = Admin, and Friday = Budget.
+4. Assign the remaining department (Planning):
+   - The only remaining open day is Monday.
+   - Therefore, Monday = Planning.
+5. Verify all rules:
+   - Planning is not on Friday (Rule 3 satisfied).
+   - IT on Wednesday (Rule 1 satisfied).
+   - Complete schedule: [Mon: Planning, Tue: HR, Wed: IT, Thu: Admin, Fri: Budget].
+6. Conclude:
+   - The Planning meeting is scheduled on Monday.
+
+Common Trap: Trying to place Admin and Budget on Mon-Tue, which would leave no slot for HR before IT.
+Exam Tip: Anchor fixed days first, locate contiguous block slots next, and assign the remaining task to the lone open day.","Correct. Survives elimination because locking IT on Wednesday, HR on Tuesday, and Admin-Budget on Thu-Fri forces Planning into Monday.","Eliminated because Tuesday is occupied by HR.","Eliminated because Thursday is occupied by Admin.","Eliminated because Friday is occupied by Budget (and Planning is prohibited on Friday).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Six training sessions (S1, S2, S3, S4, S5, S6) are scheduled from 9:00 AM to 3:00 PM (1-hour slots): (1) S1 is at 9:00 AM. (2) S6 is at 2:00 PM. (3) S4 is immediately after S1 (at 10:00 AM). (4) S5 is at 1:00 PM. (5) S3 is immediately after S2. At what time is session S3 scheduled?","12:00 PM (Noon)","11:00 AM","10:00 AM","1:00 PM","A","Step-by-Step Solution:
+1. Lay out the 6 hourly time slots:
+   - [9 AM - 10 AM], [10 AM - 11 AM], [11 AM - 12 PM], [12 PM - 1 PM], [1 PM - 2 PM], [2 PM - 3 PM].
+2. Fill known fixed slots:
+   - 9:00 AM: S1
+   - 10:00 AM: S4
+   - 1:00 PM: S5
+   - 2:00 PM: S6
+3. Identify open consecutive slots:
+   - Remaining open slots: 11:00 AM and 12:00 PM.
+   - Remaining sessions: S2 and S3.
+4. Apply Rule 5 (S3 immediately after S2):
+   - S2 must be scheduled at 11:00 AM.
+   - S3 must be scheduled at 12:00 PM.
+5. Conclude:
+   - Session S3 is scheduled at 12:00 PM (Noon).
+
+Common Trap: Swapping S2 and S3, which would place S3 before S2.
+Exam Tip: Identify the single available 2-slot contiguous window (11 AM to 1 PM) and assign the predecessor-successor pair in order.","Correct. Survives elimination because filling 9 AM, 10 AM, 1 PM, and 2 PM leaves 11 AM for S2 and 12 PM for S3.","Eliminated because 11:00 AM is occupied by S2.","Eliminated because 10:00 AM is occupied by S4.","Eliminated because 1:00 PM is occupied by S5.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Seven regional directors (A, B, C, D, E, F, G) present annual reports from Monday to Sunday: (1) A presents on Monday. (2) F presents on Tuesday. (3) D presents on Thursday. (4) G presents on Sunday. (5) E presents immediately after C. (6) B presents earlier in the week than C. On which day does director E present?","Saturday","Friday","Wednesday","Thursday","A","Step-by-Step Solution:
+1. Map out the 7-day schedule: [Mon, Tue, Wed, Thu, Fri, Sat, Sun].
+2. Place fixed individual presentations:
+   - Monday: A
+   - Tuesday: F
+   - Thursday: D
+   - Sunday: G
+3. Identify open days for remaining directors (B, C, E):
+   - Open days: Wednesday, Friday, Saturday.
+4. Apply consecutive constraint from Rule 5 (E immediately after C):
+   - (C, E) must occupy consecutive days.
+   - The only consecutive pair among open days is Friday and Saturday.
+   - Therefore: Friday = C, and Saturday = E.
+5. Assign remaining director (B):
+   - Wednesday = B.
+   - Verify Rule 6: B (Wed) presents earlier than C (Fri) $\implies$ satisfied!
+6. Conclude:
+   - Director E presents on Saturday.
+
+Common Trap: Placing C and E on Tue-Wed (which is blocked by F on Tuesday).
+Exam Tip: The only adjacent pair in {Wed, Fri, Sat} is {Fri, Sat}, forcing C on Friday and E on Saturday.","Correct. Survives elimination because Friday and Saturday are the only consecutive open days, placing C on Friday and E on Saturday.","Eliminated because Friday is occupied by C.","Eliminated because Wednesday is occupied by B.","Eliminated because Thursday is occupied by D.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Four examiners (W, X, Y, Z) conduct interviews across 4 morning time slots (8 AM, 9 AM, 10 AM, 11 AM): (1) Examiner Z is scheduled at 11:00 AM. (2) Examiner W is scheduled after Examiner X. (3) Examiner Y is scheduled before Examiner X. At what time is Examiner X scheduled?","9:00 AM","8:00 AM","10:00 AM","11:00 AM","A","Step-by-Step Solution:
+1. Lock fixed time slot:
+   - 11:00 AM = Examiner Z.
+2. Order remaining examiners (W, X, Y) across remaining slots (8 AM, 9 AM, 10 AM):
+   - By Rule 3: $Y < X$.
+   - By Rule 2: $X < W$.
+   - Unified chronological chain: $Y < X < W$.
+3. Map examiners to available hourly slots:
+   - 8:00 AM: Examiner Y
+   - 9:00 AM: Examiner X
+   - 10:00 AM: Examiner W
+   - 11:00 AM: Examiner Z
+4. Conclude:
+   - Examiner X is scheduled at 9:00 AM.
+
+Common Trap: Swapping X and Y or X and W.
+Exam Tip: Transitive inequality $Y < X < W$ maps directly to the three open ascending time slots (8 AM, 9 AM, 10 AM).","Correct. Survives elimination because the strict inequality chain Y < X < W places X in the 9:00 AM slot.","Eliminated because 8:00 AM is occupied by Examiner Y.","Eliminated because 10:00 AM is occupied by Examiner W.","Eliminated because 11:00 AM is occupied by Examiner Z.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Five court hearings (H1, H2, H3, H4, H5) are scheduled sequentially without intermission: (1) H2 is scheduled immediately after H1. (2) H3 is scheduled immediately after H2. (3) H4 is scheduled immediately after H3. (4) H5 is scheduled before H1. Which hearing is scheduled 4th?","H3","H4","H2","H5","A","Step-by-Step Solution:
+1. Connect contiguous sequential hearings:
+   - Rule 1: H1 $\to$ H2.
+   - Rule 2: H2 $\to$ H3 $\implies$ H1 $\to$ H2 $\to$ H3.
+   - Rule 3: H3 $\to$ H4 $\implies$ H1 $\to$ H2 $\to$ H3 $\to H4$.
+2. Place hearing H5:
+   - By Rule 4, H5 is scheduled before H1.
+   - Since H1-H2-H3-H4 forms a rigid 4-block sequence, H5 MUST be placed at the very start (1st position).
+3. Assemble the complete chronological hearing sequence:
+   - 1st Hearing: H5
+   - 2nd Hearing: H1
+   - 3rd Hearing: H2
+   - 4th Hearing: H3
+   - 5th Hearing: H4
+4. Conclude:
+   - The 4th hearing scheduled is H3.
+
+Common Trap: Selecting H4 because of its subscript 4, forgetting that H5 precedes H1 and shifts all indices.
+Exam Tip: Track the 1-based timeline: $H5(1) \to H1(2) \to H2(3) \to H3(4) \to H4(5)$.","Correct. Survives elimination because H5 precedes the contiguous chain H1 -> H2 -> H3 -> H4, making H3 the 4th hearing.","Eliminated because H4 is the 5th hearing.","Eliminated because H2 is the 3rd hearing.","Eliminated because H5 is the 1st hearing.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Five security shifts (Shift 1 to Shift 5) are assigned to five officers (P, Q, R, S, T): (1) Officer T is assigned to Shift 1. (2) Officer P is assigned to Shift 3. (3) Officer R is assigned immediately after Officer S. (4) Officer Q is assigned to a shift earlier than Officer P. Which officer is assigned to Shift 2?","Officer Q","Officer S","Officer R","Officer T","A","Step-by-Step Solution:
+1. Set up shifts: [Shift 1, Shift 2, Shift 3, Shift 4, Shift 5].
+2. Place fixed shift assignments:
+   - Shift 1 = Officer T.
+   - Shift 3 = Officer P.
+3. Determine assignments for open shifts (Shifts 2, 4, 5):
+   - Remaining officers: Q, S, R.
+   - By Rule 3: R is immediately after S $\implies$ (S, R) are consecutive.
+   - The only open consecutive shifts are Shift 4 and Shift 5.
+   - Therefore: Shift 4 = S, and Shift 5 = R.
+4. Assign remaining officer (Officer Q):
+   - Shift 2 = Officer Q.
+   - Check Rule 4: Q (Shift 2) is earlier than P (Shift 3) $\implies$ satisfied!
+5. Complete schedule:
+   - [Shift 1: T, Shift 2: Q, Shift 3: P, Shift 4: S, Shift 5: R].
+6. Conclude:
+   - Officer Q is assigned to Shift 2.
+
+Common Trap: Placing (S, R) on Shifts 2-3 (blocked by P on Shift 3).
+Exam Tip: Shifts 4 and 5 are the only adjacent open slots for the pair (S, R), forcing Q into Shift 2.","Correct. Survives elimination because the consecutive pair (S, R) must take Shifts 4 and 5, leaving Shift 2 for Officer Q.","Eliminated because Officer S is assigned to Shift 4.","Eliminated because Officer R is assigned to Shift 5.","Eliminated because Officer T is assigned to Shift 1.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Six agency webinars (W1, W2, W3, W4, W5, W6) are hosted across 6 consecutive days (Day 1 to Day 6): (1) W1 is on Day 1. (2) W4 is on Day 4. (3) W2 is hosted before W3, but after W1. (4) W5 is hosted immediately before W6. On which day is webinar W5 hosted?","Day 5","Day 2","Day 3","Day 6","A","Step-by-Step Solution:
+1. Map the 6 days: [Day 1, Day 2, Day 3, Day 4, Day 5, Day 6].
+2. Place fixed anchors:
+   - Day 1: W1
+   - Day 4: W4
+3. Assign intermediate webinars (W2, W3):
+   - Rule 3: W2 is after W1 and before W3, fitting between Day 1 and Day 4.
+   - Therefore: Day 2 = W2, and Day 3 = W3.
+4. Assign remaining webinars (W5, W6):
+   - Open days: Day 5 and Day 6.
+   - Rule 4: W5 is immediately before W6 $\implies$ Day 5 = W5, and Day 6 = W6.
+5. Conclude:
+   - Webinar W5 is hosted on Day 5.
+
+Common Trap: Swapping W5 and W6.
+Exam Tip: Full timeline: $W1(1) \to W2(2) \to W3(3) \to W4(4) \to W5(5) \to W6(6)$. W5 is on Day 5.","Correct. Survives elimination because Days 5 and 6 are the only available slots for W5 and W6, placing W5 on Day 5.","Eliminated because Day 2 is occupied by W2.","Eliminated because Day 3 is occupied by W3.","Eliminated because Day 6 is occupied by W6.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Three conference rooms (Room A, Room B, Room C) host morning workshops (W1, W2, W3) and afternoon workshops (W4, W5, W6): (1) Room A hosts W1 in morning and W4 in afternoon. (2) Room B hosts W2 in morning. (3) Room C hosts W5 in afternoon. Which workshop is hosted in Room B in the afternoon?","W6","W4","W5","W1","A","Step-by-Step Solution:
+1. Set up a 2x3 scheduling matrix for Morning and Afternoon across Rooms A, B, C:
+   - Morning pool: {W1, W2, W3}
+   - Afternoon pool: {W4, W5, W6}
+2. Fill Morning assignments:
+   - Room A: W1 (Given)
+   - Room B: W2 (Given)
+   - Room C: W3 (Only remaining morning workshop)
+3. Fill Afternoon assignments:
+   - Room A: W4 (Given)
+   - Room C: W5 (Given)
+   - Room B: W6 (Only remaining afternoon workshop)
+4. Conclude:
+   - Workshop W6 is hosted in Room B in the afternoon.
+
+Common Trap: Confusing morning and afternoon workshop sets.
+Exam Tip: In a bipartite scheduling grid, eliminating assigned workshops from the afternoon set leaves W6 for Room B.","Correct. Survives elimination because Room A takes W4 and Room C takes W5, leaving W6 as the only remaining afternoon workshop for Room B.","Eliminated because W4 is in Room A.","Eliminated because W5 is in Room C.","Eliminated because W1 is a morning workshop in Room A.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"Five personnel (Elena, Fred, Grace, Harry, Ivy) take staggered 1-hour lunch breaks between 11:00 AM and 4:00 PM: (1) Elena takes lunch from 11:00 AM to 12:00 PM. (2) Ivy takes lunch from 3:00 PM to 4:00 PM. (3) Fred takes lunch immediately after Elena. (4) Grace takes lunch immediately before Ivy. When does Harry take lunch?","1:00 PM to 2:00 PM","12:00 PM to 1:00 PM","2:00 PM to 3:00 PM","11:00 AM to 12:00 PM","A","Step-by-Step Solution:
+1. List the 5 hourly lunch periods:
+   - Period 1: 11:00 AM - 12:00 PM
+   - Period 2: 12:00 PM - 1:00 PM
+   - Period 3: 1:00 PM - 2:00 PM
+   - Period 4: 2:00 PM - 3:00 PM
+   - Period 5: 3:00 PM - 4:00 PM
+2. Map fixed and relative assignments:
+   - Period 1 (11 AM - 12 PM): Elena (Given)
+   - Period 5 (3 PM - 4 PM): Ivy (Given)
+   - Period 2 (12 PM - 1 PM): Fred (Immediately after Elena)
+   - Period 4 (2 PM - 3 PM): Grace (Immediately before Ivy)
+3. Identify the unassigned slot:
+   - Period 3 (1:00 PM - 2:00 PM) is the only remaining open period.
+   - Employee Harry is the only remaining personnel.
+   - Therefore, Harry takes lunch from 1:00 PM to 2:00 PM.
+4. Conclude:
+   - Harry's lunch break is from 1:00 PM to 2:00 PM.
+
+Common Trap: Swapping Fred and Grace or miscounting the central open slot.
+Exam Tip: Systematically cross off assigned time blocks: $11-12 (\text{Elena}), 12-1 (\text{Fred}), 2-3 (\text{Grace}), 3-4 (\text{Ivy}) \implies 1-2 (\text{Harry})$.","Correct. Survives elimination because filling Periods 1, 2, 4, and 5 leaves the 1:00 PM to 2:00 PM slot uniquely open for Harry.","Eliminated because 12:00 PM to 1:00 PM is assigned to Fred.","Eliminated because 2:00 PM to 3:00 PM is assigned to Grace.","Eliminated because 11:00 AM to 12:00 PM is assigned to Elena.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"
+"A municipal agency conducts a 5-day orientation (Monday to Friday) with 5 speakers (S1, S2, S3, S4, S5): (1) S3 speaks on Wednesday. (2) S4 speaks on Tuesday. (3) S5 speaks on Friday. (4) S1 speaks earlier in the week than S2. On which day does speaker S1 speak?","Monday","Thursday","Tuesday","Friday","A","Step-by-Step Solution:
+1. Map the 5 weekdays: [Mon, Tue, Wed, Thu, Fri].
+2. Place fixed speaker assignments:
+   - Tuesday: S4
+   - Wednesday: S3
+   - Friday: S5
+3. Identify available days for remaining speakers (S1, S2):
+   - Available days: Monday and Thursday.
+4. Apply Rule 4 (S1 speaks earlier in the week than S2):
+   - Monday is earlier in the week than Thursday.
+   - Therefore: Monday = S1, and Thursday = S2.
+5. Complete schedule:
+   - [Mon: S1, Tue: S4, Wed: S3, Thu: S2, Fri: S5].
+6. Conclude:
+   - Speaker S1 speaks on Monday.
+
+Common Trap: Placing S1 on Thursday and S2 on Monday (violating Rule 4).
+Exam Tip: When two open days remain (Mon and Thu), the chronological inequality $S1 < S2$ assigns S1 to Monday.","Correct. Survives elimination because Monday and Thursday are open, and S1 earlier than S2 forces S1 into Monday.","Eliminated because Thursday is assigned to S2.","Eliminated because Tuesday is assigned to S4.","Eliminated because Friday is assigned to S5.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Scheduling | Very Difficult | Batch 084"

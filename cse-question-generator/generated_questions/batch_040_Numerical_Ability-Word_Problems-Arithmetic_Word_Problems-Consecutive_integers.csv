@@ -1,0 +1,174 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"The sum of five consecutive odd integers is 275. What is the mathematical product of the smallest and largest integers in this set?","3,009","3,025","2,985","3,015","A","Step-by-Step Solution:
+1. Express the five consecutive odd integers centered at median $n$:
+   - Set: $\{n - 4, \quad n - 2, \quad n, \quad n + 2, \quad n + 4\}$.
+2. Formulate sum equation:
+   - $(n - 4) + (n - 2) + n + (n + 2) + (n + 4) = 275$.
+   - $5n = 275 \implies n = \frac{275}{5} = 55$.
+3. Identify the smallest and largest integers:
+   - Smallest integer $= 55 - 4 = 51$.
+   - Largest integer $= 55 + 4 = 59$.
+4. Compute their product using difference of squares:
+   - $\text{Product} = 51 \times 59 = (55 - 4)(55 + 4) = 55^2 - 4^2$.
+   - $55^2 = 3,025$.
+   - $\text{Product} = 3,025 - 16 = 3,009$.
+
+Common Trap: Answering the square of the middle term ($55^2 = 3,025$, Option B) without subtracting $4^2 = 16$.
+Exam Tip: For consecutive odd/even symmetric terms: $\text{First} \times \text{Last} = \text{Mean}^2 - k^2 = 55^2 - 16 = 3,009$.","Correct. Survives elimination because the set is {51, 53, 55, 57, 59} and 51 * 59 = 3,009.","Eliminated because 3,025 is 55^2 (median squared).","Eliminated because 2,985 is an underestimate.","Eliminated because 3,015 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"The sum of the squares of three consecutive positive integers is 509. What is the value of the middle integer?","13","12","14","15","A","Step-by-Step Solution:
+1. Define the three consecutive positive integers centered at $n$:
+   - Set: $\{n - 1, \quad n, \quad n + 1\}$.
+2. Formulate sum-of-squares equation:
+   - $(n - 1)^2 + n^2 + (n + 1)^2 = 509$.
+3. Expand algebraic terms:
+   - $(n^2 - 2n + 1) + n^2 + (n^2 + 2n + 1) = 509$.
+   - $3n^2 + 2 = 509$.
+4. Solve for $n$:
+   - $3n^2 = 509 - 2 = 507$.
+   - $n^2 = \frac{507}{3} = 169$.
+   - $n = \sqrt{169} = 13$ (since integers are positive).
+5. Verify:
+   - $12^2 + 13^2 + 14^2 = 144 + 169 + 196 = 509$ (Confirmed!).
+
+Common Trap: Selecting the smallest integer $12$ (Option B) or largest integer $14$ (Option C) instead of the middle integer $13$.
+Exam Tip: Expansion of $(n-1)^2 + n^2 + (n+1)^2$ always reduces elegantly to $3n^2 + 2$.","Correct. Survives elimination because 3n^2 + 2 = 509 gives n^2 = 169, so the middle integer is n = 13.","Eliminated because 12 is the smallest integer in the set.","Eliminated because 14 is the largest integer in the set.","Eliminated because 15 yields sum of squares 677.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"If the arithmetic mean of 7 consecutive even integers is 44.0, what is the value of the largest integer in the set?","50","48","52","46","A","Step-by-Step Solution:
+1. Understand the property of consecutive arithmetic progressions:
+   - For an odd number of consecutive terms ($N = 7$), the arithmetic mean equals the exact middle (4th) term.
+   - 4th Term $= 44.0$.
+2. Formulate the set of 7 consecutive even integers centered at 44:
+   - Term 1: $44 - 6 = 38$
+   - Term 2: $44 - 4 = 40$
+   - Term 3: $44 - 2 = 42$
+   - Term 4: $44$ (Median/Mean)
+   - Term 5: $44 + 2 = 46$
+   - Term 6: $44 + 4 = 48$
+   - Term 7: $44 + 6 = 50$.
+3. Identify the largest integer:
+   - $\text{Largest Integer} = \text{Term 7} = 50$.
+4. (Verification: $\text{Sum} = 38 + 40 + 42 + 44 + 46 + 48 + 50 = 308$; $\frac{308}{7} = 44.0$).
+
+Common Trap: Answering the 6th term ($48$, Option B) or adding 8 ($52$, Option C).
+Exam Tip: Largest term in 7 consecutive even numbers is $\text{Mean} + 3(2) = 44 + 6 = 50$.","Correct. Survives elimination because the set is {38, 40, 42, 44, 46, 48, 50}, where 50 is the largest integer.","Eliminated because 48 is the second largest integer.","Eliminated because 52 is the 8th term.","Eliminated because 46 is the 5th term.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"The product of three consecutive positive integers is exactly 8 times their sum. What is the sum of the squares of these three integers?","77","85","75","80","A","Step-by-Step Solution:
+1. Define the three consecutive integers centered at $n$:
+   - $\{n - 1, \quad n, \quad n + 1\}$.
+2. Express their sum and product:
+   - $\text{Sum} = (n - 1) + n + (n + 1) = 3n$.
+   - $\text{Product} = (n - 1)n(n + 1) = n(n^2 - 1)$.
+3. Set up the given relation ($\text{Product} = 8 \times \text{Sum}$):
+   - $n(n^2 - 1) = 8(3n) = 24n$.
+4. Since $n > 0$, divide both sides by $n$:
+   - $n^2 - 1 = 24 \implies n^2 = 25 \implies n = 5$.
+5. Determine the three integers:
+   - Set: $\{4, \quad 5, \quad 6\}$.
+   - (Verification: $\text{Sum} = 15$, $\text{Product} = 4 \times 5 \times 6 = 120 = 8 \times 15$).
+6. Calculate the sum of their squares:
+   - $4^2 + 5^2 + 6^2 = 16 + 25 + 36 = 77$.
+
+Common Trap: Finding only the sum of the integers ($15$) or miscalculating $4^2 + 5^2 + 6^2$.
+Exam Tip: $n(n^2 - 1) = 24n \implies n^2 = 25 \implies n = 5 \implies 3n^2 + 2 = 3(25) + 2 = 77$.","Correct. Survives elimination because integers are 4, 5, 6 (product 120 = 8 * 15), and 4^2 + 5^2 + 6^2 = 16 + 25 + 36 = 77.","Eliminated because 85 is an overestimate.","Eliminated because 75 assumes 3(5^2) without adding 2.","Eliminated because 80 is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"For four consecutive positive integers, the sum of all four integers is 94. What is the value of the largest of these four integers?","25","24","26","23","A","Step-by-Step Solution:
+1. Define the four consecutive integers in terms of first integer $n$:
+   - $\{n, \quad n + 1, \quad n + 2, \quad n + 3\}$.
+2. Formulate sum equation:
+   - $n + (n + 1) + (n + 2) + (n + 3) = 94$.
+   - $4n + 6 = 94$.
+3. Solve for $n$:
+   - $4n = 94 - 6 = 88 \implies n = 22$.
+4. List the four consecutive integers:
+   - $22, \quad 23, \quad 24, \quad 25$.
+5. Identify the largest integer:
+   - $\text{Largest Integer} = n + 3 = 22 + 3 = 25$.
+6. (Verify inner vs outer product property: $(23 \times 24) - (22 \times 25) = 552 - 550 = 2$).
+
+Common Trap: Selecting the smallest integer $22$ or the 3rd integer $24$ (Option B).
+Exam Tip: $4n + 6 = 94 \implies n = 22 \implies \text{Largest} = 22 + 3 = 25$.","Correct. Survives elimination because 22 + 23 + 24 + 25 = 94, and the largest integer is 25.","Eliminated because 24 is the third integer.","Eliminated because 26 would yield sum 98.","Eliminated because 23 is the second integer.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"The sum of the squares of two consecutive positive odd integers is 650. What is the value of the smaller of the two integers?","17","15","19","21","A","Step-by-Step Solution:
+1. Define the two consecutive odd integers:
+   - Let smaller odd integer $= x$, larger odd integer $= x + 2$.
+2. Formulate equation:
+   - $x^2 + (x + 2)^2 = 650$.
+3. Expand and collect terms:
+   - $x^2 + x^2 + 4x + 4 = 650$.
+   - $2x^2 + 4x - 646 = 0$.
+4. Divide the entire equation by 2:
+   - $x^2 + 2x - 323 = 0$.
+5. Factor quadratic equation:
+   - Find two numbers whose product is $-323$ and difference is $2$:
+   - $\sqrt{323} \approx 17.97 \implies 17 \times 19 = 323$.
+   - $(x + 19)(x - 17) = 0$.
+6. Since $x > 0$, $x = 17$.
+7. (Verification: $17^2 + 19^2 = 289 + 361 = 650$).
+
+Common Trap: Selecting the larger integer $19$ (Option C) instead of the smaller integer $17$.
+Exam Tip: Factors of 323 with difference 2 are 17 and 19. Smaller is 17.","Correct. Survives elimination because 17^2 + 19^2 = 289 + 361 = 650, where 17 is the smaller integer.","Eliminated because 15^2 + 17^2 = 225 + 289 = 514 != 650.","Eliminated because 19 is the larger of the two odd integers.","Eliminated because 19^2 + 21^2 = 361 + 441 = 802 != 650.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"If the sum of 9 consecutive integers is 0, what is the mathematical product of all 9 integers in the set?","0","576","-576","24","A","Step-by-Step Solution:
+1. Express the 9 consecutive integers centered at mean $m$:
+   - Set: $\{m - 4, \quad m - 3, \quad m - 2, \quad m - 1, \quad m, \quad m + 1, \quad m + 2, \quad m + 3, \quad m + 4\}$.
+2. Formulate sum:
+   - $\text{Sum} = 9m = 0 \implies m = 0$.
+3. The set of integers is:
+   - $\{-4, \quad -3, \quad -2, \quad -1, \quad 0, \quad 1, \quad 2, \quad 3, \quad 4\}$.
+4. Compute the product of all elements:
+   - $\text{Product} = (-4) \times (-3) \times (-2) \times (-1) \times 0 \times 1 \times 2 \times 3 \times 4$.
+   - By the Zero Multiplication Property, any product with a factor of zero equals exactly 0.
+   - $\text{Product} = 0$.
+
+Common Trap: Multiplying non-zero elements to get $24 \times 24 = 576$ (Option B), forgetting that 0 is included in the set.
+Exam Tip: Any set of consecutive integers whose sum is 0 centered at 0 contains 0 itself; thus, its product is always 0.","Correct. Survives elimination because 0 is the central integer in the set {-4, -3, -2, -1, 0, 1, 2, 3, 4}, making the product 0.","Eliminated because 576 is the product of non-zero terms ((-4)(-3)(-2)(-1) * 1*2*3*4).","Eliminated because -576 is the negative product.","Eliminated because 24 is 4!.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"For four consecutive even integers, three times the sum of the first two integers is exactly 22 more than twice the sum of the last two integers. What is the value of the smallest integer in the sequence?","18","16","20","14","A","Step-by-Step Solution:
+1. Define the four consecutive even integers:
+   - $\{x, \quad x + 2, \quad x + 4, \quad x + 6\}$.
+2. Express the two partial sums:
+   - Sum of first two: $x + (x + 2) = 2x + 2$.
+   - Sum of last two: $(x + 4) + (x + 6) = 2x + 10$.
+3. Set up the given equation:
+   - $3(2x + 2) = 2(2x + 10) + 22$.
+4. Expand both sides:
+   - $6x + 6 = 4x + 20 + 22$.
+   - $6x + 6 = 4x + 42$.
+5. Solve for $x$:
+   - $6x - 4x = 42 - 6$.
+   - $2x = 36 \implies x = 18$.
+6. Verify:
+   - Integers: $18, 20, 22, 24$.
+   - $3(18 + 20) = 3(38) = 114$.
+   - $2(22 + 24) + 22 = 2(46) + 22 = 92 + 22 = 114$ (Confirmed!).
+
+Common Trap: Arithmetic error in collecting constants ($42 - 6 = 36 \implies x = 18$).
+Exam Tip: Always verify the solution by plugging $x = 18$ back into the original word problem.","Correct. Survives elimination because x = 18 gives 3(38) = 114 and 2(46) + 22 = 114.","Eliminated because x = 16 yields 3(34) = 102 != 2(42) + 22 = 106.","Eliminated because x = 20 yields 3(42) = 126 != 2(50) + 22 = 122.","Eliminated because x = 14 yields 3(30) = 90 != 2(38) + 22 = 98.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"The sum of the cubes of three consecutive positive integers is 216. What is the value of the largest of these three integers?","5","4","6","3","A","Step-by-Step Solution:
+1. Define the three consecutive integers centered at $n$:
+   - $\{n - 1, \quad n, \quad n + 1\}$.
+2. Formulate sum-of-cubes equation:
+   - $(n - 1)^3 + n^3 + (n + 1)^3 = 216$.
+3. Expand cubic binomials:
+   - $(n^3 - 3n^2 + 3n - 1) + n^3 + (n^3 + 3n^2 + 3n + 1) = 216$.
+   - $3n^3 + 6n = 216$.
+4. Divide by 3:
+   - $n^3 + 2n = 72 \implies n(n^2 + 2) = 72$.
+5. Test integer values for $n$:
+   - For $n = 4$: $4(4^2 + 2) = 4(16 + 2) = 4(18) = 72$ (Exact match!).
+6. The three consecutive integers are $3, 4, 5$.
+   - (Verification: $3^3 + 4^3 + 5^3 = 27 + 64 + 125 = 216$).
+7. Identify the largest integer:
+   - $\text{Largest Integer} = n + 1 = 4 + 1 = 5$.
+
+Common Trap: Selecting the middle integer $4$ (Option B) or smallest integer $3$ (Option D).
+Exam Tip: $3n^3 + 6n = 216 \implies n = 4 \implies \text{Largest} = 5$.","Correct. Survives elimination because the integers are 3, 4, 5 (sum of cubes = 27 + 64 + 125 = 216), where 5 is the largest integer.","Eliminated because 4 is the middle integer.","Eliminated because 6 is an overestimate.","Eliminated because 3 is the smallest integer.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"
+"The sum of five consecutive integers is denoted by $S$. In terms of $S$, what is the sum of the NEXT five consecutive integers?","S + 25","S + 50","S + 20","2S","A","Step-by-Step Solution:
+1. Define the initial five consecutive integers:
+   - Set 1: $\{n, \quad n + 1, \quad n + 2, \quad n + 3, \quad n + 4\}$.
+   - Sum $S = 5n + 10$.
+2. Define the next five consecutive integers:
+   - Set 2: $\{n + 5, \quad n + 6, \quad n + 7, \quad n + 8, \quad n + 9\}$.
+3. Compute the sum of Set 2 ($S_2$):
+   - $S_2 = (n + 5) + (n + 6) + (n + 7) + (n + 8) + (n + 9)$.
+   - $S_2 = 5n + 35$.
+4. Express $S_2$ in terms of $S$:
+   - $S_2 = (5n + 10) + 25 = S + 25$.
+5. (Verification via term-by-term difference: Each of the 5 terms in Set 2 is exactly 5 units greater than its corresponding term in Set 1: $(n+5)-n = 5$. Total increase $= 5 \text{ terms} \times 5 = 25$).
+
+Common Trap: Adding $5 \times 10 = 50$ (Option B) or selecting $2S$ (Option D).
+Exam Tip: Term shift $= 5$. Number of terms $= 5$. Total sum shift $= 5 \times 5 = 25 \implies S + 25$.","Correct. Survives elimination because each of the 5 new terms is 5 greater than the original terms, giving a net increase of 5 * 5 = 25 (S + 25).","Eliminated because S + 50 assumes a 10-unit shift per term.","Eliminated because S + 20 assumes a 4-unit shift per term.","Eliminated because 2S is only true if S = 25.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Consecutive integers | Very Difficult | Batch 040"

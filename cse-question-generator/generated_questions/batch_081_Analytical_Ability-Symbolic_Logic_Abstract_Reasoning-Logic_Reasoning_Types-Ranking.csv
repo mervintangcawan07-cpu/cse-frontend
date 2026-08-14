@@ -1,0 +1,175 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"In a cohort of 45 candidates who took the Civil Service Professional Examination, Carlos ranks 14th from the top. What is Carlos's exact rank when counted from the bottom of the list?","32nd","31st","33rd","30th","A","Step-by-Step Solution:
+1. Identify the given parameters:
+   - Total number of candidates ($N$) = 45.
+   - Rank from the top ($R_{\text{top}}$) = 14.
+2. Apply the standard Rank Inversion Formula:
+   - $\text{Rank from bottom} = N - R_{\text{top}} + 1$.
+3. Substitute the values:
+   - $\text{Rank from bottom} = 45 - 14 + 1 = 31 + 1 = 32\text{nd}$.
+4. Verify by segment addition:
+   - Candidates ranked higher than Carlos: $14 - 1 = 13$.
+   - Candidates ranked lower than Carlos: $45 - 14 = 31$.
+   - Carlos's position counting from the bottom: $31 + 1 = 32\text{nd}$.
+5. Conclude:
+   - Carlos is ranked 32nd from the bottom.
+
+Common Trap: Forgetting to add 1 after subtracting (calculating $45 - 14 = 31\text{st}$, which counts only the people below Carlos).
+Exam Tip: $\text{Rank}_{\text{Bottom}} = \text{Total} - \text{Rank}_{\text{Top}} + 1$.","Correct. Survives elimination because 45 - 14 + 1 = 32nd position from the bottom.","Eliminated because 31st counts only the candidates below Carlos without including Carlos.","Eliminated because 33rd is an arithmetic calculation error.","Eliminated because 30th is an arithmetic calculation error.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"In an annual executive performance review: (1) Officer A scored higher than Officer B. (2) Officer C scored higher than Officer D. (3) Officer B scored higher than Officer C. (4) Officer E scored lower than Officer D. Which officer attained the MEDIAN (3rd highest) performance score?","Officer C","Officer B","Officer D","Officer A","A","Step-by-Step Solution:
+1. Translate the comparative performance statements into mathematical inequalities:
+   - Premise 1: $A > B$.
+   - Premise 2: $C > D$.
+   - Premise 3: $B > C$.
+   - Premise 4: $D > E$ (since E scored lower than D).
+2. Chain all inequalities into a single unified descending order:
+   - From $A > B$, $B > C$, $C > D$, and $D > E$:
+   - Strict Order: $A > B > C > D > E$.
+3. Determine rank positions among the 5 officers:
+   - 1st (Highest): Officer A
+   - 2nd: Officer B
+   - 3rd (Median): Officer C
+   - 4th: Officer D
+   - 5th (Lowest): Officer E
+4. Conclude:
+   - Officer C attained the exact median performance score.
+
+Common Trap: Misinterpreting \"lower than\" and inverting Officer E's inequality.
+Exam Tip: Chain the inequalities transitively: $A > B > C > D > E$. The middle element of 5 items is the 3rd item (C).","Correct. Survives elimination because the unified strict inequality chain A > B > C > D > E places Officer C in the exact 3rd (median) position.","Eliminated because Officer B is 2nd highest.","Eliminated because Officer D is 4th highest.","Eliminated because Officer A is 1st (highest).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"In a national civil service merit ranking: Maria is 18th from the top, and Juan is 24th from the bottom. There are exactly 7 candidates ranked strictly between Maria and Juan, with Maria ranked higher than Juan. What is the total number of candidates in the ranking list?","49","48","50","42","A","Step-by-Step Solution:
+1. Segment the ranking list into non-overlapping contiguous groups:
+   - Group 1 (Top segment up to and including Maria): 18 candidates.
+   - Group 2 (Intermediate segment strictly between Maria and Juan): 7 candidates.
+   - Group 3 (Bottom segment from Juan down to the last candidate): 24 candidates.
+2. Sum the three disjoint segments to find total candidates ($N$):
+   - $N = \text{Top Segment} + \text{Middle Segment} + \text{Bottom Segment}$.
+   - $N = 18 + 7 + 24 = 49$.
+3. Cross-verify via Juan's top rank:
+   - Juan's rank from top: $18 + 7 + 1 = 26\text{th}$.
+   - Total $N = R_{\text{top}} + R_{\text{bottom}} - 1 = 26 + 24 - 1 = 50 - 1 = 49$.
+4. Conclude:
+   - There are 49 candidates in total.
+
+Common Trap: Subtracting 1 when summing disjoint groups (e.g., $18 + 7 + 24 - 1 = 48$). The $-1$ applies only when a single person's top and bottom ranks are added directly.
+Exam Tip: Sum of Disjoint Segments: $\text{Top} + \text{Between} + \text{Bottom} = 18 + 7 + 24 = 49$.","Correct. Survives elimination because adding the three disjoint groups yields 18 + 7 + 24 = 49 candidates.","Eliminated because 48 erroneously subtracts 1 from disjoint partition sums.","Eliminated because 50 is an arithmetic error.","Eliminated because 42 omits the intermediate candidates.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"Six regional agencies (V, W, X, Y, Z, K) were ranked based on annual citizen satisfaction scores: (1) Agency V ranked higher than Agency W. (2) Agency X ranked higher than Agency V. (3) Agency Y ranked higher than Agency Z, but lower than Agency W. (4) Agency K ranked higher than Agency X. Which agency ranked SECOND TO LOWEST (5th place)?","Agency Y","Agency Z","Agency W","Agency V","A","Step-by-Step Solution:
+1. Express the ranking constraints as mathematical inequalities:
+   - Rule 1: $V > W$.
+   - Rule 2: $X > V$.
+   - Rule 3: $W > Y > Z$.
+   - Rule 4: $K > X$.
+2. Chain the inequalities from highest to lowest:
+   - $K > X > V > W > Y > Z$.
+3. Map the rank positions:
+   - 1st Place: Agency K
+   - 2nd Place: Agency X
+   - 3rd Place: Agency V
+   - 4th Place: Agency W
+   - 5th Place (Second to Lowest): Agency Y
+   - 6th Place (Lowest): Agency Z
+4. Conclude:
+   - Agency Y ranked 5th (second to lowest).
+
+Common Trap: Selecting Agency Z (which is the lowest, 6th place, rather than second to lowest).
+Exam Tip: \"Second to lowest\" in a 6-item list is 5th place: $K(1) > X(2) > V(3) > W(4) > Y(5) > Z(6)$.","Correct. Survives elimination because the unified ranking K > X > V > W > Y > Z places Agency Y in 5th place (second to lowest).","Eliminated because Agency Z is in 6th place (lowest).","Eliminated because Agency W is in 4th place.","Eliminated because Agency V is in 3rd place.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"In a single queue of applicants, Elena is 11th from the left, and Gabriel is 17th from the right. When Elena and Gabriel swap their positions, Elena becomes 23rd from the left. What is the total number of applicants in the queue?","39","38","40","41","A","Step-by-Step Solution:
+1. Identify the dual coordinates of Gabriel's original position:
+   - Before the swap, Gabriel occupied a chair that was 17th from the right ($R_{\text{right}} = 17$).
+   - After swapping, Elena moves to Gabriel's exact chair, and her new position is measured as 23rd from the left ($R_{\text{left}} = 23$).
+2. Calculate total applicants ($N$) using the chair's known left and right ranks:
+   - Formula: $N = R_{\text{left}} + R_{\text{right}} - 1$.
+   - $N = 23 + 17 - 1 = 40 - 1 = 39$.
+3. Verify:
+   - Gabriel's new rank from the right: $39 - 11 + 1 = 29\text{th}$.
+   - Elena shifted by $23 - 11 = 12$ places to the right.
+   - Total length remains invariant at 39.
+4. Conclude:
+   - The total number of applicants is 39.
+
+Common Trap: Forgetting to subtract 1 for the double-counted swap seat ($23 + 17 = 40$).
+Exam Tip: The chair where Elena moves has $R_{\text{Left}} = 23$ and $R_{\text{Right}} = 17 \implies N = 23 + 17 - 1 = 39$.","Correct. Survives elimination because the swapped position is 23rd from the left and 17th from the right: 23 + 17 - 1 = 39.","Eliminated because 38 subtracts an extra unnecessary position.","Eliminated because 40 double-counts the swapped position.","Eliminated because 41 is an arithmetic calculation error.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"Five civil service examinees (F, G, H, I, J) have distinct test scores: (1) F scored higher than G, but lower than H. (2) I scored higher than H. (3) J did NOT get the lowest score. Who got the LOWEST test score?","G","J","F","H","A","Step-by-Step Solution:
+1. Set up inequalities from given statements:
+   - Statement 1: $H > F > G$.
+   - Statement 2: $I > H \implies I > H > F > G$.
+2. Analyze the relative ranks of F, G, H, I:
+   - Among these four examinees, G is strictly the lowest ($G < F < H < I$).
+3. Integrate the condition for examinee J:
+   - Statement 3 states: J is not the lowest score ($J > \text{Lowest}$).
+   - Since J cannot be the lowest, and G is already lower than F, H, and I, the lowest score MUST belong to examinee G.
+4. Conclude:
+   - Examinee G obtained the lowest test score.
+
+Common Trap: Assuming the exact position of J must be known to determine the lowest person.
+Exam Tip: Since $G < F < H < I$ and $J \neq \text{Lowest}$, $G$ is mathematically forced to be the absolute lowest.","Correct. Survives elimination because G is lower than F, H, and I, and J is explicitly disqualified from being the lowest, forcing G to be the lowest.","Eliminated because J is explicitly stated not to have the lowest score.","Eliminated because F scored higher than G.","Eliminated because H scored higher than F and G.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"In a competitive merit examination with 60 participants, Rafael is ranked 22nd from the top, while Sofia is ranked 15th from the bottom. How many participants are ranked strictly BETWEEN Rafael and Sofia?","23","24","22","25","A","Step-by-Step Solution:
+1. Identify the given parameters:
+   - Total participants ($N$) = 60.
+   - Rafael's rank from top ($R_1$) = 22.
+   - Sofia's rank from bottom ($R_2$) = 15.
+2. Check for overlapping or separate segments:
+   - Sum of endpoint ranks: $R_1 + R_2 = 22 + 15 = 37$.
+   - Since $37 < 60$, the two segments do NOT overlap, and there is a gap between them.
+3. Calculate the number of participants strictly in the intermediate gap:
+   - $\text{Participants Between} = N - (R_1 + R_2)$.
+   - $\text{Participants Between} = 60 - (22 + 15) = 60 - 37 = 23$.
+4. Cross-verify via top ranks:
+   - Sofia's rank from top: $60 - 15 + 1 = 46\text{th}$.
+   - Number between 22nd and 46th: $46 - 22 - 1 = 23$.
+5. Conclude:
+   - There are 23 participants strictly between Rafael and Sofia.
+
+Common Trap: Calculating $60 - 37 + 1 = 24$ (which would include one of the endpoints).
+Exam Tip: Non-overlapping gap formula: $\text{Between} = \text{Total} - (\text{Top Rank} + \text{Bottom Rank}) = 60 - 37 = 23$.","Correct. Survives elimination because 60 - (22 + 15) = 23 participants strictly between the two ranks.","Eliminated because 24 includes an endpoint.","Eliminated because 22 is an arithmetic miscalculation.","Eliminated because 25 is an arithmetic miscalculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"Seven project proposals (1, 2, 3, 4, 5, 6, 7) are evaluated on cost-effectiveness: (1) Proposal 3 is more cost-effective than Proposal 5, but less than Proposal 2. (2) Proposal 1 is more cost-effective than Proposal 2. (3) Proposal 6 is less cost-effective than Proposal 5, but more than Proposal 4. (4) Proposal 7 is the least cost-effective of all. Which proposal is ranked 4th in cost-effectiveness?","Proposal 5","Proposal 3","Proposal 6","Proposal 2","A","Step-by-Step Solution:
+1. Translate statements into inequalities:
+   - Rule 1: $2 > 3 > 5$.
+   - Rule 2: $1 > 2$.
+   - Rule 3: $5 > 6 > 4$.
+   - Rule 4: $4 > 7$ (Proposal 7 is absolute lowest).
+2. Connect into a single descending chain:
+   - $1 > 2 > 3 > 5 > 6 > 4 > 7$.
+3. Determine rank positions:
+   - 1st: Proposal 1
+   - 2nd: Proposal 2
+   - 3rd: Proposal 3
+   - 4th: Proposal 5
+   - 5th: Proposal 6
+   - 6th: Proposal 4
+   - 7th: Proposal 7
+4. Conclude:
+   - Proposal 5 is ranked 4th.
+
+Common Trap: Confusing Proposal 3 (3rd) with Proposal 5 (4th).
+Exam Tip: Combine links sequentially: $1 > 2 > 3 > 5 > 6 > 4 > 7$. The 4th item is Proposal 5.","Correct. Survives elimination because the strict inequality chain 1 > 2 > 3 > 5 > 6 > 4 > 7 places Proposal 5 in 4th rank.","Eliminated because Proposal 3 is ranked 3rd.","Eliminated because Proposal 6 is ranked 5th.","Eliminated because Proposal 2 is ranked 2nd.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"In a merit promotion list of an agency, Mateo ranks 12th overall. If exactly 8 female candidates and a group of male candidates are ranked higher than Mateo, how many male candidates are ranked strictly higher than Mateo?","3","6","4","5","A","Step-by-Step Solution:
+1. Identify total candidates ranked ahead of Mateo:
+   - Mateo is 12th overall $\implies$ exactly $12 - 1 = 11$ candidates are ranked higher than Mateo.
+2. Decompose the higher-ranked candidates by gender:
+   - Higher-ranked candidates = (Female candidates ahead) + (Male candidates ahead).
+   - $11 = 8 + \text{Male candidates ahead}$.
+3. Solve for male candidates ahead:
+   - $\text{Male candidates ahead} = 11 - 8 = 3$.
+4. Conclude:
+   - Exactly 3 male candidates are ranked strictly higher than Mateo.
+
+Common Trap: Subtracting from 12 instead of 11 (forgetting that Mateo himself occupies the 12th spot).
+Exam Tip: Candidates ahead of Rank $K$ is always $K - 1$. Here, $12 - 1 = 11 \implies 11 - 8 = 3$.","Correct. Survives elimination because 12th rank overall means 11 candidates are ahead, and 11 - 8 females = 3 males ahead.","Eliminated because 6 is an arithmetic error.","Eliminated because 4 assumes 12 candidates ahead rather than 11.","Eliminated because 5 is an arithmetic error.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"
+"Five administrative departments (Admin, Finance, HR, IT, Legal) are ranked by budget efficiency: (1) IT is more efficient than HR. (2) Finance is more efficient than Legal, but less efficient than HR. (3) Admin is more efficient than IT. Which department is the SECOND MOST EFFICIENT?","IT","Admin","HR","Finance","A","Step-by-Step Solution:
+1. Translate rules into efficiency inequalities:
+   - Rule 1: $\text{IT} > \text{HR}$.
+   - Rule 2: $\text{HR} > \text{Finance} > \text{Legal}$.
+   - Rule 3: $\text{Admin} > \text{IT}$.
+2. Combine into a single descending efficiency ranking:
+   - $\text{Admin} > \text{IT} > \text{HR} > \text{Finance} > \text{Legal}$.
+3. Determine rank positions:
+   - 1st (Most Efficient): Admin
+   - 2nd (Second Most Efficient): IT
+   - 3rd: HR
+   - 4th: Finance
+   - 5th (Least Efficient): Legal
+4. Conclude:
+   - The IT department is the second most efficient department.
+
+Common Trap: Selecting Admin (which is 1st/most efficient) instead of the 2nd most efficient.
+Exam Tip: $\text{Admin}(1) > \text{IT}(2) > \text{HR}(3) > \text{Finance}(4) > \text{Legal}(5)$.","Correct. Survives elimination because the unified efficiency chain Admin > IT > HR > Finance > Legal places IT in 2nd rank.","Eliminated because Admin is 1st (most efficient).","Eliminated because HR is 3rd.","Eliminated because Finance is 4th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ranking | Very Difficult | Batch 081"

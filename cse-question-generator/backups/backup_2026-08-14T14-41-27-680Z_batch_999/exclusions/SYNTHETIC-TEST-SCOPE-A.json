@@ -1,0 +1,80 @@
+{
+  "scope_key": "SYNTHETIC-TEST-SCOPE-A",
+  "created_at": "2026-08-14T14:41:27.661Z",
+  "updated_at": "2026-08-14T14:41:27.663Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "11b54e6e5967d8624af081e7444da72469b26474d97d1574a809e14b2e55b080",
+    "ba967405a90f172a97c8c84df3d3e334460bdcf66504dad18d1cefb824ae1559",
+    "317b4a8495c207663660da64890567d5fd74a62d5bd7379d6c9f09cb37f0465a",
+    "dbc4cac8fb5b216e0a91e879e908e0b79b51cd91ac3f4f48a02de71538c2965e",
+    "ace6abe4f98025b22fdf96f1e2976aa57cf64852aafaf475e112377c2c5ec633",
+    "75bfda8fa8a551dbb0d50774df8e7eaef0069fc2233cc5932b50a3adad8c35af",
+    "c807999ebb00665da2fe7553f99cb90c26162964ddb4b6a94e9f9c59b494315d",
+    "0726273e095eef349b5dbb4529802a31c2a0dd39f79b32d39a5f5b4f695f2205",
+    "12ff12370f916bdf139477031f0bd84fbacc4a9df514d9fa38114711e9cf9158",
+    "f0c655b800af2fcbec3c46f508f43f653d847535073135d47ccd80e9d6f0fb6b"
+  ],
+  "records": [
+    {
+      "id": "q_1786718487662_774m7o",
+      "hash": "11b54e6e5967d8624af081e7444da72469b26474d97d1574a809e14b2e55b080",
+      "normalized": "synthetic dummy test only 11 what is the mock placeholder value for property x in unit test 1",
+      "added_at": "2026-08-14T14:41:27.662Z"
+    },
+    {
+      "id": "q_1786718487662_n9i7ok",
+      "hash": "ba967405a90f172a97c8c84df3d3e334460bdcf66504dad18d1cefb824ae1559",
+      "normalized": "synthetic dummy test only 12 what is the mock placeholder value for property x in unit test 2",
+      "added_at": "2026-08-14T14:41:27.662Z"
+    },
+    {
+      "id": "q_1786718487663_v6pjr7",
+      "hash": "317b4a8495c207663660da64890567d5fd74a62d5bd7379d6c9f09cb37f0465a",
+      "normalized": "synthetic dummy test only 13 what is the mock placeholder value for property x in unit test 3",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_46uszm",
+      "hash": "dbc4cac8fb5b216e0a91e879e908e0b79b51cd91ac3f4f48a02de71538c2965e",
+      "normalized": "synthetic dummy test only 14 what is the mock placeholder value for property x in unit test 4",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_iqa69s",
+      "hash": "ace6abe4f98025b22fdf96f1e2976aa57cf64852aafaf475e112377c2c5ec633",
+      "normalized": "synthetic dummy test only 15 what is the mock placeholder value for property x in unit test 5",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_irqxds",
+      "hash": "75bfda8fa8a551dbb0d50774df8e7eaef0069fc2233cc5932b50a3adad8c35af",
+      "normalized": "synthetic dummy test only 16 what is the mock placeholder value for property x in unit test 6",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_10sbdl",
+      "hash": "c807999ebb00665da2fe7553f99cb90c26162964ddb4b6a94e9f9c59b494315d",
+      "normalized": "synthetic dummy test only 17 what is the mock placeholder value for property x in unit test 7",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_plbz6j",
+      "hash": "0726273e095eef349b5dbb4529802a31c2a0dd39f79b32d39a5f5b4f695f2205",
+      "normalized": "synthetic dummy test only 18 what is the mock placeholder value for property x in unit test 8",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_0nj854",
+      "hash": "12ff12370f916bdf139477031f0bd84fbacc4a9df514d9fa38114711e9cf9158",
+      "normalized": "synthetic dummy test only 19 what is the mock placeholder value for property x in unit test 9",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    },
+    {
+      "id": "q_1786718487663_11ehm4",
+      "hash": "f0c655b800af2fcbec3c46f508f43f653d847535073135d47ccd80e9d6f0fb6b",
+      "normalized": "synthetic dummy test only 110 what is the mock placeholder value for property x in unit test 10",
+      "added_at": "2026-08-14T14:41:27.663Z"
+    }
+  ]
+}

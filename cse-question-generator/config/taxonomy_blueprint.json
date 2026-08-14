@@ -1,0 +1,385 @@
+{
+  "version": "4.0",
+  "reviewer_level": "PROFESSIONAL_ONLY",
+  "categories": [
+    {
+      "category_id": "VA",
+      "category_name": "Verbal Ability",
+      "components": [
+        {
+          "component_id": "RC",
+          "component_name": "Reading Comprehension",
+          "subtopics": [
+            {
+              "subtopic_id": "RC_CORE",
+              "subtopic_name": "Core Reading Skills",
+              "micro_subtopics": [
+                {
+                  "micro_id": "CAUSEEFFECT",
+                  "micro_name": "Cause and Effect",
+                  "status": "NEXT_UP",
+                  "target_batches": 1
+                },
+                {
+                  "micro_id": "COMPARISON",
+                  "micro_name": "Comparison",
+                  "status": "PENDING",
+                  "target_batches": 1
+                },
+                {
+                  "micro_id": "SEQUENCE",
+                  "micro_name": "Sequence",
+                  "status": "PENDING",
+                  "target_batches": 1
+                },
+                {
+                  "micro_id": "BEST_TITLE",
+                  "micro_name": "Best title",
+                  "status": "PENDING",
+                  "target_batches": 1
+                },
+                {
+                  "micro_id": "STMT_SUPPORTED",
+                  "micro_name": "Which statement is supported",
+                  "status": "PENDING",
+                  "target_batches": 1
+                },
+                {
+                  "micro_id": "STMT_NOT_SUPPORTED",
+                  "micro_name": "Which statement is NOT supported",
+                  "status": "PENDING",
+                  "target_batches": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "NA",
+      "category_name": "Numerical Ability",
+      "components": [
+        {
+          "component_id": "BASIC_OPS",
+          "component_name": "Basic Operations",
+          "subtopics": [
+            {
+              "subtopic_id": "OPS_CORE",
+              "subtopic_name": "Arithmetic & Number Properties",
+              "micro_subtopics": [
+                { "micro_id": "ORDER_OF_OPERATIONS", "micro_name": "Order of operations", "status": "PENDING" },
+                { "micro_id": "FRACTIONS", "micro_name": "Fractions", "status": "PENDING" },
+                { "micro_id": "DECIMALS", "micro_name": "Decimals", "status": "PENDING" },
+                { "micro_id": "PERCENTAGES", "micro_name": "Percentages", "status": "PENDING" },
+                { "micro_id": "RATIOS", "micro_name": "Ratios", "status": "PENDING" },
+                { "micro_id": "PROPORTIONS", "micro_name": "Proportions", "status": "PENDING" },
+                { "micro_id": "MIXED_OPERATIONS", "micro_name": "Mixed operations", "status": "PENDING" },
+                { "micro_id": "POSITIVE_NEGATIVE_NUMBERS", "micro_name": "Positive/negative numbers", "status": "PENDING" },
+                { "micro_id": "ROUNDING", "micro_name": "Rounding", "status": "PENDING" },
+                { "micro_id": "ESTIMATION", "micro_name": "Estimation", "status": "PENDING" },
+                { "micro_id": "AVERAGE_MEAN", "micro_name": "Average/mean", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "NUMBER_SEQUENCE",
+          "component_name": "Number Sequence",
+          "subtopics": [
+            {
+              "subtopic_id": "SEQ_CORE",
+              "subtopic_name": "Sequences & Patterns",
+              "micro_subtopics": [
+                { "micro_id": "ARITHMETIC_SEQUENCES", "micro_name": "Arithmetic sequences", "status": "PENDING" },
+                { "micro_id": "INCREASING_SEQUENCES", "micro_name": "Increasing sequences", "status": "PENDING" },
+                { "micro_id": "DECREASING_SEQUENCES", "micro_name": "Decreasing sequences", "status": "PENDING" },
+                { "micro_id": "ALTERNATING_PATTERNS", "micro_name": "Alternating patterns", "status": "PENDING" },
+                { "micro_id": "MULTIPLICATION_PATTERNS", "micro_name": "Multiplication patterns", "status": "PENDING" },
+                { "micro_id": "DIVISION_PATTERNS", "micro_name": "Division patterns", "status": "PENDING" },
+                { "micro_id": "ADD_SUB_PATTERNS", "micro_name": "Addition/subtraction patterns", "status": "PENDING" },
+                { "micro_id": "MIXED_OP_SEQUENCES", "micro_name": "Mixed operations", "status": "PENDING" },
+                { "micro_id": "SQUARES", "micro_name": "Squares", "status": "PENDING" },
+                { "micro_id": "FIBONACCI_PATTERNS", "micro_name": "Fibonacci-like patterns", "status": "PENDING" },
+                { "micro_id": "DIFFERENCE_PATTERNS", "micro_name": "Difference patterns", "status": "PENDING" },
+                { "micro_id": "SECOND_DIFF_PATTERNS", "micro_name": "Second-difference patterns", "status": "PENDING" },
+                { "micro_id": "POSITION_PATTERNS", "micro_name": "Position-based patterns", "status": "PENDING" },
+                { "micro_id": "ALTERNATING_SEQUENCES", "micro_name": "Alternating sequences", "status": "PENDING" },
+                { "micro_id": "HIDDEN_PATTERNS", "micro_name": "Hidden-pattern sequences", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "WORD_PROBLEMS",
+          "component_name": "Word Problems",
+          "subtopics": [
+            {
+              "subtopic_id": "WP_CORE",
+              "subtopic_name": "Applied Word Problems",
+              "micro_subtopics": [
+                { "micro_id": "AGE_PROBLEMS", "micro_name": "Age problems", "status": "PENDING" },
+                { "micro_id": "WORK_RATE_PROBLEMS", "micro_name": "Work-rate problems", "status": "PENDING" },
+                { "micro_id": "DISTANCE_RATE_TIME", "micro_name": "Distance-rate-time", "status": "PENDING" },
+                { "micro_id": "PERCENTAGE_PROBLEMS", "micro_name": "Percentage", "status": "PENDING" },
+                { "micro_id": "PROFIT_LOSS", "micro_name": "Profit/loss", "status": "PENDING" },
+                { "micro_id": "DISCOUNT", "micro_name": "Discount", "status": "PENDING" },
+                { "micro_id": "SIMPLE_INTEREST", "micro_name": "Simple interest", "status": "PENDING" },
+                { "micro_id": "RATIO_PROPORTION_WP", "micro_name": "Ratio/proportion", "status": "PENDING" },
+                { "micro_id": "MIXTURES", "micro_name": "Mixtures", "status": "PENDING" },
+                { "micro_id": "PARTNERSHIP", "micro_name": "Partnership", "status": "PENDING" },
+                { "micro_id": "PRODUCTION", "micro_name": "Production", "status": "PENDING" },
+                { "micro_id": "WORK_COMPLETION", "micro_name": "Work completion", "status": "PENDING" },
+                { "micro_id": "COMBINED_WORK", "micro_name": "Combined work", "status": "PENDING" },
+                { "micro_id": "TIME_ALLOCATION", "micro_name": "Time allocation", "status": "PENDING" },
+                { "micro_id": "POPULATION", "micro_name": "Population", "status": "PENDING" },
+                { "micro_id": "BASIC_PROBABILITY", "micro_name": "Basic probability", "status": "PENDING" },
+                { "micro_id": "COUNTING", "micro_name": "Counting", "status": "PENDING" },
+                { "micro_id": "NUMBER_RELATIONSHIPS", "micro_name": "Number relationships", "status": "PENDING" },
+                { "micro_id": "COMPARISON_PROBLEMS", "micro_name": "Comparison problems", "status": "PENDING" },
+                { "micro_id": "MULTI_STEP_PROBLEMS", "micro_name": "Multi-step problems", "status": "PENDING" },
+                { "micro_id": "REVERSE_PROBLEMS", "micro_name": "Reverse problems", "status": "PENDING" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "AA",
+      "category_name": "Analytical Ability",
+      "components": [
+        {
+          "component_id": "WORD_ANALOGY",
+          "component_name": "Word Analogy",
+          "subtopics": [
+            {
+              "subtopic_id": "WA_CORE",
+              "subtopic_name": "Analogy Types",
+              "micro_subtopics": [
+                { "micro_id": "SYNONYM_ANALOGY", "micro_name": "Synonym analogy", "status": "PENDING" },
+                { "micro_id": "ANTONYM_ANALOGY", "micro_name": "Antonym analogy", "status": "PENDING" },
+                { "micro_id": "PART_TO_WHOLE", "micro_name": "Part-to-whole", "status": "PENDING" },
+                { "micro_id": "WHOLE_TO_PART", "micro_name": "Whole-to-part", "status": "PENDING" },
+                { "micro_id": "FUNCTION_ANALOGY", "micro_name": "Function analogy", "status": "PENDING" },
+                { "micro_id": "WORKER_TOOL", "micro_name": "Worker-tool", "status": "PENDING" },
+                { "micro_id": "OBJECT_PURPOSE", "micro_name": "Object-purpose", "status": "PENDING" },
+                { "micro_id": "CAUSE_EFFECT_ANALOGY", "micro_name": "Cause-effect", "status": "PENDING" },
+                { "micro_id": "DEGREE_ANALOGY", "micro_name": "Degree", "status": "PENDING" },
+                { "micro_id": "CLASSIFICATION_ANALOGY", "micro_name": "Classification", "status": "PENDING" },
+                { "micro_id": "LOCATION_ANALOGY", "micro_name": "Location", "status": "PENDING" },
+                { "micro_id": "SEQUENCE_ANALOGY", "micro_name": "Sequence", "status": "PENDING" },
+                { "micro_id": "PRODUCT_MATERIAL", "micro_name": "Product-material", "status": "PENDING" },
+                { "micro_id": "PERSON_ACTION", "micro_name": "Person-action", "status": "PENDING" },
+                { "micro_id": "RELATIONSHIP_ANALOGY", "micro_name": "Relationship analogy", "status": "PENDING" },
+                { "micro_id": "ABSTRACT_RELATIONSHIPS", "micro_name": "Abstract relationships", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "SYMBOLIC_LOGIC",
+          "component_name": "Symbolic Logic / Abstract Reasoning",
+          "subtopics": [
+            {
+              "subtopic_id": "SL_CORE",
+              "subtopic_name": "Logic & Reasoning Types",
+              "micro_subtopics": [
+                { "micro_id": "LOGICAL_RELATIONSHIPS", "micro_name": "Logical relationships", "status": "PENDING" },
+                { "micro_id": "CONDITIONAL_STATEMENTS", "micro_name": "Conditional statements", "status": "PENDING" },
+                { "micro_id": "IF_THEN_REASONING", "micro_name": "If-then reasoning", "status": "PENDING" },
+                { "micro_id": "EITHER_OR_REASONING", "micro_name": "Either/or reasoning", "status": "PENDING" },
+                { "micro_id": "ALL_SOME_NONE", "micro_name": "All/some/none", "status": "PENDING" },
+                { "micro_id": "NEGATION", "micro_name": "Negation", "status": "PENDING" },
+                { "micro_id": "SYLLOGISMS", "micro_name": "Syllogisms", "status": "PENDING" },
+                { "micro_id": "PATTERN_RECOGNITION", "micro_name": "Pattern recognition", "status": "PENDING" },
+                { "micro_id": "SYMBOL_SUBSTITUTION", "micro_name": "Symbol substitution", "status": "PENDING" },
+                { "micro_id": "SEQUENCE_PATTERNS", "micro_name": "Sequence patterns", "status": "PENDING" },
+                { "micro_id": "ARRANGEMENT_LOGIC", "micro_name": "Arrangement logic", "status": "PENDING" },
+                { "micro_id": "RANKING", "micro_name": "Ranking", "status": "PENDING" },
+                { "micro_id": "ORDERING", "micro_name": "Ordering", "status": "PENDING" },
+                { "micro_id": "GROUPING", "micro_name": "Grouping", "status": "PENDING" },
+                { "micro_id": "SCHEDULING", "micro_name": "Scheduling", "status": "PENDING" },
+                { "micro_id": "CONSTRAINT_SATISFACTION", "micro_name": "Constraint satisfaction", "status": "PENDING" },
+                { "micro_id": "DEDUCTIVE_REASONING", "micro_name": "Deductive reasoning", "status": "PENDING" },
+                { "micro_id": "ABSTRACT_PATTERNS", "micro_name": "Abstract patterns", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "ASSUMPTIONS_CONCLUSIONS",
+          "component_name": "Identifying Assumptions and Drawing Conclusions",
+          "subtopics": [
+            {
+              "subtopic_id": "AC_CORE",
+              "subtopic_name": "Argument Evaluation & Inference",
+              "micro_subtopics": [
+                { "micro_id": "NECESSARY_ASSUMPTIONS", "micro_name": "Necessary assumptions", "status": "PENDING" },
+                { "micro_id": "HIDDEN_ASSUMPTIONS", "micro_name": "Hidden assumptions", "status": "PENDING" },
+                { "micro_id": "VALID_CONCLUSIONS", "micro_name": "Valid conclusions", "status": "PENDING" },
+                { "micro_id": "INVALID_CONCLUSIONS", "micro_name": "Invalid conclusions", "status": "PENDING" },
+                { "micro_id": "INFERENCE_AC", "micro_name": "Inference", "status": "PENDING" },
+                { "micro_id": "CAUSE_EFFECT_REASONING", "micro_name": "Cause/effect reasoning", "status": "PENDING" },
+                { "micro_id": "CONDITIONAL_CONCLUSIONS", "micro_name": "Conditional conclusions", "status": "PENDING" },
+                { "micro_id": "EVIDENCE_EVALUATION", "micro_name": "Evidence evaluation", "status": "PENDING" },
+                { "micro_id": "STRENGTH_OF_ARGUMENT", "micro_name": "Strength of argument", "status": "PENDING" },
+                { "micro_id": "WEAKNESS_OF_ARGUMENT", "micro_name": "Weakness of argument", "status": "PENDING" },
+                { "micro_id": "FACT_VS_INFERENCE", "micro_name": "Fact vs inference", "status": "PENDING" },
+                { "micro_id": "PRESUPPOSITION", "micro_name": "Presupposition", "status": "PENDING" },
+                { "micro_id": "CONTRADICTION", "micro_name": "Contradiction", "status": "PENDING" },
+                { "micro_id": "CONSISTENCY", "micro_name": "Consistency", "status": "PENDING" },
+                { "micro_id": "MUST_BE_TRUE", "micro_name": "Must be true", "status": "PENDING" },
+                { "micro_id": "COULD_BE_TRUE", "micro_name": "Could be true", "status": "PENDING" },
+                { "micro_id": "CANNOT_BE_TRUE", "micro_name": "Cannot be true", "status": "PENDING" },
+                { "micro_id": "MOST_LIKELY", "micro_name": "Most likely", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "DATA_INTERPRETATION",
+          "component_name": "Data Interpretation",
+          "subtopics": [
+            {
+              "subtopic_id": "DI_CORE",
+              "subtopic_name": "Quantitative & Graphical Analysis",
+              "micro_subtopics": [
+                { "micro_id": "TABLES", "micro_name": "Tables", "status": "PENDING" },
+                { "micro_id": "BAR_GRAPHS", "micro_name": "Bar graphs", "status": "PENDING" },
+                { "micro_id": "LINE_GRAPHS", "micro_name": "Line graphs", "status": "PENDING" },
+                { "micro_id": "PIE_CHARTS", "micro_name": "Pie charts", "status": "PENDING" },
+                { "micro_id": "DATA_COMPARISON", "micro_name": "Data comparison", "status": "PENDING" },
+                { "micro_id": "TRENDS", "micro_name": "Trends", "status": "PENDING" },
+                { "micro_id": "PERCENT_CHANGE", "micro_name": "Percent change", "status": "PENDING" },
+                { "micro_id": "RATIOS_DI", "micro_name": "Ratios", "status": "PENDING" },
+                { "micro_id": "AVERAGES_DI", "micro_name": "Averages", "status": "PENDING" },
+                { "micro_id": "MAX_MIN", "micro_name": "Maximum/minimum", "status": "PENDING" },
+                { "micro_id": "DIFFERENCE_DI", "micro_name": "Difference", "status": "PENDING" },
+                { "micro_id": "TOTAL", "micro_name": "Total", "status": "PENDING" },
+                { "micro_id": "GROWTH_DECLINE", "micro_name": "Growth/decline", "status": "PENDING" },
+                { "micro_id": "MULTI_VARIABLE_TABLES", "micro_name": "Multi-variable tables", "status": "PENDING" },
+                { "micro_id": "COMBINED_CHARTS", "micro_name": "Combined charts", "status": "PENDING" },
+                { "micro_id": "GRAPH_INFERENCE", "micro_name": "Graph inference", "status": "PENDING" },
+                { "micro_id": "DATA_SUFFICIENCY", "micro_name": "Data sufficiency-style reasoning", "status": "PENDING" },
+                { "micro_id": "MULTI_STEP_DATA_INTERPRETATION", "micro_name": "Multi-step data interpretation", "status": "PENDING" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category_id": "GI",
+      "category_name": "General Information",
+      "components": [
+        {
+          "component_id": "PHILIPPINE_CONSTITUTION",
+          "component_name": "Philippine Constitution",
+          "subtopics": [
+            {
+              "subtopic_id": "CONSTI_CORE",
+              "subtopic_name": "Constitutional Articles & Doctrines",
+              "micro_subtopics": [
+                { "micro_id": "CONSTITUTION_OVERVIEW", "micro_name": "Constitution overview", "status": "PENDING" },
+                { "micro_id": "FUNDAMENTAL_PRINCIPLES", "micro_name": "Fundamental principles", "status": "PENDING" },
+                { "micro_id": "STATE_POLICIES", "micro_name": "State policies", "status": "PENDING" },
+                { "micro_id": "BILL_OF_RIGHTS", "micro_name": "Bill of Rights", "status": "PENDING" },
+                { "micro_id": "CITIZENSHIP", "micro_name": "Citizenship", "status": "PENDING" },
+                { "micro_id": "SUFFRAGE", "micro_name": "Suffrage", "status": "PENDING" },
+                { "micro_id": "LEGISLATIVE_DEPARTMENT", "micro_name": "Legislative Department", "status": "PENDING" },
+                { "micro_id": "EXECUTIVE_DEPARTMENT", "micro_name": "Executive Department", "status": "PENDING" },
+                { "micro_id": "JUDICIAL_DEPARTMENT", "micro_name": "Judicial Department", "status": "PENDING" },
+                { "micro_id": "CONSTITUTIONAL_COMMISSIONS", "micro_name": "Constitutional Commissions", "status": "PENDING" },
+                { "micro_id": "ACCOUNTABILITY_PUBLIC_OFFICERS", "micro_name": "Accountability of Public Officers", "status": "PENDING" },
+                { "micro_id": "LOCAL_GOVERNMENT", "micro_name": "Local Government", "status": "PENDING" },
+                { "micro_id": "NATIONAL_ECONOMY_PATRIMONY", "micro_name": "National Economy and Patrimony", "status": "PENDING" },
+                { "micro_id": "SOCIAL_JUSTICE_HUMAN_RIGHTS", "micro_name": "Social Justice and Human Rights", "status": "PENDING" },
+                { "micro_id": "EDUCATION", "micro_name": "Education", "status": "PENDING" },
+                { "micro_id": "FAMILY", "micro_name": "Family", "status": "PENDING" },
+                { "micro_id": "GENERAL_PROVISIONS", "micro_name": "General provisions", "status": "PENDING" },
+                { "micro_id": "AMENDMENTS_REVISIONS", "micro_name": "Amendments/revisions", "status": "PENDING" },
+                { "micro_id": "SEPARATION_OF_POWERS", "micro_name": "Separation of powers", "status": "PENDING" },
+                { "micro_id": "CHECKS_AND_BALANCES", "micro_name": "Checks and balances", "status": "PENDING" },
+                { "micro_id": "JUDICIAL_REVIEW", "micro_name": "Judicial review", "status": "PENDING" },
+                { "micro_id": "DUE_PROCESS", "micro_name": "Due process", "status": "PENDING" },
+                { "micro_id": "EQUAL_PROTECTION", "micro_name": "Equal protection", "status": "PENDING" },
+                { "micro_id": "FREEDOM_OF_SPEECH", "micro_name": "Freedom of speech", "status": "PENDING" },
+                { "micro_id": "FREEDOM_OF_RELIGION", "micro_name": "Freedom of religion", "status": "PENDING" },
+                { "micro_id": "SEARCH_AND_SEIZURE", "micro_name": "Search and seizure", "status": "PENDING" },
+                { "micro_id": "PRIVACY", "micro_name": "Privacy", "status": "PENDING" },
+                { "micro_id": "RIGHTS_OF_ACCUSED", "micro_name": "Rights of accused persons", "status": "PENDING" },
+                { "micro_id": "WRITS_REMEDIES", "micro_name": "Writs/remedies concepts", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "RA_6713",
+          "component_name": "RA 6713 (Code of Conduct and Ethical Standards)",
+          "subtopics": [
+            {
+              "subtopic_id": "ETHICS_CORE",
+              "subtopic_name": "Ethical Standards & Norms",
+              "micro_subtopics": [
+                { "micro_id": "EIGHT_NORMS_OF_CONDUCT", "micro_name": "Eight norms of conduct", "status": "PENDING" },
+                { "micro_id": "COMMITMENT_PUBLIC_INTEREST", "micro_name": "Commitment to public interest", "status": "PENDING" },
+                { "micro_id": "PROFESSIONALISM", "micro_name": "Professionalism", "status": "PENDING" },
+                { "micro_id": "JUSTNESS_SINCERITY", "micro_name": "Justness and sincerity", "status": "PENDING" },
+                { "micro_id": "POLITICAL_NEUTRALITY", "micro_name": "Political neutrality", "status": "PENDING" },
+                { "micro_id": "RESPONSIVENESS_PUBLIC", "micro_name": "Responsiveness to the public", "status": "PENDING" },
+                { "micro_id": "NATIONALISM_PATRIOTISM", "micro_name": "Nationalism and patriotism", "status": "PENDING" },
+                { "micro_id": "COMMITMENT_DEMOCRACY", "micro_name": "Commitment to democracy", "status": "PENDING" },
+                { "micro_id": "SIMPLE_LIVING", "micro_name": "Simple living", "status": "PENDING" },
+                { "micro_id": "DUTIES_PUBLIC_OFFICIALS", "micro_name": "Duties of public officials", "status": "PENDING" },
+                { "micro_id": "PROHIBITED_ACTS", "micro_name": "Prohibited acts", "status": "PENDING" },
+                { "micro_id": "GIFTS_BENEFITS", "micro_name": "Gifts and benefits", "status": "PENDING" },
+                { "micro_id": "CONFLICT_OF_INTEREST", "micro_name": "Conflict of interest", "status": "PENDING" },
+                { "micro_id": "FINANCIAL_DISCLOSURE", "micro_name": "Financial disclosure", "status": "PENDING" },
+                { "micro_id": "SALN", "micro_name": "SALN", "status": "PENDING" },
+                { "micro_id": "DIVESTMENT", "micro_name": "Divestment", "status": "PENDING" },
+                { "micro_id": "ADMINISTRATIVE_RESPONSIBILITIES", "micro_name": "Administrative responsibilities", "status": "PENDING" },
+                { "micro_id": "ETHICAL_DECISION_MAKING", "micro_name": "Ethical decision-making", "status": "PENDING" },
+                { "micro_id": "ACCOUNTABILITY_ETHICS", "micro_name": "Accountability", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "PEACE_HUMAN_RIGHTS",
+          "component_name": "Peace and Human Rights",
+          "subtopics": [
+            {
+              "subtopic_id": "PHR_CORE",
+              "subtopic_name": "Peace Doctrines & Human Rights Law",
+              "micro_subtopics": [
+                { "micro_id": "PEACE_EDUCATION", "micro_name": "Peace education and culture of peace", "status": "PENDING" },
+                { "micro_id": "UNIVERSAL_DECLARATION_HR", "micro_name": "Universal Declaration of Human Rights", "status": "PENDING" },
+                { "micro_id": "CHR_MANDATE", "micro_name": "Commission on Human Rights mandate", "status": "PENDING" },
+                { "micro_id": "INDIGENOUS_PEOPLES_RIGHTS", "micro_name": "Indigenous peoples rights (IPRA)", "status": "PENDING" },
+                { "micro_id": "WOMEN_CHILDREN_RIGHTS", "micro_name": "Rights of women and children (VAWC, etc.)", "status": "PENDING" }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "ENVIRONMENT_MANAGEMENT",
+          "component_name": "Environment Management and Protection",
+          "subtopics": [
+            {
+              "subtopic_id": "ENV_CORE",
+              "subtopic_name": "Environmental Laws & Sustainability",
+              "micro_subtopics": [
+                { "micro_id": "CLEAN_AIR_ACT", "micro_name": "Clean Air Act (RA 8749)", "status": "PENDING" },
+                { "micro_id": "CLEAN_WATER_ACT", "micro_name": "Clean Water Act (RA 9275)", "status": "PENDING" },
+                { "micro_id": "SOLID_WASTE_MANAGEMENT", "micro_name": "Ecological Solid Waste Management (RA 9003)", "status": "PENDING" },
+                { "micro_id": "CLIMATE_CHANGE_ACT", "micro_name": "Climate Change Act (RA 9729)", "status": "PENDING" },
+                { "micro_id": "DISASTER_RISK_REDUCTION", "micro_name": "Philippine DRRM Act (RA 10121)", "status": "PENDING" }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

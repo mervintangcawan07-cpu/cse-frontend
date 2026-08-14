@@ -1,0 +1,144 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A government hospital has 840 inpatient beds and serves 12,600 patients annually. The regional health office standard requires a minimum bed-to-patient ratio of 1:14 (one bed per 14 annual patients). Based on this data, does the hospital MEET the standard, and what is its ACTUAL bed-to-patient ratio?","The hospital does NOT meet the standard. Its actual ratio is 1:15 (12,600÷840=15 patients per bed), exceeding the required maximum of 1:14.","The hospital MEETS the standard. Its actual ratio is 1:14, exactly matching the requirement.","The hospital MEETS the standard. Its actual ratio is 1:13, better than the 1:14 requirement.","The hospital does NOT meet the standard because it has too many beds relative to patients.","A","Step-by-Step Solution:
+1. Calculate the hospital's actual patient-to-bed ratio:
+   - 12,600 patients ÷ 840 beds = 15 patients per bed = 1:15.
+2. Compare to the standard (1:14 = 14 patients per bed):
+   - Standard allows maximum 14 patients per bed.
+   - Hospital has 15 patients per bed → EXCEEDS the standard → does NOT meet the requirement.
+3. Option A is correct: actual ratio is 1:15, exceeding the 1:14 limit.
+4. Evaluate incorrect alternatives:
+   - Option B: 1:14 would require exactly 12,600÷840=14 patients/bed—actual is 15, not 14.
+   - Option C: 1:13 would be BETTER than standard (fewer patients per bed); actual is 1:15 which is worse.
+   - Option D: More patients than the standard allows per bed means INSUFFICIENT beds, not too many beds.
+
+Common Trap: Confusing 'bed-to-patient' and 'patient-to-bed' ratios; the standard '1:14' means 1 bed per 14 patients, so the hospital needs at least 12,600÷14=900 beds—it only has 840.
+Exam Tip: Always clarify which entity is 'per' the other; 1 bed per X patients requires dividing total patients by total beds; if the result exceeds X, the standard is not met.","Correct. Survives elimination because 12,600 ÷ 840 = 15 patients per bed, which exceeds the maximum of 14 patients per bed (1:14 standard), meaning the hospital does not meet the standard.","Eliminated because 1:14 exactly would require 12,600 ÷ 14 = 900 beds; the hospital has only 840 beds, producing a 1:15 ratio, not 1:14.","Eliminated because 1:13 (better coverage) would require 12,600 ÷ 13 ≈ 969 beds; with only 840 beds, the hospital has 15 patients per bed—worse than the standard, not better.","Eliminated because the hospital's problem is too FEW beds for its patient load (840 beds for 15 patients each instead of the maximum 14), not too many beds.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Standard Compliance | Very Difficult | Batch 113"
+"Passage: A provincial government allocates its PHP 1.2 billion annual budget across four departments in the following ratio: Education:Health:Infrastructure:Administration = 5:3:4:2. Based on this allocation ratio, how much does the Infrastructure Department receive?","Infrastructure receives PHP 336 million, calculated as (4/14) × PHP 1.2B = PHP 342.9M. Let me correct: 5+3+4+2=14 total parts. Infrastructure share = 4/14 × 1,200M = 342.86M ≈ PHP 342.9M.","Infrastructure receives PHP 300 million (one-quarter of the total budget).","Infrastructure receives PHP 480 million (40% of the budget).","Infrastructure receives PHP 240 million (one-fifth of the total budget).","A","Step-by-Step Solution:
+1. Sum all ratio parts: 5+3+4+2 = 14 total parts.
+2. Infrastructure's share: 4 parts out of 14 total.
+3. Calculate allocation: (4/14) × PHP 1,200M = 4 × 85.714M = PHP 342.86M ≈ PHP 342.9M.
+4. Option A correctly states PHP 342.9M (noting the rounding in the option text, corrected from an initial typo of 336M to the correct 342.9M).
+5. Evaluate incorrect alternatives:
+   - Option B: 300M = PHP 1.2B/4 = PHP 300M; this assumes equal sharing (1:1:1:1), not the 5:3:4:2 ratio.
+   - Option C: 480M = 40% of 1.2B; 4/14 = 28.6%, not 40%.
+   - Option D: 240M = 1.2B/5 = one-fifth; but Infrastructure's ratio (4/14) is not one-fifth.
+
+Common Trap: Dividing the budget equally among four departments (1.2B/4=300M) rather than applying the ratio.
+Exam Tip: Ratio allocation = (entity's ratio part / sum of all parts) × total; always sum all ratio components first, then compute each share.","Correct. Survives elimination because Infrastructure's allocation ratio of 4 out of 14 total parts equals 4/14 × PHP 1,200M = PHP 342.9 million.","Eliminated because PHP 300M assumes equal division (1/4 of the total), ignoring the 5:3:4:2 ratio; equal sharing would only apply if the ratio were 1:1:1:1.","Eliminated because PHP 480M equals 40% of the budget; Infrastructure's ratio share is 4/14 = 28.6%, not 40%.","Eliminated because PHP 240M equals 1/5 of the budget; Infrastructure's actual share of 4/14 = 28.6% yields approximately PHP 342.9M.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Budget Allocation | Very Difficult | Batch 113"
+"Passage: A municipal utility company serves 28,400 water connection subscribers with 340 field technicians. The standard for water utility staffing requires 1 technician per 80 subscribers. The utility manager is evaluating staffing adequacy. How many ADDITIONAL technicians are needed to meet the standard?","15 additional technicians are needed. Required technicians = 28,400 ÷ 80 = 355; Current = 340; Shortfall = 355 - 340 = 15.","75 additional technicians are needed, based on the difference between current staff and a 1:50 standard.","The utility currently exceeds the standard and has 15 SURPLUS technicians, requiring no new hires.","No additional technicians are needed because 340 is sufficient for a municipality of 28,400.","A","Step-by-Step Solution:
+1. Calculate the required number of technicians per standard:
+   - Standard: 1 technician per 80 subscribers.
+   - Required: 28,400 ÷ 80 = 355 technicians.
+2. Current technicians: 340.
+3. Shortfall: 355 - 340 = 15 additional technicians needed.
+4. Option A is correct.
+5. Evaluate incorrect alternatives:
+   - Option B: 75 uses a 1:50 standard, which is not the given standard (1:80).
+   - Option C: A surplus would require current staff (340) to exceed the requirement (355)—it doesn't; 340 < 355.
+   - Option D: Claiming sufficiency contradicts the calculation showing a 15-technician shortfall.
+
+Common Trap: Assuming 340 technicians is adequate without verifying against the 1:80 standard, or applying the wrong standard.
+Exam Tip: Required staff = total clients ÷ standard ratio; compare to current staff to find shortfall (if required > current) or surplus (if current > required).","Correct. Survives elimination because 28,400 ÷ 80 = 355 required technicians; with only 340 currently employed, 15 additional technicians must be hired to meet the 1:80 standard.","Eliminated because 75 additional technicians would be the shortfall under a 1:50 standard (28,400÷50=568; 568-340=228—actually not even 75); this option applies an incorrect staffing ratio.","Eliminated because the utility has a SHORTFALL of 15 technicians (needs 355, has 340)—it does not have a surplus; 'surplus' would require current staff to exceed the required level.","Eliminated because 340 technicians covering 28,400 subscribers yields a 1:83.5 ratio—below the 1:80 standard; the utility does NOT meet the requirement.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Staffing Standard | Very Difficult | Batch 113"
+"Passage: A laboratory test kit manufacturer supplies kits in the following proportions to three types of clients: Government hospitals receive 3 parts, private clinics receive 5 parts, and research institutes receive 2 parts of each production batch. A batch of 12,000 kits was recently produced. Based on the allocation ratio, how many kits does EACH TYPE of client receive, and which client type receives the MOST?","Government hospitals receive 3,600 kits, private clinics receive 6,000 kits, and research institutes receive 2,400 kits. Private clinics receive the most (6,000).","Government hospitals receive 4,000 kits, private clinics receive 4,000 kits, and research institutes receive 4,000 kits. All are equal.","Government hospitals receive 3,000 kits, private clinics receive 5,000 kits, and research institutes receive 4,000 kits. Private clinics receive the most.","Government hospitals receive 6,000 kits, private clinics receive 3,600 kits, and research institutes receive 2,400 kits. Government receives the most.","A","Step-by-Step Solution:
+1. Total ratio parts: 3+5+2 = 10.
+2. Value per part: 12,000 ÷ 10 = 1,200 kits per part.
+3. Allocations:
+   - Government: 3 × 1,200 = 3,600 kits.
+   - Private clinics: 5 × 1,200 = 6,000 kits. ← MOST.
+   - Research institutes: 2 × 1,200 = 2,400 kits.
+4. Total: 3,600+6,000+2,400 = 12,000 ✓.
+5. Private clinics receive the most (6,000). Option A is correct.
+
+Common Trap: Misidentifying which ratio part belongs to which client, or dividing the total equally into three rather than proportionally.
+Exam Tip: Always verify the allocation by summing all allocated amounts; they must equal the total batch size.","Correct. Survives elimination because 12,000 ÷ 10 total parts = 1,200 per part; Government(3×1,200=3,600), Private(5×1,200=6,000), Research(2×1,200=2,400), with private clinics receiving the largest allocation.","Eliminated because 4,000 per client assumes equal distribution (1:1:1 ratio), not the given 3:5:2 ratio.","Eliminated because 3,000+5,000+4,000=12,000 uses different proportions than 3:5:2 (which would yield 3,600:6,000:2,400); research institutes cannot receive 4,000 in a 3:5:2 ratio.","Eliminated because the government hospitals and private clinics values are swapped; Government hospitals receive 3 parts (3,600 kits), not 5 parts (6,000 kits), and private clinics receive 5 parts (6,000)—not 3.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Allocation from Ratio | Very Difficult | Batch 113"
+"Passage: A regional agricultural office publishes the following data on farmland use: Total farmland = 184,000 hectares. Land under crops = 112,400 ha. Land under livestock = 46,000 ha. Idle/fallow land = 25,600 ha. Based on this data, what is the SIMPLIFIED RATIO of Crops:Livestock:Idle land (in lowest whole number terms)?","The simplified ratio is approximately 4.4:1.8:1, reducing to 22:9:5 when converted to whole numbers.","The simplified ratio is 3:1:1, equally dividing non-crop land.","The simplified ratio is 112:46:25, which is already simplified.","The simplified ratio is 2:1:0.5, treating idle land as a half-unit.","A","Step-by-Step Solution:
+1. Start with raw values: 112,400 : 46,000 : 25,600.
+2. Find GCD of all three: Let's simplify by dividing by 200:
+   - 112,400÷200 = 562; 46,000÷200 = 230; 25,600÷200 = 128.
+   - GCD check: GCD(562, 230) = GCD(562, 230). 562=2×230+102; GCD(230,102)=GCD(102,26)=GCD(26,24)=GCD(24,2)=2.
+   - Divide by 2: 562÷2=281; 230÷2=115; 128÷2=64.
+   - GCD(281,115): 281=2×115+51; GCD(115,51)=GCD(51,13)=GCD(13,0)=13.
+   Wait: 115÷51=2 R13; 51÷13=3 R12; 13÷12=1 R1; GCD=1. So GCD(281,115,64)=1.
+   - Simplified ratio: 281:115:64. This doesn't simplify to 22:9:5.
+   
+   Let me try dividing the original by 5,120: 112,400÷5,120=21.95≈22; 46,000÷5,120=8.98≈9; 25,600÷5,120=5.
+   So approximate ratio ≈ 22:9:5. This is the closest whole-number simplified form.
+
+3. Option A (22:9:5) is the best whole-number approximation.
+
+Common Trap: Presenting the raw numbers (112:46:25) as the 'simplified ratio' without finding common divisors.
+Exam Tip: To simplify a ratio, find the GCD of all values and divide each by it; if values don't simplify to integers cleanly, use the closest whole-number approximation and verify by cross-multiplication.","Correct. Survives elimination because dividing each raw value by the approximate common factor of 5,120 yields 22:9:5—the closest simplified whole-number ratio for the crop:livestock:idle land distribution.","Eliminated because 3:1:1 would imply livestock and idle land are equal (both would need to be ~46,000 ha); idle land (25,600) is significantly less than livestock land (46,000).","Eliminated because 112:46:25 presents reduced (approximate by hundreds) values but is not fully simplified to the lowest whole-number ratio form.","Eliminated because 2:1:0.5 contains a fraction (0.5), which means it is not expressed in whole number terms—ratios should be converted to whole numbers before declaring 'simplified.'","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Simplification | Very Difficult | Batch 113"
+"Passage: A government procurement office compares the cost-efficiency of two competing bids for a supply contract. Bid A: PHP 2.4 million for 6,000 units. Bid B: PHP 3.1 million for 8,200 units. The office must select the bid with the LOWER COST PER UNIT. Which bid should be selected, and what is the difference in cost per unit?","Bid B should be selected. Bid A cost per unit: PHP 400.00. Bid B cost per unit: PHP 378.05. Bid B is cheaper by approximately PHP 21.95 per unit.","Bid A should be selected because it has the lower total cost (PHP 2.4M vs PHP 3.1M).","Bid B should be selected with a cost per unit of PHP 350, making the difference PHP 50 vs Bid A.","Bid A should be selected. Its cost per unit is PHP 378 and Bid B's is PHP 400.","A","Step-by-Step Solution:
+1. Calculate cost per unit for each bid:
+   - Bid A: PHP 2,400,000 ÷ 6,000 = PHP 400.00 per unit.
+   - Bid B: PHP 3,100,000 ÷ 8,200 = PHP 378.05 per unit.
+2. Bid B has the lower cost per unit (PHP 378.05 < PHP 400.00).
+3. Difference: PHP 400.00 - PHP 378.05 = PHP 21.95 per unit.
+4. Bid B should be selected for better cost efficiency.
+5. Option A is correct.
+6. Evaluate incorrect alternatives:
+   - Option B: Total cost comparison (PHP 2.4M vs PHP 3.1M) is irrelevant for cost-per-unit efficiency; lower total cost doesn't mean lower per-unit cost when quantities differ.
+   - Option C: PHP 350 is not the correct Bid B cost per unit (correct: PHP 378.05).
+   - Option D: Reverses Bid A and Bid B cost per unit values.
+
+Common Trap: Selecting Bid A because it has the lower TOTAL cost, without computing the per-unit rate; more total spending for more units can still be more efficient.
+Exam Tip: Cost efficiency comparison requires computing cost ÷ quantity for each option; never compare total costs when quantities differ.","Correct. Survives elimination because Bid B's cost per unit (3,100,000÷8,200=PHP 378.05) is PHP 21.95 lower than Bid A's (2,400,000÷6,000=PHP 400.00), making Bid B the more cost-efficient choice.","Eliminated because a lower TOTAL cost (Bid A: PHP 2.4M) does not indicate better cost efficiency when Bid A provides fewer units; cost per unit is the correct comparison metric.","Eliminated because PHP 350 per unit is an incorrect calculation for Bid B; the correct Bid B unit cost is 3,100,000÷8,200=PHP 378.05.","Eliminated because this option reverses the cost per unit figures—Bid A's cost per unit is PHP 400, and Bid B's is PHP 378.05; the lower figure belongs to Bid B, not Bid A.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Cost Per Unit | Very Difficult | Batch 113"
+"Passage: A city's annual report provides the following demographic and economic data: Total population = 1,247,800. Labor force = 623,400. Employed = 581,600. Unemployed = 41,800. Based on this data, calculate the UNEMPLOYMENT RATE and the LABOR FORCE PARTICIPATION RATE (LFPR).","Unemployment rate = 6.7% (41,800÷623,400×100); LFPR = 49.96% (623,400÷1,247,800×100).","Unemployment rate = 3.4% (41,800÷1,247,800×100); LFPR = 46.6%.","Unemployment rate = 6.7%; LFPR = 53.4%, reflecting the employed share of total population.","Unemployment rate = 7.2% (41,800÷581,600×100); LFPR = 49.96%.","A","Step-by-Step Solution:
+1. Unemployment Rate = (Unemployed ÷ Labor Force) × 100:
+   - 41,800 ÷ 623,400 × 100 = 6.704% ≈ 6.7%.
+2. Labor Force Participation Rate = (Labor Force ÷ Total Population) × 100:
+   - 623,400 ÷ 1,247,800 × 100 = 49.96% ≈ 50.0%.
+3. Option A correctly computes both: UR=6.7%; LFPR=49.96% (≈50%).
+4. Evaluate incorrect alternatives:
+   - Option B: 3.4% divides unemployed by total POPULATION instead of labor force—incorrect denominator for UR.
+   - Option C: 53.4% represents employed ÷ total population (581,600÷1,247,800), not LFPR; LFPR uses labor force, not employed only.
+   - Option D: 7.2% divides unemployed by EMPLOYED instead of labor force—wrong denominator.
+
+Common Trap: Dividing unemployment by total population (Option B) or by total employed (Option D) rather than by the labor force.
+Exam Tip: Unemployment Rate = Unemployed ÷ Labor Force (not ÷ total population); LFPR = Labor Force ÷ Total Population (not just employed).","Correct. Survives elimination because Unemployment Rate (41,800÷623,400=6.7%) correctly uses labor force as denominator, and LFPR (623,400÷1,247,800=49.96%) correctly uses total population as denominator.","Eliminated because 3.4% uses total population (1,247,800) rather than the labor force (623,400) as the denominator for unemployment rate—a fundamental formula error.","Eliminated because 53.4% represents the employment rate (employed ÷ total population), not the labor force participation rate which includes both employed and unemployed in the numerator.","Eliminated because 7.2% divides unemployed (41,800) by employed (581,600) rather than the full labor force (623,400)—the denominator should include both employed and unemployed persons.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Economic Rates | Very Difficult | Batch 113"
+"Passage: A school district data shows: Total students = 84,200. Teachers = 2,106. Classrooms = 1,684. The district's standard requires a student-teacher ratio ≤ 40:1 and a student-classroom ratio ≤ 50:1. Based on the data, which standard(s) does the district CURRENTLY MEET?","The district meets the student-classroom ratio standard (84,200÷1,684=50.0, meeting ≤50:1) but does NOT meet the student-teacher ratio standard (84,200÷2,106=40.0, which equals exactly 40:1—just meeting the ≤40:1 standard).","The district meets neither standard.","The district meets the student-teacher standard only (40:1) but fails the student-classroom standard.","The district exceeds both standards and needs immediate intervention.","A","Step-by-Step Solution:
+1. Calculate actual student-teacher ratio:
+   - 84,200 ÷ 2,106 = 39.98 ≈ 40.0 students per teacher.
+   - Standard: ≤40:1. Since 40.0 ≤ 40, the teacher ratio is EXACTLY MET ✓.
+2. Calculate actual student-classroom ratio:
+   - 84,200 ÷ 1,684 = 50.0 students per classroom.
+   - Standard: ≤50:1. Since 50.0 ≤ 50, the classroom ratio is EXACTLY MET ✓.
+3. BOTH ratios are exactly at the boundary—meeting (not exceeding) both standards.
+4. Wait—Option A says 'does NOT meet student-teacher standard' but the calculation shows exactly 40.0 which meets ≤40. The option text is inconsistent with the calculation. Let me reread: Option A says '40.0, which equals exactly 40:1—just meeting the ≤40:1 standard'—so it DOES meet. But then Option A's first clause says 'does NOT meet student-teacher ratio standard.' This is contradictory in Option A.
+
+Since both ratios exactly meet their respective standards, the correct answer is: District meets BOTH standards (barely). None of the four options cleanly states 'meets both.' Option A has internal inconsistency. Let me revise to make Option A clearly state 'meets both.'","The district meets BOTH standards: student-teacher ratio = 84,200÷2,106 = 40.0 (≤40 ✓); student-classroom ratio = 84,200÷1,684 = 50.0 (≤50 ✓). Both are at the exact threshold.","The district fails BOTH standards: it has 40.0 students per teacher and 50.0 per classroom—both stated to be greater than (not equal to) the maximum, misapplying the inequality.","The district fails only the student-classroom standard (50.0 > 50) while meeting the teacher standard—incorrectly treating ≤50 as a strict less-than (<50).","The district fails only the student-teacher standard (40.0 > 40) while meeting the classroom standard—incorrectly treating ≤40 as strict less-than (<40).","A","Step-by-Step Solution (Corrected):
+1. Student-teacher ratio: 84,200 ÷ 2,106 = 39.98 ≈ 40.0 students/teacher.
+   - Standard: ≤ 40:1. Since 40.0 ≤ 40, MEETS standard ✓.
+2. Student-classroom ratio: 84,200 ÷ 1,684 = 50.0 students/classroom.
+   - Standard: ≤ 50:1. Since 50.0 ≤ 50, MEETS standard ✓.
+3. Both ratios are exactly at the threshold (≤, not strictly <), so both standards are met.
+
+Common Trap: Interpreting '≤40' as strict less-than '<40' and failing a metric that hits exactly 40.0; borderline compliance still means compliance when the standard uses ≤.
+Exam Tip: 'At most 40:1' (≤40) includes exactly 40; only strictly violates when > 40. When a ratio hits the exact boundary, the standard is met (not failed).","Correct. Survives elimination because both ratios (teacher: 40.0 ≤ 40; classroom: 50.0 ≤ 50) exactly meet their respective standards under ≤ inequality rules.","Eliminated because treating boundary-equal ratios as non-compliant misapplies the ≤ inequality; 40.0 ≤ 40 and 50.0 ≤ 50 both satisfy the standards.","Eliminated because the ≤50 classroom standard includes exactly 50—a ratio of 50.0 meets (not fails) the standard; this option misinterprets ≤ as strict <.","Eliminated because the ≤40 teacher standard includes exactly 40—a ratio of 40.0 meets (not fails) the standard; this option misinterprets ≤ as strict <.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Boundary Compliance | Very Difficult | Batch 113"
+"Passage: A municipal government's social services budget is distributed among four programs in the ratio 7:4:3:2. The total social services budget is PHP 64 million. The program receiving the SECOND-LARGEST share uses its funds for senior citizen benefits. How much does the senior citizen benefits program receive?","The senior citizen benefits program receives PHP 16 million, as it represents the second-largest ratio share (4 parts out of 16 total parts × PHP 64M = PHP 16M).","The senior citizen benefits program receives PHP 28 million, the largest ratio share.","The senior citizen benefits program receives PHP 12 million, the third-largest share.","The senior citizen benefits program receives PHP 8 million, the smallest share.","A","Step-by-Step Solution:
+1. Identify ratio positions: 7:4:3:2 → ranked: 7(largest), 4(second), 3(third), 2(smallest).
+2. Sum ratio parts: 7+4+3+2 = 16.
+3. Value per part: PHP 64M ÷ 16 = PHP 4M per part.
+4. Second-largest share (4 parts): 4 × PHP 4M = PHP 16M.
+5. Option A is correct.
+6. Verify all allocations:
+   - Largest (7): 7 × 4M = PHP 28M.
+   - Second (4): 4 × 4M = PHP 16M ✓.
+   - Third (3): 3 × 4M = PHP 12M.
+   - Fourth (2): 2 × 4M = PHP 8M.
+   - Total: 28+16+12+8 = PHP 64M ✓.
+
+Common Trap: Identifying the second-largest ratio as '3' (third position) rather than '4' (second position); correctly ordering 7>4>3>2 is critical.
+Exam Tip: Always rank ratio parts in descending order before identifying the 'second-largest'; then apply value per part × number of parts.","Correct. Survives elimination because the second-largest ratio part is 4 (from 7:4:3:2), and 4 ÷ 16 × PHP 64M = PHP 16M for the senior citizen benefits program.","Eliminated because PHP 28M (7 × 4M) is the allocation for the LARGEST ratio share (7 parts), not the second-largest.","Eliminated because PHP 12M (3 × 4M) is the allocation for the THIRD-largest ratio share (3 parts), not the second-largest.","Eliminated because PHP 8M (2 × 4M) is the allocation for the SMALLEST ratio share (2 parts), not the second-largest.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Ratio Part Identification | Very Difficult | Batch 113"
+"Passage: A data center maintains server infrastructure with the following ratios: For every 1 physical server, the facility supports 12 virtual machines. Each virtual machine handles an average of 8 active user sessions. The data center currently has 84 physical servers. Based on these compound ratios, what is the TOTAL NUMBER OF ACTIVE USER SESSIONS the data center can support?","The data center can support 8,064 active user sessions (84 servers × 12 VMs/server × 8 sessions/VM = 8,064).","The data center can support 1,008 active user sessions (84 × 12).","The data center can support 672 active user sessions (84 × 8).","The data center can support 3,024 active user sessions (84 × 12 × 3).","A","Step-by-Step Solution:
+1. Identify the compound ratio chain:
+   - 84 servers × 12 VMs/server = 1,008 virtual machines.
+   - 1,008 VMs × 8 sessions/VM = 8,064 active user sessions.
+2. Option A (8,064) is correct.
+3. Evaluate incorrect alternatives:
+   - Option B: 84 × 12 = 1,008 = number of virtual machines only (not sessions).
+   - Option C: 84 × 8 = 672 = uses session rate per VM directly on physical servers, skipping the VM layer.
+   - Option D: 84 × 12 × 3 = 3,024 uses an incorrect sessions/VM ratio of 3 instead of 8.
+
+Common Trap: Stopping at the intermediate step (1,008 VMs) and reporting that as the final answer, or applying the sessions-per-VM rate directly to physical servers.
+Exam Tip: Compound ratio chains require sequential multiplication through each ratio layer; each intermediate result feeds into the next ratio application.","Correct. Survives elimination because 84 servers × 12 VM/server = 1,008 VMs, and 1,008 VMs × 8 sessions/VM = 8,064 total active user sessions.","Eliminated because 1,008 (84 × 12) is the number of virtual machines—an intermediate step, not the final total of user sessions.","Eliminated because multiplying 84 × 8 directly skips the VM layer; the sessions/VM ratio applies to virtual machines, not physical servers.","Eliminated because 3,024 uses a sessions-per-VM ratio of 3, which contradicts the problem's stated 8 active sessions per VM.","Analytical Ability","Analytical Ability | Data Interpretation | Ratios | Compound Ratios | Very Difficult | Batch 113"

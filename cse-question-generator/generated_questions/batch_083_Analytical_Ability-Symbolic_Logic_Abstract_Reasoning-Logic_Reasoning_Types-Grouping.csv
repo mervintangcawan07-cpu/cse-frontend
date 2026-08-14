@@ -1,0 +1,191 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A special audit committee of exactly 4 members is selected from three economists (E1, E2, E3) and four accountants (A1, A2, A3, A4), subject to: (1) At least one economist and at least two accountants must be chosen. (2) If E1 is chosen, A1 cannot be chosen. (3) If A2 is chosen, E2 must be chosen. (4) A3 and A4 cannot both be chosen. If E1 and A2 are both chosen, which 4-member committee is valid?","E1, E2, A2, A3","E1, A1, A2, E2","E1, E2, A2, A1","E1, E2, A3, A4","A","Step-by-Step Solution:
+1. Track members from given initial selections:
+   - Given: E1 and A2 are chosen.
+2. Apply Rule 3 ($A2 \implies E2$):
+   - Since A2 is chosen, E2 MUST be chosen.
+   - Current committee (3 members): {E1, E2, A2}.
+3. Evaluate quota requirements from Rule 1:
+   - Current economists: E1, E2 (2 economists, satisfies $\ge 1$).
+   - Current accountants: A2 (1 accountant).
+   - Rule 1 requires at least 2 accountants, so the 4th member MUST be an accountant.
+4. Filter available accountants (A1, A3, A4):
+   - By Rule 2 ($E1 \implies \neg A1$): A1 is EXCLUDED.
+   - Remaining eligible accountants: A3 or A4.
+   - By Rule 4, we select either A3 alone or A4 alone.
+5. Formulate valid 4-member committee:
+   - {E1, E2, A2, A3} or {E1, E2, A2, A4}.
+6. Conclude:
+   - {E1, E2, A2, A3} is fully valid.
+
+Common Trap: Selecting A1 despite E1 being present (violating Rule 2).
+Exam Tip: Propagate conditional inclusions ($A2 \implies E2$) and exclusions ($E1 \implies \neg A1$) before testing composition quotas.","Correct. Survives elimination because E1 triggers exclusion of A1, A2 triggers inclusion of E2, and accountant quota selects A3, yielding {E1, E2, A2, A3}.","Eliminated because A1 cannot serve when E1 is present (violates Rule 2).","Eliminated because A1 violates Rule 2.","Eliminated because A2 is omitted despite being given.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A task force of 5 specialists is selected from 4 engineers (W, X, Y, Z) and 4 lawyers (J, K, L, M): (1) Exactly 3 engineers and 2 lawyers must be chosen. (2) If W is chosen, J must be chosen. (3) If X is chosen, L cannot be chosen. (4) Y and Z cannot both be chosen. If engineer X is selected, which 3 engineers MUST form the engineering component?","W, X, Y","X, Y, Z","W, Y, Z","W, X, L","A","Step-by-Step Solution:
+1. Identify total engineers needed:
+   - Exactly 3 engineers must be chosen from the pool of 4: {W, X, Y, Z}.
+2. Apply the given selection:
+   - Engineer X is selected.
+   - Remaining engineers to select: 2 more from {W, Y, Z}.
+3. Apply Rule 4 ($\neg(Y \land Z)$):
+   - Y and Z cannot both be chosen simultaneously.
+   - Therefore, at most one engineer can be chosen from the pair {Y, Z}.
+4. Deduce the engineering selection:
+   - To obtain 2 additional engineers from {W, Y, Z} while taking at most one from {Y, Z}, engineer W MUST be chosen!
+   - The third engineer must be either Y or Z.
+   - Valid engineering triplets: {W, X, Y} or {W, X, Z}.
+5. Conclude:
+   - {W, X, Y} is the valid engineering component.
+
+Common Trap: Selecting {X, Y, Z}, which violates the mutual exclusion between Y and Z.
+Exam Tip: When choosing $k$ items from a set with mutually exclusive pairs, the non-conflicting candidates are forced into selection.","Correct. Survives elimination because choosing 3 engineers with X included and Y/Z mutually exclusive forces W and exactly one of Y or Z into the group: {W, X, Y}.","Eliminated because Y and Z cannot both be chosen (violates Rule 4).","Eliminated because X is omitted and Y/Z are both included.","Eliminated because L is a lawyer, not an engineer.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A project team of 3 members is selected from 6 candidates (P, Q, R, S, T, U): (1) P and Q cannot serve together. (2) If R is selected, S must be selected. (3) If S is selected, T cannot be selected. If candidate R is selected, which 3-member team is valid?","P, R, S","R, S, T","P, Q, R","R, T, U","A","Step-by-Step Solution:
+1. Process initial given candidate:
+   - Candidate R is selected.
+2. Apply Rule 2 ($R \implies S$):
+   - Since R is selected, S MUST be selected.
+   - Current team (2 members): {R, S}.
+3. Apply Rule 3 ($S \implies \neg T$):
+   - Since S is selected, T is EXCLUDED.
+4. Select the 3rd member from remaining candidates {P, Q, U}:
+   - By Rule 1, P and Q cannot serve together, so we can pick either P alone, Q alone, or U alone.
+   - If P is chosen $\implies$ Team is {P, R, S}.
+5. Verify {P, R, S}:
+   - 3 members? Yes.
+   - P and Q not together? Yes (Q is out).
+   - R implies S? Yes (S is in).
+   - S implies no T? Yes (T is out).
+6. Conclude:
+   - {P, R, S} is completely valid.
+
+Common Trap: Selecting {R, S, T}, which violates the exclusion between S and T.
+Exam Tip: Propagate implications: $R \implies S \implies \neg T$.","Correct. Survives elimination because R forces S, S excludes T, and selecting P satisfies the team size of 3: {P, R, S}.","Eliminated because T cannot serve when S is selected (violates Rule 3).","Eliminated because P and Q cannot serve together and S is missing.","Eliminated because S is missing when R is selected (violates Rule 2).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"An interview panel of 4 evaluators is formed from 3 males (M1, M2, M3) and 3 females (F1, F2, F3): (1) Exactly 2 males and 2 females must be chosen. (2) M1 and F1 must serve together ($M1 \iff F1$). (3) If M2 is chosen, F2 cannot be chosen ($M2 \implies \neg F2$). If M2 is selected, which complete panel is valid?","M1, M2, F1, F3","M2, M3, F1, F3","M1, M2, F2, F3","M2, M3, F2, F3","A","Step-by-Step Solution:
+1. Analyze constraints given M2 is selected:
+   - Male selected: M2.
+   - Rule 3 ($M2 \implies \neg F2$): Female F2 is EXCLUDED.
+2. Determine the second male:
+   - Case A: Second male is M1 $\implies$ Males are {M1, M2}.
+     - By Rule 2 ($M1 \iff F1$): Since M1 is in, female F1 MUST be in.
+     - Available females: {F1, F3} (since F2 is excluded).
+     - Both F1 and F3 must be chosen to satisfy the 2-female quota.
+     - Complete panel: {M1, M2, F1, F3}.
+   - Case B: Second male is M3 $\implies$ Males are {M2, M3}.
+     - Since M1 is out, F1 MUST be out (Rule 2).
+     - Since F2 is also excluded (Rule 3), only female F3 remains, making it impossible to select 2 females.
+     - Case B is impossible.
+3. Conclude:
+   - The uniquely valid panel is {M1, M2, F1, F3}.
+
+Common Trap: Overlooking the biconditional link ($M1 \iff F1$) which forces M1 and F1 into the panel simultaneously.
+Exam Tip: If eliminating a member reduces available pool below the gender quota, the alternative branch is mandatory.","Correct. Survives elimination because M2 excludes F2, forcing M1 and F1 into the panel alongside F3 to meet gender quotas: {M1, M2, F1, F3}.","Eliminated because omitting M1 forces F1 out, leaving only one female available (violates quota).","Eliminated because F2 cannot serve when M2 is selected (violates Rule 3).","Eliminated because F2 violates Rule 3.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A research delegation of 3 scientists is selected from Physics (P1, P2), Chemistry (C1, C2), and Biology (B1, B2): (1) Exactly one scientist from each discipline must be chosen. (2) If P1 is chosen, C1 cannot be chosen. (3) If C2 is chosen, B2 must be chosen. If P1 is selected, what is the uniquely determined delegation?","P1, C2, B2","P1, C1, B1","P1, C2, B1","P2, C2, B2","A","Step-by-Step Solution:
+1. Fix the Physics selection:
+   - Given: P1 is chosen (P2 is excluded).
+2. Determine Chemistry selection:
+   - By Rule 2 ($P1 \implies \neg C1$): C1 cannot be chosen.
+   - Since exactly one chemist is required, Chemistry representative MUST be C2.
+3. Determine Biology selection:
+   - By Rule 3 ($C2 \implies B2$): Since C2 is chosen, B2 MUST be chosen.
+4. Assemble complete 3-member delegation:
+   - Physics: P1
+   - Chemistry: C2
+   - Biology: B2
+   - Delegation: {P1, C2, B2}.
+5. Conclude:
+   - The delegation is uniquely {P1, C2, B2}.
+
+Common Trap: Selecting B1 instead of B2 (violating Rule 3).
+Exam Tip: Follow the domino cascade of implications: $P1 \implies \neg C1 \implies C2 \implies B2$.","Correct. Survives elimination because P1 forces C2 via C1 exclusion, and C2 strictly implies B2, yielding {P1, C2, B2}.","Eliminated because C1 cannot serve when P1 is chosen (violates Rule 2).","Eliminated because B2 must serve when C2 is chosen (violates Rule 3).","Eliminated because P1 is the designated physics representative.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A 4-person inspection committee is chosen from 6 candidates (A, B, C, D, E, F): (1) If A is chosen, D must be chosen. (2) If B is chosen, E cannot be chosen. (3) C and F must be chosen together ($C \iff F$). If candidates A and C are both chosen, which 4 members make up the committee?","A, C, D, F","A, B, C, D","A, C, E, F","A, B, D, F","A","Step-by-Step Solution:
+1. Process the given selections:
+   - Candidates A and C are chosen.
+2. Apply conditional rules:
+   - By Rule 1 ($A \implies D$): Since A is chosen, D MUST be chosen.
+   - By Rule 3 ($C \iff F$): Since C is chosen, F MUST be chosen.
+3. Count total selected members:
+   - Selected so far: {A, C, D, F}.
+   - Total count = 4 members.
+4. Verify quota and remaining rules:
+   - Required committee size = 4 members (satisfied).
+   - Candidate B is not chosen, so Rule 2 is not violated.
+5. Conclude:
+   - The complete committee is {A, C, D, F}.
+
+Common Trap: Trying to add a 5th member or omitting F despite C being chosen.
+Exam Tip: Two direct implications ($A \implies D$ and $C \implies F$) immediately fill all 4 committee seats.","Correct. Survives elimination because A forces D, C forces F, completing the 4-member committee {A, C, D, F}.","Eliminated because F must serve when C is chosen (violates Rule 3).","Eliminated because D must serve when A is chosen (violates Rule 1).","Eliminated because C is omitted and F requires C.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A working group of 4 analysts is selected from 6 specialists (U, V, W, X, Y, Z): (1) U and V cannot both be in the group. (2) If W is in the group, Z must be in the group. (3) If X is in the group, Y cannot be in the group. If both W and X are selected, which 4-member group is valid?","U, W, X, Z","U, V, W, X","W, X, Y, Z","U, W, X, Y","A","Step-by-Step Solution:
+1. Process initial selections:
+   - W and X are selected.
+2. Apply conditional rules:
+   - By Rule 2 ($W \implies Z$): Since W is selected, Z MUST be selected.
+   - By Rule 3 ($X \implies \neg Y$): Since X is selected, Y is EXCLUDED.
+3. Track current members (3 members):
+   - {W, X, Z}.
+4. Select the 4th member from remaining eligible candidates:
+   - Available candidates: U or V (since Y is excluded).
+   - By Rule 1 ($\neg(U \land V)$), U and V cannot both be chosen, so choosing U alone is valid.
+   - Resulting 4-member group: {U, W, X, Z}.
+5. Conclude:
+   - {U, W, X, Z} is fully valid.
+
+Common Trap: Including Y when X is present (violating Rule 3) or including both U and V (violating Rule 1).
+Exam Tip: When two candidates are mutually exclusive, picking exactly one of them fills the final slot cleanly.","Correct. Survives elimination because W forces Z, X excludes Y, and U is selected without V to complete the 4-member group {U, W, X, Z}.","Eliminated because U and V cannot serve together (violates Rule 1) and Z is missing.","Eliminated because Y cannot serve when X is selected (violates Rule 3).","Eliminated because Y violates Rule 3 and Z is missing.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A squad of 3 security officers is selected from 5 officers (Alpha, Bravo, Charlie, Delta, Echo): (1) Alpha and Echo cannot serve together. (2) If Bravo serves, Delta must serve. (3) Charlie must serve on every squad. If Bravo serves, what is the complete squad?","Bravo, Charlie, Delta","Alpha, Bravo, Charlie","Bravo, Delta, Echo","Alpha, Charlie, Echo","A","Step-by-Step Solution:
+1. Process mandatory inclusions:
+   - By Rule 3: Charlie is automatically in every squad.
+   - Given condition: Bravo serves.
+2. Apply conditional rule:
+   - By Rule 2 ($Bravo \implies Delta$): Since Bravo serves, Delta MUST serve.
+3. Count total squad members:
+   - Squad members: {Bravo, Charlie, Delta}.
+   - Total count = 3 members.
+4. Verify all rules:
+   - Squad size = 3 (satisfied).
+   - Rule 1 (Alpha and Echo not together): Neither is on the squad (satisfied).
+5. Conclude:
+   - The complete squad is {Bravo, Charlie, Delta}.
+
+Common Trap: Trying to include Alpha or Echo when all 3 slots are already filled.
+Exam Tip: Once the squad size of 3 is reached by mandatory selections, all other candidates are excluded.","Correct. Survives elimination because Charlie is mandatory, Bravo is given, and Bravo strictly implies Delta, completely filling the 3-member squad {Bravo, Charlie, Delta}.","Eliminated because Delta must serve when Bravo serves (violates Rule 2).","Eliminated because Charlie is omitted (violates Rule 3).","Eliminated because Bravo is omitted.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A project team of 4 members is chosen from 3 Seniors (S1, S2, S3) and 3 Juniors (J1, J2, J3): (1) Exactly 2 Seniors and 2 Juniors must be chosen. (2) If S1 is chosen, J1 cannot be chosen. (3) If J2 is chosen, S2 must be chosen. (4) S3 and J3 must be chosen together ($S3 \iff J3$). If S2 and J3 are selected, which 4-member team is formed?","S2, S3, J2, J3","S1, S2, S3, J3","S2, S3, J1, J2","S1, S2, J2, J3","A","Step-by-Step Solution:
+1. Process initial given selections:
+   - Senior S2 is selected.
+   - Junior J3 is selected.
+2. Apply Rule 4 ($S3 \iff J3$):
+   - Since J3 is selected, Senior S3 MUST be selected.
+3. Evaluate senior quota:
+   - Selected seniors: {S2, S3} (exactly 2 seniors).
+   - Senior quota is FILLED $\implies$ Senior S1 is EXCLUDED.
+4. Evaluate junior quota:
+   - Current juniors: {J3} (1 junior).
+   - Exactly 1 more junior needed from {J1, J2}.
+   - If J2 is chosen: Rule 3 ($J2 \implies S2$) is satisfied because S2 is already on the team.
+   - If J1 is chosen: Rule 2 is also satisfied.
+   - Option A presents the team {S2, S3, J2, J3}.
+5. Verify complete team {S2, S3, J2, J3}:
+   - 2 Seniors (S2, S3) and 2 Juniors (J2, J3)? Yes.
+   - J2 implies S2? Yes (S2 is present).
+   - S3 and J3 together? Yes.
+6. Conclude:
+   - {S2, S3, J2, J3} is valid.
+
+Common Trap: Selecting 3 seniors (violating the 2 Seniors, 2 Juniors quota).
+Exam Tip: Verify both individual logical conditions and overall subgroup quota constraints.","Correct. Survives elimination because J3 forces S3, filling the 2-senior quota (S2, S3), and selecting J2 satisfies Rule 3 to complete the 4-member team {S2, S3, J2, J3}.","Eliminated because it contains 3 seniors and only 1 junior (violates quota).","Eliminated because J3 is omitted despite being given.","Eliminated because S3 is omitted when J3 is present (violates Rule 4).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"
+"A 3-member review committee is selected from 5 candidates (K, L, M, N, O): (1) If K is chosen, L must be chosen. (2) If M is chosen, N cannot be chosen. (3) O is chosen if and only if N is chosen ($O \iff N$). If candidate K is selected, which 3-member committee is valid?","K, L, M","K, L, N","K, M, N","K, N, O","A","Step-by-Step Solution:
+1. Process given candidate K:
+   - Candidate K is selected.
+2. Apply Rule 1 ($K \implies L$):
+   - Since K is selected, L MUST be selected.
+   - Current committee (2 members): {K, L}.
+3. Select the 3rd member from {M, N, O}:
+   - If N is selected: By Rule 3 ($O \iff N$), O must also be selected $\implies$ Total 4 members (exceeds quota of 3).
+   - If O is selected: By Rule 3 ($O \iff N$), N must also be selected $\implies$ Total 4 members (exceeds quota of 3).
+   - Therefore, neither N nor O can be selected.
+   - The 3rd member MUST be candidate M!
+4. Check Rule 2 for M ($M \implies \neg N$):
+   - M is in, and N is out (Rule 2 is satisfied).
+5. Conclude:
+   - The valid 3-member committee is {K, L, M}.
+
+Common Trap: Selecting N without realizing it forces O into the committee, creating an invalid 4-member group.
+Exam Tip: When a biconditional pair ($N \iff O$) requires 2 slots and only 1 slot is available, BOTH members are excluded.","Correct. Survives elimination because K forces L, the coupled pair (N, O) cannot fit into the single remaining slot, forcing M to be the 3rd member: {K, L, M}.","Eliminated because N forces O, requiring 4 members instead of 3.","Eliminated because L is missing when K is selected (violates Rule 1).","Eliminated because L is missing and N/O forces 4 members.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Grouping | Very Difficult | Batch 083"

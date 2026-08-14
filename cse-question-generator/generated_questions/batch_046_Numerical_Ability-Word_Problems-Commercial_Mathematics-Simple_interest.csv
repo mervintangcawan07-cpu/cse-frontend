@@ -1,0 +1,162 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A principal sum invested at a constant annual simple interest rate triples ($3\times$) in exactly 16.0 years. What is the annual simple interest rate, and in how many total years will the same principal grow to 5 times ($5\times$) its original value at the identical rate?","Rate: 12.5%; Total Time: 32.0 years","Rate: 12.5%; Total Time: 40.0 years","Rate: 18.75%; Total Time: 32.0 years","Rate: 10.0%; Total Time: 36.0 years","A","Step-by-Step Solution:
+1. Determine interest earned for tripling:
+   - $A_1 = 3P \implies I_1 = A_1 - P = 3P - P = 2P$.
+2. Formulate simple interest equation for 16.0 years:
+   - $I_1 = P \cdot r \cdot t_1 \implies 2P = P \cdot r \cdot 16.0$.
+3. Solve for annual rate $r$:
+   - $r = \frac{2}{16.0} = \frac{1}{8} = 0.125 = 12.5\%\text{ per annum}$.
+4. Determine interest needed to grow to 5 times the principal ($A_2 = 5P$):
+   - $I_2 = 5P - P = 4P$.
+5. Compute total time $t_2$ required:
+   - $4P = P \cdot (0.125) \cdot t_2$.
+   - $t_2 = \frac{4}{0.125} = 4 \times 8 = 32.0\text{ years}$.
+6. (Alternative Ratio Method: Interest is directly proportional to time in simple interest: $\frac{t_2}{t_1} = \frac{I_2}{I_1} \implies \frac{t_2}{16} = \frac{4P}{2P} = 2 \implies t_2 = 32.0\text{ years}$).
+
+Common Trap: Assuming time scales directly with the multiple ($\frac{5}{3} \times 16 = 26.67\text{ years}$ or $5 \times 8 = 40\text{ years}$, Option B), forgetting that principal $P$ is not interest.
+Exam Tip: Growth multiple $N \implies \text{Interest} = (N - 1)P$. To triple $= 2P$ ($16\text{ yrs}$); to quintuple $= 4P$ ($32\text{ yrs}$).","Correct. Survives elimination because rate is 2/16 = 12.5% per annum, and earning 4P interest takes 4 / 0.125 = 32.0 years.","Eliminated because 40.0 years assumes interest is 5P instead of 4P.","Eliminated because 18.75% assumes 3P interest in 16 years.","Eliminated because 10.0% rate yields tripling in 20 years.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"A retiree invested a retirement gratuity of ₱600,000.00 into two government savings instruments: Treasury Bills yielding 6.0% annual simple interest, and a High-Yield Cooperative Fund yielding 9.0% annual simple interest. If his combined annual simple interest income from both instruments is ₱48,000.00, how much principal was allocated to the High-Yield Cooperative Fund?","₱400,000.00","₱200,000.00","₱350,000.00","₱450,000.00","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let $x$ be the principal invested in Treasury Bills (6.0%).
+   - Principal invested in High-Yield Coop Fund (9.0%) $= ₱600,000.00 - x$.
+2. Formulate combined annual interest equation:
+   - $0.06 x + 0.09(600,000.00 - x) = 48,000.00$.
+3. Expand and collect terms:
+   - $0.06x + 54,000.00 - 0.09x = 48,000.00$.
+   - $-0.03x = 48,000.00 - 54,000.00 = -6,000.00$.
+4. Solve for $x$ (Treasury Bills principal):
+   - $x = \frac{-6,000.00}{-0.03} = ₱200,000.00$.
+5. Compute principal in High-Yield Cooperative Fund:
+   - $\text{Coop Principal} = ₱600,000.00 - ₱200,000.00 = ₱400,000.00$.
+6. Verify:
+   - Treasury Bills: $₱200,000 \times 0.06 = ₱12,000.00$.
+   - Coop Fund: $₱400,000 \times 0.09 = ₱36,000.00$.
+   - Total Interest $= ₱12,000 + ₱36,000 = ₱48,000.00$ (Confirmed!).
+
+Common Trap: Selecting the Treasury Bills principal ($₱200,000.00$, Option B) instead of the Coop Fund principal ($₱400,000.00$).
+Exam Tip: Alligation check: Overall rate $= \frac{48,000}{600,000} = 8.0\%$. Ratio $(9-8) : (8-6) = 1 : 2 \implies \text{Coop} = \frac{2}{3}(600,000) = ₱400,000.00$.","Correct. Survives elimination because ₱200,000 at 6% (₱12,000) + ₱400,000 at 9% (₱36,000) = ₱48,000.00 annual interest.","Eliminated because ₱200,000.00 is the allocation to Treasury Bills.","Eliminated because ₱350,000.00 yields annual interest ₱46,500.00.","Eliminated because ₱450,000.00 yields annual interest ₱49,500.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"A certain principal amounts to ₱37,200.00 in 3.0 years and to ₱42,000.00 in 5.0 years at a constant annual simple interest rate. What is the original principal and the annual simple interest rate?","Principal: ₱30,000.00; Rate: 8.0%","Principal: ₱28,000.00; Rate: 8.5%","Principal: ₱32,000.00; Rate: 7.5%","Principal: ₱30,000.00; Rate: 7.0%","A","Step-by-Step Solution:
+1. Determine interest accrued over the 2-year difference ($5.0 - 3.0 = 2.0\text{ years}$):
+   - $I_{2\text{ yrs}} = ₱42,000.00 - ₱37,200.00 = ₱4,800.00$.
+2. Calculate annual interest ($I_{\text{annual}}$):
+   - $I_{\text{annual}} = \frac{₱4,800.00}{2.0} = ₱2,400.00\text{/year}$.
+3. Calculate accumulated interest over 3.0 years:
+   - $I_{3\text{ yrs}} = 3.0 \times ₱2,400.00 = ₱7,200.00$.
+4. Determine original principal $P$:
+   - $P = A_3 - I_{3\text{ yrs}} = ₱37,200.00 - ₱7,200.00 = ₱30,000.00$.
+5. Calculate annual simple interest rate $r$:
+   - $r = \frac{I_{\text{annual}}}{P} \times 100\% = \frac{₱2,400.00}{₱30,000.00} \times 100\% = 0.08 = 8.0\%$.
+
+Common Trap: Dividing the 2-year interest difference ($₱4,800$) by 3 or 5 years instead of 2 years.
+Exam Tip: In simple interest, interest grows by a constant amount each year ($₱2,400/\text{yr}$). Principal $= 37,200 - 3(2,400) = ₱30,000.00$.","Correct. Survives elimination because annual interest is ₱2,400, giving principal ₱37,200 - ₱7,200 = ₱30,000.00 and rate 2,400 / 30,000 = 8.0%.","Eliminated because ₱28,000.00 yields 3-year amount ₱35,140 != ₱37,200.","Eliminated because ₱32,000.00 yields 3-year amount ₱39,200.","Eliminated because 7.0% rate yields annual interest ₱2,100.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"If ₱50,000.00 is borrowed on March 15 and fully repaid on June 28 of the same standard year at an annual simple interest rate of 7.3%, what is the exact simple interest owed using the exact day count convention (365 days/year)?","₱1,050.00","₱1,035.00","₱1,065.00","₱1,080.00","A","Step-by-Step Solution:
+1. Calculate the exact number of days elapsed between March 15 and June 28:
+   - March (remaining days): $31 - 15 = 16\text{ days}$.
+   - April (full month): $30\text{ days}$.
+   - May (full month): $31\text{ days}$.
+   - June (days elapsed): $28\text{ days}$.
+   - $\text{Total Exact Days} = 16 + 30 + 31 + 28 = 105\text{ days}$.
+2. Apply the exact simple interest formula:
+   - $I = P \cdot r \cdot \frac{t}{365}$.
+3. Substitute $P = ₱50,000.00, r = 0.073, t = 105$:
+   - $P \cdot r = 50,000.00 \times 0.073 = 3,650.00$.
+   - $I = 3,650.00 \times \frac{105}{365}$.
+4. Simplify:
+   - $\frac{3,650.00}{365} = 10.00$.
+   - $I = 10.00 \times 105 = ₱1,050.00$.
+
+Common Trap: Using ordinary interest with 360 days ($\frac{105}{360} \implies ₱1,064.58$) or counting March days as 30 instead of 31.
+Exam Tip: $50,000 \times 0.073 = 3,650$, which divides evenly by $365$ to yield $10 \times 105 = ₱1,050.00$.","Correct. Survives elimination because exact day count is 105 days, and 50,000 * 0.073 * (105 / 365) = 10 * 105 = ₱1,050.00.","Eliminated because ₱1,035.00 assumes 103.5 days.","Eliminated because ₱1,065.00 uses ordinary interest (360-day divisor).","Eliminated because ₱1,080.00 assumes 108 days.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"A loan administrator notes that if the annual simple interest rate on a portfolio drops from 8.5% to 7.0%, the annual simple interest income decreases by exactly ₱18,000.00. What is the total principal amount of the loan portfolio?","₱1,200,000.00","₱1,000,000.00","₱1,500,000.00","₱1,350,000.00","A","Step-by-Step Solution:
+1. Determine the difference in interest rate ($\Delta r$):
+   - $\Delta r = 8.5\% - 7.0\% = 1.5\% = 0.015$.
+2. Relate the rate difference to the annual income difference ($\Delta I$):
+   - $\Delta I = P \cdot \Delta r \cdot t$, where $t = 1.0\text{ year}$.
+   - $₱18,000.00 = P \times 0.015 \times 1.0$.
+3. Solve for principal $P$:
+   - $P = \frac{₱18,000.00}{0.015} = \frac{18,000,000.00}{15} = ₱1,200,000.00$.
+4. Verify:
+   - At 8.5%: $₱1,200,000 \times 0.085 = ₱102,000.00$.
+   - At 7.0%: $₱1,200,000 \times 0.070 = ₱84,000.00$.
+   - Difference $= ₱102,000 - ₱84,000 = ₱18,000.00$ (Confirmed!).
+
+Common Trap: Dividing by $1.5$ without converting to decimal ($0.015$), yielding $₱12,000.00$.
+Exam Tip: $P = \frac{\Delta I}{\Delta r} = \frac{18,000}{0.015} = ₱1,200,000.00$.","Correct. Survives elimination because 1.5% of ₱1,200,000.00 is 18,000.00.","Eliminated because 1.5% of ₱1,000,000.00 is ₱15,000.00 != ₱18,000.00.","Eliminated because 1.5% of ₱1,500,000.00 is ₱22,500.00.","Eliminated because ₱1,350,000.00 yields ₱20,250.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"What is the present value of a promissory note for ₱96,000.00 due in exactly 2.0 years, discounted at an annual simple interest rate of 10.0%?","₱80,000.00","₱76,800.00","₱86,400.00","₱82,000.00","A","Step-by-Step Solution:
+1. Identify the relationship between Present Value ($PV$) and Future Maturity Value ($A$):
+   - $A = PV(1 + r \cdot t)$.
+2. Substitute known values ($A = ₱96,000.00, r = 0.10, t = 2.0\text{ years}$):
+   - $₱96,000.00 = PV(1 + 0.10 \times 2.0)$.
+   - $₱96,000.00 = PV(1 + 0.20) = 1.20 PV$.
+3. Solve for $PV$:
+   - $PV = \frac{₱96,000.00}{1.20} = \frac{960,000.00}{12} = ₱80,000.00$.
+4. (Note on True Discount: The true discount is $A - PV = ₱96,000.00 - ₱80,000.00 = ₱16,000.00$, which represents 2 years simple interest on the $₱80,000.00$ present value).
+
+Common Trap: Calculating Banker's discount by subtracting $20\%$ of $₱96,000$ ($96,000 \times 0.80 = ₱76,800.00$, Option B), which incorrectly applies the discount rate to future maturity value rather than present value.
+Exam Tip: Present Value formula: $PV = \frac{A}{1 + rt} = \frac{96,000}{1.20} = ₱80,000.00$.","Correct. Survives elimination because ₱80,000.00 * (1 + 0.10 * 2) = ₱80,000 * 1.20 = ₱96,000.00 maturity value.","Eliminated because ₱76,800.00 is Banker's Discount (subtracting 20% from future value).","Eliminated because ₱86,400.00 assumes 1 year discount.","Eliminated because ₱82,000.00 is an underestimate of discount.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"A principal sum was placed at simple interest at a certain fixed rate for 4.0 years. Had it been invested at a 3.0% higher annual rate, it would have earned ₱14,400.00 more in total interest. What was the original principal sum?","₱120,000.00","₱100,000.00","₱150,000.00","₱144,000.00","A","Step-by-Step Solution:
+1. Relate the extra interest earned to the rate increase:
+   - $\text{Extra Interest} = P \times \Delta r \times t$.
+2. Substitute $\Delta r = 3.0\% = 0.03, t = 4.0\text{ years}$, and $\text{Extra Interest} = ₱14,400.00$:
+   - $₱14,400.00 = P \times 0.03 \times 4.0$.
+3. Simplify the equation:
+   - $₱14,400.00 = 0.12 P$.
+4. Solve for $P$:
+   - $P = \frac{₱14,400.00}{0.12} = \frac{1,440,000.00}{12} = ₱120,000.00$.
+5. Verify:
+   - Additional interest per year $= ₱120,000 \times 0.03 = ₱3,600.00$.
+   - Over 4 years $= 4 \times ₱3,600.00 = ₱14,400.00$ (Confirmed!).
+
+Common Trap: Forgetting to multiply by 4 years ($P = \frac{14,400}{0.03} = ₱480,000$).
+Exam Tip: $P = \frac{\Delta I}{\Delta r \cdot t} = \frac{14,400}{0.03 \times 4} = \frac{14,400}{0.12} = ₱120,000.00$.","Correct. Survives elimination because 12% total extra interest over 4 years on ₱120,000.00 yields exactly ₱14,400.00.","Eliminated because ₱100,000.00 yields extra interest ₱12,000.00 != ₱14,400.00.","Eliminated because ₱150,000.00 yields extra interest ₱18,000.00.","Eliminated because ₱144,000.00 yields extra interest ₱17,280.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"A cooperative member borrows ₱100,000.00 at 12.0% annual simple interest. The contract requires repayment in 10 equal monthly installments covering both the principal and the full 10-month interest. What is the amount of each equal monthly installment?","₱11,000.00","₱10,500.00","₱11,200.00","₱10,800.00","A","Step-by-Step Solution:
+1. Convert the loan duration to years:
+   - $t = \frac{10}{12}\text{ years}$.
+2. Calculate total simple interest for 10 months:
+   - $I = P \cdot r \cdot t = ₱100,000.00 \times 0.12 \times \frac{10}{12}$.
+   - Notice that $0.12 \times \frac{10}{12} = 0.10 = 10.0\%$.
+   - $I = ₱100,000.00 \times 0.10 = ₱10,000.00$.
+3. Compute total debt to be settled:
+   - $\text{Total Debt} = \text{Principal} + \text{Interest} = ₱100,000.00 + ₱10,000.00 = ₱110,000.00$.
+4. Calculate equal monthly installment over 10 months:
+   - $\text{Monthly Installment} = \frac{₱110,000.00}{10} = ₱11,000.00\text{/month}$.
+
+Common Trap: Computing annual interest ($₱12,000$) instead of 10-month interest ($₱10,000$), yielding $\frac{112,000}{10} = ₱11,200.00$ (Option C).
+Exam Tip: 10 months at 12% per year $= 10\%$ total interest. Total debt $= ₱110,000 \implies ₱11,000/\text{month}$.","Correct. Survives elimination because 10-month interest is ₱10,000, giving total debt ₱110,000 and monthly payment ₱11,000.00.","Eliminated because ₱10,500.00 assumes 5% total interest.","Eliminated because ₱11,200.00 incorrectly charges a full 12 months of interest.","Eliminated because ₱10,800.00 assumes 8% total interest.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"The simple interest on a invested sum is $\frac{9}{16}$ of the principal. If the numerical value of the time in years is exactly equal to the annual simple interest rate percentage ($t = r$), what is the annual interest rate and the time duration?","Rate: 7.5%; Time: 7.5 years","Rate: 6.0%; Time: 6.0 years","Rate: 8.0%; Time: 8.0 years","Rate: 9.0%; Time: 9.0 years","A","Step-by-Step Solution:
+1. Express simple interest in terms of principal $P$:
+   - $I = \frac{9}{16} P$.
+2. Formulate standard simple interest equation:
+   - $I = P \cdot \frac{r}{100} \cdot t$.
+3. Substitute $t = r$:
+   - $\frac{9}{16} P = P \cdot \frac{r^2}{100}$.
+4. Divide both sides by $P$ and solve for $r^2$:
+   - $\frac{r^2}{100} = \frac{9}{16} \implies r^2 = \frac{900}{16} = \frac{225}{4}$.
+5. Take the positive square root:
+   - $r = \sqrt{\frac{225}{4}} = \frac{15}{2} = 7.5\%$.
+6. Time duration is also $t = 7.5\text{ years}$ ($7\text{ years and } 6\text{ months}$).
+7. Verify:
+   - $I = P \times 0.075 \times 7.5 = P \times 0.5625 = \frac{9}{16} P$ (Confirmed!).
+
+Common Trap: Forgetting to multiply by 100 when taking the square root ($\sqrt{9/16} = 3/4 = 0.75$).
+Exam Tip: $r = \sqrt{\frac{9}{16} \times 100} = \frac{3}{4} \times 10 = 7.5\%$.","Correct. Survives elimination because r = sqrt(900/16) = 15/2 = 7.5%, and 0.075 * 7.5 = 0.5625 = 9/16.","Eliminated because 6.0% yields I = 0.36 P != 0.5625 P.","Eliminated because 8.0% yields I = 0.64 P.","Eliminated because 9.0% yields I = 0.81 P.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"
+"An investor places $\frac{1}{3}$ of his total capital at 7.0% annual simple interest, $\frac{1}{4}$ of his capital at 8.0% annual simple interest, and the remaining balance at 10.0% annual simple interest. If his total annual simple interest income is exactly ₱2,550.00, what is his total invested capital?","₱30,000.00","₱28,000.00","₱36,000.00","₱32,000.00","A","Step-by-Step Solution:
+1. Determine the fraction of capital allocated to the third investment:
+   - First two fractions $= \frac{1}{3} + \frac{1}{4} = \frac{4 + 3}{12} = \frac{7}{12}$.
+   - Remaining fraction $= 1 - \frac{7}{12} = \frac{5}{12}$.
+2. Compute the effective overall weighted interest rate on total capital $C$:
+   - $r_{\text{eff}} = \frac{1}{3}(0.07) + \frac{1}{4}(0.08) + \frac{5}{12}(0.10)$.
+3. Convert to common denominator ($\text{LCD} = 12$):
+   - $r_{\text{eff}} = \frac{4(0.07) + 3(0.08) + 5(0.10)}{12} = \frac{0.28 + 0.24 + 0.50}{12} = \frac{1.02}{12} = 0.085 = 8.5\%$.
+4. Set up total interest equation:
+   - $0.085 C = ₱2,550.00$.
+5. Solve for $C$:
+   - $C = \frac{₱2,550.00}{0.085} = \frac{2,550,000.00}{85} = ₱30,000.00$.
+6. Verify:
+   - $\frac{1}{3}(30,000) = ₱10,000 \times 0.07 = ₱700.00$.
+   - $\frac{1}{4}(30,000) = ₱7,500 \times 0.08 = ₱600.00$.
+   - $\frac{5}{12}(30,000) = ₱12,500 \times 0.10 = ₱1,250.00$.
+   - Total Interest $= ₱700 + ₱600 + ₱1,250 = ₱2,550.00$ (Confirmed!).
+
+Common Trap: Taking the simple arithmetic average $\frac{7 + 8 + 10}{3} = 8.33\%$ instead of the weighted average ($8.5\%$).
+Exam Tip: Weighted rate $= \frac{1.02}{12} = 8.5\% \implies C = \frac{2,550}{0.085} = ₱30,000.00$.","Correct. Survives elimination because weighted interest rate is 8.5%, giving total capital ₱2,550 / 0.085 = ₱30,000.00.","Eliminated because ₱28,000.00 yields interest ₱2,380.00 != ₱2,550.00.","Eliminated because ₱36,000.00 yields interest ₱3,060.00.","Eliminated because ₱32,000.00 yields interest ₱2,720.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Simple interest | Very Difficult | Batch 046"

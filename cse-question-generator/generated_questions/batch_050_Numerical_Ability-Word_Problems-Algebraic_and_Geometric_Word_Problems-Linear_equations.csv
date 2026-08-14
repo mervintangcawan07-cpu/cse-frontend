@@ -1,0 +1,198 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A logistics officer is arranging passenger vans for official seminar delegates. If 12 delegates are seated in each van, 9 delegates are left without seats. If 15 delegates are seated in each van, exactly 1 van remains completely empty. How many total passenger vans and seminar delegates are there?","8 vans and 105 delegates","9 vans and 117 delegates","7 vans and 93 delegates","10 vans and 129 delegates","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let $v$ be the total number of passenger vans.
+   - Let $D$ be the total number of seminar delegates.
+2. Formulate delegate count equations from both seating arrangements:
+   - Scenario 1 (12 delegates/van + 9 unseated): $D = 12v + 9$.
+   - Scenario 2 (15 delegates/van with 1 empty van): $D = 15(v - 1) = 15v - 15$.
+3. Set the two delegate expressions equal to each other:
+   - $12v + 9 = 15v - 15$.
+4. Solve for $v$ (number of vans):
+   - $15v - 12v = 9 + 15$.
+   - $3v = 24 \implies v = 8\text{ vans}$.
+5. Calculate total delegate count $D$:
+   - $D = 12(8) + 9 = 96 + 9 = 105\text{ delegates}$.
+6. Verify under Scenario 2:
+   - $D = 15(8 - 1) = 15(7) = 105\text{ delegates}$ (Confirmed!).
+
+Common Trap: Setting Scenario 2 as $15v - 1$ instead of $15(v - 1)$, leading to non-integer van counts.
+Exam Tip: Equate delegate expressions: $12v + 9 = 15v - 15 \implies 3v = 24 \implies v = 8\text{ vans}, D = 105\text{ delegates}$.","Correct. Survives elimination because 8 vans gives 12(8) + 9 = 105 delegates and 15(8 - 1) = 105 delegates.","Eliminated because 9 vans yields 117 vs 120 delegates.","Eliminated because 7 vans yields 93 vs 90 delegates.","Eliminated because 10 vans yields 129 vs 135 delegates.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"A relief coordinator distributes emergency relief kits equally among a group of barangays. If there were 2 fewer barangays, each barangay would receive 3 more kits. If there were 4 more barangays, each barangay would receive 3 fewer kits. How many total barangays are there, and what is the total number of kits distributed?","8 barangays and 72 kits","10 barangays and 90 kits","6 barangays and 54 kits","12 barangays and 108 kits","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $n$ be the number of barangays.
+   - Let $k$ be the number of kits received per barangay.
+   - Total kits $T = n \cdot k$.
+2. Formulate system of non-linear equations from the two conditions:
+   - Condition 1: $(n - 2)(k + 3) = nk \implies nk + 3n - 2k - 6 = nk \implies 3n - 2k = 6$ (Equation 1).
+   - Condition 2: $(n + 4)(k - 3) = nk \implies nk - 3n + 4k - 12 = nk \implies -3n + 4k = 12$ (Equation 2).
+3. Add Equation 1 and Equation 2 directly to eliminate $n$:
+   - $(3n - 2k) + (-3n + 4k) = 6 + 12$.
+   - $2k = 18 \implies k = 9\text{ kits/barangay}$.
+4. Substitute $k = 9$ into Equation 1 to solve for $n$:
+   - $3n - 2(9) = 6 \implies 3n - 18 = 6 \implies 3n = 24 \implies n = 8\text{ barangays}$.
+5. Calculate total kits $T$:
+   - $T = n \cdot k = 8 \times 9 = 72\text{ kits}$.
+6. Verify:
+   - Scenario 1: $(8 - 2)(9 + 3) = 6 \times 12 = 72$.
+   - Scenario 2: $(8 + 4)(9 - 3) = 12 \times 6 = 72$ (Confirmed!).
+
+Common Trap: Adding kits without realizing that the total product $nk$ must remain constant.
+Exam Tip: Adding $3n - 2k = 6$ and $-3n + 4k = 12$ directly gives $2k = 18 \implies k = 9, n = 8 \implies T = 72$.","Correct. Survives elimination because 8 barangays receiving 9 kits yields 72 kits, satisfying (6)(12) = 72 and (12)(6) = 72.","Eliminated because 10 barangays fails Equation 1.","Eliminated because 6 barangays fails Equation 2.","Eliminated because 12 barangays fails the system.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"Solve for the variable $x$ in the fractional linear algebraic equation: $\frac{3x - 5}{4} - \frac{2x - 3}{3} = \frac{x + 1}{6} - \frac{11}{12}$.","x = 6","x = 4","x = 8","x = 5","A","Step-by-Step Solution:
+1. Identify the Least Common Multiple (LCM) of all denominators:
+   - $\text{LCM}(4, 3, 6, 12) = 12$.
+2. Multiply every term on both sides by 12 to eliminate fractions:
+   - $12 \left(\frac{3x - 5}{4}\right) - 12 \left(\frac{2x - 3}{3}\right) = 12 \left(\frac{x + 1}{6}\right) - 12 \left(\frac{11}{12}\right)$.
+3. Simplify each multiplied term:
+   - $3(3x - 5) - 4(2x - 3) = 2(x + 1) - 11$.
+4. Expand brackets (paying strict attention to negative signs):
+   - $9x - 15 - 8x + 12 = 2x + 2 - 11$.
+5. Combine like terms on both sides:
+   - $(9x - 8x) + (-15 + 12) = 2x + (2 - 11)$.
+   - $x - 3 = 2x - 9$.
+6. Solve for $x$:
+   - $-3 + 9 = 2x - x \implies x = 6$.
+7. Verify:
+   - $\text{LHS} = \frac{13}{4} - \frac{9}{3} = \frac{13}{4} - 3 = \frac{1}{4} = \frac{3}{12}$.
+   - $\text{RHS} = \frac{7}{6} - \frac{11}{12} = \frac{14 - 11}{12} = \frac{3}{12} = \frac{1}{4}$ (Confirmed!).
+
+Common Trap: Forgetting to distribute the negative sign across the second numerator (writing $-8x - 12$ instead of $-8x + 12$).
+Exam Tip: Multiply by LCM 12: $3(3x - 5) - 4(2x - 3) = 2(x + 1) - 11 \implies x - 3 = 2x - 9 \implies x = 6$.","Correct. Survives elimination because substituting x = 6 yields LHS = 1/4 and RHS = 1/4.","Eliminated because x = 4 yields LHS = -1/12 and RHS = -1/12 != 1/4.","Eliminated because x = 8 yields LHS = 7/12 and RHS = 7/12 != 1/4.","Eliminated because x = 5 yields LHS = 1/6 and RHS = 1/12.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"The units digit of a two-digit positive integer exceeds its tens digit by 3. If twice the integer formed by reversing its digits exceeds 3 times the original integer by 18, what is the original two-digit integer?","36","25","47","14","A","Step-by-Step Solution:
+1. Define the digits:
+   - Let the tens digit be $t$.
+   - Units digit $u = t + 3$.
+2. Formulate the original integer $N$ and reversed integer $R$:
+   - $N = 10t + u = 10t + (t + 3) = 11t + 3$.
+   - $R = 10u + t = 10(t + 3) + t = 10t + 30 + t = 11t + 30$.
+3. Set up the given relation equation ($2R - 3N = 18$):
+   - $2(11t + 30) - 3(11t + 3) = 18$.
+4. Expand and collect terms:
+   - $22t + 60 - 33t - 9 = 18$.
+   - $-11t + 51 = 18$.
+5. Solve for $t$:
+   - $11t = 51 - 18 = 33 \implies t = 3$.
+6. Find the units digit and original integer:
+   - $u = 3 + 3 = 6$.
+   - $\text{Original Integer} = 36$.
+7. Verify:
+   - Reversed integer $= 63$.
+   - $2(63) - 3(36) = 126 - 108 = 18$ (Confirmed!).
+
+Common Trap: Selecting the reversed integer 63 or guessing 25 ($u - t = 3$, but $2(52) - 3(25) = 104 - 75 = 29 \neq 18$).
+Exam Tip: $-11t + 51 = 18 \implies 11t = 33 \implies t = 3, u = 6 \implies 36$.","Correct. Survives elimination because 36 has units digit exceeding tens digit by 3, and 2(63) - 3(36) = 126 - 108 = 18.","Eliminated because 25 yields 2(52) - 3(25) = 29 != 18.","Eliminated because 47 yields 2(74) - 3(47) = 148 - 141 = 7 != 18.","Eliminated because 14 yields 2(41) - 3(14) = 82 - 42 = 40 != 18.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"An IT procurement officer has an exact budget of ₱83,000.00 to purchase a total of 9 tablet computers. Standard Tablets cost ₱7,000.00 each, while Advanced Tablets cost ₱11,000.00 each. If the entire budget is exhausted, how many Advanced Tablets did she purchase?","5 Advanced Tablets","4 Advanced Tablets","6 Advanced Tablets","3 Advanced Tablets","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let $A$ be the number of Advanced Tablets.
+   - Number of Standard Tablets $= 9 - A$.
+2. Formulate total budget equation:
+   - $11,000.00 A + 7,000.00(9 - A) = ₱83,000.00$.
+3. Divide entire equation by 1,000 to simplify:
+   - $11A + 7(9 - A) = 83$.
+4. Expand and solve for $A$:
+   - $11A + 63 - 7A = 83$.
+   - $4A = 83 - 63 = 20$.
+   - $A = \frac{20}{4} = 5\text{ Advanced Tablets}$.
+5. Calculate Standard Tablets:
+   - $\text{Standard} = 9 - 5 = 4\text{ Standard Tablets}$.
+6. Verify:
+   - $5(₱11,000.00) + 4(₱7,000.00) = ₱55,000.00 + ₱28,000.00 = ₱83,000.00$ (Confirmed!).
+
+Common Trap: Answering the number of Standard Tablets ($4$, Option B) instead of Advanced Tablets ($5$).
+Exam Tip: Let all 9 be Standard ($9 \times 7\text{k} = 63\text{k}$). Shortfall $= 83\text{k} - 63\text{k} = 20\text{k}$. Difference per unit $= 11\text{k} - 7\text{k} = 4\text{k}$. Advanced $= \frac{20\text{k}}{4\text{k}} = 5$.","Correct. Survives elimination because 5 Advanced (₱55,000) + 4 Standard (₱28,000) = 9 tablets totaling ₱83,000.00.","Eliminated because 4 Advanced Tablets yields total cost ₱79,000.00 != ₱83,000.00.","Eliminated because 6 Advanced Tablets yields total cost ₱87,000.00.","Eliminated because 3 Advanced Tablets yields total cost ₱75,000.00.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"A municipal water storage tank is fed by an inlet valve adding water at a constant rate $I$ and has a drain leak discharging water at a constant rate $L$. When both inlet and leak are active, the tank level rises at 15.0 liters/minute. When the inlet valve flow rate is increased by 50.0%, the net water level rises at 30.0 liters/minute. What is the discharge rate of the leak in liters/minute?","15.0 liters/min","12.0 liters/min","18.0 liters/min","20.0 liters/min","A","Step-by-Step Solution:
+1. Define rate variables:
+   - Let $I$ be the baseline inlet flow rate (L/min).
+   - Let $L$ be the constant drain leak rate (L/min).
+2. Formulate linear equations for net filling rates:
+   - Baseline Condition: $I - L = 15.0$ (Equation 1).
+   - Augmented Condition (+50% inlet $\implies 1.50 I$): $1.50 I - L = 30.0$ (Equation 2).
+3. Subtract Equation 1 from Equation 2 to eliminate $L$:
+   - $(1.50 I - L) - (I - L) = 30.0 - 15.0$.
+   - $0.50 I = 15.0 \implies I = \frac{15.0}{0.50} = 30.0\text{ L/min}$.
+4. Substitute $I = 30.0$ into Equation 1 to solve for leak rate $L$:
+   - $30.0 - L = 15.0 \implies L = 30.0 - 15.0 = 15.0\text{ L/min}$.
+5. Verify:
+   - Baseline: $30.0 - 15.0 = 15.0\text{ L/min}$.
+   - Augmented: $1.5(30.0) - 15.0 = 45.0 - 15.0 = 30.0\text{ L/min}$ (Confirmed!).
+
+Common Trap: Subtracting without accounting for the 0.5 factor ($1.5I - I = 0.5I$, not $I$).
+Exam Tip: The 15 L/min increase in net rate came entirely from the 50% increase in inlet rate $\implies 0.5 I = 15 \implies I = 30, L = 15\text{ L/min}$.","Correct. Survives elimination because baseline inlet is 30 L/min and leak is 15 L/min, giving net rates of 15 L/min and 30 L/min.","Eliminated because 12.0 L/min leak yields net rate of 18 L/min.","Eliminated because 18.0 L/min leak yields net rate of 12 L/min.","Eliminated because 20.0 L/min leak yields net rate of 10 L/min.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"A father's current age is 4 times his daughter's current age. In exactly 6.0 years, the father's age will be 3 times his daughter's age at that time. What is the difference in years between their current ages?","36.0 years","32.0 years","40.0 years","28.0 years","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let daughter's current age $= d$.
+   - Father's current age $= 4d$.
+2. Formulate age relationship 6 years in the future:
+   - Father's future age $= 4d + 6.0$.
+   - Daughter's future age $= d + 6.0$.
+   - Given: $4d + 6.0 = 3(d + 6.0)$.
+3. Expand and solve for $d$:
+   - $4d + 6.0 = 3d + 18.0$.
+   - $4d - 3d = 18.0 - 6.0 \implies d = 12.0\text{ years}$.
+4. Compute current ages:
+   - Daughter $= 12.0\text{ years}$.
+   - Father $= 4(12.0) = 48.0\text{ years}$.
+5. Calculate current age difference:
+   - $\text{Age Difference} = 48.0 - 12.0 = 36.0\text{ years}$.
+   - (Or: $\text{Difference} = 4d - d = 3d = 3(12.0) = 36.0\text{ years}$).
+
+Common Trap: Selecting father's age ($48$) or daughter's age ($12$) instead of the age difference.
+Exam Tip: $4d + 6 = 3(d + 6) \implies d = 12 \implies \text{Difference} = 3d = 36.0\text{ years}$.","Correct. Survives elimination because daughter is 12 and father is 48 (in 6 years: 18 and 54, which is 3x), giving age difference 36.0 years.","Eliminated because 32.0 years corresponds to daughter age 10.67.","Eliminated because 40.0 years corresponds to daughter age 13.33.","Eliminated because 28.0 years is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"A transport truck traveled from Facility A to Facility B at an average speed of 60.0 km/h. On the return trip along the identical route, road conditions reduced its average speed to 40.0 km/h. If the total round-trip driving time was exactly 5.0 hours, what is the one-way distance between Facility A and Facility B?","120.0 km","100.0 km","140.0 km","150.0 km","A","Step-by-Step Solution:
+1. Define variable:
+   - Let $d$ be the one-way distance in kilometers.
+2. Express travel times for outbound and return legs ($\text{Time} = \frac{\text{Distance}}{\text{Speed}}$):
+   - Outbound Time $= \frac{d}{60.0}\text{ hours}$.
+   - Return Time $= \frac{d}{40.0}\text{ hours}$.
+3. Set up total travel time equation:
+   - $\frac{d}{60.0} + \frac{d}{40.0} = 5.0$.
+4. Find common denominator ($\text{LCM}(60, 40) = 120$):
+   - $\frac{2d + 3d}{120.0} = 5.0$.
+   - $\frac{5d}{120.0} = 5.0$.
+5. Solve for $d$:
+   - $\frac{d}{24.0} = 5.0 \implies d = 5.0 \times 24.0 = 120.0\text{ km}$.
+6. Verify:
+   - Outbound time $= \frac{120}{60} = 2.0\text{ hours}$.
+   - Return time $= \frac{120}{40} = 3.0\text{ hours}$.
+   - Total time $= 2.0 + 3.0 = 5.0\text{ hours}$ (Confirmed!).
+
+Common Trap: Taking the average speed as $50\text{ km/h}$ and computing $50 \times 2.5 = 125\text{ km}$, ignoring harmonic mean speed.
+Exam Tip: Distance formula: $d = \frac{T \cdot v_1 \cdot v_2}{v_1 + v_2} = \frac{5.0 \times 60 \times 40}{100} = \frac{12,000}{100} = 120.0\text{ km}$.","Correct. Survives elimination because 120 km / 60 km/h (2 hrs) + 120 km / 40 km/h (3 hrs) = 5.0 hours total round-trip time.","Eliminated because 100.0 km yields total time 4.17 hours != 5.0 hours.","Eliminated because 140.0 km yields total time 5.83 hours.","Eliminated because 150.0 km yields total time 6.25 hours.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"A civil engineer has 60.0 meters of perimeter fencing to enclose a rectangular storage yard using an existing concrete warehouse wall as one of the long boundaries (fencing only 3 sides: one length $L$ parallel to the wall, and two equal widths $W$). If the length $L$ parallel to the wall is 6.0 meters longer than twice the width ($L = 2W + 6.0$), what are the dimensions of the enclosed yard?","Length: 33.0 m; Width: 13.5 m","Length: 36.0 m; Width: 12.0 m","Length: 30.0 m; Width: 15.0 m","Length: 32.0 m; Width: 14.0 m","A","Step-by-Step Solution:
+1. Formulate the 3-sided fencing constraint equation:
+   - Fencing available $= L + 2W = 60.0\text{ meters}$.
+2. Substitute the given relationship $L = 2W + 6.0$:
+   - $(2W + 6.0) + 2W = 60.0$.
+3. Combine like terms:
+   - $4W + 6.0 = 60.0$.
+4. Solve for width $W$:
+   - $4W = 60.0 - 6.0 = 54.0$.
+   - $W = \frac{54.0}{4} = 13.5\text{ meters}$.
+5. Calculate length $L$:
+   - $L = 2(13.5) + 6.0 = 27.0 + 6.0 = 33.0\text{ meters}$.
+6. Verify:
+   - $L + 2W = 33.0 + 2(13.5) = 33.0 + 27.0 = 60.0\text{ meters}$ (Confirmed!).
+
+Common Trap: Using a 4-sided perimeter equation $2L + 2W = 60.0$ ($W = 9, L = 24$), forgetting that the warehouse wall replaces one length.
+Exam Tip: 3-sided perimeter: $L + 2W = 60 \implies (2W + 6) + 2W = 60 \implies 4W = 54 \implies W = 13.5\text{ m}, L = 33.0\text{ m}$.","Correct. Survives elimination because 33.0 m + 2(13.5 m) = 60.0 m, and 33.0 m is exactly 6 m longer than 2(13.5 m) = 27.0 m.","Eliminated because 36.0 m + 2(12.0 m) = 60.0 m, but 36.0 is 12 m longer than 2(12), not 6 m.","Eliminated because 30.0 m + 2(15.0 m) = 60.0 m, but 30.0 = 2(15), not 2(15) + 6.","Eliminated because 32.0 m + 2(14.0 m) = 60.0 m, but 32.0 is only 4 m longer than 2(14).","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"
+"Solve for the variable $y$ in the multi-bracket linear algebraic equation: $4(2y - 1) - 3(y + 2) = 2(y + 5) + 1$.","y = 7","y = 5","y = 9","y = 6","A","Step-by-Step Solution:
+1. Expand both sides of the equation:
+   - $\text{LHS} = 4(2y) - 4(1) - 3(y) - 3(2) = 8y - 4 - 3y - 6$.
+   - $\text{RHS} = 2(y) + 2(5) + 1 = 2y + 10 + 1$.
+2. Combine like terms on both sides:
+   - $\text{LHS} = (8y - 3y) + (-4 - 6) = 5y - 10$.
+   - $\text{RHS} = 2y + 11$.
+3. Set the simplified expressions equal:
+   - $5y - 10 = 2y + 11$.
+4. Group variable terms on LHS and constant terms on RHS:
+   - $5y - 2y = 11 + 10$.
+   - $3y = 21$.
+5. Solve for $y$:
+   - $y = \frac{21}{3} = 7$.
+6. Verify:
+   - $\text{LHS} = 4(14 - 1) - 3(7 + 2) = 4(13) - 3(9) = 52 - 27 = 25$.
+   - $\text{RHS} = 2(7 + 5) + 1 = 2(12) + 1 = 24 + 1 = 25$ (Confirmed!).
+
+Common Trap: Sign error when distributing $-3(y + 2)$, incorrectly writing $-3y + 6$ instead of $-3y - 6$.
+Exam Tip: $5y - 10 = 2y + 11 \implies 3y = 21 \implies y = 7$.","Correct. Survives elimination because substituting y = 7 yields LHS = 25 and RHS = 25.","Eliminated because y = 5 yields LHS = 15 and RHS = 21.","Eliminated because y = 9 yields LHS = 35 and RHS = 29.","Eliminated because y = 6 yields LHS = 20 and RHS = 23.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Linear equations | Very Difficult | Batch 050"

@@ -1,0 +1,191 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Consider the following categorical syllogism: Major Premise: All public procurement officers are bonded fiduciaries ($\text{All } P \text{ is } B$). Minor Premise: No casual contractual workers are bonded fiduciaries ($\text{No } C \text{ is } B$). Conclusion: Therefore, no casual contractual workers are public procurement officers ($\text{No } C \text{ is } P$). Which classical valid syllogistic mood and figure does this argument represent?","Figure 2, Mood AEE (Camestres)","Figure 1, Mood AAA (Barbara)","Figure 2, Mood EAE (Cesare)","Figure 3, Mood EIO (Ferison)","A","Step-by-Step Solution:
+1. Identify the three terms in the syllogism:
+   - Major Term ($P$): \"public procurement officers\" (Predicate of the conclusion).
+   - Minor Term ($C$): \"casual contractual workers\" (Subject of the conclusion).
+   - Middle Term ($B$): \"bonded fiduciaries\" (Appears in both premises).
+2. Determine the Figure:
+   - Major Premise: $\text{All } P \text{ is } B$ ($P - M$, Middle term is Predicate).
+   - Minor Premise: $\text{No } C \text{ is } B$ ($S - M$, Middle term is Predicate).
+   - In FIGURE 2, the middle term is the Predicate in BOTH premises ($P-M, S-M$).
+3. Determine the Mood:
+   - Major Premise is Universal Affirmative ($A$).
+   - Minor Premise is Universal Negative ($E$).
+   - Conclusion is Universal Negative ($E$).
+   - Mood: AEE.
+4. Combine Mood and Figure:
+   - Mood AEE in Figure 2 corresponds to the mnemonic name \"CAMESTRES\" (a valid Aristotelian syllogism).
+5. Evaluate incorrect alternatives:
+   - Option B (Barbara): AAA in Figure 1.
+   - Option C (Cesare): EAE in Figure 2 (Major premise would be $E$, Minor $A$).
+   - Option D (Ferison): EIO in Figure 3.
+
+Common Trap: Confusing Camestres (AEE-2) with Cesare (EAE-2). In Camestres, the Major is $A$ and Minor is $E$.
+Exam Tip: Camestres = Major $A$, Minor $E$, Conclusion $E$ in Figure 2 ($P-M, S-M$).","Correct. Survives elimination because the middle term is the predicate in both premises (Figure 2) and the proposition sequence is A-E-E (Camestres).","Eliminated because Barbara is AAA in Figure 1.","Eliminated because Cesare has E as the major premise and A as the minor premise.","Eliminated because Ferison is EIO in Figure 3.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the following syllogism: Major Premise: All certified government auditors are forensic accountants ($\text{All } A \text{ are } F$). Minor Premise: All certified government auditors are career civil service officers ($\text{All } A \text{ are } C$). Conclusion: Therefore, all career civil service officers are forensic accountants ($\text{All } C \text{ are } F$). What formal syllogistic fallacy is committed by this deduction?","Fallacy of Illicit Minor","Fallacy of Illicit Major","Fallacy of Undistributed Middle","Fallacy of Exclusive Premises","A","Step-by-Step Solution:
+1. Identify terms and their distribution status:
+   - Middle Term ($A$): \"certified government auditors\" (Subject of both premises, Distributed in both).
+   - Major Term ($F$): \"forensic accountants\".
+   - Minor Term ($C$): \"career civil service officers\".
+2. Analyze the Minor Term ($C$):
+   - In Minor Premise: \"All $A$ are $C$\" ($A$-proposition). The predicate $C$ is UNDISTRIBUTED.
+   - In Conclusion: \"All $C$ are $F$\" ($A$-proposition). The subject $C$ is DISTRIBUTED.
+3. Apply the Rule of Distribution:
+   - A term that is UNDISTRIBUTED in the premises CANNOT be DISTRIBUTED in the conclusion.
+   - Since the minor term $C$ is undistributed in the premise but distributed in the conclusion, this commits the formal \"FALLACY OF ILLICIT MINOR\".
+4. Set-Theoretic Counterexample:
+   - All auditors may be career officers, but there are thousands of career officers who are engineers, teachers, or administrators and not forensic accountants. The valid conclusion in Figure 3 (Darapti) is only the particular: \"Some career officers are forensic accountants.\"
+
+Common Trap: Overlooking term distribution in universal conclusions derived from Figure 3 premises.
+Exam Tip: If the Minor Term goes from Undistributed in the premise to Distributed in the conclusion = ILLICIT MINOR.","Correct. Survives elimination because minor term C is undistributed as the predicate of an A-premise but distributed as the subject of the A-conclusion.","Eliminated because the major term F is undistributed in both premise and conclusion.","Eliminated because the middle term A is distributed in both premises.","Eliminated because both premises are affirmative.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the syllogism: Major Premise: No classified state secrets are public records ($\text{No } S \text{ is } P$). Minor Premise: All agency audit reports are public records ($\text{All } A \text{ is } P$). Conclusion: Therefore, no agency audit reports are classified state secrets ($\text{No } A \text{ is } S$). Which valid syllogistic mood and figure is this?","Figure 2, Mood EAE (Cesare)","Figure 1, Mood EAE (Celarent)","Figure 2, Mood AEE (Camestres)","Figure 4, Mood AEE (Camenes)","A","Step-by-Step Solution:
+1. Identify the three terms:
+   - Major Term ($S$): \"classified state secrets\".
+   - Minor Term ($A$): \"agency audit reports\".
+   - Middle Term ($P$): \"public records\".
+2. Determine the Figure:
+   - Major: $\text{No } S \text{ is } P$ ($P - M$, Middle term $P$ is Predicate).
+   - Minor: $\text{All } A \text{ is } P$ ($S - M$, Middle term $P$ is Predicate).
+   - When the middle term is the Predicate in both premises, the syllogism is in FIGURE 2.
+3. Determine the Mood:
+   - Major Premise is Universal Negative ($E$).
+   - Minor Premise is Universal Affirmative ($A$).
+   - Conclusion is Universal Negative ($E$).
+   - Mood: EAE.
+4. Combine Mood and Figure:
+   - Mood EAE in Figure 2 is named \"CESARE\" (a valid syllogism).
+5. Evaluate incorrect alternatives:
+   - Option B (Celarent): EAE in Figure 1 (where middle term is subject in major premise).
+   - Option C (Camestres): AEE in Figure 2.
+   - Option D (Camenes): AEE in Figure 4.
+
+Common Trap: Confusing Figure 1 Celarent ($M-P, S-M$) with Figure 2 Cesare ($P-M, S-M$).
+Exam Tip: Cesare = EAE-2 (Middle term is predicate in both premises).","Correct. Survives elimination because the middle term is the predicate in both premises (Figure 2) and the proposition order is E-A-E (Cesare).","Eliminated because Celarent is in Figure 1 ($M-P, S-M$).","Eliminated because Camestres has an A-major premise and E-minor premise.","Eliminated because Camenes is in Figure 4.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the argument: Major Premise: All legislative statutes are enactments of congress ($\text{All } S \text{ are } E$). Minor Premise: Some executive orders are not legislative statutes ($\text{Some } O \text{ are not } S$). Conclusion: Therefore, some executive orders are not enactments of congress ($\text{Some } O \text{ are not } E$). What formal syllogistic fallacy is committed?","Fallacy of Illicit Major","Fallacy of Illicit Minor","Fallacy of Undistributed Middle","Fallacy of Four Terms","A","Step-by-Step Solution:
+1. Identify terms and distribution:
+   - Major Term ($E$): \"enactments of congress\".
+   - Minor Term ($O$): \"executive orders\".
+   - Middle Term ($S$): \"legislative statutes\".
+2. Analyze the Major Term ($E$):
+   - In Major Premise: \"All $S$ are $E$\" ($A$-proposition). The predicate $E$ is UNDISTRIBUTED.
+   - In Conclusion: \"Some $O$ are not $E$\" ($O$-proposition). The predicate of a negative proposition ($O$) is DISTRIBUTED.
+3. Apply the Rule of Distribution:
+   - Major term $E$ is distributed in the conclusion but was undistributed in the major premise.
+   - This commits the formal \"FALLACY OF ILLICIT MAJOR\".
+4. Set-Theoretic Counterexample:
+   - Executive orders are not statutes, yet both statutes and executive orders might be valid enactments under congressional authority. You cannot infer that an entity is outside $E$ just because it is outside subset $S$.
+
+Common Trap: Failing to notice that the predicate of an $O$-proposition (\"Some S are not P\") is DISTRIBUTED.
+Exam Tip: When the conclusion is negative ($E$ or $O$), always check if the Major Term was distributed in the Major Premise!","Correct. Survives elimination because major term E is undistributed as the predicate of an A-premise but distributed as the predicate of the negative O-conclusion (Illicit Major).","Eliminated because the minor term O is undistributed in both minor premise and conclusion.","Eliminated because the middle term S is distributed as the subject of the A-premise.","Eliminated because exactly three terms are used.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Given the premises: Major Premise: All cabinet secretaries are presidential appointees ($\text{All } C \text{ is } P$). Minor Premise: Some constitutional commissioners are cabinet secretaries ($\text{Some } K \text{ is } C$). Which conclusion validly completes this Figure 1, Mood AII (Darii) syllogism?","Some constitutional commissioners are presidential appointees ($\text{Some } K \text{ is } P$).","All constitutional commissioners are presidential appointees ($\text{All } K \text{ is } P$).","No constitutional commissioners are presidential appointees.","Some presidential appointees are not constitutional commissioners.","A","Step-by-Step Solution:
+1. Identify the formal structure:
+   - Major Premise ($A$): $\text{All } C \text{ is } P$ ($M - P$, Middle term $C$ is Subject).
+   - Minor Premise ($I$): $\text{Some } K \text{ is } C$ ($S - M$, Middle term $C$ is Predicate).
+   - Figure: FIGURE 1 ($M-P, S-M$).
+2. Analyze Mood AII in Figure 1 (*Darii*):
+   - Major is Universal Affirmative ($A$).
+   - Minor is Particular Affirmative ($I$).
+   - By syllogistic rules, the conclusion must be Particular Affirmative ($I$).
+3. Formulate the conclusion:
+   - Subject = Minor Term ($K$: \"constitutional commissioners\").
+   - Predicate = Major Term ($P$: \"presidential appointees\").
+   - Conclusion: \"Some constitutional commissioners are presidential appointees\" ($\text{Some } K \text{ is } P$).
+4. Evaluate incorrect alternatives:
+   - Option B: Universal claim overextends the particular minor premise.
+   - Option C: Negative conclusion from affirmative premises is invalid.
+   - Option D: Negative conclusion.
+
+Common Trap: Upgrading the conclusion to \"All\" when one premise is \"Some\".
+Exam Tip: AII-1 (Darii): All M is P + Some S is M $\implies$ Some S is P.","Correct. Survives elimination because Darii (AII-1) validly deduces the particular affirmative conclusion: Some K is P.","Eliminated because universal conclusion is an illicit overextension of a particular premise.","Eliminated because negative conclusions cannot follow from purely affirmative premises.","Eliminated because the conclusion must be affirmative.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Why is the following syllogism INVALID in classical Aristotelian logic? Premise 1: No department undersecretaries are elective officials ($\text{No } U \text{ is } E$). Premise 2: No elective officials are career civil service eligibles ($\text{No } E \text{ is } C$). Conclusion: Therefore, some career civil service eligibles are not department undersecretaries.","Fallacy of Exclusive Premises (no valid conclusion can be drawn from two negative premises).","Fallacy of Undistributed Middle.","Fallacy of Illicit Minor.","Fallacy of Illicit Major.","A","Step-by-Step Solution:
+1. Examine the qualities of both premises:
+   - Premise 1: $\text{No } U \text{ is } E$ (Negative proposition, $E$-type).
+   - Premise 2: $\text{No } E \text{ is } C$ (Negative proposition, $E$-type).
+2. Recall the fundamental Aristotelian Syllogistic Rule regarding Negative Premises:
+   - \"No valid conclusion can be drawn from two negative premises.\"
+   - When both premises are negative ($E$ or $O$), the middle term is separated from both the major term and the minor term, providing ZERO logical bridge between them.
+3. Name the formal fallacy:
+   - This error is formally designated as the \"FALLACY OF EXCLUSIVE PREMISES\".
+4. Evaluate incorrect alternatives:
+   - Options B, C, and D are specific term distribution fallacies that do not capture the primary structural prohibition against two negative premises.
+
+Common Trap: Trying to diagram intersections when two \"NO\" premises immediately invalidate any deduction.
+Exam Tip: Rule of Syllogisms: TWO NEGATIVE PREMISES = INVALID (Fallacy of Exclusive Premises).","Correct. Survives elimination because classical syllogistic rules strictly forbid deriving any conclusion from two negative premises (Fallacy of Exclusive Premises).","Eliminated because the primary structural violation is the presence of two negative premises.","Eliminated because illicit minor pertains to term distribution.","Eliminated because illicit major pertains to term distribution.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the syllogism: Major Premise: All sworn public officers are bound by RA 6713 ($\text{All } O \text{ is } B$). Minor Premise: Some sworn public officers are barangay captains ($\text{Some } O \text{ is } K$). Conclusion: Therefore, some barangay captains are bound by RA 6713 ($\text{Some } K \text{ is } B$). Which valid syllogistic mood and figure is represented?","Figure 3, Mood AII (Datisi)","Figure 1, Mood AII (Darii)","Figure 3, Mood IAI (Disamis)","Figure 4, Mood IAI (Dimaris)","A","Step-by-Step Solution:
+1. Identify the terms:
+   - Major Term ($B$): \"bound by RA 6713\" (Predicate of conclusion).
+   - Minor Term ($K$): \"barangay captains\" (Subject of conclusion).
+   - Middle Term ($O$): \"sworn public officers\".
+2. Determine the Figure:
+   - Major Premise: $\text{All } O \text{ is } B$ ($M - P$, Middle term is Subject).
+   - Minor Premise: $\text{Some } O \text{ is } K$ ($M - S$, Middle term is Subject).
+   - In FIGURE 3, the middle term is the Subject in BOTH premises ($M-P, M-S$).
+3. Determine the Mood:
+   - Major Premise is Universal Affirmative ($A$).
+   - Minor Premise is Particular Affirmative ($I$).
+   - Conclusion is Particular Affirmative ($I$).
+   - Mood: AII.
+4. Combine Mood and Figure:
+   - Mood AII in Figure 3 is named \"DATISI\" (a valid syllogism).
+5. Evaluate incorrect alternatives:
+   - Option B (Darii): AII in Figure 1 ($M-P, S-M$).
+   - Option C (Disamis): IAI in Figure 3.
+   - Option D (Dimaris): IAI in Figure 4.
+
+Common Trap: Confusing Figure 1 (Darii) with Figure 3 (Datisi). In Datisi, the middle term is the subject of both premises.
+Exam Tip: Datisi = AII-3 ($M-P, M-S$).","Correct. Survives elimination because the middle term is the subject in both premises (Figure 3) and the proposition order is A-I-I (Datisi).","Eliminated because Darii is in Figure 1 where middle term is predicate in the minor premise.","Eliminated because Disamis has an I-major premise and A-minor premise.","Eliminated because Dimaris is in Figure 4.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the argument: Major Premise: All constitutional rights are protected by the supreme law ($\text{All } R \text{ is } P$). Minor Premise: Some statutory privileges are constitutional rights ($\text{Some } S \text{ is } R$). Conclusion: Therefore, no statutory privileges are protected by the supreme law ($\text{No } S \text{ is } P$). What formal syllogistic fallacy is committed by drawing this negative conclusion?","Fallacy of Drawing a Negative Conclusion from Affirmative Premises","Fallacy of Exclusive Premises","Fallacy of Illicit Minor","Fallacy of Undistributed Middle","A","Step-by-Step Solution:
+1. Examine the quality of the premises and conclusion:
+   - Major Premise: \"All $R$ is $P$\" (Affirmative proposition, $A$-type).
+   - Minor Premise: \"Some $S$ is $R$\" (Affirmative proposition, $I$-type).
+   - Conclusion: \"No $S$ is $P$\" (Negative proposition, $E$-type).
+2. Recall the fundamental Syllogistic Rule of Quality:
+   - \"If both premises are affirmative, the conclusion MUST be affirmative.\"
+   - Affirmative premises state inclusions/containments; they cannot establish the total or partial exclusion asserted by a negative conclusion.
+3. Identify the formal fallacy:
+   - This commits the \"FALLACY OF DRAWING A NEGATIVE CONCLUSION FROM AFFIRMATIVE PREMISES\".
+4. Evaluate other options:
+   - Option B: Pertains to two negative premises.
+   - Options C and D: Term distribution errors.
+
+Common Trap: Overlooking the polarity/quality of premises and jumping directly to diagramming terms.
+Exam Tip: Affirmative + Affirmative = AFFIRMATIVE CONCLUSION ONLY. Any negative conclusion is an instant fallacy!","Correct. Survives elimination because drawing a negative conclusion (E) from two affirmative premises (A and I) is a textbook formal quality fallacy.","Eliminated because the premises are affirmative, not exclusive negatives.","Eliminated because this is a quality fallacy rather than an illicit minor.","Eliminated because the middle term R is distributed in the major premise.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Consider the syllogism: Major Premise: All judicial decisions forming part of jurisprudence are sources of law ($\text{All } J \text{ are } S$). Minor Premise: No executive department orders are judicial decisions forming part of jurisprudence ($\text{No } E \text{ are } J$). Conclusion: Therefore, no executive department orders are sources of law ($\text{No } E \text{ are } S$). What formal syllogistic fallacy is committed?","Fallacy of Illicit Major","Fallacy of Illicit Minor","Fallacy of Undistributed Middle","Fallacy of Four Terms","A","Step-by-Step Solution:
+1. Identify terms and distribution:
+   - Major Term ($S$): \"sources of law\" (Predicate of conclusion).
+   - Minor Term ($E$): \"executive department orders\" (Subject of conclusion).
+   - Middle Term ($J$): \"judicial decisions forming part of jurisprudence\".
+2. Examine the Major Term ($S$):
+   - In Major Premise: \"All $J$ are $S$\" ($A$-proposition). The predicate $S$ is UNDISTRIBUTED.
+   - In Conclusion: \"No $E$ are $S$\" ($E$-proposition). The predicate of an $E$-proposition is DISTRIBUTED.
+3. Apply the Rule of Distribution:
+   - Major term $S$ is distributed in the conclusion but was undistributed in the major premise.
+   - This commits the formal \"FALLACY OF ILLICIT MAJOR\".
+4. Juridical/Factual Reality:
+   - Executive orders are indeed sources of administrative law under the Administrative Code of 1987, even though they are not judicial decisions. You cannot exclude $E$ from all sources of law $S$ simply because $E$ is excluded from the subset of judicial decisions $J$.
+
+Common Trap: Believing that because the minor premise is negative, the conclusion can freely distribute the major term.
+Exam Tip: An $A$-major premise never distributes its predicate. If the conclusion is negative ($E$ or $O$), the predicate becomes distributed $\implies$ ILLICIT MAJOR!","Correct. Survives elimination because the major term S is undistributed in the A-major premise but distributed in the E-conclusion, committing Illicit Major.","Eliminated because the minor term E is distributed in both minor premise and conclusion.","Eliminated because the middle term J is distributed in both premises.","Eliminated because the syllogism contains exactly three univocal terms.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"Given the valid Figure 1, Mood EIO (Ferio) syllogism: Major Premise: No corrupt transactions are legal disbursements ($\text{No } M \text{ is } P$). Minor Premise: Some municipal payments are corrupt transactions ($\text{Some } S \text{ is } M$). What is the uniquely valid conclusion that completes the syllogism?","Some municipal payments are not legal disbursements ($\text{Some } S \text{ is not } P$).","No municipal payments are legal disbursements ($\text{No } S \text{ is } P$).","Some municipal payments are legal disbursements ($\text{Some } S \text{ is } P$).","All municipal payments are legal disbursements ($\text{All } S \text{ is } P$).","A","Step-by-Step Solution:
+1. Identify the terms:
+   - Middle Term ($M$): \"corrupt transactions\".
+   - Major Term ($P$): \"legal disbursements\".
+   - Minor Term ($S$): \"municipal payments\".
+2. Check Figure 1 alignment:
+   - Major Premise ($E$): $\text{No } M \text{ is } P$ ($M - P$, Middle term is Subject).
+   - Minor Premise ($I$): $\text{Some } S \text{ is } M$ ($S - M$, Middle term is Predicate).
+3. Apply the valid Mood EIO in Figure 1 (*Ferio*):
+   - Major is Universal Negative ($E$).
+   - Minor is Particular Affirmative ($I$).
+   - Syllogistic rules require:
+     - Negative premise $\implies$ Negative conclusion.
+     - Particular premise $\implies$ Particular conclusion.
+     - Therefore, the conclusion MUST be Particular Negative ($O$-type).
+4. Formulate the $O$-conclusion:
+   - \"Some municipal payments are not legal disbursements\" ($\text{Some } S \text{ is not } P$).
+5. Evaluate incorrect alternatives:
+   - Option B: Universal Negative ($E$) overextends the particular minor premise (Illicit Minor).
+   - Options C and D: Affirmative conclusions from a negative premise.
+
+Common Trap: Selecting the universal negative \"No municipal payments are legal\" instead of the particular negative \"Some municipal payments are not legal\".
+Exam Tip: EIO-1 (Ferio): No M is P + Some S is M $\implies$ Some S is not P.","Correct. Survives elimination because Ferio (EIO-1) validly deduces the particular negative conclusion: Some S is not P.","Eliminated because the universal negative (E) is an illicit overextension of the particular minor premise.","Eliminated because a negative premise requires a negative conclusion.","Eliminated because affirmative conclusions cannot follow from a negative premise.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"

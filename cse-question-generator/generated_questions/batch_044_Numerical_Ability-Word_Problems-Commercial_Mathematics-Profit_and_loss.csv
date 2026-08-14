@@ -1,0 +1,157 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A vendor sells two commercial laptops for ₱36,000.00 each. On the first laptop, he realizes a profit of 20.0%, while on the second laptop, he incurs a loss of 20.0%. What is his overall percentage profit or loss on the entire combined transaction, and what is the net monetary gain or loss in pesos?","Net Loss: 4.0% (₱3,000.00 loss)","No gain, no loss (0%)","Net Gain: 4.0% (₱3,000.00 gain)","Net Loss: 2.0% (₱1,500.00 loss)","A","Step-by-Step Solution:
+1. Apply the standard rule for equal selling prices with symmetric $\pm x\%$ margins:
+   - When two items have identical Selling Price ($SP$) and equal profit/loss percentages ($x\%$), there is ALWAYS a net loss of $\left(\frac{x}{10}\right)^2\%$.
+   - $\text{Net Loss \%} = \left(\frac{20.0}{10}\right)^2\% = (2)^2\% = 4.0\%$.
+2. Compute individual cost prices ($CP$):
+   - Total $SP = ₱36,000.00 + ₱36,000.00 = ₱72,000.00$.
+   - Laptop 1 (20% profit): $CP_1 = \frac{₱36,000.00}{1.20} = ₱30,000.00$.
+   - Laptop 2 (20% loss): $CP_2 = \frac{₱36,000.00}{0.80} = ₱45,000.00$.
+3. Compute total cost price:
+   - $\text{Total } CP = ₱30,000.00 + ₱45,000.00 = ₱75,000.00$.
+4. Compute net monetary loss:
+   - $\text{Net Loss} = \text{Total } CP - \text{Total } SP = ₱75,000.00 - ₱72,000.00 = ₱3,000.00$.
+5. Verify percentage loss on total cost:
+   - $\text{Loss \%} = \frac{₱3,000.00}{₱75,000.00} \times 100\% = 4.0\%$ (Confirmed!).
+
+Common Trap: Assuming $+20\% - 20\% = 0\%$ (Option B), ignoring that the 20% loss operates on a larger cost base ($₱45,000$) than the 20% gain ($₱30,000$).
+Exam Tip: Identical $SP$ with $+x\%$ and $-x\%$ margins ALWAYS yields a net loss of $\frac{x^2}{100}\% = \frac{400}{100}\% = 4.0\%$.","Correct. Survives elimination because total CP is ₱75,000 and total SP is ₱72,000, representing an exact 4.0% loss (₱3,000.00).","Eliminated because 0% ignores unequal cost bases.","Eliminated because transaction is a net loss, not a gain.","Eliminated because 2.0% is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A dishonest grains dealer claims to sell rice at its exact cost price, but utilizes a tampered weight scale that delivers only 900.0 grams for every 1.0 kilogram (1,000.0 grams) billed to customers. What is his exact percentage profit?","11.11\% \text{ (or } 11\frac{1}{9}\%\text{)}","10.00\%","12.50\%","9.09\%","A","Step-by-Step Solution:
+1. Apply the dishonest trader formula:
+   - $\text{Percentage Gain} = \frac{\text{Error in Weight}}{\text{True Weight} - \text{Error in Weight}} \times 100.0\%$.
+2. Identify values:
+   - True Weight $= 1,000.0\text{ grams}$.
+   - Error in Weight $= 1,000.0 - 900.0 = 100.0\text{ grams}$.
+   - Weight Delivered (False Weight) $= 900.0\text{ grams}$.
+3. Formulate the profit equation:
+   - $\text{Percentage Gain} = \frac{100.0}{900.0} \times 100.0\% = \frac{1}{9} \times 100.0\% = 11.1111\% \approx 11.11\% = 11\frac{1}{9}\%$.
+4. (Explanation: The merchant pays for 900 g of rice and sells that exact 900 g at the price of 1,000 g. Cost $= 900$, Revenue $= 1,000 \implies \text{Profit} = \frac{100}{900} = 11.11\%$).
+
+Common Trap: Dividing the 100 g error by the 1,000 g billed weight ($\frac{100}{1,000} = 10.0\%$, Option B), which calculates profit margin on revenue instead of cost price.
+Exam Tip: Trader's cost is based on goods ACTUALLY DELIVERED ($900\text{ g}$). $\text{Gain} = \frac{100}{900} = 11\frac{1}{9}\%$.","Correct. Survives elimination because the trader gains 100 g of revenue on a 900 g cost base, yielding 100/900 = 11.11% (11 1/9%).","Eliminated because 10.00% calculates error over billed weight rather than actual delivered cost.","Eliminated because 12.50% assumes 800 g delivery.","Eliminated because 9.09% is 1/11.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"If the cost price of 16 identical office printers is exactly equal to the selling price of 12 of the same printers, what is the retailer's percentage profit on the transaction?","33.33\% \text{ (or } 33\frac{1}{3}\%\text{)}","25.00\%","30.00\%","36.00\%","A","Step-by-Step Solution:
+1. Set up the cost-to-revenue equality:
+   - $16 \times CP = 12 \times SP$.
+2. Formulate the ratio of $SP$ to $CP$:
+   - $\frac{SP}{CP} = \frac{16}{12} = \frac{4}{3}$.
+3. Assign unit values:
+   - Let $CP = 3.0$ and $SP = 4.0$.
+4. Compute profit per unit:
+   - $\text{Profit} = SP - CP = 4.0 - 3.0 = 1.0$.
+5. Calculate percentage profit on cost:
+   - $\text{Profit \%} = \frac{\text{Profit}}{CP} \times 100.0\% = \frac{1.0}{3.0} \times 100.0\% = 33.3333\% \approx 33.33\% = 33\frac{1}{3}\%$.
+
+Common Trap: Calculating profit based on $16$ ($SP$) to get $\frac{4}{16} = 25.0\%$ (Option B).
+Exam Tip: $\frac{SP}{CP} = \frac{16}{12} = \frac{4}{3} \implies \text{Profit} = \frac{4 - 3}{3} = \frac{1}{3} = 33\frac{1}{3}\%$.","Correct. Survives elimination because SP/CP = 16/12 = 4/3, giving a profit margin of 1/3 = 33.33% on cost.","Eliminated because 25.00% divides profit by 16 instead of 12.","Eliminated because 30.00% is an underestimate.","Eliminated because 36.00% is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A retailer purchases 200 light fixtures at ₱150.00 each. During transport, 20 fixtures are damaged and rendered completely unsellable. If the retailer wishes to realize a net profit of 20.0% on his entire initial capital investment, at what price per unit must he sell each remaining unbroken fixture?","₱200.00","₱180.00","₱210.00","₱190.00","A","Step-by-Step Solution:
+1. Calculate total initial capital outlay:
+   - $\text{Total Capital Outlay} = 200 \times ₱150.00 = ₱30,000.00$.
+2. Calculate target total sales revenue with 20.0% profit:
+   - $\text{Target Revenue} = ₱30,000.00 \times (1 + 0.20) = ₱30,000.00 \times 1.20 = ₱36,000.00$.
+3. Determine number of intact, sellable fixtures:
+   - $\text{Sellable Fixtures} = 200 - 20 = 180\text{ fixtures}$.
+4. Compute required selling price per intact unit:
+   - $\text{Unit Selling Price} = \frac{\text{Target Revenue}}{\text{Sellable Fixtures}} = \frac{₱36,000.00}{180} = ₱200.00\text{/unit}$.
+5. Verify:
+   - Total Revenue $= 180 \times ₱200.00 = ₱36,000.00$.
+   - Net Profit $= ₱36,000.00 - ₱30,000.00 = ₱6,000.00 = 20.0\%$ of $₱30,000.00$ (Confirmed!).
+
+Common Trap: Applying the 20% markup to the cost price ($150 \times 1.20 = ₱180.00$, Option B), which fails to recover the loss from the 20 broken units ($180 \times 180 = ₱32,400 < ₱36,000$).
+Exam Tip: Must divide TOTAL TARGET REVENUE ($₱36,000$) by the REMAINING inventory ($180$).","Correct. Survives elimination because target revenue is ₱36,000.00 across 180 sellable units, giving ₱36,000 / 180 = ₱200.00 per unit.","Eliminated because ₱180.00 recovers only ₱32,400.00 (only 8% profit).","Eliminated because ₱210.00 yields ₱37,800.00 (26% profit).","Eliminated because ₱190.00 yields ₱34,200.00 (14% profit).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"By selling an electronic device for ₱2,400.00, a merchant incurs a loss of 20.0%. At what selling price should he offer the device to realize a profit of 20.0%?","₱3,600.00","₱3,200.00","₱3,800.00","₱3,400.00","A","Step-by-Step Solution:
+1. Determine original cost price ($CP$):
+   - At 20.0% loss, Selling Price is $80.0\%$ of $CP$:
+   - $0.80 CP = ₱2,400.00 \implies CP = \frac{₱2,400.00}{0.80} = ₱3,000.00$.
+2. Calculate target selling price for 20.0% profit:
+   - Target Selling Price is $120.0\%$ of $CP$:
+   - $\text{Target } SP = ₱3,000.00 \times 1.20 = ₱3,600.00$.
+3. Alternative Direct Proportion Method:
+   - $\text{Target } SP = ₱2,400.00 \times \frac{100 + 20}{100 - 20} = ₱2,400.00 \times \frac{120}{80} = ₱2,400.00 \times 1.50 = ₱3,600.00$.
+
+Common Trap: Adding 40% directly to the initial selling price ($2,400 \times 1.40 = ₱3,360$).
+Exam Tip: $\text{New } SP = \text{Old } SP \times \frac{100 + \text{Gain \%}}{100 - \text{Loss \%}} = 2,400 \times \frac{120}{80} = ₱3,600.00$.","Correct. Survives elimination because CP is ₱3,000.00, and selling at 20% profit requires ₱3,000 * 1.20 = ₱3,600.00.","Eliminated because ₱3,200.00 gives a profit of only 6.67% on cost.","Eliminated because ₱3,800.00 yields 26.67% profit.","Eliminated because ₱3,400.00 yields 13.33% profit.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A manufacturer sets the marked price of an industrial tool at 40.0% above its production cost. The manufacturer grants a standard trade discount of 15.0% on the marked price, followed by an additional 5.0% cash discount on the discounted subtotal. What is the manufacturer's net percentage profit on cost?","13.05\%","20.00\%","15.25\%","12.50\%","A","Step-by-Step Solution:
+1. Let base production cost price $CP = 100.0$.
+2. Compute marked price ($MP$) with 40.0% markup:
+   - $MP = 100.0 \times (1 + 0.40) = 140.0$.
+3. Apply 15.0% trade discount:
+   - $SP_1 = 140.0 \times (1 - 0.15) = 140.0 \times 0.85 = 119.0$.
+4. Apply 5.0% cash discount on subtotal:
+   - $SP_{\text{final}} = 119.0 \times (1 - 0.05) = 119.0 \times 0.95 = 113.05$.
+5. Calculate net profit percentage on original cost ($CP = 100.0$):
+   - $\text{Net Profit \%} = \frac{113.05 - 100.0}{100.0} \times 100\% = 13.05\%$.
+6. Multiplier formula:
+   - $\text{Multiplier} = 1.40 \times 0.85 \times 0.95 = 1.19 \times 0.95 = 1.1305 \implies +13.05\%$.
+
+Common Trap: Subtracting percentage points directly ($40\% - 15\% - 5\% = 20.0\%$, Option B), ignoring multiplicative bases.
+Exam Tip: Compound multiplier: $1.40 \times 0.85 \times 0.95 = 1.1305 \implies 13.05\%$.","Correct. Survives elimination because 1.40 * 0.85 * 0.95 = 1.1305, representing an exact 13.05% net profit on cost.","Eliminated because 20.00% is the false arithmetic sum (40% - 15% - 5%).","Eliminated because 15.25% is a calculation slip.","Eliminated because 12.50% is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A merchant bought two antique display cabinets for a combined total of ₱70,000.00. He sold the first cabinet at a profit of 25.0% and the second cabinet at a loss of 10.0%. If his overall net profit on the combined sale was exactly 5.0%, what was the cost price of the first cabinet?","₱30,000.00","₱40,000.00","₱35,000.00","₱25,000.00","A","Step-by-Step Solution:
+1. Apply the Rule of Alligation on profit/loss percentages:
+   - Profit on Cabinet 1 $= +25.0\%$
+   - Loss on Cabinet 2 $= -10.0\%$
+   - Mean Combined Profit $= +5.0\%$.
+2. Compute deviations from the mean:
+   - Deviation for Cabinet 1: $|+25.0 - (+5.0)| = 20.0$.
+   - Deviation for Cabinet 2: $|-10.0 - (+5.0)| = |-15.0| = 15.0$.
+3. Formulate the cost price ratio ($CP_1 : CP_2$):
+   - $\frac{CP_1}{CP_2} = \frac{15.0}{20.0} = \frac{3}{4}$.
+4. Divide total combined cost ($₱70,000.00$) into $3 + 4 = 7\text{ parts}$:
+   - $1\text{ part} = \frac{₱70,000.00}{7} = ₱10,000.00$.
+5. Compute cost price of Cabinet 1:
+   - $CP_1 = 3 \times ₱10,000.00 = ₱30,000.00$.
+   - ($CP_2 = 4 \times ₱10,000.00 = ₱40,000.00$).
+6. Verify:
+   - Gain on Cabinet 1 $= ₱30,000 \times 0.25 = +₱7,500$.
+   - Loss on Cabinet 2 $= ₱40,000 \times 0.10 = -₱4,000$.
+   - Net Gain $= ₱7,500 - ₱4,000 = +₱3,500 = 5.0\%$ of $₱70,000.00$ (Confirmed!).
+
+Common Trap: Inverting the ratio ($4 : 3 \implies ₱40,000.00$, Option B).
+Exam Tip: Alligation: $CP_1 : CP_2 = (5 - (-10)) : (25 - 5) = 15 : 20 = 3 : 4 \implies CP_1 = ₱30,000.00$.","Correct. Survives elimination because alligation gives CP ratio 3:4, making the cost price of the first cabinet 3/7 * ₱70,000 = ₱30,000.00.","Eliminated because ₱40,000.00 is the cost price of the second cabinet.","Eliminated because ₱35,000.00 assumes equal cost prices.","Eliminated because ₱25,000.00 fails the 5% net profit condition.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"If a merchant calculates his profit margin as 20.0% of the selling price, what is his actual percentage profit when calculated on the cost price?","25.0\%","20.0\%","16.7\%","22.5\%","A","Step-by-Step Solution:
+1. Let the Selling Price $SP = 100.0$.
+2. Compute the stated profit (20.0% of $SP$):
+   - $\text{Profit} = 0.20 \times 100.0 = 20.0$.
+3. Determine the actual Cost Price ($CP$):
+   - $CP = SP - \text{Profit} = 100.0 - 20.0 = 80.0$.
+4. Calculate standard percentage profit on Cost Price:
+   - $\text{Profit \% on } CP = \frac{\text{Profit}}{CP} \times 100.0\% = \frac{20.0}{80.0} \times 100.0\%$.
+5. Simplify:
+   - $\frac{20.0}{80.0} = \frac{1}{4} = 0.25 = 25.0\%$.
+
+Common Trap: Assuming profit on selling price is identical to profit on cost price ($20.0\%$, Option B).
+Exam Tip: Formula: $\text{Profit on } CP = \frac{P_{\text{SP}}}{100 - P_{\text{SP}}} \times 100\% = \frac{20}{80} \times 100\% = 25.0\%$.","Correct. Survives elimination because profit is 20 on a cost base of 80, giving 20 / 80 = 25.0% on cost.","Eliminated because 20.0% is the margin on selling price.","Eliminated because 16.7% is the margin on selling price when profit is 20% on cost.","Eliminated because 22.5% is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A fruit merchant purchased 500.0 kg of oranges at ₱40.00 per kg. He sold 300.0 kg at a profit of 20.0%, 150.0 kg at a profit of 10.0%, and the remaining 50.0 kg at a loss of 15.0%. What was his total net profit in pesos, and what was his overall percentage profit on total cost?","Total Profit: ₱2,700.00 (13.5%)","Total Profit: ₱2,400.00 (12.0%)","Total Profit: ₱3,000.00 (15.0%)","Total Profit: ₱2,500.00 (12.5%)","A","Step-by-Step Solution:
+1. Calculate total initial investment:
+   - $\text{Total Investment} = 500.0\text{ kg} \times ₱40.00\text{/kg} = ₱20,000.00$.
+2. Calculate profit/loss from each batch:
+   - Batch 1 ($300\text{ kg}$): $\text{Cost} = 300 \times 40 = ₱12,000 \implies \text{Profit} = ₱12,000 \times (+0.20) = +₱2,400.00$.
+   - Batch 2 ($150\text{ kg}$): $\text{Cost} = 150 \times 40 = ₱6,000 \implies \text{Profit} = ₱6,000 \times (+0.10) = +₱600.00$.
+   - Batch 3 ($50\text{ kg}$): $\text{Cost} = 50 \times 40 = ₱2,000 \implies \text{Loss} = ₱2,000 \times (-0.15) = -₱300.00$.
+3. Sum total net profit:
+   - $\text{Net Profit} = +₱2,400.00 + ₱600.00 - ₱300.00 = ₱2,700.00$.
+4. Calculate overall percentage profit on total investment:
+   - $\text{Overall Profit \%} = \frac{₱2,700.00}{₱20,000.00} \times 100\% = 13.5\%$.
+
+Common Trap: Forgetting to subtract the loss from Batch 3 ($2,400 + 600 = ₱3,000.00$, Option C).
+Exam Tip: Weighted average profit: $\frac{300(20) + 150(10) - 50(15)}{500} = \frac{6000 + 1500 - 750}{500} = \frac{6750}{500} = 13.5\%$.","Correct. Survives elimination because net profit is ₱2,400 + ₱600 - ₱300 = ₱2,700.00, which is exactly 13.5% of the ₱20,000.00 investment.","Eliminated because ₱2,400.00 includes only Batch 1.","Eliminated because ₱3,000.00 omits the Batch 3 loss.","Eliminated because ₱2,500.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"
+"A retail dealer sells a smartphone at a profit of 12.0%. If he had purchased it for 10.0% less and sold it for ₱450.00 less, he would have gained 20.0%. What was the original cost price of the smartphone?","₱11,250.00","₱12,000.00","₱10,500.00","₱11,500.00","A","Step-by-Step Solution:
+1. Define variables:
+   - Let original cost price $= x$.
+   - Original selling price $= 1.12x$.
+2. Formulate hypothetical modified scenario:
+   - New Cost Price $= x \times (1 - 0.10) = 0.90x$.
+   - New Selling Price $= 1.12x - ₱450.00$.
+3. Express new selling price with 20.0% profit on new cost:
+   - $\text{New } SP = 0.90x \times (1 + 0.20) = 0.90x \times 1.20 = 1.08x$.
+4. Set up the equation connecting both expressions for New $SP$:
+   - $1.12x - 450.00 = 1.08x$.
+5. Solve for $x$:
+   - $1.12x - 1.08x = 450.00$.
+   - $0.04x = 450.00 \implies x = \frac{450.00}{0.04} = \frac{45,000.00}{4} = ₱11,250.00$.
+6. Verify:
+   - Original $CP = ₱11,250$, Original $SP = ₱12,600$.
+   - New $CP = ₱10,125$, New $SP = ₱12,600 - 450 = ₱12,150$.
+   - Profit $= ₱12,150 - ₱10,125 = ₱2,025 = 20.0\%$ of $₱10,125$ (Confirmed!).
+
+Common Trap: Setting the equation as $1.12x - 450 = 1.20x \implies 0.08x = 450 \implies x = ₱5,625$, forgetting that the 20% gain applies to $0.90x$.
+Exam Tip: $1.12x - 1.20(0.90x) = 450 \implies 0.04x = 450 \implies x = ₱11,250.00$.","Correct. Survives elimination because 1.12x - 450 = 1.08x gives 0.04x = 450, yielding original cost price x = ₱11,250.00.","Eliminated because ₱12,000.00 yields 0.04(12,000) = 480 != 450.","Eliminated because ₱10,500.00 yields 0.04(10,500) = 420 != 450.","Eliminated because ₱11,500.00 yields 0.04(11,500) = 460 != 450.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Profit and loss | Very Difficult | Batch 044"

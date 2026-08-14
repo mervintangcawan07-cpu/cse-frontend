@@ -1,0 +1,138 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"If $A : B = 3 : 4$, $B : C = 5 : 6$, and $C : D = 8 : 9$, find the compound continuous ratio $A : B : C : D$ in simplest integer terms, and evaluate the fraction $\frac{A + D}{B + C}$.","15 : 20 : 24 : 27 and \frac{21}{22}","15 : 20 : 24 : 27 and \frac{22}{21}","3 : 5 : 8 : 9 and \frac{12}{13}","12 : 15 : 18 : 27 and \frac{39}{33}","A","Step-by-Step Solution:
+1. Harmonize $A : B$ and $B : C$:
+   - $A : B = 3 : 4 = 15 : 20$.
+   - $B : C = 5 : 6 = 20 : 24$.
+   - Thus, $A : B : C = 15 : 20 : 24$.
+2. Harmonize with $C : D = 8 : 9$:
+   - Since $C = 24$, multiply $C : D$ by 3: $8 \times 3 : 9 \times 3 = 24 : 27$.
+   - Thus, $A : B : C : D = 15 : 20 : 24 : 27$.
+3. Evaluate the fraction $\frac{A + D}{B + C}$:
+   - Numerator: $A + D = 15 + 27 = 42$.
+   - Denominator: $B + C = 20 + 24 = 44$.
+   - Fraction: $\frac{42}{44} = \frac{21}{22}$.
+
+Common Trap: Combining ratios directly without finding the common multiplier for linking terms ($B$ and $C$).
+Exam Tip: Match the bridging variable first (make $B=20$, then make $C=24$).","Correct. Survives elimination because the continuous ratio is 15:20:24:27 and (15+27)/(20+24) = 42/44 = 21/22.","Eliminated because inverting the final fraction yields 22/21.","Eliminated because simply chaining the raw numerators without harmonization gives 3:5:8:9.","Eliminated because improper scaling multipliers yield 12:15:18:27.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"The monthly salaries of three engineers $X$, $Y$, and $Z$ were originally in the ratio $4 : 5 : 7$. When engineer $Z$ received a promotion resulting in a monthly salary increase of ₱15,000, the new ratio of their monthly salaries became $8 : 10 : 17$. What was engineer $X$'s original monthly salary?","₱40,000","₱50,000","₱70,000","₱35,000","A","Step-by-Step Solution:
+1. Let the original salaries of $X, Y, Z$ be $4k, 5k, 7k$.
+2. Note that the ratio between $X$ and $Y$ remains $4 : 5 = 8 : 10$ (unchanged).
+3. The new salary of $Z$ is $7k + 15,000$.
+4. Set up the ratio between $X$ and $Z$:
+   - $\frac{X}{Z_{\text{new}}} = \frac{4k}{7k + 15,000} = \frac{8}{17}$.
+5. Cross-multiply and solve for $k$:
+   - $17 \times (4k) = 8 \times (7k + 15,000)$.
+   - $68k = 56k + 120,000$.
+   - $68k - 56k = 120,000 \implies 12k = 120,000 \implies k = 10,000$.
+6. Calculate $X$'s original salary:
+   - $X = 4k = 4 \times 10,000 = ₱40,000$.
+
+Common Trap: Solving for $k$ and forgetting to multiply by 4, or solving for $Z$'s salary instead of $X$'s.
+Exam Tip: Verify: $X=40k, Y=50k, Z=70k$. New $Z=85k$. Ratio $40k : 50k : 85k = 8 : 10 : 17$.","Correct. Survives elimination because k = 10,000, so X's salary is 4k = ₱40,000.","Eliminated because ₱50,000 is engineer Y's original salary (5k).","Eliminated because ₱70,000 is engineer Z's original salary (7k).","Eliminated because arithmetic error in the cross-multiplication yields ₱35,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"Two liquid containers $P$ and $Q$ contain alcohol and water mixtures. In container $P$, the ratio of alcohol to water is $3 : 2$. In container $Q$, the ratio of alcohol to water is $7 : 3$. If liquid from container $P$ and container $Q$ are mixed in the volumetric ratio of $2 : 3$, what is the final ratio of alcohol to water in the resulting composite mixture?","33 : 17","17 : 33","31 : 19","29 : 21","A","Step-by-Step Solution:
+1. Determine fractional concentrations:
+   - Container $P$: Alcohol $= \frac{3}{3+2} = \frac{3}{5}$, Water $= \frac{2}{5}$.
+   - Container $Q$: Alcohol $= \frac{7}{7+3} = \frac{7}{10}$, Water $= \frac{3}{10}$.
+2. Mix in volume ratio $2 : 3$ (take 2 liters of $P$ and 3 liters of $Q$, total $= 5$ liters):
+   - Total Alcohol $= 2 \times \left(\frac{3}{5}\right) + 3 \times \left(\frac{7}{10}\right) = \frac{6}{5} + \frac{21}{10} = \frac{12}{10} + \frac{21}{10} = \frac{33}{10}$.
+   - Total Water $= 2 \times \left(\frac{2}{5}\right) + 3 \times \left(\frac{3}{10}\right) = \frac{4}{5} + \frac{9}{10} = \frac{8}{10} + \frac{9}{10} = \frac{17}{10}$.
+3. Calculate ratio of Alcohol to Water:
+   - $\text{Ratio} = \frac{33/10}{17/10} = 33 : 17$.
+
+Common Trap: Adding ratio components directly: $(3 \times 2 + 7 \times 3) : (2 \times 2 + 3 \times 3) = 27 : 13$, which ignores differing denominator bases (5 vs 10).
+Exam Tip: Always convert to fractional concentrations first before multiplying by volumetric weights.","Correct. Survives elimination because weighted alcohol is 33/10 and weighted water is 17/10, giving 33 : 17.","Eliminated because this is the inverted ratio of Water to Alcohol.","Eliminated because arithmetic error in common denominator addition yields 31:19.","Eliminated because adding components without normalization yields 29:21.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"If $(2x + 3y) : (3x + 5y) = 18 : 29$, determine the exact value of the ratio $(x^2 + y^2) : (y^2 - x^2)$.","25 : 7","25 : 9","16 : 9","7 : 25","A","Step-by-Step Solution:
+1. Solve for the base ratio $\frac{x}{y}$:
+   - $\frac{2x + 3y}{3x + 5y} = \frac{18}{29}$.
+2. Cross-multiply:
+   - $29(2x + 3y) = 18(3x + 5y)$.
+   - $58x + 87y = 54x + 90y$.
+   - $58x - 54x = 90y - 87y \implies 4x = 3y \implies \frac{x}{y} = \frac{3}{4}$.
+3. Let $x = 3k$ and $y = 4k$:
+   - $x^2 + y^2 = (3k)^2 + (4k)^2 = 9k^2 + 16k^2 = 25k^2$.
+   - $y^2 - x^2 = (4k)^2 - (3k)^2 = 16k^2 - 9k^2 = 7k^2$.
+4. Ratio: $\frac{x^2 + y^2}{y^2 - x^2} = \frac{25k^2}{7k^2} = \frac{25}{7} = 25 : 7$.
+
+Common Trap: Squaring coefficients before solving for $x/y$, or subtracting $x^2 - y^2$ to get a negative denominator.
+Exam Tip: Cross-multiply the linear ratio first to get $\frac{x}{y}$, then substitute simple integers.","Correct. Survives elimination because x/y = 3/4, giving (9 + 16) : (16 - 9) = 25 : 7.","Eliminated because subtracting 16 - 7 = 9 gives 25:9.","Eliminated because evaluating only y^2 : x^2 gives 16:9.","Eliminated because inverting the ratio gives 7:25.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"The ratio of male to female employees in a government bureau was originally $7 : 5$. When 10 new male employees and 30 new female employees were recruited, the number of male and female employees became exactly equal ($1 : 1$). What was the original total number of employees in the bureau?","120","140","100","160","A","Step-by-Step Solution:
+1. Let the original number of male employees $= 7k$ and female employees $= 5k$.
+2. Original total employees $= 7k + 5k = 12k$.
+3. After recruitment:
+   - New Males $= 7k + 10$.
+   - New Females $= 5k + 30$.
+4. Since the new counts are equal ($1 : 1$):
+   - $7k + 10 = 5k + 30$.
+   - $7k - 5k = 30 - 10 \implies 2k = 20 \implies k = 10$.
+5. Calculate original total headcount:
+   - $\text{Total} = 12k = 12(10) = 120\text{ employees}$.
+
+Common Trap: Answering with the new total ($80 + 80 = 160$) instead of the *original* total requested in the question.
+Exam Tip: Double check: Original males $= 7(10) = 70$, females $= 5(10) = 50$. Total $= 120$. After adding 10 and 30, both equal 80.","Correct. Survives elimination because k = 10, making the original total 12k = 120 employees.","Eliminated because 140 corresponds to k = 11.67.","Eliminated because 100 corresponds to 10k instead of 12k.","Eliminated because 160 is the new total headcount after recruitment (80 + 80).","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"Three partners $P$, $Q$, and $R$ invest in a joint business venture. Partner $P$'s capital investment is twice partner $Q$'s investment, and partner $Q$'s investment is three times partner $R$'s investment. If the total annual net profit of the venture is ₱400,000, how much profit does partner $P$ receive?","₱240,000","₱120,000","₱40,000","₱180,000","A","Step-by-Step Solution:
+1. Express all investments in terms of $R$'s investment ($x$):
+   - $R = x$.
+   - $Q = 3x$.
+   - $P = 2 \times Q = 2(3x) = 6x$.
+2. Continuous investment ratio:
+   - $P : Q : R = 6 : 3 : 1$.
+3. Total ratio parts $= 6 + 3 + 1 = 10\text{ parts}$.
+4. Calculate $P$'s share of the ₱400,000 profit:
+   - $P\text{'s Share} = \frac{6}{10} \times ₱400,000 = 6 \times ₱40,000 = ₱240,000$.
+
+Common Trap: Setting $P = 2x, Q = 3x, R = x$ (Total $= 6$), forgetting that $P$ is twice $Q$, meaning $P = 2(3x) = 6x$.
+Exam Tip: In chained ratio word problems, set the smallest reference variable to $x$ and build upward.","Correct. Survives elimination because the ratio is 6:3:1 (total 10 parts), and P receives (6/10) * 400,000 = ₱240,000.","Eliminated because ₱120,000 is partner Q's profit share (3/10 * 400k).","Eliminated because ₱40,000 is partner R's profit share (1/10 * 400k).","Eliminated because miscalculating the ratio as 3:2:1 yields ₱180,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"A provincial development grant of ₱180,000 is distributed among four district offices $A, B, C,$ and $D$ in the fractional ratio $\frac{1}{2} : \frac{1}{3} : \frac{1}{4} : \frac{1}{6}$. What is the exact monetary share received by district office $B$?","₱48,000","₱72,000","₱36,000","₱24,000","A","Step-by-Step Solution:
+1. Convert fractional ratios to whole integer ratios by multiplying each fraction by the Least Common Multiple (LCM) of the denominators (2, 3, 4, 6):
+   - $\text{LCM}(2, 3, 4, 6) = 12$.
+   - $A = \frac{1}{2} \times 12 = 6$.
+   - $B = \frac{1}{3} \times 12 = 4$.
+   - $C = \frac{1}{4} \times 12 = 3$.
+   - $D = \frac{1}{6} \times 12 = 2$.
+2. Integer Ratio: $A : B : C : D = 6 : 4 : 3 : 2$.
+3. Sum of ratio parts $= 6 + 4 + 3 + 2 = 15\text{ parts}$.
+4. Value of one part $= \frac{₱180,000}{15} = ₱12,000$.
+5. District Office $B$'s share (4 parts):
+   - $\text{Share of } B = 4 \times ₱12,000 = ₱48,000$.
+
+Common Trap: Trying to multiply $\frac{1}{3} \times 180,000 = 60,000$, forgetting that fractional ratios must be normalized because their sum ($\frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \frac{1}{6} = \frac{15}{12} = 1.25$) exceeds 1.
+Exam Tip: Always clear denominators with the LCM to establish clean integer ratio parts.","Correct. Survives elimination because the integer ratio is 6:4:3:2 (15 total parts), and B receives 4 * 12,000 = ₱48,000.","Eliminated because ₱72,000 is district office A's share (6 * 12,000).","Eliminated because ₱36,000 is district office C's share (3 * 12,000).","Eliminated because ₱24,000 is district office D's share (2 * 12,000).","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"If $a : b = 3 : 2$, $b : c = 3 : 5$, and $c : d = 2 : 5$, determine the sub-duplicate ratio of $a : d$.","3 : 5","9 : 25","27 : 125","5 : 3","A","Step-by-Step Solution:
+1. Find the compound ratio $\frac{a}{d}$:
+   - $\frac{a}{d} = \frac{a}{b} \times \frac{b}{c} \times \frac{c}{d}$.
+   - $\frac{a}{d} = \frac{3}{2} \times \frac{3}{5} \times \frac{2}{5} = \frac{18}{50} = \frac{9}{25}$.
+2. Mathematical Definition: The sub-duplicate ratio of $x : y$ is the ratio of their square roots, $\sqrt{x} : \sqrt{y}$.
+3. Calculate sub-duplicate ratio:
+   - $\sqrt{9} : \sqrt{25} = 3 : 5$.
+
+Common Trap: Confusing 'sub-duplicate ratio' (square root ratio) with 'duplicate ratio' (squared ratio, $81 : 625$) or 'triplicate ratio' (cubed ratio).
+Exam Tip: Duplicate = square ($x^2:y^2$), Sub-duplicate = square root ($\sqrt{x}:\sqrt{y}$), Triplicate = cube ($x^3:y^3$).","Correct. Survives elimination because a/d = 9/25, and its sub-duplicate (square root) ratio is sqrt(9):sqrt(25) = 3:5.","Eliminated because 9:25 is the direct ratio a:d before taking the sub-duplicate square root.","Eliminated because 27:125 is the triplicate ratio of 3:5.","Eliminated because 5:3 is the inverted reciprocal ratio.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"The speeds of three emergency disaster response vehicles $V_1, V_2,$ and $V_3$ are in the ratio $3 : 4 : 6$. What is the ratio of the time taken by each vehicle to traverse the exact same deployment distance?","4 : 3 : 2","6 : 4 : 3","3 : 4 : 6","2 : 3 : 4","A","Step-by-Step Solution:
+1. Physics Relationship: $\text{Time} = \frac{\text{Distance}}{\text{Speed}}$.
+2. For constant distance $D$, time is inversely proportional to speed:
+   - $T_1 : T_2 : T_3 = \frac{1}{S_1} : \frac{1}{S_2} : \frac{1}{S_3}$.
+3. Substitute speed ratios:
+   - $T_1 : T_2 : T_3 = \frac{1}{3} : \frac{1}{4} : \frac{1}{6}$.
+4. Multiply each fraction by the LCM of 3, 4, 6 (which is 12):
+   - $T_1 = \frac{1}{3} \times 12 = 4$.
+   - $T_2 = \frac{1}{4} \times 12 = 3$.
+   - $T_3 = \frac{1}{6} \times 12 = 2$.
+5. Time Ratio: $4 : 3 : 2$.
+
+Common Trap: Simply inverting the order of the numbers ($6 : 4 : 3$), which only works for two variables, not three.
+Exam Tip: For three or more inversely proportional variables, always take reciprocals and multiply by the LCM.","Correct. Survives elimination because the inverse ratio 1/3 : 1/4 : 1/6 multiplied by 12 yields 4 : 3 : 2.","Eliminated because simply writing the speed numbers in reverse order (6:4:3) fails the reciprocal test (1/3 != 6/12).","Eliminated because this is the original speed ratio, not the time ratio.","Eliminated because this inverts the fastest and slowest vehicles incorrectly.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"
+"Gold is 19 times as heavy as water, and copper is 9 times as heavy as water. In what volumetric ratio must gold and copper be mixed so that the resulting bullion alloy is 15 times as heavy as water?","3 : 2","2 : 3","4 : 3","5 : 3","A","Step-by-Step Solution:
+1. Let the volume of gold be $g$ and the volume of copper be $c$.
+2. Specific gravities: Gold $= 19$, Copper $= 9$, Target Alloy $= 15$.
+3. Total mass equation:
+   - $19g + 9c = 15(g + c)$.
+4. Expand and group like terms:
+   - $19g + 9c = 15g + 15c$.
+   - $19g - 15g = 15c - 9c$.
+   - $4g = 6c$.
+5. Solve for the ratio $\frac{g}{c}$:
+   - $\frac{g}{c} = \frac{6}{4} = \frac{3}{2} = 3 : 2$.
+6. (Alternatively, apply the Rule of Alligation: $|15 - 9| : |19 - 15| = 6 : 4 = 3 : 2$).
+
+Common Trap: Inverting the ratio to $2 : 3$, which would produce a lighter alloy closer to copper ($13\times$).
+Exam Tip: Use Alligation: Difference from Gold $(19 - 15 = 4)$ goes to Copper; Difference from Copper $(15 - 9 = 6)$ goes to Gold. Ratio $= 6 : 4 = 3 : 2$.","Correct. Survives elimination because 19(3) + 9(2) = 57 + 18 = 75, and 75 / 5 = 15. Ratio is 3 : 2.","Eliminated because 2:3 yields an alloy of (19*2 + 9*3)/5 = 65/5 = 13 times water.","Eliminated because 4:3 yields an alloy of (76 + 27)/7 = 103/7 = 14.71 times water.","Eliminated because 5:3 yields an alloy of (95 + 27)/8 = 122/8 = 15.25 times water.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Ratios | Very Difficult | Batch 011"

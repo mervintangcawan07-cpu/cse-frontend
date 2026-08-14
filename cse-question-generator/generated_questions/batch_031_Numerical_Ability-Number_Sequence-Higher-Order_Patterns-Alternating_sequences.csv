@@ -1,0 +1,156 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Find the missing value in the dual-track alternating numerical progression:
+
+$$3, \quad 80, \quad 6, \quad 70, \quad 12, \quad 50, \quad 24, \quad 20, \quad 48, \quad \textbf{?}$$","-20","-10","0","-30","A","Step-by-Step Solution:
+1. Deconstruct the interleaved sequence into two distinct sub-tracks:
+2. Track 1 (Odd positions: 1st, 3rd, 5th, 7th, 9th):
+   - $3, \quad 6, \quad 12, \quad 24, \quad 48$ (Geometric progression with common ratio $r = 2$).
+3. Track 2 (Even positions: 2nd, 4th, 6th, 8th, 10th):
+   - $80, \quad 70, \quad 50, \quad 20, \quad \textbf{?}$
+   - Calculate consecutive decrements:
+     - $80 - 70 = 10$
+     - $70 - 50 = 20$
+     - $50 - 20 = 30$.
+   - The decrements increase by 10 at each step ($10, 20, 30$).
+   - The next decrement is 40.
+4. Compute the 10th term (belonging to Track 2):
+   - $T_{10} = 20 - 40 = -20$.
+
+Common Trap: Subtracting 30 again ($20 - 30 = -10$, Option B) or assuming the sequence stops at 0.
+Exam Tip: Track 2 decrements form an arithmetic progression of multiples of 10 ($10, 20, 30, 40$).","Correct. Survives elimination because Track 2 subtrahend increments to 40, giving 20 - 40 = -20.","Eliminated because subtracting 30 gives -10.","Eliminated because 0 is an unfounded floor.","Eliminated because subtracting 50 gives -30.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Identify the next number in the alternating operator sequence:
+
+$$5, \quad 15, \quad 12, \quad 36, \quad 33, \quad 99, \quad \textbf{?}$$","96","297","93","102","A","Step-by-Step Solution:
+1. Examine operations between successive terms:
+   - $5 \times 3 = 15$
+   - $15 - 3 = 12$
+   - $12 \times 3 = 36$
+   - $36 - 3 = 33$
+   - $33 \times 3 = 99$.
+2. The sequence strictly alternates between $[\times 3]$ and $[-3]$.
+3. Apply the next scheduled operation ($-3$) to the 6th term:
+   - $T_7 = 99 - 3 = 96$.
+
+Common Trap: Multiplying by 3 again ($99 \times 3 = 297$, Option B) instead of subtracting 3.
+Exam Tip: Operational cycle: $\times 3 \to -3 \to \times 3 \to -3 \to \times 3 \to -3$.","Correct. Survives elimination because the next operation is -3, yielding 99 - 3 = 96.","Eliminated because 297 is 99 * 3, which violates the alternating operator cycle.","Eliminated because subtracting 6 gives 93.","Eliminated because adding 3 gives 102.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"What is the 10th term in the alternating cube-square sequence:
+
+$$1, \quad 4, \quad 27, \quad 16, \quad 125, \quad 36, \quad 343, \quad 64, \quad 729, \quad \textbf{?}$$","100","1,000","81","121","A","Step-by-Step Solution:
+1. Examine terms relative to their positional index $n$:
+   - Odd positions ($n = 1, 3, 5, 7, 9$): Perfect cubes $n^3$:
+     - $1^3 = 1, \quad 3^3 = 27, \quad 5^3 = 125, \quad 7^3 = 343, \quad 9^3 = 729$.
+   - Even positions ($n = 2, 4, 6, 8, 10$): Perfect squares $n^2$:
+     - $2^2 = 4, \quad 4^2 = 16, \quad 6^2 = 36, \quad 8^2 = 64$.
+2. The 10th term is at an even position ($n = 10$).
+3. Apply the even-position squaring rule:
+   - $T_{10} = 10^2 = 100$.
+
+Common Trap: Cubing $10^3 = 1,000$ (Option B) by applying the odd-position rule to an even index.
+Exam Tip: Even position = Square ($n^2$), Odd position = Cube ($n^3$). For $n = 10$, $10^2 = 100$.","Correct. Survives elimination because the 10th position is even, requiring 10^2 = 100.","Eliminated because 1,000 is 10^3 (cube rule applied to even index).","Eliminated because 81 is 9^2.","Eliminated because 121 is 11^2.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Find the missing pair $(A, B)$ in the interleaved fractional sequence:
+
+$$\frac{1}{2}, \quad 4, \quad \frac{2}{3}, \quad 9, \quad \frac{3}{4}, \quad 16, \quad \frac{4}{5}, \quad 25, \quad A, \quad B$$","A = \frac{5}{6}, \quad B = 36","A = \frac{5}{6}, \quad B = 49","A = \frac{6}{7}, \quad B = 36","A = \frac{4}{5}, \quad B = 36","A","Step-by-Step Solution:
+1. Separate into two interleaved tracks:
+2. Track 1 (Odd positions: 1st, 3rd, 5th, 7th, 9th):
+   - $\frac{1}{2}, \quad \frac{2}{3}, \quad \frac{3}{4}, \quad \frac{4}{5}, \quad A$.
+   - Formula: $\frac{k}{k + 1}$. For $k = 5$ (9th position): $A = \frac{5}{6}$.
+3. Track 2 (Even positions: 2nd, 4th, 6th, 8th, 10th):
+   - $4, \quad 9, \quad 16, \quad 25, \quad B$.
+   - Formula: $(m + 1)^2$. For $m = 5$ (10th position): $B = (5 + 1)^2 = 6^2 = 36$.
+4. Result: $A = \frac{5}{6}, B = 36$.
+
+Common Trap: Jumping to $7^2 = 49$ for $B$ (Option B) or skipping fraction increments for $A$.
+Exam Tip: Track 1 numerators increment sequentially ($1, 2, 3, 4, 5$), Track 2 bases increment sequentially ($2, 3, 4, 5, 6$).","Correct. Survives elimination because A = 5/6 and B = 6^2 = 36.","Eliminated because B = 49 skips 6^2 to 7^2.","Eliminated because A = 6/7 skips 5/6.","Eliminated because A = 4/5 repeats the 7th term.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Determine the next term in the alternating additive-multiplicative sequence:
+
+$$2, \quad 5, \quad 15, \quad 18, \quad 54, \quad 57, \quad \textbf{?}$$","171","60","174","168","A","Step-by-Step Solution:
+1. Identify operations connecting consecutive terms:
+   - $2 + 3 = 5$
+   - $5 \times 3 = 15$
+   - $15 + 3 = 18$
+   - $18 \times 3 = 54$
+   - $54 + 3 = 57$.
+2. The sequence strictly alternates between $[+3]$ and $[\times 3]$.
+3. Apply the next scheduled operation ($\times 3$) to the 6th term:
+   - $T_7 = 57 \times 3 = 171$.
+
+Common Trap: Adding 3 again ($57 + 3 = 60$, Option B) instead of multiplying by 3.
+Exam Tip: Alternate operations: $+3 \to \times 3 \to +3 \to \times 3 \to +3 \to \times 3$.","Correct. Survives elimination because the next operation is * 3, yielding 57 * 3 = 171.","Eliminated because adding 3 gives 60, violating alternation.","Eliminated because arithmetic error gives 174.","Eliminated because multiplying by 56 gives 168.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"What is the next number in the alternating signed rational geometric sequence:
+
+$$1, \quad -\frac{1}{2}, \quad \frac{1}{4}, \quad -\frac{1}{8}, \quad \frac{1}{16}, \quad -\frac{1}{32}, \quad \textbf{?}$$","\frac{1}{64}","-\frac{1}{64}","\frac{1}{128}","-\frac{1}{16}","A","Step-by-Step Solution:
+1. Find common ratio $r$:
+   - $r = \frac{-1/2}{1} = -\frac{1}{2}$.
+2. Verify ratio across terms:
+   - $-\frac{1}{2} \times \left(-\frac{1}{2}\right) = +\frac{1}{4}$
+   - $\frac{1}{4} \times \left(-\frac{1}{2}\right) = -\frac{1}{8}$
+   - $-\frac{1}{8} \times \left(-\frac{1}{2}\right) = +\frac{1}{16}$
+   - $\frac{1}{16} \times \left(-\frac{1}{2}\right) = -\frac{1}{32}$.
+3. Multiply the 6th term by $-\frac{1}{2}$ to obtain the 7th term:
+   - $T_7 = -\frac{1}{32} \times \left(-\frac{1}{2}\right) = +\frac{1}{64}$.
+
+Common Trap: Dropping the sign change, producing $-\frac{1}{64}$ (Option B).
+Exam Tip: Negative $\times$ Negative = Positive. $(-\frac{1}{32}) \times (-\frac{1}{2}) = +\frac{1}{64}$.","Correct. Survives elimination because (-1/32) * (-1/2) = +1/64.","Eliminated because negative sign is incorrect (negative times negative is positive).","Eliminated because 1/128 is the 8th term.","Eliminated because -1/16 is the 5th term inverted.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Find the 9th term in the alternating prime-composite sequence:
+
+$$2, \quad 4, \quad 3, \quad 6, \quad 5, \quad 8, \quad 7, \quad 9, \quad \textbf{?}$$","11","10","9","13","A","Step-by-Step Solution:
+1. Deconstruct into two interleaved streams:
+   - Track 1 (Odd positions: 1st, 3rd, 5th, 7th, 9th):
+     - Consecutive prime numbers: $2, 3, 5, 7, \textbf{?}$.
+     - The next prime number after 7 is 11.
+   - Track 2 (Even positions: 2nd, 4th, 6th, 8th):
+     - Consecutive composite numbers: $4, 6, 8, 9$.
+2. The 9th term is at an odd position, so it belongs to Track 1 (the prime numbers).
+3. Result: $T_9 = 11$.
+
+Common Trap: Providing the next composite number $10$ (Option B), which belongs to the 10th position, not the 9th.
+Exam Tip: 9th position = 5th prime number = 11.","Correct. Survives elimination because the 9th term is from the prime stream (2, 3, 5, 7, 11), giving 11.","Eliminated because 10 is the 10th term (from the composite stream).","Eliminated because 9 is the 8th term.","Eliminated because 13 is the 6th prime (11th term).","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Identify the next number in the alternating expanding subtraction sequence:
+
+$$100, \quad 98, \quad 95, \quad 90, \quad 83, \quad 72, \quad \textbf{?}$$","59","61","57","58","A","Step-by-Step Solution:
+1. Calculate the consecutive decrements (subtrahends):
+   - $100 - 98 = 2$
+   - $98 - 95 = 3$
+   - $95 - 90 = 5$
+   - $90 - 83 = 7$
+   - $83 - 72 = 11$.
+2. The subtrahends are consecutive prime numbers: $2, 3, 5, 7, 11$.
+3. Identify the next prime number after 11:
+   - The next prime is 13 (since 12 is composite).
+4. Compute the 7th term:
+   - $T_7 = 72 - 13 = 59$.
+
+Common Trap: Subtracting 11 again ($72 - 11 = 61$, Option B) or subtracting 15 ($72 - 15 = 57$, Option C).
+Exam Tip: Prime subtrahends skip composite odd numbers ($9, 15$). Next subtrahend is 13.","Correct. Survives elimination because the next prime subtrahend is 13, giving 72 - 13 = 59.","Eliminated because subtracting 11 gives 61.","Eliminated because subtracting 15 gives 57.","Eliminated because subtracting 14 gives 58.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Find the missing number in the alternating sign arithmetic progression:
+
+$$10, \quad -8, \quad 6, \quad -4, \quad 2, \quad 0, \quad -2, \quad \textbf{?}$$","4","-4","2","-6","A","Step-by-Step Solution:
+1. Analyze absolute magnitudes:
+   - $10, 8, 6, 4, 2, 0, 2, 4, 6 \dots$ (Magnitudes decrease by 2 to 0, then increase by 2).
+   - Alternatively: $T_n = (-1)^{n+1} \cdot (12 - 2n)$.
+2. Verify terms with formula:
+   - $n=1: (+1)(10) = +10$
+   - $n=2: (-1)(8) = -8$
+   - $n=3: (+1)(6) = +6$
+   - $n=4: (-1)(4) = -4$
+   - $n=5: (+1)(2) = +2$
+   - $n=6: (-1)(0) = 0$
+   - $n=7: (+1)(-2) = -2$.
+3. Compute the 8th term ($n = 8$):
+   - $T_8 = (-1)^{9} \cdot (12 - 2(8)) = (-1) \cdot (12 - 16) = (-1) \cdot (-4) = +4$.
+
+Common Trap: Answering $-4$ (Option B), failing to multiply the negative sign of the formula by the negative difference $(-1 \times -4 = +4)$.
+Exam Tip: Even index parity for $n = 8$ flips the sign of $-4$ to $+4$.","Correct. Survives elimination because T8 = (-1)^9 * (12 - 16) = (-1) * (-4) = +4.","Eliminated because -4 drops the negative multiplier.","Eliminated because 2 is the 5th term.","Eliminated because -6 is the 9th term.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"
+"Find the next term in the three-way alternating sequence:
+
+$$1, \quad 2, \quad 3, \quad 2, \quad 4, \quad 6, \quad 4, \quad 8, \quad 12, \quad 8, \quad 16, \quad \textbf{?}$$","24","32","18","20","A","Step-by-Step Solution:
+1. Deconstruct into three independent interleaved series ($k = 3$ period):
+   - Track 1 (Positions 1, 4, 7, 10): $1, 2, 4, 8$ (Doubling: $\times 2$).
+   - Track 2 (Positions 2, 5, 8, 11): $2, 4, 8, 16$ (Doubling: $\times 2$).
+   - Track 3 (Positions 3, 6, 9, 12): $3, 6, 12, \textbf{?}$ (Doubling: $\times 2$).
+2. The 12th term belongs to Track 3.
+3. Compute the 4th term of Track 3:
+   - $T_{12} = 12 \times 2 = 24$.
+
+Common Trap: Doubling Track 2 ($16 \times 2 = 32$, Option B) for the 12th position instead of advancing Track 3.
+Exam Tip: $12 \equiv 0 \pmod 3$, which directs to the 3rd track ($3 \to 6 \to 12 \to 24$).","Correct. Survives elimination because Position 12 is in Track 3 (3, 6, 12, 24), giving 24.","Eliminated because 32 is the continuation of Track 2.","Eliminated because adding 6 gives 18.","Eliminated because adding 8 gives 20.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Alternating sequences | Very Difficult | Batch 031"

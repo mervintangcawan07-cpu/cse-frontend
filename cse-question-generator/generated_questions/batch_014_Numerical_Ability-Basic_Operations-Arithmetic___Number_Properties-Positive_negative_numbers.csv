@@ -1,0 +1,154 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"If $a < 0$, $b > 0$, and $c < 0$ such that $|a| > |b| > |c|$, which of the following algebraic expressions is mathematically guaranteed to be strictly NEGATIVE?","\frac{a + b}{b - c}","\frac{a \times c}{b}","b - a","(a - c)^2","A","Step-by-Step Solution:
+1. Analyze Statement A: $\frac{a + b}{b - c}$
+   - Numerator: Since $a < 0$ and $|a| > |b|$, the negative number dominates the positive number, so $a + b < 0$ (Negative).
+   - Denominator: Since $b > 0$ and $c < 0$, subtracting a negative number yields $b - c = b + |c| > 0$ (Positive).
+   - Quotient: $\frac{\text{Negative}}{\text{Positive}} = \text{Strictly Negative}$.
+2. Analyze other options:
+   - Option B: $\frac{a \times c}{b} = \frac{(-) \times (-)}{(+)} = \frac{(+)}{(+)} = \text{Positive}$.
+   - Option C: $b - a = b - (-) = b + |a| > 0$ (Positive).
+   - Option D: $(a - c)^2 \ge 0$ (Square of any real number is always non-negative).
+
+Common Trap: Assuming $|a| > |b|$ means $a > b$, forgetting that larger absolute values of negative numbers make them more negative ($a < -b$).
+Exam Tip: In sign inequality problems, test with specific sample numbers: let $a = -5, b = 3, c = -1$. Then $\frac{-5 + 3}{3 - (-1)} = \frac{-2}{4} = -0.5$ (Negative).","Correct. Survives elimination because numerator (a+b) is negative and denominator (b-c) is positive, ensuring a strictly negative quotient.","Eliminated because the product of two negatives is positive, divided by positive gives positive.","Eliminated because subtracting a negative from a positive yields a positive sum.","Eliminated because squaring any real number yields a non-negative result.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"Evaluate the exact sum of the following finite alternating integer series:
+
+$$S = 1 - 2 + 3 - 4 + 5 - 6 + \cdots + 99 - 100$$","-50","50","-100","0","A","Step-by-Step Solution:
+1. Group the 100 consecutive terms into pairs of two:
+   - $(1 - 2) + (3 - 4) + (5 - 6) + \dots + (99 - 100)$.
+2. Calculate the value of each individual pair:
+   - $1 - 2 = -1$
+   - $3 - 4 = -1$
+   - $5 - 6 = -1$
+   - $\dots$
+   - $99 - 100 = -1$.
+3. Determine the total number of pairs:
+   - $\text{Number of pairs} = \frac{100}{2} = 50\text{ pairs}$.
+4. Multiply the number of pairs by the value per pair:
+   - $S = 50 \times (-1) = -50$.
+
+Common Trap: Confusing the alternating series with the standard Gaussian sum $\frac{n(n+1)}{2} = 5050$.
+Exam Tip: For any alternating series $1 - 2 + 3 - 4 + \dots - 2k$, the sum is always $-k$.","Correct. Survives elimination because 50 pairs of -1 sum to exactly -50.","Eliminated because dropping the negative sign yields +50.","Eliminated because assuming each term equals -1 gives -100.","Eliminated because terms do not cancel to 0 since negative terms are larger in magnitude than preceding positives.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"If $x$ is a strictly negative real number ($x < 0$), simplify the expression:
+
+$$f(x) = \frac{|x| + |-x| - \sqrt{x^2}}{x}$$","-1","1","3","-3","A","Step-by-Step Solution:
+1. Apply the formal definition of absolute value for $x < 0$:
+   - $|x| = -x$ (since $x$ is negative, $-x$ is positive).
+   - $|-x| = |x| = -x$.
+2. Apply the principal square root definition:
+   - $\sqrt{x^2} = |x| = -x$.
+3. Substitute these definitions into the numerator:
+   - $\text{Numerator} = (-x) + (-x) - (-x) = -x - x + x = -x$.
+4. Divide by the denominator $x$:
+   - $f(x) = \frac{-x}{x} = -1$.
+
+Common Trap: Setting $|x| = x$ and $\sqrt{x^2} = x$, which leads to $\frac{x + x - x}{x} = +1$ (Option B), ignoring the negative sign constraint.
+Exam Tip: Remember that $\sqrt{x^2} = |x|$, which equals $-x$ whenever $x < 0$.","Correct. Survives elimination because for negative x, numerator simplifies to -x, giving -x / x = -1.","Eliminated because assuming |x| = x for negative numbers gives incorrect sign +1.","Eliminated because arithmetic error in the numerator sum yields 3.","Eliminated because adding all three terms without subtraction yields -3.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"Determine the number of positive integer solutions that satisfy the rational inequality:
+
+$$\frac{(x - 3)(x + 5)}{x - 1} \le 0$$","2","3","1","Infinite","A","Step-by-Step Solution:
+1. Identify critical root boundaries where numerator or denominator equals 0:
+   - Numerator roots: $x = 3$ and $x = -5$.
+   - Denominator asymptote: $x = 1$ (note: $x \neq 1$).
+2. Test intervals on the real number line:
+   - Interval $(-\infty, -5]$: Test $x = -6 \implies \frac{(-9)(-1)}{-7} = \frac{+}{-} = - \le 0$ (Valid).
+   - Interval $(-5, 1)$: Test $x = 0 \implies \frac{(-3)(5)}{-1} = \frac{-}{-} = + > 0$ (Invalid).
+   - Interval $(1, 3]$: Test $x = 2 \implies \frac{(-1)(7)}{1} = \frac{-}{+} = - \le 0$ (Valid).
+   - Interval $(3, \infty)$: Test $x = 4 \implies \frac{(1)(9)}{3} = \frac{+}{+} = + > 0$ (Invalid).
+3. Complete solution set: $x \in (-\infty, -5] \cup (1, 3]$.
+4. Count positive integers ($x \in \{1, 2, 3, \dots\}$) within $(1, 3]$:
+   - $x = 2$ and $x = 3$.
+   - Note: $x = 1$ is strictly excluded because it makes the denominator zero.
+5. Total count of positive integer solutions $= 2$.
+
+Common Trap: Including $x = 1$ in the solution count, forgetting that denominators cannot equal zero.
+Exam Tip: Denominator roots are always open parentheses (strictly excluded from solution sets).","Correct. Survives elimination because only x = 2 and x = 3 are positive integers in the valid solution interval (1, 3].","Eliminated because including x = 1 (which causes division by zero) gives 3.","Eliminated because omitting the upper boundary x = 3 gives only 1 solution.","Eliminated because the negative solution interval (-inf, -5] contains negative integers, not positive integers.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"If $p = -2, q = 3,$ and $r = -4$, evaluate the rational expression:
+
+$$\frac{p^3 - q^2 + r^2}{p \cdot q \cdot r - |p \cdot r|}$$","-\frac{1}{16}","\frac{1}{16}","-\frac{1}{32}","-\frac{33}{16}","A","Step-by-Step Solution:
+1. Numerator:
+   - $p^3 = (-2)^3 = -8$.
+   - $q^2 = 3^2 = 9 \implies -q^2 = -9$.
+   - $r^2 = (-4)^2 = +16$.
+   - Total Numerator $= -8 - 9 + 16 = -17 + 16 = -1$.
+2. Denominator:
+   - Product $p \cdot q \cdot r = (-2)(3)(-4) = +24$.
+   - Absolute value $|p \cdot r| = |(-2)(-4)| = |8| = 8$.
+   - Total Denominator $= 24 - 8 = 16$.
+3. Final Division:
+   - $\frac{-1}{16} = -\frac{1}{16}$.
+
+Common Trap: Evaluating $(-4)^2$ as $-16$ or $(-2)(-4)$ as $-8$, leading to severe sign distortion.
+Exam Tip: Separate power evaluations into $(-a)^n$ vs $-a^n$ before combining arithmetic terms.","Correct. Survives elimination because numerator is -1 and denominator is 16, yielding -1/16.","Eliminated because dropping the negative numerator sign gives positive 1/16.","Eliminated because adding 24 + 8 in the denominator gives 32, yielding -1/32.","Eliminated because evaluating r^2 as -16 gives numerator of -33.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"If $x < 0$ and $y > 0$, determine the specific quadrant in the Cartesian plane where the coordinate point $P(-x, -y)$ is located.","Quadrant IV","Quadrant II","Quadrant III","Quadrant I","A","Step-by-Step Solution:
+1. Analyze the abscissa (x-coordinate):
+   - Given $x < 0$ (negative).
+   - The coordinate is $-x = -(\text{negative}) = +\text{positive}$.
+   - Thus, the x-coordinate is $> 0$.
+2. Analyze the ordinate (y-coordinate):
+   - Given $y > 0$ (positive).
+   - The coordinate is $-y = -(\text{positive}) = -\text{negative}$.
+   - Thus, the y-coordinate is $< 0$.
+3. Determine the quadrant for point $(+, -)$:
+   - Quadrant I: $(+, +)$
+   - Quadrant II: $(-, +)$
+   - Quadrant III: $(-, -)$
+   - Quadrant IV: $(+, -)$
+4. Point $P(-x, -y)$ lies in Quadrant IV.
+
+Common Trap: Assuming point $(-x, -y)$ automatically has two negative signs and lies in Quadrant III.
+Exam Tip: When variables have predefined signs, substitute sample values: $x = -2, y = 3 \implies P(-(-2), -(3)) = P(2, -3) \in \text{Quadrant IV}$.","Correct. Survives elimination because -x is positive and -y is negative, placing P(+, -) squarely in Quadrant IV.","Eliminated because Quadrant II requires (-, +).","Eliminated because assuming double negatives without evaluating variables puts it falsely in Quadrant III.","Eliminated because Quadrant I requires (+, +).","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"Evaluate the product of signs:
+
+$$(-1)^1 \times (-1)^2 \times (-1)^3 \times \cdots \times (-1)^{20}$$","1","-1","0","20","A","Step-by-Step Solution:
+1. Apply the product rule for identical bases with exponents:
+   - $(-1)^1 \times (-1)^2 \times \dots \times (-1)^{20} = (-1)^{(1 + 2 + 3 + \dots + 20)}$.
+2. Sum the arithmetic series in the exponent:
+   - $\text{Exponent} = \sum_{k=1}^{20} k = \frac{n(n + 1)}{2} = \frac{20 \times 21}{2} = 10 \times 21 = 210$.
+3. Evaluate $(-1)^{210}$:
+   - Since the exponent $210$ is an even integer:
+   - $(-1)^{\text{even}} = +1$.
+
+Common Trap: Assuming 20 terms mean 10 negative ones and 10 positive ones multiplying to $-1$.
+Exam Tip: The sum of numbers from 1 to $n$ determines the total power of $(-1)$. If $\frac{n(n+1)}{2}$ is even, the result is $+1$; if odd, $-1$.","Correct. Survives elimination because the sum of exponents is 210 (even), so (-1)^210 = 1.","Eliminated because miscalculating the exponent sum as odd yields -1.","Eliminated because powers of -1 cannot multiply to 0.","Eliminated because 20 is the number of terms, not the numerical value of the expression.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"Find the sum of all valid real solutions to the absolute value equation:
+
+$$|2x - 1| = x + 4$$","4","6","-4","5","A","Step-by-Step Solution:
+1. Domain Constraint: The right side must be non-negative: $x + 4 \ge 0 \implies x \ge -4$.
+2. Case 1 ($2x - 1 \ge 0 \implies 2x - 1 = x + 4$):
+   - $2x - x = 4 + 1 \implies x = 5$.
+   - Check constraint: $5 \ge -4$ (Valid).
+3. Case 2 ($2x - 1 < 0 \implies -(2x - 1) = x + 4$):
+   - $-2x + 1 = x + 4$.
+   - $-2x - x = 4 - 1 \implies -3x = 3 \implies x = -1$.
+   - Check constraint: $-1 \ge -4$ (Valid).
+4. Sum of all valid solutions:
+   - $\text{Sum} = 5 + (-1) = 4$.
+
+Common Trap: Forgetting Case 2 or making sign errors when distributing the negative sign across $(2x - 1)$.
+Exam Tip: Always substitute both roots back into the original equation to verify validity: $|2(5)-1| = 9 = 5+4$ (True); $|2(-1)-1| = |-3| = 3 = -1+4$ (True).","Correct. Survives elimination because the two valid roots are x = 5 and x = -1, which sum to 4.","Eliminated because adding 5 + 1 (sign error in root 2) gives 6.","Eliminated because sign reversal yields -4.","Eliminated because 5 is only one of the two valid roots.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"The ambient temperature in Baguio City at 6:00 AM was recorded at $-2^\circ\text{C}$. By 1:00 PM, solar heating caused the temperature to rise by $14^\circ\text{C}$. By 10:00 PM, an intense cold front caused the temperature to drop by $19^\circ\text{C}$. What was the official temperature reading at 10:00 PM?","-7^\circ\text{C}","-5^\circ\text{C}","7^\circ\text{C}","-9^\circ\text{C}","A","Step-by-Step Solution:
+1. Initial baseline temperature: $T_0 = -2^\circ\text{C}$.
+2. Temperature at 1:00 PM after $14^\circ\text{C}$ rise:
+   - $T_1 = -2 + 14 = +12^\circ\text{C}$.
+3. Temperature at 10:00 PM after $19^\circ\text{C}$ drop:
+   - $T_2 = +12 - 19 = -7^\circ\text{C}$.
+
+Common Trap: Subtracting 14 and adding 19 (inverting temperature directions), or calculating $-2 + 14 - 19$ as $-5$.
+Exam Tip: Model directional changes on a signed number line: $-2 \xrightarrow{+14} +12 \xrightarrow{-19} -7$.","Correct. Survives elimination because -2 + 14 - 19 = 12 - 19 = -7°C.","Eliminated because arithmetic error gives -5°C.","Eliminated because dropping the negative sign yields positive 7°C.","Eliminated because starting from 0 instead of -2 gives -9°C.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"
+"If $a, b,$ and $c$ are non-zero real numbers, how many distinct numerical values can the expression $E = \frac{a}{|a|} + \frac{b}{|b|} + \frac{c}{|c|} + \frac{abc}{|abc|}$ assume across all possible sign combinations?","3 distinct values (4, 0, -4)","4 distinct values","2 distinct values","5 distinct values","A","Step-by-Step Solution:
+1. Note that for any non-zero real number $x$, $\frac{x}{|x|} = +1$ if $x > 0$ and $-1$ if $x < 0$.
+2. Analyze all 4 sign parity cases for the triplet $(a, b, c)$:
+   - Case 1: All 3 positive $(+, +, +) \implies abc > 0$.
+     - $E = 1 + 1 + 1 + 1 = 4$.
+   - Case 2: Exactly 2 positive, 1 negative $(+, +, -) \implies abc < 0$.
+     - $E = 1 + 1 - 1 + (-1) = 0$.
+   - Case 3: Exactly 1 positive, 2 negative $(+, -, -) \implies abc > 0$.
+     - $E = 1 - 1 - 1 + (+1) = 0$.
+   - Case 4: All 3 negative $(-, -, -) \implies abc < 0$.
+     - $E = -1 - 1 - 1 + (-1) = -4$.
+3. The set of distinct values assumed by $E$ is $\{4, 0, -4\}$.
+4. Total number of distinct values $= 3$.
+
+Common Trap: Assuming there are 8 distinct values because there are $2^3 = 8$ sign permutations, ignoring that Cases 2 and 3 both evaluate to 0.
+Exam Tip: Group sign configurations by the number of negative variables (0, 1, 2, or 3 negatives).","Correct. Survives elimination because the expression evaluates exclusively to 4, 0, or -4, yielding exactly 3 distinct values.","Eliminated because assuming 4 distinct values (4, 2, -2, -4) fails to recognize internal parity cancellation to 0.","Eliminated because missing 0 gives only 2 values.","Eliminated because assuming all 5 possible sum levels from -4 to +4 are attainable is false.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Positive/negative numbers | Very Difficult | Batch 014"

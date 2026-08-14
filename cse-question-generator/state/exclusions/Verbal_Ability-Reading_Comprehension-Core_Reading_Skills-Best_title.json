@@ -1,0 +1,30 @@
+{
+  "scope_key": "Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Best_title",
+  "created_at": "2026-08-14T14:48:22.000Z",
+  "updated_at": "2026-08-14T14:48:22.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "57a2cfad89bbcb27376c66657c7cbca56ffbe24e8e8bc377cf02a35368a69e38",
+    "cbbe14400cfbe842c161eb31ef78f2aa7dae28d9c57e62df0b6238bcda8fcf70",
+    "955bfeb1a05ae1bdf806e23297a783701d4a3e2e0ea28fb68a6e0e960da1ecf4",
+    "e974261d7a9b0c95ef393f9c675c94ebc453c076ebddad4ba878a87b5a83a005",
+    "9c017bc4fa04e12e105e46bfb76f92ea2ba644dcae4a282fcf3e6fbcf77be5c0",
+    "fc5f156fb15494d6e9929a73c1c4e7faefdc79c09fe0f7e19f7e53cf2ea14c77",
+    "b8ea16caec32e3d368d4ea336f32e92cbb41a052be1bb3dbf275e5ebba9a9f4c",
+    "8311cbef627f311c19b0d2d319e7db754efea2f8bb7df61a6e76cf0034a781b0",
+    "28fa2d515a452d5b682cf891823eb91b5c464efda091bc7d25e003ba7c8aa982",
+    "cf73ca42dc2ec32870e8ec8e0f590bb824f9c6cb41398c8e1e779a544c45a761"
+  ],
+  "records": [
+    { "id": "q_004_1", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_2", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_3", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_4", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_5", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_6", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_7", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_8", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_9", "added_at": "2026-08-14T14:48:22.000Z" },
+    { "id": "q_004_10", "added_at": "2026-08-14T14:48:22.000Z" }
+  ]
+}

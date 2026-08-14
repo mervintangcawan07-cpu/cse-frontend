@@ -1,0 +1,30 @@
+{
+  "scope_key": "Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Which_statement_is_NOT_supported",
+  "created_at": "2026-08-14T14:49:36.000Z",
+  "updated_at": "2026-08-14T14:49:36.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "596645ea79c94025176b9e2c454e99f187a552bfef1ea78fb649f8754b2d352b",
+    "b8ecfa82be0697ad50a417537b98d28ee83f51152a5c531d06e3381ad707b6bf",
+    "3505bf74ad6111ee904da36a188f57fae1dafe2297eb0989069726df21a48c66",
+    "d0a0b631d87e146e2798e4d39f4e24ef78c8d84428cbbf2971ff98eb79e224eb",
+    "cb36056b6b7a54492bfd7b5b5ba2858b438ea2d78d4ea9bc59432d665b169b14",
+    "6cfa7b3227eb09bf2bb68a0a9fc31a89c9cbfbb28d6a89cfa6b0098df24fae41",
+    "734a36fdfd374fb91d2ba3aa91b10a26ebcf72ce90c37f481be833a693158c56",
+    "b17849646b5a8e0f6fc4136365bb24c7cf4883492723ec08726fa45d658c1482",
+    "0c8853b01859ae3c42845c483d47c237cce14cb839b2aeef071e626e25779c11",
+    "f29633e795ae7db1ce2fe8d3fe7c55c0c99a0e6e76cf0a41b5275e5264b3ef8b"
+  ],
+  "records": [
+    { "id": "q_006_1", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_2", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_3", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_4", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_5", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_6", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_7", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_8", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_9", "added_at": "2026-08-14T14:49:36.000Z" },
+    { "id": "q_006_10", "added_at": "2026-08-14T14:49:36.000Z" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "scope_key": "Analytical_Ability-Identifying_Assumptions_and_Drawing_Conclusions-Argument_Evaluation_Inference-Must_be_true",
+  "created_at": "2026-08-14T21:55:27.000Z",
+  "updated_at": "2026-08-14T21:55:27.000Z",
+  "total_recorded_questions": 10,
+  "records": [
+    { "id": "q_102_1" }, { "id": "q_102_2" }, { "id": "q_102_3" }, { "id": "q_102_4" },
+    { "id": "q_102_5" }, { "id": "q_102_6" }, { "id": "q_102_7" }, { "id": "q_102_8" },
+    { "id": "q_102_9" }, { "id": "q_102_10" }
+  ]
+}

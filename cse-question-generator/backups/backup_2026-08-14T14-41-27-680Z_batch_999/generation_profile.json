@@ -1,0 +1,46 @@
+{
+  "version": "3.0",
+  "profile_name": "CSE-PPT Professional & Subprofessional Question Bank Master Rules",
+  "created_at": "2026-08-14T22:40:00.000Z",
+  "status": "INITIALIZED",
+  "csv_specification": {
+    "required_columns_count": 13,
+    "headers": [
+      "Question",
+      "Option A",
+      "Option B",
+      "Option C",
+      "Option D",
+      "Correct Answer",
+      "Explanation",
+      "Elimination A",
+      "Elimination B",
+      "Elimination C",
+      "Elimination D",
+      "Category",
+      "Tags"
+    ],
+    "batch_size": 10,
+    "encoding": "UTF-8"
+  },
+  "rules_compact": {
+    "question_integrity": {
+      "options_count": 4,
+      "valid_answers": ["A", "B", "C", "D"],
+      "explanation_required": true,
+      "all_eliminations_required": true,
+      "category_required": true,
+      "tags_required": true
+    },
+    "duplicate_prevention": {
+      "scope": "MICRO_SUBTOPIC_SCOPED",
+      "hash_algorithm": "SHA-256",
+      "normalization": "lowercase_alphanumeric_trimmed"
+    },
+    "batch_policy": {
+      "atomic_completion": true,
+      "auto_backup_on_batch_complete": true
+    }
+  },
+  "master_prompt_status": "AWAITING_MASTER_PROMPT_PARTS"
+}

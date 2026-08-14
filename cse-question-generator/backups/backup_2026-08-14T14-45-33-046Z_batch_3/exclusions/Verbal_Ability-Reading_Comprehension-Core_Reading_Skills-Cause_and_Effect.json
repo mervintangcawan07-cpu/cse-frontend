@@ -1,0 +1,80 @@
+{
+  "scope_key": "Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect",
+  "created_at": "2026-08-14T14:43:47.937Z",
+  "updated_at": "2026-08-14T14:43:47.938Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "84ae279a95fec453506b89b2a9a9dda236913fa5e0cdda8712fd5b8f8f9fc89d",
+    "5074d48502a9ee61b8f3bcc788b750639ce8dca9fe067cff5b97bf646a420334",
+    "d1dfb0ee3ec6201c5a51e1462b768e3733a19ad1d1d585a7099042ff3f81bf1d",
+    "19fa18eb0e2ed1a4a44a97d892c5afe6077ebaa6195e6a4965eef3c9f6dcc521",
+    "1280b240633a2b1cb2230bec025137d72ccf8db1c22d77fed8ba56ef45d8e313",
+    "f7f891884890dbca58cd1e07a3a370ed7b45aa6b762b9f933b8cfa06beaacc7c",
+    "a3c517c8cb67c55ffd982150fdc2486537e6eba252b09186294ffdf740be1901",
+    "02659862e1a9c153a8aa964f7a435bf75c9998af2c38e3b7936323c300413a2a",
+    "4081c53500e0f7c98dcc1b77139b82d485605e7aab96b916bf1729f9a0f553e5",
+    "4666be2159493bb279941b483ad312675de8a2aeab0ee5f5a6014d5cc7014da9"
+  ],
+  "records": [
+    {
+      "id": "q_1786718627937_vzy9ax",
+      "hash": "84ae279a95fec453506b89b2a9a9dda236913fa5e0cdda8712fd5b8f8f9fc89d",
+      "normalized": "in 2021 the department of trade and industry initiated the digitalization of msmes program across region vii to modernize bookkeeping and transaction ",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_qwx7v5",
+      "hash": "5074d48502a9ee61b8f3bcc788b750639ce8dca9fe067cff5b97bf646a420334",
+      "normalized": "the implementation of the ease of doing business act ra 11032 mandated local government units lgus to establish electronic business onestop shops ebos",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_3bi2jd",
+      "hash": "d1dfb0ee3ec6201c5a51e1462b768e3733a19ad1d1d585a7099042ff3f81bf1d",
+      "normalized": "when the metropolitan water regulatory board enforced a progressive volumetric tariff structuresubstantially penalizing residential water consumption ",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_5qd6y9",
+      "hash": "19fa18eb0e2ed1a4a44a97d892c5afe6077ebaa6195e6a4965eef3c9f6dcc521",
+      "normalized": "in an effort to curb rampant inflationary pressures in the staple cereal sector the national price coordinating council imposed an administrative pric",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_pkdnup",
+      "hash": "1280b240633a2b1cb2230bec025137d72ccf8db1c22d77fed8ba56ef45d8e313",
+      "normalized": "the introduction of highyield hybrid rice varieties across the central luzon agricultural basin dramatically boosted seasonal crop yields by 40 betwee",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_0oba25",
+      "hash": "f7f891884890dbca58cd1e07a3a370ed7b45aa6b762b9f933b8cfa06beaacc7c",
+      "normalized": "to alleviate chronic fiscal strain on public healthcare facilities province z devolved the procurement of tertiary medical supplies directly to distri",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_v8bkc7",
+      "hash": "a3c517c8cb67c55ffd982150fdc2486537e6eba252b09186294ffdf740be1901",
+      "normalized": "urban development researchers analyzed the rapid decline of vehicular transit velocity along the newly constructed commonwealth elevated bypass despit",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627937_jnihge",
+      "hash": "02659862e1a9c153a8aa964f7a435bf75c9998af2c38e3b7936323c300413a2a",
+      "normalized": "in 2020 the civil service commission implemented an asynchronous flexiplace working arrangement for nonfrontline personnel in agency y to maintain con",
+      "added_at": "2026-08-14T14:43:47.937Z"
+    },
+    {
+      "id": "q_1786718627938_2ln0j4",
+      "hash": "4081c53500e0f7c98dcc1b77139b82d485605e7aab96b916bf1729f9a0f553e5",
+      "normalized": "to safeguard coastal biodiversity a marine sanctuary in the visayan sea prohibited all municipal motorized fishing within a 15kilometer radius five ye",
+      "added_at": "2026-08-14T14:43:47.938Z"
+    },
+    {
+      "id": "q_1786718627938_dzrpki",
+      "hash": "4666be2159493bb279941b483ad312675de8a2aeab0ee5f5a6014d5cc7014da9",
+      "normalized": "in an effort to elevate basic education numeracy the department of education piloted a pure conceptual mastery curriculum in district w completely eli",
+      "added_at": "2026-08-14T14:43:47.938Z"
+    }
+  ]
+}

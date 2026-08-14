@@ -1,0 +1,30 @@
+{
+  "scope_key": "Numerical_Ability-Word_Problems-Algebraic_and_Geometric_Word_Problems-Quadratic_equations",
+  "created_at": "2026-08-14T15:17:19.000Z",
+  "updated_at": "2026-08-14T15:17:19.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+    "2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c",
+    "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d",
+    "4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e",
+    "5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f",
+    "6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a",
+    "7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b",
+    "8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c",
+    "9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d",
+    "0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e"
+  ],
+  "records": [
+    { "id": "q_051_1", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_2", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_3", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_4", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_5", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_6", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_7", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_8", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_9", "added_at": "2026-08-14T15:17:19.000Z" },
+    { "id": "q_051_10", "added_at": "2026-08-14T15:17:19.000Z" }
+  ]
+}

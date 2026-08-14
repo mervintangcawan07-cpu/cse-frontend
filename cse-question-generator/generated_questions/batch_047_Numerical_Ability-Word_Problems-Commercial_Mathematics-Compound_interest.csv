@@ -1,0 +1,153 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"The difference between compound interest (compounded annually) and simple interest on a principal sum for 2.0 years at an annual interest rate of 8.0% is exactly ₱1,280.00. What is the value of the principal sum?","₱200,000.00","₱180,000.00","₱240,000.00","₱225,000.00","A","Step-by-Step Solution:
+1. Apply the standard 2-year difference formula between Compound Interest ($CI$) and Simple Interest ($SI$):
+   - $CI - SI = P \left(\frac{r}{100.0}\right)^2$.
+2. Substitute $CI - SI = ₱1,280.00$ and $r = 8.0\%$:
+   - $₱1,280.00 = P \left(\frac{8.0}{100.0}\right)^2 = P (0.08)^2$.
+   - $₱1,280.00 = 0.0064 P$.
+3. Solve for principal $P$:
+   - $P = \frac{₱1,280.00}{0.0064} = \frac{1,280,000.00}{6.4} = ₱200,000.00$.
+4. Verify:
+   - $SI = ₱200,000.00 \times 0.08 \times 2.0 = ₱32,000.00$.
+   - $CI = ₱200,000.00 \times [(1.08)^2 - 1] = ₱200,000.00 \times 0.1664 = ₱33,280.00$.
+   - Difference $= ₱33,280.00 - ₱32,000.00 = ₱1,280.00$ (Confirmed!).
+
+Common Trap: Using the simple interest formula alone or forgetting to square the interest rate.
+Exam Tip: For 2 years: $P = \frac{\Delta}{(r/100)^2} = \frac{1,280}{0.0064} = ₱200,000.00$.","Correct. Survives elimination because ₱200,000.00 * (0.08)^2 = ₱200,000 * 0.0064 = ₱1,280.00 difference.","Eliminated because ₱180,000.00 yields difference ₱1,152.00 != ₱1,280.00.","Eliminated because ₱240,000.00 yields difference ₱1,536.00.","Eliminated because ₱225,000.00 yields difference ₱1,440.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A municipal endowment fund of ₱100,000.00 is invested for 1.5 years at a nominal annual interest rate of 12.0% compounded semi-annually. What is the total compound interest earned, and what is the final maturity amount?","Interest: ₱19,101.60; Maturity: ₱119,101.60","Interest: ₱18,000.00; Maturity: ₱118,000.00","Interest: ₱19,500.00; Maturity: ₱119,500.00","Interest: ₱18,720.00; Maturity: ₱118,720.00","A","Step-by-Step Solution:
+1. Identify compounding parameters:
+   - Principal $P = ₱100,000.00$.
+   - Compounding frequency $m = 2$ (semi-annually).
+   - Semi-annual interest rate $i = \frac{12.0\%}{2} = 6.0\% = 0.06$.
+   - Total compounding periods $n = 1.5\text{ years} \times 2 = 3\text{ periods}$.
+2. Compute final maturity amount ($A$):
+   - $A = P(1 + i)^n = ₱100,000.00 \times (1 + 0.06)^3$.
+   - $(1.06)^3 = 1.06 \times 1.06 \times 1.06 = 1.1236 \times 1.06 = 1.191016$.
+   - $A = ₱100,000.00 \times 1.191016 = ₱119,101.60$.
+3. Calculate compound interest earned:
+   - $CI = A - P = ₱119,101.60 - ₱100,000.00 = ₱19,101.60$.
+
+Common Trap: Calculating simple interest ($100,000 \times 0.12 \times 1.5 = ₱18,000.00$, Option B), ignoring semi-annual compounding growth.
+Exam Tip: $(1.06)^3 = 1.191016 \implies CI = ₱19,101.60$.","Correct. Survives elimination because ₱100,000 * (1.06)^3 = ₱119,101.60 maturity, yielding ₱19,101.60 compound interest.","Eliminated because ₱18,000.00 is simple interest without compounding.","Eliminated because ₱19,500.00 is an overestimate.","Eliminated because ₱18,720.00 assumes annual compounding for 1.5 years.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A capital investment placed at a fixed annual compound interest rate doubles ($2\times$) in exactly 5.0 years. In how many years will the investment grow to 8 times ($8\times$) its original principal value at the same compounding rate?","15.0 years","20.0 years","25.0 years","12.0 years","A","Step-by-Step Solution:
+1. Apply the compound interest exponential scaling property:
+   - $A = P(1 + r)^t$.
+   - Given: $2P = P(1 + r)^5 \implies (1 + r)^5 = 2$.
+2. Express target multiple (8 times principal) as a power of 2:
+   - Target Multiple $= 8 = 2^3$.
+3. Substitute $(1 + r)^5$ for the base 2:
+   - $8 = \left[(1 + r)^5\right]^3 = (1 + r)^{5 \times 3} = (1 + r)^{15}$.
+4. Therefore, total time required is $T = 15.0\text{ years}$.
+5. (Step-by-step timeline: $0\text{ yrs} \to P$; $5\text{ yrs} \to 2P$; $10\text{ yrs} \to 4P$; $15\text{ yrs} \to 8P$).
+
+Common Trap: Using simple interest linear logic ($5 \times 8 / 2 = 20\text{ yrs}$, Option B) or adding 5 years per multiple.
+Exam Tip: Compound growth doubles multiplicatively every fixed period: $1 \to 2 \to 4 \to 8 \implies 3\text{ doubling cycles} \times 5\text{ yrs} = 15\text{ yrs}$.","Correct. Survives elimination because 8 = 2^3, requiring 3 doubling cycles of 5 years each = 15.0 years.","Eliminated because 20.0 years yields 2^4 = 16 times original value.","Eliminated because 25.0 years yields 2^5 = 32 times original value.","Eliminated because 12.0 years is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"What is the Effective Annual Rate (EAR / Effective Annual Yield) of a special savings certificate that pays a nominal interest rate of 8.0% compounded quarterly?","8.24\%","8.00\%","8.40\%","8.16\%","A","Step-by-Step Solution:
+1. Apply the Effective Annual Rate formula:
+   - $\text{EAR} = \left(1 + \frac{r}{m}\right)^m - 1.0$.
+2. Identify values:
+   - Nominal rate $r = 0.08$.
+   - Compounding frequency $m = 4$ (quarterly).
+3. Compute quarterly rate:
+   - $i = \frac{0.08}{4} = 0.02 = 2.0\%$.
+4. Expand the compound binomial:
+   - $\text{EAR} = (1 + 0.02)^4 - 1.0 = (1.02)^4 - 1.0$.
+   - $(1.02)^2 = 1.0404$.
+   - $(1.02)^4 = (1.0404)^2 = 1.08243216$.
+5. Convert to percentage:
+   - $\text{EAR} = 1.08243216 - 1.0 = 0.08243216 \approx 8.2432\% \approx 8.24\%$.
+
+Common Trap: Selecting the nominal rate of $8.00\%$ (Option B) without compounding adjustment.
+Exam Tip: $\text{EAR} = (1.02)^4 - 1 = 8.24\%$.","Correct. Survives elimination because (1.02)^4 - 1 = 1.082432 - 1 = 8.24% effective annual rate.","Eliminated because 8.00% is the nominal annual rate without compounding.","Eliminated because 8.40% is an overestimate.","Eliminated because 8.16% is the EAR for semi-annual compounding ((1.04)^2 - 1).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"The difference between compound interest (compounded annually) and simple interest on a principal sum for 3.0 years at an annual interest rate of 10.0% is exactly ₱1,550.00. What is the value of the principal sum?","₱50,000.00","₱45,000.00","₱60,000.00","₱55,000.00","A","Step-by-Step Solution:
+1. Apply the standard 3-year difference formula:
+   - $CI - SI = P \left(\frac{r}{100.0}\right)^2 \left(\frac{r}{100.0} + 3.0\right)$.
+2. Substitute $CI - SI = ₱1,550.00$ and $r = 10.0\% = 0.10$:
+   - $₱1,550.00 = P (0.10)^2 (0.10 + 3.0)$.
+   - $₱1,550.00 = P (0.01)(3.10) = 0.031 P$.
+3. Solve for principal $P$:
+   - $P = \frac{₱1,550.00}{0.031} = \frac{1,550,000.00}{31} = ₱50,000.00$.
+4. Verify:
+   - $SI = ₱50,000.00 \times 0.10 \times 3.0 = ₱15,000.00$.
+   - $CI = ₱50,000.00 \times [(1.10)^3 - 1] = ₱50,000.00 \times [1.331 - 1] = ₱50,000.00 \times 0.331 = ₱16,550.00$.
+   - Difference $= ₱16,550.00 - ₱15,000.00 = ₱1,550.00$ (Confirmed!).
+
+Common Trap: Using the 2-year formula $P(r/100)^2$ ($1,550 / 0.01 = ₱155,000$).
+Exam Tip: 3-year difference factor is $0.031$ for $10\%$ rate. $P = \frac{1,550}{0.031} = ₱50,000.00$.","Correct. Survives elimination because 3-year difference is 0.031 * ₱50,000.00 = ₱1,550.00.","Eliminated because ₱45,000.00 yields difference ₱1,395.00 != ₱1,550.00.","Eliminated because ₱60,000.00 yields difference ₱1,860.00.","Eliminated because ₱55,000.00 yields difference ₱1,705.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A cooperative development fund of ₱250,000.00 is invested for 3.0 years with varying annual compound interest rates: 4.0% for the first year, 5.0% for the second year, and 6.0% for the third year. What is the total compound interest earned at the conclusion of the 3-year term?","₱39,380.00","₱37,500.00","₱40,250.00","₱38,900.00","A","Step-by-Step Solution:
+1. Apply the multi-period compound interest growth formula:
+   - $A = P(1 + r_1)(1 + r_2)(1 + r_3)$.
+2. Substitute $P = ₱250,000.00, r_1 = 0.04, r_2 = 0.05, r_3 = 0.06$:
+   - End of Year 1: $₱250,000.00 \times 1.04 = ₱260,000.00$.
+   - End of Year 2: $₱260,000.00 \times 1.05 = ₱273,000.00$.
+   - End of Year 3: $₱273,000.00 \times 1.06 = ₱273,000.00 + ₱16,380.00 = ₱289,380.00$.
+3. Calculate total compound interest earned:
+   - $CI = A - P = ₱289,380.00 - ₱250,000.00 = ₱39,380.00$.
+4. (Verification: Simple interest would be $250,000 \times (0.04 + 0.05 + 0.06) = 250,000 \times 0.15 = ₱37,500.00$).
+
+Common Trap: Calculating simple interest sum $4\% + 5\% + 6\% = 15\%$ ($₱37,500.00$, Option B), omitting interest-on-interest compounding.
+Exam Tip: Compound multiplier: $1.04 \times 1.05 \times 1.06 = 1.15752 \implies CI = 250,000 \times 0.15752 = ₱39,380.00$.","Correct. Survives elimination because ₱250,000 * 1.04 * 1.05 * 1.06 = ₱289,380.00, giving interest ₱39,380.00.","Eliminated because ₱37,500.00 is simple interest without compounding (15%).","Eliminated because ₱40,250.00 is an overestimate.","Eliminated because ₱38,900.00 is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A principal sum compounded annually amounts to ₱24,200.00 in 2.0 years and to ₱26,620.00 in 3.0 years. What is the annual compound interest rate and the original principal?","Rate: 10.0%; Principal: ₱20,000.00","Rate: 10.0%; Principal: ₱22,000.00","Rate: 12.0%; Principal: ₱20,000.00","Rate: 8.0%; Principal: ₱21,000.00","A","Step-by-Step Solution:
+1. Relate consecutive annual maturity amounts ($A_2$ and $A_3$):
+   - $A_3 = A_2(1 + r)$.
+   - $₱26,620.00 = ₱24,200.00(1 + r)$.
+2. Solve for annual rate $r$:
+   - $1 + r = \frac{₱26,620.00}{₱24,200.00} = 1.10$.
+   - $r = 1.10 - 1.0 = 0.10 = 10.0\%$.
+3. Compute original principal $P$ using $A_2$:
+   - $A_2 = P(1 + r)^2$.
+   - $₱24,200.00 = P(1.10)^2 = 1.21 P$.
+4. Solve for $P$:
+   - $P = \frac{₱24,200.00}{1.21} = ₱20,000.00$.
+5. Verify:
+   - Year 1: $20,000 \times 1.10 = 22,000$.
+   - Year 2: $22,000 \times 1.10 = 24,200$.
+   - Year 3: $24,200 \times 1.10 = 26,620$ (Confirmed!).
+
+Common Trap: Finding the rate as $10\%$ but subtracting $₱2,420$ twice linearly ($24,200 - 4,840 = ₱19,360$).
+Exam Tip: Consecutive ratio $\frac{A_3}{A_2} = 1 + r \implies r = 10.0\%$. $P = \frac{A_2}{(1.10)^2} = ₱20,000.00$.","Correct. Survives elimination because ₱26,620 / ₱24,200 = 1.10 (10.0% rate), and ₱24,200 / 1.21 = ₱20,000.00 principal.","Eliminated because ₱22,000.00 is the amount after Year 1.","Eliminated because 12.0% rate fails the consecutive year ratio.","Eliminated because 8.0% rate fails the equations.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"An investment of ₱40,000.00 is placed for 1.0 year at a nominal interest rate of 10.0% per annum. How much additional compound interest is earned if interest is compounded SEMI-ANNUALLY instead of ANNUALLY?","₱100.00","₱200.00","₱150.00","₱50.00","A","Step-by-Step Solution:
+1. Calculate interest earned with ANNUAL compounding ($m = 1$):
+   - $CI_{\text{annual}} = ₱40,000.00 \times 0.10 = ₱4,000.00$.
+2. Calculate interest earned with SEMI-ANNUAL compounding ($m = 2$):
+   - Semi-annual rate $i = \frac{10.0\%}{2} = 5.0\% = 0.05$.
+   - Number of periods $n = 1.0 \times 2 = 2\text{ periods}$.
+   - $A_{\text{semi}} = ₱40,000.00 \times (1 + 0.05)^2 = ₱40,000.00 \times 1.1025 = ₱44,100.00$.
+   - $CI_{\text{semi}} = ₱44,100.00 - ₱40,000.00 = ₱4,100.00$.
+3. Compute the extra interest earned:
+   - $\text{Additional Interest} = CI_{\text{semi}} - CI_{\text{annual}} = ₱4,100.00 - ₱4,000.00 = ₱100.00$.
+4. (Shortcut: Extra interest is simply 1 period of interest on the first period's interest: $P \times i^2 = 40,000 \times (0.05)^2 = 40,000 \times 0.0025 = ₱100.00$).
+
+Common Trap: Doubling the annual interest ($₱8,000.00$) or miscalculating $(1.05)^2 = 1.10$.
+Exam Tip: Extra interest from semi-annual compounding in Year 1 is $P \times \left(\frac{r}{2}\right)^2 = 40,000 \times (0.05)^2 = ₱100.00$.","Correct. Survives elimination because semi-annual interest is ₱4,100.00 vs annual interest of ₱4,000.00, yielding exactly ₱100.00 additional return.","Eliminated because ₱200.00 is an overestimate.","Eliminated because ₱150.00 is a calculation slip.","Eliminated because ₱50.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A municipal bond obligation of ₱121,000.00 matures in exactly 2.0 years. If the benchmark financial discount rate is 10.0% per annum compounded annually, what is the exact present value of the obligation today?","₱100,000.00","₱96,800.00","₱99,000.00","₱102,000.00","A","Step-by-Step Solution:
+1. Apply the compound interest Present Value formula:
+   - $PV = \frac{A}{(1 + r)^t}$.
+2. Substitute maturity value $A = ₱121,000.00, r = 0.10, t = 2.0\text{ years}$:
+   - $PV = \frac{₱121,000.00}{(1 + 0.10)^2} = \frac{₱121,000.00}{(1.10)^2}$.
+3. Expand denominator:
+   - $(1.10)^2 = 1.21$.
+4. Solve for $PV$:
+   - $PV = \frac{₱121,000.00}{1.21} = ₱100,000.00$.
+5. Verify:
+   - $₱100,000.00 \times (1.10)^2 = ₱100,000.00 \times 1.21 = ₱121,000.00$ (Confirmed!).
+
+Common Trap: Subtracting 20% from future value ($121,000 \times 0.80 = ₱96,800.00$, Option B), which applies simple discount to future amount.
+Exam Tip: Present Value divides by the compound factor $(1+r)^t = 1.21 \implies \frac{121,000}{1.21} = ₱100,000.00$.","Correct. Survives elimination because ₱121,000.00 / (1.10)^2 = ₱121,000 / 1.21 = ₱100,000.00 present value.","Eliminated because ₱96,800.00 subtracts 20% directly from future value.","Eliminated because ₱99,000.00 assumes simple interest discounting.","Eliminated because ₱102,000.00 is an underestimate of discount.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"
+"A cooperative loan of ₱63,000.00 is to be amortized in two equal annual installments, the first paid at the end of Year 1 and the second at the end of Year 2. If interest is charged at 10.0% per annum compounded annually, what is the amount of each equal annual installment?","₱36,300.00","₱34,650.00","₱37,800.00","₱35,000.00","A","Step-by-Step Solution:
+1. Apply the present value of an annuity equation:
+   - $P = \frac{x}{1 + r} + \frac{x}{(1 + r)^2}$, where $x$ is the equal annual installment.
+2. Substitute $P = ₱63,000.00$ and $r = 0.10$:
+   - $₱63,000.00 = \frac{x}{1.10} + \frac{x}{1.21}$.
+3. Find common denominator ($1.21$):
+   - $₱63,000.00 = \frac{1.10x + x}{1.21} = \frac{2.10x}{1.21}$.
+4. Solve for installment $x$:
+   - $x = \frac{₱63,000.00 \times 1.21}{2.10}$.
+   - Notice that $\frac{63,000.00}{2.10} = 30,000.00$.
+   - $x = 30,000.00 \times 1.21 = ₱36,300.00$.
+5. Verify loan amortization schedule:
+   - End of Year 1: Interest $= 63,000 \times 0.10 = 6,300 \implies \text{Balance} = 69,300 - 36,300 = ₱33,000.00$.
+   - End of Year 2: Interest $= 33,000 \times 0.10 = 3,300 \implies \text{Balance} = 36,300 - 36,300 = ₱0.00$ (Fully amortized!).
+
+Common Trap: Simply dividing total debt with 20% interest by 2 ($\frac{63,000 \times 1.20}{2} = ₱37,800.00$, Option C), ignoring principal reduction after Year 1.
+Exam Tip: Present value balance: $\frac{x}{1.1} + \frac{x}{1.21} = 63,000 \implies x = ₱36,300.00$.","Correct. Survives elimination because Year 1 PV (₱33,000) + Year 2 PV (₱30,000) = ₱63,000.00, giving installment ₱36,300.00.","Eliminated because ₱34,650.00 leaves a residual loan balance.","Eliminated because ₱37,800.00 ignores principal reduction after Year 1.","Eliminated because ₱35,000.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Compound interest | Very Difficult | Batch 047"

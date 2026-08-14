@@ -1,0 +1,30 @@
+{
+  "scope_key": "Numerical_Ability-Basic_Operations-Arithmetic___Number_Properties-Decimals",
+  "created_at": "2026-08-14T14:54:46.000Z",
+  "updated_at": "2026-08-14T14:54:46.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
+    "8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c",
+    "7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d",
+    "6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e",
+    "5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f",
+    "4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a",
+    "3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b",
+    "2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c",
+    "1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d",
+    "0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e"
+  ],
+  "records": [
+    { "id": "q_009_1", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_2", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_3", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_4", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_5", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_6", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_7", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_8", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_9", "added_at": "2026-08-14T14:54:46.000Z" },
+    { "id": "q_009_10", "added_at": "2026-08-14T14:54:46.000Z" }
+  ]
+}

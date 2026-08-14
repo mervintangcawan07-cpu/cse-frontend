@@ -1,0 +1,162 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A city mayor proposed installing automated red-light enforcement cameras at all major intersections to generate municipal revenue from traffic violation fines. The mayor claimed: 'Because automated cameras operate 24/7 and never accept bribes, implementing this camera network will double municipal traffic fine revenues within six months.' Which of the following, if true, exposes the most serious WEAKNESS in the mayor's revenue projection?","Motorists who become aware of the automated cameras will strictly obey traffic signals to avoid penalties, causing total traffic violations to plummet by 80% within three months.","Automated camera optical lenses require periodic manual cleaning during rainy weather.","Municipal traffic signal controllers consume electrical energy from the local power grid.","Some urban motorists prefer commuting on two-wheeled motorcycles rather than four-wheeled cars.","A","Step-by-Step Solution:
+1. Identify the mayor's premise and revenue projection:
+   - Premise: Automated cameras catch 100% of violations 24/7 without corruption.
+   - Projected Outcome: Total traffic fine revenues will DOUBLE.
+2. Uncover the underlying behavioural flaw:
+   - Fines require traffic violations to occur. If automated enforcement successfully deters drivers, motorists will stop running red lights.
+   - If red-light running drops by 80%, the volume of collectible fines collapses, making a doubling of revenue impossible.
+3. Match with answer choices:
+   - Option A directly identifies this classic deterrence-induced revenue collapse (self-defeating policy projection).
+4. Evaluate incorrect alternatives:
+   - Option B: Routine maintenance does not undermine macro revenue dynamics.
+   - Option C: Electrical power usage is a standard operating cost, not a revenue refutation.
+   - Option D: Motorcycle commuting is irrelevant.
+
+Common Trap: Assuming strict enforcement always yields more revenue, forgetting that strict enforcement changes human behavior to avoid penalties.
+Exam Tip: A revenue projection based on penalizing a behavior is fundamentally weakened if the penalty successfully eliminates that behavior.","Correct. Survives elimination because if strict camera enforcement deters 80% of red-light violations, the pool of collectible fines will collapse rather than double.","Eliminated because routine lens cleaning is a minor operational task that does not affect revenue logic.","Eliminated because standard electricity consumption does not invalidate revenue projections.","Eliminated because vehicle type preference is irrelevant to red-light deterrence.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: To reduce long queuing times at licensing branches, the Land Transportation Office (LTO) launched an online portal for driver's license renewals. An analyst concluded that this online portal will completely eliminate physical queues at LTO branches nationwide. Which of the following, if true, reveals the most significant WEAKNESS in the analyst's conclusion?","The majority of daily visitors at LTO branches are individuals applying for new student permits, practical driving examinations, and vehicle inspections—none of which can be completed via the online renewal portal.","The online portal automatically transmits digital confirmation receipts to applicant email addresses.","Computer database servers generate thermal heat during intensive data transaction processing.","LTO branch offices maintain air-conditioned customer waiting lounges.","A","Step-by-Step Solution:
+1. Deconstruct the analyst's conclusion:
+   - Feature: Online portal for license *renewals*.
+   - Stated Conclusion: Physical queues will be *completely eliminated* across all LTO branches.
+2. Identify the scope mismatch:
+   - License renewals are only one of dozens of services provided by LTO branches.
+   - If new driver applicants, practical driving test takers, and motor vehicle inspection applicants constitute the vast majority of visitors, moving renewals online will leave the main bulk of physical queues completely intact.
+3. Conclude:
+   - Option A directly exposes this scope mismatch and invalidates the claim of total queue elimination.
+4. Evaluate incorrect alternatives:
+   - Option B: Email receipts are a standard feature, not a weakness.
+   - Option C: Server thermodynamics are irrelevant.
+   - Option D: Air conditioning is a comfort feature, irrelevant to queue elimination.
+
+Common Trap: Believing that moving one service online eliminates crowds created by all other non-digital services.
+Exam Tip: An argument claiming a targeted solution solves 100% of a problem is fatally weakened if the targeted sub-problem accounts for only a minor fraction of the total volume.","Correct. Survives elimination because moving only renewals online cannot eliminate queues when the majority of visitors require in-person practical tests and vehicle inspections.","Eliminated because digital email receipts support portal operations rather than weaken the argument.","Eliminated because server heat generation is an irrelevant technical distraction.","Eliminated because waiting room air conditioning does not affect customer queuing volume.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: A provincial governor proposed constructing a four-lane highway through an agricultural valley to spur industrialization. The governor argued that the highway will guarantee economic prosperity for local agrarian farmers by turning their farmlands into prime industrial real estate. Which of the following, if true, points out a critical WEAKNESS in the governor's argument regarding farmer prosperity?","Converting fertile agricultural lands into industrial real estate causes tenant farmers to lose their agricultural livelihoods and land tenure, while speculative profits accrue almost exclusively to corporate land developers.","The highway will be paved with asphalt concrete rather than Portland cement concrete.","Industrial manufacturing facilities require dedicated high-voltage electrical grid connections.","Agricultural cereal crops grow at a faster biological rate during the rainy season.","A","Step-by-Step Solution:
+1. Trace the governor's causal claim:
+   - Action: Build highway through valley $\to$ Farmlands become industrial real estate.
+   - Target Beneficiary: Local agrarian farmers will achieve \"guaranteed economic prosperity\".
+2. Expose the socio-economic reality:
+   - Most rural farmers are tenant farmers or smallholders who do not own commercial development rights.
+   - Industrialization leads to eviction, loss of farming livelihood, and displacement, while speculative capital gains flow to wealthy corporate developers.
+3. Conclude:
+   - Option A directly disproves the claim that the highway ensures prosperity for local agrarian farmers.
+4. Evaluate incorrect alternatives:
+   - Option B: Paving materials (asphalt vs cement) are irrelevant to farmer prosperity.
+   - Option C: High-voltage power is standard engineering, not a refutation.
+   - Option D: Seasonal crop growth rates are irrelevant to land conversion impacts.
+
+Common Trap: Assuming real estate price appreciation automatically enriches the tenant farmers who work the land.
+Exam Tip: An argument claiming infrastructure enriches vulnerable workers is weakened if evidence shows the project displaces workers while enriching third-party developers.","Correct. Survives elimination because industrial real estate conversion displaces tenant farmers from their livelihoods, concentrating financial windfalls in corporate developers.","Eliminated because paving material specifications have zero bearing on socio-economic farmer welfare.","Eliminated because power grid requirements are standard infrastructure details.","Eliminated because biological crop seasonality is irrelevant to real estate displacement.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: An educational advocacy group proposed replacing all public high school science laboratories with virtual computer simulations to reduce government procurement costs. The group asserted that virtual simulations provide an identical educational experience to hands-on physical laboratory experiments without any drawback. Which of the following, if true, represents the most substantial WEAKNESS in the group's assertion?","Virtual simulations cannot teach tactile manual dexterity, physical instrument calibration, safe handling of hazardous chemical reagents, or troubleshooting real-world experimental apparatus errors.","Virtual simulation software can be installed on standard desktop computer monitors.","Physical laboratory glassware can shatter if dropped on concrete floors.","High school science teachers hold bachelor's degrees in secondary education.","A","Step-by-Step Solution:
+1. Identify the group's absolute claim:
+   - Claim: Virtual simulations provide an *identical* educational experience to physical labs *without any drawback*.
+2. Find the pedagogical deficit of digital simulations:
+   - Science laboratories are designed to teach tactile motor skills, physical handling of glassware and chemicals, calibration of physical sensors, and managing unpredictable physical phenomena (troubleshooting). Flat-screen simulations cannot replicate these physical skills.
+3. Conclude:
+   - Option A directly disproves the claim of an \"identical experience without drawback\".
+4. Evaluate incorrect alternatives:
+   - Option B: Desktop compatibility is an operational convenience, not a weakness.
+   - Option C: Glassware fragility is a reason advocates dislike physical labs, not a weakness in the counter-argument.
+   - Option D: Teacher credentials are irrelevant to lab simulation efficacy.
+
+Common Trap: Confusing digital convenience with true pedagogical equivalence.
+Exam Tip: Claims of \"zero drawback\" in replacing physical skills training with software are decisively refuted by identifying irreplaceable tactile and physical competencies.","Correct. Survives elimination because software simulations cannot replicate tactile motor skills, chemical handling safety, or physical apparatus troubleshooting.","Eliminated because monitor installation capability is a feature of software, not a pedagogical critique.","Eliminated because glassware fragility is an inherent trait of physical labs, not a refutation of tactile learning.","Eliminated because teacher qualifications do not address the simulation modality gap.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: A municipal water utility decided to increase water tariffs by 50% across all residential tiers to fund pipeline capital expenditures. The utility board argued: 'Because water is an absolute biological necessity with zero consumer substitutes, residential water consumption will remain completely unchanged, guaranteeing a 50% increase in utility revenue.' Which of the following, if true, highlights a fundamental WEAKNESS in the board's economic reasoning?","While baseline drinking water is price-inelastic, households substantially curtail discretionary water use (vehicle washing, garden watering, long showers) when tariffs rise, resulting in a significant drop in total billed volume.","Municipal water flows through distribution pipelines under pressurized hydraulic force.","Commercial bottled spring water is widely sold in retail grocery supermarkets.","The water utility employs licensed civil and hydraulic engineers.","A","Step-by-Step Solution:
+1. Analyze the board's economic premise:
+   - Premise: Water is a biological necessity with zero substitutes $\implies$ Price elasticity is zero (consumption volume will remain 100% unchanged).
+   - Conclusion: Tariff hike of 50% guarantees exactly a 50% surge in total revenue.
+2. Identify the elasticity error:
+   - While *essential survival water* (drinking, cooking) is inelastic, a massive proportion of residential water use is *discretionary* (washing cars, lawn watering, recreational use).
+   - When prices rise 50%, households drastically reduce discretionary water use. Total billed volume drops, preventing the utility from achieving its 50% revenue growth target.
+3. Conclude:
+   - Option A accurately identifies this fundamental price elasticity flaw.
+4. Evaluate incorrect alternatives:
+   - Option B: Hydraulic pressure is basic physics, irrelevant to economics.
+   - Option C: Bottled water is a substitute for drinking, but not for tap showers or laundry.
+   - Option D: Staff engineering credentials do not validate revenue projections.
+
+Common Trap: Believing that because drinking water is essential, all residential water consumption is completely price-inelastic.
+Exam Tip: Economic weakness: Conflating inelastic baseline survival needs with elastic discretionary consumption volumes.","Correct. Survives elimination because residential consumers curtail elastic discretionary water uses (lawns, car washing) when prices spike, reducing total volume and revenue.","Eliminated because hydraulic physics principles do not govern consumer price elasticity.","Eliminated because bottled water does not serve as a practical substitute for municipal piped utility water.","Eliminated because staff engineering credentials do not validate financial revenue forecasts.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: To resolve chronic physician shortages in remote rural health units (RHUs), a department proposed doubling starting salaries for rural doctors. Proponents claimed that this salary increase alone will guarantee 100% physician retention in remote rural assignments. Which of the following, if true, reveals the most serious WEAKNESS in the proponents' claim?","Surveys of rural physicians indicate that severe diagnostic equipment shortages, professional isolation, lack of quality schools for their children, and absence of career advancement are the primary drivers of resignation.","Medical doctors complete four years of undergraduate study and four years of medical school.","Rural health units maintain inventories of essential antibiotic medications.","High public sector salaries are subject to standard statutory withholding taxes.","A","Step-by-Step Solution:
+1. Examine the single-factor claim:
+   - Proposed Solution: Double starting financial compensation.
+   - Claim: Higher compensation *alone* will guarantee 100% physician retention in rural posts.
+2. Uncover the non-monetary causes of rural doctor flight:
+   - Physicians leave rural areas not merely for salary, but because they lack basic hospital tools, face professional isolation, cannot access quality schooling for their families, and cannot advance their clinical specializations.
+   - Doubling salaries without fixing working conditions, family infrastructure, and career pathways fails to solve the root problem.
+3. Conclude:
+   - Option A directly exposes the weakness of the single-factor monetary solution.
+4. Evaluate incorrect alternatives:
+   - Option B: Years of medical schooling is background context, not a policy weakness.
+   - Option C: Antibiotic inventories are standard operational details.
+   - Option D: Income taxes apply to all high earners and do not invalidate salary increases.
+
+Common Trap: Assuming financial compensation is the only factor governing professional career retention.
+Exam Tip: When a policy claims money alone guarantees 100% retention, it is fatally weakened by evidence showing retention is driven primarily by non-monetary structural and working conditions.","Correct. Survives elimination because non-monetary factors like diagnostic equipment shortages, family schooling, and career isolation are the primary drivers of physician resignation.","Eliminated because standard medical education timelines do not address rural retention dynamics.","Eliminated because pharmacy inventory is an operational detail that does not explain doctor retention.","Eliminated because taxation applies uniformly and does not negate the value of compensation.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: A municipal council enacted an ordinance prohibiting informal street vendors from operating on public sidewalks, arguing that this ban will permanently eradicate urban poverty by forcing displaced vendors into formal salaried corporate employment. Which of the following, if true, exposes the most critical WEAKNESS in the council's reasoning?","The local formal job market experiences high structural unemployment and enforces educational degree barriers that most informal street vendors cannot meet, leaving displaced vendors completely destitute.","Street vendors provide low-cost cooked meals to daily low-wage commuters.","Public sidewalks accommodate high volumes of daily pedestrian foot traffic.","Municipal police officers conduct foot patrols to enforce municipal ordinances.","A","Step-by-Step Solution:
+1. Deconstruct the council's causal chain:
+   - Ban street vending $\to$ Vendors enter formal corporate jobs $\to$ Urban poverty eradicated.
+2. Identify the economic barrier:
+   - Street vendors participate in the informal economy precisely because they lack college degrees and formal qualifications required by the corporate sector.
+   - If the formal sector has high unemployment and strict degree prerequisites, banning vending does NOT create corporate jobs for them; it destroys their only source of survival income, deepening poverty.
+3. Conclude:
+   - Option A exposes this fatal economic disconnect.
+4. Evaluate incorrect alternatives:
+   - Option B: Low-cost meal provision is a consumer benefit, but Option A strikes directly at the core poverty eradication claim.
+   - Option C: Sidewalk traffic is physical context, not an economic critique.
+   - Option D: Police patrols describe enforcement, not a policy flaw.
+
+Common Trap: Assuming banning an informal activity automatically creates formal alternative employment for disqualified workers.
+Exam Tip: A policy assuming informal workers will transition to formal corporate jobs is weakened if structural hiring barriers prevent them from obtaining those jobs.","Correct. Survives elimination because formal job markets enforce degree requirements and suffer from unemployment, leaving displaced vendors destitute rather than employed.","Eliminated because while street food is affordable, Option A more directly destroys the council's poverty eradication logic.","Eliminated because pedestrian congestion describes physical sidewalk use, not economic policy efficacy.","Eliminated because police patrol duties do not address employment market realities.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: A public transport consortium proposed replacing all 60-passenger city buses with 10-passenger electric vans, arguing that smaller vans travel faster in traffic and will therefore eliminate overall urban road congestion. Which of the following, if true, reveals the fatal WEAKNESS in the consortium's proposal?","Transporting the equivalent total passenger volume using 10-passenger vans requires six times more vehicles on the road, drastically increasing total road space occupancy and worsening traffic gridlock.","Electric passenger vans produce zero harmful tailpipe carbon exhaust emissions.","City transit buses are painted in standardized municipal fleet colors.","Commercial bus drivers are required to hold professional heavy-vehicle driver's licenses.","A","Step-by-Step Solution:
+1. Examine the proposed vehicle substitution:
+   - Replace 1 large bus (60 passengers) with small vans (10 passengers each).
+   - Claim: Smaller vans travel faster, so this will *eliminate urban road congestion*.
+2. Calculate the vehicular spatial impact:
+   - To transport 60 passengers:
+     - Approach A: 1 Bus occupies approximately 12 meters of road length.
+     - Approach B: 6 Vans occupy $6 \times 5\text{ meters} = 30\text{ meters}$ of road length plus safety following distances!
+   - Replacing high-capacity buses with low-capacity vans multiplies the number of vehicles on the road by six, consuming vastly more physical road space and causing severe traffic gridlock.
+3. Conclude:
+   - Option A is the mathematically fatal critique of the proposal.
+4. Evaluate incorrect alternatives:
+   - Option B: Zero emissions is an environmental positive, not a traffic weakness.
+   - Option C: Paint color is a cosmetic triviality.
+   - Option D: Driver license classification is irrelevant to road geometry.
+
+Common Trap: Focusing on individual vehicle agility while ignoring macro fleet volume geometry.
+Exam Tip: Geometric road capacity weakness: Replacing high-capacity transit with low-capacity vehicles multiplies vehicle counts and worsens road congestion.","Correct. Survives elimination because replacing 60-passenger buses with 10-passenger vans requires 6 times more vehicles, vastly increasing road space occupancy and paralyzing traffic.","Eliminated because zero emissions is an environmental advantage, not a traffic congestion flaw.","Eliminated because bus paint colors have zero impact on traffic flow.","Eliminated because driver licensing categories do not alter physical road geometry.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: An anti-corruption commission proposed requiring all public procurement officers to undergo mandatory quarterly polygraph (lie-detector) examinations, asserting that polygraph testing will definitively identify 100% of corrupt personnel. Which of the following, if true, points out the most decisive WEAKNESS in the commission's assertion?","Scientific studies and psychological consensus establish that polygraph tests have high false-positive and false-negative error rates because they measure physiological stress rather than factual truthfulness.","Polygraph testing instruments require electrical power from rechargeable batteries.","Public procurement officers manage official bidding documents for government agencies.","Quarter-end agency financial statements are audited by independent accounting examiners.","A","Step-by-Step Solution:
+1. Analyze the commission's absolute claim:
+   - Mechanism: Quarterly polygraph examinations.
+   - Claim: Will *definitively identify 100%* of corrupt personnel.
+2. Evaluate the scientific reliability of the tool:
+   - Polygraph machines measure autonomic nervous system responses (pulse, skin conductance, respiration) associated with general physiological stress, anxiety, or nervousness—NOT lies.
+   - Honest individuals can fail due to test anxiety (false positive), while sociopaths or trained deceivers can pass easily (false negative).
+   - High error rates make polygraphs scientifically invalid as a 100% definitive corruption detector.
+3. Conclude:
+   - Option A directly exposes this fatal scientific flaw.
+4. Evaluate incorrect alternatives:
+   - Option B: Battery power is a trivial technical requirement.
+   - Option C: Descriptive job duties do not validate polygraph accuracy.
+   - Option D: External auditing is standard practice, irrelevant to lie-detector biology.
+
+Common Trap: Believing pop-culture portrayals of lie detectors as infallible scientific machines.
+Exam Tip: Polygraph tests measure physiological anxiety, not truthfulness; citing high false-positive/false-negative error rates decisively weakens claims of 100% accuracy.","Correct. Survives elimination because polygraphs measure autonomic physiological stress rather than truth, resulting in high error rates that negate claims of 100% definitive detection.","Eliminated because battery power requirements are a minor technical detail.","Eliminated because describing procurement officer duties does not prove polygraph accuracy.","Eliminated because external financial audits do not address polygraph diagnostic reliability.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"
+"Passage: A regional agriculture department urged smallholder farming communities to convert 100% of their crop farmlands exclusively to export avocado orchards. The department argued that because avocados command premium prices in international markets, monoculture avocado farming guarantees permanent economic stability for all farming families. Which of the following, if true, reveals the most severe WEAKNESS in the department's recommendation?","Monoculture farming exposes smallholder families to catastrophic crop failure from species-specific blights, international price volatility, and severe food insecurity during the 5-to-7-year gestation period before trees produce fruit.","Avocado fruits contain high concentrations of natural heart-healthy monounsaturated fatty acids.","International commercial fruit export markets operate across different global time zones.","Agricultural extension officers conduct scheduled on-site farm productivity evaluations.","A","Step-by-Step Solution:
+1. Deconstruct the monoculture recommendation:
+   - Recommendation: Convert 100% of farmlands exclusively to export avocados.
+   - Promise: Guarantees permanent economic stability for smallholder families.
+2. Expose the structural vulnerabilities of 100% cash-crop monoculture:
+   - Vulnerability 1 (Gestation Period): Avocado trees take 5 to 7 years to bear commercial fruit. How do smallholder families buy food during these 7 income-free years?
+   - Vulnerability 2 (Biological Risk): 100% monoculture makes farms hyper-susceptible to single-pathogen blights.
+   - Vulnerability 3 (Market Shock): Complete dependence on foreign export prices leaves farmers defenseless against global price crashes.
+3. Conclude:
+   - Option A comprehensively highlights these catastrophic vulnerabilities.
+4. Evaluate incorrect alternatives:
+   - Option B: Nutritional benefits do not solve farm bankruptcy or 7-year gestation hunger.
+   - Option C: Global time zones are irrelevant to farm economics.
+   - Option D: Extension officer visits do not mitigate monoculture financial risk.
+
+Common Trap: Focusing on premium export prices while ignoring the multi-year gestation period and monoculture blight risks.
+Exam Tip: An argument promising economic stability from 100% monoculture conversion is decisively weakened by multi-year tree maturation delays, disease vulnerability, and market price shocks.","Correct. Survives elimination because a 5-7 year fruit gestation period, disease vulnerability, and export price shocks create severe poverty and food insecurity rather than stability.","Eliminated because dietary nutritional benefits do not address farm financial and survival risks.","Eliminated because international time zones have zero impact on agricultural viability.","Eliminated because extension officer visits do not prevent structural monoculture failure.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Weakness of argument | Very Difficult | Batch 097"

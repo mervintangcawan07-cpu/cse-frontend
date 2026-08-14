@@ -1,0 +1,163 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Evaluate the following mathematical expression following the strict order of operations (GEMDAS):
+
+$$\frac{-4^2 + 3 \times |5 - 17| - (-2)^3}{\sqrt{144} - [2^3 - (5 \times -2 + 3)]}$$","-\frac{28}{3}","\frac{28}{3}","-4","-\frac{14}{5}","A","Step-by-Step Solution:
+1. Simplify the numerator:
+   - Note that $-4^2 = -(4^2) = -16$ (since the exponent applies only to 4).
+   - Evaluate the absolute value: $|5 - 17| = |-12| = 12$. Then $3 \times 12 = 36$.
+   - Evaluate $(-2)^3 = -8$. Subtracting gives $-(-8) = +8$.
+   - Total Numerator = $-16 + 36 + 8 = 28$.
+2. Simplify the denominator:
+   - $\sqrt{144} = 12$.
+   - Inside the nested brackets: $5 \times -2 + 3 = -10 + 3 = -7$.
+   - $2^3 - (-7) = 8 + 7 = 15$.
+   - Total Denominator = $12 - 15 = -3$.
+3. Divide: $\frac{28}{-3} = -\frac{28}{3}$.
+
+Common Trap: Treating $-4^2$ as $(-4)^2 = +16$, which erroneously alters the numerator.
+Exam Tip: In Philippine civil service exams, $-x^2$ is always negative without parentheses.","Correct. Survives elimination because the exact numerator is 28 and denominator is -3, yielding -28/3.","Eliminated because the negative sign in the denominator makes the overall rational result negative.","Eliminated because miscalculating the denominator as -7 yields -4, which violates bracket evaluation.","Eliminated because this results from an arithmetic error in the absolute value product.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Determine the exact value of the following complex nested expression:
+
+$$18 - 2 \cdot [ 3^2 - \{ 4 - (6 - 2 \cdot 5) \} ] \div (-1)^5$$","16","20","-16","24","B","Step-by-Step Solution:
+1. Evaluate innermost parentheses: $(6 - 2 \cdot 5) = 6 - 10 = -4$.
+2. Evaluate curly braces: $\{ 4 - (-4) \} = 4 + 4 = 8$.
+3. Evaluate square brackets: $[ 3^2 - 8 ] = [ 9 - 8 ] = 1$.
+4. Expression becomes: $18 - 2 \cdot [1] \div (-1)^5$.
+5. Evaluate power: $(-1)^5 = -1$.
+6. Perform multiplication and division from left to right:
+   - $2 \cdot 1 = 2$.
+   - $2 \div (-1) = -2$.
+7. Perform subtraction: $18 - (-2) = 18 + 2 = 20$.
+
+Common Trap: Subtracting before performing multiplication/division (e.g., $18 - 2 = 16$), which violates GEMDAS hierarchy.
+Exam Tip: Always perform multiplication and division strictly from left to right before addition/subtraction.","Eliminated because subtracting 18 - 2 first violates the operational order.","Correct. Survives elimination because resolving the nested grouping yields 1, and 18 - (-2) = 20.","Eliminated because of sign reversal errors when handling the odd power of -1.","Eliminated because this results from miscalculating the innermost bracket as +4 instead of -4.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Evaluate the rational expression:
+
+$$\frac{2^{-3} \times (4^2 - 2^4) + | -7 \times 3 + 6 |}{(3 - 5)^2 \times 2 - [4^2 \div 8 \times 2]}$$","\frac{15}{4}","\frac{5}{2}","-\frac{15}{4}","\frac{21}{8}","A","Step-by-Step Solution:
+1. Numerator:
+   - $4^2 - 2^4 = 16 - 16 = 0$. Thus, $2^{-3} \times 0 = 0$.
+   - $| -7 \times 3 + 6 | = | -21 + 6 | = | -15 | = 15$.
+   - Total Numerator = $0 + 15 = 15$.
+2. Denominator:
+   - $(3 - 5)^2 \times 2 = (-2)^2 \times 2 = 4 \times 2 = 8$.
+   - Inside bracket: $4^2 \div 8 \times 2 = 16 \div 8 \times 2 = 2 \times 2 = 4$.
+   - Total Denominator = $8 - 4 = 4$.
+3. Fraction: $\frac{15}{4}$.
+
+Common Trap: In the bracket $16 \div 8 \times 2$, multiplying $8 \times 2 = 16$ first to get $16 \div 16 = 1$. Multiplication does NOT have precedence over division; they have equal priority left-to-right.
+Exam Tip: In PEMDAS, M and D are of equal rank and must be computed from left to right.","Correct. Survives elimination because numerator is 15 and denominator is 4, giving exactly 15/4.","Eliminated because miscalculating the bracket as 1 gives a denominator of 7, not yielding 5/2.","Eliminated because both numerator and denominator evaluate to positive quantities.","Eliminated because ignoring the zero property of the first term leads to incorrect fractional addition.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Simplify the numerical expression:
+
+$$-5^2 - (-3)^3 + \frac{6 \times (-2)^2 - 12 \div 3 \times 2}{| -4 |^2 - 2^4 + 1}$$","18","-18","68","22","A","Step-by-Step Solution:
+1. $-5^2 = -(5^2) = -25$.
+2. $-(-3)^3 = -(-27) = +27$.
+3. Fraction Numerator:
+   - $(-2)^2 = 4$. $6 \times 4 = 24$.
+   - $12 \div 3 \times 2 = 4 \times 2 = 8$.
+   - Numerator = $24 - 8 = 16$.
+4. Fraction Denominator:
+   - $|-4|^2 = 4^2 = 16$.
+   - $2^4 = 16$.
+   - Denominator = $16 - 16 + 1 = 1$.
+   - Fraction Value = $\frac{16}{1} = 16$.
+5. Combine all terms: $-25 + 27 + 16 = 2 + 16 = 18$.
+
+Common Trap: Evaluating $-5^2$ as $+25$ or $(-3)^3$ as $+27$.
+Exam Tip: Distinguish carefully between a negative sign inside parentheses $(-a)^n$ versus outside $-a^n$.","Correct. Survives elimination because -25 + 27 + 16 = 18.","Eliminated because sign errors on the leading base produce -18.","Eliminated because treating -5^2 as +25 leads to an inflated value of 68.","Eliminated because miscalculating the division term in the numerator yields 22.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Compute the exact value of the mixed operational expression:
+
+$$\left[ \frac{3}{4} - \left( \frac{1}{2} \right)^2 \right] \div \left( \frac{5}{6} - \frac{2}{3} \times \frac{3}{4} \right) + (-2)^2 \times \frac{3}{8}$$","3","\frac{9}{4}","\frac{3}{2}","1","A","Step-by-Step Solution:
+1. First Bracket: $\left[ \frac{3}{4} - \frac{1}{4} \right] = \frac{2}{4} = \frac{1}{2}$.
+2. Second Parentheses:
+   - Multiply first: $\frac{2}{3} \times \frac{3}{4} = \frac{6}{12} = \frac{1}{2}$.
+   - Subtract: $\frac{5}{6} - \frac{1}{2} = \frac{5}{6} - \frac{3}{6} = \frac{2}{6} = \frac{1}{3}$.
+3. Perform Division: $\frac{1}{2} \div \frac{1}{3} = \frac{1}{2} \times 3 = \frac{3}{2}$.
+4. Addition Term: $(-2)^2 \times \frac{3}{8} = 4 \times \frac{3}{8} = \frac{12}{8} = \frac{3}{2}$.
+5. Final Sum: $\frac{3}{2} + \frac{3}{2} = \frac{6}{2} = 3$.
+
+Common Trap: Subtracting $\frac{5}{6} - \frac{2}{3}$ before multiplying by $\frac{3}{4}$.
+Exam Tip: Fraction bars and brackets isolate operations, but internal PEMDAS rules still apply inside each bracket.","Correct. Survives elimination because the division yields 3/2 and the added term is 3/2, summing to 3.","Eliminated because of incorrect common denominator calculation in the second bracket.","Eliminated because forgetting to add the second term leaves only the quotient 3/2.","Eliminated because inverting the division operands results in 1.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Evaluate the following fraction containing nested powers and absolute values:
+
+$$\frac{3 \times [4 - (2 - 5)^2] + |-18 \div 2|}{2^3 - 3 \times (5 - 2^2)}$$","-\frac{6}{5}","\frac{6}{5}","-2","-\frac{3}{5}","A","Step-by-Step Solution:
+1. Numerator:
+   - $(2 - 5) = -3$. $(-3)^2 = 9$.
+   - $4 - 9 = -5$.
+   - $3 \times (-5) = -15$.
+   - $|-18 \div 2| = |-9| = 9$.
+   - Total Numerator = $-15 + 9 = -6$.
+2. Denominator:
+   - $2^3 = 8$.
+   - $2^2 = 4$. $(5 - 4) = 1$.
+   - $3 \times 1 = 3$.
+   - Total Denominator = $8 - 3 = 5$.
+3. Final Quotient: $\frac{-6}{5} = -\frac{6}{5}$.
+
+Common Trap: Forgetting the absolute value makes $|-9| = +9$.
+Exam Tip: Compute the entire numerator and entire denominator separately before simplifying the final fraction.","Correct. Survives elimination because numerator is -6 and denominator is 5, giving -6/5.","Eliminated because dropping the negative sign in the numerator yields positive 6/5.","Eliminated because miscalculating the denominator as 3 yields -2.","Eliminated because failing to square (-3) leads to arithmetic discrepancies.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"What is the value of the following expression under strict standard mathematical order of operations:
+
+$$48 \div 2(9 + 3) - [ (2^3 - 3) \times 4 - 2^2 \times 3 ]$$","280","-6","16","296","A","Step-by-Step Solution:
+1. First Term: $48 \div 2(9 + 3) = 48 \div 2(12)$.
+   - In standard algebraic order of operations, implied multiplication has the same priority as explicit multiplication and division, evaluated strictly from left to right:
+   - $48 \div 2 = 24$.
+   - $24 \times 12 = 288$.
+2. Bracket Term: $[ (2^3 - 3) \times 4 - 2^2 \times 3 ]$
+   - $(8 - 3) = 5$.
+   - $5 \times 4 = 20$.
+   - $2^2 \times 3 = 4 \times 3 = 12$.
+   - Bracket Value = $20 - 12 = 8$.
+3. Final Result: $288 - 8 = 280$.
+
+Common Trap: Performing $2 \times 12 = 24$ before dividing 48, which gives $48 \div 24 = 2$, yielding $2 - 8 = -6$.
+Exam Tip: Left-to-right rule applies strictly to division and multiplication strings.","Correct. Survives elimination because 48 / 2 * 12 = 288, and 288 - 8 = 280.","Eliminated because giving implied multiplication precedence gives 2 - 8 = -6, violating standard left-to-right rules.","Eliminated because arithmetic errors in the bracket yield incorrect subtrahends.","Eliminated because adding instead of subtracting the bracket yields 296.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Evaluate the rational expression:
+
+$$\frac{|-3^2 + 5| - 2^3 \div 4 \times 3}{[(-1)^4 \times 6 - 8 \div 2] \times (-2)}$$","\frac{1}{2}","-\frac{1}{2}","1","-\frac{1}{4}","A","Step-by-Step Solution:
+1. Numerator:
+   - $-3^2 = -9$. $-9 + 5 = -4$. $|-4| = 4$.
+   - $2^3 \div 4 \times 3 = 8 \div 4 \times 3 = 2 \times 3 = 6$.
+   - Total Numerator = $4 - 6 = -2$.
+2. Denominator:
+   - $(-1)^4 = 1$. $1 \times 6 = 6$.
+   - $8 \div 2 = 4$.
+   - Inside bracket = $6 - 4 = 2$.
+   - Multiply by $-2$: $2 \times (-2) = -4$.
+   - Total Denominator = $-4$.
+3. Final Quotient: $\frac{-2}{-4} = \frac{1}{2}$.
+
+Common Trap: Dividing a negative by a negative yields a positive number.
+Exam Tip: Keep track of negative signs at each step to avoid sign inversion in the final fraction.","Correct. Survives elimination because -2 / -4 = +1/2.","Eliminated because negative divided by negative produces a positive result.","Eliminated because miscalculating the numerator as -4 gives -4 / -4 = 1.","Eliminated because arithmetic errors in the denominator yield incorrect magnitudes.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Simplify the numerical expression:
+
+$$100 - [ 4 \times \{ 3^2 - (2^3 - 5) \} + 2 \times | -6 \times 2 + 4 | ] \div 4$$","90","85","95","70","A","Step-by-Step Solution:
+1. Innermost parentheses: $(2^3 - 5) = 8 - 5 = 3$.
+2. Curly braces: $\{ 3^2 - 3 \} = 9 - 3 = 6$.
+3. Multiply: $4 \times 6 = 24$.
+4. Absolute value term: $| -6 \times 2 + 4 | = | -12 + 4 | = | -8 | = 8$.
+5. Multiply: $2 \times 8 = 16$.
+6. Bracket sum: $24 + 16 = 40$.
+7. Divide by 4: $40 \div 4 = 10$.
+8. Final subtraction: $100 - 10 = 90$.
+
+Common Trap: Subtracting 100 - 40 first before dividing by 4. Division has precedence over outer subtraction.
+Exam Tip: Brackets group terms, but the division attached to the bracket must be evaluated before subtracting from 100.","Correct. Survives elimination because bracket evaluates to 40, 40 / 4 = 10, and 100 - 10 = 90.","Eliminated because dividing only the second term by 4 results in 85.","Eliminated because forgetting the factor of 4 in the first term leads to 95.","Eliminated because subtracting 100 - 40 first gives 60 / 4 = 15, yielding erroneous results.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"
+"Evaluate the following fraction:
+
+$$\frac{( -2 )^4 - 2^4 + [ 3 \times (-4) - (-2)^2 ]}{2 - 3 \times | 1 - 2 \times 3 |}$$","\frac{16}{13}","-\frac{16}{13}","\frac{8}{13}","\frac{16}{17}","A","Step-by-Step Solution:
+1. Numerator:
+   - $(-2)^4 = 16$.
+   - $2^4 = 16$.
+   - $(-2)^4 - 2^4 = 16 - 16 = 0$.
+   - Inside bracket: $3 \times (-4) = -12$.
+   - $(-2)^2 = 4$. $-12 - 4 = -16$.
+   - Total Numerator = $0 + (-16) = -16$.
+2. Denominator:
+   - Inside absolute value: $1 - 2 \times 3 = 1 - 6 = -5$.
+   - $|-5| = 5$.
+   - $3 \times 5 = 15$.
+   - Total Denominator = $2 - 15 = -13$.
+3. Final Quotient: $\frac{-16}{-13} = \frac{16}{13}$.
+
+Common Trap: Believing $(-2)^4 - 2^4 = 32$. Since $(-2)^4 = 16$ and $2^4 = 16$, their difference is 0.
+Exam Tip: Negative divided by negative is positive.","Correct. Survives elimination because numerator is -16 and denominator is -13, resulting in +16/13.","Eliminated because dropping the negative sign cancellation yields -16/13.","Eliminated because miscalculating the bracket as -8 yields 8/13.","Eliminated because adding 2 + 15 in the denominator gives 17 instead of 2 - 15 = -13.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Order of operations | Very Difficult | Batch 007"

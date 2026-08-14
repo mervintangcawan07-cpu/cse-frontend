@@ -1,0 +1,157 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A nationwide audit of the Government Service Insurance System (GSIS) found that while 92% of pension processing requests submitted via the online mobile portal were disbursed within 48 hours, only 58% of claims processed through physical branch kiosks met the same 48-hour standard. However, 84% of pensioners over the age of 75 continued to submit their claims via physical branch kiosks due to limited smartphone access or digital biometric barriers. Which of the following INFERENCES is most strongly supported by the passage?","The majority of pensioners over 75 years old rely on a claim submission method that has a lower rate of 48-hour disbursement than the mobile portal.","Pensioners under the age of 75 never visit physical branch kiosks to process their pension claims.","The GSIS will completely decommission all physical branch kiosks by the end of the current fiscal year.","Paper-based claims at branch kiosks are more susceptible to fraudulent tampering than digital mobile claims.","A","Step-by-Step Solution:
+1. Synthesize the relevant factual data points:
+   - Mobile portal: 92% disbursed within 48 hours.
+   - Physical branch kiosks: 58% disbursed within 48 hours ($58\% < 92\%$).
+   - Pensioners over 75: 84% (a clear majority) use physical branch kiosks.
+2. Formulate the deductive inference:
+   - Because 84% of pensioners over 75 use branch kiosks, and branch kiosks achieve a lower 48-hour disbursement rate (58%) compared to the mobile app (92%), the majority of pensioners over 75 rely on a method with lower 48-hour turnaround.
+   - Option A is a direct, mathematically airtight synthesis.
+3. Evaluate incorrect alternatives:
+   - Option B: Extreme absolutist claim (\"never visit\") unsupported by the text.
+   - Option C: Total kiosk closure is speculative and unmentioned.
+   - Option D: Fraud susceptibility was not evaluated in the audit data.
+
+Common Trap: Choosing speculative policy predictions (Option C) rather than integrating the stated statistical percentages.
+Exam Tip: An inference is a factual conclusion directly derived from combining two or more explicit premises in the text.","Correct. Survives elimination because 84% of over-75 pensioners use kiosks, which have a lower 48-hour disbursement rate (58%) than the app (92%).","Eliminated because the passage does not claim younger pensioners never use kiosks.","Eliminated because future kiosk decommissioning is unstated speculation.","Eliminated because fraud rates were not analyzed in the passage.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: Under Republic Act No. 7305 (Magna Carta for Public Health Workers), public health personnel assigned to hazard zones are entitled to monthly hazard allowances ranging from 15% to 25% of their basic salary based on risk severity. Hospital X is classified as a low-risk facility (qualifying for a 15% hazard allowance), while Hospital Y is a high-risk infectious disease facility (qualifying for a 25% hazard allowance). Nurse Althea and Nurse Brian earn the same basic salary of PHP 35,000, but Nurse Althea works at Hospital Y while Nurse Brian works at Hospital X. What can be INFERRED regarding their compensation?","Nurse Althea receives a higher monthly hazard allowance than Nurse Brian.","Nurse Brian does not receive any monthly hazard allowance.","Nurse Althea's take-home pay is completely exempt from statutory withholding taxes.","Hospital X has a larger patient bed capacity than Hospital Y.","A","Step-by-Step Solution:
+1. Compute the hazard allowance for each nurse:
+   - Common base salary = PHP 35,000.
+   - Nurse Althea (Hospital Y, high-risk): Allowance $= 25\% \times \text{PHP } 35,000 = \text{PHP } 8,750$.
+   - Nurse Brian (Hospital X, low-risk): Allowance $= 15\% \times \text{PHP } 35,000 = \text{PHP } 5,250$.
+2. Compare the allowances:
+   - $\text{PHP } 8,750 > \text{PHP } 5,250$.
+   - Nurse Althea receives a higher monthly hazard allowance than Nurse Brian.
+3. Conclude:
+   - Option A is mathematically and legally proven.
+4. Evaluate incorrect alternatives:
+   - Option B: Brian receives a 15% allowance (PHP 5,250), not zero.
+   - Option C: Tax exemption rules are unmentioned.
+   - Option D: Bed capacity is unstated.
+
+Common Trap: Assuming low-risk means zero hazard pay.
+Exam Tip: Apply the quantitative rates from the law to identical baseline salaries to deduce the comparative financial outcome.","Correct. Survives elimination because 25% of PHP 35,000 (PHP 8,750) is mathematically greater than 15% of PHP 35,000 (PHP 5,250).","Eliminated because Nurse Brian is entitled to a 15% hazard allowance.","Eliminated because tax exemption status is unmentioned.","Eliminated because physical bed capacity is outside the scope of the passage.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: In a government agency with 200 total personnel, all 40 division chiefs are required to attend the quarterly budget performance review, while non-supervisory staff may attend voluntarily. At yesterday's review meeting, exactly 75 employees were present in the conference hall, and all 40 division chiefs were confirmed to be in attendance. Which of the following can be INFERRED with mathematical certainty?","Exactly 35 non-supervisory employees attended yesterday's budget performance review meeting.","Exactly 125 employees were on approved official leave yesterday.","None of the non-supervisory employees attended the review meeting.","All division chiefs voted against the proposed budget realignment.","A","Step-by-Step Solution:
+1. Identify the constituent groups present at the meeting:
+   - Total attendees present = 75.
+   - Division chiefs present = 40 (all 40 attended).
+2. Calculate the non-supervisory attendees:
+   - $\text{Non-supervisory attendees} = \text{Total attendees} - \text{Division chiefs present}$.
+   - $\text{Non-supervisory attendees} = 75 - 40 = 35$.
+3. Conclude:
+   - Exactly 35 non-supervisory employees attended the meeting.
+   - Option A is a mathematical certainty.
+4. Evaluate incorrect alternatives:
+   - Option B: Absent from the meeting ($200 - 75 = 125$) does not mean on official leave; they could simply be working at their desks.
+   - Option C: Factually false (35 attended).
+   - Option D: Voting behavior is unmentioned.
+
+Common Trap: Assuming employees not in the meeting are absent on leave (they could simply be working at their desks).
+Exam Tip: Use basic set subtraction: $\text{Total Present} (75) - \text{Mandatory Chiefs} (40) = \text{Voluntary Staff} (35)$.","Correct. Survives elimination because subtracting the 40 confirmed division chiefs from the 75 total attendees leaves exactly 35 non-supervisory employees.","Eliminated because non-attendees could be working at their desks rather than on leave.","Eliminated because 35 non-supervisory employees were confirmed present.","Eliminated because voting outcomes are unmentioned.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: A regional energy assessment observed that in provinces where rooftop solar adoption grew by more than 30% between 2021 and 2024, peak daytime grid electricity demand dropped by an average of 18%. In contrast, in provinces where rooftop solar adoption grew by less than 5%, peak daytime grid demand rose by an average of 12% over the same period. Which inference is most strongly supported by the observations?","There is an inverse relationship between substantial rooftop solar adoption and peak daytime electricity demand on the regional utility grid.","Rooftop solar panels generate more electrical energy during evening hours than during midday hours.","Fossil-fuel power plants in the province will be completely decommissioned within three years.","Provinces with high solar adoption experience cooler average ambient temperatures than low adoption provinces.","A","Step-by-Step Solution:
+1. Analyze the comparative empirical trends:
+   - High Solar Growth ($>30\%$) $\implies$ Peak Grid Demand Decreased ($-18\%$).
+   - Low Solar Growth ($<5\%$) $\implies$ Peak Grid Demand Increased ($+12\%$).
+2. Identify the mathematical relationship:
+   - As solar adoption goes up, daytime grid demand goes down; as solar adoption remains low, grid demand goes up.
+   - This represents an INVERSE (negative) statistical correlation.
+3. Conclude:
+   - Option A accurately describes this inverse relationship.
+4. Evaluate incorrect alternatives:
+   - Option B: Solar panels generate power from sunlight during the day, not at night.
+   - Option C: Total decommissioning of fossil plants is an unstated, unrealistic extreme.
+   - Option D: Temperature differences are completely unmentioned.
+
+Common Trap: Selecting unmentioned technical or weather claims instead of summarizing the correlation.
+Exam Tip: When variable $X$ increases while variable $Y$ decreases, the variables exhibit an inverse relationship.","Correct. Survives elimination because the data demonstrates an inverse relationship: high solar growth correlates with declining peak daytime grid demand.","Eliminated because solar panels do not generate more energy at night.","Eliminated because complete decommissioning of power plants is unstated speculation.","Eliminated because ambient temperature data was not measured in the study.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: Under Philippine environmental regulations, industrial facilities generating more than 100 kilograms of hazardous waste per month must employ a full-time certified Pollution Control Officer (PCO). Facility Alpha generates 85 kg per month, Facility Beta generates 140 kg per month, and Facility Gamma generates 220 kg per month. Which statement can be properly INFERRED?","Both Facility Beta and Facility Gamma are legally mandated to employ a full-time certified Pollution Control Officer.","Facility Alpha is legally prohibited from employing a Pollution Control Officer.","Facility Gamma generates a higher volume of municipal solid plastic waste than Facility Beta.","Facility Alpha will be penalized for environmental regulatory non-compliance.","A","Step-by-Step Solution:
+1. Apply the regulatory threshold ($> 100\text{ kg/month}$):
+   - Facility Alpha: $85\text{ kg} \le 100\text{ kg} \implies$ Not mandated under this threshold.
+   - Facility Beta: $140\text{ kg} > 100\text{ kg} \implies$ Legally mandated to employ full-time PCO.
+   - Facility Gamma: $220\text{ kg} > 100\text{ kg} \implies$ Legally mandated to employ full-time PCO.
+2. Derive the valid inference:
+   - Both Facility Beta and Facility Gamma exceed the 100 kg threshold and are legally mandated to employ a full-time certified PCO.
+   - Option A is directly supported.
+3. Evaluate incorrect alternatives:
+   - Option B: Alpha is not required, but is certainly not *prohibited* from voluntarily hiring one.
+   - Option C: Hazardous waste is distinct from municipal solid plastic waste.
+   - Option D: Alpha is below the threshold, so it is not in violation.
+
+Common Trap: Assuming not being required to hire a PCO means being legally prohibited from hiring one.
+Exam Tip: A mandatory minimum threshold ($>100\text{ kg}$) creates an obligation for entities above it without prohibiting voluntary compliance below it.","Correct. Survives elimination because Beta (140 kg) and Gamma (220 kg) both exceed the statutory 100 kg/month threshold requiring a full-time certified PCO.","Eliminated because Alpha is not prohibited from voluntarily employing a PCO.","Eliminated because hazardous waste volume does not measure municipal plastic waste.","Eliminated because Alpha is fully compliant with the regulation.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: A public library assessment found that municipal branches providing free high-speed Wi-Fi and air-conditioned co-working desks recorded three times more daily visitors than branches providing only traditional book borrowing stacks. Furthermore, 70% of visitors at the co-working branches brought their own portable laptop computers. What can be INFERRED from the passage?","Many patrons visiting the co-working library branches utilize the facility for activities involving personal electronic devices.","Traditional print books will be completely removed from all municipal public library branches.","Library branches equipped with air-conditioning have larger physical floor areas than non-air-conditioned branches.","Public libraries with co-working spaces charge admission fees to all visitors.","A","Step-by-Step Solution:
+1. Identify the factual premise:
+   - 70% of visitors at co-working branches brought their own portable laptop computers.
+2. Formulate the direct inference:
+   - Because 70% of patrons brought laptops, a substantial proportion of visitors are using the library for tasks requiring personal electronic computing devices.
+   - Option A is a moderate, factual, and fully supported inference.
+3. Evaluate incorrect alternatives:
+   - Option B: Total removal of print books is an extreme, unstated extrapolation.
+   - Option C: Physical floor area dimensions were not reported.
+   - Option D: Admission fees are unmentioned and contradict public library mandates.
+
+Common Trap: Over-extrapolating to predict the death of traditional physical books (Option B).
+Exam Tip: Sound inferences remain moderate and closely tethered to the explicit empirical facts.","Correct. Survives elimination because 70% of visitors bringing laptops directly supports the inference that many patrons utilize the facility for electronic device activities.","Eliminated because total removal of physical books is unsupported speculation.","Eliminated because floor area dimensions were not evaluated.","Eliminated because admission fees are unmentioned and unsupported.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: Under the Ease of Doing Business Act (RA 11032), the failure of an agency to approve or disapprove a business permit within the prescribed statutory timeframe—provided that all required documents were submitted and all official fees paid—results in the automatic approval of the application by operation of law. Entrepreneur Cruz submitted a complete permit application with all mandatory attachments and paid all official fees on June 1 for a transaction with a 3-day statutory deadline. By June 15, the licensing office had issued neither an approval nor a rejection. Which of the following is a VALID INFERENCE?","Entrepreneur Cruz's permit application is deemed automatically approved by operation of law under RA 11032.","The entrepreneur must re-submit all application forms and pay the official fees a second time.","The licensing office is legally granted an indefinite processing extension for internal audits.","Automatic approval provisions apply exclusively to foreign multinational corporate investments.","A","Step-by-Step Solution:
+1. Audit the statutory conditions for automatic approval:
+   - Condition 1: Complete documentary submissions (Met: Cruz submitted all required attachments).
+   - Condition 2: Full payment of official fees (Met: Cruz paid all fees).
+   - Condition 3: Expiration of statutory processing deadline without action (Met: 14 days elapsed on a 3-day deadline without approval or rejection).
+2. Deduce the legal outcome:
+   - All statutory conditions for automatic approval under RA 11032 are satisfied.
+   - The permit is deemed automatically approved by operation of law.
+   - Option A is legally airtight and valid.
+3. Evaluate incorrect alternatives:
+   - Option B: Re-submission and re-payment are contrary to the law.
+   - Option C: Indefinite extensions violate the core purpose of ARTA.
+   - Option D: The law applies to all business applicants, not just foreign corporations.
+
+Common Trap: Believing the applicant must start over when the government delays processing.
+Exam Tip: When all statutory prerequisites are met and the agency fails to act within the deadline, automatic approval takes effect by operation of law.","Correct. Survives elimination because Cruz fulfilled all requirements and the statutory deadline lapsed without agency action, triggering automatic approval by operation of law.","Eliminated because re-application is contrary to the automatic approval mandate.","Eliminated because agencies cannot grant themselves indefinite extensions under RA 11032.","Eliminated because automatic approval applies to all qualifying business applicants.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: A secondary curriculum study revealed that public high school students in the STEM strand spent an average of 14 hours per week in science laboratory practicals, whereas students in the HUMSS strand spent an average of 2 hours per week in science laboratories but 16 hours per week in research writing workshops. Which inference is most securely supported?","STEM strand students spent substantially more weekly time in science laboratory practicals than HUMSS strand students.","HUMSS strand students achieve lower average cumulative GPAs than STEM strand students.","High school science laboratories will be closed to all non-STEM academic tracks.","HUMSS strand graduates are legally barred from enrolling in tertiary science degree programs.","A","Step-by-Step Solution:
+1. Extract the laboratory time data:
+   - STEM students: 14 hours per week in science labs.
+   - HUMSS students: 2 hours per week in science labs.
+2. Compare the weekly hours:
+   - $14\text{ hours/week} > 2\text{ hours/week}$.
+   - STEM students spent 12 more hours per week (7 times more time) in science laboratories than HUMSS students.
+3. Conclude:
+   - Option A is a direct, undeniable factual inference.
+4. Evaluate incorrect alternatives:
+   - Option B: GPA comparisons are unmentioned.
+   - Option C: Laboratory closures are unsupported speculation.
+   - Option D: University degree eligibility restrictions are unstated.
+
+Common Trap: Inferring student academic competence (GPAs) from differences in curriculum time allocation.
+Exam Tip: Stick strictly to the quantitative comparison established in the passage ($14\text{ hours} > 2\text{ hours}$).","Correct. Survives elimination because the data directly proves STEM students spend 14 hours/week in science labs compared to 2 hours/week for HUMSS students.","Eliminated because cumulative GPA data was not measured in the study.","Eliminated because lab access restrictions are unsupported speculation.","Eliminated because tertiary enrollment rules are unmentioned.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: During a scheduled system migration, a government bureau announced that its central database servers would be offline from 8:00 PM Friday until 6:00 AM Monday. During this maintenance window, all online public certificate verification portals were completely inaccessible. Citizen Reyes attempted to verify an official certificate online at 2:00 PM on Saturday. What can be properly INFERRED?","Citizen Reyes was unable to successfully access the online certificate verification service at the time of the attempt.","Citizen Reyes's official certificate was confirmed to be fraudulent.","The bureau's physical regional offices were open for in-person document authentication on Saturday afternoon.","The database migration was completed 24 hours ahead of the scheduled deadline.","A","Step-by-Step Solution:
+1. Check the downtime interval:
+   - Maintenance window: Friday 8:00 PM to Monday 6:00 AM.
+   - During this entire window, online verification was completely inaccessible.
+2. Map the citizen's attempt time:
+   - Citizen Reyes attempted online verification at 2:00 PM on Saturday.
+   - Saturday 2:00 PM falls squarely within the Friday night to Monday morning downtime window.
+3. Deduce the outcome:
+   - Citizen Reyes could not access the service at that time due to the scheduled server offline status.
+   - Option A is a factual certainty.
+4. Evaluate incorrect alternatives:
+   - Option B: Inability to connect does not mean the document is fake.
+   - Option C: Weekend office hours are unmentioned.
+   - Option D: Early completion is unstated.
+
+Common Trap: Conflating a website downtime failure with document fraud.
+Exam Tip: Time interval mapping: If event falls within the blackout window, the dependent service is inaccessible.","Correct. Survives elimination because Saturday 2:00 PM falls within the announced Friday 8 PM to Monday 6 AM offline maintenance window.","Eliminated because server downtime does not indicate document invalidity or fraud.","Eliminated because weekend physical office operations are unmentioned.","Eliminated because early server restoration is unsupported speculation.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"
+"Passage: A regional agricultural report noted that organic fertilizer was applied to 40% of the rice farms in the province, while the remaining 60% used synthetic chemical fertilizers. Farms treated with organic fertilizer had an average production cost that was 25% lower per hectare than synthetic-treated farms, although their average harvest yield was 8% lower per hectare. Which of the following is a sound INFERENCE?","While organic rice farmlands had lower average yields per hectare than synthetic-fertilizer farms, they also incurred lower average production costs per hectare.","Organic farming will completely displace synthetic chemical fertilizer usage across the province within five years.","Synthetic chemical fertilizer is legally prohibited under municipal agricultural ordinances.","Farmlands using organic fertilizers suffered higher rates of insect pest damage.","A","Step-by-Step Solution:
+1. Extract the dual characteristics of organic farms relative to synthetic farms:
+   - Metric 1 (Cost): Production cost was 25% lower per hectare.
+   - Metric 2 (Yield): Harvest yield was 8% lower per hectare.
+2. Synthesize both metrics:
+   - Organic rice farms exhibited both lower costs per hectare and lower yields per hectare compared to synthetic fertilizer farms.
+   - Option A captures both explicit empirical findings accurately and neutrally.
+3. Evaluate incorrect alternatives:
+   - Option B: Total market displacement in 5 years is speculative extrapolation.
+   - Option C: Synthetic fertilizers are used on 60% of farms, so they are clearly not prohibited.
+   - Option D: Pest damage metrics were not discussed.
+
+Common Trap: Speculating on future market adoption rates instead of summarizing the comparative data.
+Exam Tip: A sound inference accurately synthesizes the multi-variable data points (costs vs yields) presented in the text.","Correct. Survives elimination because the passage explicitly documents both the 25% cost reduction and the 8% yield reduction on organic farms relative to synthetic farms.","Eliminated because future fertilizer market displacement is unsupported speculation.","Eliminated because synthetic fertilizer is actively used on 60% of farms.","Eliminated because pest damage rates were not evaluated in the report.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Inference | Very Difficult | Batch 092"

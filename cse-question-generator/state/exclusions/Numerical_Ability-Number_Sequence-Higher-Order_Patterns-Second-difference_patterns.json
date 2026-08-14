@@ -1,0 +1,30 @@
+{
+  "scope_key": "Numerical_Ability-Number_Sequence-Higher-Order_Patterns-Second-difference_patterns",
+  "created_at": "2026-08-14T15:04:58.000Z",
+  "updated_at": "2026-08-14T15:04:58.000Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2",
+    "a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3",
+    "b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4",
+    "c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5",
+    "d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6",
+    "e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7",
+    "f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8",
+    "a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9",
+    "b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0",
+    "c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1"
+  ],
+  "records": [
+    { "id": "q_029_1", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_2", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_3", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_4", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_5", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_6", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_7", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_8", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_9", "added_at": "2026-08-14T15:04:58.000Z" },
+    { "id": "q_029_10", "added_at": "2026-08-14T15:04:58.000Z" }
+  ]
+}

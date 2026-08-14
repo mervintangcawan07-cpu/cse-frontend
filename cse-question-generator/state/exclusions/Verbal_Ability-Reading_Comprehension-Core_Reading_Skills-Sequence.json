@@ -1,0 +1,80 @@
+{
+  "scope_key": "Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Sequence",
+  "created_at": "2026-08-14T14:45:33.038Z",
+  "updated_at": "2026-08-14T14:45:33.040Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "b51e494364e7a2a4c7d8d8baf6f06a8692b5af270a2abf75dfcf6718fb345899",
+    "7c4d6519497ad19046f4e53628a8862c0d690feb2426e7c04d9bb52ee31643b3",
+    "bb47f03efb7824b562ba563b85f2e9aee8c1931e8760520b8b94605431ddf671",
+    "8bccf2140b5675399eaffb713f4f350092c1598939a22aeb5ebb9be38d9e3f59",
+    "05a2b34c6356bf41752bf73390b370b1ab9f3ba32a2e80ac882631249fcc075f",
+    "3fa68fe3ca433d4b55c5b927ee2eb80b91242ec2269750b3dcfeb141b4c6c47f",
+    "cc27984818f7029499ee773bfdc76fc3955c2d2887b6d2eb61708d2dcf88652b",
+    "e6e846af440223019740c1af0a95f2708d5f1e89c02f8ef1a97408dbbea0f9a1",
+    "7831126973afeaac0e3f198c19fc22ebb1d154f962a686286d1c0832e2cd1146",
+    "ebdde57888c5a7da5f36617df64faeaf59503f3edad350feb347d0a14b538c26"
+  ],
+  "records": [
+    {
+      "id": "q_1786718733038_5czbsz",
+      "hash": "b51e494364e7a2a4c7d8d8baf6f06a8692b5af270a2abf75dfcf6718fb345899",
+      "normalized": "under republic act no 9184 the government procurement reform act and its 2016 revised implementing rules and regulations competitive public bidding fo",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733038_qex5ut",
+      "hash": "7c4d6519497ad19046f4e53628a8862c0d690feb2426e7c04d9bb52ee31643b3",
+      "normalized": "the philippine national budget process mandated by the constitution and executive issuances comprises four distinct sequential phases managed by the d",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733038_g6lg6l",
+      "hash": "bb47f03efb7824b562ba563b85f2e9aee8c1931e8760520b8b94605431ddf671",
+      "normalized": "administrative disciplinary proceedings against civil service personnel under the 2017 rules on administrative cases in the civil service raccs follow",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733038_4xvn70",
+      "hash": "8bccf2140b5675399eaffb713f4f350092c1598939a22aeb5ebb9be38d9e3f59",
+      "normalized": "in environmental governance applying for an environmental compliance certificate ecc through the environmental management bureau emb under presidentia",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733038_7tdcro",
+      "hash": "05a2b34c6356bf41752bf73390b370b1ab9f3ba32a2e80ac882631249fcc075f",
+      "normalized": "under the philippine disaster risk reduction and management act ra 10121 the national disaster risk reduction and management council ndrrmc manages hy",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733038_4h63e7",
+      "hash": "3fa68fe3ca433d4b55c5b927ee2eb80b91242ec2269750b3dcfeb141b4c6c47f",
+      "normalized": "the passage of a bill into statutory law under the 1987 philippine constitution follows an exacting bicameral legislative timeline a proposed measure ",
+      "added_at": "2026-08-14T14:45:33.038Z"
+    },
+    {
+      "id": "q_1786718733039_n41mbz",
+      "hash": "cc27984818f7029499ee773bfdc76fc3955c2d2887b6d2eb61708d2dcf88652b",
+      "normalized": "in public sector performance management under the civil service commissions strategic performance management system spms government agencies execute a",
+      "added_at": "2026-08-14T14:45:33.039Z"
+    },
+    {
+      "id": "q_1786718733039_t7637q",
+      "hash": "e6e846af440223019740c1af0a95f2708d5f1e89c02f8ef1a97408dbbea0f9a1",
+      "normalized": "when an indigent citizen seeks judicial relief through the katarungang pambarangay system under republic act no 7160 the local government code the dis",
+      "added_at": "2026-08-14T14:45:33.039Z"
+    },
+    {
+      "id": "q_1786718733039_rp3gf4",
+      "hash": "7831126973afeaac0e3f198c19fc22ebb1d154f962a686286d1c0832e2cd1146",
+      "normalized": "a comprehensive commission on audit coa compliance and financial audit of a government corporation progresses through a standardized chronological met",
+      "added_at": "2026-08-14T14:45:33.039Z"
+    },
+    {
+      "id": "q_1786718733040_yj7s1k",
+      "hash": "ebdde57888c5a7da5f36617df64faeaf59503f3edad350feb347d0a14b538c26",
+      "normalized": "in public infrastructure project delivery the department of public works and highways dpwh follows a strict fivestage project development lifecycle th",
+      "added_at": "2026-08-14T14:45:33.040Z"
+    }
+  ]
+}

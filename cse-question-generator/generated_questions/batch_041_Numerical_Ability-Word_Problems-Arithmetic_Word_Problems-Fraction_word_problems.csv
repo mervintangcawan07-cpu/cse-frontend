@@ -1,0 +1,171 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A government department was allocated an annual operating budget. In the first quarter, it spent $\frac{1}{4}$ of the total budget. In the second quarter, it spent $\frac{2}{5}$ of the REMAINING budget. In the third quarter, it spent $\frac{1}{3}$ of what remained after the second quarter. If ₱3,600,000.00 remains for the fourth quarter, what was the original annual operating budget?","₱12,000,000.00","₱10,800,000.00","₱14,400,000.00","₱15,000,000.00","A","Step-by-Step Solution:
+1. Define total budget as $B$.
+2. Track remaining fractions after each quarterly expenditure:
+   - After Q1 ($\frac{1}{4}$ spent): $\text{Remaining}_1 = B \left(1 - \frac{1}{4}\right) = \frac{3}{4} B$.
+   - After Q2 ($\frac{2}{5}$ of remaining spent): $\text{Remaining}_2 = \frac{3}{4} B \left(1 - \frac{2}{5}\right) = \frac{3}{4} B \times \frac{3}{5} = \frac{9}{20} B$.
+   - After Q3 ($\frac{1}{3}$ of remaining spent): $\text{Remaining}_3 = \frac{9}{20} B \left(1 - \frac{1}{3}\right) = \frac{9}{20} B \times \frac{2}{3} = \frac{6}{20} B = \frac{3}{10} B$.
+3. Set the Q4 remaining balance equation:
+   - $\frac{3}{10} B = ₱3,600,000.00$.
+4. Solve for $B$:
+   - $B = ₱3,600,000.00 \times \frac{10}{3} = ₱1,200,000.00 \times 10 = ₱12,000,000.00$.
+5. (Verification: Q1 spent $= 3\text{M} \implies 9\text{M}$ left; Q2 spent $= \frac{2}{5}(9\text{M}) = 3.6\text{M} \implies 5.4\text{M}$ left; Q3 spent $= \frac{1}{3}(5.4\text{M}) = 1.8\text{M} \implies 3.6\text{M}$ left).
+
+Common Trap: Adding the fractions directly without compounding remainders ($\frac{1}{4} + \frac{2}{5} + \frac{1}{3} = \frac{59}{60} \implies \frac{1}{60} B = 3.6\text{M} \to 216\text{M}$).
+Exam Tip: Chain the survival fractions: $\left(\frac{3}{4}\right) \times \left(\frac{3}{5}\right) \times \left(\frac{2}{3}\right) = \frac{18}{60} = \frac{3}{10} \implies B = \frac{10}{3}(3.6\text{M}) = 12\text{M}$.","Correct. Survives elimination because the fraction remaining after three stages is (3/4)(3/5)(2/3) = 3/10, giving 3,600,000 / (3/10) = ₱12,000,000.00.","Eliminated because ₱10,800,000.00 assumes 3/9 remaining.","Eliminated because ₱14,400,000.00 is an overestimate.","Eliminated because ₱15,000,000.00 assumes 24% remaining.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A public library has a collection of books. Exactly $\frac{3}{8}$ of the books are non-fiction, $\frac{2}{5}$ of the remainder are reference manuals, and the remaining 360 books are fiction novels. What is the total number of books in the library collection?","960 books","900 books","1,080 books","840 books","A","Step-by-Step Solution:
+1. Let $N$ be the total number of books.
+2. Calculate remaining books after non-fiction:
+   - Non-fiction fraction $= \frac{3}{8}$.
+   - Remainder fraction $= 1 - \frac{3}{8} = \frac{5}{8}$.
+3. Calculate reference manuals fraction:
+   - Reference manuals $= \frac{2}{5} \times \frac{5}{8} = \frac{2}{8} = \frac{1}{4}$.
+4. Compute remaining fraction for fiction novels:
+   - Fiction fraction $= \frac{5}{8} - \frac{2}{8} = \frac{3}{8}$.
+5. Set up equation with known fiction count:
+   - $\frac{3}{8} N = 360\text{ books}$.
+6. Solve for $N$:
+   - $N = 360 \times \frac{8}{3} = 120 \times 8 = 960\text{ books}$.
+7. Verify:
+   - Non-fiction: $\frac{3}{8}(960) = 360$.
+   - Remainder: $960 - 360 = 600$.
+   - Reference: $\frac{2}{5}(600) = 240$.
+   - Fiction: $600 - 240 = 360$ (Confirmed!).
+
+Common Trap: Subtracting $\frac{3}{8} + \frac{2}{5} = \frac{31}{40} \implies \frac{9}{40} N = 360 \implies N = 1,600$.
+Exam Tip: $\frac{2}{5}$ applies only to the $\frac{5}{8}$ remainder: $\left(1 - \frac{2}{5}\right) \times \frac{5}{8} = \frac{3}{5} \times \frac{5}{8} = \frac{3}{8}$.","Correct. Survives elimination because the remaining fiction novels represent exactly 3/8 of the total collection, giving 360 * (8/3) = 960 books.","Eliminated because 900 books yields 337.5 fiction novels (non-integer).","Eliminated because 1,080 books yields 405 fiction novels.","Eliminated because 840 books yields 315 fiction novels.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A municipal water reservoir is $\frac{3}{5}$ full. When 150.0 liters of water is drawn out for distribution, the reservoir becomes $\frac{1}{3}$ full. What is the total volume capacity of the reservoir in liters?","562.5 liters","500.0 liters","600.0 liters","540.0 liters","A","Step-by-Step Solution:
+1. Define total reservoir capacity as $C$ (in liters).
+2. Formulate volume change equation:
+   - $\text{Initial Volume} - \text{Water Drawn} = \text{Final Volume}$.
+   - $\frac{3}{5} C - 150.0 = \frac{1}{3} C$.
+3. Collect fractional terms:
+   - $\frac{3}{5} C - \frac{1}{3} C = 150.0$.
+4. Find common denominator ($\text{LCD} = 15$):
+   - $\frac{9}{15} C - \frac{5}{15} C = 150.0$.
+   - $\frac{4}{15} C = 150.0$.
+5. Solve for $C$:
+   - $C = \frac{150.0 \times 15}{4} = \frac{2,250.0}{4} = 562.5\text{ liters}$.
+6. Verify:
+   - Initial: $\frac{3}{5}(562.5) = 337.5\text{ L}$.
+   - After drawing 150 L: $337.5 - 150 = 187.5\text{ L}$.
+   - Final check: $\frac{1}{3}(562.5) = 187.5\text{ L}$ (Confirmed!).
+
+Common Trap: Miscalculating $\frac{3}{5} - \frac{1}{3} = \frac{2}{15}$ instead of $\frac{4}{15} \implies C = 1,125\text{ L}$.
+Exam Tip: Cross-multiply fractions: $\frac{3(3) - 1(5)}{15} = \frac{9 - 5}{15} = \frac{4}{15}$.","Correct. Survives elimination because 4/15 of the capacity equals 150.0 liters, giving C = 150 * 15 / 4 = 562.5 liters.","Eliminated because 500.0 liters gives 4/15(500) = 133.3 L != 150 L.","Eliminated because 600.0 liters gives 4/15(600) = 160 L.","Eliminated because 540.0 liters gives 4/15(540) = 144 L.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A civil service officer spends $\frac{1}{3}$ of his monthly salary on housing rent, $\frac{1}{4}$ on food and groceries, and $\frac{1}{6}$ on utilities and transportation. If he deposits the remaining ₱15,000.00 into a cooperative savings account, what is his total monthly salary?","₱60,000.00","₱54,000.00","₱72,000.00","₱48,000.00","A","Step-by-Step Solution:
+1. Sum all expenditure fractions of the total salary $S$:
+   - Total Spent Fraction $= \frac{1}{3} + \frac{1}{4} + \frac{1}{6}$.
+2. Find least common denominator ($\text{LCD} = 12$):
+   - $\text{Total Spent Fraction} = \frac{4}{12} + \frac{3}{12} + \frac{2}{12} = \frac{4 + 3 + 2}{12} = \frac{9}{12} = \frac{3}{4}$.
+3. Calculate remaining savings fraction:
+   - $\text{Savings Fraction} = 1 - \frac{3}{4} = \frac{1}{4}$.
+4. Set up savings equation:
+   - $\frac{1}{4} S = ₱15,000.00$.
+5. Solve for $S$:
+   - $S = ₱15,000.00 \times 4 = ₱60,000.00$.
+6. (Verification: Rent $= ₱20,000$, Food $= ₱15,000$, Utilities $= ₱10,000$. Total spent $= ₱45,000$. Remaining $= ₱60,000 - ₱45,000 = ₱15,000$).
+
+Common Trap: Treating fractions as applying to subsequent remainders rather than the base salary.
+Exam Tip: Check wording: since all fractions are \"of his monthly salary\", add them directly: $\frac{4+3+2}{12} = \frac{3}{4}$.","Correct. Survives elimination because total expenditures equal 3/4 of salary, leaving 1/4 = ₱15,000.00, which gives S = ₱60,000.00.","Eliminated because ₱54,000.00 yields 1/4 = ₱13,500.","Eliminated because ₱72,000.00 yields 1/4 = ₱18,000.","Eliminated because ₱48,000.00 yields 1/4 = ₱12,000.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A roll of fiber optic telecommunications cable was cut into three segments. The first segment is $\frac{2}{7}$ of the total original length, and the second segment is $\frac{3}{5}$ of the REMAINING length. If the third segment measures exactly 120.0 meters, what was the original length of the uncut roll?","420.0 meters","350.0 meters","490.0 meters","380.0 meters","A","Step-by-Step Solution:
+1. Let $L$ be the original uncut length.
+2. Determine length after first cut:
+   - Cut 1 $= \frac{2}{7} L$.
+   - $\text{Remaining}_1 = L - \frac{2}{7} L = \frac{5}{7} L$.
+3. Determine length of second cut:
+   - Cut 2 $= \frac{3}{5} \times \text{Remaining}_1 = \frac{3}{5} \times \frac{5}{7} L = \frac{3}{7} L$.
+4. Determine fractional length of third segment:
+   - Segment 3 $= \text{Remaining}_1 - \text{Cut 2} = \frac{5}{7} L - \frac{3}{7} L = \frac{2}{7} L$.
+5. Set third segment equal to 120.0 meters:
+   - $\frac{2}{7} L = 120.0\text{ meters}$.
+6. Solve for $L$:
+   - $L = 120.0 \times \frac{7}{2} = 60.0 \times 7 = 420.0\text{ meters}$.
+7. Verify:
+   - Cut 1 $= \frac{2}{7}(420) = 120\text{ m} \implies 300\text{ m}$ left.
+   - Cut 2 $= \frac{3}{5}(300) = 180\text{ m} \implies 120\text{ m}$ left. Matches!
+
+Common Trap: Adding $\frac{2}{7} + \frac{3}{5} = \frac{31}{35}$, giving remaining $\frac{4}{35} L = 120 \implies L = 1,050\text{ m}$.
+Exam Tip: $\left(1 - \frac{3}{5}\right) \times \frac{5}{7} = \frac{2}{5} \times \frac{5}{7} = \frac{2}{7}$. $\frac{2}{7} L = 120 \implies L = 420\text{ m}$.","Correct. Survives elimination because the third segment represents 2/7 of the total length, giving L = 120 * (7/2) = 420.0 meters.","Eliminated because 350.0 meters yields third segment 100 meters.","Eliminated because 490.0 meters yields third segment 140 meters.","Eliminated because 380.0 meters is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"In a regional administrative convention, $\frac{5}{9}$ of the participants are female. If $\frac{3}{5}$ of the female participants and $\frac{1}{2}$ of the male participants are licensed professional teachers, what fraction of the total participants are NOT licensed teachers?","\frac{4}{9}","\frac{5}{9}","\frac{1}{2}","\frac{7}{18}","A","Step-by-Step Solution:
+1. Let total participants be represented as 1 (or $N$):
+   - Female fraction $= \frac{5}{9}$.
+   - Male fraction $= 1 - \frac{5}{9} = \frac{4}{9}$.
+2. Calculate licensed teachers in each group:
+   - Female licensed teachers $= \frac{3}{5} \times \frac{5}{9} = \frac{3}{9}$.
+   - Male licensed teachers $= \frac{1}{2} \times \frac{4}{9} = \frac{2}{9}$.
+3. Calculate total fraction of licensed teachers:
+   - $\text{Total Licensed} = \frac{3}{9} + \frac{2}{9} = \frac{5}{9}$.
+4. Compute fraction NOT licensed teachers:
+   - $\text{Not Licensed} = 1 - \frac{5}{9} = \frac{4}{9}$.
+
+Common Trap: Finding the fraction of participants who ARE licensed teachers ($\frac{5}{9}$, Option B) instead of NOT licensed ($\frac{4}{9}$).
+Exam Tip: Licensed fraction is $\frac{3+2}{9} = \frac{5}{9} \implies$ Non-licensed is $1 - \frac{5}{9} = \frac{4}{9}$.","Correct. Survives elimination because licensed teachers comprise 3/9 + 2/9 = 5/9 of the convention, leaving 1 - 5/9 = 4/9 not licensed.","Eliminated because 5/9 is the fraction of participants who ARE licensed teachers.","Eliminated because 1/2 is the unweighted average.","Eliminated because 7/18 is a common denominator error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A cooperative vendor has a crate of mangoes. In the morning, he sells $\frac{1}{2}$ of his mangoes plus 4 additional mangoes. In the afternoon, he sells $\frac{1}{3}$ of the REMAINING mangoes plus 6 additional mangoes. If he has exactly 14 mangoes left at closing, how many mangoes were originally in the crate?","68 mangoes","72 mangoes","64 mangoes","80 mangoes","A","Step-by-Step Solution:
+1. Work backwards from the final remaining count (14 mangoes):
+2. Let $M_{\text{noon}}$ be the count of mangoes remaining at noon before afternoon sales:
+   - Afternoon sales $= \frac{1}{3} M_{\text{noon}} + 6$.
+   - Remaining at closing $= M_{\text{noon}} - \left(\frac{1}{3} M_{\text{noon}} + 6\right) = \frac{2}{3} M_{\text{noon}} - 6$.
+   - Set equal to 14: $\frac{2}{3} M_{\text{noon}} - 6 = 14 \implies \frac{2}{3} M_{\text{noon}} = 20 \implies M_{\text{noon}} = 20 \times \frac{3}{2} = 30\text{ mangoes}$.
+3. Let $M_0$ be the original crate inventory in the morning:
+   - Morning sales $= \frac{1}{2} M_0 + 4$.
+   - Remaining at noon $= M_0 - \left(\frac{1}{2} M_0 + 4\right) = \frac{1}{2} M_0 - 4$.
+   - Set equal to 30: $\frac{1}{2} M_0 - 4 = 30 \implies \frac{1}{2} M_0 = 34 \implies M_0 = 68\text{ mangoes}$.
+4. Verify forward:
+   - Morning: $\frac{68}{2} + 4 = 38$ sold $\implies 68 - 38 = 30$ left.
+   - Afternoon: $\frac{30}{3} + 6 = 16$ sold $\implies 30 - 16 = 14$ left (Confirmed!).
+
+Common Trap: Forgetting to add the 4 and 6 when working backwards ($\frac{14 \times 3/2 \times 2}{1} = 42$).
+Exam Tip: In reverse multi-stage problems: $(14 + 6) \times \frac{3}{2} = 30 \to (30 + 4) \times 2 = 68$.","Correct. Survives elimination because working backwards: (14 + 6) * 3/2 = 30, and (30 + 4) * 2 = 68 mangoes originally.","Eliminated because 72 mangoes leaves 16 at the end.","Eliminated because 64 mangoes leaves 12 at the end.","Eliminated because 80 mangoes leaves 20 at the end.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A storage vessel is $\frac{4}{7}$ full of cooking oil. When $\frac{1}{4}$ of the oil currently in the container is dispensed, exactly 45.0 liters of oil remains in the vessel. What is the total volume capacity of the container in liters?","105.0 liters","98.0 liters","112.0 liters","120.0 liters","A","Step-by-Step Solution:
+1. Define total capacity as $C$ (in liters).
+2. Determine initial oil volume:
+   - $\text{Initial Oil} = \frac{4}{7} C$.
+3. Calculate volume dispensed ($\frac{1}{4}$ of the oil present):
+   - $\text{Oil Dispensed} = \frac{1}{4} \times \left(\frac{4}{7} C\right) = \frac{1}{7} C$.
+4. Calculate remaining oil in the vessel:
+   - $\text{Remaining Oil} = \frac{4}{7} C - \frac{1}{7} C = \frac{3}{7} C$.
+5. Set equal to 45.0 liters:
+   - $\frac{3}{7} C = 45.0$.
+6. Solve for $C$:
+   - $C = 45.0 \times \frac{7}{3} = 15.0 \times 7 = 105.0\text{ liters}$.
+7. Verify:
+   - Initial oil: $\frac{4}{7}(105) = 60\text{ L}$.
+   - Dispensed: $\frac{1}{4}(60) = 15\text{ L}$.
+   - Remaining: $60 - 15 = 45\text{ L}$ (Confirmed!).
+
+Common Trap: Subtracting $\frac{1}{4}$ directly from $\frac{4}{7}$ ($\frac{4}{7} - \frac{1}{4} = \frac{9}{28} \implies C = 140\text{ L}$), forgetting that $\frac{1}{4}$ was of the OIL, not the container capacity.
+Exam Tip: Retained oil is $\left(1 - \frac{1}{4}\right) \times \frac{4}{7} C = \frac{3}{4} \times \frac{4}{7} C = \frac{3}{7} C \implies C = \frac{7}{3}(45) = 105\text{ L}$.","Correct. Survives elimination because 3/7 of total capacity equals 45.0 liters, giving C = 45 * 7 / 3 = 105.0 liters.","Eliminated because 98.0 liters yields 42.0 liters remaining.","Eliminated because 112.0 liters yields 48.0 liters remaining.","Eliminated because 120.0 liters yields 51.4 liters remaining.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"If $\frac{3}{4}$ of an unknown number exceeds $\frac{2}{5}$ of the same number by exactly 42.0, what is the value of the number?","120.0","140.0","100.0","150.0","A","Step-by-Step Solution:
+1. Define the unknown number as $x$.
+2. Formulate algebraic difference equation:
+   - $\frac{3}{4} x - \frac{2}{5} x = 42.0$.
+3. Combine fractions over common denominator ($\text{LCD} = 20$):
+   - $\frac{15}{20} x - \frac{8}{20} x = 42.0$.
+   - $\frac{15 - 8}{20} x = 42.0$.
+   - $\frac{7}{20} x = 42.0$.
+4. Solve for $x$:
+   - $x = 42.0 \times \frac{20}{7} = 6.0 \times 20 = 120.0$.
+5. Verify:
+   - $\frac{3}{4}(120) = 90.0$.
+   - $\frac{2}{5}(120) = 48.0$.
+   - $90.0 - 48.0 = 42.0$ (Confirmed!).
+
+Common Trap: Arithmetic slip in fraction subtraction $\frac{3}{4} - \frac{2}{5} = \frac{1}{1} = 1$.
+Exam Tip: $\frac{7}{20} x = 42 \implies x = \frac{42 \times 20}{7} = 6 \times 20 = 120$.","Correct. Survives elimination because 3/4(120) - 2/5(120) = 90 - 48 = 42.0.","Eliminated because for x = 140, 3/4(140) - 2/5(140) = 105 - 56 = 49 != 42.","Eliminated because for x = 100, 75 - 40 = 35 != 42.","Eliminated because for x = 150, 112.5 - 60 = 52.5 != 42.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"
+"A scholar dedicated $\frac{2}{5}$ of her total study session to Mathematics, $\frac{1}{4}$ of the total session to Science, and the remaining 70.0 minutes to General Information and Ethics. What was the total duration of her study session in hours and minutes?","3 hours and 20 minutes \text{ (or 200.0 minutes)}","3 hours and 45 minutes","3 hours and 00 minutes","2 hours and 50 minutes","A","Step-by-Step Solution:
+1. Sum the fractions spent on Mathematics and Science:
+   - $\text{Math + Science} = \frac{2}{5} + \frac{1}{4}$.
+   - $\text{LCD} = 20 \implies \frac{8}{20} + \frac{5}{20} = \frac{13}{20}$.
+2. Determine fraction remaining for General Information:
+   - $\text{Remaining Fraction} = 1 - \frac{13}{20} = \frac{7}{20}$.
+3. Set up equation with known remaining time (70.0 minutes):
+   - $\frac{7}{20} T = 70.0\text{ minutes}$.
+4. Solve for total time $T$:
+   - $T = 70.0 \times \frac{20}{7} = 10.0 \times 20 = 200.0\text{ minutes}$.
+5. Convert minutes to hours and minutes:
+   - $200.0\text{ minutes} = 3\text{ hours } (180\text{ min}) + 20\text{ minutes} = 3\text{ hours and } 20\text{ minutes}$.
+6. (Verification: Math $= \frac{2}{5}(200) = 80\text{ min}$, Science $= \frac{1}{4}(200) = 50\text{ min}$, GenInfo $= 70\text{ min}$. Sum $= 80 + 50 + 70 = 200\text{ min}$).
+
+Common Trap: Stating $200\text{ minutes} = 2\text{ hours } 20\text{ minutes}$ instead of $3\text{ hours } 20\text{ minutes}$.
+Exam Tip: $\frac{7}{20} T = 70 \implies T = 200\text{ min} = 3\text{ hrs } 20\text{ min}$.","Correct. Survives elimination because 7/20 of the session is 70 minutes, giving total time 200 minutes = 3 hours and 20 minutes.","Eliminated because 3 hours 45 minutes is 225 minutes.","Eliminated because 3 hours 00 minutes is 180 minutes.","Eliminated because 2 hours 50 minutes is 170 minutes.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Fraction word problems | Very Difficult | Batch 041"

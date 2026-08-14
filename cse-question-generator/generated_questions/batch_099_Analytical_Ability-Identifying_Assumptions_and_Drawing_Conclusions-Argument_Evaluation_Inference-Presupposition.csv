@@ -1,0 +1,132 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A government circular states: 'All senior supervisors must resubmit their updated individual performance targets.' Which of the following is a PRESUPPOSITION embedded in the circular?","Senior supervisors have existing individual performance targets that are now being updated.","Senior supervisors have never submitted any performance targets before.","Performance targets are entirely optional for senior supervisors.","Only newly hired personnel are required to submit performance targets.","A","Step-by-Step Solution:
+1. Define Presupposition:
+   - A presupposition is an implicit assumption that must be true for a statement to be coherent and meaningful. It is taken for granted before the statement is even made.
+2. Analyze the circular:
+   - The instruction to 'resubmit updated' targets presupposes that (a) individual performance targets already exist, and (b) they were already submitted once before.
+   - The word 'resubmit' cannot be meaningful unless a prior submission already occurred.
+3. Match with answer choices:
+   - Option A captures this exact presupposition: existing targets are being updated and re-filed.
+4. Evaluate incorrect alternatives:
+   - Option B: 'Resubmit' directly contradicts this—they clearly submitted before.
+   - Option C: The mandatory 'must' signals compulsory, not optional.
+   - Option D: The circular targets senior supervisors, not new hires.
+
+Common Trap: Confusing the explicit instruction with the underlying taken-for-granted premise.
+Exam Tip: Presuppositions are what a statement quietly assumes before the main claim is made; look for words like 'again', 'still', 'already', or 're-' as presupposition triggers.","Correct. Survives elimination because 'resubmit updated targets' presupposes prior submission and pre-existing targets.","Eliminated because 'resubmit' directly implies a previous submission already occurred.","Eliminated because the use of 'must' makes submission compulsory, not optional.","Eliminated because the directive explicitly addresses senior supervisors, not new personnel.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: During a Congressional budget hearing, a senator asked: 'When did the agency stop misusing public funds?' Which PRESUPPOSITION is embedded in the senator's question?","That the agency did previously misuse public funds at some point.","That the agency has never received any public funds.","That the agency's current budget is larger than the prior year's.","That the senator does not believe in the agency's reform program.","A","Step-by-Step Solution:
+1. Identify the question's embedded presupposition:
+   - 'When did you stop misusing funds?' presupposes two things simultaneously: (1) You misused funds, and (2) You have stopped.
+   - This is a classic 'loaded question' or 'complex question' fallacy that presupposes the truth of its embedded premise.
+2. Match with answer choices:
+   - Option A correctly captures that prior misuse is presupposed as a background fact.
+3. Evaluate incorrect alternatives:
+   - Option B: Receipt of public funds is clearly presupposed by the entire audit context.
+   - Option C: Budget size comparisons are not embedded in this specific question.
+   - Option D: The senator's personal beliefs are not a logical presupposition of the sentence structure.
+
+Common Trap: Missing the automatic assumption smuggled inside 'when did you stop'—it presupposes you started and then stopped.
+Exam Tip: 'Loaded question' presuppositions force you to accept a damaging premise simply by attempting to answer the question.","Correct. Survives elimination because 'when did you stop' linguistically presupposes that the activity (misuse) did previously occur.","Eliminated because receipt of public agency funding is assumed throughout the hearing.","Eliminated because budget size comparisons are not embedded in this question.","Eliminated because the senator's subjective beliefs are not logical presuppositions.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A procurement officer notified suppliers: 'The supplier who delivers the highest quality medical equipment at the lowest verified price will be awarded the contract.' Which of the following is a PRESUPPOSITION embedded in this notification?","Multiple suppliers are competing, and their competing price and quality submissions can be meaningfully compared to identify a superior bid.","Only one supplier in the country manufactures medical equipment.","All competing suppliers will automatically agree with the contract award decision.","The procurement officer has the personal authority to set the final contract price.","A","Step-by-Step Solution:
+1. Identify background assumptions required for the statement's coherence:
+   - 'The supplier who delivers the highest quality... at the lowest price will be awarded' presupposes: (a) There are multiple suppliers with competing bids, (b) Their bids are objectively comparable, and (c) A valid competitive selection process exists.
+2. Match with answer choices:
+   - Option A is the core presupposition: multiple competing bids can be evaluated against one another.
+3. Evaluate incorrect alternatives:
+   - Option B: One monopoly supplier contradicts the comparative superlative ('who delivers the highest quality'), which requires plural competing options.
+   - Option C: Supplier agreement with the outcome is nowhere presupposed.
+   - Option D: Officer authority is an administrative matter, not embedded in the sentence's logical structure.
+
+Common Trap: Focusing on who wins rather than on what conditions must be true for 'the winner' to be meaningfully identified.
+Exam Tip: Comparative superlative statements ('the best/highest/lowest') presuppose the existence of multiple competing options to compare.","Correct. Survives elimination because a superlative winner ('highest quality at lowest price') requires multiple competing bids to compare.","Eliminated because a single supplier makes comparisons and superlatives meaningless.","Eliminated because supplier agreement with the outcome is not a presupposition of the award criteria.","Eliminated because officer authority is not embedded in the comparative criteria statement.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A news headline reads: 'Government finally resolves three-year traffic gridlock in central business district.' Which PRESUPPOSITION is contained in the word 'finally'?","There had been a prolonged, unsuccessful period during which the traffic gridlock persisted despite prior government efforts.","Traffic gridlock in the business district was caused entirely by private citizens.","The government resolved the gridlock using a method not previously attempted.","No previous mayor had ever acknowledged the traffic problem.","A","Step-by-Step Solution:
+1. Analyze the presupposition of 'finally':
+   - 'Finally' presupposes a history of delay, struggle, or previous failed attempts before the current resolution.
+   - It does not occur in a vacuum—it signals that what was accomplished was long-awaited.
+2. Match with answer choices:
+   - Option A correctly unpacks the presupposition of 'finally': prior unsuccessful attempts over three years.
+3. Evaluate incorrect alternatives:
+   - Option B: The cause of the gridlock is not embedded in the word 'finally'.
+   - Option C: The novelty of the method is not presupposed by the temporal word 'finally'.
+   - Option D: Mayoral acknowledgment is not a presupposition of the adverb 'finally'.
+
+Common Trap: Confusing what 'finally' implies about duration and effort with what it implies about methodology or public officials.
+Exam Tip: Temporal or resolution words like 'finally', 'at last', and 'eventually' all presuppose an extended prior struggle before the current resolution.","Correct. Survives elimination because 'finally' linguistically presupposes a prolonged period of prior unsuccessful effort before resolution was achieved.","Eliminated because causation of the gridlock is not embedded in the presuppositions of the word 'finally'.","Eliminated because method novelty is not a presupposition of the temporal adverb 'finally'.","Eliminated because prior mayoral acknowledgment is not presupposed by 'finally'.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: An agency memo states: 'Division chiefs who have already completed the mandatory ethics seminar need not reregister for the second cycle.' Which PRESUPPOSITION does this memo embed?","A mandatory ethics seminar exists and has been offered at least once, with some division chiefs having already completed it.","Division chiefs are exempt from all future mandatory government training programs.","The second cycle of the ethics seminar will be cancelled due to low enrollment.","Only non-supervisory staff are required to complete the mandatory ethics program.","A","Step-by-Step Solution:
+1. Identify the presuppositions embedded in the memo:
+   - 'Already completed' presupposes: (a) A mandatory ethics seminar exists, (b) It was previously conducted, and (c) A subset of division chiefs have already finished it.
+   - 'Second cycle' presupposes: A first cycle was conducted.
+2. Match with answer choices:
+   - Option A combines both presuppositions accurately.
+3. Evaluate incorrect alternatives:
+   - Option B: General exemption from all future programs is not presupposed.
+   - Option C: Cancellation is not embedded anywhere in the memo's logic.
+   - Option D: The exemption only applies to completers—staff exemption is not presupposed.
+
+Common Trap: Inferring the second cycle will be cancelled rather than identifying the presupposed existence of the first cycle.
+Exam Tip: Words like 'already' and 'second cycle' signal that prior events are presupposed as factual background.","Correct. Survives elimination because 'already completed' and 'second cycle' presuppose prior seminar existence and a first offering that some division chiefs attended.","Eliminated because the memo exempts only seminar completers from re-registration, not from all future training.","Eliminated because cancellation is not embedded in the memo's presupposed logic.","Eliminated because the memo targets division chiefs specifically, not non-supervisory staff.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A public announcement reads: 'Citizens who wish to renew their expired driver's licenses may visit any LTO branch.' Which PRESUPPOSITION is embedded in this announcement?","The visiting citizens possess driver's licenses that have already undergone expiration.","All citizens of driving age are required to hold a driver's license under national law.","LTO branches are the only government offices that handle civil document renewals.","Driver's license fees will be waived for senior citizen cardholders.","A","Step-by-Step Solution:
+1. Parse the announcement's logical structure:
+   - 'Citizens who wish to renew their expired driver's licenses' presupposes: (a) The citizens possess driver's licenses, and (b) These licenses have already expired.
+   - Without these presuppositions, the sentence lacks a coherent referent.
+2. Match with answer choices:
+   - Option A captures both embedded presuppositions precisely.
+3. Evaluate incorrect alternatives:
+   - Option B: Mandatory licensure for all driving-age citizens is not embedded in this renewal notice.
+   - Option C: LTO's exclusivity over all renewals is not presupposed by this specific announcement.
+   - Option D: Senior fee waivers are an unmentioned policy detail.
+
+Common Trap: Introducing related but non-embedded facts about national traffic regulations.
+Exam Tip: An announcement about renewing 'expired licenses' presupposes you already hold a license and that it has lapsed—two separate presuppositions.","Correct. Survives elimination because 'renew their expired driver's licenses' presupposes both prior possession and prior expiration of the license.","Eliminated because mandatory universal licensure is not presupposed by a renewal notice.","Eliminated because LTO exclusivity over all document renewals is not embedded in this announcement.","Eliminated because senior citizen fee waivers are not presupposed anywhere in the text.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A civil service examination notice states: 'Applicants who passed the April 2024 examination but failed to submit their certificates within the deadline must reapply.' Which two PRESUPPOSITIONS are embedded in this notice?","(1) An April 2024 civil service examination was conducted and results were released; and (2) A deadline for certificate submission was previously established and communicated.","(1) All applicants passed the April 2024 examination; and (2) No deadline was set for document submission.","(1) Reapplication fees are higher than initial registration fees; and (2) The April 2024 examination results are disputed.","(1) Failed applicants are permanently barred from all future examinations; and (2) Passing applicants require legal certification of scores.","A","Step-by-Step Solution:
+1. Identify and separate the two distinct presuppositions:
+   - Presupposition 1: 'Who passed the April 2024 examination' presupposes the examination occurred and results were released.
+   - Presupposition 2: 'Failed to submit within the deadline' presupposes a deadline was officially set and published.
+2. Match with answer choices:
+   - Option A captures both distinct presuppositions correctly.
+3. Evaluate incorrect alternatives:
+   - Option B: Not all applicants passed ('who passed' implies a subset); and a deadline is clearly presupposed by 'failed to submit within the deadline'.
+   - Option C: Fee comparisons and disputed results are fabrications.
+   - Option D: Permanent bars and legal certification are not presupposed by this notice.
+
+Common Trap: Assuming a presupposition must be stated explicitly in the sentence.
+Exam Tip: Complex sentences often carry multiple simultaneous presuppositions—each clause or condition embeds its own.","Correct. Survives elimination because 'passed the April 2024 examination' and 'failed to submit within the deadline' both require prior events to be true.","Eliminated because 'who passed' implies a subset (not all), and 'within the deadline' confirms a deadline was set.","Eliminated because fee comparisons and disputed results are fabrications not embedded in the notice.","Eliminated because permanent bars and legal certifications are not presupposed in this procedural notice.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A budget circular instructs: 'Departments that exhausted their MOOE allocations before the third quarter should request a supplemental budget.' Which PRESUPPOSITION is embedded in this instruction?","MOOE (Maintenance and Other Operating Expenses) allocations are finite, pre-assigned budgetary ceilings for each department within the fiscal year.","All government departments are guaranteed supplemental budget approval regardless of merit.","The budget circular is retroactively applicable to prior fiscal years.","MOOE allocations are replenished automatically on a monthly basis without departmental requests.","A","Step-by-Step Solution:
+1. Identify the underlying assumptions the instruction takes for granted:
+   - 'Exhausted their MOOE allocations' presupposes: MOOE allocations are finite budgets that can be depleted. Without this presupposition, 'exhausting' an allocation is meaningless.
+   - 'Before the third quarter' presupposes the fiscal year is divided into identifiable quarters.
+2. Match with answer choices:
+   - Option A correctly states the core presupposition: MOOE ceilings are finite and pre-assigned.
+3. Evaluate incorrect alternatives:
+   - Option B: Guaranteed approval contradicts the conditional nature of the request ('should request').
+   - Option C: Retroactive applicability is not presupposed.
+   - Option D: Automatic monthly replenishment contradicts 'exhausting' an allocation.
+
+Common Trap: Confusing the presupposed finite nature of MOOE with the outcome of the supplemental request.
+Exam Tip: The phrase 'exhausted allocations' presupposes that allocations are finite spending limits, not unlimited funding pools.","Correct. Survives elimination because 'exhausted MOOE allocations' only makes sense if MOOE is a finite, pre-assigned spending ceiling.","Eliminated because supplemental approval requires justification, not guaranteed automatic release.","Eliminated because retroactive fiscal application is not embedded in this forward-looking instruction.","Eliminated because automatic monthly replenishment contradicts the concept of 'exhausting' an allocation.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: An ombudsman's complaint form instructs: 'If the complaint is against a public official who is no longer in office, indicate the date of separation.' Which PRESUPPOSITION is embedded in this instruction?","Some complainants who use this form intend to file complaints against public officials who have already left government service.","All public officials leave office through resignation rather than retirement.","Ombudsman complaints can only be filed against current active government officials.","Complainants are required to personally verify the separation date through HR records.","A","Step-by-Step Solution:
+1. Identify what is presupposed for the instruction to have purpose:
+   - The conditional 'if the complaint is against a public official who is no longer in office' presupposes that this situation can and does occur—some complaints do target former officials.
+   - Without this presupposition, the conditional instruction would serve zero purpose.
+2. Match with answer choices:
+   - Option A correctly identifies the presupposition: complaints against former officials are a foreseeable and valid scenario.
+3. Evaluate incorrect alternatives:
+   - Option B: Mode of separation (resignation vs retirement) is not presupposed.
+   - Option C: The instruction's existence directly disproves this by covering post-separation cases.
+   - Option D: Who verifies the date is not presupposed by the instruction to 'indicate the date'.
+
+Common Trap: Assuming the instruction implies only current officials can be complained against.
+Exam Tip: Conditional instructions embedded in official forms presuppose that the condition they address actually occurs in practice.","Correct. Survives elimination because providing a specific instruction for former officials presupposes that complaints against them are a real and valid scenario.","Eliminated because separation mode (resignation vs retirement) is not presupposed.","Eliminated because the instruction's existence directly demonstrates that complaints against former officials are permitted.","Eliminated because verification method is not presupposed by the instruction to indicate a date.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"
+"Passage: A legislative bill states: 'The new legislation repeals all inconsistent provisions of Republic Act No. 7160.' Which PRESUPPOSITION is embedded in this clause?","At least some provisions of Republic Act No. 7160 are inconsistent with the new legislation's mandates.","Republic Act No. 7160 has never been amended prior to this new legislation.","The entire text of Republic Act No. 7160 will be completely struck down.","All local government units oppose the repeal provision.","A","Step-by-Step Solution:
+1. Analyze the repeal clause's logical structure:
+   - 'Repeals all inconsistent provisions' presupposes that inconsistent provisions exist to be repealed.
+   - If no provisions of RA 7160 were inconsistent with the new law, there would be nothing to repeal and the clause would be empty.
+2. Match with answer choices:
+   - Option A correctly states the presupposition: at least some inconsistencies exist.
+3. Evaluate incorrect alternatives:
+   - Option B: Prior amendment history of RA 7160 is not presupposed by a repeal clause.
+   - Option C: 'All inconsistent provisions' ≠ 'all provisions'; the consistent ones are untouched.
+   - Option D: LGU opposition is a political opinion, not an embedded presupposition.
+
+Common Trap: Assuming 'repeals all inconsistent provisions' means RA 7160 is fully abolished.
+Exam Tip: Repeal clauses presuppose the existence of conflicts to resolve—they are meaningless if no inconsistencies exist.","Correct. Survives elimination because a repeal of 'inconsistent provisions' logically presupposes that such inconsistencies actually exist in RA 7160.","Eliminated because prior amendment history is not embedded in this specific repeal clause.","Eliminated because only inconsistent provisions are repealed—consistent provisions remain intact.","Eliminated because LGU political opposition is not a logical presupposition of the legislative text.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Presupposition | Very Difficult | Batch 099"

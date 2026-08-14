@@ -1,0 +1,186 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Passage: A regional development council collates the total capital investments (in PHP millions) across five economic corridors over four quarters: North Corridor: Q1=124.5, Q2=138.2, Q3=145.0, Q4=162.3. South Corridor: Q1=98.4, Q2=105.6, Q3=112.8, Q4=124.2. East Corridor: Q1=210.3, Q2=215.8, Q3=224.5, Q4=239.4. West Corridor: Q1=76.8, Q2=82.4, Q3=89.6, Q4=95.2. Central Corridor: Q1=185.0, Q2=192.5, Q3=204.1, Q4=218.4. What is the GRAND TOTAL of all capital investments across all corridors and all four quarters combined?","PHP 2,842.6 million","PHP 2,785.4 million","PHP 2,912.8 million","PHP 2,654.2 million","A","Step-by-Step Solution:
+1. Sum each corridor across all four quarters:
+   - North Corridor: 124.5 + 138.2 + 145.0 + 162.3 = 570.0M.
+   - South Corridor: 98.4 + 105.6 + 112.8 + 124.2 = 441.0M.
+   - East Corridor: 210.3 + 215.8 + 224.5 + 239.4 = 890.0M.
+   - West Corridor: 76.8 + 82.4 + 89.6 + 95.2 = 344.0M.
+   - Central Corridor: 185.0 + 192.5 + 204.1 + 218.4 = 800.0M.
+2. Sum the corridor totals:
+   - Grand Total = 570.0 + 441.0 + 890.0 + 344.0 + 800.0 = PHP 2,845.0M.
+   Let's check the quarterly sums:
+   - Q1: 124.5 + 98.4 + 210.3 + 76.8 + 185.0 = 695.0M.
+   - Q2: 138.2 + 105.6 + 215.8 + 82.4 + 192.5 = 734.5M.
+   - Q3: 145.0 + 112.8 + 224.5 + 89.6 + 204.1 = 776.0M.
+   - Q4: 162.3 + 124.2 + 239.4 + 95.2 + 218.4 = 839.5M.
+   - Grand Total = 695.0 + 734.5 + 776.0 + 839.5 = PHP 3,045.0M.
+   Wait! Let's re-add carefully:
+   - North: 124.5+138.2=262.7; +145.0=407.7; +162.3=570.0.
+   - South: 98.4+105.6=204.0; +112.8=316.8; +124.2=441.0.
+   - East: 210.3+215.8=426.1; +224.5=650.6; +239.4=890.0.
+   - West: 76.8+82.4=159.2; +89.6=248.8; +95.2=344.0.
+   - Central: 185.0+192.5=377.5; +204.1=581.6; +218.4=800.0.
+   - Sum = 570 + 441 + 890 + 344 + 800 = 3,045.0M.
+   Let's ensure the options reflect 3,045.0M.
+   Let's update option A to PHP 3,045.0 million.","PHP 3,045.0 million","PHP 2,842.6 million","PHP 2,985.0 million","PHP 3,120.5 million","A","Step-by-Step Solution:
+1. Calculate each corridor's annual total:
+   - North: 124.5 + 138.2 + 145.0 + 162.3 = 570.0M.
+   - South: 98.4 + 105.6 + 112.8 + 124.2 = 441.0M.
+   - East: 210.3 + 215.8 + 224.5 + 239.4 = 890.0M.
+   - West: 76.8 + 82.4 + 89.6 + 95.2 = 344.0M.
+   - Central: 185.0 + 192.5 + 204.1 + 218.4 = 800.0M.
+2. Sum the five corridor totals:
+   - Grand Total = 570.0 + 441.0 + 890.0 + 344.0 + 800.0 = PHP 3,045.0M.
+3. Verification by quarterly columns:
+   - Q1: 695.0M, Q2: 734.5M, Q3: 776.0M, Q4: 839.5M.
+   - Sum = 695.0 + 734.5 + 776.0 + 839.5 = PHP 3,045.0M.
+
+Common Trap: Skipping one corridor or misaligning decimal places across multi-row additions.
+Exam Tip: Cross-verify matrix grand totals by summing both row totals and column totals.","Correct. Survives elimination because the sum of all 20 individual quarterly investments across the five economic corridors equals exactly PHP 3,045.0 million.","Eliminated because PHP 2,842.6 million reflects an arithmetic omission of the West Corridor's full Q3 and Q4 totals.","Eliminated because PHP 2,985.0 million is 60 million below the true grand total due to underestimating the East Corridor's total.","Eliminated because PHP 3,120.5 million overstates the sum by double-counting portions of Q4.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A disaster response agency distributes family food packs (FFPs) across four island provinces following a severe weather disturbance. The breakdown of released packs is as follows: Province W received 14,250 FFPs in Week 1, 18,400 in Week 2, and 9,350 in Week 3. Province X received 22,100 in Week 1, 15,600 in Week 2, and 12,300 in Week 3. Province Y received 8,750 in Week 1, 11,200 in Week 2, and 14,850 in Week 3. Province Z received 19,300 in Week 1, 21,500 in Week 2, and 16,400 in Week 3. What is the TOTAL number of FFPs distributed during Week 2 and Week 3 combined across all four provinces?","119,600 FFPs","124,350 FFPs","115,200 FFPs","128,400 FFPs","A","Step-by-Step Solution:
+1. Identify the requested scope: Week 2 and Week 3 across all four provinces (omit Week 1).
+2. Calculate Week 2 total:
+   - Province W: 18,400
+   - Province X: 15,600
+   - Province Y: 11,200
+   - Province Z: 21,500
+   - Week 2 Total = 18,400 + 15,600 + 11,200 + 21,500 = 66,700 FFPs.
+3. Calculate Week 3 total:
+   - Province W: 9,350
+   - Province X: 12,300
+   - Province Y: 14,850
+   - Province Z: 16,400
+   - Week 3 Total = 9,350 + 12,300 + 14,850 + 16,400 = 52,900 FFPs.
+4. Sum Week 2 and Week 3 totals:
+   - Combined Total = 66,700 + 52,900 = 119,600 FFPs.
+
+Common Trap: Adding Week 1 values by mistake, or confusing single province totals with the two-week multi-province sum.
+Exam Tip: Clearly circle or isolate only the relevant columns/rows before performing aggregation.","Correct. Survives elimination because the combined sum of Week 2 (66,700 FFPs) and Week 3 (52,900 FFPs) across all four provinces equals exactly 119,600 FFPs.","Eliminated because 124,350 FFPs erroneously includes Week 1 distributions from Province Y.","Eliminated because 115,200 FFPs undercounts Week 3 distributions in Province Z by 4,400 packs.","Eliminated because 128,400 FFPs includes extraneous data from Week 1 Province W distributions.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A public works department reports the cumulative length of newly paved national and secondary roads (in kilometers) across three administrative districts over a three-year period: District 1 paved 48.6 km in Year 1, 52.4 km in Year 2, and 61.8 km in Year 3. District 2 paved 39.2 km in Year 1, 44.5 km in Year 2, and 49.3 km in Year 3. District 3 paved 55.1 km in Year 1, 58.7 km in Year 2, and 64.2 km in Year 3. If the national target for the three districts combined was 450.0 km over the three years, what is the TOTAL paved length achieved, and by how much did it exceed or fall short of the target?","473.8 km achieved, exceeding the target by 23.8 km.","462.4 km achieved, exceeding the target by 12.4 km.","448.2 km achieved, falling short of the target by 1.8 km.","481.5 km achieved, exceeding the target by 31.5 km.","A","Step-by-Step Solution:
+1. Calculate the total for each district:
+   - District 1: 48.6 + 52.4 + 61.8 = 162.8 km.
+   - District 2: 39.2 + 44.5 + 49.3 = 133.0 km.
+   - District 3: 55.1 + 58.7 + 64.2 = 178.0 km.
+2. Sum all district totals:
+   - Total Paved Length = 162.8 + 133.0 + 178.0 = 473.8 km.
+3. Compare with national target:
+   - 473.8 km - 450.0 km = +23.8 km (exceeded target).
+
+Common Trap: Arithmetic slips in carrying decimal tenths when adding three-digit numbers.
+Exam Tip: Break down sums by whole numbers and decimals separately to verify precision.","Correct. Survives elimination because summing all yearly outputs across Districts 1 (162.8 km), 2 (133.0 km), and 3 (178.0 km) yields 473.8 km, which exceeds the 450.0 km target by exactly 23.8 km.","Eliminated because 462.4 km misses the decimal increments across Year 3.","Eliminated because 448.2 km incorrectly claims a shortfall by omitting District 2's Year 3 accomplishments.","Eliminated because 481.5 km overstates District 1's paving accomplishments.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A state university system records the total number of graduates across four campuses and three degree clusters for Academic Year 2023-2024: Main Campus: STEM=1,420; Social Sciences=980; Business=1,650. North Campus: STEM=850; Social Sciences=620; Business=1,100. South Campus: STEM=640; Social Sciences=780; Business=920. East Campus: STEM=510; Social Sciences=430; Business=680. What is the TOTAL number of graduates in the Business and STEM clusters COMBINED across all four campuses?","7,770 graduates","7,250 graduates","8,120 graduates","6,980 graduates","A","Step-by-Step Solution:
+1. Calculate Total STEM graduates across all 4 campuses:
+   - Main: 1,420
+   - North: 850
+   - South: 640
+   - East: 510
+   - Total STEM = 1,420 + 850 + 640 + 510 = 3,420.
+2. Calculate Total Business graduates across all 4 campuses:
+   - Main: 1,650
+   - North: 1,100
+   - South: 920
+   - East: 680
+   - Total Business = 1,650 + 1,100 + 920 + 680 = 4,350.
+3. Sum STEM and Business totals:
+   - Combined Total = 3,420 + 4,350 = 7,770 graduates.
+
+Common Trap: Including the Social Sciences cluster or missing one of the satellite campuses.
+Exam Tip: Identify the specific categories requested and sum their sub-totals systematically.","Correct. Survives elimination because total STEM graduates (3,420) plus total Business graduates (4,350) equals 7,770 graduates across the four university campuses.","Eliminated because 7,250 graduates fails to include the East Campus Business cohort.","Eliminated because 8,120 graduates mistakenly incorporates the East Campus Social Sciences graduates.","Eliminated because 6,980 graduates omits the South Campus STEM graduates.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: An environmental management bureau monitors solid waste generation (in metric tons per day, MTD) across five commercial zones: Zone A produces 42.5 MTD of biodegradable, 28.3 MTD of recyclable, and 14.2 MTD of residual waste. Zone B produces 51.0 MTD of biodegradable, 34.6 MTD of recyclable, and 18.4 MTD of residual waste. Zone C produces 38.2 MTD of biodegradable, 22.1 MTD of recyclable, and 11.7 MTD of residual waste. Zone D produces 64.8 MTD of biodegradable, 41.5 MTD of recyclable, and 23.7 MTD of residual waste. Zone E produces 29.5 MTD of biodegradable, 19.4 MTD of recyclable, and 9.6 MTD of residual waste. What is the TOTAL amount of RECYCLABLE and RESIDUAL waste generated daily across all five commercial zones?","223.5 MTD","215.2 MTD","234.8 MTD","208.9 MTD","A","Step-by-Step Solution:
+1. Isolate Recyclable and Residual categories across all zones (exclude Biodegradable):
+2. Sum of Recyclable waste:
+   - Zone A: 28.3
+   - Zone B: 34.6
+   - Zone C: 22.1
+   - Zone D: 41.5
+   - Zone E: 19.4
+   - Total Recyclable = 28.3 + 34.6 + 22.1 + 41.5 + 19.4 = 145.9 MTD.
+3. Sum of Residual waste:
+   - Zone A: 14.2
+   - Zone B: 18.4
+   - Zone C: 11.7
+   - Zone D: 23.7
+   - Zone E: 9.6
+   - Total Residual = 14.2 + 18.4 + 11.7 + 23.7 + 9.6 = 77.6 MTD.
+4. Combined Recyclable + Residual = 145.9 + 77.6 = 223.5 MTD.
+
+Common Trap: Adding biodegradable waste into the sum, or making transposition errors with the decimals.
+Exam Tip: When multiple categories exist per group, sum column-by-column for the requested categories only.","Correct. Survives elimination because total recyclable waste (145.9 MTD) plus total residual waste (77.6 MTD) equals 223.5 MTD daily across all five zones.","Eliminated because 215.2 MTD omits Zone B's residual waste contribution.","Eliminated because 234.8 MTD includes a calculation artifact from Zone C biodegradable waste.","Eliminated because 208.9 MTD fails to add Zone E's recyclable fraction correctly.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A regional labor department reviews registered job vacancies reported by four industry sectors over three quarters: Sector 1 (Manufacturing): Q1=3,450; Q2=3,820; Q3=4,110. Sector 2 (BPO & IT): Q1=6,200; Q2=6,850; Q3=7,400. Sector 3 (Hospitality & Tourism): Q1=2,150; Q2=2,600; Q3=3,100. Sector 4 (Construction): Q1=1,800; Q2=2,250; Q3=2,550. What is the TOTAL number of job vacancies generated across ALL four sectors in Quarter 2 and Quarter 3 combined?","32,680 vacancies","31,250 vacancies","33,400 vacancies","30,850 vacancies","A","Step-by-Step Solution:
+1. Calculate Q2 vacancies across all sectors:
+   - Sector 1: 3,820
+   - Sector 2: 6,850
+   - Sector 3: 2,600
+   - Sector 4: 2,250
+   - Total Q2 = 3,820 + 6,850 + 2,600 + 2,250 = 15,520 vacancies.
+2. Calculate Q3 vacancies across all sectors:
+   - Sector 1: 4,110
+   - Sector 2: 7,400
+   - Sector 3: 3,100
+   - Sector 4: 2,550
+   - Total Q3 = 4,110 + 7,400 + 3,100 + 2,550 = 17,160 vacancies.
+3. Combined Q2 + Q3 Total = 15,520 + 17,160 = 32,680 vacancies.
+
+Common Trap: Adding Q1 numbers by mistake or miscalculating the cross-sector sums.
+Exam Tip: Sum the period columns first, then add the period totals together.","Correct. Survives elimination because Q2 vacancies (15,520) plus Q3 vacancies (17,160) equals exactly 32,680 vacancies across all four sectors.","Eliminated because 31,250 vacancies undercounts the BPO sector's Q3 contribution.","Eliminated because 33,400 vacancies incorporates Q1 Construction vacancies.","Eliminated because 30,850 vacancies misses the Manufacturing sector's growth in Q3.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A municipal treasury department collects real property tax (RPT), business tax (BT), and regulatory fees (RF) from four barangays during an annual campaign: Barangay Alpha: RPT=PHP 4.8M, BT=PHP 3.2M, RF=PHP 1.1M. Barangay Bravo: RPT=PHP 6.5M, BT=PHP 5.4M, RF=PHP 1.8M. Barangay Charlie: RPT=PHP 3.9M, BT=PHP 2.8M, RF=PHP 0.9M. Barangay Delta: RPT=PHP 8.2M, BT=PHP 6.7M, RF=PHP 2.4M. What is the TOTAL municipal revenue collected from Business Tax and Regulatory Fees combined across the four barangays?","PHP 24.3 million","PHP 22.8 million","PHP 25.6 million","PHP 23.4 million","A","Step-by-Step Solution:
+1. Target categories: Business Tax (BT) and Regulatory Fees (RF). Exclude Real Property Tax (RPT).
+2. Sum Business Tax across 4 barangays:
+   - Alpha: 3.2M
+   - Bravo: 5.4M
+   - Charlie: 2.8M
+   - Delta: 6.7M
+   - Total BT = 3.2 + 5.4 + 2.8 + 6.7 = PHP 18.1M.
+3. Sum Regulatory Fees across 4 barangays:
+   - Alpha: 1.1M
+   - Bravo: 1.8M
+   - Charlie: 0.9M
+   - Delta: 2.4M
+   - Total RF = 1.1 + 1.8 + 0.9 + 2.4 = PHP 6.2M.
+4. Total BT + RF = 18.1M + 6.2M = PHP 24.3 million.
+
+Common Trap: Including RPT figures in the total or dropping decimal components in small fees.
+Exam Tip: Subtotal the specific fee structures separately before combining.","Correct. Survives elimination because total Business Tax (PHP 18.1M) plus total Regulatory Fees (PHP 6.2M) equals PHP 24.3 million across the four barangays.","Eliminated because PHP 22.8 million fails to include Barangay Delta's regulatory fee collections.","Eliminated because PHP 25.6 million includes an erroneous carryover from Barangay Alpha's property tax.","Eliminated because PHP 23.4 million omits Barangay Charlie's regulatory fees.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A regional electrification administration reports the number of newly energized households across four island municipalities over three phases: Municipality A: Phase 1=1,240, Phase 2=1,580, Phase 3=1,820. Municipality B: Phase 1=980, Phase 2=1,150, Phase 3=1,340. Municipality C: Phase 1=1,650, Phase 2=1,890, Phase 3=2,120. Municipality D: Phase 1=840, Phase 2=960, Phase 3=1,080. If each household connection received a government subsidy of PHP 2,500, what is the GRAND TOTAL government subsidy disbursed across all municipalities and all three phases?","PHP 41,625,000","PHP 39,850,000","PHP 43,200,000","PHP 40,500,000","A","Step-by-Step Solution:
+1. Calculate total energized households per municipality:
+   - Municipality A: 1,240 + 1,580 + 1,820 = 4,640 households.
+   - Municipality B: 980 + 1,150 + 1,340 = 3,470 households.
+   - Municipality C: 1,650 + 1,890 + 2,120 = 5,660 households.
+   - Municipality D: 840 + 960 + 1,080 = 2,880 households.
+2. Sum all energized households:
+   - Total Households = 4,640 + 3,470 + 5,660 + 2,880 = 16,650 households.
+3. Multiply total households by the PHP 2,500 subsidy per household:
+   - Grand Total Subsidy = 16,650 × PHP 2,500 = PHP 41,625,000.
+
+Common Trap: Multiplying only one phase by 2,500, or committing an arithmetic error during the multi-digit multiplication.
+Exam Tip: Compute total volume first, then apply unit cost multiplier.","Correct. Survives elimination because total households across all phases (16,650) multiplied by PHP 2,500 subsidy per connection equals exactly PHP 41,625,000.","Eliminated because PHP 39,850,000 reflects a summation error omitting Phase 3 of Municipality B.","Eliminated because PHP 43,200,000 over-calculates the subsidy by assuming 17,280 households.","Eliminated because PHP 40,500,000 applies a flawed unit multiplier of PHP 2,432.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: An agricultural research agency measures the volume of hybrid palay seeds distributed (in sacks of 50 kg each) to farmers across five congressional districts in two planting seasons (Wet Season and Dry Season): District 1: Wet=4,200 sacks, Dry=3,800 sacks. District 2: Wet=5,100 sacks, Dry=4,650 sacks. District 3: Wet=3,750 sacks, Dry=3,400 sacks. District 4: Wet=6,300 sacks, Dry=5,900 sacks. District 5: Wet=2,900 sacks, Dry=2,650 sacks. What is the TOTAL METRIC TONNAGE of hybrid seeds distributed across all five districts during BOTH seasons combined? (Note: 1 metric ton = 1,000 kg; 1 sack = 50 kg, so 20 sacks = 1 metric ton).","2,132.5 metric tons","2,045.0 metric tons","2,210.0 metric tons","1,985.5 metric tons","A","Step-by-Step Solution:
+1. Sum all distributed sacks across Wet and Dry seasons for all 5 districts:
+   - District 1: 4,200 + 3,800 = 8,000 sacks.
+   - District 2: 5,100 + 4,650 = 9,750 sacks.
+   - District 3: 3,750 + 3,400 = 7,150 sacks.
+   - District 4: 6,300 + 5,900 = 12,200 sacks.
+   - District 5: 2,900 + 2,650 = 5,550 sacks.
+2. Sum total sacks:
+   - Total Sacks = 8,000 + 9,750 + 7,150 + 12,200 + 5,550 = 42,650 sacks.
+3. Convert sacks to metric tons:
+   - Total kg = 42,650 sacks × 50 kg/sack = 2,132,500 kg.
+   - Metric Tons = 2,132,500 kg ÷ 1,000 kg/MT = 2,132.5 metric tons.
+   - (Or 42,650 ÷ 20 = 2,132.5 MT).
+
+Common Trap: Leaving the answer in total number of sacks (42,650) without applying the unit conversion to metric tons.
+Exam Tip: Pay strict attention to unit specifications in the question prompt (sacks vs. metric tons).","Correct. Survives elimination because 42,650 total sacks distributed across both seasons equals 2,132,500 kg, which converts exactly to 2,132.5 metric tons.","Eliminated because 2,045.0 metric tons reflects omitting the Dry Season distribution of District 5.","Eliminated because 2,210.0 metric tons miscalculates District 4's total as 13,750 sacks.","Eliminated because 1,985.5 metric tons ignores District 1's Dry Season allocation.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"
+"Passage: A national scholarship commission tracks disbursement amounts (in PHP thousands) across three scholarship categories over four school quarters: Category A (Full Academic): Q1=12,500, Q2=13,200, Q3=14,100, Q4=15,000. Category B (Merit-Assistance): Q1=8,400, Q2=8,900, Q3=9,500, Q4=10,200. Category C (Special Talent): Q1=4,100, Q2=4,300, Q3=4,700, Q4=5,100. What is the TOTAL disbursement across ALL three categories for the SECOND HALF of the school year (Q3 and Q4 combined)?","PHP 58,600 thousand","PHP 54,200 thousand","PHP 61,400 thousand","PHP 56,800 thousand","A","Step-by-Step Solution:
+1. Target quarters: Q3 and Q4 (Second Half). Omit Q1 and Q2.
+2. Sum Category A (Q3 + Q4): 14,100 + 15,000 = 29,100.
+3. Sum Category B (Q3 + Q4): 9,500 + 10,200 = 19,700.
+4. Sum Category C (Q3 + Q4): 4,700 + 5,100 = 9,800.
+5. Sum all categories for Q3 and Q4:
+   - Combined Total = 29,100 + 19,700 + 9,800 = PHP 58,600 thousand (PHP 58.6M).
+6. Verify by quarterly column sums:
+   - Q3 Total: 14,100 + 9,500 + 4,700 = 28,300.
+   - Q4 Total: 15,000 + 10,200 + 5,100 = 30,300.
+   - Combined = 28,300 + 30,300 = PHP 58,600 thousand.
+
+Common Trap: Summing all four quarters instead of restricting the calculation to Q3 and Q4.
+Exam Tip: 'Second half' of a four-quarter year always refers specifically to Q3 and Q4.","Correct. Survives elimination because Q3 disbursements (28,300 thousand) plus Q4 disbursements (30,300 thousand) across all three scholarship categories equals PHP 58,600 thousand.","Eliminated because PHP 54,200 thousand erroneously omits Category C from the Q3 and Q4 totals.","Eliminated because PHP 61,400 thousand includes Category C disbursements from Q2.","Eliminated because PHP 56,800 thousand undercounts Category A's Q4 allocation.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Total | Very Difficult | Batch 117"

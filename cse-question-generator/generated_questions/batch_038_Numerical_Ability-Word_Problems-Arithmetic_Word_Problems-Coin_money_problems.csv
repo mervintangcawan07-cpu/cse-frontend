@@ -1,0 +1,189 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A cashier has a total of 65 coins consisting entirely of ₱5.00 coins and ₱10.00 coins. If the total monetary value of all the coins is exactly ₱475.00, how many coins of each denomination does the cashier possess?","35 (₱5 coins) and 30 (₱10 coins)","30 (₱5 coins) and 35 (₱10 coins)","40 (₱5 coins) and 25 (₱10 coins)","25 (₱5 coins) and 40 (₱10 coins)","A","Step-by-Step Solution:
+1. Define algebraic variables:
+   - Let $x$ be the number of ₱5.00 coins.
+   - Let $y$ be the number of ₱10.00 coins.
+2. Set up the system of equations:
+   - $x + y = 65 \implies x = 65 - y$ (Equation 1).
+   - $5.00x + 10.00y = 475.00$ (Equation 2).
+3. Substitute Equation 1 into Equation 2:
+   - $5(65 - y) + 10y = 475$.
+   - $325 - 5y + 10y = 475$.
+   - $5y = 475 - 325 = 150 \implies y = 30$.
+4. Calculate $x$:
+   - $x = 65 - 30 = 35$.
+5. Verify total monetary value:
+   - $35 \times ₱5.00 + 30 \times ₱10.00 = ₱175.00 + ₱300.00 = ₱475.00$ (Confirmed!).
+
+Common Trap: Swapping the counts of the two denominations ($30$ of ₱5 and $35$ of ₱10, Option B), which yields $30(5) + 35(10) = ₱500.00$.
+Exam Tip: If all 65 were ₱5 coins, value would be $65 \times 5 = ₱325$. The extra $₱150$ divided by $(10 - 5 = 5)$ gives $30$ ₱10 coins directly.","Correct. Survives elimination because 35 * ₱5 + 30 * ₱10 = ₱175 + ₱300 = ₱475.00 and 35 + 30 = 65 coins.","Eliminated because 30 * ₱5 + 35 * ₱10 = ₱500.00 != ₱475.00.","Eliminated because 40 * ₱5 + 25 * ₱10 = ₱450.00.","Eliminated because 25 * ₱5 + 40 * ₱10 = ₱525.00.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A municipal treasurer holds a cash box with 140 Philippine banknotes consisting of ₱100 bills, ₱500 bills, and ₱1,000 bills, totaling ₱71,000.00. The number of ₱100 bills is exactly twice the number of ₱500 bills. How many banknotes of each denomination are in the cash box?","₱100: 60; ₱500: 30; ₱1,000: 50","₱100: 50; ₱500: 25; ₱1,000: 65","₱100: 70; ₱500: 35; ₱1,000: 35","₱100: 40; ₱500: 20; ₱1,000: 80","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $y$ be the number of ₱500 bills.
+   - Number of ₱100 bills $= 2y$.
+   - Let $z$ be the number of ₱1,000 bills.
+2. Set up total count equation:
+   - $2y + y + z = 140 \implies 3y + z = 140 \implies z = 140 - 3y$.
+3. Set up total monetary value equation:
+   - $100(2y) + 500y + 1,000z = 71,000$.
+   - $200y + 500y + 1,000(140 - 3y) = 71,000$.
+4. Solve for $y$:
+   - $700y + 140,000 - 3,000y = 71,000$.
+   - $-2,300y = 71,000 - 140,000 = -69,000$.
+   - $y = \frac{-69,000}{-2,300} = 30$.
+5. Compute counts of all denominations:
+   - ₱500 bills: $y = 30$.
+   - ₱100 bills: $2y = 2(30) = 60$.
+   - ₱1,000 bills: $z = 140 - 3(30) = 140 - 90 = 50$.
+6. Verify total sum:
+   - $60(100) + 30(500) + 50(1,000) = 6,000 + 15,000 + 50,000 = ₱71,000.00$.
+
+Common Trap: Selecting Option C ($70, 35, 35$), which totals $140$ notes but yields value $7,000 + 17,500 + 35,000 = ₱59,500$.
+Exam Tip: $3y + z = 140$ and $700y + 1000z = 71,000 \implies y = 30, z = 50$.","Correct. Survives elimination because 60(100) + 30(500) + 50(1000) = 6,000 + 15,000 + 50,000 = ₱71,000.00 with 60 + 30 + 50 = 140 notes and 60 = 2(30).","Eliminated because 50(100) + 25(500) + 65(1000) = 5,000 + 12,500 + 65,000 = ₱82,500 != ₱71,000.","Eliminated because 70(100) + 35(500) + 35(1000) = ₱59,500.","Eliminated because 40(100) + 20(500) + 80(1000) = ₱94,000.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A collection of ₱1.00, ₱5.00, and ₱20.00 coins has a total monetary value of ₱480.00. The quantities of ₱1.00, ₱5.00, and ₱20.00 coins are in the ratio $5 : 3 : 2$. What is the total number of coins in the collection?","80 coins","70 coins","90 coins","100 coins","A","Step-by-Step Solution:
+1. Define quantities in terms of multiplier $k$:
+   - Number of ₱1.00 coins $= 5k$.
+   - Number of ₱5.00 coins $= 3k$.
+   - Number of ₱20.00 coins $= 2k$.
+2. Formulate total monetary value equation:
+   - $1.00(5k) + 5.00(3k) + 20.00(2k) = 480.00$.
+   - $5k + 15k + 40k = 480.00$.
+   - $60k = 480.00 \implies k = \frac{480}{60} = 8$.
+3. Compute total number of coins:
+   - $\text{Total Coins} = 5k + 3k + 2k = 10k$.
+   - $\text{Total Coins} = 10(8) = 80\text{ coins}$.
+4. (Verification: 40 ₱1 coins = ₱40; 24 ₱5 coins = ₱120; 16 ₱20 coins = ₱320. Sum $= 40 + 120 + 320 = ₱480.00$).
+
+Common Trap: Answering $k = 8$ or the count of ₱1 coins ($40$) instead of the sum total of all coins ($80$).
+Exam Tip: Total parts $= 5 + 3 + 2 = 10\text{ parts}$. Total coins $= 10k = 10(8) = 80\text{ coins}$.","Correct. Survives elimination because k = 8 gives 40 (₱1), 24 (₱5), and 16 (₱20) coins, totaling 80 coins and ₱480.00.","Eliminated because 70 coins corresponds to non-integer ratio parts.","Eliminated because 90 coins yields total value ₱540.00.","Eliminated because 100 coins yields total value ₱600.00.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"An administrative clerk purchased 40 pens. Some were premium pens costing ₱35.00 each, and the remainder were standard pens costing ₱15.00 each. If the total expenditure was ₱880.00, how many premium pens were purchased?","14 premium pens","16 premium pens","12 premium pens","18 premium pens","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $p$ be the number of premium pens.
+   - Number of standard pens $= 40 - p$.
+2. Formulate total cost equation:
+   - $35.00p + 15.00(40 - p) = 880.00$.
+3. Expand and simplify:
+   - $35p + 600 - 15p = 880$.
+   - $20p = 880 - 600 = 280$.
+4. Solve for $p$:
+   - $p = \frac{280}{20} = 14\text{ premium pens}$.
+5. (Verification: 14 premium pens $= 14 \times 35 = ₱490.00$; 26 standard pens $= 26 \times 15 = ₱390.00$. Total $= ₱490 + ₱390 = ₱880.00$).
+
+Common Trap: Selecting the number of standard pens ($26$) or making an arithmetic error in $880 - 600 = 280$.
+Exam Tip: Quick method: If all 40 were standard pens, cost $= 40 \times 15 = 600$. Difference $= 880 - 600 = 280$. Premium pens $= \frac{280}{35 - 15} = \frac{280}{20} = 14$.","Correct. Survives elimination because 14(35) + 26(15) = 490 + 390 = ₱880.00.","Eliminated because 16 premium pens gives 16(35) + 24(15) = 560 + 360 = ₱920.00.","Eliminated because 12 premium pens gives 12(35) + 28(15) = 420 + 420 = ₱840.00.","Eliminated because 18 premium pens gives ₱960.00.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A petty cash box contains ₱1.00 coins, ₱5.00 coins, and ₱10.00 coins. There are 3 more ₱5.00 coins than ₱1.00 coins, and 4 fewer ₱10.00 coins than twice the number of ₱1.00 coins. If the total value of all coins is ₱235.00, how many ₱1.00 coins are in the box?","10 (₱1.00 coins)","12 (₱1.00 coins)","8 (₱1.00 coins)","15 (₱1.00 coins)","A","Step-by-Step Solution:
+1. Express all coin quantities in terms of $x$ (number of ₱1.00 coins):
+   - Number of ₱1.00 coins $= x$.
+   - Number of ₱5.00 coins $= x + 3$.
+   - Number of ₱10.00 coins $= 2x - 4$.
+2. Formulate total monetary value equation:
+   - $1(x) + 5(x + 3) + 10(2x - 4) = 235.00$.
+3. Expand and collect terms:
+   - $x + 5x + 15 + 20x - 40 = 235$.
+   - $26x - 25 = 235$.
+4. Solve for $x$:
+   - $26x = 235 + 25 = 260 \implies x = 10$.
+5. Verify coin counts and values:
+   - ₱1 coins: $10 \times 1 = ₱10.00$
+   - ₱5 coins: $(10 + 3) \times 5 = 13 \times 5 = ₱65.00$
+   - ₱10 coins: $(2(10) - 4) \times 10 = 16 \times 10 = ₱160.00$.
+   - Sum $= 10 + 65 + 160 = ₱235.00$ (Confirmed!).
+
+Common Trap: Forgetting the negative sign in $-40$, yielding $26x + 55 = 235 \implies 26x = 180$ (non-integer).
+Exam Tip: Always double-check algebraic expansion: $5(3) + 10(-4) = 15 - 40 = -25$.","Correct. Survives elimination because x = 10 yields 10 (₱1), 13 (₱5), and 16 (₱10) coins, summing to ₱10 + ₱65 + ₱160 = ₱235.00.","Eliminated because x = 12 yields value 26(12) - 25 = 312 - 25 = ₱287.00.","Eliminated because x = 8 yields 26(8) - 25 = 208 - 25 = ₱183.00.","Eliminated because x = 15 yields ₱365.00.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A payroll officer has ₱50.00 bills and ₱20.00 bills totaling ₱2,100.00. The number of ₱50.00 bills exceeds the number of ₱20.00 bills by exactly 14. What is the total count of banknotes in the officer's possession?","54 banknotes","48 banknotes","60 banknotes","50 banknotes","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $y$ be the number of ₱20.00 bills.
+   - Number of ₱50.00 bills $= y + 14$.
+2. Formulate total value equation:
+   - $20.00y + 50.00(y + 14) = 2,100.00$.
+3. Expand and solve for $y$:
+   - $20y + 50y + 700 = 2,100$.
+   - $70y = 2,100 - 700 = 1,400 \implies y = 20$.
+4. Compute quantities of each bill:
+   - ₱20 bills $= 20$.
+   - ₱50 bills $= 20 + 14 = 34$.
+5. Calculate total count of banknotes:
+   - $\text{Total Banknotes} = 20 + 34 = 54\text{ banknotes}$.
+6. Verify total sum:
+   - $20 \times 20 + 34 \times 50 = 400 + 1,700 = ₱2,100.00$.
+
+Common Trap: Answering only the count of ₱50 bills ($34$) or ₱20 bills ($20$) instead of the sum ($54$).
+Exam Tip: Read carefully: \"total count of banknotes\" requires summing $y + (y + 14) = 2y + 14 = 2(20) + 14 = 54$.","Correct. Survives elimination because 34 * 50 + 20 * 20 = 1,700 + 400 = ₱2,100.00, and total bills is 34 + 20 = 54.","Eliminated because 48 banknotes gives 31(50) + 17(20) = 1,550 + 340 = ₱1,890.","Eliminated because 60 banknotes gives ₱2,310.","Eliminated because 50 banknotes gives ₱1,960.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"An office procurement division bought a total of 50 office supplies consisting of hardbound notebooks at ₱45.00 each and plastic folders at ₱18.00 each. If the total invoice amount was exactly ₱1,440.00, how many notebooks were purchased?","20 notebooks","25 notebooks","15 notebooks","30 notebooks","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $n$ be the number of notebooks.
+   - Number of folders $= 50 - n$.
+2. Formulate invoice value equation:
+   - $45.00n + 18.00(50 - n) = 1,440.00$.
+3. Expand and simplify:
+   - $45n + 900 - 18n = 1,440$.
+   - $27n = 1,440 - 900 = 540$.
+4. Solve for $n$:
+   - $n = \frac{540}{27} = 20\text{ notebooks}$.
+5. (Verification: 20 notebooks $= 20 \times 45 = ₱900.00$; 30 folders $= 30 \times 18 = ₱540.00$. Total $= ₱900 + ₱540 = ₱1,440.00$).
+
+Common Trap: Selecting the number of folders ($30$, Option D) instead of notebooks ($20$).
+Exam Tip: $27n = 540 \implies n = 20\text{ notebooks}$.","Correct. Survives elimination because 20 notebooks (₱45) + 30 folders (₱18) = ₱900 + ₱540 = ₱1,440.00.","Eliminated because 25 notebooks yields 25(45) + 25(18) = 1,125 + 450 = ₱1,575.00.","Eliminated because 15 notebooks yields 15(45) + 35(18) = 675 + 630 = ₱1,305.00.","Eliminated because 30 is the number of folders purchased.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A donation box contains ₱5.00 coins, ₱10.00 coins, and ₱20.00 coins in the ratio $4 : 3 : 1$. If the total value of all coins in the box is ₱1,400.00, what is the combined monetary value of all the ₱10.00 coins?","₱600.00","₱400.00","₱500.00","₱700.00","A","Step-by-Step Solution:
+1. Define quantities in terms of multiplier $k$:
+   - Number of ₱5 coins $= 4k$.
+   - Number of ₱10 coins $= 3k$.
+   - Number of ₱20 coins $= 1k$.
+2. Formulate total monetary value equation:
+   - $5.00(4k) + 10.00(3k) + 20.00(1k) = 1,400.00$.
+   - $20k + 30k + 20k = 1,400.00$.
+   - $70k = 1,400.00 \implies k = \frac{1,400}{70} = 20$.
+3. Compute the number of ₱10 coins:
+   - Number of ₱10 coins $= 3k = 3(20) = 60\text{ coins}$.
+4. Calculate combined value of ₱10 coins:
+   - $\text{Value} = 60 \times ₱10.00 = ₱600.00$.
+5. (Verification: ₱5 coins $= 80 \times 5 = ₱400$; ₱10 coins $= 60 \times 10 = ₱600$; ₱20 coins $= 20 \times 20 = ₱400$. Sum $= 400 + 600 + 400 = ₱1,400.00$).
+
+Common Trap: Providing the count of coins ($60$) or the value of ₱5 coins ($₱400.00$, Option B).
+Exam Tip: Value of ₱10 coins is $30k = 30(20) = ₱600.00$.","Correct. Survives elimination because k = 20 gives 60 ₱10 coins, with total value 60 * 10 = ₱600.00.","Eliminated because ₱400.00 is the value of the ₱5 coins (or ₱20 coins).","Eliminated because ₱500.00 is an arithmetic slip.","Eliminated because ₱700.00 is half the total fund.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A charity raffle organizer has 100 tickets in total, priced at ₱25.00, ₱50.00, and ₱100.00. The number of ₱25.00 tickets sold is exactly three times the number of ₱100.00 tickets sold. If total revenue from all 100 tickets is ₱4,750.00, how many ₱50.00 tickets were sold?","60 tickets","50 tickets","40 tickets","70 tickets","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $z$ be the number of ₱100 tickets sold.
+   - Number of ₱25 tickets sold $= 3z$.
+   - Total tickets $= 100 \implies$ Number of ₱50 tickets sold $= 100 - (3z + z) = 100 - 4z$.
+2. Formulate total sales revenue equation:
+   - $25(3z) + 50(100 - 4z) + 100z = 4,750.00$.
+3. Expand and collect terms:
+   - $75z + 5,000 - 200z + 100z = 4,750$.
+   - $5,000 - 25z = 4,750$.
+4. Solve for $z$:
+   - $25z = 5,000 - 4,750 = 250 \implies z = 10$.
+5. Calculate the number of ₱50 tickets sold:
+   - $\text{Number of ₱50 tickets} = 100 - 4(10) = 100 - 40 = 60\text{ tickets}$.
+6. Verify:
+   - 30 tickets at ₱25 $= ₱750$
+   - 60 tickets at ₱50 $= ₱3,000$
+   - 10 tickets at ₱100 $= ₱1,000$
+   - Sum $= 750 + 3,000 + 1,000 = ₱4,750.00$ (Confirmed!).
+
+Common Trap: Giving $4z = 40$ (Option C) or $3z = 30$ instead of $100 - 4z = 60$.
+Exam Tip: $100 - 4(10) = 60\text{ tickets}$.","Correct. Survives elimination because z = 10 yields 30 (₱25), 60 (₱50), and 10 (₱100) tickets, summing to 100 tickets and ₱4,750.00.","Eliminated because 50 tickets of ₱50 gives non-integer ticket breakdown.","Eliminated because 40 tickets is 4z.","Eliminated because 70 tickets gives ₱4,375.00 total.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"
+"A smart vending machine contains twice as many ₱10.00 coins as ₱20.00 coins, and 15 more ₱5.00 coins than ₱20.00 coins. If the total value of all coins in the machine is ₱1,425.00, what is the total number of coins in the machine?","135 coins","120 coins","150 coins","140 coins","A","Step-by-Step Solution:
+1. Define quantities in terms of $x$ (number of ₱20.00 coins):
+   - Number of ₱20.00 coins $= x$.
+   - Number of ₱10.00 coins $= 2x$.
+   - Number of ₱5.00 coins $= x + 15$.
+2. Formulate total monetary value equation:
+   - $20.00(x) + 10.00(2x) + 5.00(x + 15) = 1,425.00$.
+3. Expand and collect terms:
+   - $20x + 20x + 5x + 75 = 1,425$.
+   - $45x + 75 = 1,425$.
+4. Solve for $x$:
+   - $45x = 1,425 - 75 = 1,350$.
+   - $x = \frac{1,350}{45} = 30$.
+5. Compute total number of coins:
+   - ₱20 coins $= 30$
+   - ₱10 coins $= 2(30) = 60$
+   - ₱5 coins $= 30 + 15 = 45$.
+   - $\text{Total Coins} = 30 + 60 + 45 = 135\text{ coins}$.
+6. Verify total sum:
+   - $30(20) + 60(10) + 45(5) = 600 + 600 + 225 = ₱1,425.00$.
+
+Common Trap: Finding only $x = 30$ or the number of ₱10 coins ($60$) instead of the sum total of all coins ($135$).
+Exam Tip: $\text{Total Coins} = x + 2x + (x + 15) = 4x + 15 = 4(30) + 15 = 135\text{ coins}$.","Correct. Survives elimination because x = 30 gives 30 (₱20), 60 (₱10), and 45 (₱5) coins, totaling 135 coins and ₱1,425.00.","Eliminated because 120 coins gives 4x + 15 != 120.","Eliminated because 150 coins corresponds to x = 33.75.","Eliminated because 140 coins is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Coin/money problems | Very Difficult | Batch 038"

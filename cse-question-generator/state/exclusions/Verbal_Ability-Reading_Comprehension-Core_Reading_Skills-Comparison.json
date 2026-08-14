@@ -1,0 +1,80 @@
+{
+  "scope_key": "Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Comparison",
+  "created_at": "2026-08-14T14:44:40.982Z",
+  "updated_at": "2026-08-14T14:44:40.983Z",
+  "total_recorded_questions": 10,
+  "hashes": [
+    "8c847e806efc5f0d763018bb55d8295bf5eae867f121f920977e16c0a9ba53cb",
+    "76132d5186601cfa21a7381c8833a6b861750ccc0e9b98540c09d6c9e14e1edb",
+    "f54f1f3ad137b01d5a7c864fc76fb0859c2309c70f9d7786ed2954bf47323474",
+    "f54e64f921385bbbc91e1366f5a7bdfa8696bb485b234d11e595fcee97281d51",
+    "1ef0f782e23ec7a3372dcbc42b4e9dad7fac78ad5b4a544d4bde6905fa3efac6",
+    "84e22ffedc33935bc36c6e8228686118cd1e844987620c5a3e08c53662a53d9d",
+    "b644bcc588ea1abbd4efd36e69c3267b1e491efd75385727bab233dc1fcb1d08",
+    "ee959ba3fdcbdf18f02b22951c077e4422232fdcf22d54c883acf1cb05823796",
+    "0b56af67ee5d41c8520fb27d3c77b06a3dc2a3469bff45101acdf46324f87d92",
+    "d758bd2162fdc3c8b0b298c9271aee01e143467749ccc8e2c4c8d4318f625659"
+  ],
+  "records": [
+    {
+      "id": "q_1786718680982_st9jox",
+      "hash": "8c847e806efc5f0d763018bb55d8295bf5eae867f121f920977e16c0a9ba53cb",
+      "normalized": "in reforming public transportation within metro cebu two competing regulatory paradigms were debated the grosscost contract gcc model and the netcost ",
+      "added_at": "2026-08-14T14:44:40.982Z"
+    },
+    {
+      "id": "q_1786718680983_hzavqy",
+      "hash": "76132d5186601cfa21a7381c8833a6b861750ccc0e9b98540c09d6c9e14e1edb",
+      "normalized": "public sector talent management distinguishes between positionbased and careerbased civil service systems a positionbased system predominant in countr",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_igdsdu",
+      "hash": "f54f1f3ad137b01d5a7c864fc76fb0859c2309c70f9d7786ed2954bf47323474",
+      "normalized": "in managing disaster risk financing the department of finance evaluates exante risk retention mechanisms against expost emergency borrowing facilities",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_bpw8mt",
+      "hash": "f54e64f921385bbbc91e1366f5a7bdfa8696bb485b234d11e595fcee97281d51",
+      "normalized": "environmental policy analysts compare commandandcontrol cac environmental regulations with marketbased instruments mbis in curbing industrial carbon e",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_a59ouc",
+      "hash": "1ef0f782e23ec7a3372dcbc42b4e9dad7fac78ad5b4a544d4bde6905fa3efac6",
+      "normalized": "in public project appraisal the national economic and development authority neda utilizes both financial net present value fnpv and economic net prese",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_esg6zi",
+      "hash": "84e22ffedc33935bc36c6e8228686118cd1e844987620c5a3e08c53662a53d9d",
+      "normalized": "judicial administrative doctrines contrast adversarial and inquisitorial legal systems in factfinding and procedural control in an adversarial framewo",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_id1zlz",
+      "hash": "b644bcc588ea1abbd4efd36e69c3267b1e491efd75385727bab233dc1fcb1d08",
+      "normalized": "when analyzing agricultural trade policy in developing nations economists compare import substitution industrialization isi with exportoriented indust",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_eze5jp",
+      "hash": "ee959ba3fdcbdf18f02b22951c077e4422232fdcf22d54c883acf1cb05823796",
+      "normalized": "in telecommunications network architecture engineers contrast circuitswitched networks with packetswitched networks circuitswitched networks such as l",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_v66y6l",
+      "hash": "0b56af67ee5d41c8520fb27d3c77b06a3dc2a3469bff45101acdf46324f87d92",
+      "normalized": "within public organizational governance theorists differentiate hierarchical bureaucracy from network governance hierarchical bureaucracy operates on ",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    },
+    {
+      "id": "q_1786718680983_lygi2h",
+      "hash": "d758bd2162fdc3c8b0b298c9271aee01e143467749ccc8e2c4c8d4318f625659",
+      "normalized": "in public health epidemiology surveillance systems are categorized into passive surveillance and active surveillance in a passive surveillance system ",
+      "added_at": "2026-08-14T14:44:40.983Z"
+    }
+  ]
+}

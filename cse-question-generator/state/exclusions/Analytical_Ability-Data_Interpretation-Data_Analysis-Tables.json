@@ -1,0 +1,11 @@
+{
+  "scope_key": "Analytical_Ability-Data_Interpretation-Data_Analysis-Tables",
+  "created_at": "2026-08-14T22:05:59.000Z",
+  "updated_at": "2026-08-14T22:05:59.000Z",
+  "total_recorded_questions": 10,
+  "records": [
+    { "id": "q_106_1" }, { "id": "q_106_2" }, { "id": "q_106_3" }, { "id": "q_106_4" },
+    { "id": "q_106_5" }, { "id": "q_106_6" }, { "id": "q_106_7" }, { "id": "q_106_8" },
+    { "id": "q_106_9" }, { "id": "q_106_10" }
+  ]
+}

@@ -1,0 +1,160 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Identify the next number in the recursive mixed-operation sequence:
+
+$$4, \quad 9, \quad 20, \quad 43, \quad 90, \quad 185, \quad \textbf{?}$$","376","370","375","382","A","Step-by-Step Solution:
+1. Examine the relation connecting successive terms:
+   - $4 \times 2 + 1 = 9$
+   - $9 \times 2 + 2 = 20$
+   - $20 \times 2 + 3 = 43$
+   - $43 \times 2 + 4 = 90$
+   - $90 \times 2 + 5 = 185$.
+2. The recurrence formula is $T_{n+1} = 2 T_n + n$.
+3. Compute the 7th term by doubling $T_6$ and adding 6:
+   - $T_7 = 185 \times 2 + 6$.
+   - $185 \times 2 = 370$.
+   - $370 + 6 = 376$.
+
+Common Trap: Doubling without adding 6 ($370$, Option B) or adding 5 again ($375$, Option C).
+Exam Tip: In $T_{n+1} = 2 T_n + k$, ensure $k$ increments in synchrony with the step index.","Correct. Survives elimination because 185 * 2 + 6 = 370 + 6 = 376.","Eliminated because 370 is 185 * 2 without adding the incremented offset 6.","Eliminated because repeating the +5 offset yields 375.","Eliminated because adding 12 gives 382.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Find the missing number in the four-operator cyclic sequence:
+
+$$12, \quad 36, \quad 40, \quad 10, \quad 6, \quad 18, \quad 22, \quad \textbf{?}$$","5.5 \text{ (or } 5\frac{1}{2}\text{)}","18","4.5","6.0","A","Step-by-Step Solution:
+1. Analyze the operational transitions across the cycle:
+   - $12 \to 36$: Multiply by 3 ($12 \times 3 = 36$).
+   - $36 \to 40$: Add 4 ($36 + 4 = 40$).
+   - $40 \to 10$: Divide by 4 ($40 \div 4 = 10$).
+   - $10 \to 6$: Subtract 4 ($10 - 4 = 6$).
+2. The operational cycle of length 4 is $[\times 3, \quad +4, \quad \div 4, \quad -4]$.
+3. Verify cycle restart:
+   - $6 \to 18$: Multiply by 3 ($6 \times 3 = 18$).
+   - $18 \to 22$: Add 4 ($18 + 4 = 22$).
+4. The next operation in the cycle is $\div 4$:
+   - $T_8 = 22 \div 4 = 5.5 = 5\frac{1}{2}$.
+
+Common Trap: Subtracting 4 ($22 - 4 = 18$, Option B), skipping the division step in the 4-stage cycle.
+Exam Tip: Track the 4-phase cycle: Phase 1 ($\times 3$) $\to$ Phase 2 ($+4$) $\to$ Phase 3 ($\div 4$) $\to$ Phase 4 ($-4$).","Correct. Survives elimination because the 8th term corresponds to Phase 3 of the cycle (divide by 4), giving 22 / 4 = 5.5.","Eliminated because subtracting 4 skips Phase 3 to Phase 4, yielding 18.","Eliminated because arithmetic error gives 4.5.","Eliminated because dividing by 3.67 gives 6.0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"What is the 8th term in the alternating geometric-division sequence:
+
+$$8, \quad 24, \quad 12, \quad 36, \quad 18, \quad 54, \quad 27, \quad \textbf{?}$$","81","13.5","72","90","A","Step-by-Step Solution:
+1. Identify alternating operations:
+   - $8 \times 3 = 24$
+   - $24 \div 2 = 12$
+   - $12 \times 3 = 36$
+   - $36 \div 2 = 18$
+   - $18 \times 3 = 54$
+   - $54 \div 2 = 27$.
+2. The sequence strictly alternates between $[\times 3]$ and $[\div 2]$.
+3. Apply the next scheduled operation ($\times 3$) to the 7th term:
+   - $T_8 = 27 \times 3 = 81$.
+
+Common Trap: Dividing by 2 again ($27 \div 2 = 13.5$, Option B) instead of multiplying by 3.
+Exam Tip: Odd-to-even steps are $[\times 3]$, and even-to-odd steps are $[\div 2]$.","Correct. Survives elimination because 27 * 3 = 81.","Eliminated because dividing 27 / 2 = 13.5 applies the wrong alternating phase.","Eliminated because arithmetic error gives 72.","Eliminated because multiplying by 3.33 gives 90.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Identify the next number in the multiplying-and-odd-addition sequence:
+
+$$2, \quad 7, \quad 24, \quad 77, \quad 238, \quad \textbf{?}$$","723","714","729","719","A","Step-by-Step Solution:
+1. Examine operations connecting successive terms:
+   - $2 \times 3 + 1 = 6 + 1 = 7$
+   - $7 \times 3 + 3 = 21 + 3 = 24$
+   - $24 \times 3 + 5 = 72 + 5 = 77$
+   - $77 \times 3 + 7 = 231 + 7 = 238$.
+2. The recurrence formula is $T_{n+1} = 3 T_n + (2n - 1)$, where odd numbers are added at each stage ($1, 3, 5, 7$).
+3. The next odd additive term is 9.
+4. Compute the 6th term:
+   - $T_6 = 238 \times 3 + 9$.
+   - $238 \times 3 = 714$.
+   - $714 + 9 = 723$.
+
+Common Trap: Forgetting to add 9 after multiplying by 3 ($714$, Option B) or adding 7 again ($721$).
+Exam Tip: Track both components: constant multiplier $\times 3$ and consecutive odd additions ($+1, +3, +5, +7, +9$).","Correct. Survives elimination because 238 * 3 + 9 = 714 + 9 = 723.","Eliminated because 714 is 238 * 3 without the added odd constant 9.","Eliminated because adding 15 yields 729.","Eliminated because adding 5 yields 719.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Find the missing number in the sequence:
+
+$$1, \quad 3, \quad 11, \quad 47, \quad 239, \quad \textbf{?}$$","1,439","1,434","1,444","1,200","A","Step-by-Step Solution:
+1. Identify the recurrence pattern:
+   - $1 \times 2 + 1 = 3$
+   - $3 \times 3 + 2 = 11$
+   - $11 \times 4 + 3 = 47$
+   - $47 \times 5 + 4 = 239$.
+2. The recurrence rule is $T_{n+1} = T_n \times (n + 1) + n$.
+3. Compute the 6th term by multiplying by 6 and adding 5:
+   - $T_6 = 239 \times 6 + 5$.
+   - $239 \times 6 = 1,434$.
+   - $1,434 + 5 = 1,439$.
+
+Common Trap: Forgetting to add 5 after multiplying ($1,434$, Option B).
+Exam Tip: Notice $T_n = (n+1)! - 1$: $2!-1=1, 3!-1=5\dots$ Here $T_n = n! + \dots$ compute $6 \times 239 + 5 = 1,439$.","Correct. Survives elimination because 239 * 6 + 5 = 1,434 + 5 = 1,439.","Eliminated because 1,434 is 239 * 6 without adding 5.","Eliminated because adding 10 yields 1,444.","Eliminated because 5! * 10 = 1,200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"What is the next number in the alternating double-and-subtract sequence:
+
+$$15, \quad 30, \quad 25, \quad 50, \quad 45, \quad 90, \quad \textbf{?}$$","85","180","95","80","A","Step-by-Step Solution:
+1. Determine the pattern of operations:
+   - $15 \times 2 = 30$
+   - $30 - 5 = 25$
+   - $25 \times 2 = 50$
+   - $50 - 5 = 45$
+   - $45 \times 2 = 90$.
+2. The sequence strictly alternates between $[\times 2]$ and $[-5]$.
+3. Apply the next scheduled operation ($-5$):
+   - $T_7 = 90 - 5 = 85$.
+
+Common Trap: Doubling again ($90 \times 2 = 180$, Option B) instead of subtracting 5.
+Exam Tip: Check: Odd steps double, even steps subtract 5. Next step is an even step (subtract 5).","Correct. Survives elimination because 90 - 5 = 85.","Eliminated because doubling 90 gives 180, violating alternation.","Eliminated because adding 5 gives 95.","Eliminated because subtracting 10 gives 80.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Determine the next term in the multiplying-and-incrementing sequence:
+
+$$3, \quad 5, \quad 13, \quad 43, \quad 177, \quad \textbf{?}$$","891","885","890","912","A","Step-by-Step Solution:
+1. Analyze the operational transitions:
+   - $3 \times 1 + 2 = 5$
+   - $5 \times 2 + 3 = 13$
+   - $13 \times 3 + 4 = 43$
+   - $43 \times 4 + 5 = 177$.
+2. The recurrence formula is $T_{n+1} = T_n \times n + (n + 1)$.
+3. Compute the 6th term with multiplier 5 and additive term 6:
+   - $T_6 = 177 \times 5 + 6$.
+   - $177 \times 5 = 885$.
+   - $885 + 6 = 891$.
+
+Common Trap: Forgetting to add 6 after multiplying ($885$, Option B) or adding 5 instead ($890$, Option C).
+Exam Tip: Both the multiplier ($1, 2, 3, 4, 5$) and the additive constant ($2, 3, 4, 5, 6$) increment by 1 at each step.","Correct. Survives elimination because 177 * 5 + 6 = 885 + 6 = 891.","Eliminated because 885 is 177 * 5 without adding 6.","Eliminated because adding 5 gives 890.","Eliminated because arithmetic error gives 912.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Find the missing number in the halving-and-adding sequence:
+
+$$100, \quad 52, \quad 28, \quad 16, \quad 10, \quad \textbf{?}$$","7","6","8","5","A","Step-by-Step Solution:
+1. Examine the recursive operational rule:
+   - $\frac{100}{2} + 2 = 50 + 2 = 52$
+   - $\frac{52}{2} + 2 = 26 + 2 = 28$
+   - $\frac{28}{2} + 2 = 14 + 2 = 16$
+   - $\frac{16}{2} + 2 = 8 + 2 = 10$.
+2. Formulate recurrence: $T_{n+1} = \frac{T_n}{2} + 2$.
+3. Compute the 6th term ($T_6$):
+   - $T_6 = \frac{10}{2} + 2 = 5 + 2 = 7$.
+
+Common Trap: Halving without adding 2 ($\frac{10}{2} = 5$, Option D) or subtracting 2 ($5 - 2 = 3$).
+Exam Tip: Notice differences halve at each step: $48, 24, 12, 6, 3 \implies 10 - 3 = 7$.","Correct. Survives elimination because 10 / 2 + 2 = 7 (or 10 - 3 = 7).","Eliminated because arithmetic error yields 6.","Eliminated because adding 3 gives 8.","Eliminated because 5 is 10 / 2 without the +2 offset.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Identify the next number in the factorial-scaling sequence:
+
+$$2, \quad 5, \quad 16, \quad 65, \quad 326, \quad \textbf{?}$$","1,957","1,956","1,960","1,825","A","Step-by-Step Solution:
+1. Examine the progression:
+   - $2 \times 2 + 1 = 5$
+   - $5 \times 3 + 1 = 16$
+   - $16 \times 4 + 1 = 65$
+   - $65 \times 5 + 1 = 326$.
+2. The recurrence formula is $T_{n+1} = T_n \times (n + 1) + 1$.
+3. Compute the 6th term by multiplying by 6 and adding 1:
+   - $T_6 = 326 \times 6 + 1 = 1,956 + 1 = 1,957$.
+
+Common Trap: Forgetting to add 1 after multiplying ($1,956$, Option B).
+Exam Tip: Compute $6 \times 326 = 1,956$, then add $1 = 1,957$.","Correct. Survives elimination because 326 * 6 + 1 = 1,956 + 1 = 1,957.","Eliminated because 1,956 is 326 * 6 without the +1 offset.","Eliminated because adding 4 gives 1,960.","Eliminated because multiplying by 5.5 gives 1,825.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"
+"Find the next term in the compound multiplying-and-adding sequence:
+
+$$1, \quad 4, \quad 15, \quad 64, \quad 325, \quad \textbf{?}$$","1,956","1,950","1,960","1,856","A","Step-by-Step Solution:
+1. Analyze the operational pattern:
+   - $1 \times 2 + 2 = 4$
+   - $4 \times 3 + 3 = 15$
+   - $15 \times 4 + 4 = 64$
+   - $64 \times 5 + 5 = 325$.
+2. Formulate recurrence: $T_{n+1} = T_n \times (n + 1) + (n + 1) = (T_n + 1)(n + 1)$.
+3. Compute the 6th term with multiplier and adder equal to 6:
+   - $T_6 = 325 \times 6 + 6$.
+   - $325 \times 6 = 1,950$.
+   - $1,950 + 6 = 1,956$.
+   - (Equivalently: $(325 + 1) \times 6 = 326 \times 6 = 1,956$).
+
+Common Trap: Forgetting to add 6 after multiplying ($1,950$, Option B).
+Exam Tip: Factoring as $(T_n + 1)(n + 1)$ allows direct calculation: $326 \times 6 = 1,956$.","Correct. Survives elimination because (325 + 1) * 6 = 326 * 6 = 1,956.","Eliminated because 1,950 is 325 * 6 without adding 6.","Eliminated because adding 10 yields 1,960.","Eliminated because arithmetic error yields 1,856.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Mixed operations | Very Difficult | Batch 025"

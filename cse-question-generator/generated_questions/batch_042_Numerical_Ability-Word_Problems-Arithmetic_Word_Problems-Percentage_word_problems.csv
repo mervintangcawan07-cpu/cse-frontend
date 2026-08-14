@@ -1,0 +1,145 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"In an entrance examination for a government management internship program, 65.0% of the candidates passed the Numerical Reasoning test, 70.0% passed the Verbal Reasoning test, and 15.0% failed both tests. If exactly 400 candidates passed BOTH tests, what was the total number of candidates who sat for the examination?","800 candidates","750 candidates","850 candidates","900 candidates","A","Step-by-Step Solution:
+1. Define universal set as $100.0\%$.
+2. Calculate percentage of candidates who passed at least one test:
+   - $P(\text{Passed at least one}) = 100.0\% - P(\text{Failed both}) = 100.0\% - 15.0\% = 85.0\%$.
+3. Apply the Principle of Inclusion-Exclusion for two sets ($N$ and $V$):
+   - $P(N \cup V) = P(N) + P(V) - P(N \cap V)$.
+   - $85.0\% = 65.0\% + 70.0\% - P(N \cap V)$.
+   - $85.0\% = 135.0\% - P(N \cap V)$.
+4. Solve for percentage passing both tests:
+   - $P(N \cap V) = 135.0\% - 85.0\% = 50.0\%$.
+5. Set up equation with known count of 400 candidates:
+   - $50.0\% \text{ of Total Candidates} = 400$.
+   - $\text{Total Candidates} = \frac{400}{0.50} = 800\text{ candidates}$.
+
+Common Trap: Adding $65\% + 70\% = 135\%$ and subtracting $100\%$ ($35\% \implies 1,143$), forgetting that 15% failed both tests.
+Exam Tip: Set passed at least one to $85\%$. Overlap is $(65 + 70) - 85 = 50\%$. Total is $400 / 0.50 = 800$.","Correct. Survives elimination because 50% passed both tests, representing 400 candidates, yielding a total of 800 candidates.","Eliminated because 750 candidates yields 375 passing both.","Eliminated because 850 candidates yields 425 passing both.","Eliminated because 900 candidates yields 450 passing both.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"The market price of a staple agricultural commodity increased by 25.0%. By what exact percentage must a household reduce its consumption of this commodity so that its total expenditure on the item remains completely unchanged?","20.0\%","25.0\%","16.7\%","22.5\%","A","Step-by-Step Solution:
+1. Apply the standard price-consumption-expenditure inverse percentage formula:
+   - $\text{Percentage Reduction} = \frac{r}{100.0 + r} \times 100.0\%$, where $r = 25.0\%$.
+2. Substitute $r = 25.0$:
+   - $\text{Percentage Reduction} = \frac{25.0}{100.0 + 25.0} \times 100.0\% = \frac{25.0}{125.0} \times 100.0\%$.
+3. Simplify the fraction:
+   - $\frac{25.0}{125.0} = \frac{1}{5} = 0.20 = 20.0\%$.
+4. (Verification with base values: Initial price $= ₱100.00$, consumption $= 100\text{ units} \implies \text{Expenditure} = ₱10,000.00$. New price $= ₱125.00 \implies \text{New consumption} = \frac{₱10,000.00}{₱125.00} = 80\text{ units}$. Reduction $= 100 - 80 = 20\text{ units} = 20.0\%$).
+
+Common Trap: Assuming consumption must decrease by the same 25.0% (Option B), which would result in lower expenditure ($1.25 \times 0.75 = 0.9375 \implies -6.25\%$).
+Exam Tip: An increase of $+25\%$ ($\frac{1}{4}$) requires a decrease of $-20\%$ ($\frac{1}{4+1} = \frac{1}{5}$).","Correct. Survives elimination because 25 / (100 + 25) = 25 / 125 = 1/5 = 20.0%.","Eliminated because 25.0% reduction results in a 6.25% drop in total expenditure.","Eliminated because 16.7% is 1/6 (corresponding to a 20% price increase).","Eliminated because 22.5% is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"A candidate in a promotional examination scored 28.0% of the total marks and failed by 14 marks. Another candidate scored 42.0% of the total marks and obtained 28 marks more than the minimum passing threshold. What was the maximum possible marks for the examination, and what is the passing mark?","Maximum: 300 marks; Passing: 98 marks (32.67%)","Maximum: 350 marks; Passing: 112 marks (32.00%)","Maximum: 280 marks; Passing: 92 marks (32.86%)","Maximum: 320 marks; Passing: 104 marks (32.50%)","A","Step-by-Step Solution:
+1. Define variables:
+   - Let $M$ be the total maximum possible marks.
+   - Let $P$ be the passing mark.
+2. Set up expressions for passing mark $P$:
+   - Candidate 1: $P = 0.28 M + 14$ (Equation 1).
+   - Candidate 2: $P = 0.42 M - 28$ (Equation 2).
+3. Equate the two expressions:
+   - $0.42 M - 28 = 0.28 M + 14$.
+4. Solve for $M$:
+   - $0.42 M - 0.28 M = 14 + 28$.
+   - $0.14 M = 42 \implies M = \frac{42}{0.14} = 300\text{ marks}$.
+5. Calculate passing mark $P$:
+   - $P = 0.28(300) + 14 = 84 + 14 = 98\text{ marks}$.
+6. Calculate passing percentage:
+   - $\text{Passing \%} = \frac{98}{300} \times 100\% = 32.6667\% \approx 32.67\%$.
+
+Common Trap: Subtracting the marks instead of adding ($28 - 14 = 14 \implies M = 100$).
+Exam Tip: Percentage difference ($42\% - 28\% = 14\%$) corresponds to total mark span ($14 + 28 = 42\text{ marks}$) $\implies 0.14 M = 42 \implies M = 300$.","Correct. Survives elimination because 14% of maximum marks equals 42 marks, giving Maximum = 300 and Passing = 84 + 14 = 98 marks.","Eliminated because 350 marks gives 0.14(350) = 49 != 42.","Eliminated because 280 marks gives 0.14(280) = 39.2 != 42.","Eliminated because 320 marks gives 0.14(320) = 44.8 != 42.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"The population of a first-class municipality increased by 10.0% during the first year, decreased by 10.0% during the second year, and increased by 20.0% during the third year. If the population at the end of the third year was exactly 118,800, what was the municipality's initial population?","100,000","105,000","95,000","110,000","A","Step-by-Step Solution:
+1. Let $P_0$ be the initial population.
+2. Track successive multi-year growth factors:
+   - Year 1 (+10%): Factor $= 1.10$.
+   - Year 2 (-10%): Factor $= 0.90$.
+   - Year 3 (+20%): Factor $= 1.20$.
+3. Compute compound multiplier:
+   - $\text{Compound Factor} = 1.10 \times 0.90 \times 1.20 = 0.99 \times 1.20 = 1.188$.
+4. Set up equation with final population:
+   - $1.188 P_0 = 118,800$.
+5. Solve for $P_0$:
+   - $P_0 = \frac{118,800}{1.188} = 100,000$.
+6. Verify:
+   - Year 1: $100,000 \times 1.10 = 110,000$.
+   - Year 2: $110,000 \times 0.90 = 99,000$.
+   - Year 3: $99,000 \times 1.20 = 118,800$ (Confirmed!).
+
+Common Trap: Assuming $+10\% - 10\% + 20\% = +20\%$ net change ($1.20 P_0 = 118,800 \implies P_0 = 99,000$), ignoring intermediate compounding.
+Exam Tip: $+10\%$ then $-10\%$ yields $1.10 \times 0.90 = 0.99$ (a $1\%$ net loss), not zero change.","Correct. Survives elimination because 1.10 * 0.90 * 1.20 = 1.188, and 118,800 / 1.188 = 100,000.","Eliminated because 105,000 yields final population 124,740.","Eliminated because 95,000 yields final population 112,860.","Eliminated because 110,000 yields final population 130,680.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"In a municipal election between two candidates, Candidate A received 56.0% of the valid votes cast and won by a majority of 1,440 votes over Candidate B. If 4.0% of the total votes cast were declared invalid, how many total votes were cast in the election?","12,500 total votes","12,000 total votes","13,000 total votes","12,800 total votes","A","Step-by-Step Solution:
+1. Let $V$ be the total number of valid votes.
+2. Determine vote distribution between candidates:
+   - Candidate A: $56.0\% V$.
+   - Candidate B: $100.0\% - 56.0\% = 44.0\% V$.
+3. Express majority margin:
+   - $\text{Majority} = 56.0\% V - 44.0\% V = 12.0\% V$.
+4. Set equal to 1,440 votes:
+   - $0.12 V = 1,440 \implies V = \frac{1,440}{0.12} = 12,000\text{ valid votes}$.
+5. Calculate total votes cast $T$ (including 4.0% invalid votes):
+   - Valid votes comprise $100.0\% - 4.0\% = 96.0\%$ of total votes $T$.
+   - $0.96 T = 12,000$.
+   - $T = \frac{12,000}{0.96} = \frac{1,200,000}{96} = 12,500\text{ total votes cast}$.
+
+Common Trap: Selecting $12,000$ (Option B), which is the valid vote count, forgetting to add invalid ballots.
+Exam Tip: $T = \frac{\text{Valid Votes}}{1 - \text{Invalid Rate}} = \frac{12,000}{0.96} = 12,500\text{ total votes}$.","Correct. Survives elimination because valid votes are 12,000 (1,440 / 0.12), and total votes cast is 12,000 / 0.96 = 12,500.","Eliminated because 12,000 is the valid vote count excluding invalid ballots.","Eliminated because 13,000 assumes 7.7% invalid rate.","Eliminated because 12,800 is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"If the length of a rectangular government compound is increased by 30.0% and its width is decreased by 20.0%, what is the net percentage change in the area of the compound?","4.0% increase","10.0% increase","6.0% increase","2.0% decrease","A","Step-by-Step Solution:
+1. Apply the two-dimensional successive percentage change formula:
+   - $\text{Net \% Change} = a + b + \frac{ab}{100.0}$.
+2. Substitute $a = +30.0\%$ and $b = -20.0\%$:
+   - $\text{Net \% Change} = 30.0 + (-20.0) + \frac{(30.0)(-20.0)}{100.0}$.
+3. Simplify the calculation:
+   - $\text{Net \% Change} = 10.0 - \frac{600.0}{100.0} = 10.0 - 6.0 = +4.0\%$.
+4. (Verification with base dimensions: Let $L = 10, W = 10 \implies \text{Area} = 100$. New $L = 13$, New $W = 8 \implies \text{New Area} = 13 \times 8 = 104$. Change $= 104 - 100 = +4.0\%$).
+
+Common Trap: Simply subtracting $30\% - 20\% = +10\%$ (Option B), ignoring the cross-term adjustment.
+Exam Tip: Multiplier method: $1.30 \times 0.80 = 1.04 \implies +4.0\%$ increase.","Correct. Survives elimination because 1.30 * 0.80 = 1.04, representing an exact 4.0% increase in area.","Eliminated because 10.0% increase is the unadjusted difference (30% - 20%).","Eliminated because 6.0% is the subtracted cross-term alone.","Eliminated because 2.0% decrease is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"An executive's basic salary was first reduced by 20.0% during an agency budget cut, and subsequently raised by 25.0% during the following fiscal year. Compared to the original baseline salary, the executive's current salary is:","Exactly equal (0% net change)","5.0% higher","5.0% lower","2.5% higher","A","Step-by-Step Solution:
+1. Let the original baseline salary be $S_0 = 100.0$.
+2. Apply the 20.0% reduction:
+   - $S_1 = 100.0 \times (1 - 0.20) = 100.0 \times 0.80 = 80.0$.
+3. Apply the 25.0% increase on the reduced salary ($S_1 = 80.0$):
+   - $S_2 = 80.0 \times (1 + 0.25) = 80.0 \times 1.25 = 100.0$.
+4. Compare final salary $S_2$ to original baseline $S_0$:
+   - $\text{Net Change} = \frac{100.0 - 100.0}{100.0} \times 100\% = 0.0\%$.
+   - The current salary is exactly equal to the original salary.
+
+Common Trap: Subtracting $-20\% + 25\% = +5\%$ (Option B), forgetting that the 25% increase operates on the smaller reduced base of 80.
+Exam Tip: $0.80 \times 1.25 = 1.000 \implies 0\%$ net change.","Correct. Survives elimination because (1 - 0.20)(1 + 0.25) = 0.80 * 1.25 = 1.00, resulting in exactly 0% net change.","Eliminated because 5.0% higher is the false arithmetic sum (-20% + 25%).","Eliminated because 5.0% lower is an arithmetic slip.","Eliminated because 2.5% higher is an estimate error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"A candidate answered 80.0% of the first 50 questions correctly on a 120-question comprehensive civil service examination. What percentage of the remaining 70 questions must she answer correctly to achieve an overall passing score of exactly 75.0% on the entire examination?","71.43\% \text{ (or } 71\frac{3}{7}\%\text{)}","70.00\%","72.50\%","68.75\%","A","Step-by-Step Solution:
+1. Calculate total correct answers required for the entire 120-question exam:
+   - $\text{Target Correct} = 120 \times 0.75 = 90\text{ questions}$.
+2. Calculate correct answers achieved in the first 50 questions:
+   - $\text{Current Correct} = 50 \times 0.80 = 40\text{ questions}$.
+3. Calculate correct answers needed from the remaining 70 questions:
+   - $\text{Needed Correct} = 90 - 40 = 50\text{ questions}$.
+4. Compute required percentage accuracy on the remaining 70 questions:
+   - $\text{Required Percentage} = \frac{50}{70} \times 100\% = \frac{5}{7} \times 100\% = \frac{500}{7}\% \approx 71.4286\% \approx 71.43\% = 71\frac{3}{7}\%$.
+
+Common Trap: Averaging 80% and 75% to guess 70.0% (Option B), ignoring the unequal weighting of 50 vs 70 questions.
+Exam Tip: $\frac{50}{70} = \frac{5}{7} = 71\frac{3}{7}\% \approx 71.43\%$.","Correct. Survives elimination because 50 correct answers are needed out of the remaining 70 questions, giving 50 / 70 = 71.43% (71 3/7%).","Eliminated because 70.00% yields only 49 correct answers (total 89/120 = 74.17% < 75%).","Eliminated because 72.50% yields 50.75 correct.","Eliminated because 68.75% is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"Fresh harvest fruits contain 68.0% water, while dehydrated dried fruits contain 20.0% water. How many kilograms of dehydrated dried fruits can be produced from 100.0 kilograms of fresh harvest fruits?","40.0 kg","32.0 kg","48.0 kg","50.0 kg","A","Step-by-Step Solution:
+1. Identify the constant dry solid pulp mass:
+   - In fresh fruits: Water $= 68.0\% \implies \text{Solid Pulp} = 100.0\% - 68.0\% = 32.0\%$.
+2. Calculate mass of solid pulp in 100.0 kg fresh fruits:
+   - $\text{Solid Pulp Mass} = 100.0\text{ kg} \times 0.32 = 32.0\text{ kg}$.
+3. Express solid pulp fraction in dried fruits:
+   - In dried fruits: Water $= 20.0\% \implies \text{Solid Pulp} = 100.0\% - 20.0\% = 80.0\%$.
+4. Let $W$ be total mass of dried fruits produced:
+   - $0.80 W = \text{Solid Pulp Mass} = 32.0\text{ kg}$.
+5. Solve for $W$:
+   - $W = \frac{32.0}{0.80} = 40.0\text{ kg}$.
+
+Common Trap: Selecting $32.0\text{ kg}$ (Option B), which is the solid pulp alone without the 20% residual water content.
+Exam Tip: $\text{Fresh Solid} = \text{Dry Solid} \implies 100(0.32) = W(0.80) \implies W = 40.0\text{ kg}$.","Correct. Survives elimination because the 32.0 kg of solid pulp constitutes 80% of the final dried fruit mass, giving 32.0 / 0.80 = 40.0 kg.","Eliminated because 32.0 kg is the dry pulp mass with 0% water.","Eliminated because 48.0 kg is 100 - (68 - 20).","Eliminated because 50.0 kg assumes 36% pulp.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"
+"In an agency division, 40.0% of the personnel are male and 60.0% are female. If 75.0% of the male personnel and 80.0% of the female personnel hold permanent civil service appointments, what percentage of the total division personnel are temporary (non-permanent) appointees?","22.0\%","24.0\%","20.0\%","18.0\%","A","Step-by-Step Solution:
+1. Method 1 (Direct calculation of temporary fractions):
+   - Temporary fraction among males $= 100.0\% - 75.0\% = 25.0\%$.
+   - Temporary males as \% of total $= 40.0\% \times 0.25 = 10.0\%$.
+   - Temporary fraction among females $= 100.0\% - 80.0\% = 20.0\%$.
+   - Temporary females as \% of total $= 60.0\% \times 0.20 = 12.0\%$.
+2. Sum total temporary personnel percentage:
+   - $\text{Total Temporary \%} = 10.0\% + 12.0\% = 22.0\%$.
+3. Method 2 (Complement of permanent personnel):
+   - Permanent personnel $= (0.40 \times 0.75) + (0.60 \times 0.80) = 0.30 + 0.48 = 0.78 = 78.0\%$.
+   - Temporary personnel $= 100.0\% - 78.0\% = 22.0\%$ (Confirmed!).
+
+Common Trap: Taking the simple average of non-permanent rates $\frac{25\% + 20\%}{2} = 22.5\%$ or calculating permanent personnel ($78\%$).
+Exam Tip: Weighted temporary percentage: $0.40(0.25) + 0.60(0.20) = 0.10 + 0.12 = 22.0\%$.","Correct. Survives elimination because temporary staff comprises 40%(25%) + 60%(20%) = 10% + 12% = 22.0% of total personnel.","Eliminated because 24.0% is an overestimate.","Eliminated because 20.0% assumes equal weighting at 20%.","Eliminated because 18.0% is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Percentage word problems | Very Difficult | Batch 042"

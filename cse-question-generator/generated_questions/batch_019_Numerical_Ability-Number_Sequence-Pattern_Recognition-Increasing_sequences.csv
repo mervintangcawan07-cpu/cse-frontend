@@ -1,0 +1,172 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Identify the next number in the accelerating increasing sequence:
+
+$$4, \quad 11, \quad 30, \quad 67, \quad 128, \quad 219, \quad \textbf{?}$$","346","343","352","338","A","Step-by-Step Solution:
+1. Examine the terms relative to standard cubic powers ($n^3$):
+   - For $n = 1$: $1^3 + 3 = 1 + 3 = 4$.
+   - For $n = 2$: $2^3 + 3 = 8 + 3 = 11$.
+   - For $n = 3$: $3^3 + 3 = 27 + 3 = 30$.
+   - For $n = 4$: $4^3 + 3 = 64 + 3 = 67$.
+   - For $n = 5$: $5^3 + 3 = 125 + 3 = 128$.
+   - For $n = 6$: $6^3 + 3 = 216 + 3 = 219$.
+2. Formulate general term: $T_n = n^3 + 3$.
+3. Compute the 7th term ($n = 7$):
+   - $T_7 = 7^3 + 3 = 343 + 3 = 346$.
+
+Common Trap: Providing $7^3 = 343$ (Option B), forgetting to add the constant offset $+3$.
+Exam Tip: When second differences increase linearly ($6, 12, 18, 24, 30$), the underlying sequence is always a cubic polynomial $an^3 + bn^2 + cn + d$.","Correct. Survives elimination because the sequence follows Tn = n^3 + 3, giving 7^3 + 3 = 343 + 3 = 346.","Eliminated because 343 is 7^3 without the +3 offset.","Eliminated because overestimating the constant offset gives 352.","Eliminated because subtracting 5 yields 338.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Determine the next number in the rapidly growing increasing sequence:
+
+$$3, \quad 8, \quad 27, \quad 112, \quad 565, \quad \textbf{?}$$","3,396","3,390","3,402","2,825","A","Step-by-Step Solution:
+1. Analyze the operational transitions between consecutive terms:
+   - From 3 to 8: $3 \times 2 + 2 = 6 + 2 = 8$.
+   - From 8 to 27: $8 \times 3 + 3 = 24 + 3 = 27$.
+   - From 27 to 112: $27 \times 4 + 4 = 108 + 4 = 112$.
+   - From 112 to 565: $112 \times 5 + 5 = 560 + 5 = 565$.
+2. Identify recurrence relation: $T_{n+1} = T_n \times (n + 1) + (n + 1)$.
+3. Compute the next term (multiply by 6 and add 6):
+   - $T_6 = 565 \times 6 + 6$.
+   - $565 \times 6 = 3,390$.
+   - $3,390 + 6 = 3,396$.
+
+Common Trap: Multiplying by 6 without adding 6 ($3,390$, Option B).
+Exam Tip: In sequences with growing multipliers, check if the additive term increments in lockstep with the multiplier.","Correct. Survives elimination because the recurrence is Tn+1 = Tn * (n+1) + (n+1), giving 565 * 6 + 6 = 3,396.","Eliminated because 3,390 is 565 * 6 without adding 6.","Eliminated because adding 12 instead of 6 gives 3,402.","Eliminated because multiplying by 5 gives 2,825.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Find the next number in the polynomial power sequence:
+
+$$2, \quad 6, \quad 20, \quad 72, \quad 272, \quad \textbf{?}$$","1,056","1,024","1,088","992","A","Step-by-Step Solution:
+1. Decompose each term into powers of 2:
+   - $T_1 = 4^0 + 2^0 = 1 + 1 = 2$.
+   - $T_2 = 4^1 + 2^1 = 4 + 2 = 6$.
+   - $T_3 = 4^2 + 2^2 = 16 + 4 = 20$.
+   - $T_4 = 4^3 + 2^3 = 64 + 8 = 72$.
+   - $T_5 = 4^4 + 2^4 = 256 + 16 = 272$.
+2. Formulate general term: $T_n = 4^{n-1} + 2^{n-1} = 2^{n-1}(2^{n-1} + 1)$.
+3. Compute the 6th term ($n = 6$):
+   - $T_6 = 4^5 + 2^5 = 1,024 + 32 = 1,056$.
+
+Common Trap: Guessing $1,024$ ($4^5$, Option B) by ignoring the second power of two component ($2^5 = 32$).
+Exam Tip: Look for factored forms $2^k(2^k + 1)$ when numbers resemble products of near-powers of two ($1\times2, 2\times3, 4\times5, 8\times9, 16\times17, 32\times33$).","Correct. Survives elimination because T6 = 4^5 + 2^5 = 1,024 + 32 = 1,056.","Eliminated because 1,024 is 4^5 alone without adding 2^5 = 32.","Eliminated because adding 64 yields 1,088.","Eliminated because arithmetic error gives 992.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Find the next number in the recursive doubling sequence:
+
+$$5, \quad 12, \quad 26, \quad 54, \quad 110, \quad 222, \quad \textbf{?}$$","446","444","448","452","A","Step-by-Step Solution:
+1. Inspect recursive relationship:
+   - $5 \times 2 + 2 = 12$
+   - $12 \times 2 + 2 = 26$
+   - $26 \times 2 + 2 = 54$
+   - $54 \times 2 + 2 = 110$
+   - $110 \times 2 + 2 = 222$.
+2. Alternatively, examine the differences:
+   - $12 - 5 = 7$
+   - $26 - 12 = 14 = 7 \times 2^1$
+   - $54 - 26 = 28 = 7 \times 2^2$
+   - $110 - 54 = 56 = 7 \times 2^3$
+   - $222 - 110 = 112 = 7 \times 2^4$.
+3. Next difference is $7 \times 2^5 = 7 \times 32 = 224$.
+4. Compute next term:
+   - $222 + 224 = 446$ (or $222 \times 2 + 2 = 444 + 2 = 446$).
+
+Common Trap: Doubling without adding 2 ($222 \times 2 = 444$, Option B).
+Exam Tip: In sequences where differences double ($7, 14, 28, 56, 112, 224$), next term is $T_n + \text{Difference}$.","Correct. Survives elimination because 222 * 2 + 2 = 446 (or 222 + 224 = 446).","Eliminated because 444 is 222 * 2 without the +2 constant.","Eliminated because adding 4 gives 448.","Eliminated because arithmetic error gives 452.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Determine the missing number in the sequence of cumulative square sums:
+
+$$1, \quad 5, \quad 14, \quad 30, \quad 55, \quad 91, \quad 140, \quad \textbf{?}$$","204","200","214","196","A","Step-by-Step Solution:
+1. Examine differences between consecutive terms:
+   - $5 - 1 = 4 = 2^2$
+   - $14 - 5 = 9 = 3^2$
+   - $30 - 14 = 16 = 4^2$
+   - $55 - 30 = 25 = 5^2$
+   - $91 - 55 = 36 = 6^2$
+   - $140 - 91 = 49 = 7^2$.
+2. The sequence represents square pyramidal numbers: $S_n = \sum_{k=1}^n k^2 = \frac{n(n + 1)(2n + 1)}{6}$.
+3. The next difference is $8^2 = 64$.
+4. Compute next term:
+   - $T_8 = 140 + 64 = 204$.
+   - (Verification: $\frac{8 \times 9 \times 17}{6} = \frac{1,224}{6} = 204$).
+
+Common Trap: Adding $7^2 = 49$ again ($140 + 49 = 189$) or adding $8 \times 7 = 56$.
+Exam Tip: Consecutive differences of squares ($4, 9, 16, 25, 36, 49, 64$) generate the square pyramidal sequence.","Correct. Survives elimination because the next difference is 8^2 = 64, giving 140 + 64 = 204.","Eliminated because rounding to 200 introduces error.","Eliminated because adding 74 yields 214.","Eliminated because 196 is 14^2, not the cumulative sum.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Find the 8th term in the increasing factorial-growth sequence:
+
+$$2, \quad 3, \quad 8, \quad 27, \quad 112, \quad 565, \quad 3396, \quad \textbf{?}$$","23,779","23,772","24,120","23,550","A","Step-by-Step Solution:
+1. Identify recursive rule:
+   - $T_1 = 2$
+   - $T_2 = 2 \times 1 + 1 = 3$
+   - $T_3 = 3 \times 2 + 2 = 8$
+   - $T_4 = 8 \times 3 + 3 = 27$
+   - $T_5 = 27 \times 4 + 4 = 112$
+   - $T_6 = 112 \times 5 + 5 = 565$
+   - $T_7 = 565 \times 6 + 6 = 3,396$.
+2. To find the 8th term ($T_8$), multiply $T_7$ by 7 and add 7:
+   - $T_8 = 3,396 \times 7 + 7$.
+3. Compute multiplication:
+   - $3,396 \times 7 = 23,772$.
+4. Add 7:
+   - $23,772 + 7 = 23,779$.
+
+Common Trap: Omitting the final addition of 7 ($23,772$, Option B).
+Exam Tip: Compute $7 \times (3,396 + 1) = 7 \times 3,397 = 23,779$ for faster calculation.","Correct. Survives elimination because T8 = 3,396 * 7 + 7 = 23,772 + 7 = 23,779.","Eliminated because 23,772 is 3,396 * 7 without the added 7.","Eliminated because overestimating multiplier product gives 24,120.","Eliminated because underestimating product yields 23,550.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"What is the next number in the rapidly expanding factorial sequence:
+
+$$2, \quad 5, \quad 16, \quad 65, \quad 326, \quad \textbf{?}$$","1,957","1,956","1,960","1,825","A","Step-by-Step Solution:
+1. Examine the sequence progression:
+   - From 2 to 5: $2 \times 2 + 1 = 5$.
+   - From 5 to 16: $5 \times 3 + 1 = 16$.
+   - From 16 to 65: $16 \times 4 + 1 = 65$.
+   - From 65 to 326: $65 \times 5 + 1 = 326$.
+2. Formulate recurrence: $T_{n+1} = T_n \times (n + 1) + 1$.
+3. Calculate the next term by multiplying by 6 and adding 1:
+   - $T_6 = 326 \times 6 + 1$.
+   - $326 \times 6 = 1,956$.
+   - $1,956 + 1 = 1,957$.
+
+Common Trap: Forgetting to add 1 at the end ($1,956$, Option B).
+Exam Tip: In sequences with multiplier growth ($k, k+1, k+2\dots$), check if the additive constant is $+1$ throughout.","Correct. Survives elimination because 326 * 6 + 1 = 1,956 + 1 = 1,957.","Eliminated because 1,956 is 326 * 6 without adding 1.","Eliminated because adding 4 gives 1,960.","Eliminated because multiplying by 5.5 gives 1,825.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Find the missing number in the cubic-offset sequence:
+
+$$6, \quad 13, \quad 32, \quad 69, \quad 130, \quad \textbf{?}$$","221","216","226","215","A","Step-by-Step Solution:
+1. Compare each term with perfect cubes ($n^3$):
+   - $1^3 + 5 = 1 + 5 = 6$.
+   - $2^3 + 5 = 8 + 5 = 13$.
+   - $3^3 + 5 = 27 + 5 = 32$.
+   - $4^3 + 5 = 64 + 5 = 69$.
+   - $5^3 + 5 = 125 + 5 = 130$.
+2. General term: $T_n = n^3 + 5$.
+3. Compute the 6th term ($n = 6$):
+   - $T_6 = 6^3 + 5 = 216 + 5 = 221$.
+
+Common Trap: Selecting $6^3 = 216$ (Option B), forgetting the constant $+5$ offset.
+Exam Tip: The third difference of this sequence is constant ($6$), confirming an $n^3$ cubic polynomial.","Correct. Survives elimination because T6 = 6^3 + 5 = 216 + 5 = 221.","Eliminated because 216 is 6^3 without the +5 offset.","Eliminated because adding 10 yields 226.","Eliminated because subtracting 1 yields 215.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Find the next term in the tetrahedral number sequence:
+
+$$1, \quad 4, \quad 10, \quad 20, \quad 35, \quad 56, \quad \textbf{?}$$","84","78","90","82","A","Step-by-Step Solution:
+1. Examine consecutive differences:
+   - $4 - 1 = 3$ (2nd triangular number)
+   - $10 - 4 = 6$ (3rd triangular number)
+   - $20 - 10 = 10$ (4th triangular number)
+   - $35 - 20 = 15$ (5th triangular number)
+   - $56 - 35 = 21$ (6th triangular number).
+2. The sequence is formed by the tetrahedral numbers: $Te_n = \frac{n(n + 1)(n + 2)}{6}$.
+3. The next triangular difference is the 7th triangular number:
+   - $\Delta = \frac{7 \times 8}{2} = 28$.
+4. Compute the next term:
+   - $T_7 = 56 + 28 = 84$.
+   - (Verification via formula: $\frac{7 \times 8 \times 9}{6} = \frac{504}{6} = 84$).
+
+Common Trap: Adding 22 instead of 28 ($56 + 22 = 78$, Option B).
+Exam Tip: Differences between tetrahedral numbers are triangular numbers ($3, 6, 10, 15, 21, 28$).","Correct. Survives elimination because 56 + 28 = 84 (or 7 * 8 * 9 / 6 = 84).","Eliminated because adding 22 yields 78.","Eliminated because overestimating difference to 34 yields 90.","Eliminated because adding 26 yields 82.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
+"Identify the next number in the rapidly growing sequence:
+
+$$3, \quad 7, \quad 23, \quad 95, \quad 479, \quad \textbf{?}$$","2,879","2,874","2,885","2,750","A","Step-by-Step Solution:
+1. Analyze the multipliers and additive increments:
+   - $3 \times 2 + 1 = 7$.
+   - $7 \times 3 + 2 = 23$.
+   - $23 \times 4 + 3 = 95$.
+   - $95 \times 5 + 4 = 479$.
+2. Formulate recurrence: $T_{n+1} = T_n \times (n + 1) + n$.
+3. Compute the next term by multiplying by 6 and adding 5:
+   - $T_6 = 479 \times 6 + 5$.
+   - $479 \times 6 = 2,874$.
+   - $2,874 + 5 = 2,879$.
+
+Common Trap: Forgetting to add 5 after multiplying ($2,874$, Option B).
+Exam Tip: In sequences where both the multiplier and the additive term increment by 1 each step ($\times 2+1, \times 3+2, \times 4+3, \times 5+4, \times 6+5$), always track both components.","Correct. Survives elimination because 479 * 6 + 5 = 2,874 + 5 = 2,879.","Eliminated because 2,874 is 479 * 6 without adding 5.","Eliminated because adding 11 yields 2,885.","Eliminated because multiplying by 5.7 gives 2,750.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Increasing sequences | Very Difficult | Batch 019"
