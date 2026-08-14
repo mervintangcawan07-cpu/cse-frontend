@@ -602,12 +602,17 @@ If a diff suddenly shows thousands of changed lines for
 a small change, STOP and investigate.
 
 ==================================================
-26. VALIDATION
+26. VALIDATION & MANDATORY BUILD RULE
 ==================================================
 
 Inspect package.json before choosing commands.
 
-Run appropriate validation such as:
+MANDATORY PRE-COMMIT BUILD RULE:
+Always run `npm run build` before committing any code changes.
+Both type-checking (`npx tsc --noEmit`) and the production build (`npm run build`)
+must succeed with 0 errors before creating a commit.
+
+Run appropriate validation:
 
 npx tsc --noEmit
 
@@ -617,7 +622,7 @@ npm run build
 
 Run project-specific tests when available.
 
-Do not claim a test passed unless it actually ran.
+Do not claim a test or build passed unless it actually ran.
 
 If a command is unavailable, report:
 
@@ -691,6 +696,7 @@ Do NOT automatically commit every task.
 Commit only when:
 
 - The user has approved the implementation
+- `npm run build` has been executed and verified to pass with 0 errors
 - Changes are verified
 - The repository workflow permits it
 - The changes are task-related
@@ -953,6 +959,7 @@ ALWAYS:
 PROTECT USER WORK.
 INSPECT BEFORE MODIFYING.
 PRESERVE EXISTING FUNCTIONALITY.
+RUN NPM RUN BUILD BEFORE COMMITTING.
 PROTECT DATABASE DATA.
 PROTECT AUTHENTICATION.
 PROTECT PAYMENTS.
