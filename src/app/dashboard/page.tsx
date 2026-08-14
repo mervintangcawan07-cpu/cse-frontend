@@ -1,7 +1,7 @@
 // Relative Path: src/app/dashboard/page.tsx
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
@@ -10,6 +10,7 @@ import CSCCountdownWidget from "@/components/CSCCountdownWidget";
 import CSCDailyQuestionWidget from "@/components/cse/CSCDailyQuestionWidget";
 import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 import PaymentConfirmationLoader from "@/components/common/PaymentConfirmationLoader";
+import WidgetErrorBoundary from "@/components/common/WidgetErrorBoundary";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -65,10 +66,18 @@ interface DashboardAnalytics {
   }>;
 }
 
+const DEFAULT_PLANS: Plan[] = [
+  { planType: "1_MONTH", name: "1-Month Pass", price: 199, durationDays: 30 },
+  { planType: "6_MONTHS", name: "6-Month Pass", price: 299, durationDays: 180 },
+  { planType: "LIFETIME", name: "Lifetime Pass", price: 499, durationDays: 0 },
+];
+
 function DashboardContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [plans, setPlans] = useState<Plan[]>([]);
+  const [plans, setPlans] = useState<Plan[]>(DEFAULT_PLANS);
   const [analytics, setAnalytics] = useState<DetailedAnalytics | null>(null);
+  const [analyticsError, setAnalyticsError] = useState(false);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [dashAnalytics, setDashAnalytics] = useState<DashboardAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
@@ -79,6 +88,29 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paymentStatus = searchParams.get("payment");
+
+  // Isolated refetch specifically for exam analytics / score progression
+  const fetchAnalyticsOnly = useCallback(async () => {
+    setAnalyticsLoading(true);
+    setAnalyticsError(false);
+    try {
+      const res = await fetch("/api/user/analytics/detailed");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.analytics) {
+          setAnalytics(data.analytics);
+          setAnalyticsError(false);
+          return;
+        }
+      }
+      setAnalyticsError(true);
+    } catch (err) {
+      console.warn("Could not reload analytics:", err);
+      setAnalyticsError(true);
+    } finally {
+      setAnalyticsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     setChartMounted(true);
@@ -102,28 +134,40 @@ function DashboardContent() {
         if (userRes.ok && userData.user) {
           setUser(userData.user);
 
-          const [analyticsRes, pricingRes, dashAnalyticsRes] = await Promise.all([
-            fetch("/api/user/analytics/detailed"),
-            fetch("/api/pricing"),
-            fetch("/api/analytics/dashboard"),
+          // Graceful Error Recovery: Fetch independent datasets concurrently without all-or-nothing failure
+          const results = await Promise.allSettled([
+            fetch("/api/pricing").then((r) => (r.ok ? r.json() : null)),
+            fetch("/api/analytics/dashboard").then((r) => (r.ok ? r.json() : null)),
+            fetch("/api/user/analytics/detailed").then((r) => (r.ok ? r.json() : null)),
           ]);
 
-          const [analyticsData, pricingData, dashAnalyticsData] = await Promise.all([
-            analyticsRes.json(),
-            pricingRes.json(),
-            dashAnalyticsRes.json(),
-          ]);
-
-          if (pricingRes.ok && pricingData.plans) {
-            setPlans(pricingData.plans);
+          // 1. Pricing plans
+          if (results[0].status === "fulfilled" && results[0].value?.plans) {
+            setPlans(results[0].value.plans);
           }
 
-          if (analyticsRes.ok && analyticsData.analytics) {
-            setAnalytics(analyticsData.analytics);
+          // 2. Overview Dashboard Analytics (streaks, quick cards)
+          if (results[1].status === "fulfilled" && results[1].value) {
+            setDashAnalytics(results[1].value);
+          } else {
+            setDashAnalytics({
+              totalExams: 0,
+              averageScore: 0,
+              passReadinessScore: 0,
+              currentStreak: 1,
+              longestStreak: 1,
+              totalBookmarks: 0,
+              recommendation: "Focus on your daily practice question to build exam confidence.",
+              recentHistory: [],
+            });
           }
 
-          if (dashAnalyticsRes.ok) {
-            setDashAnalytics(dashAnalyticsData);
+          // 3. Detailed Exam Statistics & Charts
+          if (results[2].status === "fulfilled" && results[2].value?.analytics) {
+            setAnalytics(results[2].value.analytics);
+            setAnalyticsError(false);
+          } else {
+            setAnalyticsError(true);
           }
         } else {
           router.push("/login");
@@ -301,10 +345,14 @@ function DashboardContent() {
       </div>
 
       {/* AUTOMATIC CSC EXAMINATION TIMETABLE & COUNTDOWN WIDGET */}
-      <CSCCountdownWidget />
+      <WidgetErrorBoundary fallbackTitle="CSC Examination Timetable Unavailable">
+        <CSCCountdownWidget />
+      </WidgetErrorBoundary>
 
       {/* DAILY QUESTION OF THE DAY CHALLENGE WIDGET */}
-      <CSCDailyQuestionWidget />
+      <WidgetErrorBoundary fallbackTitle="Daily Practice Challenge Unavailable">
+        <CSCDailyQuestionWidget />
+      </WidgetErrorBoundary>
 
       {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (
@@ -429,81 +477,112 @@ function DashboardContent() {
         </div>
       )}
 
-      {/* PERFORMANCE CHARTS */}
-      {analytics && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-black text-slate-900">Score Progression</h2>
-                <p className="text-xs text-slate-500">Historical performance across mock exam attempts</p>
-              </div>
-              <span className="text-xs font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
-                80% Benchmark
+      {/* PERFORMANCE CHARTS WITH ISOLATED ERROR BOUNDARY & RECOVERY */}
+      <WidgetErrorBoundary
+        fallbackTitle="Performance Charts Temporarily Unavailable"
+        onRetry={fetchAnalyticsOnly}
+      >
+        {analyticsLoading ? (
+          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md text-center space-y-2">
+            <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="text-xs font-bold text-slate-500">Refreshing exam performance statistics...</p>
+          </div>
+        ) : analyticsError || !analytics ? (
+          <div className="bg-slate-900 text-white p-6 rounded-3xl border border-slate-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl p-2.5 bg-amber-500/20 text-amber-400 rounded-2xl border border-amber-500/30 shrink-0">
+                📊
               </span>
+              <div>
+                <h3 className="text-sm font-black text-white">Exam Statistics Temporarily Unavailable</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Your mock exams, questions, and streak counters are operating normally.
+                </p>
+              </div>
             </div>
-
-            <div className="h-64 w-full pt-4">
-              {chartMounted && (
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={analytics.scoreHistory}>
-                    <defs>
-                      <linearGradient id="scoreColor" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="date" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                    <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f172a",
-                        borderRadius: "16px",
-                        border: "none",
-                        color: "#fff",
-                        fontSize: "12px",
-                      }}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="score"
-                      stroke="#2563eb"
-                      strokeWidth={3}
-                      fillOpacity={1}
-                      fill="url(#scoreColor)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              )}
-            </div>
+            <button
+              onClick={fetchAnalyticsOnly}
+              disabled={analyticsLoading}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer shrink-0 whitespace-nowrap"
+            >
+              🔄 Retry Loading Stats
+            </button>
           </div>
-
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
-            <div>
-              <h2 className="text-lg font-black text-slate-900">Subject Mastery</h2>
-              <p className="text-xs text-slate-500 font-medium">Accuracy rate by core subject</p>
-            </div>
-
-            <div className="space-y-4 pt-2">
-              {analytics.categoryBreakdown.map((cat, idx) => (
-                <div key={idx} className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-bold text-slate-700">
-                    <span>{cat.category}</span>
-                    <span className="text-slate-900 font-extrabold">{cat.score}%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                    <div
-                      className={`h-2.5 rounded-full ${cat.color}`}
-                      style={{ width: `${cat.score}%` }}
-                    />
-                  </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-lg font-black text-slate-900">Score Progression</h2>
+                  <p className="text-xs text-slate-500">Historical performance across mock exam attempts</p>
                 </div>
-              ))}
+                <span className="text-xs font-extrabold px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">
+                  80% Benchmark
+                </span>
+              </div>
+
+              <div className="h-64 w-full pt-4">
+                {chartMounted && (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={analytics.scoreHistory}>
+                      <defs>
+                        <linearGradient id="scoreColor" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="date" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          borderRadius: "16px",
+                          border: "none",
+                          color: "#fff",
+                          fontSize: "12px",
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="score"
+                        stroke="#2563eb"
+                        strokeWidth={3}
+                        fillOpacity={1}
+                        fill="url(#scoreColor)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+              <div>
+                <h2 className="text-lg font-black text-slate-900">Subject Mastery</h2>
+                <p className="text-xs text-slate-500 font-medium">Accuracy rate by core subject</p>
+              </div>
+
+              <div className="space-y-4 pt-2">
+                {analytics.categoryBreakdown.map((cat, idx) => (
+                  <div key={idx} className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-bold text-slate-700">
+                      <span>{cat.category}</span>
+                      <span className="text-slate-900 font-extrabold">{cat.score}%</span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                      <div
+                        className={`h-2.5 rounded-full ${cat.color}`}
+                        style={{ width: `${cat.score}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </WidgetErrorBoundary>
     </div>
   );
 }
