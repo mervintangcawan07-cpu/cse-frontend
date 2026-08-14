@@ -1,7 +1,7 @@
 // Relative Path: src/components/social/rooms/StudyRoomStage.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   LiveKitRoom,
   RoomAudioRenderer,
@@ -72,8 +72,11 @@ function RealtimeStageContent({
 
   // Live Whiteboard sync states
   const [incomingDelta, setIncomingDelta] = useState<DrawDelta | null>(null);
+  const [incomingDeltasBatch, setIncomingDeltasBatch] = useState<DrawDelta[] | null>(null);
   const [incomingClearSignal, setIncomingClearSignal] = useState<number>(0);
   const [handRaiseAlerts, setHandRaiseAlerts] = useState<string[]>([]);
+  const wbVersionRef = useRef<number>(0);
+  const wbClearTimeRef = useRef<number>(0);
 
   const isModerator = userRole === "MODERATOR";
   const isHostOrMod = isHost || isModerator;
@@ -90,7 +93,50 @@ function RealtimeStageContent({
     }
   }, [isUserForceMuted, localParticipant]);
 
-  // Listen for LiveKit Data Channel messages
+  // Fetch whiteboard state from server (for initial load, late joins, and catch-up)
+  const fetchWhiteboardState = useCallback(async (fullRefresh = false) => {
+    try {
+      const since = fullRefresh ? 0 : wbVersionRef.current;
+      const res = await fetch(
+        `/api/social/rooms/${roomId}/whiteboard?sinceVersion=${since}&clearTime=${wbClearTimeRef.current}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data.clearTimestamp && data.clearTimestamp > wbClearTimeRef.current) {
+          wbClearTimeRef.current = data.clearTimestamp;
+          setIncomingClearSignal(data.clearTimestamp);
+        }
+
+        if (data.fullSync) {
+          wbVersionRef.current = data.version || 0;
+          setIncomingDeltasBatch(data.strokes || []);
+        } else if (data.strokes && data.strokes.length > 0) {
+          wbVersionRef.current = data.version || wbVersionRef.current;
+          data.strokes.forEach((stroke: DrawDelta) => {
+            setIncomingDelta(stroke);
+          });
+        } else if (data.version) {
+          wbVersionRef.current = data.version;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to sync whiteboard state:", err);
+    }
+  }, [roomId]);
+
+  // Poll whiteboard state while on WHITEBOARD tab for 100% reliable cross-device sync
+  useEffect(() => {
+    fetchWhiteboardState(true);
+
+    if (activeTab === "WHITEBOARD") {
+      const interval = setInterval(() => {
+        fetchWhiteboardState(false);
+      }, 2500);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, fetchWhiteboardState]);
+
+  // Listen for LiveKit Data Channel messages (0ms sub-millisecond instant peer delivery)
   useEffect(() => {
     if (!room) return;
 
@@ -100,9 +146,13 @@ function RealtimeStageContent({
         const data = JSON.parse(decoded);
 
         if (data.type === "WHITEBOARD_DRAW") {
+          wbVersionRef.current += 1;
           setIncomingDelta(data.delta);
         } else if (data.type === "WHITEBOARD_CLEAR") {
-          setIncomingClearSignal(Date.now());
+          const now = Date.now();
+          wbClearTimeRef.current = now;
+          wbVersionRef.current += 1;
+          setIncomingClearSignal(now);
         } else if (data.type === "HAND_RAISE") {
           if (data.userName) {
             setHandRaiseAlerts((prev) => [...prev.slice(-4), data.userName]);
@@ -178,28 +228,59 @@ function RealtimeStageContent({
     }
   };
 
-  // Broadcast drawing strokes
+  // Broadcast drawing strokes via LiveKit & persist to room whiteboard API
   const handleDrawDelta = (delta: DrawDelta) => {
-    if (!canDraw || !room || !localParticipant) return;
-    try {
-      const payload = JSON.stringify({ type: "WHITEBOARD_DRAW", delta });
-      const encoded = new TextEncoder().encode(payload);
-      localParticipant.publishData(encoded, { reliable: true });
-    } catch (err) {
-      console.error("Failed to publish stroke delta:", err);
+    if (!canDraw) return;
+
+    // 1. Instant Peer Broadcast via WebRTC DataChannel
+    if (room && localParticipant) {
+      try {
+        const payload = JSON.stringify({ type: "WHITEBOARD_DRAW", delta });
+        const encoded = new TextEncoder().encode(payload);
+        localParticipant.publishData(encoded, { reliable: true });
+      } catch (err) {
+        console.error("Failed to publish stroke delta:", err);
+      }
     }
+
+    // 2. Persist to room server state for late joiners and fallback
+    fetch(`/api/social/rooms/${roomId}/whiteboard`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ delta }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.version) wbVersionRef.current = data.version;
+      })
+      .catch(() => {});
   };
 
-  // Broadcast clear board event
+  // Broadcast clear board event & delete from room whiteboard API
   const handleClearBoard = () => {
-    if (!canDraw || !room || !localParticipant) return;
-    try {
-      const payload = JSON.stringify({ type: "WHITEBOARD_CLEAR" });
-      const encoded = new TextEncoder().encode(payload);
-      localParticipant.publishData(encoded, { reliable: true });
-    } catch (err) {
-      console.error("Failed to publish clear signal:", err);
+    if (!canDraw) return;
+
+    // 1. Instant Peer Broadcast via WebRTC DataChannel
+    if (room && localParticipant) {
+      try {
+        const payload = JSON.stringify({ type: "WHITEBOARD_CLEAR" });
+        const encoded = new TextEncoder().encode(payload);
+        localParticipant.publishData(encoded, { reliable: true });
+      } catch (err) {
+        console.error("Failed to publish clear signal:", err);
+      }
     }
+
+    // 2. Clear on server state
+    fetch(`/api/social/rooms/${roomId}/whiteboard`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.clearTimestamp) wbClearTimeRef.current = data.clearTimestamp;
+        if (data.version) wbVersionRef.current = data.version;
+      })
+      .catch(() => {});
   };
 
   // Toggle Microphones
@@ -420,6 +501,7 @@ function RealtimeStageContent({
               onDrawDelta={handleDrawDelta}
               onClearBoard={handleClearBoard}
               incomingDelta={incomingDelta}
+              incomingDeltasBatch={incomingDeltasBatch}
               incomingClearSignal={incomingClearSignal}
             />
           </div>
