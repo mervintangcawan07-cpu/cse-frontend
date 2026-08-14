@@ -79,7 +79,7 @@ export default function ResumeExamBanner() {
           Discard
         </button>
         <Link
-          href="/exam"
+          href="/mock-exam/take"
           className="flex-1 md:flex-initial text-center px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl transition shadow-sm flex items-center justify-center gap-2"
         >
           <span>Resume Exam</span>

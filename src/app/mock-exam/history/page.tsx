@@ -75,10 +75,10 @@ export default function ExamHistoryPage() {
         </div>
 
         <Link
-          href="/dashboard"
+          href="/practice"
           className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 shrink-0"
         >
-          ← Return to Dashboard
+          ← Return to Practice Hub
         </Link>
       </div>
 
@@ -91,7 +91,7 @@ export default function ExamHistoryPage() {
             Take your first practice mock exam to generate diagnostic analytics and review item explanations.
           </p>
           <Link
-            href="/exam"
+            href="/mock-exam/take"
             className="inline-block px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition"
           >
             ⚡ Take Practice Exam

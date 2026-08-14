@@ -59,11 +59,25 @@ function TakeExamPageInner() {
 
         const qData = await questionsRes.json();
         if (questionsRes.ok && qData.questions) {
-          setAllQuestions(qData.questions);
-          const uniqueCategories = Array.from(
-            new Set(qData.questions.map((q: Question) => q.category))
-          ) as string[];
-          setCategories(uniqueCategories);
+          // Standard official CSE category normalization & deduplication
+          const categoryMap = new Map<string, string>();
+          qData.questions.forEach((q: Question) => {
+            const raw = q.category?.trim();
+            if (raw && !raw.toLowerCase().includes("elimination drill")) {
+              const lower = raw.toLowerCase();
+              if (!categoryMap.has(lower)) {
+                if (lower.includes("verbal")) categoryMap.set(lower, "Verbal Ability");
+                else if (lower.includes("numerical")) categoryMap.set(lower, "Numerical Reasoning");
+                else if (lower.includes("analytical")) categoryMap.set(lower, "Analytical Reasoning");
+                else if (lower.includes("general")) categoryMap.set(lower, "General Information");
+                else if (lower.includes("clerical")) categoryMap.set(lower, "Clerical Ability");
+                else {
+                  categoryMap.set(lower, raw.charAt(0).toUpperCase() + raw.slice(1));
+                }
+              }
+            }
+          });
+          setCategories(Array.from(new Set(categoryMap.values())));
         }
 
         if (bookmarkRes.ok) {
@@ -374,24 +388,24 @@ function TakeExamPageInner() {
       <div className="max-w-xl mx-auto py-10 px-4 space-y-6">
         <div className="flex justify-between items-center">
           <Link
-            href="/dashboard"
-            className="text-xs font-extrabold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100 transition flex items-center gap-1"
+            href="/practice"
+            className="text-xs font-extrabold text-blue-400 hover:text-blue-300 transition flex items-center gap-1.5"
           >
-            ← Back to Dashboard
+            ← Back to Practice & Prep Hub
           </Link>
         </div>
 
         {savedSessionData && (
-          <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 p-6 rounded-3xl space-y-3 shadow-sm">
+          <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 p-6 rounded-3xl space-y-3 shadow-xl">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-black uppercase text-amber-700 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
+              <span className="text-xs font-black uppercase text-amber-400 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">
                 ⏸️ Unfinished Exam Found
               </span>
             </div>
-            <h2 className="text-base font-extrabold text-slate-900 dark:text-slate-100">
+            <h2 className="text-base font-extrabold text-white">
               You have a saved exam session in progress!
             </h2>
-            <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+            <p className="text-xs text-slate-300 font-medium leading-relaxed">
               Answered {Object.keys(savedSessionData.selectedAnswers || {}).length} of{" "}
               {savedSessionData.examQuestions?.length || 0} items.
             </p>
@@ -407,7 +421,7 @@ function TakeExamPageInner() {
                   localStorage.removeItem(LOCAL_STORAGE_KEY);
                   setSavedSessionData(null);
                 }}
-                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold text-xs rounded-xl transition cursor-pointer"
+                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition cursor-pointer"
               >
                 Discard & Start Fresh
               </button>
@@ -415,35 +429,45 @@ function TakeExamPageInner() {
           </div>
         )}
 
-        <div className="bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500">
-          <div>
-            <h1 className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">Configure Mock Exam</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden text-slate-100">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">⏱️</span>
+              <h1 className="text-2xl font-black text-white">Configure Mock Exam</h1>
+            </div>
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
               Customize your practice session with smart non-repeating question queue.
             </p>
           </div>
 
           <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
                 Select Category
               </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full p-4 border border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 text-slate-800 dark:text-slate-100 font-medium outline-none focus:border-blue-500 focus:bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500"
-              >
-                <option value="All">All Categories (170 Items - Smart Repetition)</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-sm font-bold text-white outline-none focus:border-blue-500 transition cursor-pointer appearance-none"
+                >
+                  <option value="All" className="bg-slate-900 text-white py-2">
+                    All Categories (170 Items - Smart Repetition)
                   </option>
-                ))}
-              </select>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat} className="bg-slate-900 text-white py-2">
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs font-bold">
+                  ▼
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-sm font-bold text-slate-700 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
                 Time Limit
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -455,11 +479,12 @@ function TakeExamPageInner() {
                 ].map((timer) => (
                   <button
                     key={timer.value}
+                    type="button"
                     onClick={() => setTimerMinutes(timer.value)}
-                    className={`p-3 rounded-xl border text-sm font-bold transition cursor-pointer ${
+                    className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition cursor-pointer flex items-center justify-center text-center ${
                       timerMinutes === timer.value
-                        ? "border-blue-600 bg-blue-50 text-blue-700"
-                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500"
+                        ? "border-blue-500 bg-blue-600 text-white font-black shadow-lg shadow-blue-600/30"
+                        : "border-slate-800 bg-slate-950 text-slate-300 hover:text-white hover:bg-slate-800"
                     }`}
                   >
                     {timer.label}
@@ -472,9 +497,10 @@ function TakeExamPageInner() {
           <button
             onClick={handleStartExam}
             disabled={startingExam}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-black text-lg rounded-2xl transition shadow-sm cursor-pointer"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-black text-sm sm:text-base rounded-2xl transition shadow-lg shadow-blue-600/30 cursor-pointer flex items-center justify-center gap-2"
           >
-            {startingExam ? "Assembling Smart Exam Pool..." : "Start 170-Item Exam 🚀"}
+            <span>🚀</span>
+            <span>{startingExam ? "Assembling Smart Exam Pool..." : "Start 170-Item Exam"}</span>
           </button>
         </div>
       </div>

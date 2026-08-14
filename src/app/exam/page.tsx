@@ -36,7 +36,8 @@ export default function ExamHubPage() {
               router.push("/dashboard");
               return;
             }
-            setUser(data.user);
+            router.replace("/mock-exam/take");
+            return;
           } else {
             router.push("/login");
           }

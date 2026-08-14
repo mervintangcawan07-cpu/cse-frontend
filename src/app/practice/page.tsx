@@ -56,13 +56,13 @@ export default function PracticeAndPrepPage() {
             {isPaid ? (
               <>
                 <Link
-                  href="/exam"
+                  href="/mock-exam/take"
                   className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-blue-600/30"
                 >
                   Start Exam ⚡
                 </Link>
                 <Link
-                  href="/history"
+                  href="/mock-exam/history"
                   className="py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs text-center rounded-xl border border-slate-700 transition shrink-0"
                 >
                   📜 History
