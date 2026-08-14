@@ -22,7 +22,15 @@ async function verifyAdmin() {
 export async function GET() {
   try {
     const notes = await prisma.studyNote.findMany({ orderBy: { createdAt: "desc" } });
-    return NextResponse.json({ notes });
+    return NextResponse.json(
+      { notes },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch study notes" }, { status: 500 });
   }

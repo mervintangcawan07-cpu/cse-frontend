@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProTipBullets from "@/components/notes/ProTipBullets";
+import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface StudyNote {
   id: string;
@@ -31,13 +32,12 @@ export default function ReviewerPage() {
   useEffect(() => {
     async function fetchNotesAndBookmarks() {
       try {
-        const [notesRes, bookmarkRes] = await Promise.all([
-          fetch("/api/reviewer"),
+        const [notesData, bookmarkRes] = await Promise.all([
+          fetchWithClientCache<{ notes: StudyNote[] }>("/api/reviewer"),
           fetch("/api/bookmarks"),
         ]);
 
-        const notesData = await notesRes.json();
-        if (notesRes.ok && notesData.notes) setStudyNotes(notesData.notes);
+        if (notesData && notesData.notes) setStudyNotes(notesData.notes);
 
         if (bookmarkRes.ok) {
           const bookmarkData = await bookmarkRes.json();

@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { fetchWithClientCache } from "@/lib/clientCache";
 
 export default function LearningHubPage() {
   const [isPaid, setIsPaid] = useState(false);
@@ -18,10 +19,11 @@ export default function LearningHubPage() {
       })
       .catch(() => {});
 
-    Promise.all([fetch("/api/reviewer"), fetch("/api/reading-materials")])
-      .then(async ([notesRes, hbRes]) => {
-        const notesData = await notesRes.json();
-        const hbData = await hbRes.json();
+    Promise.all([
+      fetchWithClientCache<{ notes: any[] }>("/api/reviewer"),
+      fetchWithClientCache<{ handbooks: any[] }>("/api/reading-materials"),
+    ])
+      .then(([notesData, hbData]) => {
         setStats({
           notesCount: notesData.notes?.length || 0,
           handbooksCount: hbData.handbooks?.length || 0,

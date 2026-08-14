@@ -33,7 +33,15 @@ export async function GET() {
         createdAt: true,
       },
     });
-    return NextResponse.json({ handbooks });
+    return NextResponse.json(
+      { handbooks },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch handbooks" }, { status: 500 });
   }

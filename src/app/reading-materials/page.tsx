@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PassageScanner from "@/components/PassageScanner";
+import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface DocumentItem {
   id: string;
@@ -25,9 +26,8 @@ export default function ReadingMaterialsPage() {
   useEffect(() => {
     async function fetchHandbooks() {
       try {
-        const res = await fetch("/api/reading-materials");
-        const data = await res.json();
-        if (res.ok && data.handbooks) {
+        const data = await fetchWithClientCache<{ handbooks: DocumentItem[] }>("/api/reading-materials");
+        if (data && data.handbooks) {
           setDocumentsList(data.handbooks);
           if (data.handbooks.length > 0) setSelectedDoc(data.handbooks[0]);
         }
