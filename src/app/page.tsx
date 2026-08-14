@@ -3,40 +3,32 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import QuestionReview from "@/components/question/QuestionReview";
+import { StructuredQuestion } from "@/types/question";
 
-interface SampleQuestion {
-  id: number;
-  type: string;
-  category: string;
-  badgeColor: string;
-  prompt: string;
-  options: string[];
-  correctIndex: number;
-  correctAnswerText: string;
-  stepByStep: { step: string; detail: string }[];
-  whyCorrect: string;
-  whyWrong: { option: string; text: string }[];
-  eliminationStrategy: string;
-  commonTrap: string;
-  examTip: string;
+interface SampleChallengeQuestion extends StructuredQuestion {
+  id: string;
+  badgeLabel: string;
 }
 
-const SAMPLE_QUESTIONS: SampleQuestion[] = [
+const SAMPLE_QUESTIONS: SampleChallengeQuestion[] = [
   {
-    id: 1,
-    type: "Challenge 1 of 3: Numerical Reasoning",
-    category: "Numerical Ability • Multi-Step Work & Rate",
-    badgeColor: "bg-blue-500/10 text-blue-700 border-blue-200",
+    id: "sample-1",
+    badgeLabel: "Challenge 1 of 3",
+    category: "Numerical Reasoning",
+    subtopic: "Multi-Step Work & Rate",
+    difficulty: "HARD",
     prompt:
       "A government printing office uses three automated machines—Alpha, Beta, and Gamma. Working together at their constant standard rates, they can print a batch of 18,000 examination booklets in 6 hours. Machine Alpha works twice as fast as Machine Gamma, while Machine Beta works 1.5 times as fast as Machine Gamma. If Machine Beta breaks down after all three machines have worked together for exactly 2 hours, how many additional hours will it take Machines Alpha and Gamma working together to finish the remaining booklets?",
     options: [
-      "A. 4 hours",
-      "B. 6 hours",
-      "C. 8 hours",
-      "D. 9 hours",
+      "4 hours",
+      "6 hours",
+      "8 hours",
+      "9 hours",
     ],
-    correctIndex: 1,
-    correctAnswerText: "B. 6 hours",
+    answerIndex: 1,
+    explanation:
+      "After 2 hours, 6,000 booklets are finished, leaving 12,000 booklets. Without Machine Beta (1,000 booklets/hr), Machines Alpha and Gamma produce exactly 2,000 booklets/hr together. 12,000 ÷ 2,000 = 6 hours.",
     stepByStep: [
       {
         step: "Step 1: Calculate the combined printing rate of all three machines.",
@@ -69,26 +61,10 @@ const SAMPLE_QUESTIONS: SampleQuestion[] = [
           "Time = Remaining Work ÷ Combined Rate = 12,000 booklets ÷ 2,000 booklets/hr = 6 hours.",
       },
     ],
-    whyCorrect:
-      "After 2 hours, 6,000 booklets are finished, leaving 12,000 booklets. Without Machine Beta (1,000 booklets/hr), Machines Alpha and Gamma produce exactly 2,000 booklets/hr together. 12,000 ÷ 2,000 = 6 hours.",
-    whyWrong: [
-      {
-        option: "A (4 hours)",
-        text: "Incorrect. This assumes all 3 machines continued operating for the remaining 12,000 booklets (12,000 ÷ 3,000 = 4 hours), failing to account for Beta's breakdown.",
-      },
-      {
-        option: "B (6 hours)",
-        text: "Correct! Precisely accounts for the 2 hours of joint production and the adjusted combined speed of Alpha + Gamma.",
-      },
-      {
-        option: "C (8 hours)",
-        text: "Incorrect. Results from calculating total elapsed time from start to finish (2 initial hrs + 6 additional hrs = 8 hrs total), but the question specifically asks for 'additional hours'.",
-      },
-      {
-        option: "D (9 hours)",
-        text: "Incorrect. This computes how long Alpha and Gamma would take to print the entire 18,000 batch alone from scratch (18,000 ÷ 2,000 = 9 hrs), ignoring the 6,000 booklets already printed.",
-      },
-    ],
+    whyA: "Incorrect. This assumes all 3 machines continued operating for the remaining 12,000 booklets (12,000 ÷ 3,000 = 4 hours), failing to account for Beta's breakdown.",
+    whyB: "Correct! Precisely accounts for the 2 hours of joint production and the adjusted combined speed of Alpha + Gamma.",
+    whyC: "Incorrect. Results from calculating total elapsed time from start to finish (2 initial hrs + 6 additional hrs = 8 hrs total), but the question specifically asks for 'additional hours'.",
+    whyD: "Incorrect. This computes how long Alpha and Gamma would take to print the entire 18,000 batch alone from scratch (18,000 ÷ 2,000 = 9 hrs), ignoring the 6,000 booklets already printed.",
     eliminationStrategy:
       "Notice that Beta contributes 1,000 booklets/hr out of 3,000 (exactly one-third). The remaining two machines work at 2/3 speed (2,000 booklets/hr). For 12,000 booklets remaining, 12,000 ÷ 2,000 must equal an integer (6). Eliminate 4 immediately as it assumes no breakdown.",
     commonTrap:
@@ -97,20 +73,22 @@ const SAMPLE_QUESTIONS: SampleQuestion[] = [
       "When rates are given as relative multiples (e.g., 'twice as fast', '1.5 times as fast'), set the slowest unit as variable x to avoid fractions until the final step.",
   },
   {
-    id: 2,
-    type: "Challenge 2 of 3: Tricky Verbal Analogy",
-    category: "Verbal Ability • Structural & Semantic Relationships",
-    badgeColor: "bg-emerald-500/10 text-emerald-700 border-emerald-200",
+    id: "sample-2",
+    badgeLabel: "Challenge 2 of 3",
+    category: "Verbal Ability",
+    subtopic: "Structural & Semantic Analogy",
+    difficulty: "HARD",
     prompt:
       "Analyze the relationship between the primary pair and choose the pair that exhibits the EXACT same structural and grammatical relationship:\n\nOBDURATE : PERSUASION :: ________ : ________",
     options: [
-      "A. impervious : penetration",
-      "B. gullible : deception",
-      "C. penitent : forgiveness",
-      "D. meticulous : perfection",
+      "impervious : penetration",
+      "gullible : deception",
+      "penitent : forgiveness",
+      "meticulous : perfection",
     ],
-    correctIndex: 0,
-    correctAnswerText: "A. impervious : penetration",
+    answerIndex: 0,
+    explanation:
+      "Both 'obdurate' and 'impervious' describe states of absolute resistance against an external action or influence ('persuasion' and 'penetration' respectively).",
     stepByStep: [
       {
         step: "Step 1: Define the primary pair precisely.",
@@ -138,26 +116,10 @@ const SAMPLE_QUESTIONS: SampleQuestion[] = [
           "'Penitent' seeks or desires forgiveness (not immune to it). 'Meticulous' strives for perfection (aim/goal relationship).",
       },
     ],
-    whyCorrect:
-      "Both 'obdurate' and 'impervious' describe states of absolute resistance against an external action or influence ('persuasion' and 'penetration' respectively).",
-    whyWrong: [
-      {
-        option: "A (impervious : penetration)",
-        text: "Correct! Exact parallel: [Adjective] describes something that cannot be affected or breached by [Noun].",
-      },
-      {
-        option: "B (gullible : deception)",
-        text: "Incorrect. Classic inverted trap! A gullible person is vulnerable to deception, whereas an obdurate person resists persuasion.",
-      },
-      {
-        option: "C (penitent : forgiveness)",
-        text: "Incorrect. Represents an attitude and its sought result (penitent seeks forgiveness), not resistance or immunity.",
-      },
-      {
-        option: "D (meticulous : perfection)",
-        text: "Incorrect. Represents an approach and its standard of execution (meticulous aims for perfection).",
-      },
-    ],
+    whyA: "Correct! Exact parallel: [Adjective] describes something that cannot be affected or breached by [Noun].",
+    whyB: "Incorrect. Classic inverted trap! A gullible person is vulnerable to deception, whereas an obdurate person resists persuasion.",
+    whyC: "Incorrect. Represents an attitude and its sought result (penitent seeks forgiveness), not resistance or immunity.",
+    whyD: "Incorrect. Represents an approach and its standard of execution (meticulous aims for perfection).",
     eliminationStrategy:
       "First eliminate C and D because they describe pursuit or desire rather than resistance. Between A and B, identify the polarity: obdurate means 'cannot be persuaded' (negative resistance), while gullible means 'easily deceived' (positive vulnerability). Thus, choose A.",
     commonTrap:
@@ -166,20 +128,22 @@ const SAMPLE_QUESTIONS: SampleQuestion[] = [
       "Always construct an explicit 'Bridge Sentence' containing both words (e.g. 'X is immune to Y') and substitute each option into the exact same sentence structure.",
   },
   {
-    id: 3,
-    type: "Challenge 3 of 3: Analytical / Logical Reasoning",
-    category: "Analytical Ability • Multi-Condition Deductive Scheduling",
-    badgeColor: "bg-purple-500/10 text-purple-700 border-purple-200",
+    id: "sample-3",
+    badgeLabel: "Challenge 3 of 3",
+    category: "Analytical Reasoning",
+    subtopic: "Multi-Condition Deductive Scheduling",
+    difficulty: "HARD",
     prompt:
       "Six government interns—Arvin, Bea, Carlo, Danica, Elena, and Franco—are scheduled to undergo individual performance evaluation interviews from Monday through Saturday (one intern per day).\n\nThe schedule must satisfy the following constraints:\n1. Arvin must be interviewed on an earlier day than Bea.\n2. Elena must be interviewed on either Thursday or Friday.\n3. Danica must be interviewed immediately before or immediately after Carlo.\n4. Franco must be interviewed on Monday or Saturday.\n5. Bea is interviewed on Wednesday.\n\nWhich of the following MUST BE TRUE about the interview schedule?",
     options: [
-      "A. Arvin is interviewed on Tuesday.",
-      "B. Danica is interviewed on Friday.",
-      "C. Elena is interviewed on Friday.",
-      "D. Franco is interviewed on Saturday.",
+      "Arvin is interviewed on Tuesday.",
+      "Danica is interviewed on Friday.",
+      "Elena is interviewed on Friday.",
+      "Franco is interviewed on Saturday.",
     ],
-    correctIndex: 0,
-    correctAnswerText: "A. Arvin is interviewed on Tuesday.",
+    answerIndex: 0,
+    explanation:
+      "Because the consecutive pair [Danica, Carlo] is forced into Friday–Saturday, Franco is forced to Monday, which leaves Tuesday as the only possible day for Arvin.",
     stepByStep: [
       {
         step: "Step 1: Anchor the fixed positions.",
@@ -212,26 +176,10 @@ const SAMPLE_QUESTIONS: SampleQuestion[] = [
           "Mon(1): Franco | Tue(2): Arvin | Wed(3): Bea | Thu(4): Elena | Fri(5): Danica or Carlo | Sat(6): Carlo or Danica. Every condition is satisfied.",
       },
     ],
-    whyCorrect:
-      "Because the consecutive pair [Danica, Carlo] is forced into Friday–Saturday, Franco is forced to Monday, which leaves Tuesday as the only possible day for Arvin.",
-    whyWrong: [
-      {
-        option: "A (Arvin is interviewed on Tuesday)",
-        text: "Correct! In every valid arrangement satisfying all 5 conditions, Arvin must occupy Tuesday.",
-      },
-      {
-        option: "B (Danica is interviewed on Friday)",
-        text: "Incorrect. While possible, it is not 'MUST BE TRUE' because Carlo could be interviewed on Friday and Danica on Saturday.",
-      },
-      {
-        option: "C (Elena is interviewed on Friday)",
-        text: "Incorrect. Must be false! Friday is occupied by one of the [Danica/Carlo] pair, forcing Elena to Thursday.",
-      },
-      {
-        option: "D (Franco is interviewed on Saturday)",
-        text: "Incorrect. Must be false! Saturday is occupied by Danica or Carlo, forcing Franco to Monday.",
-      },
-    ],
+    whyA: "Correct! In every valid arrangement satisfying all 5 conditions, Arvin must occupy Tuesday.",
+    whyB: "Incorrect. While possible, it is not 'MUST BE TRUE' because Carlo could be interviewed on Friday and Danica on Saturday.",
+    whyC: "Incorrect. Must be false! Friday is occupied by one of the [Danica/Carlo] pair, forcing Elena to Thursday.",
+    whyD: "Incorrect. Must be false! Saturday is occupied by Danica or Carlo, forcing Franco to Monday.",
     eliminationStrategy:
       "Identify the 'block constraint' first. Two adjacent items [D,C] require two consecutive empty slots. With Wed fixed, slots [1,2], [4,5], and [5,6] are the only theoretical candidates. Eliminating impossible blocks quickly solves the entire puzzle.",
     commonTrap:
@@ -276,7 +224,6 @@ export default function LandingPage() {
   const activeQuestion = SAMPLE_QUESTIONS[currentChallengeIndex];
   const currentSelected = selectedAnswers[currentChallengeIndex];
   const isCurrentSubmitted = submittedChallenges[currentChallengeIndex];
-  const isCurrentCorrect = currentSelected === activeQuestion.correctIndex;
 
   const handleSelectOption = (index: number) => {
     if (isCurrentSubmitted) return;
@@ -605,200 +552,47 @@ export default function LandingPage() {
             })}
           </div>
 
-          {/* Interactive Question Card */}
-          <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 shadow-md space-y-6">
-            {/* Header / Type */}
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${activeQuestion.badgeColor}`}>
-                  {activeQuestion.type}
-                </span>
-              </div>
-              <span className="text-xs font-semibold text-slate-400">
-                {activeQuestion.category}
-              </span>
-            </div>
-
-            {/* Prompt */}
-            <div className="space-y-4">
-              <p className="text-sm sm:text-base font-bold text-slate-900 leading-relaxed whitespace-pre-line">
-                {activeQuestion.prompt}
-              </p>
-
-              {/* Options */}
-              <div className="space-y-2.5 pt-2">
-                {activeQuestion.options.map((opt, idx) => {
-                  const isSelected = currentSelected === idx;
-                  const isCorrect = idx === activeQuestion.correctIndex;
-
-                  let cardStyle = "bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-800";
-                  if (isSelected && !isCurrentSubmitted) {
-                    cardStyle = "bg-blue-50/80 border-blue-500 text-blue-950 font-bold shadow-xs";
-                  } else if (isCurrentSubmitted) {
-                    if (isCorrect) {
-                      cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-bold";
-                    } else if (isSelected) {
-                      cardStyle = "bg-rose-50 border-rose-400 text-rose-950 font-medium";
-                    } else {
-                      cardStyle = "bg-slate-50/60 border-slate-200 text-slate-400 opacity-80";
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      disabled={isCurrentSubmitted}
-                      onClick={() => handleSelectOption(idx)}
-                      className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm transition flex items-center justify-between gap-3 cursor-pointer disabled:cursor-default ${cardStyle}`}
-                    >
-                      <span className="leading-relaxed">{opt}</span>
-                      {isCurrentSubmitted && isCorrect && (
-                        <span className="px-2 py-0.5 bg-emerald-600 text-white font-extrabold text-[10px] rounded-md shrink-0">
-                          ✓ Correct
-                        </span>
-                      )}
-                      {isCurrentSubmitted && isSelected && !isCorrect && (
-                        <span className="px-2 py-0.5 bg-rose-600 text-white font-extrabold text-[10px] rounded-md shrink-0">
-                          ✗ Your Choice
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Interaction Bar */}
-              {!isCurrentSubmitted ? (
-                <div className="pt-3 flex justify-end">
+          {/* Interactive Question Card Powered by QuestionReview */}
+          <QuestionReview
+            question={activeQuestion}
+            userAnswerIndex={currentSelected}
+            itemNumber={currentChallengeIndex + 1}
+            mode="INTERACTIVE"
+            isSubmitted={isCurrentSubmitted}
+            badgeLabel={activeQuestion.badgeLabel}
+            onSelectOption={handleSelectOption}
+            onSubmitAnswer={handleSubmitAnswer}
+            footerActions={
+              isCurrentSubmitted ? (
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
                   <button
                     type="button"
-                    disabled={currentSelected === null}
-                    onClick={handleSubmitAnswer}
-                    className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                    onClick={handleResetChallenges}
+                    className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-white underline font-semibold cursor-pointer"
                   >
-                    Check Answer
+                    Reset All Challenges
                   </button>
-                </div>
-              ) : (
-                /* REVEAL RESULT & DEEP RATIONALIZATION */
-                <div className="pt-4 space-y-6 animate-fade-in">
-                  {/* Result Banner */}
-                  <div
-                    className={`p-4 rounded-2xl border flex items-center justify-between gap-3 ${
-                      isCurrentCorrect
-                        ? "bg-emerald-50 border-emerald-300 text-emerald-900"
-                        : "bg-amber-50 border-amber-300 text-amber-900"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5 font-black text-xs sm:text-sm">
-                      <span className="text-base">{isCurrentCorrect ? "🎉" : "💡"}</span>
-                      <span>
-                        {isCurrentCorrect
-                          ? "Correct! Excellent reasoning."
-                          : "Not quite — let's break down the reasoning step-by-step."}
-                      </span>
-                    </div>
-                    <span className="text-xs font-extrabold underline shrink-0">
-                      Answer: {activeQuestion.correctAnswerText}
-                    </span>
-                  </div>
 
-                  {/* Deep Rationalization Sections */}
-                  <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-5 text-xs text-slate-800">
-                    {/* Step-by-Step Breakdown */}
-                    <div className="space-y-2.5">
-                      <h4 className="font-black text-slate-900 uppercase text-[11px] tracking-wider flex items-center gap-1.5">
-                        <span>📝</span>
-                        <span>Step-by-Step Solution:</span>
-                      </h4>
-                      <div className="space-y-2 pl-1 border-l-2 border-blue-300 ml-1">
-                        {activeQuestion.stepByStep.map((s, i) => (
-                          <div key={i} className="pl-3 space-y-0.5">
-                            <p className="font-bold text-slate-900">{s.step}</p>
-                            <p className="text-slate-600 leading-relaxed font-medium">{s.detail}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Why Other Choices Are Wrong */}
-                    <div className="space-y-2 pt-2 border-t border-slate-200">
-                      <h4 className="font-black text-slate-900 uppercase text-[11px] tracking-wider flex items-center gap-1.5">
-                        <span>🎯</span>
-                        <span>Why Every Option Is Right or Wrong:</span>
-                      </h4>
-                      <div className="space-y-1.5">
-                        {activeQuestion.whyWrong.map((item, i) => (
-                          <div key={i} className="p-2.5 bg-white rounded-xl border border-slate-200/80 leading-relaxed">
-                            <strong className="text-slate-900 font-bold">{item.option}:</strong>{" "}
-                            <span className="text-slate-600">{item.text}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Elimination Strategy & Traps Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
-                      <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl space-y-1">
-                        <span className="font-extrabold text-blue-900 uppercase text-[10px] block">
-                          ⚡ Elimination Strategy
-                        </span>
-                        <p className="text-blue-800 text-[11px] leading-relaxed">
-                          {activeQuestion.eliminationStrategy}
-                        </p>
-                      </div>
-
-                      <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-1">
-                        <span className="font-extrabold text-rose-900 uppercase text-[10px] block">
-                          ⚠️ Common Trap
-                        </span>
-                        <p className="text-rose-800 text-[11px] leading-relaxed">
-                          {activeQuestion.commonTrap}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Exam Tip */}
-                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl flex items-start gap-2 text-amber-900 text-[11px]">
-                      <span className="text-sm shrink-0">💡</span>
-                      <p>
-                        <strong className="font-bold">Exam Day Tip:</strong> {activeQuestion.examTip}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Advance to Next Challenge or Final CTA */}
-                  <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                  {currentChallengeIndex < SAMPLE_QUESTIONS.length - 1 ? (
                     <button
                       type="button"
-                      onClick={handleResetChallenges}
-                      className="text-xs text-slate-500 hover:text-slate-800 underline font-semibold cursor-pointer"
+                      onClick={handleNextChallenge}
+                      className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
-                      Reset All Challenges
+                      <span>Next Challenge Question →</span>
                     </button>
-
-                    {currentChallengeIndex < SAMPLE_QUESTIONS.length - 1 ? (
-                      <button
-                        type="button"
-                        onClick={handleNextChallenge}
-                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5"
-                      >
-                        <span>Next Challenge →</span>
-                      </button>
-                    ) : (
-                      <a
-                        href="#pricing"
-                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md transition text-center"
-                      >
-                        Explore CSC Review PRO
-                      </a>
-                    )}
-                  </div>
+                  ) : (
+                    <a
+                      href="#pricing"
+                      className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md transition text-center"
+                    >
+                      Explore CSC Review PRO
+                    </a>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              ) : null
+            }
+          />
 
           {/* ALL COMPLETED BANNER */}
           {allCompleted && (

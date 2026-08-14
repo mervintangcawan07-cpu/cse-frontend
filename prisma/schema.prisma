@@ -400,34 +400,48 @@ model ExamCategoryResult {
 }
 
 model Question {
-  id          String    @id @default(cuid())
-  category    String
-  subtopic    String    @default("General")
-  prompt      String    @db.Text
+  id                  String    @id @default(cuid())
+  category            String
+  subtopic            String    @default("General")
+  prompt              String    @db.Text
 
-  options     String[]
-  optionA     String?
-  optionB     String?
-  optionC     String?
-  optionD     String?
+  options             String[]
+  optionA             String?
+  optionB             String?
+  optionC             String?
+  optionD             String?
 
-  answerIndex Int
-  explanation String?   @db.Text
-  imageUrl    String?
+  answerIndex         Int
+  explanation         String?   @db.Text
+  imageUrl            String?
+
+  // --- Premium Educational & Reasoning Fields ---
+  stepByStep          String?   @db.Text
+  whyA                String?   @db.Text
+  whyB                String?   @db.Text
+  whyC                String?   @db.Text
+  whyD                String?   @db.Text
+  eliminationStrategy String?   @db.Text
+  commonTrap          String?   @db.Text
+  examTip             String?   @db.Text
+  difficulty          String?   @default("MEDIUM")
+  tags                String[]  @default([])
+  skillTested         String?
 
   userMistakes          UserMistake[]
   dailyQuestionAttempts DailyQuestionAttempt[]
   flags                 QuestionFlag[]
   activeInStudyRooms    StudyRoom[]
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
-  deletedBy   String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  deletedAt           DateTime?
+  deletedBy           String?
 
   @@index([category])
   @@index([subtopic])
   @@index([category, subtopic])
+  @@index([difficulty])
   @@index([deletedAt])
 }
 

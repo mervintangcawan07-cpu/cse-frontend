@@ -1,34 +1,18 @@
 "use client";
 
-import { formatPromptHTML } from "@/lib/formatPrompt";
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import QuestionReview from "@/components/question/QuestionReview";
+import ExplainMistakeButton from "@/components/ExplainMistakeButton";
+import { StructuredQuestion } from "@/types/question";
 
-interface Question {
+interface ReviewItem {
   id: string;
-  category: string;
-  prompt: string;
-  options: string[];
-  answerIndex: number;
-  explanation: string;
-  imageUrl?: string;
-}
-
-interface UserAnswer {
-  id: string;
-  userAnswerIndex: number;
+  userAnswerIndex?: number | null;
   isCorrect: boolean;
-  question: Question;
-}
-
-interface ExamAttempt {
-  id: string;
-  score: number;
-  totalItems: number;
-  percentage: number;
-  createdAt: string;
-  answers: UserAnswer[];
+  isSkipped?: boolean;
+  question: StructuredQuestion;
 }
 
 export default function ExamReviewPage({
@@ -38,9 +22,10 @@ export default function ExamReviewPage({
 }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const [attempt, setAttempt] = useState<ExamAttempt | null>(null);
+  const [attempt, setAttempt] = useState<any | null>(null);
+  const [items, setItems] = useState<ReviewItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<"ALL" | "INCORRECT" | "CORRECT">("ALL");
+  const [filter, setFilter] = useState<"ALL" | "INCORRECT" | "CORRECT" | "SKIPPED">("ALL");
 
   useEffect(() => {
     async function loadReview() {
@@ -49,7 +34,84 @@ export default function ExamReviewPage({
         const data = await res.json();
 
         if (res.ok && data.attempt) {
-          setAttempt(data.attempt);
+          const att = data.attempt;
+          setAttempt(att);
+
+          const parsedItems: ReviewItem[] = [];
+
+          if (Array.isArray(att.details) && att.details.length > 0) {
+            att.details.forEach((det: any, idx: number) => {
+              const q: StructuredQuestion = {
+                id: det.id || String(idx),
+                category: det.category || "General",
+                subtopic: det.subtopic || "General",
+                prompt: det.prompt || "",
+                options: det.options || [],
+                answerIndex: det.answerIndex ?? 0,
+                explanation: det.explanation || null,
+                imageUrl: det.imageUrl || null,
+                stepByStep: det.stepByStep || null,
+                whyA: det.whyA || null,
+                whyB: det.whyB || null,
+                whyC: det.whyC || null,
+                whyD: det.whyD || null,
+                eliminationStrategy: det.eliminationStrategy || null,
+                commonTrap: det.commonTrap || null,
+                examTip: det.examTip || null,
+                difficulty: det.difficulty || "MEDIUM",
+                tags: det.tags || [],
+              };
+
+              const userChoice =
+                det.selectedIndex !== undefined && det.selectedIndex !== null
+                  ? det.selectedIndex
+                  : null;
+              const isCorrect = userChoice === q.answerIndex;
+              const isSkipped = userChoice === null;
+
+              parsedItems.push({
+                id: det.id || String(idx),
+                userAnswerIndex: userChoice,
+                isCorrect,
+                isSkipped,
+                question: q,
+              });
+            });
+          } else if (Array.isArray(att.answers) && att.answers.length > 0) {
+            att.answers.forEach((ans: any, idx: number) => {
+              const q = ans.question || {};
+              const formattedQ: StructuredQuestion = {
+                id: q.id || String(idx),
+                category: q.category || "General",
+                subtopic: q.subtopic || "General",
+                prompt: q.prompt || "",
+                options: q.options || [],
+                answerIndex: q.answerIndex ?? 0,
+                explanation: q.explanation || null,
+                imageUrl: q.imageUrl || null,
+                stepByStep: q.stepByStep || null,
+                whyA: q.whyA || null,
+                whyB: q.whyB || null,
+                whyC: q.whyC || null,
+                whyD: q.whyD || null,
+                eliminationStrategy: q.eliminationStrategy || null,
+                commonTrap: q.commonTrap || null,
+                examTip: q.examTip || null,
+                difficulty: q.difficulty || "MEDIUM",
+                tags: q.tags || [],
+              };
+
+              parsedItems.push({
+                id: ans.id || String(idx),
+                userAnswerIndex: ans.userAnswerIndex ?? null,
+                isCorrect: Boolean(ans.isCorrect),
+                isSkipped: ans.userAnswerIndex === null || ans.userAnswerIndex === undefined,
+                question: formattedQ,
+              });
+            });
+          }
+
+          setItems(parsedItems);
         } else {
           router.push("/dashboard");
         }
@@ -64,35 +126,40 @@ export default function ExamReviewPage({
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        Loading exam review answers and explanations...
+      <div className="max-w-4xl mx-auto py-24 text-center space-y-4">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p className="font-extrabold text-slate-700 dark:text-slate-300">
+          Loading detailed exam review answers and explanations...
+        </p>
       </div>
     );
   }
 
   if (!attempt) return null;
 
-  const filteredAnswers = attempt.answers.filter((ans) => {
-    if (filter === "CORRECT") return ans.isCorrect;
-    if (filter === "INCORRECT") return !ans.isCorrect;
+  const correctCount = items.filter((a) => a.isCorrect).length;
+  const skippedCount = items.filter((a) => a.isSkipped).length;
+  const incorrectCount = items.length - correctCount - skippedCount;
+
+  const filteredItems = items.filter((item) => {
+    if (filter === "CORRECT") return item.isCorrect;
+    if (filter === "INCORRECT") return !item.isCorrect && !item.isSkipped;
+    if (filter === "SKIPPED") return item.isSkipped;
     return true;
   });
 
-  const correctCount = attempt.answers.filter((a) => a.isCorrect).length;
-  const incorrectCount = attempt.answers.length - correctCount;
-
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6 text-slate-100">
+    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
       {/* HEADER BANNER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            Exam Review Mode
+          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full border border-blue-500/20">
+            Diagnostic Review Mode
           </span>
-          <h1 className="text-2xl font-black text-white mt-2">
-            Detailed Diagnostic Review
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-2">
+            Detailed Exam Rationalization
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Exam Taken:{" "}
             {new Date(attempt.createdAt).toLocaleDateString("en-US", {
               month: "short",
@@ -106,156 +173,94 @@ export default function ExamReviewPage({
 
         <div className="flex items-center gap-3 shrink-0">
           <div className="text-right">
-            <span className="text-2xl font-black text-amber-400">
+            <span className="text-3xl font-black text-blue-600 dark:text-amber-400">
               {attempt.percentage}%
             </span>
-            <span className="text-[10px] font-bold text-slate-400 block">
-              {correctCount} / {attempt.totalItems} Correct
+            <span className="text-[10px] font-bold text-slate-500 block">
+              {correctCount} / {items.length} Correct
             </span>
           </div>
           <Link
-            href="/dashboard"
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700"
+            href="/mock-exam/history"
+            className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-bold rounded-xl transition border border-slate-200 dark:border-slate-700"
           >
-            ← Dashboard
+            ← Exam History
           </Link>
         </div>
       </div>
 
       {/* FILTER BAR */}
-      <div className="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-2xl p-2 gap-2 text-xs font-bold">
+      <div className="flex flex-wrap items-center justify-between bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 gap-1.5 text-xs font-bold">
         <button
           onClick={() => setFilter("ALL")}
-          className={`flex-1 py-2.5 rounded-xl transition ${
+          className={`flex-1 py-2 rounded-xl transition cursor-pointer ${
             filter === "ALL"
-              ? "bg-blue-600 text-white shadow-md"
-              : "text-slate-400 hover:text-white"
+              ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-black"
+              : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          All Items ({attempt.answers.length})
+          All Items ({items.length})
         </button>
         <button
           onClick={() => setFilter("INCORRECT")}
-          className={`flex-1 py-2.5 rounded-xl transition ${
+          className={`flex-1 py-2 rounded-xl transition cursor-pointer ${
             filter === "INCORRECT"
-              ? "bg-red-600 text-white shadow-md"
-              : "text-slate-400 hover:text-white"
+              ? "bg-rose-600 text-white shadow-xs font-black"
+              : "text-slate-500 hover:text-rose-600"
           }`}
         >
           ❌ Incorrect ({incorrectCount})
         </button>
         <button
           onClick={() => setFilter("CORRECT")}
-          className={`flex-1 py-2.5 rounded-xl transition ${
+          className={`flex-1 py-2 rounded-xl transition cursor-pointer ${
             filter === "CORRECT"
-              ? "bg-emerald-600 text-white shadow-md"
-              : "text-slate-400 hover:text-white"
+              ? "bg-emerald-600 text-white shadow-xs font-black"
+              : "text-slate-500 hover:text-emerald-600"
           }`}
         >
           ✅ Correct ({correctCount})
         </button>
+        {skippedCount > 0 && (
+          <button
+            onClick={() => setFilter("SKIPPED")}
+            className={`flex-1 py-2 rounded-xl transition cursor-pointer ${
+              filter === "SKIPPED"
+                ? "bg-slate-900 text-white shadow-xs font-black"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            Skipped ({skippedCount})
+          </button>
+        )}
       </div>
 
-      {/* QUESTION REVIEW CARDS */}
-      <div className="space-y-4">
-        {filteredAnswers.map((ans, idx) => {
-          const q = ans.question;
+      {/* REUSABLE QUESTION REVIEW LIST */}
+      <div className="space-y-6">
+        {filteredItems.map((item, idx) => {
+          const q = item.question;
+          const userChoice = item.userAnswerIndex;
 
           return (
-            <div
-              key={ans.id}
-              className={`p-6 rounded-3xl border transition ${
-                ans.isCorrect
-                  ? "bg-slate-900/80 border-slate-800"
-                  : "bg-slate-900/90 border-red-500/30"
-              }`}
-            >
-              <div className="flex justify-between items-start gap-4 mb-3">
-                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg border border-slate-700">
-                  Item #{idx + 1} • {q.category}
-                </span>
-                <span
-                  className={`text-xs font-black px-3 py-1 rounded-full border ${
-                    ans.isCorrect
-                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                      : "bg-red-500/10 text-red-400 border-red-500/30"
-                  }`}
-                >
-                  {ans.isCorrect ? "✅ Correct" : "❌ Incorrect"}
-                </span>
-              </div>
-
-              {/* Prompt with HTML Table Support */}
-              <div
-                className="text-sm font-extrabold text-white mb-4 leading-relaxed overflow-x-auto"
-                dangerouslySetInnerHTML={{ __html: formatPromptHTML(q.prompt) }}
-              />
-
-              {/* Chart / Graph Image Display */}
-              {q.imageUrl && (
-                <div className="my-4 flex justify-center bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
-                  <img
-                    src={q.imageUrl}
-                    alt="Question Diagram"
-                    className="max-h-64 object-contain rounded-xl shadow-sm"
+            <QuestionReview
+              key={item.id || idx}
+              question={q}
+              userAnswerIndex={userChoice}
+              itemNumber={idx + 1}
+              mode="REVIEW"
+              isSkipped={item.isSkipped}
+              actions={
+                !item.isCorrect && !item.isSkipped && userChoice !== null && userChoice !== undefined ? (
+                  <ExplainMistakeButton
+                    prompt={q.prompt}
+                    userChoice={q.options[userChoice]}
+                    correctChoice={q.options[q.answerIndex]}
+                    officialExplanation={q.explanation}
+                    category={q.category}
                   />
-                </div>
-              )}
-
-              {/* Options */}
-              <div className="space-y-2 mb-4">
-                {q.options.map((opt, optIdx) => {
-                  const isUserSelection = ans.userAnswerIndex === optIdx;
-                  const isCorrectAnswer = q.answerIndex === optIdx;
-
-                  let optionStyle =
-                    "bg-slate-950 border-slate-800 text-slate-400";
-                  if (isCorrectAnswer) {
-                    optionStyle =
-                      "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-bold";
-                  } else if (isUserSelection && !ans.isCorrect) {
-                    optionStyle =
-                      "bg-red-500/10 border-red-500/40 text-red-300 font-bold";
-                  }
-
-                  return (
-                    <div
-                      key={optIdx}
-                      className={`p-3.5 rounded-xl border text-xs flex justify-between items-center ${optionStyle}`}
-                    >
-                      <span>
-                        <strong className="mr-2 uppercase">
-                          {String.fromCharCode(65 + optIdx)}.
-                        </strong>
-                        {opt}
-                      </span>
-                      {isCorrectAnswer && (
-                        <span className="text-[10px] uppercase font-black tracking-wider text-emerald-400">
-                          Correct Answer
-                        </span>
-                      )}
-                      {isUserSelection && !isCorrectAnswer && (
-                        <span className="text-[10px] uppercase font-black tracking-wider text-red-400">
-                          Your Choice
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Explanation Box */}
-              {q.explanation && (
-                <div className="p-4 rounded-2xl bg-blue-600/10 border border-blue-500/30 space-y-1">
-                  <span className="text-[10px] font-black uppercase text-blue-400 tracking-wider block">
-                    💡 Solution & Explanation
-                  </span>
-                  <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                    {q.explanation}
-                  </p>
-                </div>
-              )}
-            </div>
+                ) : null
+              }
+            />
           );
         })}
       </div>

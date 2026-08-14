@@ -45,6 +45,162 @@ export async function GET(request: Request) {
   }
 }
 
+export async function POST(request: Request) {
+  try {
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse || !user) {
+      return errorResponse ?? NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      category,
+      subtopic = "General",
+      prompt,
+      imageUrl = null,
+      options,
+      answerIndex = 0,
+      explanation = null,
+      stepByStep = null,
+      whyA = null,
+      whyB = null,
+      whyC = null,
+      whyD = null,
+      eliminationStrategy = null,
+      commonTrap = null,
+      examTip = null,
+      difficulty = "MEDIUM",
+      tags = [],
+      skillTested = null,
+    } = body;
+
+    if (!prompt || !options || options.length < 2) {
+      return NextResponse.json(
+        { error: "Prompt and at least 2 options are required." },
+        { status: 400 }
+      );
+    }
+
+    const createdQuestion = await prisma.question.create({
+      data: {
+        category: category || "General",
+        subtopic: subtopic || "General",
+        prompt,
+        imageUrl,
+        options,
+        optionA: options[0] || null,
+        optionB: options[1] || null,
+        optionC: options[2] || null,
+        optionD: options[3] || null,
+        answerIndex,
+        explanation,
+        stepByStep,
+        whyA,
+        whyB,
+        whyC,
+        whyD,
+        eliminationStrategy,
+        commonTrap,
+        examTip,
+        difficulty,
+        tags: Array.isArray(tags) ? tags : [],
+        skillTested,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      question: createdQuestion,
+    });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[QUESTIONS_POST_ERROR]", err);
+    return NextResponse.json(
+      { error: "Failed to create question.", details: err?.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse || !user) {
+      return errorResponse ?? NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      id,
+      category,
+      subtopic = "General",
+      prompt,
+      imageUrl = null,
+      options,
+      answerIndex = 0,
+      explanation = null,
+      stepByStep = null,
+      whyA = null,
+      whyB = null,
+      whyC = null,
+      whyD = null,
+      eliminationStrategy = null,
+      commonTrap = null,
+      examTip = null,
+      difficulty = "MEDIUM",
+      tags = [],
+      skillTested = null,
+    } = body;
+
+    if (!id || !prompt || !options || options.length < 2) {
+      return NextResponse.json(
+        { error: "Question ID, prompt, and at least 2 options are required." },
+        { status: 400 }
+      );
+    }
+
+    const updatedQuestion = await prisma.question.update({
+      where: { id },
+      data: {
+        category: category || "General",
+        subtopic: subtopic || "General",
+        prompt,
+        imageUrl,
+        options,
+        optionA: options[0] || null,
+        optionB: options[1] || null,
+        optionC: options[2] || null,
+        optionD: options[3] || null,
+        answerIndex,
+        explanation,
+        stepByStep,
+        whyA,
+        whyB,
+        whyC,
+        whyD,
+        eliminationStrategy,
+        commonTrap,
+        examTip,
+        difficulty,
+        tags: Array.isArray(tags) ? tags : [],
+        skillTested,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      question: updatedQuestion,
+    });
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[QUESTIONS_PUT_ERROR]", err);
+    return NextResponse.json(
+      { error: "Failed to update question.", details: err?.message },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(request: Request) {
   try {
     const { user, errorResponse } = await requireAdminAuth(request);

@@ -50,6 +50,17 @@ export async function POST(request: Request) {
         optionD: true,
         answerIndex: true,
         explanation: true,
+        imageUrl: true,
+        stepByStep: true,
+        whyA: true,
+        whyB: true,
+        whyC: true,
+        whyD: true,
+        eliminationStrategy: true,
+        commonTrap: true,
+        examTip: true,
+        difficulty: true,
+        tags: true,
       },
     });
 
@@ -111,6 +122,17 @@ export async function POST(request: Request) {
         answerIndex: q.answerIndex,
         selectedIndex: userIdx,
         explanation: q.explanation || null,
+        imageUrl: q.imageUrl || null,
+        stepByStep: q.stepByStep || null,
+        whyA: q.whyA || null,
+        whyB: q.whyB || null,
+        whyC: q.whyC || null,
+        whyD: q.whyD || null,
+        eliminationStrategy: q.eliminationStrategy || null,
+        commonTrap: q.commonTrap || null,
+        examTip: q.examTip || null,
+        difficulty: q.difficulty || "MEDIUM",
+        tags: q.tags || [],
       });
     }
 

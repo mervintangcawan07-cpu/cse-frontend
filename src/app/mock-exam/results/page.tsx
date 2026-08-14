@@ -4,19 +4,11 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ExplainMistakeButton from "@/components/ExplainMistakeButton";
-import FormattedExplanation from "@/components/exam/FormattedExplanation";
-
-interface Question {
-  id: string;
-  category: string;
-  prompt: string;
-  options: string[];
-  answerIndex: number;
-  explanation?: string;
-}
+import QuestionReview from "@/components/question/QuestionReview";
+import { StructuredQuestion } from "@/types/question";
 
 interface ReviewData {
-  questions: Question[];
+  questions: StructuredQuestion[];
   selectedAnswers: { [key: number]: number };
   score: number;
   correct: number;
@@ -48,17 +40,29 @@ function ExamResultContent() {
           if (res.ok && data.attempt) {
             const att = data.attempt;
             if (att.details && Array.isArray(att.details)) {
-              const questions: Question[] = [];
+              const questions: StructuredQuestion[] = [];
               const selectedAnswers: { [key: number]: number } = {};
 
               att.details.forEach((item: any, idx: number) => {
                 questions.push({
                   id: item.id || String(idx),
                   category: item.category || "General",
+                  subtopic: item.subtopic || "General",
                   prompt: item.prompt || "",
                   options: item.options || [],
                   answerIndex: item.answerIndex ?? 0,
                   explanation: item.explanation,
+                  imageUrl: item.imageUrl || null,
+                  stepByStep: item.stepByStep || null,
+                  whyA: item.whyA || null,
+                  whyB: item.whyB || null,
+                  whyC: item.whyC || null,
+                  whyD: item.whyD || null,
+                  eliminationStrategy: item.eliminationStrategy || null,
+                  commonTrap: item.commonTrap || null,
+                  examTip: item.examTip || null,
+                  difficulty: item.difficulty || "MEDIUM",
+                  tags: item.tags || [],
                 });
                 if (item.selectedIndex !== null && item.selectedIndex !== undefined && item.selectedIndex >= 0) {
                   selectedAnswers[idx] = item.selectedIndex;
@@ -99,150 +103,163 @@ function ExamResultContent() {
 
   const handleRetakeExam = () => {
     localStorage.removeItem("cse_active_exam_session");
+    localStorage.removeItem("cse_latest_review");
     router.push("/mock-exam/take");
-  };
-
-  const scrollToReview = (filterMode: "ALL" | "INCORRECT" | "CORRECT" | "SKIPPED") => {
-    setFilter(filterMode);
-    const el = document.getElementById("review-section");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
   };
 
   if (!mounted || loading) {
     return (
-      <div className="max-w-2xl mx-auto py-20 text-center">
-        <p className="text-slate-400 font-medium animate-pulse">Loading exam results & solution keys...</p>
+      <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
+        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p className="font-extrabold text-slate-700 dark:text-slate-300">
+          Loading diagnostic review data...
+        </p>
       </div>
     );
   }
 
-  if (!reviewData || !reviewData.questions) {
+  if (!reviewData) {
     return (
-      <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
-        <p className="text-slate-400 font-semibold">No recent test results found.</p>
+      <div className="max-w-md mx-auto py-24 text-center space-y-6">
+        <div className="text-5xl">📊</div>
+        <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+          No Recent Exam Found
+        </h2>
+        <p className="text-sm text-slate-500">
+          You haven't completed a mock examination in this session or your review history has expired.
+        </p>
         <Link
-          href="/dashboard"
-          className="inline-block px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition"
+          href="/mock-exam/take"
+          className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl shadow-md transition"
         >
-          Return to Dashboard
+          Start a Mock Exam Now
         </Link>
       </div>
     );
   }
 
-  const {
-    questions = [],
-    selectedAnswers = {},
-    score = 0,
-    correct = 0,
-    incorrect = 0,
-    skipped = 0,
-  } = reviewData;
-
+  const { questions, selectedAnswers, score, correct, incorrect, skipped } = reviewData;
   const isPassed = score >= 80;
 
+  // Filter questions with their original item indices
   const filteredQuestionsWithIndex = questions
-    .map((q, originalIdx) => ({ q, originalIdx }))
+    .map((q, idx) => ({ q, originalIdx: idx }))
     .filter(({ q, originalIdx }) => {
       const userChoice = selectedAnswers[originalIdx];
       const isCorrect = userChoice === q.answerIndex;
       const isSkipped = userChoice === undefined;
 
-      if (filter === "INCORRECT") return !isCorrect && !isSkipped;
       if (filter === "CORRECT") return isCorrect;
+      if (filter === "INCORRECT") return !isCorrect && !isSkipped;
       if (filter === "SKIPPED") return isSkipped;
-      return true;
+      return true; // ALL
     });
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 space-y-8 text-slate-100">
-      {/* Score Header Card */}
-      <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl shadow-xl text-center space-y-4">
-        <div className="inline-block">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
+      {/* 🏆 Score Summary Card */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl text-center space-y-6">
+        <div className="space-y-2">
           <span
-            className={`text-xs font-extrabold uppercase px-3 py-1 rounded-full border ${
+            className={`text-xs font-black uppercase px-3 py-1 rounded-full border inline-block ${
               isPassed
-                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                : "bg-rose-500/10 text-rose-400 border-rose-500/30"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30"
             }`}
           >
-            {isPassed ? "Passed — Benchmark Reached" : "Needs Review"}
+            {isPassed ? "🎉 Official CSE Passing Grade Achieved" : "⚠️ Needs Improvement (Passing is 80%)"}
           </span>
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+            Diagnostic Exam Results
+          </h1>
         </div>
 
-        <div>
-          <h1 className="text-5xl font-black text-white">{score}%</h1>
-          <p className="text-slate-400 text-sm mt-1">Final Practice Exam Score</p>
+        {/* Big Score Gauge */}
+        <div className="flex justify-center items-baseline gap-2">
+          <span className="text-6xl sm:text-7xl font-black text-slate-900 dark:text-white tracking-tight">
+            {score}%
+          </span>
+          <span className="text-lg font-bold text-slate-400">Rating</span>
         </div>
 
-        {/* Interactive Breakdown Stats */}
-        <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-800">
-          <button
-            onClick={() => scrollToReview("CORRECT")}
-            className="bg-emerald-500/10 hover:bg-emerald-500/20 p-3 rounded-2xl border border-emerald-500/20 transition text-center group cursor-pointer"
-          >
-            <p className="text-xl font-extrabold text-emerald-400">{correct}</p>
-            <p className="text-[11px] font-semibold text-emerald-400/80 group-hover:underline">Correct ✅</p>
-          </button>
+        {/* Detailed Metrics Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <span className="text-xs text-slate-500 font-bold uppercase block">Total Items</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              {questions.length}
+            </span>
+          </div>
 
-          <button
-            onClick={() => scrollToReview("INCORRECT")}
-            className="bg-rose-500/10 hover:bg-rose-500/20 p-3 rounded-2xl border border-rose-500/20 transition text-center group cursor-pointer"
-          >
-            <p className="text-xl font-extrabold text-rose-400">{incorrect}</p>
-            <p className="text-[11px] font-semibold text-rose-400/80 group-hover:underline">Incorrect ❌</p>
-          </button>
+          <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-200 dark:border-emerald-800/60">
+            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase block">
+              Correct
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400">
+              {correct}
+            </span>
+          </div>
 
-          <button
-            onClick={() => scrollToReview("SKIPPED")}
-            className="bg-slate-800 hover:bg-slate-700/80 p-3 rounded-2xl border border-slate-700 transition text-center group cursor-pointer"
-          >
-            <p className="text-xl font-extrabold text-slate-300">{skipped}</p>
-            <p className="text-[11px] font-semibold text-slate-400 group-hover:underline">Skipped ⏭️</p>
-          </button>
+          <div className="p-4 bg-rose-50 dark:bg-rose-950/30 rounded-2xl border border-rose-200 dark:border-rose-800/60">
+            <span className="text-xs text-rose-600 dark:text-rose-400 font-bold uppercase block">
+              Incorrect
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-rose-700 dark:text-rose-400">
+              {incorrect}
+            </span>
+          </div>
+
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <span className="text-xs text-slate-500 font-bold uppercase block">Skipped</span>
+            <span className="text-xl sm:text-2xl font-black text-slate-700 dark:text-slate-300">
+              {skipped}
+            </span>
+          </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="pt-2 flex flex-wrap justify-center gap-3">
-          {incorrect > 0 && (
-            <button
-              onClick={() => scrollToReview("INCORRECT")}
-              className="px-5 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-sm rounded-xl transition shadow-md flex items-center gap-2 cursor-pointer"
-            >
-              <span>❌ Review {incorrect} Mistakes</span>
-            </button>
-          )}
-
+        <div className="flex flex-col sm:flex-row justify-center gap-3 pt-2">
           <button
             onClick={handleRetakeExam}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition shadow-sm cursor-pointer"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-black text-xs rounded-xl shadow-md transition cursor-pointer"
           >
-            Retake Exam ⚡
+            Retake Exam 🔄
           </button>
-
+          <Link
+            href="/mock-exam/history"
+            className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-black text-xs rounded-xl transition"
+          >
+            View Full Exam History 📜
+          </Link>
           <Link
             href="/dashboard"
-            className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm rounded-xl transition border border-slate-700"
+            className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-black text-xs rounded-xl transition"
           >
             Back to Dashboard
           </Link>
         </div>
       </div>
 
-      {/* Answer Key Breakdown with Filter Tabs */}
-      <div id="review-section" className="space-y-4 pt-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
-          <h2 className="text-xl font-extrabold text-white">Question Review</h2>
+      {/* 📚 Question-by-Question Deep Review */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 className="text-xl font-black text-slate-900 dark:text-white">
+              Item Rationalization & Deep Breakdown
+            </h2>
+            <p className="text-xs text-slate-500">
+              Review step-by-step solutions, option analyses, and traps for every exam item.
+            </p>
+          </div>
 
-          <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl text-xs font-bold flex-wrap">
+          {/* Filter Pills */}
+          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl text-xs font-bold shrink-0">
             <button
               onClick={() => setFilter("ALL")}
               className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
                 filter === "ALL"
-                  ? "bg-slate-800 text-white shadow-sm font-extrabold"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-black"
+                  : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               All ({questions.length})
@@ -251,8 +268,8 @@ function ExamResultContent() {
               onClick={() => setFilter("INCORRECT")}
               className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
                 filter === "INCORRECT"
-                  ? "bg-rose-600 text-white shadow-sm font-extrabold"
-                  : "text-slate-400 hover:text-rose-400"
+                  ? "bg-rose-600 text-white shadow-xs font-black"
+                  : "text-slate-500 hover:text-rose-600"
               }`}
             >
               ❌ Incorrect ({incorrect})
@@ -261,8 +278,8 @@ function ExamResultContent() {
               onClick={() => setFilter("CORRECT")}
               className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
                 filter === "CORRECT"
-                  ? "bg-emerald-600 text-white shadow-sm font-extrabold"
-                  : "text-slate-400 hover:text-emerald-400"
+                  ? "bg-emerald-600 text-white shadow-xs font-black"
+                  : "text-slate-500 hover:text-emerald-600"
               }`}
             >
               ✅ Correct ({correct})
@@ -272,8 +289,8 @@ function ExamResultContent() {
                 onClick={() => setFilter("SKIPPED")}
                 className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
                   filter === "SKIPPED"
-                    ? "bg-slate-700 text-white shadow-sm font-extrabold"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-slate-900 dark:bg-slate-950 text-white shadow-xs font-black"
+                    : "text-slate-500 hover:text-slate-700"
                 }`}
               >
                 Skipped ({skipped})
@@ -284,11 +301,11 @@ function ExamResultContent() {
 
         {/* Filtered Question List */}
         {filteredQuestionsWithIndex.length === 0 ? (
-          <div className="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center space-y-2">
-            <p className="text-slate-400 font-bold">No questions match this filter.</p>
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-2">
+            <p className="text-slate-500 font-bold text-xs">No questions match this filter.</p>
             <button
               onClick={() => setFilter("ALL")}
-              className="text-xs text-blue-400 font-extrabold hover:underline cursor-pointer"
+              className="text-xs text-blue-600 dark:text-blue-400 font-black hover:underline cursor-pointer"
             >
               Show all questions
             </button>
@@ -300,85 +317,25 @@ function ExamResultContent() {
             const isSkipped = userChoice === undefined;
 
             return (
-              <div
+              <QuestionReview
                 key={q.id || originalIdx}
-                className={`p-6 rounded-2xl border bg-slate-900 shadow-sm space-y-4 ${
-                  isCorrect
-                    ? "border-emerald-500/30"
-                    : isSkipped
-                    ? "border-slate-800"
-                    : "border-rose-500/30 bg-rose-500/5"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-400 uppercase">
-                    Question #{originalIdx + 1} • {q.category}
-                  </span>
-                  <span
-                    className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
-                      isCorrect
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                        : isSkipped
-                        ? "bg-slate-800 text-slate-400 border-slate-700"
-                        : "bg-rose-500/10 text-rose-400 border-rose-500/30"
-                    }`}
-                  >
-                    {isCorrect ? "Correct" : isSkipped ? "Skipped" : "Incorrect"}
-                  </span>
-                </div>
-
-                <p className="font-bold text-white leading-relaxed">{q.prompt}</p>
-
-                <div className="space-y-2">
-                  {q.options.map((opt, optionIdx) => {
-                    const isUserSelection = userChoice === optionIdx;
-                    const isRightAnswer = q.answerIndex === optionIdx;
-
-                    let optionStyle = "border-slate-800 bg-slate-950 text-slate-300";
-                    if (isRightAnswer) {
-                      optionStyle = "border-emerald-500/50 bg-emerald-500/10 text-emerald-300 font-bold";
-                    } else if (isUserSelection && !isCorrect) {
-                      optionStyle = "border-rose-500/50 bg-rose-500/10 text-rose-300 font-bold";
-                    }
-
-                    return (
-                      <div
-                        key={optionIdx}
-                        className={`p-3 rounded-xl border text-sm flex items-center justify-between ${optionStyle}`}
-                      >
-                        <span>{opt}</span>
-                        {isRightAnswer && (
-                          <span className="text-xs text-emerald-400 font-bold">✓ Correct Answer</span>
-                        )}
-                        {isUserSelection && !isRightAnswer && (
-                          <span className="text-xs text-rose-400 font-bold">Your Answer</span>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Formatted Explanation Box */}
-                {q.explanation && (
-                  <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-200">
-                    <FormattedExplanation
-                      explanation={q.explanation}
-                      title="💡 Official Explanation"
+                question={q}
+                userAnswerIndex={userChoice}
+                itemNumber={originalIdx + 1}
+                mode="REVIEW"
+                isSkipped={isSkipped}
+                actions={
+                  !isCorrect && !isSkipped && userChoice !== undefined ? (
+                    <ExplainMistakeButton
+                      prompt={q.prompt}
+                      userChoice={q.options[userChoice]}
+                      correctChoice={q.options[q.answerIndex]}
+                      officialExplanation={q.explanation}
+                      category={q.category}
                     />
-                  </div>
-                )}
-
-                {/* AI Tutor Integration */}
-                {!isCorrect && !isSkipped && userChoice !== undefined && (
-                  <ExplainMistakeButton
-                    prompt={q.prompt}
-                    userChoice={q.options[userChoice]}
-                    correctChoice={q.options[q.answerIndex]}
-                    officialExplanation={q.explanation}
-                    category={q.category}
-                  />
-                )}
-              </div>
+                  ) : null
+                }
+              />
             );
           })
         )}
