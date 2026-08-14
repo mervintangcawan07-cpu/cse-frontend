@@ -366,7 +366,12 @@ export default function StudyRoomsSection() {
           canUserDraw={canUserDraw}
           canUserShare={canUserShare}
           isUserForceMuted={isUserForceMuted}
+          activeTopicType={activeRoom.activeTopicType}
+          activeQuestionId={activeRoom.activeQuestionId}
+          activeTopicImage={activeRoom.activeTopicImage}
+          activeTopicMeta={activeRoom.activeTopicMeta}
           onOpenSettings={() => setShowSettingsModal(true)}
+          onTopicChanged={() => openRoomView(activeRoom.id)}
         />
 
         {/* TWO COLUMN: LIVE CHAT & PARTICIPANTS */}

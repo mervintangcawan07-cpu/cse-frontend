@@ -230,10 +230,17 @@ model StudyRoom {
   allowMemberScreenShare Boolean                @default(true)
   allowMemberChat        Boolean                @default(true)
   isLocked               Boolean                @default(false)
+  // Active Study Topic (Question Bank or Host Uploaded Image)
+  activeTopicType        String?                // "QUESTION" | "IMAGE" | null
+  activeQuestionId       String?
+  activeTopicImage       String?                @db.Text
+  activeTopicMeta        Json?
+
   createdAt              DateTime               @default(now())
   updatedAt              DateTime               @updatedAt
 
   host                   User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  activeQuestion         Question?              @relation(fields: [activeQuestionId], references: [id], onDelete: SetNull)
   participants           StudyRoomParticipant[]
   messages               StudyRoomMessage[]
 
@@ -241,6 +248,7 @@ model StudyRoom {
   @@index([state])
   @@index([isPublic])
   @@index([inviteCode])
+  @@index([activeQuestionId])
 }
 
 model StudyRoomParticipant {
@@ -410,6 +418,7 @@ model Question {
   userMistakes          UserMistake[]
   dailyQuestionAttempts DailyQuestionAttempt[]
   flags                 QuestionFlag[]
+  activeInStudyRooms    StudyRoom[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

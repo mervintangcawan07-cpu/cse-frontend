@@ -96,6 +96,10 @@ export async function GET(
         allowMemberScreenShare: room.allowMemberScreenShare ?? true,
         allowMemberChat: room.allowMemberChat ?? true,
         isLocked: room.isLocked ?? false,
+        activeTopicType: room.activeTopicType || null,
+        activeQuestionId: room.activeQuestionId || null,
+        activeTopicImage: room.activeTopicImage || null,
+        activeTopicMeta: room.activeTopicMeta || null,
         host: {
           id: room.host.id,
           name: room.host.studyProfile?.displayName || room.host.name,

@@ -10,6 +10,8 @@ import {
 } from "@livekit/components-react";
 import LiveWhiteboard, { DrawDelta } from "@/components/social/whiteboard/LiveWhiteboard";
 import { RoomRoleBadge } from "@/components/social/rooms/RoomRoleBadge";
+import { ChooseTopicModal } from "@/components/social/rooms/ChooseTopicModal";
+import { ActiveTopicCard } from "@/components/social/rooms/ActiveTopicCard";
 
 interface StudyRoomStageProps {
   roomId: string;
@@ -21,7 +23,12 @@ interface StudyRoomStageProps {
   canUserDraw?: boolean;
   canUserShare?: boolean;
   isUserForceMuted?: boolean;
+  activeTopicType?: "QUESTION" | "IMAGE" | null;
+  activeQuestionId?: string | null;
+  activeTopicImage?: string | null;
+  activeTopicMeta?: any;
   onOpenSettings?: () => void;
+  onTopicChanged?: () => void;
 }
 
 function RealtimeStageContent({
@@ -34,7 +41,12 @@ function RealtimeStageContent({
   canUserDraw = true,
   canUserShare = true,
   isUserForceMuted = false,
+  activeTopicType = null,
+  activeQuestionId = null,
+  activeTopicImage = null,
+  activeTopicMeta = null,
   onOpenSettings,
+  onTopicChanged,
 }: StudyRoomStageProps) {
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
@@ -42,6 +54,21 @@ function RealtimeStageContent({
   const [isMuted, setIsMuted] = useState(true);
   const [isHandRaised, setIsHandRaised] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
+
+  // Active Study Topic state (synced with DB & DataChannel)
+  const [currentTopicType, setCurrentTopicType] = useState<"QUESTION" | "IMAGE" | null>(activeTopicType);
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | null>(activeQuestionId);
+  const [currentTopicImage, setCurrentTopicImage] = useState<string | null>(activeTopicImage);
+  const [currentTopicMeta, setCurrentTopicMeta] = useState<any>(activeTopicMeta);
+  const [showChooseTopicModal, setShowChooseTopicModal] = useState(false);
+
+  // Sync with incoming props from parent API poll
+  useEffect(() => {
+    setCurrentTopicType(activeTopicType);
+    setCurrentQuestionId(activeQuestionId);
+    setCurrentTopicImage(activeTopicImage);
+    setCurrentTopicMeta(activeTopicMeta);
+  }, [activeTopicType, activeQuestionId, activeTopicImage, activeTopicMeta]);
 
   // Live Whiteboard sync states
   const [incomingDelta, setIncomingDelta] = useState<DrawDelta | null>(null);
@@ -80,6 +107,19 @@ function RealtimeStageContent({
           if (data.userName) {
             setHandRaiseAlerts((prev) => [...prev.slice(-4), data.userName]);
           }
+        } else if (data.type === "STUDY_TOPIC_SET") {
+          if (data.topic) {
+            setCurrentTopicType(data.topic.activeTopicType);
+            setCurrentQuestionId(data.topic.activeQuestionId || null);
+            setCurrentTopicImage(data.topic.activeTopicImage || null);
+            setCurrentTopicMeta(data.topic.activeTopicMeta || null);
+            setActiveTab("OVERVIEW");
+          }
+        } else if (data.type === "STUDY_TOPIC_CLEAR") {
+          setCurrentTopicType(null);
+          setCurrentQuestionId(null);
+          setCurrentTopicImage(null);
+          setCurrentTopicMeta(null);
         }
       } catch (err) {
         console.error("Failed to parse DataChannel message:", err);
@@ -91,6 +131,52 @@ function RealtimeStageContent({
       room.off("dataReceived", handleData);
     };
   }, [room]);
+
+  // Broadcast topic set event to all room participants
+  const broadcastTopicSet = (topic: any) => {
+    if (!room || !localParticipant) return;
+    try {
+      const payload = JSON.stringify({ type: "STUDY_TOPIC_SET", topic });
+      const encoded = new TextEncoder().encode(payload);
+      localParticipant.publishData(encoded, { reliable: true });
+    } catch (err) {
+      console.error("Failed to broadcast topic set:", err);
+    }
+  };
+
+  // Broadcast topic clear event to all room participants
+  const broadcastTopicClear = () => {
+    if (!room || !localParticipant) return;
+    try {
+      const payload = JSON.stringify({ type: "STUDY_TOPIC_CLEAR" });
+      const encoded = new TextEncoder().encode(payload);
+      localParticipant.publishData(encoded, { reliable: true });
+    } catch (err) {
+      console.error("Failed to broadcast topic clear:", err);
+    }
+  };
+
+  // Host removes topic
+  const handleRemoveTopic = async () => {
+    try {
+      const res = await fetch(`/api/social/rooms/${roomId}/topic`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setCurrentTopicType(null);
+        setCurrentQuestionId(null);
+        setCurrentTopicImage(null);
+        setCurrentTopicMeta(null);
+        broadcastTopicClear();
+        onTopicChanged?.();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to remove topic");
+      }
+    } catch (err) {
+      console.error("Failed to delete topic:", err);
+    }
+  };
 
   // Broadcast drawing strokes
   const handleDrawDelta = (delta: DrawDelta) => {
@@ -196,17 +282,21 @@ function RealtimeStageContent({
             <button
               type="button"
               onClick={() => setActiveTab("OVERVIEW")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                activeTab === "OVERVIEW" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                activeTab === "OVERVIEW" ? "bg-blue-600 text-white shadow-md font-black" : "text-slate-400 hover:text-white"
               }`}
             >
-              📊 Overview
+              <span>📊</span>
+              <span>Overview</span>
+              {currentTopicType && (
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Active Study Topic" />
+              )}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("WHITEBOARD")}
               className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer ${
-                activeTab === "WHITEBOARD" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+                activeTab === "WHITEBOARD" ? "bg-blue-600 text-white shadow-md font-black" : "text-slate-400 hover:text-white"
               }`}
             >
               ✏️ Whiteboard
@@ -217,7 +307,7 @@ function RealtimeStageContent({
               disabled={!canShare && !isScreenSharing}
               className={`px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer disabled:opacity-40 ${
                 activeTab === "SCREEN_SHARE"
-                  ? "bg-blue-600 text-white shadow-md"
+                  ? "bg-blue-600 text-white shadow-md font-black"
                   : canShare
                   ? "text-slate-400 hover:text-white"
                   : "text-slate-600 cursor-not-allowed"
@@ -228,12 +318,25 @@ function RealtimeStageContent({
             </button>
           </div>
 
+          {/* Host Choose Study Topic Button */}
+          {isHost && (
+            <button
+              type="button"
+              onClick={() => setShowChooseTopicModal(true)}
+              className="px-3.5 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-1.5 shadow-sm"
+              title="Select a question or upload an image to present to participants"
+            >
+              <span>📖</span>
+              <span>{currentTopicType ? "Change Study Topic" : "Choose Study Topic"}</span>
+            </button>
+          )}
+
           {/* Host Room Policy Settings Button */}
           {isHost && onOpenSettings && (
             <button
               type="button"
               onClick={onOpenSettings}
-              className="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold rounded-xl transition cursor-pointer flex items-center gap-1.5"
               title="Manage Room Permissions & Policies"
             >
               <span>👑</span>
@@ -264,16 +367,42 @@ function RealtimeStageContent({
       {/* DISPLAY STAGE */}
       <div className="flex-1 min-h-[420px] bg-slate-900 border border-slate-800 rounded-3xl p-4 relative overflow-hidden flex flex-col">
         {activeTab === "OVERVIEW" && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 p-8">
-            <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-2xl">
-              🎧
-            </div>
-            <div className="max-w-md space-y-1">
-              <h3 className="text-base font-bold text-white">Voice Study Session Active</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                You are connected to the LiveKit voice server. Unmute your microphone below to collaborate.
-              </p>
-            </div>
+          <div className="flex-1 flex flex-col justify-center space-y-4">
+            {currentTopicType ? (
+              <ActiveTopicCard
+                topicType={currentTopicType}
+                questionMeta={currentTopicMeta}
+                topicImage={currentTopicImage}
+                topicMeta={currentTopicMeta}
+                isHost={isHost}
+                onChangeTopic={() => setShowChooseTopicModal(true)}
+                onRemoveTopic={handleRemoveTopic}
+              />
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4 p-8">
+                <div className="w-16 h-16 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-2xl">
+                  🎧
+                </div>
+                <div className="max-w-md space-y-1">
+                  <h3 className="text-base font-bold text-white">Voice Study Session Active</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    You are connected to the LiveKit voice server. Unmute your microphone below to collaborate.
+                  </p>
+                  {isHost && (
+                    <div className="pt-3">
+                      <button
+                        type="button"
+                        onClick={() => setShowChooseTopicModal(true)}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer inline-flex items-center gap-1.5 shadow-lg shadow-blue-600/30"
+                      >
+                        <span>📖</span>
+                        <span>Choose Question or Upload Topic</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -356,6 +485,24 @@ function RealtimeStageContent({
           )}
         </div>
       </div>
+
+      {/* CHOOSE STUDY TOPIC MODAL (HOST ONLY) */}
+      {isHost && (
+        <ChooseTopicModal
+          isOpen={showChooseTopicModal}
+          roomId={roomId}
+          onClose={() => setShowChooseTopicModal(false)}
+          onTopicUpdated={(newTopic) => {
+            setCurrentTopicType(newTopic.activeTopicType);
+            setCurrentQuestionId(newTopic.activeQuestionId || null);
+            setCurrentTopicImage(newTopic.activeTopicImage || null);
+            setCurrentTopicMeta(newTopic.activeTopicMeta || null);
+            broadcastTopicSet(newTopic);
+            onTopicChanged?.();
+            setActiveTab("OVERVIEW");
+          }}
+        />
+      )}
     </div>
   );
 }
