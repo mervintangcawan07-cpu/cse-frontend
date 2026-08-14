@@ -262,26 +262,26 @@ function DashboardContent() {
       <ResumeExamBanner />
 
       {/* WELCOME HERO HEADER */}
-      <div className="relative bg-slate-900 text-white p-5 sm:p-6 md:p-8 rounded-3xl border border-slate-800 shadow-2xl space-y-4 z-30 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-5 sm:p-6 md:p-8 rounded-3xl shadow-xl shadow-blue-600/15 space-y-4 z-30 overflow-hidden">
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl"></div>
         </div>
 
         <div className="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 w-full">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20 shadow-inner">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 shadow-inner backdrop-blur-md">
                 {isPaid ? "✨ PRO Examinee Access" : "Free Preview Account"}
               </span>
 
               {isPaid && daysRemaining !== null && (
-                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 shadow-inner">
+                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-amber-400 text-slate-950 rounded-full shadow-md font-bold">
                   ⏳ {daysRemaining} Days Remaining
                 </span>
               )}
               {isPaid && daysRemaining === null && !isAdmin && (
-                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 shadow-inner">
+                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-emerald-400 text-slate-950 rounded-full shadow-md font-bold">
                   ⏳ Active Lifetime / Custom Pass
                 </span>
               )}
@@ -290,7 +290,7 @@ function DashboardContent() {
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mt-2.5 tracking-tight text-white">
               Welcome back, {user?.name || "Reviewee"}!
             </h1>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-xl font-medium leading-relaxed">
+            <p className="text-blue-100 text-xs sm:text-sm mt-1 max-w-xl font-medium leading-relaxed">
               Monitor your real-time civil service test readiness, study streaks, and high-frequency exam categories.
             </p>
           </div>
@@ -301,7 +301,7 @@ function DashboardContent() {
 
               <Link
                 href="/mistakes"
-                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 backdrop-blur-sm whitespace-nowrap"
+                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white border border-white/20 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 backdrop-blur-md whitespace-nowrap shadow-sm"
               >
                 <span>📕</span>
                 <span>Mistakes</span>
@@ -309,7 +309,7 @@ function DashboardContent() {
 
               <Link
                 href="/readiness-card"
-                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 backdrop-blur-sm whitespace-nowrap"
+                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 shadow-md whitespace-nowrap"
               >
                 <span>🏆</span>
                 <span>Flex Card</span>
@@ -321,14 +321,14 @@ function DashboardContent() {
                 {daysRemaining !== null && (
                   <button
                     onClick={() => handlePayMongoCheckout("6_MONTHS")}
-                    className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold text-xs rounded-2xl transition cursor-pointer text-center"
+                    className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white border border-white/20 font-bold text-xs rounded-2xl transition cursor-pointer text-center backdrop-blur-md"
                   >
                     🔄 Extend
                   </button>
                 )}
                 <Link
                   href="/practice"
-                  className="flex-1 sm:flex-initial px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-2xl shadow-lg shadow-blue-600/30 transition flex items-center justify-center gap-1.5 whitespace-nowrap"
+                  className="flex-1 sm:flex-initial px-5 py-2.5 bg-slate-950 hover:bg-slate-900 text-white font-black text-xs rounded-2xl shadow-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap"
                 >
                   <span>⚡</span>
                   <span>Practice Center</span>
@@ -358,7 +358,7 @@ function DashboardContent() {
 
       {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (
-        <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-2xl border border-amber-500/40 space-y-6 relative overflow-hidden">
+        <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6 relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl"></div>
           <div>
             <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -409,16 +409,16 @@ function DashboardContent() {
 
       {/* PERFORMANCE METRICS & OVERVIEW CARDS (SYMMETRICAL 2X2 GRID ON MOBILE, 4-ACROSS ON DESKTOP) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-        <div className="bg-slate-900 text-white p-4 sm:p-6 rounded-3xl border border-slate-800 shadow-xl space-y-2 sm:space-y-3 flex flex-col justify-between">
+        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] sm:text-xs text-slate-400 font-extrabold uppercase tracking-wider">Study Streak</span>
-            <span className="text-lg sm:text-2xl p-1.5 sm:p-2 bg-amber-500/10 rounded-2xl border border-amber-500/20">🔥</span>
+            <span className="text-[10px] sm:text-xs text-slate-500 font-extrabold uppercase tracking-wider">Study Streak</span>
+            <span className="text-lg sm:text-2xl p-1.5 sm:p-2 bg-amber-50 rounded-2xl border border-amber-100">🔥</span>
           </div>
           <div>
-            <div className="text-2xl sm:text-3xl font-black text-amber-400">
+            <div className="text-2xl sm:text-3xl font-black text-amber-500">
               {dashAnalytics ? `${dashAnalytics.currentStreak} Days` : "0 Days"}
             </div>
-            <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium mt-0.5">Best: {dashAnalytics?.longestStreak || 0} Days</p>
+            <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium mt-0.5">Best: {dashAnalytics?.longestStreak || 0} Days</p>
           </div>
         </div>
 
@@ -472,13 +472,13 @@ function DashboardContent() {
 
       {/* AI STUDY RECOMMENDATION CARD */}
       {dashAnalytics?.recommendation && (
-        <div className="bg-amber-500/10 border border-amber-500/30 p-4 sm:p-5 rounded-3xl flex items-start gap-3 backdrop-blur-sm">
-          <span className="text-xl sm:text-2xl shrink-0 mt-0.5 p-1.5 sm:p-2 bg-amber-500/20 rounded-2xl">💡</span>
+        <div className="bg-amber-50 border border-amber-200/90 p-4 sm:p-5 rounded-3xl flex items-start gap-3 shadow-sm">
+          <span className="text-xl sm:text-2xl shrink-0 mt-0.5 p-1.5 sm:p-2 bg-amber-100 rounded-2xl text-amber-700">💡</span>
           <div>
-            <h3 className="text-[10px] sm:text-xs font-black uppercase text-amber-800 dark:text-amber-300 tracking-wider">
+            <h3 className="text-[10px] sm:text-xs font-black uppercase text-amber-900 tracking-wider">
               Personalized AI Study Focus
             </h3>
-            <p className="text-xs text-slate-700 dark:text-slate-300 font-medium mt-1 leading-relaxed">
+            <p className="text-xs text-slate-700 font-medium mt-1 leading-relaxed">
               {dashAnalytics.recommendation}
             </p>
           </div>

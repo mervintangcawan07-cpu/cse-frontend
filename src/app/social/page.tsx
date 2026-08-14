@@ -223,21 +223,21 @@ export default function SocialDashboardPage() {
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="max-w-6xl mx-auto py-6 sm:py-8 px-3 sm:px-6 space-y-6 sm:space-y-8 text-slate-100">
+    <div className="max-w-6xl mx-auto py-6 sm:py-8 px-3 sm:px-6 space-y-6 sm:space-y-8 text-slate-900">
       {/* HEADER BANNER WITH USER STUDY IDENTITY & STATUS CONTROLS */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 shadow-xl shadow-purple-600/15 relative overflow-hidden">
         {/* Subtle decorative background glow */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="space-y-2 relative z-10 w-full md:w-auto">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 sm:px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 sm:px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">
               Collaborative Study System
             </span>
 
             {/* Study Profile Identity Chip */}
             {studyProfile && (
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-slate-950/80 border border-slate-800 rounded-full text-xs relative">
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-black/20 border border-white/20 rounded-full text-xs relative backdrop-blur-md">
                 <span className="text-sm sm:text-base">{currentAvatarInfo.emoji}</span>
                 <span className="font-extrabold text-white truncate max-w-[110px] sm:max-w-[140px]">
                   {studyProfile.displayName}
@@ -246,8 +246,8 @@ export default function SocialDashboardPage() {
                 {completionData && (
                   <span className={`text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-full ${
                     completionData.isFullyComplete
-                      ? "bg-emerald-500/20 text-emerald-300"
-                      : "bg-blue-500/20 text-blue-300"
+                      ? "bg-emerald-400 text-slate-950 font-bold"
+                      : "bg-white/30 text-white font-bold"
                   }`}>
                     {completionData.percentage}%
                   </span>
@@ -258,18 +258,18 @@ export default function SocialDashboardPage() {
                   <button
                     type="button"
                     onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                    className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 hover:border-slate-600 text-[10px] font-bold cursor-pointer transition"
+                    className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 rounded-full bg-white/15 border border-white/20 hover:bg-white/25 text-[10px] font-bold cursor-pointer transition text-white"
                     title="Change Availability Status"
                   >
                     <span className={`w-2 h-2 rounded-full ${presence?.dotColor || "bg-emerald-400"}`} />
                     <span>{presence?.label || "Online"}</span>
-                    <span className="text-[8px] text-slate-500">▼</span>
+                    <span className="text-[8px] text-white/70">▼</span>
                   </button>
 
                   {/* Status Dropdown Menu */}
                   {showStatusDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 animate-fade-in">
-                      <div className="px-2.5 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    <div className="absolute top-full right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 animate-fade-in text-slate-100">
+                      <div className="px-2.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                         Set Availability
                       </div>
                       {PRESENCE_CHOICES.map((choice) => (
@@ -277,13 +277,13 @@ export default function SocialDashboardPage() {
                           key={choice.id}
                           type="button"
                           onClick={() => updatePresenceStatus(choice.id)}
-                          className="w-full px-2.5 py-1.5 rounded-xl hover:bg-slate-900 flex items-center justify-between text-xs text-left cursor-pointer transition"
+                          className="w-full px-2.5 py-1.5 rounded-xl hover:bg-slate-800 flex items-center justify-between text-xs text-left cursor-pointer transition"
                         >
                           <div className="flex items-center gap-2">
                             <span className={`w-2 h-2 rounded-full ${choice.dot}`} />
                             <span className="font-bold text-slate-200">{choice.label}</span>
                           </div>
-                          <span className="text-[10px] text-slate-500">{choice.desc}</span>
+                          <span className="text-[10px] text-slate-400">{choice.desc}</span>
                         </button>
                       ))}
                     </div>
@@ -296,7 +296,7 @@ export default function SocialDashboardPage() {
           <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white mt-1">
             Study Together Hub
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-purple-100 max-w-xl leading-relaxed font-medium">
             Review Civil Service topics alongside fellow examinees and classmates. Form study rooms, share practice questions, and track group progress.
           </p>
         </div>
@@ -305,7 +305,7 @@ export default function SocialDashboardPage() {
           <button
             type="button"
             onClick={() => setShowEditProfileModal(true)}
-            className="flex-1 md:flex-initial px-3 sm:px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer flex items-center justify-center gap-1.5 text-center"
+            className="flex-1 md:flex-initial px-3 sm:px-3.5 py-2.5 bg-white/15 hover:bg-white/25 text-white text-xs font-bold rounded-xl transition border border-white/20 cursor-pointer flex items-center justify-center gap-1.5 text-center backdrop-blur-md"
             title="Edit Study Together Profile & Status"
           >
             <span>✏️</span>

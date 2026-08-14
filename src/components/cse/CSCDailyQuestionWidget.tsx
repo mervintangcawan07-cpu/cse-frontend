@@ -111,32 +111,32 @@ export default function CSCDailyQuestionWidget() {
   const isCorrect = userAttempt?.isCorrect;
 
   return (
-    <div className="bg-slate-900 border border-blue-500/30 rounded-3xl p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden">
+    <div className="bg-white border border-blue-200/80 rounded-3xl p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6 shadow-md relative overflow-hidden">
       {/* Glow Effects */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* Top Header & Badges */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-800/80">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-100">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-sm flex items-center gap-1.5">
             <span>⚡</span>
             <span>Question of the Day</span>
           </span>
-          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20 font-mono">
+          <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-md border border-blue-200 font-mono">
             {question.category}
           </span>
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs text-slate-500 font-medium">
             {question.subtopic}
           </span>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-center">
           {hasAnswered ? (
-            <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20 flex items-center gap-1">
+            <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 flex items-center gap-1">
               <span>✓</span> Completed Today
             </span>
           ) : (
-            <span className="text-xs font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-xl border border-amber-500/20 flex items-center gap-1">
+            <span className="text-xs font-bold text-amber-800 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200 flex items-center gap-1">
               <span>🔥</span> +1 Daily Streak Reward
             </span>
           )}
@@ -145,25 +145,25 @@ export default function CSCDailyQuestionWidget() {
 
       {/* Question Prompt */}
       <div className="space-y-3">
-        <FormattedPrompt text={question.prompt} className="text-sm sm:text-base md:text-lg font-bold text-white leading-relaxed" />
+        <FormattedPrompt text={question.prompt} className="text-sm sm:text-base md:text-lg font-extrabold text-slate-900 leading-relaxed" />
       </div>
 
       {/* Options Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
         {question.options.map((opt, idx) => {
           const letter = ["A", "B", "C", "D", "E"][idx] || `${idx + 1}`;
-          let style = "bg-slate-950/80 border-slate-800 text-slate-200 hover:border-slate-700 hover:bg-slate-900";
+          let style = "bg-slate-50 border-slate-200/90 text-slate-800 hover:border-blue-300 hover:bg-blue-50/40";
 
           if (hasAnswered && resolvedAnswerIndex !== null && resolvedAnswerIndex !== undefined) {
             if (idx === resolvedAnswerIndex) {
-              style = "bg-emerald-600/20 border-emerald-500/50 text-emerald-300 font-bold shadow-md shadow-emerald-500/10";
+              style = "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold shadow-sm";
             } else if (idx === userAttempt?.userAnswer && !isCorrect) {
-              style = "bg-rose-600/20 border-rose-500/50 text-rose-300 font-bold";
+              style = "bg-rose-50 border-rose-500 text-rose-800 font-bold";
             } else {
-              style = "bg-slate-950/40 border-slate-900 text-slate-500 opacity-60";
+              style = "bg-slate-50/50 border-slate-100 text-slate-400 opacity-60";
             }
           } else if (selectedOption === idx) {
-            style = "bg-blue-600/20 border-blue-500 text-blue-300 font-bold shadow-md shadow-blue-500/10";
+            style = "bg-blue-50 border-blue-500 text-blue-800 font-bold shadow-sm";
           }
 
           // Percentage choice in community
@@ -180,16 +180,16 @@ export default function CSCDailyQuestionWidget() {
               className={`p-3.5 sm:p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer flex flex-col justify-between gap-2 ${style}`}
             >
               <div className="flex items-start gap-2.5 sm:gap-3 w-full">
-                <span className="w-6 h-6 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                <span className="w-6 h-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 text-slate-700 shadow-xs">
                   {letter}
                 </span>
                 <span className="flex-1 leading-relaxed">{opt}</span>
               </div>
 
               {hasAnswered && (
-                <div className="w-full pt-1.5 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-800/50 mt-1">
+                <div className="w-full pt-1.5 flex items-center justify-between text-[10px] text-slate-500 border-t border-slate-200/60 mt-1">
                   <span>Community picked:</span>
-                  <span className="font-bold text-slate-300">{choicePct}%</span>
+                  <span className="font-bold text-slate-700">{choicePct}%</span>
                 </div>
               )}
             </button>
@@ -201,8 +201,8 @@ export default function CSCDailyQuestionWidget() {
       {hasAnswered && (
         <div className={`p-4 sm:p-5 rounded-2xl border space-y-3 animate-fade-in ${
           isCorrect
-            ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-300"
-            : "bg-rose-950/30 border-rose-500/40 text-rose-300"
+            ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+            : "bg-rose-50 border-rose-200 text-rose-800"
         }`}>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div className="flex items-center gap-2">
@@ -237,18 +237,18 @@ export default function CSCDailyQuestionWidget() {
           </div>
 
           {question.explanation && (
-            <div className="p-3.5 bg-slate-950/80 rounded-xl border border-slate-800/80 text-xs text-slate-300 leading-relaxed space-y-1">
-              <p className="font-bold text-slate-200">Official Solution:</p>
+            <div className="p-3.5 bg-white rounded-xl border border-slate-200 text-xs text-slate-700 leading-relaxed space-y-1 shadow-xs">
+              <p className="font-bold text-slate-900">Official Solution:</p>
               <p>{question.explanation}</p>
             </div>
           )}
 
           {!isCorrect && (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs pt-1 border-t border-rose-500/20 gap-1.5">
-              <span className="text-rose-300 font-medium">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs pt-1 border-t border-rose-200 gap-1.5">
+              <span className="text-rose-700 font-medium">
                 📕 This question was automatically saved to your Mistake Notebook.
               </span>
-              <Link href="/mistakes" className="text-rose-400 hover:text-white font-bold underline">
+              <Link href="/mistakes" className="text-rose-600 hover:text-rose-700 font-bold underline">
                 View Mistake Notebook →
               </Link>
             </div>
@@ -259,13 +259,13 @@ export default function CSCDailyQuestionWidget() {
       {/* Widget Footer Action */}
       {!hasAnswered && (
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-500 font-medium">
             Select your answer and submit to earn streak points.
           </span>
           <button
             onClick={handleSubmit}
             disabled={selectedOption === null || submitting}
-            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/30 disabled:opacity-50 text-center"
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-black rounded-xl transition cursor-pointer shadow-lg shadow-blue-600/20 disabled:opacity-50 text-center"
           >
             {submitting ? "Evaluating..." : "Submit Daily Answer ⚡"}
           </button>

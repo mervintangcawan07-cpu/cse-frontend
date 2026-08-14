@@ -430,33 +430,33 @@ function TakeExamPageInner() {
           </div>
         )}
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 relative overflow-hidden text-slate-100">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 relative overflow-hidden text-slate-900">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="text-xl">⏱️</span>
-              <h1 className="text-2xl font-black text-white">Configure Mock Exam</h1>
+              <h1 className="text-2xl font-black text-slate-900">Configure Mock Exam</h1>
             </div>
-            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-medium">
               Customize your practice session with smart non-repeating question queue.
             </p>
           </div>
 
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Select Category
               </label>
               <div className="relative">
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-3.5 bg-slate-950 border border-slate-800 rounded-2xl text-sm font-bold text-white outline-none focus:border-blue-500 transition cursor-pointer appearance-none"
+                  className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:border-blue-500 transition cursor-pointer appearance-none shadow-xs"
                 >
-                  <option value="All" className="bg-slate-900 text-white py-2">
+                  <option value="All" className="bg-white text-slate-900 py-2">
                     All Categories (170 Items - Smart Repetition)
                   </option>
                   {categories.map((cat) => (
-                    <option key={cat} value={cat} className="bg-slate-900 text-white py-2">
+                    <option key={cat} value={cat} className="bg-white text-slate-900 py-2">
                       {cat}
                     </option>
                   ))}
@@ -468,7 +468,7 @@ function TakeExamPageInner() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Time Limit
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -484,8 +484,8 @@ function TakeExamPageInner() {
                     onClick={() => setTimerMinutes(timer.value)}
                     className={`p-3.5 rounded-2xl border text-xs sm:text-sm font-bold transition cursor-pointer flex items-center justify-center text-center ${
                       timerMinutes === timer.value
-                        ? "border-blue-500 bg-blue-600 text-white font-black shadow-lg shadow-blue-600/30"
-                        : "border-slate-800 bg-slate-950 text-slate-300 hover:text-white hover:bg-slate-800"
+                        ? "border-blue-600 bg-blue-600 text-white font-black shadow-md shadow-blue-600/20"
+                        : "border-slate-200 bg-slate-50 text-slate-700 hover:text-slate-900 hover:bg-slate-100 shadow-xs"
                     }`}
                   >
                     {timer.label}
@@ -531,12 +531,12 @@ function TakeExamPageInner() {
       <ExamSubmissionLoader isSubmitting={submitting} totalQuestions={examQuestions.length || 170} />
 
       {/* TOP HEADER */}
-      <div className="bg-slate-900 text-white p-4 md:p-5 rounded-3xl shadow-md flex justify-between items-center gap-4">
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 md:p-5 rounded-3xl shadow-lg shadow-blue-600/15 flex justify-between items-center gap-4">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-extrabold uppercase px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+          <span className="text-xs font-extrabold uppercase px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">
             {currentQ?.category || "General"}
           </span>
-          <span className="text-xs font-bold text-slate-400 hidden sm:inline">
+          <span className="text-xs font-bold text-blue-100 hidden sm:inline">
             Item {currentIndex + 1} of {examQuestions.length} ({answeredCount} answered)
           </span>
         </div>
@@ -546,8 +546,8 @@ function TakeExamPageInner() {
             <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono font-bold text-xs ${
                 timeLeft <= 180
-                  ? "border-rose-500/50 bg-rose-500/20 text-rose-300 animate-pulse"
-                  : "border-slate-700 bg-slate-800 text-amber-400"
+                  ? "border-rose-400 bg-rose-500 text-white animate-pulse"
+                  : "border-white/30 bg-white/20 text-white backdrop-blur-md"
               }`}
             >
               <span>⏱</span>
@@ -557,7 +557,7 @@ function TakeExamPageInner() {
 
           <button
             onClick={() => setIsPauseModalOpen(true)}
-            className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0 cursor-pointer"
+            className="px-4 py-2 bg-slate-950 hover:bg-slate-900 text-white font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-1.5 shrink-0 cursor-pointer"
           >
             <span>⏸️</span>
             <span>Pause / Exit</span>
