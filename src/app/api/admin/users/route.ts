@@ -1,33 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-
-async function verifyAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-
-  const session = await verifyJWT(token);
-  if (!session?.userId) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { id: true, role: true },
-  });
-
-  if (user?.role !== "ADMIN") return null;
-  return session;
-}
+import { requireAdminAuth } from "@/lib/serverAuth";
 
 // 1. GET USERS WITH SEARCH & SUBSCRIPTION STATS
 export async function GET(request: Request) {
   try {
-    const adminSession = await verifyAdmin();
-    if (!adminSession) {
-      return NextResponse.json({ error: "Unauthorized: Admin access required" }, { status: 403 });
-    }
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse) return errorResponse;
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q") || "";
@@ -68,10 +48,8 @@ export async function GET(request: Request) {
 // 2. UPDATE USER PRO ACCESS, DURATION, OR ROLE
 export async function PATCH(req: Request) {
   try {
-    const adminSession = await verifyAdmin();
-    if (!adminSession) {
-      return NextResponse.json({ error: "Unauthorized: Admin access required" }, { status: 403 });
-    }
+    const { user, errorResponse } = await requireAdminAuth(req);
+    if (errorResponse) return errorResponse;
 
     const body = await req.json();
     const { userId, isPaid, role, action } = body;
@@ -136,13 +114,15 @@ export async function PATCH(req: Request) {
     });
 
     // Activity Log
-    await prisma.activityLog.create({
-      data: {
-        userId: String(adminSession.userId),
-        action: "ADMIN_USER_UPDATED",
-        metadata: JSON.stringify({ targetUserId: userId, action, isPaid, role }),
-      },
-    }).catch(() => null);
+    if (user) {
+      await prisma.activityLog.create({
+        data: {
+          userId: user.id,
+          action: "ADMIN_USER_UPDATED",
+          metadata: JSON.stringify({ targetUserId: userId, action, isPaid, role }),
+        },
+      }).catch(() => null);
+    }
 
     return NextResponse.json({ success: true, user: updatedUser });
   } catch (error) {

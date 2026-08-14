@@ -1,21 +1,11 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { verifyJWT } from "@/lib/auth";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const session = await verifyJWT(token);
-    if (session?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden. Admin access required." }, { status: 403 });
-    }
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse) return errorResponse;
 
     // Parallel database queries
     const [

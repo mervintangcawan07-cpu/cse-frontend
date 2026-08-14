@@ -1,13 +1,15 @@
 // Relative Path: src/app/api/admin/questions/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 import { Prisma } from "@prisma/client";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
 export async function GET(request: Request) {
   try {
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse) return errorResponse;
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
@@ -45,16 +47,9 @@ export async function GET(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
-      return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse || !user) {
+      return errorResponse ?? NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -78,7 +73,7 @@ export async function DELETE(request: Request) {
     }
 
     for (const id of idsToDelete) {
-      await softDeleteRecord("question", id, String(session.userId));
+      await softDeleteRecord("question", id, user.id);
     }
 
     return NextResponse.json({

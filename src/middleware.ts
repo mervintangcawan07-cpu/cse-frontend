@@ -1,0 +1,96 @@
+// Relative Path: src/middleware.ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { verifyJWT } from "@/lib/auth";
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // 1. Static files, Next internals, public assets, and webhooks bypass middleware
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api/webhooks") ||
+    pathname.startsWith("/api/paymongo/webhook") ||
+    pathname.startsWith("/api/cron") ||
+    pathname.includes(".") ||
+    pathname === "/favicon.ico"
+  ) {
+    return NextResponse.next();
+  }
+
+  // 2. Read session token from cookies
+  const token = request.cookies.get("cse_session")?.value;
+  const session = token ? await verifyJWT(token) : null;
+
+  // 3. Admin Routes Protection (/admin and /admin/*)
+  if (pathname.startsWith("/admin")) {
+    if (!session) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    if (session.role !== "ADMIN") {
+      // Non-admin trying to access /admin -> redirect to user dashboard
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    return NextResponse.next();
+  }
+
+  // 4. Protected User Routes
+  const protectedUserPrefixes = [
+    "/dashboard",
+    "/practice",
+    "/mock-exam",
+    "/social",
+    "/profile",
+    "/settings",
+    "/mistakes",
+    "/drills",
+    "/duels",
+    "/flashcards",
+    "/appointments",
+    "/badges",
+    "/bookmarks",
+  ];
+
+  const isProtectedUserRoute = protectedUserPrefixes.some((prefix) =>
+    pathname.startsWith(prefix)
+  );
+
+  if (isProtectedUserRoute && !session) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // 5. Auth pages (redirect to dashboard if already logged in)
+  if ((pathname === "/login" || pathname === "/register" || pathname === "/signup") && session) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    "/admin/:path*",
+    "/dashboard/:path*",
+    "/practice/:path*",
+    "/mock-exam/:path*",
+    "/social/:path*",
+    "/profile/:path*",
+    "/settings/:path*",
+    "/mistakes/:path*",
+    "/drills/:path*",
+    "/duels/:path*",
+    "/flashcards/:path*",
+    "/appointments/:path*",
+    "/badges/:path*",
+    "/bookmarks/:path*",
+    "/login",
+    "/register",
+    "/signup",
+  ],
+};

@@ -1,22 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
-
-async function verifyAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return false;
-  const session = await verifyJWT(token);
-  if (!session?.userId) return false;
-
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { role: true },
-  });
-
-  return user?.role === "ADMIN";
-}
+import { requireAdminAuth } from "@/lib/serverAuth";
 
 // GET: Fetch all study notes
 export async function GET() {
@@ -39,7 +23,8 @@ export async function GET() {
 // POST: Create a new study note
 export async function POST(req: Request) {
   try {
-    if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    const { user, errorResponse } = await requireAdminAuth(req);
+    if (errorResponse) return errorResponse;
 
     const { category, title, summary, content, tips, videoUrl } = await req.json();
     const note = await prisma.studyNote.create({
@@ -61,7 +46,8 @@ export async function POST(req: Request) {
 // PUT: Update an existing study note
 export async function PUT(req: Request) {
   try {
-    if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    const { user, errorResponse } = await requireAdminAuth(req);
+    if (errorResponse) return errorResponse;
 
     const { id, category, title, summary, content, tips, videoUrl } = await req.json();
     if (!id) return NextResponse.json({ error: "Note ID required" }, { status: 400 });
@@ -87,7 +73,8 @@ export async function PUT(req: Request) {
 // DELETE: Remove a study note
 export async function DELETE(req: Request) {
   try {
-    if (!(await verifyAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    const { user, errorResponse } = await requireAdminAuth(req);
+    if (errorResponse) return errorResponse;
 
     const id = new URL(req.url).searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
