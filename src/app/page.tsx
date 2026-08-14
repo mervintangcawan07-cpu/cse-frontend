@@ -4,17 +4,258 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+interface SampleQuestion {
+  id: number;
+  type: string;
+  category: string;
+  badgeColor: string;
+  prompt: string;
+  options: string[];
+  correctIndex: number;
+  correctAnswerText: string;
+  stepByStep: { step: string; detail: string }[];
+  whyCorrect: string;
+  whyWrong: { option: string; text: string }[];
+  eliminationStrategy: string;
+  commonTrap: string;
+  examTip: string;
+}
+
+const SAMPLE_QUESTIONS: SampleQuestion[] = [
+  {
+    id: 1,
+    type: "Challenge 1 of 3: Numerical Reasoning",
+    category: "Numerical Ability • Multi-Step Work & Rate",
+    badgeColor: "bg-blue-500/10 text-blue-700 border-blue-200",
+    prompt:
+      "A government printing office uses three automated machines—Alpha, Beta, and Gamma. Working together at their constant standard rates, they can print a batch of 18,000 examination booklets in 6 hours. Machine Alpha works twice as fast as Machine Gamma, while Machine Beta works 1.5 times as fast as Machine Gamma. If Machine Beta breaks down after all three machines have worked together for exactly 2 hours, how many additional hours will it take Machines Alpha and Gamma working together to finish the remaining booklets?",
+    options: [
+      "A. 4 hours",
+      "B. 6 hours",
+      "C. 8 hours",
+      "D. 9 hours",
+    ],
+    correctIndex: 1,
+    correctAnswerText: "B. 6 hours",
+    stepByStep: [
+      {
+        step: "Step 1: Calculate the combined printing rate of all three machines.",
+        detail:
+          "Total rate = 18,000 booklets ÷ 6 hours = 3,000 booklets per hour.",
+      },
+      {
+        step: "Step 2: Express individual rates in terms of Machine Gamma (g).",
+        detail:
+          "Let Gamma's rate = g. Alpha's rate = 2g. Beta's rate = 1.5g. Combined: 2g + 1.5g + g = 4.5g = 3,000 booklets/hr.",
+      },
+      {
+        step: "Step 3: Solve for individual rates.",
+        detail:
+          "g (Gamma) = 3,000 ÷ 4.5 = 666.67 (or 2,000/3) booklets/hr. Alpha (2g) = 4,000/3 booklets/hr. Beta (1.5g) = 1,000 booklets/hr.",
+      },
+      {
+        step: "Step 4: Calculate work completed before Machine Beta broke down.",
+        detail:
+          "In the first 2 hours, all 3 machines produced: 2 hours × 3,000 booklets/hr = 6,000 booklets.",
+      },
+      {
+        step: "Step 5: Determine remaining work and remaining rate (Alpha + Gamma).",
+        detail:
+          "Remaining booklets = 18,000 - 6,000 = 12,000 booklets. Combined rate of Alpha and Gamma = (4,000/3) + (2,000/3) = 6,000/3 = 2,000 booklets/hr.",
+      },
+      {
+        step: "Step 6: Compute additional hours required.",
+        detail:
+          "Time = Remaining Work ÷ Combined Rate = 12,000 booklets ÷ 2,000 booklets/hr = 6 hours.",
+      },
+    ],
+    whyCorrect:
+      "After 2 hours, 6,000 booklets are finished, leaving 12,000 booklets. Without Machine Beta (1,000 booklets/hr), Machines Alpha and Gamma produce exactly 2,000 booklets/hr together. 12,000 ÷ 2,000 = 6 hours.",
+    whyWrong: [
+      {
+        option: "A (4 hours)",
+        text: "Incorrect. This assumes all 3 machines continued operating for the remaining 12,000 booklets (12,000 ÷ 3,000 = 4 hours), failing to account for Beta's breakdown.",
+      },
+      {
+        option: "B (6 hours)",
+        text: "Correct! Precisely accounts for the 2 hours of joint production and the adjusted combined speed of Alpha + Gamma.",
+      },
+      {
+        option: "C (8 hours)",
+        text: "Incorrect. Results from calculating total elapsed time from start to finish (2 initial hrs + 6 additional hrs = 8 hrs total), but the question specifically asks for 'additional hours'.",
+      },
+      {
+        option: "D (9 hours)",
+        text: "Incorrect. This computes how long Alpha and Gamma would take to print the entire 18,000 batch alone from scratch (18,000 ÷ 2,000 = 9 hrs), ignoring the 6,000 booklets already printed.",
+      },
+    ],
+    eliminationStrategy:
+      "Notice that Beta contributes 1,000 booklets/hr out of 3,000 (exactly one-third). The remaining two machines work at 2/3 speed (2,000 booklets/hr). For 12,000 booklets remaining, 12,000 ÷ 2,000 must equal an integer (6). Eliminate 4 immediately as it assumes no breakdown.",
+    commonTrap:
+      "A frequent trap in CSE word problems is confusing 'additional hours to finish' with 'total hours elapsed from the beginning' (which would be 8). Always check what the final sentence asks.",
+    examTip:
+      "When rates are given as relative multiples (e.g., 'twice as fast', '1.5 times as fast'), set the slowest unit as variable x to avoid fractions until the final step.",
+  },
+  {
+    id: 2,
+    type: "Challenge 2 of 3: Tricky Verbal Analogy",
+    category: "Verbal Ability • Structural & Semantic Relationships",
+    badgeColor: "bg-emerald-500/10 text-emerald-700 border-emerald-200",
+    prompt:
+      "Analyze the relationship between the primary pair and choose the pair that exhibits the EXACT same structural and grammatical relationship:\n\nOBDURATE : PERSUASION :: ________ : ________",
+    options: [
+      "A. impervious : penetration",
+      "B. gullible : deception",
+      "C. penitent : forgiveness",
+      "D. meticulous : perfection",
+    ],
+    correctIndex: 0,
+    correctAnswerText: "A. impervious : penetration",
+    stepByStep: [
+      {
+        step: "Step 1: Define the primary pair precisely.",
+        detail:
+          "'Obdurate' is an adjective meaning stubbornly resistant or unyielding. 'Persuasion' is a noun referring to the act of swaying or convincing.",
+      },
+      {
+        step: "Step 2: Formulate the defining relationship bridge sentence.",
+        detail:
+          "'Someone or something that is OBDURATE is completely immune or stubbornly resistant to PERSUASION.'",
+      },
+      {
+        step: "Step 3: Test Option A (impervious : penetration).",
+        detail:
+          "'Something that is IMPERVIOUS is completely immune or stubbornly resistant to PENETRATION.' This matches the grammatical form (Adjective : Noun) and exact semantic polarity (immunity/resistance).",
+      },
+      {
+        step: "Step 4: Test Option B (gullible : deception).",
+        detail:
+          "'Someone who is GULLIBLE is easily susceptible or vulnerable to DECEPTION.' This is the opposite relationship (vulnerability vs. immunity).",
+      },
+      {
+        step: "Step 5: Test Option C & D.",
+        detail:
+          "'Penitent' seeks or desires forgiveness (not immune to it). 'Meticulous' strives for perfection (aim/goal relationship).",
+      },
+    ],
+    whyCorrect:
+      "Both 'obdurate' and 'impervious' describe states of absolute resistance against an external action or influence ('persuasion' and 'penetration' respectively).",
+    whyWrong: [
+      {
+        option: "A (impervious : penetration)",
+        text: "Correct! Exact parallel: [Adjective] describes something that cannot be affected or breached by [Noun].",
+      },
+      {
+        option: "B (gullible : deception)",
+        text: "Incorrect. Classic inverted trap! A gullible person is vulnerable to deception, whereas an obdurate person resists persuasion.",
+      },
+      {
+        option: "C (penitent : forgiveness)",
+        text: "Incorrect. Represents an attitude and its sought result (penitent seeks forgiveness), not resistance or immunity.",
+      },
+      {
+        option: "D (meticulous : perfection)",
+        text: "Incorrect. Represents an approach and its standard of execution (meticulous aims for perfection).",
+      },
+    ],
+    eliminationStrategy:
+      "First eliminate C and D because they describe pursuit or desire rather than resistance. Between A and B, identify the polarity: obdurate means 'cannot be persuaded' (negative resistance), while gullible means 'easily deceived' (positive vulnerability). Thus, choose A.",
+    commonTrap:
+      "Option B uses words with strong thematic associations to human behavior, tempting examinees into picking it based on conversational similarity rather than structural logic.",
+    examTip:
+      "Always construct an explicit 'Bridge Sentence' containing both words (e.g. 'X is immune to Y') and substitute each option into the exact same sentence structure.",
+  },
+  {
+    id: 3,
+    type: "Challenge 3 of 3: Analytical / Logical Reasoning",
+    category: "Analytical Ability • Multi-Condition Deductive Scheduling",
+    badgeColor: "bg-purple-500/10 text-purple-700 border-purple-200",
+    prompt:
+      "Six government interns—Arvin, Bea, Carlo, Danica, Elena, and Franco—are scheduled to undergo individual performance evaluation interviews from Monday through Saturday (one intern per day).\n\nThe schedule must satisfy the following constraints:\n1. Arvin must be interviewed on an earlier day than Bea.\n2. Elena must be interviewed on either Thursday or Friday.\n3. Danica must be interviewed immediately before or immediately after Carlo.\n4. Franco must be interviewed on Monday or Saturday.\n5. Bea is interviewed on Wednesday.\n\nWhich of the following MUST BE TRUE about the interview schedule?",
+    options: [
+      "A. Arvin is interviewed on Tuesday.",
+      "B. Danica is interviewed on Friday.",
+      "C. Elena is interviewed on Friday.",
+      "D. Franco is interviewed on Saturday.",
+    ],
+    correctIndex: 0,
+    correctAnswerText: "A. Arvin is interviewed on Tuesday.",
+    stepByStep: [
+      {
+        step: "Step 1: Anchor the fixed positions.",
+        detail:
+          "Days are Mon(1), Tue(2), Wed(3), Thu(4), Fri(5), Sat(6). Bea is fixed on Wednesday (Day 3).",
+      },
+      {
+        step: "Step 2: Apply Constraint 1 (Arvin before Bea).",
+        detail:
+          "Since Bea is on Wed (3), Arvin must be on Monday (1) or Tuesday (2). Only two slots exist before Bea.",
+      },
+      {
+        step: "Step 3: Analyze the consecutive block for Danica & Carlo [D, C].",
+        detail:
+          "Danica and Carlo must occupy two adjacent days. They cannot occupy Days 1 & 2 because that would leave no slot for Arvin before Bea. They cannot occupy Days 4 & 5 because Elena must have Thu (4) or Fri (5). Therefore, the only available consecutive pair is Days 5 and 6 (Friday and Saturday).",
+      },
+      {
+        step: "Step 4: Determine positions for Elena and Franco.",
+        detail:
+          "Since Days 5 & 6 are taken by Danica/Carlo, Elena must take Thursday (Day 4). Since Saturday (Day 6) is occupied by Danica/Carlo, Franco (who must be Mon or Sat) MUST take Monday (Day 1).",
+      },
+      {
+        step: "Step 5: Deduce Arvin's position.",
+        detail:
+          "Since Monday (1) is occupied by Franco, and Arvin must be before Bea (3), Arvin MUST be on Tuesday (Day 2).",
+      },
+      {
+        step: "Step 6: Verify the complete valid schedule.",
+        detail:
+          "Mon(1): Franco | Tue(2): Arvin | Wed(3): Bea | Thu(4): Elena | Fri(5): Danica or Carlo | Sat(6): Carlo or Danica. Every condition is satisfied.",
+      },
+    ],
+    whyCorrect:
+      "Because the consecutive pair [Danica, Carlo] is forced into Friday–Saturday, Franco is forced to Monday, which leaves Tuesday as the only possible day for Arvin.",
+    whyWrong: [
+      {
+        option: "A (Arvin is interviewed on Tuesday)",
+        text: "Correct! In every valid arrangement satisfying all 5 conditions, Arvin must occupy Tuesday.",
+      },
+      {
+        option: "B (Danica is interviewed on Friday)",
+        text: "Incorrect. While possible, it is not 'MUST BE TRUE' because Carlo could be interviewed on Friday and Danica on Saturday.",
+      },
+      {
+        option: "C (Elena is interviewed on Friday)",
+        text: "Incorrect. Must be false! Friday is occupied by one of the [Danica/Carlo] pair, forcing Elena to Thursday.",
+      },
+      {
+        option: "D (Franco is interviewed on Saturday)",
+        text: "Incorrect. Must be false! Saturday is occupied by Danica or Carlo, forcing Franco to Monday.",
+      },
+    ],
+    eliminationStrategy:
+      "Identify the 'block constraint' first. Two adjacent items [D,C] require two consecutive empty slots. With Wed fixed, slots [1,2], [4,5], and [5,6] are the only theoretical candidates. Eliminating impossible blocks quickly solves the entire puzzle.",
+    commonTrap:
+      "Confusing 'COULD BE TRUE' with 'MUST BE TRUE'. Danica on Friday (Option B) is a possible scenario, but Carlo on Friday is equally valid, making B only conditionally true, not universally true.",
+    examTip:
+      "In Civil Service analytical reasoning, always sketch a 6-slot grid (Mon–Sat). Fill in anchor positions with bold ink and test block constraints first.",
+  },
+];
+
 export default function LandingPage() {
   const router = useRouter();
 
-  // Sample Question Widget State
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
+  // Mobile menu drawer
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // 3-Question PRO Challenge State
+  const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>([null, null, null]);
+  const [submittedChallenges, setSubmittedChallenges] = useState<boolean[]>([false, false, false]);
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // ⚡ Auto-redirect active logged-in users (<30 min inactivity) to Dashboard
+  // Auto-redirect active logged-in users to Dashboard
   useEffect(() => {
     async function checkActiveSession() {
       try {
@@ -25,105 +266,142 @@ export default function LandingPage() {
             router.replace("/dashboard");
           }
         }
-      } catch (err) {
-        // Session invalid or expired -> Stay on landing page
+      } catch {
+        // Stay on landing page
       }
     }
     checkActiveSession();
   }, [router]);
 
-  const sampleQuestion = {
-    category: "General Information & PH Constitution",
-    prompt:
-      "According to Article XI of the 1987 Philippine Constitution, public office is a public trust. Who among the following officers may be removed from office by impeachment?",
-    options: [
-      "A. Cabinet Secretaries and Department Undersecretaries",
-      "B. The President, Vice-President, Members of Supreme Court, and Ombudsman",
-      "C. Members of the House of Representatives and Senators",
-      "D. Provincial Governors and City Mayors",
-    ],
-    correctIndex: 1,
-    explanation:
-      "Article XI, Section 2 specifies that the President, Vice-President, Members of the Supreme Court, Members of the Constitutional Commissions, and the Ombudsman may be removed from office on impeachment.",
+  const activeQuestion = SAMPLE_QUESTIONS[currentChallengeIndex];
+  const currentSelected = selectedAnswers[currentChallengeIndex];
+  const isCurrentSubmitted = submittedChallenges[currentChallengeIndex];
+  const isCurrentCorrect = currentSelected === activeQuestion.correctIndex;
+
+  const handleSelectOption = (index: number) => {
+    if (isCurrentSubmitted) return;
+    const updated = [...selectedAnswers];
+    updated[currentChallengeIndex] = index;
+    setSelectedAnswers(updated);
   };
 
-  const categories = [
+  const handleSubmitAnswer = () => {
+    if (currentSelected === null) return;
+    const updated = [...submittedChallenges];
+    updated[currentChallengeIndex] = true;
+    setSubmittedChallenges(updated);
+  };
+
+  const handleNextChallenge = () => {
+    if (currentChallengeIndex < SAMPLE_QUESTIONS.length - 1) {
+      setCurrentChallengeIndex((prev) => prev + 1);
+    }
+  };
+
+  const handleResetChallenges = () => {
+    setSelectedAnswers([null, null, null]);
+    setSubmittedChallenges([false, false, false]);
+    setCurrentChallengeIndex(0);
+  };
+
+  const allCompleted = submittedChallenges.every(Boolean);
+
+  const scopeCategories = [
     {
-      title: "Numerical Reasoning",
+      title: "Numerical Ability",
       icon: "🧮",
-      items: "Basic Operations, Word Problems, Data Interpretation, Number Series",
-      color: "from-blue-500/10 to-indigo-500/10 border-blue-500/30 text-blue-400",
-      badgeBg: "bg-blue-600",
+      items: "Arithmetic operations, word problems, ratios & proportions, percentage change, work & rate, data interpretation.",
+      accent: "border-blue-200 bg-blue-50/50 text-blue-900",
+      pill: "bg-blue-600 text-white",
     },
     {
       title: "Verbal Ability",
       icon: "📖",
-      items:
-        "Grammar & Correct Usage, Vocabulary, Paragraph Organization, Reading Comprehension",
-      color: "from-emerald-500/10 to-teal-500/10 border-emerald-500/30 text-emerald-400",
-      badgeBg: "bg-emerald-600",
+      items: "Grammar & correct usage, vocabulary in context, synonyms & antonyms, paragraph organization, reading comprehension.",
+      accent: "border-indigo-200 bg-indigo-50/50 text-indigo-900",
+      pill: "bg-indigo-600 text-white",
     },
     {
       title: "Analytical Ability",
       icon: "🧩",
-      items: "Logic, Word Association, Assumptions, Logical Reasoning",
-      color: "from-purple-500/10 to-violet-500/10 border-purple-500/30 text-purple-400",
-      badgeBg: "bg-purple-600",
+      items: "Logical sequencing, deductive reasoning, conditional logic, word association, assumption identification.",
+      accent: "border-purple-200 bg-purple-50/50 text-purple-900",
+      pill: "bg-purple-600 text-white",
     },
     {
       title: "General Information",
       icon: "🇵🇭",
-      items: "Philippine Constitution, RA 6713, Peace & Human Rights, Environment",
-      color: "from-amber-500/10 to-orange-500/10 border-amber-500/30 text-amber-400",
-      badgeBg: "bg-amber-600",
+      items: "Philippine Constitution (1987), RA 6713 (Code of Conduct), peace & human rights, environmental concepts.",
+      accent: "border-emerald-200 bg-emerald-50/50 text-emerald-900",
+      pill: "bg-emerald-600 text-white",
     },
   ];
 
-  const features = [
+  const coreFeatures = [
     {
-      title: "Smart Mock Exams",
-      description: "Simulate the real Civil Service Exam with timed, adaptive tests.",
+      title: "Timed Mock Exams",
+      description:
+        "Practice with authentic 170-item exams timed under real CSC conditions with category diagnostic breakdown.",
       icon: "⏱️",
+      tag: "Exam Simulation",
+    },
+    {
+      title: "Smart Elimination Drills",
+      description:
+        "Learn why wrong choices are traps. Every option includes a rationale so you learn to eliminate distractors fast.",
+      icon: "🎯",
+      tag: "Strategy",
     },
     {
       title: "Active Recall Flashcards",
-      description: "Master vocabulary, constitution articles, and formulas faster.",
+      description:
+        "Master tricky vocabulary words, constitutional provisions, and math formulas with interactive flashcards.",
       icon: "🎴",
+      tag: "Quick Review",
     },
     {
-      title: "In-Depth Rationalizations",
+      title: "Mistake Notebook",
       description:
-        "Understand exactly why an answer is correct with detailed explanations.",
-      icon: "🧠",
+        "Every question you miss is automatically saved in your personal notebook for focused re-drilling until mastered.",
+      icon: "📓",
+      tag: "Targeted Prep",
     },
     {
-      title: "Performance Analytics",
+      title: "Study Classmates & Messaging",
       description:
-        "Track your progress and pinpoint your weakest subjects instantly.",
-      icon: "📊",
+        "Connect with fellow examinees, add study buddies, and direct message to discuss questions and share tips.",
+      icon: "👥",
+      tag: "Collaborative Study",
+    },
+    {
+      title: "Study Rooms & Live Whiteboard",
+      description:
+        "Join virtual study rooms with shared topics, real-time interactive whiteboard solving, and audio discussion.",
+      icon: "🎨",
+      tag: "Interactive Stage",
     },
   ];
 
   const pricingPlans = [
     {
-      name: "1-Month Pass",
+      name: "1-Month Intensive Pass",
       price: "₱99",
-      duration: "Valid for 30 Days",
-      description: "Ideal for quick, intensive last-minute review.",
+      duration: "30 Days Access",
+      description: "Ideal for fast, focused preparation in the final weeks before your exam date.",
       popular: false,
     },
     {
-      name: "6-Month Pass",
+      name: "6-Month Full Pass",
       price: "₱199",
-      duration: "Valid for 180 Days",
-      description: "Recommended for structured multi-month exam prep.",
+      duration: "180 Days Access",
+      description: "Our most popular pass. Complete coverage with ample time to master all subjects.",
       popular: true,
     },
     {
-      name: "1-Year Pass",
+      name: "1-Year Mastery Pass",
       price: "₱299",
-      duration: "Valid for 365 Days",
-      description: "Best value for long-term study across exam schedules.",
+      duration: "365 Days Access",
+      description: "Best value for continuous review across multiple CSC PPT and COMEX schedules.",
       popular: false,
     },
   ];
@@ -131,414 +409,703 @@ export default function LandingPage() {
   const faqs = [
     {
       q: "Does this reviewer cover both Professional and Sub-Professional levels?",
-      a: "Yes! All major core subjects—Numerical, Verbal, Analytical, and General Information—are structured to prepare you for both examination levels.",
+      a: "Yes. All core subject areas—Numerical Ability, Verbal Ability, Analytical Ability, and General Information—are fully aligned with Civil Service Commission guidelines for both exam levels.",
     },
     {
-      q: "What is the passing grade for the Civil Service Exam?",
-      a: "To pass the official CSC Examination (PPT or COMEX), an examinee must obtain an overall general rating of at least 80.00%.",
+      q: "How does the PRO rationalization differ from standard answer keys?",
+      a: "Standard answer keys only tell you the letter. CSC Review PRO breaks down each question into step-by-step logic, explains why the correct answer is right, explains why every distractor is wrong, and provides elimination strategies.",
     },
     {
-      q: "Can I access the study materials on my smartphone?",
-      a: "Absolutely. CSE Reviewer is fully optimized for mobile browsers, laptops, and tablets so you can review anywhere, anytime.",
+      q: "Can I connect and review with other examinees?",
+      a: "Yes! The Study Together Hub lets you add classmates, send 1-on-1 direct study messages, and join virtual study rooms equipped with a live synchronized whiteboard and audio stage.",
     },
     {
-      q: "How often is the question bank updated?",
-      a: "Our mock exams and rationalizations are continuously reviewed and aligned with the latest Civil Service Commission syllabus guidelines.",
+      q: "Can I study on my smartphone, tablet, and PC?",
+      a: "Yes. The entire platform is cloud-based and responsive across mobile phones, tablets, laptops, and desktop computers. No app store installation required.",
+    },
+    {
+      q: "What payment methods are supported for PRO access?",
+      a: "We support instant online payments via GCash, Maya, Debit/Credit Cards (Visa/Mastercard), and QRPH through secure PayMongo processing with zero recurring auto-charges.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white flex flex-col">
-      {/* Background Ambient Glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -right-40 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-1/3 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white flex flex-col">
+      {/* TOP NAVIGATION BAR */}
+      <nav className="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-xs">
+        <Link href="/" className="flex items-center gap-2 font-black text-lg text-slate-900 tracking-tight">
+          <span className="px-2 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-xs font-black shadow-xs">
+            CSC
+          </span>
+          <span className="font-extrabold text-slate-900">
+            Review <span className="text-blue-600">PRO</span>
+          </span>
+        </Link>
 
-      <div className="relative z-10 flex-1 flex flex-col">
-        {/* Navigation Bar */}
-        <nav className="w-full bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 sm:px-8 py-4 flex justify-between items-center shadow-md">
+        {/* Desktop Nav Links */}
+        <div className="hidden lg:flex items-center gap-7 text-xs font-bold text-slate-600">
+          <a href="#challenge" className="hover:text-blue-600 transition">Sample Challenge</a>
+          <a href="#scope" className="hover:text-blue-600 transition">Review Scope</a>
+          <a href="#features" className="hover:text-blue-600 transition">Features</a>
+          <a href="#classmates" className="hover:text-blue-600 transition">Study Classmates</a>
+          <a href="#pricing" className="hover:text-blue-600 transition">Pricing Plans</a>
+          <a href="#faqs" className="hover:text-blue-600 transition">FAQs</a>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="hidden sm:flex items-center gap-3">
           <Link
-            href="/"
-            className="flex items-center gap-2 font-black text-lg text-white tracking-tight"
+            href="/login"
+            className="px-4 py-2 font-bold text-xs text-slate-700 hover:text-blue-600 transition"
           >
-            <span className="p-1.5 bg-blue-600 rounded-lg text-xs">CSE</span>
-            <span>Reviewer</span>
+            Sign In
           </Link>
+          <Link
+            href="/signup"
+            className="px-4 py-2 font-extrabold text-xs text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:opacity-95 transition shadow-sm"
+          >
+            Start Reviewing
+          </Link>
+        </div>
 
-          <div className="hidden md:flex items-center gap-6 text-xs font-bold text-slate-300">
-            <a href="#sample" className="hover:text-white transition">Sample Test</a>
-            <a href="#scope" className="hover:text-white transition">Review Scope</a>
-            <a href="#features" className="hover:text-white transition">Features</a>
-            <a href="#pricing" className="hover:text-white transition">Pricing Plans</a>
-            <a href="#faqs" className="hover:text-white transition">FAQs</a>
+        {/* Mobile Hamburger Button */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition"
+          aria-label="Toggle Navigation Menu"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {mobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+      </nav>
+
+      {/* MOBILE DRAWER */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-5 space-y-4 shadow-xl animate-fade-in sticky top-14 z-40">
+          <div className="flex flex-col space-y-3 text-sm font-bold text-slate-700">
+            <a href="#challenge" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">Sample Challenge</a>
+            <a href="#scope" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">Review Scope</a>
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">Features</a>
+            <a href="#classmates" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">Study Classmates</a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">Pricing Plans</a>
+            <a href="#faqs" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">FAQs</a>
           </div>
-
-          <div className="flex items-center gap-3">
+          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
             <Link
               href="/login"
-              className="px-3.5 py-2 font-semibold text-xs text-slate-300 hover:text-white transition"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center py-2.5 font-bold text-xs text-slate-700 bg-slate-100 rounded-xl"
             >
               Sign In
             </Link>
             <Link
               href="/signup"
-              className="px-4 py-2 font-bold text-xs text-white bg-blue-600 rounded-xl hover:bg-blue-500 transition shadow-md"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center py-2.5 font-bold text-xs text-white bg-blue-600 rounded-xl shadow-xs"
             >
-              Start Free
+              Start Reviewing Free
             </Link>
           </div>
-        </nav>
+        </div>
+      )}
 
-        {/* Main Content */}
-        <main className="flex-1 flex flex-col">
-          {/* Hero Section */}
-          <section className="relative px-4 py-16 sm:py-24 max-w-4xl mx-auto text-center space-y-6">
-            <span className="inline-block px-4 py-1.5 bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded-full text-xs font-bold tracking-wide uppercase">
-              🇵🇭 Philippines' #1 CSE Exam Prep
+      {/* MAIN BODY */}
+      <main className="flex-1 flex flex-col">
+        {/* HERO SECTION */}
+        <section className="px-4 sm:px-6 pt-12 sm:pt-20 pb-12 max-w-5xl mx-auto text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200/80 rounded-full text-xs font-bold text-blue-700 shadow-2xs">
+            <span>🇵🇭</span>
+            <span>Comprehensive Philippine Civil Service Reviewer</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+            Prepare Smarter for the <br className="hidden sm:inline" />
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+              Civil Service Examination
             </span>
+          </h1>
 
-            <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight tracking-tight">
-              Pass the Civil Service Exam on your{" "}
-              <span className="text-blue-500">first try.</span>
-            </h1>
+          <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
+            Practice challenging CSE-style questions, understand why each answer is correct, learn how to eliminate wrong choices, and build stronger exam reasoning skills.
+          </p>
 
-            <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-              Stop guessing and start passing. Join thousands of Filipinos who passed the exam using our smart mock exams, flashcards, and detailed rationalizations.
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3.5 pt-2">
+            <Link
+              href="/signup"
+              className="w-full sm:w-auto px-8 py-4 font-black text-sm text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:opacity-95 rounded-2xl shadow-lg shadow-blue-600/20 transition transform active:scale-98 text-center"
+            >
+              Start Reviewing Free
+            </Link>
+            <a
+              href="#pricing"
+              className="w-full sm:w-auto px-8 py-4 font-bold text-sm text-slate-700 bg-white hover:bg-slate-50 rounded-2xl border border-slate-300/80 shadow-xs transition text-center"
+            >
+              Explore PRO Plans
+            </a>
+          </div>
+
+          {/* Trust Highlights */}
+          <div className="pt-6 flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-xs font-semibold text-slate-500">
+            <div className="flex items-center gap-1.5">
+              <span className="text-emerald-500 font-black">✓</span>
+              <span>Updated 2026 CSC Syllabus</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-emerald-500 font-black">✓</span>
+              <span>In-Depth Step-by-Step Rationalizations</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-emerald-500 font-black">✓</span>
+              <span>Mobile, Tablet & PC Accessible</span>
+            </div>
+          </div>
+        </section>
+
+        {/* 3-QUESTION INTERACTIVE PRO CHALLENGE */}
+        <section id="challenge" className="px-3 sm:px-6 py-12 max-w-4xl mx-auto w-full space-y-6">
+          <div className="text-center space-y-2 max-w-xl mx-auto">
+            <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+              Interactive Preview
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              Think You Can Solve These?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600">
+              Try three challenging CSE-style questions and experience the kind of reasoning and detailed explanations available in the reviewer.
             </p>
+          </div>
 
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 pt-4">
-              <Link
-                href="/signup"
-                className="w-full sm:w-auto px-8 py-4 font-black text-sm text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-2xl shadow-xl transition"
-              >
-                🚀 Start Reviewing Now
-              </Link>
-              <a
-                href="#pricing"
-                className="w-full sm:w-auto px-8 py-4 font-bold text-sm text-white bg-slate-900 hover:bg-slate-800 rounded-2xl border border-slate-800 transition"
-              >
-                🔒 View Access Plans
-              </a>
-            </div>
-          </section>
+          {/* Challenge Navigation Tabs */}
+          <div className="flex items-center justify-center gap-2 p-1.5 bg-slate-200/70 rounded-2xl max-w-md mx-auto">
+            {SAMPLE_QUESTIONS.map((q, idx) => {
+              const isSelected = currentChallengeIndex === idx;
+              const isDone = submittedChallenges[idx];
+              return (
+                <button
+                  key={q.id}
+                  type="button"
+                  onClick={() => setCurrentChallengeIndex(idx)}
+                  className={`flex-1 py-2 text-xs font-extrabold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                    isSelected
+                      ? "bg-white text-blue-700 shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <span>Q{idx + 1}</span>
+                  {isDone && <span className="text-emerald-600 text-[10px]">✓</span>}
+                </button>
+              );
+            })}
+          </div>
 
-          {/* Interactive Mini Sample Question Widget */}
-          <section id="sample" className="px-4 py-8 max-w-3xl mx-auto w-full">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-              <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">💡</span>
-                  <span className="text-xs font-black uppercase text-blue-400 tracking-wider">
-                    Instant Sample Question Test
-                  </span>
-                </div>
-                <span className="text-[11px] font-bold text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700">
-                  Try it out!
+          {/* Interactive Question Card */}
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 shadow-md space-y-6">
+            {/* Header / Type */}
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${activeQuestion.badgeColor}`}>
+                  {activeQuestion.type}
                 </span>
               </div>
-
-              <div className="space-y-4">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  {sampleQuestion.category}
-                </p>
-                <h2 className="text-sm sm:text-base font-bold text-white leading-relaxed">
-                  {sampleQuestion.prompt}
-                </h2>
-
-                <div className="space-y-2.5 pt-2">
-                  {sampleQuestion.options.map((opt, idx) => {
-                    const isSelected = selectedOption === idx;
-                    const isCorrect = idx === sampleQuestion.correctIndex;
-
-                    let btnStyle =
-                      "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700";
-                    if (showExplanation) {
-                      if (isCorrect)
-                        btnStyle =
-                          "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-bold";
-                      else if (isSelected)
-                        btnStyle =
-                          "bg-rose-500/20 border-rose-500/50 text-rose-300 font-medium";
-                    }
-
-                    return (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setSelectedOption(idx);
-                          setShowExplanation(true);
-                        }}
-                        className={`w-full text-left p-3.5 rounded-2xl border text-xs sm:text-sm transition flex items-center justify-between ${btnStyle}`}
-                      >
-                        <span>{opt}</span>
-                        {showExplanation && isCorrect && (
-                          <span className="text-emerald-400 font-extrabold text-xs">
-                            ✓ Correct
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {showExplanation && (
-                  <div className="p-4 bg-blue-600/10 border border-blue-500/30 rounded-2xl space-y-1 text-xs text-slate-200">
-                    <p className="font-extrabold uppercase text-[10px] text-blue-400">
-                      Official Rationalization:
-                    </p>
-                    <p className="leading-relaxed font-medium">
-                      {sampleQuestion.explanation}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* Key Metrics Bar */}
-          <section className="bg-slate-900 border-y border-slate-800 py-10 px-6 mt-8">
-            <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="space-y-1">
-                <p className="text-3xl sm:text-4xl font-black text-amber-400">
-                  10,000+
-                </p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Practice Questions
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-3xl sm:text-4xl font-black text-blue-400">
-                  88%
-                </p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Target Pass Rate
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-3xl sm:text-4xl font-black text-emerald-400">
-                  100%
-                </p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Updated CSC Syllabus
-                </p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-3xl sm:text-4xl font-black text-purple-400">
-                  24 / 7
-                </p>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Mobile & Desktop Access
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Comprehensive Scope Section */}
-          <section id="scope" className="py-16 px-6 max-w-6xl mx-auto w-full space-y-10">
-            <div className="text-center max-w-2xl mx-auto space-y-3">
-              <span className="text-xs font-black uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-                Comprehensive Review Scope
+              <span className="text-xs font-semibold text-slate-400">
+                {activeQuestion.category}
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-white">
-                Master Every Subject Tested on Exam Day
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                Covering both Professional and Sub-Professional Civil Service exam levels.
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {categories.map((cat, idx) => (
-                <div
-                  key={idx}
-                  className={`p-6 rounded-3xl border bg-gradient-to-br ${cat.color} space-y-4`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl">{cat.icon}</span>
-                      <h3 className="text-lg font-black text-white">{cat.title}</h3>
-                    </div>
-                    <span
-                      className={`px-2.5 py-1 ${cat.badgeBg} text-white font-bold text-[10px] rounded-full uppercase`}
+            {/* Prompt */}
+            <div className="space-y-4">
+              <p className="text-sm sm:text-base font-bold text-slate-900 leading-relaxed whitespace-pre-line">
+                {activeQuestion.prompt}
+              </p>
+
+              {/* Options */}
+              <div className="space-y-2.5 pt-2">
+                {activeQuestion.options.map((opt, idx) => {
+                  const isSelected = currentSelected === idx;
+                  const isCorrect = idx === activeQuestion.correctIndex;
+
+                  let cardStyle = "bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-800";
+                  if (isSelected && !isCurrentSubmitted) {
+                    cardStyle = "bg-blue-50/80 border-blue-500 text-blue-950 font-bold shadow-xs";
+                  } else if (isCurrentSubmitted) {
+                    if (isCorrect) {
+                      cardStyle = "bg-emerald-50 border-emerald-500 text-emerald-950 font-bold";
+                    } else if (isSelected) {
+                      cardStyle = "bg-rose-50 border-rose-400 text-rose-950 font-medium";
+                    } else {
+                      cardStyle = "bg-slate-50/60 border-slate-200 text-slate-400 opacity-80";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      disabled={isCurrentSubmitted}
+                      onClick={() => handleSelectOption(idx)}
+                      className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border text-xs sm:text-sm transition flex items-center justify-between gap-3 cursor-pointer disabled:cursor-default ${cardStyle}`}
                     >
-                      CSC Standard
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 font-medium leading-relaxed">
-                    {cat.items}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Features Grid */}
-          <section id="features" className="py-16 px-6 max-w-6xl mx-auto w-full space-y-10">
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-                Everything you need to succeed
-              </h2>
-              <p className="text-slate-400 text-xs sm:text-sm">
-                Designed specifically for Philippine Civil Service examinees.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feature, i) => (
-                <div
-                  key={i}
-                  className="p-6 bg-slate-900 rounded-3xl border border-slate-800 space-y-4"
-                >
-                  <div className="w-12 h-12 bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center text-2xl">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-base font-bold text-white">{feature.title}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* PRICING PLANS SECTION */}
-          <section id="pricing" className="py-16 bg-slate-900/60 border-t border-slate-800 px-6">
-            <div className="max-w-5xl mx-auto space-y-8">
-              <div className="text-center space-y-2">
-                <span className="text-xs font-black text-amber-400 uppercase tracking-wider">
-                  Transparent Pricing
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-white">
-                  Choose Your PRO Review Pass
-                </h2>
-                <p className="text-xs text-slate-400">
-                  Pay once via GCash, Maya, Card, or QRPH. No auto-recurring fees.
-                </p>
+                      <span className="leading-relaxed">{opt}</span>
+                      {isCurrentSubmitted && isCorrect && (
+                        <span className="px-2 py-0.5 bg-emerald-600 text-white font-extrabold text-[10px] rounded-md shrink-0">
+                          ✓ Correct
+                        </span>
+                      )}
+                      {isCurrentSubmitted && isSelected && !isCorrect && (
+                        <span className="px-2 py-0.5 bg-rose-600 text-white font-extrabold text-[10px] rounded-md shrink-0">
+                          ✗ Your Choice
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {pricingPlans.map((plan, idx) => (
+              {/* Interaction Bar */}
+              {!isCurrentSubmitted ? (
+                <div className="pt-3 flex justify-end">
+                  <button
+                    type="button"
+                    disabled={currentSelected === null}
+                    onClick={handleSubmitAnswer}
+                    className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer"
+                  >
+                    Check Answer
+                  </button>
+                </div>
+              ) : (
+                /* REVEAL RESULT & DEEP RATIONALIZATION */
+                <div className="pt-4 space-y-6 animate-fade-in">
+                  {/* Result Banner */}
                   <div
-                    key={idx}
-                    className={`p-6 rounded-3xl border flex flex-col justify-between space-y-6 relative ${
-                      plan.popular
-                        ? "bg-slate-900 border-2 border-amber-500 shadow-2xl"
-                        : "bg-slate-900 border-slate-800"
+                    className={`p-4 rounded-2xl border flex items-center justify-between gap-3 ${
+                      isCurrentCorrect
+                        ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                        : "bg-amber-50 border-amber-300 text-amber-900"
                     }`}
                   >
-                    {plan.popular && (
-                      <span className="absolute -top-3 right-6 px-3 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase">
-                        Most Popular
+                    <div className="flex items-center gap-2.5 font-black text-xs sm:text-sm">
+                      <span className="text-base">{isCurrentCorrect ? "🎉" : "💡"}</span>
+                      <span>
+                        {isCurrentCorrect
+                          ? "Correct! Excellent reasoning."
+                          : "Not quite — let's break down the reasoning step-by-step."}
                       </span>
-                    )}
+                    </div>
+                    <span className="text-xs font-extrabold underline shrink-0">
+                      Answer: {activeQuestion.correctAnswerText}
+                    </span>
+                  </div>
 
-                    <div className="space-y-3">
-                      <span className="text-xs font-bold text-slate-400 uppercase">
-                        {plan.name}
-                      </span>
-                      <div className="text-3xl font-black text-amber-400">
-                        {plan.price}{" "}
-                        <span className="text-xs font-normal text-slate-400">
-                          / {plan.duration}
-                        </span>
+                  {/* Deep Rationalization Sections */}
+                  <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-5 text-xs text-slate-800">
+                    {/* Step-by-Step Breakdown */}
+                    <div className="space-y-2.5">
+                      <h4 className="font-black text-slate-900 uppercase text-[11px] tracking-wider flex items-center gap-1.5">
+                        <span>📝</span>
+                        <span>Step-by-Step Solution:</span>
+                      </h4>
+                      <div className="space-y-2 pl-1 border-l-2 border-blue-300 ml-1">
+                        {activeQuestion.stepByStep.map((s, i) => (
+                          <div key={i} className="pl-3 space-y-0.5">
+                            <p className="font-bold text-slate-900">{s.step}</p>
+                            <p className="text-slate-600 leading-relaxed font-medium">{s.detail}</p>
+                          </div>
+                        ))}
                       </div>
-                      <p className="text-xs text-slate-400 leading-relaxed">
-                        {plan.description}
-                      </p>
                     </div>
 
-                    <Link
-                      href="/signup"
-                      className={`w-full py-3 text-center text-xs font-bold rounded-xl transition ${
-                        plan.popular
-                          ? "bg-amber-500 hover:bg-amber-400 text-slate-950 font-black"
-                          : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
-                      }`}
-                    >
-                      Get Started
-                    </Link>
+                    {/* Why Other Choices Are Wrong */}
+                    <div className="space-y-2 pt-2 border-t border-slate-200">
+                      <h4 className="font-black text-slate-900 uppercase text-[11px] tracking-wider flex items-center gap-1.5">
+                        <span>🎯</span>
+                        <span>Why Every Option Is Right or Wrong:</span>
+                      </h4>
+                      <div className="space-y-1.5">
+                        {activeQuestion.whyWrong.map((item, i) => (
+                          <div key={i} className="p-2.5 bg-white rounded-xl border border-slate-200/80 leading-relaxed">
+                            <strong className="text-slate-900 font-bold">{item.option}:</strong>{" "}
+                            <span className="text-slate-600">{item.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Elimination Strategy & Traps Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                      <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl space-y-1">
+                        <span className="font-extrabold text-blue-900 uppercase text-[10px] block">
+                          ⚡ Elimination Strategy
+                        </span>
+                        <p className="text-blue-800 text-[11px] leading-relaxed">
+                          {activeQuestion.eliminationStrategy}
+                        </p>
+                      </div>
+
+                      <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-1">
+                        <span className="font-extrabold text-rose-900 uppercase text-[10px] block">
+                          ⚠️ Common Trap
+                        </span>
+                        <p className="text-rose-800 text-[11px] leading-relaxed">
+                          {activeQuestion.commonTrap}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Exam Tip */}
+                    <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl flex items-start gap-2 text-amber-900 text-[11px]">
+                      <span className="text-sm shrink-0">💡</span>
+                      <p>
+                        <strong className="font-bold">Exam Day Tip:</strong> {activeQuestion.examTip}
+                      </p>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
 
-          {/* Frequently Asked Questions */}
-          <section id="faqs" className="py-16 px-6 max-w-3xl mx-auto w-full space-y-8">
-            <div className="text-center space-y-2">
-              <span className="text-xs font-black uppercase tracking-wider text-blue-400">
-                Got Questions?
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white">
-                Frequently Asked Questions
-              </h2>
-            </div>
-
-            <div className="space-y-3">
-              {faqs.map((faq, i) => {
-                const isOpen = openFaq === i;
-                return (
-                  <div
-                    key={i}
-                    className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden transition"
-                  >
+                  {/* Advance to Next Challenge or Final CTA */}
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
                     <button
-                      onClick={() => setOpenFaq(isOpen ? null : i)}
-                      className="w-full p-4 text-left font-bold text-xs sm:text-sm text-white flex justify-between items-center gap-4 hover:text-blue-400 transition"
+                      type="button"
+                      onClick={handleResetChallenges}
+                      className="text-xs text-slate-500 hover:text-slate-800 underline font-semibold cursor-pointer"
                     >
-                      <span>{faq.q}</span>
-                      <span className="text-slate-400 font-black text-base">
-                        {isOpen ? "−" : "+"}
-                      </span>
+                      Reset All Challenges
                     </button>
 
-                    {isOpen && (
-                      <div className="p-4 pt-0 text-xs text-slate-400 leading-relaxed border-t border-slate-800/60">
-                        {faq.a}
-                      </div>
+                    {currentChallengeIndex < SAMPLE_QUESTIONS.length - 1 ? (
+                      <button
+                        type="button"
+                        onClick={handleNextChallenge}
+                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition cursor-pointer flex items-center justify-center gap-1.5"
+                      >
+                        <span>Next Challenge →</span>
+                      </button>
+                    ) : (
+                      <a
+                        href="#pricing"
+                        className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md transition text-center"
+                      >
+                        Explore CSC Review PRO
+                      </a>
                     )}
                   </div>
-                );
-              })}
+                </div>
+              )}
             </div>
-          </section>
+          </div>
 
-          {/* Bottom Callout Banner */}
-          <section className="py-12 px-6 max-w-5xl mx-auto w-full">
-            <div className="bg-slate-900 border border-slate-800 text-white rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl" />
-
-              <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
-                Ready to Secure Your Government Career?
-              </h2>
-              <p className="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed">
-                Start practicing with real CSE-aligned questions today. No app installation required.
+          {/* ALL COMPLETED BANNER */}
+          {allCompleted && (
+            <div className="p-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white rounded-3xl shadow-xl p-6 sm:p-8 text-center space-y-4 animate-fade-in">
+              <span className="text-3xl">🎓</span>
+              <h3 className="text-xl sm:text-2xl font-black">
+                Ready for More?
+              </h3>
+              <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
+                These three questions are only a preview. Continue your preparation with full timed mock exams, comprehensive rationalizations, flashcards, and elimination drills in CSC Review PRO.
               </p>
-
-              <div className="pt-2">
+              <div className="pt-2 flex flex-col sm:flex-row justify-center items-center gap-3">
+                <a
+                  href="#pricing"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs sm:text-sm rounded-xl shadow-md transition text-center"
+                >
+                  Explore PRO Plans
+                </a>
                 <Link
                   href="/signup"
-                  className="inline-block px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm rounded-2xl shadow-xl transition hover:scale-105"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm rounded-xl border border-white/30 transition text-center"
                 >
-                  Create Your Free Account Now 🇵🇭
+                  Start Reviewing Free
                 </Link>
               </div>
             </div>
-          </section>
-        </main>
+          )}
+        </section>
 
-        {/* Footer */}
-        <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 py-8 px-6 text-center text-xs space-y-2">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <Link href="/" className="font-black text-white">
-              CSE <span className="text-blue-500">Reviewer</span>
-            </Link>
-            <p>© 2026 CSE Reviewer Philippines. All rights reserved.</p>
+        {/* COMPREHENSIVE REVIEW SCOPE */}
+        <section id="scope" className="py-14 px-4 sm:px-6 max-w-6xl mx-auto w-full space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+              Exam Coverage
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-black text-slate-900">
+              Master Every Subject on Exam Day
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium">
+              Structured to prepare you for both Professional and Sub-Professional Civil Service exam levels.
+            </p>
           </div>
-        </footer>
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {scopeCategories.map((cat, idx) => (
+              <div
+                key={idx}
+                className={`p-6 rounded-3xl border ${cat.accent} space-y-3 shadow-xs hover:shadow-md transition`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{cat.icon}</span>
+                    <h3 className="text-lg font-black">{cat.title}</h3>
+                  </div>
+                  <span className={`px-2.5 py-0.5 ${cat.pill} font-extrabold text-[10px] rounded-full uppercase`}>
+                    CSC Syllabus
+                  </span>
+                </div>
+                <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                  {cat.items}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* AUTHENTIC FEATURE SHOWCASE */}
+        <section id="features" className="py-14 px-4 sm:px-6 max-w-6xl mx-auto w-full space-y-8">
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <span className="text-[11px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+              Platform Features
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              Everything Built for Serious Review
+            </h2>
+            <p className="text-slate-600 text-xs sm:text-sm">
+              Tools specifically engineered to improve your speed, accuracy, and reasoning.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {coreFeatures.map((feat, i) => (
+              <div
+                key={i}
+                className="p-6 bg-white rounded-3xl border border-slate-200/90 space-y-3.5 shadow-xs hover:shadow-md transition"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-11 h-11 bg-slate-100 rounded-2xl flex items-center justify-center text-xl">
+                    {feat.icon}
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full uppercase">
+                    {feat.tag}
+                  </span>
+                </div>
+                <h3 className="text-base font-black text-slate-900">{feat.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  {feat.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* STUDY CLASSMATES & MESSAGING HIGHLIGHT */}
+        <section id="classmates" className="py-12 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+          <div className="bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 border border-indigo-200 rounded-3xl p-6 sm:p-10 shadow-sm flex flex-col md:flex-row items-center gap-8">
+            <div className="space-y-4 flex-1 text-center md:text-left">
+              <span className="text-[10px] font-black uppercase tracking-wider px-3 py-1 bg-indigo-600 text-white rounded-full">
+                Study Together Hub
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+                Connect with Fellow Examinees
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+                Never study alone. Add study classmates, send direct 1-on-1 messages to discuss challenging problems, invite friends to shared study rooms, and review together in real time.
+              </p>
+              <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-4 text-xs font-bold text-indigo-900">
+                <div className="flex items-center gap-1.5">
+                  <span>💬</span>
+                  <span>Direct 1-on-1 Messaging</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span>👥</span>
+                  <span>Classmate Requests</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span>🎨</span>
+                  <span>Live Whiteboard Solving</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full md:w-80 bg-white border border-indigo-200 rounded-2xl p-4 shadow-md space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-black text-slate-900">Active Study Chat</span>
+                </div>
+                <span className="text-[10px] text-slate-400 font-bold">Encrypted</span>
+              </div>
+              <div className="space-y-2 text-xs">
+                <div className="p-2.5 bg-slate-100 rounded-xl space-y-0.5">
+                  <p className="font-bold text-indigo-950 text-[11px]">Classmate Maria:</p>
+                  <p className="text-slate-700">"How did you eliminate Choice C in the proportion problem?"</p>
+                </div>
+                <div className="p-2.5 bg-blue-600 text-white rounded-xl space-y-0.5 text-right">
+                  <p className="font-bold text-blue-100 text-[11px]">You:</p>
+                  <p className="text-white">"Check the common trap: C forgets the initial 2 hours work!"</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* PRICING PLANS */}
+        <section id="pricing" className="py-16 px-4 sm:px-6 bg-white border-y border-slate-200/80">
+          <div className="max-w-5xl mx-auto space-y-8">
+            <div className="text-center space-y-2">
+              <span className="text-xs font-black text-blue-600 uppercase tracking-wider">
+                Transparent Pricing
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-900">
+                Choose Your PRO Review Pass
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium">
+                One-time payment via GCash, Maya, Card, or QRPH. No hidden fees or recurring subscriptions.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {pricingPlans.map((plan, idx) => (
+                <div
+                  key={idx}
+                  className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between space-y-6 relative transition ${
+                    plan.popular
+                      ? "bg-gradient-to-b from-blue-50/50 to-indigo-50/50 border-2 border-blue-600 shadow-xl"
+                      : "bg-white border-slate-200/90 shadow-sm hover:shadow-md"
+                  }`}
+                >
+                  {plan.popular && (
+                    <span className="absolute -top-3 right-6 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] rounded-full uppercase shadow-xs">
+                      Most Popular
+                    </span>
+                  )}
+
+                  <div className="space-y-3">
+                    <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                      {plan.name}
+                    </span>
+                    <div className="text-3xl sm:text-4xl font-black text-slate-900">
+                      {plan.price}{" "}
+                      <span className="text-xs font-semibold text-slate-500">
+                        / {plan.duration}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {plan.description}
+                    </p>
+
+                    <div className="pt-3 border-t border-slate-100 space-y-2 text-xs font-medium text-slate-700">
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-bold">✓</span>
+                        <span>Full Timed Mock Exam Suite</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-bold">✓</span>
+                        <span>Complete Step-by-Step Rationalizations</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-bold">✓</span>
+                        <span>Mistake Notebook & Elimination Drills</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-blue-600 font-bold">✓</span>
+                        <span>Classmates & Study Rooms Access</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/signup"
+                    className={`w-full py-3.5 text-center text-xs font-black rounded-xl transition ${
+                      plan.popular
+                        ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white shadow-md"
+                        : "bg-slate-900 hover:bg-slate-800 text-white"
+                    }`}
+                  >
+                    Get Started Now
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FREQUENTLY ASKED QUESTIONS */}
+        <section id="faqs" className="py-16 px-4 sm:px-6 max-w-3xl mx-auto w-full space-y-8">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-black uppercase tracking-wider text-blue-600">
+              Got Questions?
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, i) => {
+              const isOpen = openFaq === i;
+              return (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs transition"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? null : i)}
+                    className="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-sm text-slate-900 flex justify-between items-center gap-4 hover:text-blue-600 transition cursor-pointer"
+                  >
+                    <span>{faq.q}</span>
+                    <span className="text-slate-400 font-black text-base shrink-0">
+                      {isOpen ? "−" : "+"}
+                    </span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="p-4 sm:p-5 pt-0 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 font-medium">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* FINAL CALLOUT BANNER */}
+        <section className="py-12 px-4 sm:px-6 max-w-5xl mx-auto w-full">
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-xl relative overflow-hidden">
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
+              Ready to Pass the Civil Service Exam?
+            </h2>
+            <p className="text-blue-100 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed">
+              Start practicing with realistic questions, in-depth rationalizations, and collaborative study tools today.
+            </p>
+
+            <div className="pt-2">
+              <Link
+                href="/signup"
+                className="inline-block px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 font-black text-sm rounded-2xl shadow-lg transition transform hover:scale-105 active:scale-98"
+              >
+                Create Your Account Now 🇵🇭
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="bg-white border-t border-slate-200/80 text-slate-500 py-8 px-4 sm:px-8 text-xs">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+          <Link href="/" className="font-extrabold text-slate-900">
+            CSC <span className="text-blue-600">Review PRO</span>
+          </Link>
+          <p>© 2026 Civil Service Exam Reviewer Philippines. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
