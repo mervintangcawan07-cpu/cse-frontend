@@ -3,9 +3,9 @@ import { ReactNode } from "react";
 
 export default function SharedLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-slate-50">
       <Sidebar />
-      <main className="flex-1 p-6 md:p-12 overflow-y-auto">
+      <main className="flex-1 w-full min-w-0 p-4 sm:p-6 md:p-12 overflow-y-auto">
         {children}
       </main>
     </div>
