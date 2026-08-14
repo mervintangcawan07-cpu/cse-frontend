@@ -20,14 +20,21 @@ interface Question {
 
 const LOCAL_STORAGE_KEY = "cse_active_exam_session";
 
+const DEFAULT_CATEGORIES = [
+  "Verbal Ability",
+  "Numerical Reasoning",
+  "Analytical Reasoning",
+  "General Information",
+  "Clerical Ability",
+];
+
 function TakeExamPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Data States
-  const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
   // App State
@@ -54,16 +61,15 @@ function TakeExamPageInner() {
   useEffect(() => {
     async function initExam() {
       try {
-        const [questionsRes, bookmarkRes] = await Promise.all([
-          fetch("/api/questions"),
-          fetch("/api/bookmarks"),
+        const [questionsRes, bookmarkRes] = await Promise.allSettled([
+          fetch("/api/questions").then((r) => (r.ok ? r.json() : null)),
+          fetch("/api/bookmarks").then((r) => (r.ok ? r.json() : null)),
         ]);
 
-        const qData = await questionsRes.json();
-        if (questionsRes.ok && qData.questions) {
+        if (questionsRes.status === "fulfilled" && questionsRes.value?.questions) {
           // Standard official CSE category normalization & deduplication
           const categoryMap = new Map<string, string>();
-          qData.questions.forEach((q: Question) => {
+          questionsRes.value.questions.forEach((q: Question) => {
             const raw = q.category?.trim();
             if (raw && !raw.toLowerCase().includes("elimination drill")) {
               const lower = raw.toLowerCase();
@@ -79,15 +85,17 @@ function TakeExamPageInner() {
               }
             }
           });
-          setCategories(Array.from(new Set(categoryMap.values())));
+          const catList = Array.from(new Set(categoryMap.values()));
+          if (catList.length > 0) {
+            setCategories(catList);
+          }
         }
 
-        if (bookmarkRes.ok) {
-          const bookmarkData = await bookmarkRes.json();
+        if (bookmarkRes.status === "fulfilled" && bookmarkRes.value?.bookmarks) {
           const ids = new Set<string>(
-            bookmarkData.bookmarks
-              ?.filter((b: any) => b.targetType === "QUESTION" || !b.targetType)
-              .map((b: any) => b.id) || []
+            bookmarkRes.value.bookmarks
+              .filter((b: any) => b.targetType === "QUESTION" || !b.targetType)
+              .map((b: any) => b.id)
           );
           setBookmarkedIds(ids);
         }
@@ -371,17 +379,6 @@ function TakeExamPageInner() {
           subtitle="Querying official question bank, subject categories, and active study sessions."
           skeletonCount={3}
         />
-      </div>
-    );
-  }
-
-  if (allQuestions.length === 0) {
-    return (
-      <div className="max-w-2xl mx-auto py-20 text-center space-y-4">
-        <p className="text-slate-600 dark:text-slate-300 font-semibold">No questions found in database.</p>
-        <Link href="/dashboard" className="text-blue-600 font-bold hover:underline text-sm">
-          Return to Dashboard
-        </Link>
       </div>
     );
   }
