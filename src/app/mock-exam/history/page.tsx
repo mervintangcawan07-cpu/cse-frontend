@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
 interface ExamAttemptItem {
   id: string;
@@ -39,8 +40,12 @@ export default function ExamHistoryPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
-        Loading past exam attempts...
+      <div className="max-w-4xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Loading Exam History & Diagnostics..."
+          subtitle="Querying your past mock exam attempts, scores, and review keys from the database."
+          skeletonCount={3}
+        />
       </div>
     );
   }

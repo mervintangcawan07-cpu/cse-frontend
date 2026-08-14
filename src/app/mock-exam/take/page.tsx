@@ -5,6 +5,8 @@ import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import FlagQuestionButton from "@/components/exam/FlagQuestionButton";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
+import ExamSubmissionLoader from "@/components/exam/ExamSubmissionLoader";
 
 interface Question {
   id: string;
@@ -363,10 +365,12 @@ function TakeExamPageInner() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-20 text-center">
-        <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">
-          Loading exam configurations...
-        </p>
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Assembling Civil Service Mock Exam Pool..."
+          subtitle="Querying official question bank, subject categories, and active study sessions."
+          skeletonCount={3}
+        />
       </div>
     );
   }
@@ -526,6 +530,9 @@ function TakeExamPageInner() {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
+      {/* EXAM SUBMISSION & GRADING FULLSCREEN OVERLAY */}
+      <ExamSubmissionLoader isSubmitting={submitting} totalQuestions={examQuestions.length || 170} />
+
       {/* TOP HEADER */}
       <div className="bg-slate-900 text-white p-4 md:p-5 rounded-3xl shadow-md flex justify-between items-center gap-4">
         <div className="flex items-center gap-3">
