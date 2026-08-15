@@ -1,4 +1,4 @@
-"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation"
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Passage: To resolve the shortage of licensed engineers in remote municipal offices, the government established a scholarship program providing full tuition and stipends in exchange for a mandatory 4-year return-service contract in lower-income municipalities. Policy makers concluded that this initiative will permanently solve the municipal engineer shortage in rural LGUs. Which of the following is a HIDDEN ASSUMPTION in the policy makers' reasoning?","Graduates will either remain in rural municipal service beyond their mandatory 4-year term or incoming scholarship cohorts will continuously replace departing engineers without interruption.","Private engineering firms in urban centers pay lower starting salaries than rural local government units.","Lower-income municipalities experience the fastest population growth rates in the country.","Engineering scholarship recipients graduate with higher academic honors than self-funded students.","A","Step-by-Step Solution:
 1. Deconstruct the policy argument:
  - Premise: Students receive scholarships in exchange for a mandatory 4-year return service in rural LGUs.
@@ -6,15 +6,7 @@
 2. Identify the temporal gap:
  - A 4-year return service is inherently temporary. For the shortage to be *permanently* solved, either engineers must stay after 4 years, or new cohorts must arrive in perpetuity.
 3. Apply the Negation Test to Option A:
- - Negation: \""Graduates will leave immediately after 4 years AND incoming cohorts will NOT continuously replace them.\"
-"- Impact: If all graduates leave at year 4 and the pipeline collapses","the shortage re-emerges immediately. The claim of a \""permanent\"" solution is destroyed.","","","","",""
-"- Therefore","Option A is an essential hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Urban private salary comparisons are unstated and counterfactual.","","","","","",""
-"- Option C: Population growth rate is irrelevant to engineer staffing sustainability.","","","","","",""
-"- Option D: Academic honors are irrelevant to workforce availability.","","","","","",""
-"Common Trap: Overlooking the word \""permanently\"" in the conclusion","which requires an ongoing pipeline or retention assumption.","","","","",""
-"Exam Tip: When a temporary measure (4-year contract) is claimed to produce a permanent outcome","look for an assumption of continuous replacement or retention.""","Correct. Survives elimination because a temporary 4-year service obligation can only permanently resolve a shortage if graduates remain or are continuously replenished.","Eliminated because urban private salaries are irrelevant to public service retention logic.","Eliminated because municipal population growth is irrelevant to staffing replenishment.","Eliminated because academic honors do not dictate workforce retention.","Analytical Ability"
+ - Negation: \""Graduates will leave immediately after 4 years AND incoming cohorts will NOT continuously replace them.\","","","","","",""
 "Passage: A city health office announced that all municipal employees will receive free annual medical examinations and subsidized fitness gym memberships. The city mayor claimed that this initiative will directly reduce total paid sick leave expenditures by at least 30% during the next fiscal year. The mayor's claim relies on which implicit HIDDEN ASSUMPTION?","A substantial majority of employee sick leaves are caused by preventable physical health conditions that can be mitigated within a single year through fitness and medical checks.","Municipal employees currently take more annual sick leave days than private sector employees.","Physical gym workouts will be made mandatory during working hours for all department staff.","The city government will eliminate paid sick leave benefits for employees who do not use the gym passes.","A","Step-by-Step Solution:
 1. Analyze the causal premise and target outcome:
  - Intervention: Free annual medical exams and gym memberships.
@@ -22,15 +14,7 @@
 2. Uncover the tacit assumption:
  - The mayor assumes that employee absenteeism is primarily caused by physical fitness deficits that respond quickly to gym workouts and checkups, rather than unavoidable acute illnesses, surgeries, mental health burnout, or family obligations.
 3. Apply the Negation Test to Option A:
- - Negation: \""Most sick leaves are NOT caused by preventable physical conditions treatable within one year (they stem from chronic issues, accidents, or non-fitness factors).\"
-"- Impact: If gym workouts cannot prevent the underlying causes of sick leaves","sick leave spending will not drop by 30%. The claim collapses.","","","","",""
-"- Option A is a necessary hidden assumption.","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Comparison to private sector workers is completely irrelevant to the internal municipal budget.","","","","","",""
-"- Option C: Mandatory workouts during work hours are not stated in the program.","","","","","",""
-"- Option D: Benefit elimination contradicts the premise of providing voluntary wellness incentives.","","","","","",""
-"Common Trap: Assuming private sector comparisons matter when evaluating an internal municipal wellness policy.","","","","","",""
-"Exam Tip: Interventions targeting lifestyle fitness must assume that the targeted problem (sick leave) is largely caused by lifestyle fitness deficiencies.""","Correct. Survives elimination because gym passes and checkups cannot reduce sick leave costs by 30% unless sick leaves are primarily caused by preventable health issues.","Eliminated because private sector sick leave comparisons are irrelevant.","Eliminated because mandatory workout hours during duty are unstated and unnecessary.","Eliminated because eliminating benefits is counterproductive and unsupported.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Hidden assumptions | Very Difficult | Batch 089"
+ - Negation: \""Most sick leaves are NOT caused by preventable physical conditions treatable within one year (they stem from chronic issues, accidents, or non-fitness factors).\","","","","","",""
 "Passage: An educational reform panel proposed replacing letter grades (A, B, C, D, F) in public elementary schools with descriptive narrative progress reports. The panel argued that this reform will eliminate comparative academic stress among young pupils because letter grades are the primary instrument of social comparison. Which of the following is an unstated HIDDEN ASSUMPTION in the panel's argument?","Descriptive narrative evaluations will not be interpreted by parents and pupils in a competitive manner that generates comparable academic stress.","Elementary school teachers prefer writing detailed qualitative evaluations over computing numerical scores.","Tertiary universities will immediately abolish GPA entrance requirements for all applicants.","National standardized aptitude examinations will be discontinued nationwide.","A","Step-by-Step Solution:
 1. Deconstruct the reform logic:
  - Action: Replace letter grades with qualitative narrative feedback.
@@ -38,15 +22,7 @@
 2. Identify the unspoken premise:
  - The panel assumes that narrative reports cannot or will not be parsed by competitive parents and pupils to rank and compare children (e.g., distinguishing \""exemplary\"" from \""competent\"").
 3. Apply the Negation Test to Option A:
- - Negation: \""Descriptive evaluations WILL be interpreted comparatively by parents and pupils, creating equivalent academic stress.\"
-"- Impact: If parents simply compare the praise and critique in narrative reports","comparative anxiety remains unchanged. The reform fails its stated goal.","","","","",""
-"- Thus","Option A is an essential hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Teacher workload preferences do not determine whether pupil stress is reduced.","","","","","",""
-"- Option C: University admission policies are far removed from elementary school grading dynamics.","","","","","",""
-"- Option D: National aptitude tests are an unmentioned external policy.","","","","","",""
-"Common Trap: Focusing on teacher preferences (Option B) rather than the mechanism of pupil stress reduction.","","","","","",""
-"Exam Tip: When an author assumes changing the medium of evaluation removes competition","they assume the new medium will not be used competitively.""","Correct. Survives elimination because if narrative feedback is still compared competitively by pupils and parents, replacing letter grades will fail to eliminate stress.","Eliminated because teacher administrative preferences do not govern pupil psychological stress.","Eliminated because university entrance criteria are irrelevant to elementary school stress.","Eliminated because standardized test cancellation is an unsupported extreme.","Analytical Ability"
+ - Negation: \""Descriptive evaluations WILL be interpreted comparatively by parents and pupils, creating equivalent academic stress.\","","","","","",""
 "Passage: The Department of Transportation installed automatic license plate recognition (ALPR) cameras along designated dedicated busway corridors. Transport planners concluded that this automated surveillance network will completely eliminate unauthorized private vehicle incursions into the busway. Which of the following is a HIDDEN ASSUMPTION of the transport planners?","The certainty of automated camera detection and subsequent monetary fines serves as an absolute deterrent against motorists violating the busway rules.","Private motorists in the metropolis earn higher average household incomes than public transit commuters.","Public buses operating on the corridor never exceed the posted maximum speed limit.","ALPR camera networks will also be installed along all suburban arterial roads.","A","Step-by-Step Solution:
 1. Analyze the enforcement argument:
  - Mechanism: Cameras automatically photograph plates and issue fines for busway incursions.
@@ -54,15 +30,7 @@
 2. Spot the behavioral assumption:
  - Automated detection only deters violators if motorists perceive the fine as unaffordable or unavoidable, and cannot evade it (e.g., through obscured plates, emergency excuses, or willingness to pay the fine for convenience).
 3. Apply the Negation Test to Option A:
- - Negation: \""Automated detection and fines do NOT serve as an absolute deterrent (e.g., wealthy drivers willingly pay fines, or violators obscure plates).\"
-"- Impact: If fines do not completely deter drivers","incursions will continue despite cameras. The claim of total elimination fails.","","","","",""
-"- Therefore","Option A is a necessary hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Income comparisons are descriptive","not the logical mechanism of deterrence.","","","","",""
-"- Option C: Bus speed limit adherence is irrelevant to private vehicle lane trespassing.","","","","","",""
-"- Option D: Installing cameras on side streets is unnecessary for dedicated highway busway enforcement.","","","","","",""
-"Common Trap: Confusing surveillance presence with guaranteed behavioral deterrence.","","","","","",""
-"Exam Tip: An argument asserting an enforcement technology eliminates a crime must assume that the penalty reliably deters 100% of prospective offenders.""","Correct. Survives elimination because if camera fines do not completely deter motorists from trespassing, surveillance cannot eliminate unauthorized incursions.","Eliminated because income comparisons do not govern the logical mechanics of deterrence.","Eliminated because bus speed compliance is unrelated to private car trespass violations.","Eliminated because side-street camera coverage is irrelevant to busway corridors.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Hidden assumptions | Very Difficult | Batch 089"
+ - Negation: \""Automated detection and fines do NOT serve as an absolute deterrent (e.g., wealthy drivers willingly pay fines, or violators obscure plates).\","","","","","",""
 "Passage: An executive order prohibited government employees from sending or replying to work-related digital communications outside the official 8:00 AM to 5:00 PM workday. Leadership concluded that this policy will completely eliminate occupational burnout across the department. The leadership's conclusion is based on which HIDDEN ASSUMPTION?","After-hours digital communication is the exclusive or decisive cause of occupational burnout among the department's employees.","Department employees prefer voice telephone conversations over digital text messaging.","Workload volumes assigned during standard 8:00 AM to 5:00 PM office hours will be reduced by half.","All department personnel own separate personal mobile devices and computers.","A","Step-by-Step Solution:
 1. Examine the cause-and-effect relationship:
  - Policy: Ban work communication after 5:00 PM.
@@ -70,15 +38,7 @@
 2. Expose the hidden single-cause assumption:
  - Occupational burnout is multi-factorial (e.g., heavy workload, low pay, lack of resources, toxic management). Claiming that cutting after-hours emails *completely eliminates* burnout requires assuming after-hours emails are the *sole/decisive* cause.
 3. Apply the Negation Test to Option A:
- - Negation: \""After-hours communication is NOT the exclusive or decisive cause of burnout (burnout is driven by excessive daytime workload and understaffing).\"
-"- Impact: If employees are overworked during the day","shutting down email at 5:00 PM will leave them still burned out. The conclusion fails.","","","","",""
-"- Option A is a necessary hidden assumption.","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Channel preference (voice vs text) is irrelevant to total burnout.","","","","","",""
-"- Option C: Cutting daytime workload by half is an unstated external policy.","","","","","",""
-"- Option D: Owning separate personal phones does not address daytime workload burnout.","","","","","",""
-"Common Trap: Assuming after-hours work is the only component of job stress.","","","","","",""
-"Exam Tip: When an intervention targeting ONE factor is claimed to \""completely eliminate\"" a complex problem","the author implicitly assumes that factor was the sole cause.""","Correct. Survives elimination because if after-hours emails are not the primary driver of burnout, banning them cannot completely eliminate employee burnout.","Eliminated because communication medium preference is irrelevant to burnout etiology.","Eliminated because a 50% daytime workload cut is an unstated external assumption.","Eliminated because device ownership does not address the multi-factorial nature of workplace burnout.","Analytical Ability"
+ - Negation: \""After-hours communication is NOT the exclusive or decisive cause of burnout (burnout is driven by excessive daytime workload and understaffing).\","","","","","",""
 "Passage: The Commission on Elections (COMELEC) introduced an online voter portal allowing overseas absentee citizens to register from any internet-connected device. Election analysts concluded that this online portal will double the actual voter turnout of overseas citizens during the next national elections. Which of the following is a HIDDEN ASSUMPTION in the analysts' conclusion?","The inconvenience of in-person registration was the decisive barrier preventing overseas citizens from participating, and newly registered voters will actually cast ballots.","Overseas citizens possess higher average internet connectivity rates than domestic voters.","Ballot casting during the national election will also be conducted exclusively through an online voting platform.","Overseas absentee voters consistently favor incumbent national candidates over opposition challengers.","A","Step-by-Step Solution:
 1. Trace the logical chain:
  - Innovation: Online voter registration portal.
@@ -86,15 +46,7 @@
 2. Identify the gap between registration and ballot casting:
  - Making *registration* easier only doubles *voting turnout* if registration was the main obstacle AND people who register online actually show up at consular polling precincts on election day.
 3. Apply the Negation Test to Option A:
- - Negation: \""Registration difficulty was NOT the decisive barrier (low turnout was caused by distant polling precincts), or online registrants will NOT cast ballots.\"
-"- Impact: If people register online but still cannot travel 500 km to the nearest embassy to vote","turnout will not double. The projection fails.","","","","",""
-"- Therefore","Option A is an essential hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Domestic voter comparison is irrelevant to overseas turnout growth.","","","","","",""
-"- Option C: Online ballot casting is not mentioned (the prompt specifies online registration only).","","","","","",""
-"- Option D: Candidate preferences are completely irrelevant to voter participation volume.","","","","","",""
-"Common Trap: Conflating the ease of registering with the physical act of voting.","","","","","",""
-"Exam Tip: An argument predicting higher final turnout from easier registration must assume registered citizens will follow through and cast ballots.""","Correct. Survives elimination because easier online registration cannot double actual voter turnout unless registration was the main barrier and registrants follow through to vote.","Eliminated because domestic internet comparisons are irrelevant to overseas turnout.","Eliminated because online ballot casting is an unmentioned assumption.","Eliminated because partisan candidate preferences are irrelevant to turnout rates.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Hidden assumptions | Very Difficult | Batch 089"
+ - Negation: \""Registration difficulty was NOT the decisive barrier (low turnout was caused by distant polling precincts), or online registrants will NOT cast ballots.\","","","","","",""
 "Passage: To reduce plastic waste across regional offices, an agency prohibited single-use plastic beverage bottles in all its facilities and distributed reusable stainless-steel tumblers to all staff. The environmental task force asserted that this ban will reduce the agency's total annual solid waste footpr∫ by 50%. Which of the following is an underlying HIDDEN ASSUMPTION?","Single-use plastic beverage bottles constituted at least half of the agency's total annual solid waste volume prior to the prohibition.","Manufacturing stainless-steel tumblers consumes more industrial energy than recycling polyethylene plastic bottles.","All agency personnel consume exactly two liters of drinking water per workday.","Commercial food establishments located outside agency premises will also ban single-use plastic containers.","A","Step-by-Step Solution:
 1. Deconstruct the mathematical assertion:
  - Action: Eliminate 100% of single-use plastic beverage bottles.
@@ -102,15 +54,8 @@
 2. Calculate the required baseline proportion:
  - If eliminating item X reduces total waste by 50%, then item X MUST have accounted for at least 50% of total waste by volume/weight.
 3. Apply the Negation Test to Option A:
- - Negation: \""Single-use plastic bottles constituted LESS than half (e.g., 5%) of total annual solid waste.\"
-"- Impact: If bottles were only 5% of waste (with paper","food waste","and packaging making up 95%)","banning bottles can reduce waste by at most 5%","making a 50% reduction mathematically impossible!","",""
-"- Thus","Option A is a mandatory hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Embodied manufacturing energy is a lifecycle carbon metric","not part of the agency's solid waste volume.","","","","",""
-"- Option C: Exact two-liter daily intake is an unnecessary biological assumption.","","","","","",""
-"- Option D: External restaurant bans are irrelevant to internal office waste metrics.","","","","","",""
-"Common Trap: Ignoring the quantitative benchmark (50% reduction) and choosing lifecycle manufacturing facts.","","","","","",""
-"Exam Tip: Quantitative target outcomes mathematically require the targeted component to represent at least that target percentage in the baseline.""","Correct. Survives elimination because eliminating plastic bottles cannot reduce total waste by 50% unless bottles originally comprised at least 50% of the agency's total waste.","Eliminated because manufacturing energy relates to carbon lifecycle, not solid waste volume.","Eliminated because uniform water consumption is an unnecessary assumption.","Eliminated because external restaurant policies are outside internal agency waste metrics.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Hidden assumptions | Very Difficult | Batch 089"
+ - Negation: \""Single-use plastic bottles constituted LESS than half (e.g., 5%) of total annual solid waste.\","","","","","",""
+"- Impact: If bottles were only 5% of waste (with paper","food waste","and packaging making up 95%)","banning bottles can reduce waste by at most 5%","making a 50% reduction mathematically impossible!","A","","","","","","",""
 "Passage: A civil society bill proposes requiring all candidates for municipal mayor to hold a bachelor's ° in public administration or economics. Proponents claimed that this educational prerequisite will guarantee that every elected mayor manages municipal revenues and public debt prudently. The proponents' claim rests on which of the following HIDDEN ASSUMPTIONS?","Formal academic training in public administration or economics reliably translates into and guarantees prudent fiscal management in political executive practice.","Incumbent municipal mayors without formal degrees have higher average debt default rates than ° holders.","Master's ° holders are less competent executive managers than bachelor's ° graduates.","Municipal voters will reject any mayoral aspirant possessing an engineering or medical background.","A","Step-by-Step Solution:
 1. Analyze the prerequisite claim:
  - Requirement: Degree in Public Administration or Economics.
@@ -118,15 +63,7 @@
 2. Expose the gap between theory and governance:
  - Holding an academic ° teaches textbook theories, but real-world fiscal governance involves political pressures, ethics, and external economic shocks.
 3. Apply the Negation Test to Option A:
- - Negation: \""Academic training does NOT reliably guarantee prudent fiscal management in real-world governance (° holders can still be corrupt, incompetent, or fiscally reckless).\"
-"- Impact: If ° holders are not guaranteed to manage money prudently","mandating the ° cannot guarantee prudent management. The claim fails.","","","","",""
-"- Option A is a necessary hidden assumption.","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Historical default rates of non-° incumbents are unstated and unnecessary.","","","","","",""
-"- Option C: Master's ° comparisons are absurd and irrelevant.","","","","","",""
-"- Option D: Voter rejection of other degrees is irrelevant to the post-election fiscal competence claim.","","","","","",""
-"Common Trap: Believing academic qualifications automatically equal ethical","prudent real-world governance.","","","","",""
-"Exam Tip: When academic credentials are cited as a guarantee of practical executive wisdom","the argument must assume degrees reliably translate into practical execution.""","Correct. Survives elimination because an academic ° cannot guarantee prudent governance unless academic coursework reliably translates into practical executive fiscal competence.","Eliminated because historical default comparisons are unstated and unnecessary.","Eliminated because comparisons to postgraduate master's degrees are absurd and irrelevant.","Eliminated because voter rejection dynamics do not address actual post-election fiscal management.","Analytical Ability"
+ - Negation: \""Academic training does NOT reliably guarantee prudent fiscal management in real-world governance (° holders can still be corrupt, incompetent, or fiscally reckless).\","","","","","",""
 "Passage: A transit authority transitioned its commuter rail system from physical token turnstiles to contactless smartcard readers. Urban planners asserted that this fare system upgrade will reduce peak-hour station concourse crowding by 40%. Which of the following is a HIDDEN ASSUMPTION of the urban planners?","Turnstile fare transaction delays were a primary cause of station concourse congestion, rather than insufficient train capacity and platform crowding.","Smartcard manufacturing costs are fully funded through international development grants.","All commuter rail passengers travel exclusively between 7:00 AM and 8:30 AM on weekdays.","Ticket vending machines in commuter stations operate completely without electrical energy.","A","Step-by-Step Solution:
 1. Deconstruct the transport bottleneck argument:
  - Modification: Faster turnstile tap-ins via contactless smartcards.
@@ -134,15 +71,7 @@
 2. Identify the bottleneck location:
  - If crowding is caused by turnstiles, faster cards will clear the concourse. But if crowding is caused by passengers stuck on platforms waiting for overcrowded trains, speeding up turnstiles merely moves the bottleneck onto the platform without reducing overall station crowding.
 3. Apply the Negation Test to Option A:
- - Negation: \""Turnstile delays were NOT a primary cause of station crowding (crowding was caused by full platforms and infrequent trains).\"
-"- Impact: If turnstiles were not the bottleneck","contactless cards will not reduce concourse crowding by 40%. The planners' claim fails.","","","","",""
-"- Therefore","Option A is a mandatory hidden assumption.","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Funding sources for smartcards are irrelevant to station passenger flow.","","","","","",""
-"- Option C: Extreme time window that contradicts all-day transit realities.","","","","","",""
-"- Option D: Powerless ticket machines are a nonsensical technical distraction.","","","","","",""
-"Common Trap: Assuming turnstile speedups automatically reduce overall station overcrowding without examining downstream platform bottlenecks.","","","","","",""
-"Exam Tip: In passenger flow systems","speeding up entry only reduces crowding if entry was the primary bottleneck.""","Correct. Survives elimination because speeding up turnstile tap-ins cannot reduce station crowding if the true bottleneck is platform overflow and train infrequency.","Eliminated because grant funding mechanisms do not influence physical station crowd dynamics.","Eliminated because assuming all commuters travel exclusively in a 90-minute window is an unrealistic extreme.","Eliminated because ticket machine electrical dependencies are irrelevant.","Analytical Ability"
+ - Negation: \""Turnstile delays were NOT a primary cause of station crowding (crowding was caused by full platforms and infrequent trains).\","","","","","",""
 "Passage: An anti-corruption agency established a secure, encrypted online whistleblower portal that guarantees complete identity anonymity for public servants reporting bribery solicitations. Agency leadership concluded that the launch of this portal will ensure that all corrupt bribery solicitations within government are reported immediately. The leadership's conclusion DEPENDS on which hidden assumption?","Fear of retaliation and lack of confidentiality were the sole reasons public servants previously failed to report bribery solicitations.","The online whistleblower portal will be accessible exclusively to division chiefs and regional directors.","Bribery solicitations across government departments occur exclusively through encrypted email exchanges.","Whistleblowers who submit verified reports will automatically receive cash incentive rewards.","A","Step-by-Step Solution:
 1. Analyze the whistleblowing claim:
  - Solution: Guarantee complete anonymity via an encrypted portal.
@@ -151,12 +80,4 @@
  - People fail to report bribery for many reasons: fear of retaliation, apathy, complicity, lack of proof, or distrust in enforcement.
  - Claiming that anonymity guarantees 100% reporting requires assuming fear/confidentiality was the *sole* reason for non-reporting.
 3. Apply the Negation Test to Option A:
- - Negation: \""Fear of retaliation and lack of confidentiality were NOT the only reasons public servants withheld reports (some are complicit, apathetic, or lack evidence).\"
-"- Impact: If employees are complicit or lack evidence","anonymity will not make them report. Not all solicitations will be reported. The conclusion is negated.","","","","",""
-"- Option A is a necessary hidden assumption.","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","",""
-"- Option B: Restricting access to managers would contradict agency-wide whistleblower protection.","","","","","",""
-"- Option C: Bribery channel mechanics do not determine reporting willingness.","","","","","",""
-"- Option D: Cash rewards are an unmentioned external policy.","","","","","",""
-"Common Trap: Believing anonymity alone solves the problem of public sector corruption.","","","","","",""
-"Exam Tip: An argument claiming a solution fixes 100% of a non-reporting issue must assume the targeted barrier was the ONLY obstacle preventing reporting.""","Correct. Survives elimination because anonymity cannot guarantee that all bribery is reported if public servants withhold reports due to complicity, apathy, or lack of proof.","Eliminated because restricting access to senior managers would defeat comprehensive whistleblower protection.","Eliminated because the medium of bribery solicitation is irrelevant to whistleblower reporting.","Eliminated because cash rewards are an unmentioned policy.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Hidden assumptions | Very Difficult | Batch 089"
+ - Negation: \""Fear of retaliation and lack of confidentiality were NOT the only reasons public servants withheld reports (some are complicit, apathetic, or lack evidence).\","","","","","",""

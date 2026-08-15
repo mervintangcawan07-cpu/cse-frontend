@@ -155,7 +155,6 @@ Exam Tip: Percentage growth equals total change divided by base period value; sm
  2,000,000 × 0.95 × 0.95 × 0.90 × 0.90 = 2,000,000 × 0.9025 × 0.81 = 1,462,050.
  Let's use clean values in the prompt:
  ""Q1 = -5.0%, Q2 = -10.0%, Q3 = -5.0%, Q4 = -10.0%.","","","","","",""
-"Calculation: 2","000","000 × 0.95 × 0.90 × 0.95 × 0.90 = 2","000","000 × 0.855 × 0.855 = 2","000","000 × 0.731025 = 1","462","050 subscribers.","","","",""
 "Let's set Option A to 1","462","050 subscribers.""","1,462,050 subscribers","1,400,000 subscribers","1,520,000 subscribers","1,480,500 subscribers","A","Step-by-Step Solution:
 1. Apply each quarterly decline sequentially:
  - Initial base = 2,000,000 subscribers.

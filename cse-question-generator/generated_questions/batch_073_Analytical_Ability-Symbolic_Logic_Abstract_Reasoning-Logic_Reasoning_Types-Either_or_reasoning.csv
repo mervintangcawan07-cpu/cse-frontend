@@ -83,12 +83,6 @@ Exam Tip: neg F implies neg N; (M lor N) land neg N implies M implies R.","Corre
  - neg(A lor F) ≡ neg A land neg F.
 4. Translate into natural language:
  - \""The petitioner does not file an appeal (neg A) AND the judgment does not become final and executory (neg F).\","","","","","",""
-"5. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Option B (neg A lor neg F): Fails to change the operator from OR to AND.","","","","","","","","","","","",""
-"- Option C (A implies F): Equivalent to neg A lor F.","","","","","","","","","","","",""
-"- Option D (A land F): Conjunction without negations.","","","","","","","","","","","",""
-"Common Trap: Forgetting to flip the OR (lor) into an AND (land) when negating a disjunction.","","","","","","","","","","","",""
-"Exam Tip: The negation of (A OR B) is strictly (~A AND ~B).""","Correct. Survives elimination because by De Morgan's Law, ~(A or F) is strictly equivalent to (~A and ~F).","Eliminated because ~A or ~F fails to change the disjunction to a conjunction under negation.","Eliminated because A -> F is a conditional statement.","Eliminated because A and F affirms both disjuncts rather than negating them.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073","","","","","",""
 "Given the Exclusive OR condition: \""An administrative officer is assigned to either Regional Office East (E) OR Regional Office West (W), but not both (E oplus W).\"" If personnel records confirm that the officer was assigned to Regional Office East (E), what is the exact status of the assignment to Regional Office West?","The officer is definitively NOT assigned to Regional Office West (neg W).","The officer is also assigned to Regional Office West (W).","The officer's assignment to Regional Office West is optional.","The assignment to Regional Office West is indeterminate.","A","Step-by-Step Solution:
 1. Analyze the Exclusive OR premise (E oplus W):
  - E oplus W means: (E lor W) land neg(E land W).
@@ -97,11 +91,6 @@ Exam Tip: neg F implies neg N; (M lor N) land neg N implies M implies R.","Corre
  - Since E is True, for neg(E land W) to remain True, W MUST be FALSE.
 3. Conclude:
  - neg W = \""The officer is definitively NOT assigned to Regional Office West.\","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Option B (W): Directly violates the Exclusive OR restriction neg(E land W).","","","","","","","","","","","",""
-"- Options C and D: Ignore the strict constra∫ imposed by XOR.","","","","","","","","","","","",""
-"Common Trap: Treating Exclusive OR as Inclusive OR and assuming W could still be True.","","","","","","","","","","","",""
-"Exam Tip: In Exclusive OR (A oplus B)","knowing A is True immediately proves B is FALSE.""","Correct. Survives elimination because in an Exclusive OR relationship, affirming one disjunct (E) conclusively negates the other (~W).","Eliminated because W would violate the explicit \""not both\"" condition of XOR.","Eliminated because dual assignment is strictly prohibited.","Eliminated because W's non-assignment is deductively certain.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073","","","","",""
 "Given the three premises: (1) A lor B lor C (At least one of A, B, or C is true). (2) If A is true, then D is true (A implies D). (3) If B is true, then D is true (B implies D). (4) Condition C is known to be FALSE (neg C). What conclusion necessarily follows?","Condition D is TRUE (D).","Condition D is FALSE (neg D).","Condition A is FALSE (neg A).","Condition B is FALSE (neg B).","A","Step-by-Step Solution:
 1. State the premises symbolically:
  - Premise 1: A lor B lor C.

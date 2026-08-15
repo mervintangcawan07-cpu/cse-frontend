@@ -106,8 +106,6 @@ Exam Tip: Both S and T lead to neg U; thus, S lor T unconditionally guarantees n
  - T implies C and neg C vdash neg T.
 5. Translate conclusion:
  - neg T = \""Traffic congestion index did not exceed 80.\","","","","","",""
-"Common Trap: Affirming the intermediate consequences (B or C) when Modus Tollens actually proves they are all False.","","","","","","","","","","","",""
-"Exam Tip: When the final link of a conditional chain is False (neg E)","all preceding antecedents (T","C","B) are False.""","Correct. Survives elimination because cascading Modus Tollens backwards from ~E proves ~B, ~C, and ~T are all True.","Eliminated because C is False by Modus Tollens.","Eliminated because B is False by Modus Tollens.","Eliminated because both T and C are False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072","","",""
 "Given the administrative accounting rules: (1) If an invoice is digitally signed (D), then either payment voucher V is generated (V) OR payment voucher V is archived (A) [D implies (V lor A)]. (2) If payment voucher V is generated (V), then treasury check K is issued (K). (3) If payment voucher V is archived (A), then audit clearance C is required (C). An invoice was digitally signed (D), but audit clearance C was NOT required (neg C). What conclusion is certain?","Treasury check K was issued (K).","Payment voucher V was archived (A).","Invoice was not digitally signed (neg D).","Treasury check K was not issued (neg K).","A","Step-by-Step Solution:
 1. Translate to symbolic logic:
  - Premise 1: D implies (V lor A).
@@ -138,8 +136,6 @@ Exam Tip: D implies V lor A; neg C implies neg A; (V lor A) land neg A implies V
  - A implies D and neg D vdash neg A.
 4. Conclude:
  - neg A = \""Candidate A did NOT qualify.\","","","","","",""
-"Common Trap: Assuming candidate A's status is indeterminate because there are negative terms in the chain.","","","","","","","","","","","",""
-"Exam Tip: Transitive property: A implies neg B implies C implies D implies A implies D. Modus Tollens with neg D yields neg A.""","Correct. Survives elimination because transitive chaining yields A -> D, and Modus Tollens with ~D strictly proves ~A.","Eliminated because A is proven False.","Eliminated because A did not qualify.","Eliminated because A's non-qualification is mathematically certain.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072","","","","","",""
 "Consider the server monitoring rules: (1) If server X fails (X), then backup system Y starts (Y). (2) If backup system Y starts (Y), then notification Z is sent (Z). (3) If notification Z is sent (Z), then incident report W is logged (W). Fact: Incident report W was NOT logged (neg W). Which of the following statements lists all propositions that are definitely FALSE?","Server X failed (X), Backup system Y started (Y), and Notification Z was sent (Z).","Only Server X failed (X).","Only Notification Z was sent (Z).","None of the propositions can be determined.","A","Step-by-Step Solution:
 1. State the propositional chain:
  - X implies Y.

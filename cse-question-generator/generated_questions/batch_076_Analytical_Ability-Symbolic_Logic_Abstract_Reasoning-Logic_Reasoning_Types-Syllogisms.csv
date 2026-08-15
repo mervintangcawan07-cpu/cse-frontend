@@ -35,8 +35,6 @@ Exam Tip: Camestres = Major A, Minor E, Conclusion E in Figure 2 (P-M, S-M).","C
  - Since the minor term C is undistributed in the premise but distributed in the conclusion, this commits the formal \""FALLACY OF ILLICIT MINOR\"".
 4. Set-Theoretic Counterexample:
  - All auditors may be career officers, but there are thousands of career officers who are engineers, teachers, or administrators and not forensic accountants. The valid conclusion in Figure 3 (Darapti) is only the particular: \""Some career officers are forensic accountants.\","","","","","",""
-"Common Trap: Overlooking term distribution in universal conclusions derived from Figure 3 premises.","","","","","","","","","","","",""
-"Exam Tip: If the Minor Term goes from Undistributed in the premise to Distributed in the conclusion = ILLICIT MINOR.""","Correct. Survives elimination because minor term C is undistributed as the predicate of an A-premise but distributed as the subject of the A-conclusion.","Eliminated because the major term F is undistributed in both premise and conclusion.","Eliminated because the middle term A is distributed in both premises.","Eliminated because both premises are affirmative.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076","","","","","",""
 "Consider the syllogism: Major Premise: No classified state secrets are public records (No S is P). Minor Premise: All agency audit reports are public records (All A is P). Conclusion: Therefore, no agency audit reports are classified state secrets (No A is S). Which valid syllogistic mood and figure is this?","Figure 2, Mood EAE (Cesare)","Figure 1, Mood EAE (Celarent)","Figure 2, Mood AEE (Camestres)","Figure 4, Mood AEE (Camenes)","A","Step-by-Step Solution:
 1. Identify the three terms:
  - Major Term (S): \""classified state secrets\"".
@@ -102,13 +100,7 @@ Exam Tip: AII-1 (Darii): All M is P + Some S is M implies Some S is P.","Correct
  - Premise 2: No E is C (Negative proposition, E-type).
 2. Recall the fundamental Aristotelian Syllogistic Rule regarding Negative Premises:
  - \""No valid conclusion can be drawn from two negative premises.\","","","","","",""
-"- When both premises are negative (E or O)","the middle term is separated from both the major term and the minor term","providing ZERO logical bridge between them.","","","","","","","","","",""
-"3. Name the formal fallacy:","","","","","","","","","","","",""
-"- This error is formally designated as the \""FALLACY OF EXCLUSIVE PREMISES\"".","","","","","","","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Options B","C","and D are specific term distribution fallacies that do not capture the primary structural prohibition against two negative premises.","","","","","","","","","",""
-"Common Trap: Trying to diagram intersections when two \""NO\"" premises immediately invalidate any deduction.","","","","","","","","","","","",""
-"Exam Tip: Rule of Syllogisms: TWO NEGATIVE PREMISES = INVALID (Fallacy of Exclusive Premises).""","Correct. Survives elimination because classical syllogistic rules strictly forbid deriving any conclusion from two negative premises (Fallacy of Exclusive Premises).","Eliminated because the primary structural violation is the presence of two negative premises.","Eliminated because illicit minor pertains to term distribution.","Eliminated because illicit major pertains to term distribution.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076","","","","","",""
+"- When both premises are negative (E or O)","the middle term is separated from both the major term and the minor term","providing ZERO logical bridge between them.","","","A","","","","","","",""
 "Consider the syllogism: Major Premise: All sworn public officers are bound by RA 6713 (All O is B). Minor Premise: Some sworn public officers are barangay captains (Some O is K). Conclusion: Therefore, some barangay captains are bound by RA 6713 (Some K is B). Which valid syllogistic mood and figure is represented?","Figure 3, Mood AII (Datisi)","Figure 1, Mood AII (Darii)","Figure 3, Mood IAI (Disamis)","Figure 4, Mood IAI (Dimaris)","A","Step-by-Step Solution:
 1. Identify the terms:
  - Major Term (B): \""bound by RA 6713\"" (Predicate of conclusion).
@@ -139,14 +131,6 @@ Exam Tip: Datisi = AII-3 (M-P, M-S).","Correct. Survives elimination because the
  - Conclusion: \""No S is P\"" (Negative proposition, E-type).
 2. Recall the fundamental Syllogistic Rule of Quality:
  - \""If both premises are affirmative, the conclusion MUST be affirmative.\","","","","","",""
-"- Affirmative premises state inclusions/containments; they cannot establish the total or partial exclusion asserted by a negative conclusion.","","","","","","","","","","","",""
-"3. Identify the formal fallacy:","","","","","","","","","","","",""
-"- This commits the \""FALLACY OF DRAWING A NEGATIVE CONCLUSION FROM AFFIRMATIVE PREMISES\"".","","","","","","","","","","","",""
-"4. Evaluate other options:","","","","","","","","","","","",""
-"- Option B: Pertains to two negative premises.","","","","","","","","","","","",""
-"- Options C and D: Term distribution errors.","","","","","","","","","","","",""
-"Common Trap: Overlooking the polarity/quality of premises and jumping directly to diagramming terms.","","","","","","","","","","","",""
-"Exam Tip: Affirmative + Affirmative = AFFIRMATIVE CONCLUSION ONLY. Any negative conclusion is an instant fallacy!""","Correct. Survives elimination because drawing a negative conclusion (E) from two affirmative premises (A and I) is a textbook formal quality fallacy.","Eliminated because the premises are affirmative, not exclusive negatives.","Eliminated because this is a quality fallacy rather than an illicit minor.","Eliminated because the middle term R is distributed in the major premise.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076","","","","","",""
 "Consider the syllogism: Major Premise: All judicial decisions forming part of jurisprudence are sources of law (All J are S). Minor Premise: No executive department orders are judicial decisions forming part of jurisprudence (No E are J). Conclusion: Therefore, no executive department orders are sources of law (No E are S). What formal syllogistic fallacy is committed?","Fallacy of Illicit Major","Fallacy of Illicit Minor","Fallacy of Undistributed Middle","Fallacy of Four Terms","A","Step-by-Step Solution:
 1. Identify terms and distribution:
  - Major Term (S): \""sources of law\"" (Predicate of conclusion).

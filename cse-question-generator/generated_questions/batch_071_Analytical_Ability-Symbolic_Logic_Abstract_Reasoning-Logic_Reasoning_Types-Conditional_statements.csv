@@ -40,12 +40,6 @@ Exam Tip: \""Sufficient\"" introduces the antecedent (IF part): M implies D.","C
  - B implies (C implies D) ≡ (B land C) implies D.
 4. Translate to natural language:
  - \""If the national budget is approved AND the infrastructure project is certified, then funding will be disbursed.\","","","","","",""
-"5. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Option B ((B lor C) implies D): Disjunctive antecedent (would allow disbursement if only budget is approved without certification).","","","","","","","","","","","",""
-"- Option C ((B implies C) implies D): Alters the grouping hierarchy of conditionals.","","","","","","","","","","","",""
-"- Option D (B land (C implies D)): A conjunction rather than an overall conditional.","","","","","","","","","","","",""
-"Common Trap: Confusing (B land C) implies D with (B lor C) implies D.","","","","","","","","","","","",""
-"Exam Tip: Law of Exportation: P implies (Q implies R) ≡ (P land Q) implies R.""","Correct. Survives elimination because by the Law of Exportation, a nested conditional B -> (C -> D) is strictly equivalent to (B and C) -> D.","Eliminated because (B or C) -> D incorrectly allows either condition alone to trigger disbursement.","Eliminated because (B -> C) -> D changes the antecedent truth structure.","Eliminated because B and (C -> D) asserts that B is unconditionally true.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
 "Under what exact combination of truth assignments is the material conditional proposition P implies Q evaluated as FALSE in formal truth-functional logic?","When P is TRUE and Q is FALSE.","When P is FALSE and Q is TRUE.","When P is FALSE and Q is FALSE.","When P is TRUE and Q is TRUE.","A","Step-by-Step Solution:
 1. Recall the formal truth table of the Material Implication (P implies Q):
  - Row 1: P = True, Q = True implies P implies Q = True.
@@ -70,12 +64,6 @@ Exam Tip: A conditional statement is FALSE in ONLY ONE CASE: True antecedent (T)
  - Inverse: neg E implies neg S.
 3. Translate to natural language:
  - \""If an applicant does not have 5 years of government experience (neg E), then the applicant is not exempt from the preliminary examination (neg S).\","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Option B (neg S implies neg E): The Contrapositive.","","","","","","","","","","","",""
-"- Option C (S implies E): The Converse.","","","","","","","","","","","",""
-"- Option D (E land neg S): The Logical Negation.","","","","","","","","","","","",""
-"Common Trap: Confusing the Inverse (neg P implies neg Q) with the Contrapositive (neg Q implies neg P) or Converse (Q implies P).","","","","","","","","","","","",""
-"Exam Tip: Original = P implies Q; Inverse = neg P implies neg Q; Converse = Q implies P; Contrapositive = neg Q implies neg P.""","Correct. Survives elimination because the formal inverse of P -> Q is constructed by negating both terms in place: ~P -> ~Q.","Eliminated because ~S -> ~E is the contrapositive.","Eliminated because S -> E is the converse.","Eliminated because E and ~S is the logical negation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
 "Given the conditional rule: \""If a government procurement contract exceeds ₱50 million (C), then it requires mandatory public bidding (B).\"" What is the formal CONVERSE of this statement?","If a government procurement contract requires mandatory public bidding (B), then it exceeds ₱50 million (C).","If a government procurement contract does not require public bidding (neg B), then it does not exceed ₱50 million (neg C).","If a government procurement contract does not exceed ₱50 million (neg C), then it does not require public bidding (neg B).","All government contracts exceeding ₱50 million require mandatory public bidding.","A","Step-by-Step Solution:
 1. Recall the formal definition of the CONVERSE of a conditional statement:
  - The converse of P implies Q is formed by swapping the antecedent and consequent:
@@ -85,12 +73,6 @@ Exam Tip: A conditional statement is FALSE in ONLY ONE CASE: True antecedent (T)
  - Converse: B implies C.
 3. Translate to natural language:
  - \""If a government procurement contract requires mandatory public bidding (B), then it exceeds ₱50 million (C).\","","","","","",""
-"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
-"- Option B (neg B implies neg C): The Contrapositive.","","","","","","","","","","","",""
-"- Option C (neg C implies neg B): The Inverse.","","","","","","","","","","","",""
-"- Option D: A categorical rephrasing of the original statement.","","","","","","","","","","","",""
-"Common Trap: Confusing the converse (swapping terms","Q implies P) with the inverse (negating terms","neg P implies neg Q).","","","","","","","","","",""
-"Exam Tip: Converse of P implies Q is simply Q implies P.""","Correct. Survives elimination because the formal converse is created strictly by interchanging the antecedent and consequent (B -> C).","Eliminated because ~B -> ~C is the contrapositive.","Eliminated because ~C -> ~B is the inverse.","Eliminated because Option D is a rephrasing of the original conditional.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
 "Consider the biconditional statement: \""An employee receives an outstanding rating (R) IF AND ONLY IF all quarterly performance targets are surpassed (T).\"" Which of the following compound propositions is strictly logically equivalent to this biconditional?","(R implies T) land (T implies R)","(R implies T) lor (T implies R)","(R land T) implies (R lor T)","neg R implies neg T","A","Step-by-Step Solution:
 1. Analyze the formal definition of the Biconditional operator (P leftrightarrow Q):
  - \""P if and only if Q\"" expresses a two-way conditional relationship (both mutual necessity and mutual sufficiency).
