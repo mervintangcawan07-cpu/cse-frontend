@@ -1,177 +1,175 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Given the following conditional protocol rules: (1) If the disaster alert reaches Level 3 ($A$), then emergency operations centers are activated ($E$). (2) If emergency operations centers are activated ($E$), then relief funds are released ($R$) and quick response teams are deployed ($Q$). (3) If quick response teams are deployed ($Q$), then coastal evacuations are enforced ($C$). Coastal evacuations were NOT enforced ($\neg C$). Which conclusion is guaranteed to be TRUE?","The disaster alert did not reach Level 3 ($\neg A$), and emergency operations centers were not activated ($\neg E$).","Relief funds were released ($R$), and disaster alert reached Level 3 ($A$).","Emergency operations centers were activated ($E$), but coastal evacuations were omitted.","Quick response teams were deployed ($Q$), but coastal evacuations failed.","A","Step-by-Step Solution:
+"Given the following conditional protocol rules: (1) If the disaster alert reaches Level 3 (A), then emergency operations centers are activated (E). (2) If emergency operations centers are activated (E), then relief funds are released (R) and quick response teams are deployed (Q). (3) If quick response teams are deployed (Q), then coastal evacuations are enforced (C). Coastal evacuations were NOT enforced (neg C). Which conclusion is guaranteed to be TRUE?","The disaster alert did not reach Level 3 (neg A), and emergency operations centers were not activated (neg E).","Relief funds were released (R), and disaster alert reached Level 3 (A).","Emergency operations centers were activated (E), but coastal evacuations were omitted.","Quick response teams were deployed (Q), but coastal evacuations failed.","A","Step-by-Step Solution:
 1. Formulate the premises symbolically:
-   - Premise 1: $A \implies E$.
-   - Premise 2: $E \implies (R \land Q)$.
-   - Premise 3: $Q \implies C$.
-   - Fact: $\neg C$ (Coastal evacuations not enforced).
+ - Premise 1: A implies E.
+ - Premise 2: E implies (R land Q).
+ - Premise 3: Q implies C.
+ - Fact: neg C (Coastal evacuations not enforced).
 2. Step 1 - Apply Modus Tollens to Premise 3:
-   - $Q \implies C$ and $\neg C \vdash \neg Q$ (Quick response teams were NOT deployed).
-3. Step 2 - Analyze Premise 2 with $\neg Q$:
-   - Premise 2 states $E \implies (R \land Q)$.
-   - If $E$ were True, then $(R \land Q)$ would be True, which requires $Q$ to be True.
-   - Since $Q$ is False ($\neg Q$), the conjunction $(R \land Q)$ is False.
-   - By Modus Tollens on Premise 2: $\neg E$ (Emergency operations centers were NOT activated).
+ - Q implies C and neg C vdash neg Q (Quick response teams were NOT deployed).
+3. Step 2 - Analyze Premise 2 with neg Q:
+ - Premise 2 states E implies (R land Q).
+ - If E were True, then (R land Q) would be True, which requires Q to be True.
+ - Since Q is False (neg Q), the conjunction (R land Q) is False.
+ - By Modus Tollens on Premise 2: neg E (Emergency operations centers were NOT activated).
 4. Step 3 - Apply Modus Tollens to Premise 1:
-   - $A \implies E$ and $\neg E \vdash \neg A$ (Disaster alert did NOT reach Level 3).
+ - A implies E and neg E vdash neg A (Disaster alert did NOT reach Level 3).
 5. Conclude:
-   - Both $\neg A$ and $\neg E$ are deductively proven to be True.
+ - Both neg A and neg E are deductively proven to be True.
 
 Common Trap: Assuming relief funds could still be released even when operations centers were not activated.
-Exam Tip: Propagate Modus Tollens backwards through the chain: $\neg C \implies \neg Q \implies \neg E \implies \neg A$.","Correct. Survives elimination because Modus Tollens propagates backwards from ~C to prove ~Q, then ~E, then ~A necessarily.","Eliminated because A is proven False by Modus Tollens.","Eliminated because E is proven False by Modus Tollens.","Eliminated because Q is proven False by Modus Tollens.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Consider the organizational conditional rules: (1) If Project Alpha is approved ($A$), then either Budget Beta is allocated ($B$) or Campaign Gamma is cancelled ($C$). (2) If Budget Beta is allocated ($B$), then Hiring Plan Delta is frozen ($D$). (3) If Campaign Gamma is cancelled ($C$), then Hiring Plan Delta is frozen ($D$). Project Alpha was approved ($A$). What conclusion is guaranteed to be TRUE?","Hiring Plan Delta is frozen ($D$).","Budget Beta was allocated ($B$).","Campaign Gamma was cancelled ($C$).","Both Budget Beta was allocated and Campaign Gamma was cancelled.","A","Step-by-Step Solution:
+Exam Tip: Propagate Modus Tollens backwards through the chain: neg C implies neg Q implies neg E implies neg A.","Correct. Survives elimination because Modus Tollens propagates backwards from ~C to prove ~Q, then ~E, then ~A necessarily.","Eliminated because A is proven False by Modus Tollens.","Eliminated because E is proven False by Modus Tollens.","Eliminated because Q is proven False by Modus Tollens.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Consider the organizational conditional rules: (1) If Project Alpha is approved (A), then either Budget Beta is allocated (B) or Campaign Gamma is cancelled (C). (2) If Budget Beta is allocated (B), then Hiring Plan Δ is frozen (D). (3) If Campaign Gamma is cancelled (C), then Hiring Plan Δ is frozen (D). Project Alpha was approved (A). What conclusion is guaranteed to be TRUE?","Hiring Plan Δ is frozen (D).","Budget Beta was allocated (B).","Campaign Gamma was cancelled (C).","Both Budget Beta was allocated and Campaign Gamma was cancelled.","A","Step-by-Step Solution:
 1. Translate the premises into symbolic logic:
-   - Premise 1: $A \implies (B \lor C)$.
-   - Premise 2: $B \implies D$.
-   - Premise 3: $C \implies D$.
-   - Fact: $A$ is True.
+ - Premise 1: A implies (B lor C).
+ - Premise 2: B implies D.
+ - Premise 3: C implies D.
+ - Fact: A is True.
 2. Step 1 - Apply Modus Ponens to Premise 1:
-   - Since $A$ is True, the consequent $(B \lor C)$ must be TRUE.
+ - Since A is True, the consequent (B lor C) must be TRUE.
 3. Step 2 - Apply Simple Constructive Dilemma:
-   - We have the disjunction: $B \lor C$.
-   - Branch 1: If $B$ is True, then $D$ is True (by Premise 2).
-   - Branch 2: If $C$ is True, then $D$ is True (by Premise 3).
-   - Since either $B$ or $C$ MUST be True, in all possible worlds $D$ must be TRUE.
+ - We have the disjunction: B lor C.
+ - Branch 1: If B is True, then D is True (by Premise 2).
+ - Branch 2: If C is True, then D is True (by Premise 3).
+ - Since either B or C MUST be True, in all possible worlds D must be TRUE.
 4. Conclude:
-   - $D$ (\"Hiring Plan Delta is frozen\") is conclusively established.
+ - D (\""Hiring Plan Δ is frozen\"") is conclusively established.
 5. Evaluate incorrect alternatives:
-   - Options B and C: Neither $B$ nor $C$ is individually guaranteed (only their disjunction $B \lor C$ is known).
-   - Option D: Conjunction is not guaranteed.
+ - Options B and C: Neither B nor C is individually guaranteed (only their disjunction B lor C is known).
+ - Option D: Conjunction is not guaranteed.
 
-Common Trap: Claiming $B$ alone or $C$ alone must be true, rather than the common consequence $D$.
-Exam Tip: When two branching conditions lead to the exact same outcome $D$, the outcome $D$ is guaranteed!","Correct. Survives elimination because by Constructive Dilemma on (B or C), both branches independently lead to D, making D unconditionally True.","Eliminated because B is not guaranteed (C could be the true disjunct).","Eliminated because C is not guaranteed (B could be the true disjunct).","Eliminated because conjunction B and C is not required by the disjunction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Examine the conditional sequence: (1) If the auditor finds discrepancy $X$ ($X$), then inquiry $Y$ is initiated ($X \implies Y$). (2) If inquiry $Y$ is initiated, then either supervisor $Z$ is suspended ($Z$) OR account $W$ is frozen ($W$) [$Y \implies (Z \lor W)$]. (3) If account $W$ is frozen, then vendor contract $V$ is terminated ($W \implies V$). The auditor found discrepancy $X$ ($X$), but vendor contract $V$ was NOT terminated ($\neg V$). What conclusion necessarily follows?","Supervisor Z was suspended ($Z$).","Account W was frozen ($W$).","Inquiry Y was not initiated ($\neg Y$).","Discrepancy X was dismissed.","A","Step-by-Step Solution:
+Common Trap: Claiming B alone or C alone must be true, rather than the common consequence D.
+Exam Tip: When two branching conditions lead to the exact same outcome D, the outcome D is guaranteed!","Correct. Survives elimination because by Constructive Dilemma on (B or C), both branches independently lead to D, making D unconditionally True.","Eliminated because B is not guaranteed (C could be the true disjunct).","Eliminated because C is not guaranteed (B could be the true disjunct).","Eliminated because conjunction B and C is not required by the disjunction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Examine the conditional sequence: (1) If the auditor finds discrepancy X (X), then inquiry Y is initiated (X implies Y). (2) If inquiry Y is initiated, then either supervisor Z is suspended (Z) OR account W is frozen (W) [Y implies (Z lor W)]. (3) If account W is frozen, then vendor contract V is terminated (W implies V). The auditor found discrepancy X (X), but vendor contract V was NOT terminated (neg V). What conclusion necessarily follows?","Supervisor Z was suspended (Z).","Account W was frozen (W).","Inquiry Y was not initiated (neg Y).","Discrepancy X was dismissed.","A","Step-by-Step Solution:
 1. List symbolic premises and given facts:
-   - Premise 1: $X \implies Y$.
-   - Premise 2: $Y \implies (Z \lor W)$.
-   - Premise 3: $W \implies V$.
-   - Fact 1: $X = \text{True}$.
-   - Fact 2: $\neg V = \text{True}$ ($V$ is False).
-2. Step 1 - Forward deduction from Fact 1 ($X$):
-   - By Modus Ponens on Premise 1: $Y = \text{True}$.
-   - By Modus Ponens on Premise 2: $(Z \lor W) = \text{True}$.
-3. Step 2 - Backward deduction from Fact 2 ($\neg V$):
-   - By Modus Tollens on Premise 3 ($W \implies V$ and $\neg V$): $\neg W = \text{True}$ ($W$ is False).
+ - Premise 1: X implies Y.
+ - Premise 2: Y implies (Z lor W).
+ - Premise 3: W implies V.
+ - Fact 1: X = True.
+ - Fact 2: neg V = True (V is False).
+2. Step 1 - Forward deduction from Fact 1 (X):
+ - By Modus Ponens on Premise 1: Y = True.
+ - By Modus Ponens on Premise 2: (Z lor W) = True.
+3. Step 2 - Backward deduction from Fact 2 (neg V):
+ - By Modus Tollens on Premise 3 (W implies V and neg V): neg W = True (W is False).
 4. Step 3 - Apply Disjunctive Syllogism:
-   - We know $(Z \lor W) = \text{True}$ and $W = \text{False}$.
-   - Therefore, $Z$ MUST be TRUE (\"Supervisor $Z$ was suspended\").
+ - We know (Z lor W) = True and W = False.
+ - Therefore, Z MUST be TRUE (\""Supervisor Z was suspended\"").
 
-Common Trap: Stopping at $\neg W$ and failing to use Disjunctive Syllogism with $(Z \lor W)$ to prove $Z$.
-Exam Tip: Disjunctive Syllogism: $(Z \lor W) \land \neg W \vdash Z$.","Correct. Survives elimination because X implies Y, which implies (Z or W); since ~V implies ~W by Modus Tollens, Z must be True by Disjunctive Syllogism.","Eliminated because W is proven False by Modus Tollens on Premise 3.","Eliminated because Y is proven True by Modus Ponens on Premise 1.","Eliminated because X is given as an established fact.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the following conditional propositions: (1) If employee $K$ attends training ($T$), then employee $K$ earns certification ($C$). (2) If employee $K$ earns certification ($C$), then employee $K$ receives a promotion ($P$). (3) If employee $K$ does not attend training ($\neg T$), then employee $K$ conducts research ($R$). (4) If employee $K$ conducts research ($R$), then employee $K$ publishes a paper ($J$). If employee $K$ did NOT receive a promotion ($\neg P$), what must be conclusively deduced?","Employee K published a paper ($J$).","Employee K earned certification ($C$).","Employee K did not conduct research ($\neg R$).","Employee K attended the training ($T$).","A","Step-by-Step Solution:
+Common Trap: Stopping at neg W and failing to use Disjunctive Syllogism with (Z lor W) to prove Z.
+Exam Tip: Disjunctive Syllogism: (Z lor W) land neg W vdash Z.","Correct. Survives elimination because X implies Y, which implies (Z or W); since ~V implies ~W by Modus Tollens, Z must be True by Disjunctive Syllogism.","Eliminated because W is proven False by Modus Tollens on Premise 3.","Eliminated because Y is proven True by Modus Ponens on Premise 1.","Eliminated because X is given as an established fact.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Given the following conditional propositions: (1) If employee K attends training (T), then employee K earns certification (C). (2) If employee K earns certification (C), then employee K receives a promotion (P). (3) If employee K does not attend training (neg T), then employee K conducts research (R). (4) If employee K conducts research (R), then employee K publishes a paper (J). If employee K did NOT receive a promotion (neg P), what must be conclusively deduced?","Employee K published a paper (J).","Employee K earned certification (C).","Employee K did not conduct research (neg R).","Employee K attended the training (T).","A","Step-by-Step Solution:
 1. Represent rules symbolically:
-   - Premise 1: $T \implies C$.
-   - Premise 2: $C \implies P$.
-   - Premise 3: $\neg T \implies R$.
-   - Premise 4: $R \implies J$.
-   - Fact: $\neg P$ (Did not receive promotion).
-2. Step 1 - Backward deduction from $\neg P$:
-   - $C \implies P$ and $\neg P \vdash \neg C$ (by Modus Tollens).
-   - $T \implies C$ and $\neg C \vdash \neg T$ (by Modus Tollens).
-3. Step 2 - Forward deduction from $\neg T$:
-   - Since $\neg T$ is True, apply Modus Ponens to Premise 3: $R = \text{True}$ (Conducted research).
-   - Since $R$ is True, apply Modus Ponens to Premise 4: $J = \text{True}$ (Published a paper).
+ - Premise 1: T implies C.
+ - Premise 2: C implies P.
+ - Premise 3: neg T implies R.
+ - Premise 4: R implies J.
+ - Fact: neg P (Did not receive promotion).
+2. Step 1 - Backward deduction from neg P:
+ - C implies P and neg P vdash neg C (by Modus Tollens).
+ - T implies C and neg C vdash neg T (by Modus Tollens).
+3. Step 2 - Forward deduction from neg T:
+ - Since neg T is True, apply Modus Ponens to Premise 3: R = True (Conducted research).
+ - Since R is True, apply Modus Ponens to Premise 4: J = True (Published a paper).
 4. Conclude:
-   - Proposition $J$ (\"Employee $K$ published a paper\") is deductively certain.
+ - Proposition J (\""Employee K published a paper\"") is deductively certain.
 
 Common Trap: Assuming that failing to get promoted halts all further logical deductions.
-Exam Tip: Modus Tollens on the first branch ($\neg P \implies \neg C \implies \neg T$) triggers the antecedent of the second branch ($\neg T \implies R \implies J$).","Correct. Survives elimination because ~P leads via Modus Tollens to ~T, which triggers the second branch (~T -> R -> J), proving J is True.","Eliminated because C is proven False by Modus Tollens.","Eliminated because R is proven True.","Eliminated because T is proven False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Consider the branching logic: (1) If condition $P$ holds, then both $Q$ and $R$ hold [$P \implies (Q \land R)$]. (2) If condition $R$ holds, then $S$ or $T$ holds [$R \implies (S \lor T)$]. (3) If condition $S$ holds, then $U$ does not hold ($S \implies \neg U$). (4) If condition $T$ holds, then $U$ does not hold ($T \implies \neg U$). If condition $P$ is TRUE, what is the exact status of condition $U$?","Condition U is FALSE ($\neg U$).","Condition U is TRUE ($U$).","Condition U is indeterminate.","Condition U is contradictory.","A","Step-by-Step Solution:
-1. Trace the logical chain from the premise $P = \text{True}$:
-   - By Premise 1: $P \implies (Q \land R)$. Since $P$ is True, $(Q \land R)$ is True $\implies R = \text{True}$.
+Exam Tip: Modus Tollens on the first branch (neg P implies neg C implies neg T) triggers the antecedent of the second branch (neg T implies R implies J).","Correct. Survives elimination because ~P leads via Modus Tollens to ~T, which triggers the second branch (~T -> R -> J), proving J is True.","Eliminated because C is proven False by Modus Tollens.","Eliminated because R is proven True.","Eliminated because T is proven False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Consider the branching logic: (1) If condition P holds, then both Q and R hold [P implies (Q land R)]. (2) If condition R holds, then S or T holds [R implies (S lor T)]. (3) If condition S holds, then U does not hold (S implies neg U). (4) If condition T holds, then U does not hold (T implies neg U). If condition P is TRUE, what is the exact status of condition U?","Condition U is FALSE (neg U).","Condition U is TRUE (U).","Condition U is indeterminate.","Condition U is contradictory.","A","Step-by-Step Solution:
+1. Trace the logical chain from the premise P = True:
+ - By Premise 1: P implies (Q land R). Since P is True, (Q land R) is True implies R = True.
 2. Propagate to Premise 2:
-   - $R \implies (S \lor T)$. Since $R$ is True, $(S \lor T) = \text{True}$.
+ - R implies (S lor T). Since R is True, (S lor T) = True.
 3. Analyze the Disjunctive Consequence from Premises 3 and 4:
-   - Premise 3: $S \implies \neg U$.
-   - Premise 4: $T \implies \neg U$.
-   - By Simple Dilemma: $(S \lor T), (S \implies \neg U), (T \implies \neg U) \vdash \neg U$.
+ - Premise 3: S implies neg U.
+ - Premise 4: T implies neg U.
+ - By Simple Dilemma: (S lor T), (S implies neg U), (T implies neg U) vdash neg U.
 4. Conclude:
-   - $\neg U$ must be True, which means condition $U$ is FALSE.
+ - neg U must be True, which means condition U is FALSE.
 
-Common Trap: Believing $U$ is indeterminate because we do not know whether $S$ or $T$ is the active disjunct.
-Exam Tip: Both $S$ and $T$ lead to $\neg U$; thus, $S \lor T$ unconditionally guarantees $\neg U$.","Correct. Survives elimination because P implies R, which implies (S or T); since both S and T independently imply ~U, U is conclusively False.","Eliminated because U cannot be True without contradicting both conditional branches.","Eliminated because U is definitively determined to be False.","Eliminated because the deductive system is completely consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the following municipal traffic rules: (1) If the congestion index exceeds 80 ($T$), then the alternate coding scheme is enforced ($C$). (2) If the alternate coding scheme is enforced ($C$), then public bus ridership increases ($B$). (3) If public bus ridership increases ($B$), then urban carbon emissions decrease ($E$). Urban carbon emissions did NOT decrease ($\neg E$). Which conclusion is a valid deduction?","Traffic congestion index did not exceed 80 ($\neg T$).","Alternate coding scheme was enforced ($C$).","Public bus ridership increased ($B$).","Both congestion index exceeded 80 and alternate coding was enforced.","A","Step-by-Step Solution:
+Common Trap: Believing U is indeterminate because we do not know whether S or T is the active disjunct.
+Exam Tip: Both S and T lead to neg U; thus, S lor T unconditionally guarantees neg U.","Correct. Survives elimination because P implies R, which implies (S or T); since both S and T independently imply ~U, U is conclusively False.","Eliminated because U cannot be True without contradicting both conditional branches.","Eliminated because U is definitively determined to be False.","Eliminated because the deductive system is completely consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Given the following municipal traffic rules: (1) If the congestion index exceeds 80 (T), then the alternate coding scheme is enforced (C). (2) If the alternate coding scheme is enforced (C), then public bus ridership increases (B). (3) If public bus ridership increases (B), then urban carbon emissions decrease (E). Urban carbon emissions did NOT decrease (neg E). Which conclusion is a valid deduction?","Traffic congestion index did not exceed 80 (neg T).","Alternate coding scheme was enforced (C).","Public bus ridership increased (B).","Both congestion index exceeded 80 and alternate coding was enforced.","A","Step-by-Step Solution:
 1. Express the premises symbolically:
-   - $T \implies C$.
-   - $C \implies B$.
-   - $B \implies E$.
-   - Fact: $\neg E$.
+ - T implies C.
+ - C implies B.
+ - B implies E.
+ - Fact: neg E.
 2. Chain the conditional implications by Hypothetical Syllogism:
-   - $T \implies C \implies B \implies E \implies T \implies E$.
+ - T implies C implies B implies E implies T implies E.
 3. Apply Modus Tollens to the master chain:
-   - Given $T \implies E$ and $\neg E$, it follows necessarily that $\neg T$.
+ - Given T implies E and neg E, it follows necessarily that neg T.
 4. Backpropagate step-by-step:
-   - $B \implies E$ and $\neg E \vdash \neg B$.
-   - $C \implies B$ and $\neg B \vdash \neg C$.
-   - $T \implies C$ and $\neg C \vdash \neg T$.
+ - B implies E and neg E vdash neg B.
+ - C implies B and neg B vdash neg C.
+ - T implies C and neg C vdash neg T.
 5. Translate conclusion:
-   - $\neg T$ = \"Traffic congestion index did not exceed 80.\"
-
-Common Trap: Affirming the intermediate consequences ($B$ or $C$) when Modus Tollens actually proves they are all False.
-Exam Tip: When the final link of a conditional chain is False ($\neg E$), all preceding antecedents ($T, C, B$) are False.","Correct. Survives elimination because cascading Modus Tollens backwards from ~E proves ~B, ~C, and ~T are all True.","Eliminated because C is False by Modus Tollens.","Eliminated because B is False by Modus Tollens.","Eliminated because both T and C are False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the administrative accounting rules: (1) If an invoice is digitally signed ($D$), then either payment voucher $V$ is generated ($V$) OR payment voucher $V$ is archived ($A$) [$D \implies (V \lor A)$]. (2) If payment voucher $V$ is generated ($V$), then treasury check $K$ is issued ($K$). (3) If payment voucher $V$ is archived ($A$), then audit clearance $C$ is required ($C$). An invoice was digitally signed ($D$), but audit clearance $C$ was NOT required ($\neg C$). What conclusion is certain?","Treasury check K was issued ($K$).","Payment voucher V was archived ($A$).","Invoice was not digitally signed ($\neg D$).","Treasury check K was not issued ($\neg K$).","A","Step-by-Step Solution:
+ - neg T = \""Traffic congestion index did not exceed 80.\","","","","","",""
+"Common Trap: Affirming the intermediate consequences (B or C) when Modus Tollens actually proves they are all False.","","","","","","","","","","","",""
+"Exam Tip: When the final link of a conditional chain is False (neg E)","all preceding antecedents (T","C","B) are False.""","Correct. Survives elimination because cascading Modus Tollens backwards from ~E proves ~B, ~C, and ~T are all True.","Eliminated because C is False by Modus Tollens.","Eliminated because B is False by Modus Tollens.","Eliminated because both T and C are False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072","","",""
+"Given the administrative accounting rules: (1) If an invoice is digitally signed (D), then either payment voucher V is generated (V) OR payment voucher V is archived (A) [D implies (V lor A)]. (2) If payment voucher V is generated (V), then treasury check K is issued (K). (3) If payment voucher V is archived (A), then audit clearance C is required (C). An invoice was digitally signed (D), but audit clearance C was NOT required (neg C). What conclusion is certain?","Treasury check K was issued (K).","Payment voucher V was archived (A).","Invoice was not digitally signed (neg D).","Treasury check K was not issued (neg K).","A","Step-by-Step Solution:
 1. Translate to symbolic logic:
-   - Premise 1: $D \implies (V \lor A)$.
-   - Premise 2: $V \implies K$.
-   - Premise 3: $A \implies C$.
-   - Fact 1: $D = \text{True}$.
-   - Fact 2: $\neg C = \text{True}$ ($C$ is False).
-2. Step 1 - Forward deduction from $D$:
-   - $D \implies (V \lor A)$ and $D \vdash (V \lor A) = \text{True}$.
-3. Step 2 - Backward deduction from $\neg C$:
-   - $A \implies C$ and $\neg C \vdash \neg A$ (by Modus Tollens).
+ - Premise 1: D implies (V lor A).
+ - Premise 2: V implies K.
+ - Premise 3: A implies C.
+ - Fact 1: D = True.
+ - Fact 2: neg C = True (C is False).
+2. Step 1 - Forward deduction from D:
+ - D implies (V lor A) and D vdash (V lor A) = True.
+3. Step 2 - Backward deduction from neg C:
+ - A implies C and neg C vdash neg A (by Modus Tollens).
 4. Step 3 - Resolve disjunction by Disjunctive Syllogism:
-   - $(V \lor A) = \text{True}$ and $\neg A = \text{True} \vdash V = \text{True}$.
-5. Step 4 - Forward deduction from $V$:
-   - $V \implies K$ and $V \vdash K = \text{True}$ (\"Treasury check $K$ was issued\").
+ - (V lor A) = True and neg A = True vdash V = True.
+5. Step 4 - Forward deduction from V:
+ - V implies K and V vdash K = True (\""Treasury check K was issued\"").
 
-Common Trap: Stopping at $\neg A$ without carrying the deduction through $V$ to $K$.
-Exam Tip: $D \implies V \lor A$; $\neg C \implies \neg A$; $(V \lor A) \land \neg A \implies V \implies K$.","Correct. Survives elimination because D triggers (V or A); since ~C implies ~A, V must be True, which triggers V -> K to prove K is True.","Eliminated because A is proven False by Modus Tollens on Premise 3.","Eliminated because D is an established given fact.","Eliminated because K is proven True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the candidate selection constraints: (1) If candidate $A$ qualifies, then candidate $B$ does not qualify ($A \implies \neg B$). (2) If candidate $B$ does not qualify, then candidate $C$ qualifies ($\neg B \implies C$). (3) If candidate $C$ qualifies, then candidate $D$ qualifies ($C \implies D$). Candidate $D$ did NOT qualify ($\neg D$). What must be TRUE regarding candidate $A$?","Candidate A did NOT qualify ($\neg A$).","Candidate A qualified ($A$).","Candidate A and Candidate B both qualified.","The qualification status of Candidate A cannot be determined.","A","Step-by-Step Solution:
+Common Trap: Stopping at neg A without carrying the deduction through V to K.
+Exam Tip: D implies V lor A; neg C implies neg A; (V lor A) land neg A implies V implies K.","Correct. Survives elimination because D triggers (V or A); since ~C implies ~A, V must be True, which triggers V -> K to prove K is True.","Eliminated because A is proven False by Modus Tollens on Premise 3.","Eliminated because D is an established given fact.","Eliminated because K is proven True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Given the candidate selection constraints: (1) If candidate A qualifies, then candidate B does not qualify (A implies neg B). (2) If candidate B does not qualify, then candidate C qualifies (neg B implies C). (3) If candidate C qualifies, then candidate D qualifies (C implies D). Candidate D did NOT qualify (neg D). What must be TRUE regarding candidate A?","Candidate A did NOT qualify (neg A).","Candidate A qualified (A).","Candidate A and Candidate B both qualified.","The qualification status of Candidate A cannot be determined.","A","Step-by-Step Solution:
 1. Set up the conditional implication chain:
-   - $A \implies \neg B$.
-   - $\neg B \implies C$.
-   - $C \implies D$.
-   - Master Chain: $A \implies \neg B \implies C \implies D$, which simplifies to $A \implies D$.
+ - A implies neg B.
+ - neg B implies C.
+ - C implies D.
+ - Master Chain: A implies neg B implies C implies D, which simplifies to A implies D.
 2. Analyze the given condition:
-   - Fact: $\neg D$ (Candidate $D$ did not qualify).
+ - Fact: neg D (Candidate D did not qualify).
 3. Apply Modus Tollens to Master Chain:
-   - $A \implies D$ and $\neg D \vdash \neg A$.
+ - A implies D and neg D vdash neg A.
 4. Conclude:
-   - $\neg A$ = \"Candidate $A$ did NOT qualify.\"
-
-Common Trap: Assuming candidate $A$'s status is indeterminate because there are negative terms in the chain.
-Exam Tip: Transitive property: $A \implies \neg B \implies C \implies D \implies A \implies D$. Modus Tollens with $\neg D$ yields $\neg A$.","Correct. Survives elimination because transitive chaining yields A -> D, and Modus Tollens with ~D strictly proves ~A.","Eliminated because A is proven False.","Eliminated because A did not qualify.","Eliminated because A's non-qualification is mathematically certain.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Consider the server monitoring rules: (1) If server $X$ fails ($X$), then backup system $Y$ starts ($Y$). (2) If backup system $Y$ starts ($Y$), then notification $Z$ is sent ($Z$). (3) If notification $Z$ is sent ($Z$), then incident report $W$ is logged ($W$). Fact: Incident report $W$ was NOT logged ($\neg W$). Which of the following statements lists all propositions that are definitely FALSE?","Server X failed ($X$), Backup system Y started ($Y$), and Notification Z was sent ($Z$).","Only Server X failed ($X$).","Only Notification Z was sent ($Z$).","None of the propositions can be determined.","A","Step-by-Step Solution:
+ - neg A = \""Candidate A did NOT qualify.\","","","","","",""
+"Common Trap: Assuming candidate A's status is indeterminate because there are negative terms in the chain.","","","","","","","","","","","",""
+"Exam Tip: Transitive property: A implies neg B implies C implies D implies A implies D. Modus Tollens with neg D yields neg A.""","Correct. Survives elimination because transitive chaining yields A -> D, and Modus Tollens with ~D strictly proves ~A.","Eliminated because A is proven False.","Eliminated because A did not qualify.","Eliminated because A's non-qualification is mathematically certain.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072","","","","","",""
+"Consider the server monitoring rules: (1) If server X fails (X), then backup system Y starts (Y). (2) If backup system Y starts (Y), then notification Z is sent (Z). (3) If notification Z is sent (Z), then incident report W is logged (W). Fact: Incident report W was NOT logged (neg W). Which of the following statements lists all propositions that are definitely FALSE?","Server X failed (X), Backup system Y started (Y), and Notification Z was sent (Z).","Only Server X failed (X).","Only Notification Z was sent (Z).","None of the propositions can be determined.","A","Step-by-Step Solution:
 1. State the propositional chain:
-   - $X \implies Y$.
-   - $Y \implies Z$.
-   - $Z \implies W$.
-   - Given: $\neg W$ ($W$ is False).
+ - X implies Y.
+ - Y implies Z.
+ - Z implies W.
+ - Given: neg W (W is False).
 2. Apply cascading Modus Tollens:
-   - From $Z \implies W$ and $\neg W \vdash \neg Z$ ($Z$ is False).
-   - From $Y \implies Z$ and $\neg Z \vdash \neg Y$ ($Y$ is False).
-   - From $X \implies Y$ and $\neg Y \vdash \neg X$ ($X$ is False).
+ - From Z implies W and neg W vdash neg Z (Z is False).
+ - From Y implies Z and neg Z vdash neg Y (Y is False).
+ - From X implies Y and neg Y vdash neg X (X is False).
 3. Conclude:
-   - All three propositions $X, Y,$ and $Z$ are conclusively proven to be FALSE.
+ - All three propositions X, Y, and Z are conclusively proven to be FALSE.
 
-Common Trap: Concluding only the immediately preceding proposition ($Z$) is False while missing the chain back to $Y$ and $X$.
-Exam Tip: In a linear conditional chain $X \implies Y \implies Z \implies W$, if $W$ is False, every preceding node ($X, Y, Z$) is False.","Correct. Survives elimination because cascading Modus Tollens backwards from ~W proves X, Y, and Z are all conclusively False.","Eliminated because Y and Z are also False, not only X.","Eliminated because X and Y are also False, not only Z.","Eliminated because all three variables are definitively determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the statutory reform rules: (1) If rule $R_1$ is implemented, then either rule $R_2$ is modified ($M$) OR rule $R_3$ is repealed ($P$) [$R_1 \implies (M \lor P)$]. (2) If rule $R_2$ is modified ($M$), then stakeholder consultation $S$ is held ($M \implies S$). (3) If rule $R_3$ is repealed ($P$), then legal review $L$ is conducted ($P \implies L$). Rule $R_1$ was implemented, but stakeholder consultation $S$ was NOT held ($\neg S$). Which conclusion necessarily follows?","Legal review L was conducted ($L$).","Rule R2 was modified ($M$).","Rule R3 was not repealed ($\neg P$).","Rule R1 was not implemented.","A","Step-by-Step Solution:
+Common Trap: Concluding only the immediately preceding proposition (Z) is False while missing the chain back to Y and X.
+Exam Tip: In a linear conditional chain X implies Y implies Z implies W, if W is False, every preceding node (X, Y, Z) is False.","Correct. Survives elimination because cascading Modus Tollens backwards from ~W proves X, Y, and Z are all conclusively False.","Eliminated because Y and Z are also False, not only X.","Eliminated because X and Y are also False, not only Z.","Eliminated because all three variables are definitively determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Given the statutory reform rules: (1) If rule R₁ is implemented, then either rule R₂ is modified (M) OR rule R₃ is repealed (P) [R₁ implies (M lor P)]. (2) If rule R₂ is modified (M), then stakeholder consultation S is held (M implies S). (3) If rule R₃ is repealed (P), then legal review L is conducted (P implies L). Rule R₁ was implemented, but stakeholder consultation S was NOT held (neg S). Which conclusion necessarily follows?","Legal review L was conducted (L).","Rule R2 was modified (M).","Rule R3 was not repealed (neg P).","Rule R1 was not implemented.","A","Step-by-Step Solution:
 1. Translate given rules symbolically:
-   - Premise 1: $R_1 \implies (M \lor P)$.
-   - Premise 2: $M \implies S$.
-   - Premise 3: $P \implies L$.
-   - Fact 1: $R_1 = \text{True}$.
-   - Fact 2: $\neg S = \text{True}$ ($S$ is False).
-2. Step 1 - Forward deduction from $R_1$:
-   - $R_1 \implies (M \lor P)$ and $R_1 \vdash (M \lor P) = \text{True}$.
-3. Step 2 - Backward deduction from $\neg S$:
-   - $M \implies S$ and $\neg S \vdash \neg M$ (by Modus Tollens, $R_2$ was NOT modified).
+ - Premise 1: R₁ implies (M lor P).
+ - Premise 2: M implies S.
+ - Premise 3: P implies L.
+ - Fact 1: R₁ = True.
+ - Fact 2: neg S = True (S is False).
+2. Step 1 - Forward deduction from R₁:
+ - R₁ implies (M lor P) and R₁ vdash (M lor P) = True.
+3. Step 2 - Backward deduction from neg S:
+ - M implies S and neg S vdash neg M (by Modus Tollens, R₂ was NOT modified).
 4. Step 3 - Disjunctive Syllogism:
-   - $(M \lor P) = \text{True}$ and $\neg M = \text{True} \vdash P = \text{True}$ (Rule $R_3$ WAS repealed).
-5. Step 4 - Forward deduction from $P$:
-   - $P \implies L$ and $P \vdash L = \text{True}$ (\"Legal review $L$ was conducted\").
+ - (M lor P) = True and neg M = True vdash P = True (Rule R₃ WAS repealed).
+5. Step 4 - Forward deduction from P:
+ - P implies L and P vdash L = True (\""Legal review L was conducted\"").
 
-Common Trap: Stopping after concluding $P$ is True and forgetting to apply Premise 3 to deduce $L$.
-Exam Tip: $R_1 \implies M \lor P$; $\neg S \implies \neg M$; $(M \lor P) \land \neg M \implies P \implies L$.","Correct. Survives elimination because R1 triggers (M or P); ~S eliminates M via Modus Tollens, forcing P to be True, which triggers P -> L to prove L is True.","Eliminated because M is proven False by Modus Tollens on Premise 2.","Eliminated because P is proven True by Disjunctive Syllogism.","Eliminated because R1 is an established given fact.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+Common Trap: Stopping after concluding P is True and forgetting to apply Premise 3 to deduce L.
+Exam Tip: R₁ implies M lor P; neg S implies neg M; (M lor P) land neg M implies P implies L.","Correct. Survives elimination because R1 triggers (M or P); ~S eliminates M via Modus Tollens, forcing P to be True, which triggers P -> L to prove L is True.","Eliminated because M is proven False by Modus Tollens on Premise 2.","Eliminated because P is proven True by Disjunctive Syllogism.","Eliminated because R1 is an established given fact.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"

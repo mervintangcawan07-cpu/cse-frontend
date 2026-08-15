@@ -1,0 +1,95 @@
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"Identify the underlined portion that contains a grammatical error: '[Neither] the regional director [nor] his senior executive assistants [was] able to justify the substantial budget variance [during the public hearing].'","Neither","nor","was","during the public hearing","C","Step-by-Step Solution:
+1. Analyze the sentence structure: Correlative conjunction 'Neither... nor'.
+2. Rule of Proximity: In 'Neither [Subject 1] nor [Subject 2] [Verb]', the verb agrees in number and person with Subject 2 (the closer subject).
+3. Subject 1: 'the regional director' (singular).
+4. Subject 2: 'his senior executive assistants' (plural).
+5. The subject closest to the verb is plural ('assistants').
+6. The verb must therefore be PLURAL: 'were' (not singular 'was').
+7. The error is in portion C ('was').
+
+Common Trap: Matching the verb to the first subject ('director') instead of the closer plural subject ('assistants').
+Exam Tip: In 'neither... nor', always look at the noun immediately adjacent to the verb.","Correct. 'Was' is grammatically erroneous; the rule of proximity requires the plural verb 'were' to agree with the nearer subject 'assistants'.","Eliminated because correlative 'Neither' is used correctly at the start of the clause.","Eliminated because 'nor' is the correct correlative partner for 'Neither'.","Eliminated because the prepositional phrase 'during the public hearing' is grammatically sound.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The procurement committee [has decided] [to award] the infrastructure contract to whoever the board [recommends] [after the technical review].'","has decided","to award","whoever","recommends","C","Step-by-Step Solution:
+1. Examine the pronoun clause: 'to [whoever/whomever] the board recommends'.
+2. Analyze the subordinate clause: 'the board (subject) recommends (verb) [whom] (direct object)'.
+3. Because the pronoun functions as the direct object of the verb 'recommends', it must be in the objective case: 'whomever' (not subjective 'whoever').
+4. The error is in portion C ('whoever').
+
+Common Trap: Confusing subjective 'whoever' with objective 'whomever' when it functions as an object within its own clause.
+Exam Tip: Rearrange the clause: 'The board recommends HIM' -> requires 'whomever' (both end in 'm').","Correct. 'Whoever' is erroneous; because it serves as the direct object of the verb 'recommends' within the clause, it must be the objective form 'whomever'.","Eliminated because present perfect 'has decided' agrees with the singular collective subject 'committee'.","Eliminated because infinitive 'to award' correctly follows the verb 'decided'.","Eliminated because singular present verb 'recommends' agrees with singular subject 'board'.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The audit supervisor [strongly objected] to [him] [authorizing] the emergency disbursement [without prior approval].'","strongly objected","him","authorizing","without prior approval","B","Step-by-Step Solution:
+1. Analyze the structure: 'objected to [pronoun] [authorizing]'.
+2. 'Authorizing' is a GERUND (an -ing verb functioning as a noun).
+3. Rule for gerunds: A noun or gerund must be modified by a POSSESSIVE pronoun ('his', 'their', 'my'), not an objective pronoun ('him', 'them', 'me').
+4. The objection was to the action of authorizing ('his authorizing'), not the person.
+5. The error is in portion B ('him' should be 'his').
+
+Common Trap: Using objective pronouns before gerunds in formal writing.
+Exam Tip: Whenever a word ending in -ing is used as a noun, the pronoun directly before it MUST be possessive (his, her, your, their, our).","Correct. 'Him' is erroneous; a gerund ('authorizing') must be preceded and modified by a possessive pronoun ('his').","Eliminated because the past verb phrase 'strongly objected' is grammatically correct.","Eliminated because 'authorizing' is correctly functioning as a gerund object.","Eliminated because the prepositional phrase 'without prior approval' is standard and error-free.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: '[Having finished] the comprehensive audit, [the liquidation report] [was submitted] by the state auditor [to the Ombudsman].'","Having finished","the liquidation report","was submitted","to the Ombudsman","B","Step-by-Step Solution:
+1. Identify the introductory modifier: 'Having finished the comprehensive audit' (a participial modifier indicating someone completed an audit).
+2. Rule: The noun immediately following the comma must be the logical agent performing the action.
+3. Did the 'liquidation report' finish the audit? No, a report cannot perform an audit. The state auditor finished the audit.
+4. Placing 'the liquidation report' right after the comma creates a classic DANGLING PARTICIPIAL MODIFIER.
+5. The error is in portion B ('the liquidation report' should be replaced by 'the state auditor').
+
+Common Trap: Failing to notice that the passive subject ('report') cannot logically perform the action in the opening phrase.
+Exam Tip: If an introductory phrase describes an action, check if the noun right after the comma is capable of doing that action.","Correct. 'The liquidation report' creates a dangling modifier error because a document cannot perform the audit described in the introductory participial phrase.","Eliminated because the participial phrase 'Having finished' is structurally sound.","Eliminated because past passive 'was submitted' is grammatically formed.","Eliminated because prepositional phrase 'to the Ombudsman' is correct.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The new executive order is [intended to] [streamline] licensing procedures, [reduce] bureaucratic red tape, and [to eliminate] unnecessary processing fees.'","intended to","streamline","reduce","to eliminate","D","Step-by-Step Solution:
+1. Analyze the coordinated series following 'intended to':
+ - Item 1: 'streamline' (base verb governed by 'to')
+ - Item 2: 'reduce' (base verb governed by 'to')
+ - Item 3: 'to eliminate' (infinitive with redundant 'to')
+2. Rule for parallelism in infinitive series: If the initial 'to' governs the entire series, subsequent coordinated verbs must remain in the base form ('streamline, reduce, and eliminate') or repeat 'to' before EVERY single verb ('to streamline, to reduce, and to eliminate').
+3. Inserting 'to' only before the third verb disrupts the established parallel structure.
+4. The error is in portion D ('to eliminate' should be 'eliminate').
+
+Common Trap: Irregularly inserting 'to' on the last item of a parallel series.
+Exam Tip: In a list of infinitives: Either use 'to' once at the start ('to A, B, and C') OR repeat 'to' on every item ('to A, to B, and to C'). Never 'to A, B, and to C'.","Correct. 'To eliminate' violates parallel structure; because 'to' was omitted before 'reduce', it must also be omitted before 'eliminate'.","Eliminated because 'intended to' correctly establishes the predicate governing the series.","Eliminated because base verb 'streamline' is parallel.","Eliminated because base verb 'reduce' correctly follows the shared 'to'.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The legal counsel advised that [if the respondent] [was] present during the closed-door deliberation, the entire resolution [would be] rendered [null and void].'","if the respondent","was","would be","null and void","B","Step-by-Step Solution:
+1. Analyze the conditional clause: 'if the respondent was present... the resolution would be rendered...'.
+2. The condition expresses a hypothetical / contrary-to-fact situation in the past/present subjunctive.
+3. Rule for contrary-to-fact conditionals: The subjunctive mood requires 'were' (not 'was') regardless of the singular subject ('respondent').
+4. The error is in portion B ('was' should be 'were').
+
+Common Trap: Using 'was' with singular third-person nouns ('the respondent') in conditional hypothetical clauses.
+Exam Tip: 'If + subject + WERE' is strictly required for contrary-to-fact hypothetical statements in formal grammar tests.","Correct. 'Was' is erroneous; hypothetical/contrary-to-fact conditional clauses require the subjunctive form 'were'.","Eliminated because 'if the respondent' correctly introduces the conditional subject.","Eliminated because 'would be' is the correct conditional modal auxiliary.","Eliminated because 'null and void' is standard legal idiom.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The revenue figures of the southern district [are] [considerably] [higher than] [the northern district].'","are","considerably","higher than","the northern district","D","Step-by-Step Solution:
+1. Examine the items being compared:
+ - Subject: 'The revenue figures of the southern district' (plural financial figures).
+ - Comparative target: 'the northern district' (a geographical district).
+2. Illogical comparison error: Comparing financial revenue figures directly to a geographical territory.
+3. Proper comparison: Must compare revenue figures to revenue figures using 'those of the northern district'.
+4. The error is in portion D ('the northern district' should be 'those of the northern district').
+
+Common Trap: Comparing a statistic directly to a location or entity.
+Exam Tip: When comparing attributes of two places or things, ensure the second element has 'that of' or 'those of'.","Correct. 'The northern district' creates an illogical comparison by comparing revenue figures to a geographic location; it must be 'those of the northern district'.","Eliminated because plural verb 'are' agrees with plural subject 'figures'.","Eliminated because adverb 'considerably' correctly modifies 'higher'.","Eliminated because 'higher than' is the correct comparative adjective phrase.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The human resources division [has distributed] the revised code of conduct [to every employee], instructing [them] to sign the acknowledgment receipt [promptly].'","has distributed","to every employee","them","promptly","C","Step-by-Step Solution:
+1. Identify the antecedent: 'every employee' (singular indefinite noun phrase).
+2. Rule for pronoun-antecedent agreement: A singular antecedent modified by 'every' must be referred to by a singular pronoun ('him or her', 'his or her').
+3. Using plural pronoun 'them' to refer back to singular 'every employee' creates a pronoun-antecedent agreement error in formal prescriptive grammar.
+4. The error is in portion C ('them' should be 'him or her').
+
+Common Trap: Using plural 'them' for singular antecedents modified by 'every' in formal test grammar.
+Exam Tip: 'Every', 'each', 'everyone' are strictly singular and require singular pronouns in standardized civil service tests.","Correct. 'Them' is a plural pronoun that erroneously disagrees in number with the singular antecedent 'every employee' ('him or her' is required).","Eliminated because singular verb 'has distributed' correctly agrees with collective subject 'division'.","Eliminated because prepositional phrase 'to every employee' is grammatically correct.","Eliminated because adverb 'promptly' correctly modifies infinitive 'to sign'.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'Between the two proposed mass transit routes, the urban planning board [concluded] that the subway alignment was [the most] [economically viable] option [for the city].'","concluded","the most","economically viable","for the city","B","Step-by-Step Solution:
+1. Examine the context: 'Between the TWO proposed mass transit routes' (comparison between EXACTLY TWO options).
+2. Rule for degrees of comparison:
+ - When comparing exactly two items -> Use the COMPARATIVE ° ('more', '-er').
+ - When comparing three or more items -> Use the SUPERLATIVE ° ('most', '-est').
+3. Using superlative 'the most' for two items is a grammatical ° error.
+4. The error is in portion B ('the most' should be 'the more').
+
+Common Trap: Automatically using 'the most' because it sounds more emphatic.
+Exam Tip: Watch for 'Between the two...' at the start of a sentence—it strictly requires comparative ° ('the more', 'the better').","Correct. 'The most' is a superlative ° error; comparing exactly two routes requires the comparative ° 'the more'.","Eliminated because past verb 'concluded' is grammatically correct.","Eliminated because adjective phrase 'economically viable' is properly formed.","Eliminated because prepositional phrase 'for the city' is correct.","Verbal Ability","Verbal Ability | Sentence Correction and Error Identification | Error Detection and Sentence Mechanics | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"
+"Identify the underlined portion that contains a grammatical error: 'The bureau director [insisted] that the regional investigator [submits] a comprehensive liquidation report [prior to] [attending] the national convention.'","insisted","submits","prior to","attending","B","Step-by-Step Solution:
+1. Examine the main verb: 'insisted that...'.
+2. Rule for the mandative subjunctive: Verbs of demand, insistence, mandate, or recommendation ('insist', 'demand', 'recommend', 'require') followed by a 'that' clause require the BASE FORM (bare infinitive) of the verb for all subjects.
+3. Subject in clause: 'the regional investigator'.
+4. The required subjunctive verb is base form 'submit' (without '-s').
+5. The indicative form 'submits' is an error.
+6. The error is in portion B ('submits' should be 'submit').
+
+Common Trap: Adding '-s' to make the verb agree with the singular noun in a mandative subjunctive clause.
+Exam Tip: After 'insisted that', 'demanded that', 'recommended that' -> Use the bare base verb without '-s' or past tense inflections.","Correct. 'Submits' violates the mandative subjunctive rule; after the verb of insistence ('insisted that...'), the base verb 'submit' is required.","Eliminated because past reporting verb 'insisted' is grammatically correct.","Eliminated because compound preposition 'prior to' is standard.","Eliminated because gerund 'attending' correctly follows preposition 'to'.","Verbal Ability","Verbal Ability | Grammar and Correct Usage | Structural Grammar and Balarila | Identifying sentence errors (underlined format) | Difficult | Batch VA-023"

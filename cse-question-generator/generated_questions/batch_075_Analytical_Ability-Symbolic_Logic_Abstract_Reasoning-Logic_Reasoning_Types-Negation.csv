@@ -1,176 +1,170 @@
-"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"What is the exact formal logical negation of the material conditional statement: \"If an agency director approves the procurement ($D$), then the contractor delivers the equipment ($C$)\" [$D \implies C$]?","The agency director approves the procurement ($D$), AND the contractor does NOT deliver the equipment ($\neg C$).","If the agency director does not approve the procurement ($\neg D$), then the contractor does not deliver the equipment ($\neg C$).","The agency director does not approve the procurement ($\neg D$), OR the contractor delivers the equipment ($C$).","If the contractor delivers the equipment ($C$), then the agency director approves the procurement ($D$).","A","Step-by-Step Solution:
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation"
+"What is the exact formal logical negation of the material conditional statement: \""If an agency director approves the procurement (D), then the contractor delivers the equipment (C)\"" [D implies C]?","The agency director approves the procurement (D), AND the contractor does NOT deliver the equipment (neg C).","If the agency director does not approve the procurement (neg D), then the contractor does not deliver the equipment (neg C).","The agency director does not approve the procurement (neg D), OR the contractor delivers the equipment (C).","If the contractor delivers the equipment (C), then the agency director approves the procurement (D).","A","Step-by-Step Solution:
 1. Represent the conditional statement in symbolic logic:
-   - Conditional Formula: $D \implies C$.
-2. Express the conditional in terms of primitive operators ($\neg$ and $\lor$):
-   - $D \implies C \equiv \neg D \lor C$.
+ - Conditional Formula: D implies C.
+2. Express the conditional in terms of primitive operators (neg and lor):
+ - D implies C ≡ neg D lor C.
 3. Apply the negation operator to the entire formula:
-   - $\neg(D \implies C) \equiv \neg(\neg D \lor C)$.
+ - neg(D implies C) ≡ neg(neg D lor C).
 4. Apply De Morgan's Law and Double Negation:
-   - $\neg(\neg D) \land \neg C \equiv D \land \neg C$.
+ - neg(neg D) land neg C ≡ D land neg C.
 5. Translate into natural language:
-   - \"The agency director approves the procurement ($D$) AND the contractor does NOT deliver the equipment ($\neg C$).\"
-6. Evaluate incorrect alternatives:
-   - Option B ($\neg D \implies \neg C$): The Inverse of the conditional.
-   - Option C ($\neg D \lor C$): The original conditional itself in disjunctive form.
-   - Option D ($C \implies D$): The Converse.
-
-Common Trap: Assuming the negation of an \"If-Then\" statement is another \"If-Then\" statement. In formal logic, the negation of a conditional is always a CONJUNCTION ($P \land \neg Q$).
-Exam Tip: $\neg(P \implies Q) \equiv P \land \neg Q$ (Condition holds, but the promised result fails).","Correct. Survives elimination because the formal negation of P -> Q is P and ~Q, representing the exact case where the conditional promise is broken.","Eliminated because ~D -> ~C is the inverse.","Eliminated because ~D or C is logically equivalent to the original conditional, not its negation.","Eliminated because C -> D is the converse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"According to generalized De Morgan's Laws, what is the exact logical negation of the compound statement: \"Neither officer Santos was reassigned ($S$) NOR officer Reyes was promoted ($R$)\" [$\neg S \land \neg R$]?","Officer Santos was reassigned ($S$) OR officer Reyes was promoted ($R$) [$S \lor R$].","Officer Santos was reassigned ($S$) AND officer Reyes was promoted ($R$) [$S \land R$].","If officer Santos was reassigned ($S$), then officer Reyes was promoted ($R$).","Officer Santos was not reassigned ($\neg S$), and officer Reyes was not promoted ($\neg R$).","A","Step-by-Step Solution:
+ - \""The agency director approves the procurement (D) AND the contractor does NOT deliver the equipment (neg C).\"
+"6. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (neg D implies neg C): The Inverse of the conditional.","","","","","",""
+"- Option C (neg D lor C): The original conditional itself in disjunctive form.","","","","","",""
+"- Option D (C implies D): The Converse.","","","","","",""
+"Common Trap: Assuming the negation of an \""If-Then\"" statement is another \""If-Then\"" statement. In formal logic","the negation of a conditional is always a CONJUNCTION (P land neg Q).","","","","",""
+"Exam Tip: neg(P implies Q) ≡ P land neg Q (Condition holds","but the promised result fails).""","Correct. Survives elimination because the formal negation of P -> Q is P and ~Q, representing the exact case where the conditional promise is broken.","Eliminated because ~D -> ~C is the inverse.","Eliminated because ~D or C is logically equivalent to the original conditional, not its negation.","Eliminated because C -> D is the converse.","Analytical Ability"
+"According to generalized De Morgan's Laws, what is the exact logical negation of the compound statement: \""Neither officer Santos was reassigned (S) NOR officer Reyes was promoted (R)\"" [neg S land neg R]?","Officer Santos was reassigned (S) OR officer Reyes was promoted (R) [S lor R].","Officer Santos was reassigned (S) AND officer Reyes was promoted (R) [S land R].","If officer Santos was reassigned (S), then officer Reyes was promoted (R).","Officer Santos was not reassigned (neg S), and officer Reyes was not promoted (neg R).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
-   - \"Neither $S$ nor $R$\" $\equiv \neg S \land \neg R \equiv \neg(S \lor R)$.
+ - \""Neither S nor R\"" ≡ neg S land neg R ≡ neg(S lor R).
 2. Apply negation to the proposition:
-   - $\neg[\neg(S \lor R)]$.
-3. Apply the Law of Double Negation Elimination ($\neg \neg P \equiv P$):
-   - $\neg[\neg(S \lor R)] \equiv S \lor R$.
+ - neg[neg(S lor R)].
+3. Apply the Law of Double Negation Elimination (neg neg P ≡ P):
+ - neg[neg(S lor R)] ≡ S lor R.
 4. Translate into natural language:
-   - \"Officer Santos was reassigned ($S$) OR officer Reyes was promoted ($R$).\"
-5. Evaluate incorrect alternatives:
-   - Option B ($S \land R$): Conjunction claiming both events occurred (overly restrictive).
-   - Option C ($S \implies R$): A conditional statement.
-   - Option D ($\neg S \land \neg R$): The original statement restated.
-
-Common Trap: Believing that negating \"Neither A nor B\" requires \"Both A and B\". It only requires \"At least one of A or B\" ($A \lor B$).
-Exam Tip: $\neg(\text{Neither A nor B}) \equiv A \text{ OR } B$.","Correct. Survives elimination because the negation of ~(S or R) simplifies via Double Negation to S or R.","Eliminated because S and R is a conjunction requiring both, whereas at least one is sufficient to falsify \"neither\".","Eliminated because S -> R is a conditional.","Eliminated because this is the original statement unnegated.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the exact logical negation of the universally quantified conditional proposition: \"All civil servants who pass the comprehensive examination ($P$) receive a merit promotion ($M$)\" [$\forall x (P(x) \implies M(x))$]?","There is at least one civil servant who passes the comprehensive examination ($P$) but does NOT receive a merit promotion ($\neg M$).","No civil servant who passes the comprehensive examination receives a merit promotion.","All civil servants who do not pass the comprehensive examination do not receive a merit promotion.","There is at least one civil servant who does not pass the examination and does not receive a promotion.","A","Step-by-Step Solution:
+ - \""Officer Santos was reassigned (S) OR officer Reyes was promoted (R).\"
+"5. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (S land R): Conjunction claiming both events occurred (overly restrictive).","","","","","",""
+"- Option C (S implies R): A conditional statement.","","","","","",""
+"- Option D (neg S land neg R): The original statement restated.","","","","","",""
+"Common Trap: Believing that negating \""Neither A nor B\"" requires \""Both A and B\"". It only requires \""At least one of A or B\"" (A lor B).","","","","","",""
+"Exam Tip: neg(Neither A nor B) ≡ A OR B.""","Correct. Survives elimination because the negation of ~(S or R) simplifies via Double Negation to S or R.","Eliminated because S and R is a conjunction requiring both, whereas at least one is sufficient to falsify \""neither\"".","Eliminated because S -> R is a conditional.","Eliminated because this is the original statement unnegated.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
+"What is the exact logical negation of the universally quantified conditional proposition: \""All civil servants who pass the comprehensive examination (P) receive a merit promotion (M)\"" [forall x (P(x) implies M(x))]?","There is at least one civil servant who passes the comprehensive examination (P) but does NOT receive a merit promotion (neg M).","No civil servant who passes the comprehensive examination receives a merit promotion.","All civil servants who do not pass the comprehensive examination do not receive a merit promotion.","There is at least one civil servant who does not pass the examination and does not receive a promotion.","A","Step-by-Step Solution:
 1. Express the proposition in first-order predicate logic:
-   - Universal Affirmative: $\forall x (P(x) \implies M(x))$.
+ - Universal Affirmative: forall x (P(x) implies M(x)).
 2. Negate the universal quantifier:
-   - $\neg \forall x (P(x) \implies M(x)) \equiv \exists x \neg(P(x) \implies M(x))$.
+ - neg forall x (P(x) implies M(x)) ≡ exists x neg(P(x) implies M(x)).
 3. Negate the internal conditional proposition:
-   - $\neg(P(x) \implies M(x)) \equiv P(x) \land \neg M(x)$.
+ - neg(P(x) implies M(x)) ≡ P(x) land neg M(x).
 4. Combine into final quantified negation:
-   - $\exists x (P(x) \land \neg M(x))$.
+ - exists x (P(x) land neg M(x)).
 5. Translate into natural language:
-   - \"There exists at least one civil servant who passes the comprehensive examination ($P$) AND does NOT receive a merit promotion ($\neg M$).\"
-6. Evaluate incorrect alternatives:
-   - Option B: Universal Negative ($\forall x (P(x) \implies \neg M(x))$), which is the contrary, not the contradictory.
-   - Option C: Universal Inverse.
-   - Option D: Incorrectly negates the antecedent $P(x)$.
-
-Common Trap: Selecting \"No civil servant receives a promotion\" (contrary) instead of finding a single counterexample (contradictory).
-Exam Tip: To disprove \"All S are P\", you only need ONE instance of \"S that is NOT P\".","Correct. Survives elimination because the formal logical negation of a universal conditional is the existential statement asserting an antecedent that fails the consequent: exists x (P(x) and ~M(x)).","Eliminated because universal negative \"No civil servant\" is the contrary rather than the minimal contradictory negation.","Eliminated because this is the inverse proposition.","Eliminated because it incorrectly negates the qualifying antecedent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the exact logical negation of the compound logical formula: \"P \land (Q \lor R)\"?","\neg P \lor (\neg Q \land \neg R)","\neg P \land (\neg Q \lor \neg R)","\neg P \lor (\neg Q \lor \neg R)","\neg P \land (\neg Q \land \neg R)","A","Step-by-Step Solution:
+ - \""There exists at least one civil servant who passes the comprehensive examination (P) AND does NOT receive a merit promotion (neg M).\"
+"6. Evaluate incorrect alternatives:","","","","","",""
+"- Option B: Universal Negative (forall x (P(x) implies neg M(x)))","which is the contrary","not the contradictory.","","","",""
+"- Option C: Universal Inverse.","","","","","",""
+"- Option D: Incorrectly negates the antecedent P(x).","","","","","",""
+"Common Trap: Selecting \""No civil servant receives a promotion\"" (contrary) instead of finding a single counterexample (contradictory).","","","","","",""
+"Exam Tip: To disprove \""All S are P\""","you only need ONE instance of \""S that is NOT P\"".""","Correct. Survives elimination because the formal logical negation of a universal conditional is the existential statement asserting an antecedent that fails the consequent: exists x (P(x) and ~M(x)).","Eliminated because universal negative \""No civil servant\"" is the contrary rather than the minimal contradictory negation.","Eliminated because this is the inverse proposition.","Eliminated because it incorrectly negates the qualifying antecedent.","Analytical Ability"
+"What is the exact logical negation of the compound logical formula: \""P land (Q lor R)\""?","neg P lor (neg Q land neg R)","neg P land (neg Q lor neg R)","neg P lor (neg Q lor neg R)","neg P land (neg Q land neg R)","A","Step-by-Step Solution:
 1. Write the full formula under negation:
-   - $\neg[P \land (Q \lor R)]$.
-2. Apply De Morgan's Law to the main conjunction ($\land$):
-   - $\neg P \lor \neg(Q \lor R)$.
-3. Apply De Morgan's Law to the sub-formula $\neg(Q \lor R)$:
-   - $\neg(Q \lor R) \equiv \neg Q \land \neg R$.
+ - neg[P land (Q lor R)].
+2. Apply De Morgan's Law to the main conjunction (land):
+ - neg P lor neg(Q lor R).
+3. Apply De Morgan's Law to the sub-formula neg(Q lor R):
+ - neg(Q lor R) ≡ neg Q land neg R.
 4. Substitute back into the main expression:
-   - $\neg P \lor (\neg Q \land \neg R)$.
+ - neg P lor (neg Q land neg R).
 5. Evaluate incorrect alternatives:
-   - Option B: Fails to change the main connective from AND to OR.
-   - Option C: Fails to change the inner connective from OR to AND.
-   - Option D: Incorrectly uses AND for both connectives.
+ - Option B: Fails to change the main connective from AND to OR.
+ - Option C: Fails to change the inner connective from OR to AND.
+ - Option D: Incorrectly uses AND for both connectives.
 
 Common Trap: Forgetting that negating a nested formula requires flipping ALL conjunctions to disjunctions and all disjunctions to conjunctions at each hierarchical level.
-Exam Tip: $\neg[P \land (Q \lor R)] \equiv \neg P \lor (\neg Q \land \neg R)$.","Correct. Survives elimination because applying De Morgan's laws recursively yields ~P or (~Q and ~R).","Eliminated because the outer operator must be disjunction (or).","Eliminated because the inner operator must be conjunction (and).","Eliminated because the outer operator was not flipped to disjunction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the exact logical negation of the existential negative proposition: \"Some government agencies do NOT have an active public portal ($\exists x (A(x) \land \neg W(x))$)\"?","Every government agency has an active public portal ($\forall x (A(x) \implies W(x))$).","No government agency has an active public portal.","Some government agencies have an active public portal.","Every government agency does not have an active public portal.","A","Step-by-Step Solution:
+Exam Tip: neg[P land (Q lor R)] ≡ neg P lor (neg Q land neg R)."
+"What is the exact logical negation of the existential negative proposition: \""Some government agencies do NOT have an active public portal (exists x (A(x) land neg W(x)))\""?","Every government agency has an active public portal (forall x (A(x) implies W(x))).","No government agency has an active public portal.","Some government agencies have an active public portal.","Every government agency does not have an active public portal.","A","Step-by-Step Solution:
 1. Identify the categorical type of the proposition:
-   - Statement: \"Some $A$ are not $W$\" ($O$-proposition: Particular Negative).
+ - Statement: \""Some A are not W\"" (O-proposition: Particular Negative).
 2. Locate the Contradictory on the Square of Opposition:
-   - The contradictory of an $O$-proposition is the $A$-proposition (Universal Affirmative).
+ - The contradictory of an O-proposition is the A-proposition (Universal Affirmative).
 3. Express using predicate logic negation:
-   - $\neg \exists x (A(x) \land \neg W(x)) \equiv \forall x \neg(A(x) \land \neg W(x))$.
-   - $\neg(A(x) \land \neg W(x)) \equiv \neg A(x) \lor W(x) \equiv A(x) \implies W(x)$.
-   - Result: $\forall x (A(x) \implies W(x))$ (\"Every government agency has an active public portal\").
+ - neg exists x (A(x) land neg W(x)) ≡ forall x neg(A(x) land neg W(x)).
+ - neg(A(x) land neg W(x)) ≡ neg A(x) lor W(x) ≡ A(x) implies W(x).
+ - Result: forall x (A(x) implies W(x)) (\""Every government agency has an active public portal\"").
 4. Evaluate incorrect alternatives:
-   - Option B: Universal Negative ($E$-proposition).
-   - Option C: Particular Affirmative ($I$-proposition, which is the Subcontrary of $O$).
-   - Option D: Universal Negative restated.
+ - Option B: Universal Negative (E-proposition).
+ - Option C: Particular Affirmative (I-proposition, which is the Subcontrary of O).
+ - Option D: Universal Negative restated.
 
-Common Trap: Confusing the Subcontrary ($I$: \"Some do\") with the exact logical Contradictory/Negation ($A$: \"All do\").
-Exam Tip: $\neg(\text{Some S are NOT P}) \equiv \text{ALL S are P}$.","Correct. Survives elimination because the contradictory of a Particular Negative (O) on the Square of Opposition is strictly the Universal Affirmative (A).","Eliminated because \"No agency\" is the Universal Negative (E).","Eliminated because \"Some agencies do\" is the Subcontrary (I), which can be true simultaneously with O.","Eliminated because this is identical to the Universal Negative (E).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the exact logical negation of the biconditional proposition: \"A legislative bill becomes law ($L$) if and only if the President signs it ($S$)\" [$L \leftrightarrow S$]?","Either the bill becomes law without presidential signature, OR the President signs it but it does not become law ($L \oplus S$).","The bill does not become law, and the President does not sign it.","If the President does not sign the bill, it does not become law.","The bill becomes law, and the President signs it.","A","Step-by-Step Solution:
+Common Trap: Confusing the Subcontrary (I: \""Some do\"") with the exact logical Contradictory/Negation (A: \""All do\"").
+Exam Tip: neg(Some S are NOT P) ≡ ALL S are P."
+"What is the exact logical negation of the biconditional proposition: \""A legislative bill becomes law (L) if and only if the President signs it (S)\"" [L leftrightarrow S]?","Either the bill becomes law without presidential signature, OR the President signs it but it does not become law (L oplus S).","The bill does not become law, and the President does not sign it.","If the President does not sign the bill, it does not become law.","The bill becomes law, and the President signs it.","A","Step-by-Step Solution:
 1. Represent the biconditional symbolically:
-   - $L \leftrightarrow S \equiv (L \implies S) \land (S \implies L) \equiv (L \land S) \lor (\neg L \land \neg S)$.
+ - L leftrightarrow S ≡ (L implies S) land (S implies L) ≡ (L land S) lor (neg L land neg S).
 2. Apply negation to the formula:
-   - $\neg(L \leftrightarrow S) \equiv \neg[(L \land S) \lor (\neg L \land \neg S)]$.
+ - neg(L leftrightarrow S) ≡ neg[(L land S) lor (neg L land neg S)].
 3. Apply De Morgan's Law:
-   - $\neg(L \land S) \land \neg(\neg L \land \neg S) \equiv (\neg L \lor \neg S) \land (L \lor S)$.
-4. Recognize the Exclusive OR ($L \oplus S$):
-   - $(L \lor S) \land (\neg L \lor \neg S) \equiv (L \land \neg S) \lor (\neg L \land S) \equiv L \oplus S$.
+ - neg(L land S) land neg(neg L land neg S) ≡ (neg L lor neg S) land (L lor S).
+4. Recognize the Exclusive OR (L oplus S):
+ - (L lor S) land (neg L lor neg S) ≡ (L land neg S) lor (neg L land S) ≡ L oplus S.
 5. Translate into natural language:
-   - \"Either the bill becomes law without presidential signature ($L \land \neg S$) OR the President signs it but it does not become law ($\neg L \land S$).\"
-6. Evaluate incorrect alternatives:
-   - Option B ($\neg L \land \neg S$): Evaluates $L \leftrightarrow S$ to True (both false).
-   - Option C ($\neg S \implies \neg L$): One directional half of the biconditional.
-   - Option D ($L \land S$): Evaluates $L \leftrightarrow S$ to True (both true).
-
-Common Trap: Selecting $\neg L \land \neg S$, not realizing that when both are false, the biconditional is actually TRUE!
-Exam Tip: $\neg(P \leftrightarrow Q) \equiv P \oplus Q$ (The negation of a Biconditional is the Exclusive OR).","Correct. Survives elimination because the exact logical negation of a biconditional P <-> Q is the Exclusive OR P XOR Q, where one is true and the other is false.","Eliminated because when both are false, the biconditional evaluates to True.","Eliminated because this is the contrapositive of one half of the biconditional.","Eliminated because when both are true, the biconditional evaluates to True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the logical negation of the Exclusive OR statement: \"Either applicant X is hired ($X$) OR applicant Y is hired ($Y$), but not both\" [$X \oplus Y$]?","Either both applicants X and Y are hired, OR neither applicant is hired [$(X \land Y) \lor (\neg X \land \neg Y) \equiv X \leftrightarrow Y$].","Neither applicant X nor applicant Y is hired.","Both applicant X and applicant Y are hired.","Applicant X is hired and applicant Y is not hired.","A","Step-by-Step Solution:
-1. State the formula for Exclusive OR ($X \oplus Y$):
-   - $X \oplus Y \equiv (X \land \neg Y) \lor (\neg X \land Y)$.
+ - \""Either the bill becomes law without presidential signature (L land neg S) OR the President signs it but it does not become law (neg L land S).\"
+"6. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (neg L land neg S): Evaluates L leftrightarrow S to True (both false).","","","","","",""
+"- Option C (neg S implies neg L): One directional half of the biconditional.","","","","","",""
+"- Option D (L land S): Evaluates L leftrightarrow S to True (both true).","","","","","",""
+"Common Trap: Selecting neg L land neg S","not realizing that when both are false","the biconditional is actually TRUE!","","","",""
+"Exam Tip: neg(P leftrightarrow Q) ≡ P oplus Q (The negation of a Biconditional is the Exclusive OR).""","Correct. Survives elimination because the exact logical negation of a biconditional P <-> Q is the Exclusive OR P XOR Q, where one is true and the other is false.","Eliminated because when both are false, the biconditional evaluates to True.","Eliminated because this is the contrapositive of one half of the biconditional.","Eliminated because when both are true, the biconditional evaluates to True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
+"What is the logical negation of the Exclusive OR statement: \""Either applicant X is hired (X) OR applicant Y is hired (Y), but not both\"" [X oplus Y]?","Either both applicants X and Y are hired, OR neither applicant is hired [(X land Y) lor (neg X land neg Y) ≡ X leftrightarrow Y].","Neither applicant X nor applicant Y is hired.","Both applicant X and applicant Y are hired.","Applicant X is hired and applicant Y is not hired.","A","Step-by-Step Solution:
+1. State the formula for Exclusive OR (X oplus Y):
+ - X oplus Y ≡ (X land neg Y) lor (neg X land Y).
 2. Apply the negation operator:
-   - $\neg(X \oplus Y)$.
+ - neg(X oplus Y).
 3. Recall that the negation of Exclusive OR is the Biconditional / Equivalence:
-   - $\neg(X \oplus Y) \equiv X \leftrightarrow Y$.
+ - neg(X oplus Y) ≡ X leftrightarrow Y.
 4. Expand the Biconditional into truth-functional disjunction:
-   - $X \leftrightarrow Y \equiv (X \land Y) \lor (\neg X \land \neg Y)$.
+ - X leftrightarrow Y ≡ (X land Y) lor (neg X land neg Y).
 5. Translate into natural language:
-   - \"Either both applicants $X$ and $Y$ are hired, OR neither applicant is hired.\"
-6. Evaluate incorrect alternatives:
-   - Option B: Captures only one half of the negation ($\neg X \land \neg Y$).
-   - Option C: Captures only one half of the negation ($X \land Y$).
-   - Option D: A scenario where $X \oplus Y$ is True.
-
-Common Trap: Selecting only \"both are hired\" or only \"neither is hired\" instead of their complete disjunction.
-Exam Tip: $\neg(X \oplus Y) \equiv (X \land Y) \lor (\neg X \land \neg Y) \equiv X \leftrightarrow Y$.","Correct. Survives elimination because the negation of XOR is the logical biconditional (both true OR both false).","Eliminated because this represents only one of the two possible negating cases.","Eliminated because this represents only one of the two possible negating cases.","Eliminated because this is a case where the original XOR statement is True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"Consider the quantified proposition: \"Every employee in Division 1 passed the safety inspection ($S$) OR passed the ethics evaluation ($E$)\" [$\forall x (S(x) \lor E(x))$]. What is its exact logical negation?","There is at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation ($\exists x (\neg S(x) \land \neg E(x))$).","No employee in Division 1 passed the safety inspection or ethics evaluation.","There is at least one employee who did not pass the safety inspection OR did not pass the ethics evaluation.","Every employee in Division 1 failed both evaluations.","A","Step-by-Step Solution:
+ - \""Either both applicants X and Y are hired, OR neither applicant is hired.\"
+"6. Evaluate incorrect alternatives:","","","","","",""
+"- Option B: Captures only one half of the negation (neg X land neg Y).","","","","","",""
+"- Option C: Captures only one half of the negation (X land Y).","","","","","",""
+"- Option D: A scenario where X oplus Y is True.","","","","","",""
+"Common Trap: Selecting only \""both are hired\"" or only \""neither is hired\"" instead of their complete disjunction.","","","","","",""
+"Exam Tip: neg(X oplus Y) ≡ (X land Y) lor (neg X land neg Y) ≡ X leftrightarrow Y.""","Correct. Survives elimination because the negation of XOR is the logical biconditional (both true OR both false).","Eliminated because this represents only one of the two possible negating cases.","Eliminated because this represents only one of the two possible negating cases.","Eliminated because this is a case where the original XOR statement is True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
+"Consider the quantified proposition: \""Every employee in Division 1 passed the safety inspection (S) OR passed the ethics evaluation (E)\"" [forall x (S(x) lor E(x))]. What is its exact logical negation?","There is at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation (exists x (neg S(x) land neg E(x))).","No employee in Division 1 passed the safety inspection or ethics evaluation.","There is at least one employee who did not pass the safety inspection OR did not pass the ethics evaluation.","Every employee in Division 1 failed both evaluations.","A","Step-by-Step Solution:
 1. Write the quantified formula:
-   - $\forall x (S(x) \lor E(x))$.
+ - forall x (S(x) lor E(x)).
 2. Negate the universal quantifier:
-   - $\neg \forall x (S(x) \lor E(x)) \equiv \exists x \neg(S(x) \lor E(x))$.
+ - neg forall x (S(x) lor E(x)) ≡ exists x neg(S(x) lor E(x)).
 3. Apply De Morgan's Law to the internal disjunction:
-   - $\neg(S(x) \lor E(x)) \equiv \neg S(x) \land \neg E(x)$.
+ - neg(S(x) lor E(x)) ≡ neg S(x) land neg E(x).
 4. Combine into final expression:
-   - $\exists x (\neg S(x) \land \neg E(x))$.
+ - exists x (neg S(x) land neg E(x)).
 5. Translate into natural language:
-   - \"There exists at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation.\"
-6. Evaluate incorrect alternatives:
-   - Option B: Universal statement (contrary).
-   - Option C ($\exists x (\neg S(x) \lor \neg E(x))$): Failed to flip OR to AND under De Morgan's Law.
-   - Option D: Universal statement.
-
-Common Trap: Forgetting to change the disjunction ($\lor$) to a conjunction ($\land$) inside the negated existential claim.
-Exam Tip: $\neg \forall x (S \lor E) \equiv \exists x (\neg S \land \neg E)$.","Correct. Survives elimination because negating the universal quantifier yields existential quantifier, and De Morgan's law negates S or E into (~S and ~E).","Eliminated because universal negative is the contrary.","Eliminated because failing one evaluation is not enough if they passed the other (OR inside is invalid).","Eliminated because universal failure is an overstatement.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"What is the exact logical negation of the conjunction of two conditional statements: \"(P \implies Q) \land (Q \implies R)\"?","(P \land \neg Q) \lor (Q \land \neg R)","(\neg P \lor Q) \land (\neg Q \lor R)","(P \land \neg Q) \land (Q \land \neg R)","(\neg P \land Q) \lor (\neg Q \land R)","A","Step-by-Step Solution:
+ - \""There exists at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation.\"
+"6. Evaluate incorrect alternatives:","","","","","",""
+"- Option B: Universal statement (contrary).","","","","","",""
+"- Option C (exists x (neg S(x) lor neg E(x))): Failed to flip OR to AND under De Morgan's Law.","","","","","",""
+"- Option D: Universal statement.","","","","","",""
+"Common Trap: Forgetting to change the disjunction (lor) to a conjunction (land) inside the negated existential claim.","","","","","",""
+"Exam Tip: neg forall x (S lor E) ≡ exists x (neg S land neg E).""","Correct. Survives elimination because negating the universal quantifier yields existential quantifier, and De Morgan's law negates S or E into (~S and ~E).","Eliminated because universal negative is the contrary.","Eliminated because failing one evaluation is not enough if they passed the other (OR inside is invalid).","Eliminated because universal failure is an overstatement.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
+"What is the exact logical negation of the conjunction of two conditional statements: \""(P implies Q) land (Q implies R)\""?","(P land neg Q) lor (Q land neg R)","(neg P lor Q) land (neg Q lor R)","(P land neg Q) land (Q land neg R)","(neg P land Q) lor (neg Q land R)","A","Step-by-Step Solution:
 1. State the formula under negation:
-   - $\neg[(P \implies Q) \land (Q \implies R)]$.
+ - neg[(P implies Q) land (Q implies R)].
 2. Apply De Morgan's Law for conjunctions:
-   - $\neg(P \implies Q) \lor \neg(Q \implies R)$.
-3. Apply the rule of Conditional Negation ($\neg(A \implies B) \equiv A \land \neg B$):
-   - $\neg(P \implies Q) \equiv P \land \neg Q$.
-   - $\neg(Q \implies R) \equiv Q \land \neg R$.
+ - neg(P implies Q) lor neg(Q implies R).
+3. Apply the rule of Conditional Negation (neg(A implies B) ≡ A land neg B):
+ - neg(P implies Q) ≡ P land neg Q.
+ - neg(Q implies R) ≡ Q land neg R.
 4. Substitute both back into the disjunction:
-   - $(P \land \neg Q) \lor (Q \land \neg R)$.
+ - (P land neg Q) lor (Q land neg R).
 5. Evaluate incorrect alternatives:
-   - Option B: The original statement in disjunctive form.
-   - Option C: Connects terms with AND instead of OR.
-   - Option D: Negates antecedent instead of consequent.
+ - Option B: The original statement in disjunctive form.
+ - Option C: Connects terms with AND instead of OR.
+ - Option D: Negates antecedent instead of consequent.
 
-Common Trap: Using AND ($\land$) between the negated conditionals instead of OR ($\lor$).
-Exam Tip: $\neg(A \land B) \equiv \neg A \lor \neg B$; $\neg(P \implies Q) \equiv P \land \neg Q$.","Correct. Survives elimination because De Morgan's law splits the conjunction into a disjunction of negated conditionals: (P and ~Q) or (Q and ~R).","Eliminated because this is the original compound formula written in disjunctive normal form.","Eliminated because the connective between the negated conditionals must be OR.","Eliminated because it negates the antecedents instead of the consequents.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
-"By the fundamental Laws of Propositional Logic, which of the following expressions is strictly logically equivalent to the negated disjunction of negations: \"\neg(\neg P \lor \neg Q)\"?","P \land Q","P \lor Q","\neg P \land \neg Q","\neg(P \land Q)","A","Step-by-Step Solution:
+Common Trap: Using AND (land) between the negated conditionals instead of OR (lor).
+Exam Tip: neg(A land B) ≡ neg A lor neg B; neg(P implies Q) ≡ P land neg Q."
+"By the fundamental Laws of Propositional Logic, which of the following expressions is strictly logically equivalent to the negated disjunction of negations: \""neg(neg P lor neg Q)\""?","P land Q","P lor Q","neg P land neg Q","neg(P land Q)","A","Step-by-Step Solution:
 1. State the initial formula:
-   - $\neg(\neg P \lor \neg Q)$.
+ - neg(neg P lor neg Q).
 2. Apply De Morgan's Law for disjunctions:
-   - $\neg(\neg P) \land \neg(\neg Q)$.
-3. Apply the Double Negation Elimination Law ($\neg \neg A \equiv A$):
-   - $\neg(\neg P) \equiv P$.
-   - $\neg(\neg Q) \equiv Q$.
+ - neg(neg P) land neg(neg Q).
+3. Apply the Double Negation Elimination Law (neg neg A ≡ A):
+ - neg(neg P) ≡ P.
+ - neg(neg Q) ≡ Q.
 4. Combine terms:
-   - $P \land Q$.
+ - P land Q.
 5. Verify with truth table:
-   - If $P = \text{T}, Q = \text{T} \implies \neg(\text{F} \lor \text{F}) = \neg(\text{F}) = \text{True} = P \land Q$.
-   - In all other rows, the formula evaluates to False, matching $P \land Q$ identically.
+ - If P = T, Q = T implies neg(F lor F) = neg(F) = True = P land Q.
+ - In all other rows, the formula evaluates to False, matching P land Q identically.
 6. Evaluate incorrect alternatives:
-   - Option B ($P \lor Q$): Disjunction.
-   - Option C ($\neg P \land \neg Q$): Equivalent to $\neg(P \lor Q)$.
-   - Option D ($\neg(P \land Q)$): Equivalent to $\neg P \lor \neg Q$.
+ - Option B (P lor Q): Disjunction.
+ - Option C (neg P land neg Q): Equivalent to neg(P lor Q).
+ - Option D (neg(P land Q)): Equivalent to neg P lor neg Q.
 
-Common Trap: Confusing $\neg(\neg P \lor \neg Q) \equiv P \land Q$ with $\neg(P \lor Q) \equiv \neg P \land \neg Q$.
-Exam Tip: Negating a disjunction of negations produces a conjunction of positives: $\neg(\neg P \lor \neg Q) \equiv P \land Q$.","Correct. Survives elimination because applying De Morgan's Law and Double Negation converts ~(~P or ~Q) directly into P and Q.","Eliminated because the connective transforms to conjunction (and).","Eliminated because double negations cancel out to positive literals.","Eliminated because ~(P and Q) is ~P or ~Q without the outer negation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Negation | Very Difficult | Batch 075"
+Common Trap: Confusing neg(neg P lor neg Q) ≡ P land Q with neg(P lor Q) ≡ neg P land neg Q.
+Exam Tip: Negating a disjunction of negations produces a conjunction of positives: neg(neg P lor neg Q) ≡ P land Q."

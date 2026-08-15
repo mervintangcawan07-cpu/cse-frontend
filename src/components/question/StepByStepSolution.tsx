@@ -2,6 +2,7 @@
 
 import React from "react";
 import { StepSolutionItem } from "@/types/question";
+import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface StepByStepSolutionProps {
   stepByStep?: string | StepSolutionItem[] | null;
@@ -60,12 +61,12 @@ export default function StepByStepSolution({ stepByStep }: StepByStepSolutionPro
 
       <div className="space-y-2.5 pl-1 border-l-2 border-blue-400 dark:border-blue-500 ml-1">
         {steps.map((s, idx) => (
-          <div key={idx} className="pl-3.5 space-y-0.5">
-            <p className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm">
-              {s.step}
+          <div key={idx} className="pl-3.5 space-y-0.5 min-w-0 break-words">
+            <p className="font-extrabold text-slate-900 dark:text-slate-100 text-xs sm:text-sm break-words">
+              {cleanMathText(s.step)}
             </p>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-medium text-xs sm:text-sm">
-              {s.detail}
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-medium text-xs sm:text-sm break-words">
+              {cleanMathText(s.detail)}
             </p>
           </div>
         ))}

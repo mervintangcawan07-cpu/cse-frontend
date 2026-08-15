@@ -1,172 +1,172 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Six administrative audit stages (P, Q, R, S, T, U) must be performed strictly one at a time under the following constraints: (1) P is executed before Q. (2) R is executed before P. (3) S is executed after Q. (4) T is executed immediately before S. (5) U is executed after S. What is the exact execution order from first to last?","R, P, Q, T, S, U","P, R, Q, T, S, U","R, P, T, Q, S, U","R, Q, P, T, S, U","A","Step-by-Step Solution:
 1. Translate the procedural constraints into chronological sequential relations:
-   - Rule 1: $P < Q$.
-   - Rule 2: $R < P \implies R < P < Q$.
-   - Rule 3: $Q < S \implies R < P < Q < S$.
-   - Rule 4: T is immediately before S $\implies R < P < Q < T < S$.
-   - Rule 5: $S < U \implies R < P < Q < T < S < U$.
+ - Rule 1: P < Q.
+ - Rule 2: R < P implies R < P < Q.
+ - Rule 3: Q < S implies R < P < Q < S.
+ - Rule 4: T is immediately before S implies R < P < Q < T < S.
+ - Rule 5: S < U implies R < P < Q < T < S < U.
 2. Assemble the unique total linear ordering:
-   - 1st Stage: R
-   - 2nd Stage: P
-   - 3rd Stage: Q
-   - 4th Stage: T
-   - 5th Stage: S
-   - 6th Stage: U
+ - 1st Stage: R
+ - 2nd Stage: P
+ - 3rd Stage: Q
+ - 4th Stage: T
+ - 5th Stage: S
+ - 6th Stage: U
 3. Verify complete sequence:
-   - R $\to$ P $\to$ Q $\to$ T $\to$ S $\to$ U.
+ - R to P to Q to T to S to U.
 4. Conclude:
-   - The exact execution order is R, P, Q, T, S, U.
+ - The exact execution order is R, P, Q, T, S, U.
 
 Common Trap: Placing T after S or placing P before R.
 Exam Tip: Chain the inequalities transitively and insert immediate neighbors into their exact contiguous slots.","Correct. Survives elimination because R < P < Q < T < S < U satisfies all 5 procedural ordering constraints in exact sequence.","Eliminated because P is placed before R (violates Rule 2).","Eliminated because T is placed before Q (violates Rule 4).","Eliminated because Q is placed before P (violates Rule 1).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Five public infrastructure projects (A, B, C, D, E) are scheduled for sequential completion: (1) Project C is completed after Project A. (2) Project B is completed before Project A. (3) Project D is completed before Project B. (4) Project E is completed after Project C. Which project is the 3rd project completed in this chronological sequence?","Project A","Project B","Project C","Project D","A","Step-by-Step Solution:
 1. Express completion constraints as timeline inequalities:
-   - Rule 1: $A < C$.
-   - Rule 2: $B < A \implies B < A < C$.
-   - Rule 3: $D < B \implies D < B < A < C$.
-   - Rule 4: $C < E \implies D < B < A < C < E$.
+ - Rule 1: A < C.
+ - Rule 2: B < A implies B < A < C.
+ - Rule 3: D < B implies D < B < A < C.
+ - Rule 4: C < E implies D < B < A < C < E.
 2. List the chronological order from 1st to 5th:
-   - 1st Completed: Project D
-   - 2nd Completed: Project B
-   - 3rd Completed: Project A
-   - 4th Completed: Project C
-   - 5th Completed: Project E
+ - 1st Completed: Project D
+ - 2nd Completed: Project B
+ - 3rd Completed: Project A
+ - 4th Completed: Project C
+ - 5th Completed: Project E
 3. Conclude:
-   - Project A is the 3rd project completed.
+ - Project A is the 3rd project completed.
 
 Common Trap: Confusing Project B (2nd) or Project C (4th) with Project A (3rd).
-Exam Tip: Sequential ordering chain: $D(1) \to B(2) \to A(3) \to C(4) \to E(5)$. The 3rd item is Project A.","Correct. Survives elimination because the full chronological chain D -> B -> A -> C -> E places Project A in the 3rd position.","Eliminated because Project B is completed 2nd.","Eliminated because Project C is completed 4th.","Eliminated because Project D is completed 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Sequential ordering chain: D(1) to B(2) to A(3) to C(4) to E(5). The 3rd item is Project A.","Correct. Survives elimination because the full chronological chain D -> B -> A -> C -> E places Project A in the 3rd position.","Eliminated because Project B is completed 2nd.","Eliminated because Project C is completed 4th.","Eliminated because Project D is completed 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Seven professional training modules (1, 2, 3, 4, 5, 6, 7) must be completed according to prerequisite rules: (1) Module 4 requires completion of Module 2. (2) Module 2 requires completion of Module 1. (3) Module 6 requires completion of Module 4. (4) Module 7 requires completion of Module 6. (5) Module 3 is completed after Module 1, but before Module 2. (6) Module 5 is completed after Module 7. What is the unique linear order of completion?","1, 3, 2, 4, 6, 7, 5","1, 2, 3, 4, 6, 7, 5","3, 1, 2, 4, 6, 7, 5","1, 3, 2, 6, 4, 7, 5","A","Step-by-Step Solution:
 1. Connect prerequisite dependencies:
-   - From Rule 2 and Rule 5: Module 3 is between 1 and 2 $\implies 1 \to 3 \to 2$.
-   - From Rule 1: Module 4 requires 2 $\implies 1 \to 3 \to 2 \to 4$.
-   - From Rule 3: Module 6 requires 4 $\implies 1 \to 3 \to 2 \to 4 \to 6$.
-   - From Rule 4: Module 7 requires 6 $\implies 1 \to 3 \to 2 \to 4 \to 6 \to 7$.
-   - From Rule 6: Module 5 is completed after 7 $\implies 1 \to 3 \to 2 \to 4 \to 6 \to 7 \to 5$.
+ - From Rule 2 and Rule 5: Module 3 is between 1 and 2 implies 1 to 3 to 2.
+ - From Rule 1: Module 4 requires 2 implies 1 to 3 to 2 to 4.
+ - From Rule 3: Module 6 requires 4 implies 1 to 3 to 2 to 4 to 6.
+ - From Rule 4: Module 7 requires 6 implies 1 to 3 to 2 to 4 to 6 to 7.
+ - From Rule 6: Module 5 is completed after 7 implies 1 to 3 to 2 to 4 to 6 to 7 to 5.
 2. Assemble the verified order:
-   - Module 1 $\to$ Module 3 $\to$ Module 2 $\to$ Module 4 $\to$ Module 6 $\to$ Module 7 $\to$ Module 5.
+ - Module 1 to Module 3 to Module 2 to Module 4 to Module 6 to Module 7 to Module 5.
 3. Conclude:
-   - The unique linear order is 1, 3, 2, 4, 6, 7, 5.
+ - The unique linear order is 1, 3, 2, 4, 6, 7, 5.
 
 Common Trap: Placing Module 3 after Module 2 (violates Rule 5).
-Exam Tip: Topologically sort the dependency graph: $1 \to 3 \to 2 \to 4 \to 6 \to 7 \to 5$.","Correct. Survives elimination because 1 -> 3 -> 2 -> 4 -> 6 -> 7 -> 5 strictly satisfies all prerequisite topological dependencies.","Eliminated because 3 is placed after 2 (violates Rule 5).","Eliminated because 3 is placed before 1 (violates Rule 5).","Eliminated because 6 is placed before 4 (violates Rule 3).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Topologically sort the dependency graph: 1 to 3 to 2 to 4 to 6 to 7 to 5.","Correct. Survives elimination because 1 -> 3 -> 2 -> 4 -> 6 -> 7 -> 5 strictly satisfies all prerequisite topological dependencies.","Eliminated because 3 is placed after 2 (violates Rule 5).","Eliminated because 3 is placed before 1 (violates Rule 5).","Eliminated because 6 is placed before 4 (violates Rule 3).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "In a judicial appeals timeline, five legal rulings (V, W, X, Y, Z) were promulgated sequentially: (1) Ruling W was promulgated after Ruling V, but before Ruling X. (2) Ruling Z was promulgated before Ruling V. (3) Ruling Y was promulgated after Ruling X. Which ruling was promulgated 4th in chronological sequence?","Ruling X","Ruling W","Ruling V","Ruling Y","A","Step-by-Step Solution:
 1. Express chronological relationships as inequality orderings:
-   - Rule 1: $V < W < X$.
-   - Rule 2: $Z < V \implies Z < V < W < X$.
-   - Rule 3: $X < Y \implies Z < V < W < X < Y$.
+ - Rule 1: V < W < X.
+ - Rule 2: Z < V implies Z < V < W < X.
+ - Rule 3: X < Y implies Z < V < W < X < Y.
 2. Map the 5 rulings to chronological positions:
-   - 1st Promulgated: Ruling Z
-   - 2nd Promulgated: Ruling V
-   - 3rd Promulgated: Ruling W
-   - 4th Promulgated: Ruling X
-   - 5th Promulgated: Ruling Y
+ - 1st Promulgated: Ruling Z
+ - 2nd Promulgated: Ruling V
+ - 3rd Promulgated: Ruling W
+ - 4th Promulgated: Ruling X
+ - 5th Promulgated: Ruling Y
 3. Conclude:
-   - Ruling X was promulgated 4th.
+ - Ruling X was promulgated 4th.
 
 Common Trap: Confusing Ruling W (3rd) with Ruling X (4th).
-Exam Tip: Chronological sequence: $Z(1) \to V(2) \to W(3) \to X(4) \to Y(5)$. The 4th ruling is X.","Correct. Survives elimination because the full sequence Z -> V -> W -> X -> Y places Ruling X in the 4th position.","Eliminated because Ruling W was promulgated 3rd.","Eliminated because Ruling V was promulgated 2nd.","Eliminated because Ruling Y was promulgated 5th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
-"Six software releases (Alpha, Beta, Gamma, Delta, Epsilon, Zeta) are deployed sequentially: (1) Beta is deployed immediately after Alpha. (2) Delta is deployed immediately after Gamma. (3) Epsilon is deployed after Delta, but before Zeta. (4) Gamma is deployed immediately after Beta. What is the 5th release deployed?","Epsilon","Delta","Zeta","Gamma","A","Step-by-Step Solution:
+Exam Tip: Chronological sequence: Z(1) to V(2) to W(3) to X(4) to Y(5). The 4th ruling is X.","Correct. Survives elimination because the full sequence Z -> V -> W -> X -> Y places Ruling X in the 4th position.","Eliminated because Ruling W was promulgated 3rd.","Eliminated because Ruling V was promulgated 2nd.","Eliminated because Ruling Y was promulgated 5th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+"Six software releases (Alpha, Beta, Gamma, Δ, Epsilon, Zeta) are deployed sequentially: (1) Beta is deployed immediately after Alpha. (2) Δ is deployed immediately after Gamma. (3) Epsilon is deployed after Δ, but before Zeta. (4) Gamma is deployed immediately after Beta. What is the 5th release deployed?","Epsilon","Δ","Zeta","Gamma","A","Step-by-Step Solution:
 1. Assemble the contiguous deployment chain:
-   - Rule 1: Alpha $\to$ Beta (consecutive).
-   - Rule 4: Beta $\to$ Gamma (consecutive) $\implies$ Alpha $\to$ Beta $\to$ Gamma.
-   - Rule 2: Gamma $\to$ Delta (consecutive) $\implies$ Alpha $\to$ Beta $\to$ Gamma $\to$ Delta.
-   - Rule 3: Delta $\to$ Epsilon $\to$ Zeta $\implies$ Alpha $\to$ Beta $\to$ Gamma $\to$ Delta $\to$ Epsilon $\to$ Zeta.
+ - Rule 1: Alpha to Beta (consecutive).
+ - Rule 4: Beta to Gamma (consecutive) implies Alpha to Beta to Gamma.
+ - Rule 2: Gamma to Δ (consecutive) implies Alpha to Beta to Gamma to Δ.
+ - Rule 3: Δ to Epsilon to Zeta implies Alpha to Beta to Gamma to Δ to Epsilon to Zeta.
 2. Number the deployment positions:
-   - 1st: Alpha
-   - 2nd: Beta
-   - 3rd: Gamma
-   - 4th: Delta
-   - 5th: Epsilon
-   - 6th: Zeta
+ - 1st: Alpha
+ - 2nd: Beta
+ - 3rd: Gamma
+ - 4th: Δ
+ - 5th: Epsilon
+ - 6th: Zeta
 3. Conclude:
-   - The 5th release deployed is Epsilon.
+ - The 5th release deployed is Epsilon.
 
 Common Trap: Swapping Epsilon and Zeta.
-Exam Tip: Since Epsilon is before Zeta and follows the first 4 fixed releases, Epsilon must occupy the 5th slot.","Correct. Survives elimination because the complete linear deployment chain Alpha -> Beta -> Gamma -> Delta -> Epsilon -> Zeta places Epsilon in the 5th position.","Eliminated because Delta is deployed 4th.","Eliminated because Zeta is deployed 6th.","Eliminated because Gamma is deployed 3rd.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Since Epsilon is before Zeta and follows the first 4 fixed releases, Epsilon must occupy the 5th slot.","Correct. Survives elimination because the complete linear deployment chain Alpha -> Beta -> Gamma -> Δ -> Epsilon -> Zeta places Epsilon in the 5th position.","Eliminated because Δ is deployed 4th.","Eliminated because Zeta is deployed 6th.","Eliminated because Gamma is deployed 3rd.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Five civil service candidates (P, Q, R, S, T) are scheduled for individual panel interviews: (1) T is interviewed before P. (2) Q is interviewed after R. (3) P is interviewed before R. (4) S is interviewed after Q. Who is interviewed LAST (5th position)?","S","Q","R","T","A","Step-by-Step Solution:
 1. Translate interview sequence rules into a single chronological chain:
-   - Rule 1: $T < P$.
-   - Rule 3: $P < R \implies T < P < R$.
-   - Rule 2: $R < Q \implies T < P < R < Q$.
-   - Rule 4: $Q < S \implies T < P < R < Q < S$.
+ - Rule 1: T < P.
+ - Rule 3: P < R implies T < P < R.
+ - Rule 2: R < Q implies T < P < R < Q.
+ - Rule 4: Q < S implies T < P < R < Q < S.
 2. List interview schedule from 1st to 5th:
-   - 1st Interview: Candidate T
-   - 2nd Interview: Candidate P
-   - 3rd Interview: Candidate R
-   - 4th Interview: Candidate Q
-   - 5th Interview (Last): Candidate S
+ - 1st Interview: Candidate T
+ - 2nd Interview: Candidate P
+ - 3rd Interview: Candidate R
+ - 4th Interview: Candidate Q
+ - 5th Interview (Last): Candidate S
 3. Conclude:
-   - Candidate S is interviewed last (5th position).
+ - Candidate S is interviewed last (5th position).
 
 Common Trap: Confusing Q (4th) with S (5th).
-Exam Tip: Transitive chaining: $T \to P \to R \to Q \to S$. The terminal node is Candidate S.","Correct. Survives elimination because the uninterrupted linear sequence T -> P -> R -> Q -> S places Candidate S in the final (5th) position.","Eliminated because Candidate Q is interviewed 4th.","Eliminated because Candidate R is interviewed 3rd.","Eliminated because Candidate T is interviewed 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Transitive chaining: T to P to R to Q to S. The terminal node is Candidate S.","Correct. Survives elimination because the uninterrupted linear sequence T -> P -> R -> Q -> S places Candidate S in the final (5th) position.","Eliminated because Candidate Q is interviewed 4th.","Eliminated because Candidate R is interviewed 3rd.","Eliminated because Candidate T is interviewed 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Seven legislative bills (B1, B2, B3, B4, B5, B6, B7) are signed into law sequentially: (1) B2 is signed before B4, but after B1. (2) B3 is signed immediately before B1. (3) B6 is signed after B4, but before B5. (4) B7 is signed immediately after B5. Which bill was signed 3rd?","B2","B1","B3","B4","A","Step-by-Step Solution:
 1. Combine the signing order constraints:
-   - Rule 2: $B3 < B1$ (B3 immediately before B1).
-   - Rule 1: $B1 < B2 < B4 \implies B3 < B1 < B2 < B4$.
-   - Rule 3: $B4 < B6 < B5 \implies B3 < B1 < B2 < B4 < B6 < B5$.
-   - Rule 4: $B5 < B7 \implies B3 < B1 < B2 < B4 < B6 < B5 < B7$.
+ - Rule 2: B3 < B1 (B3 immediately before B1).
+ - Rule 1: B1 < B2 < B4 implies B3 < B1 < B2 < B4.
+ - Rule 3: B4 < B6 < B5 implies B3 < B1 < B2 < B4 < B6 < B5.
+ - Rule 4: B5 < B7 implies B3 < B1 < B2 < B4 < B6 < B5 < B7.
 2. Map bills to sequential signing ranks:
-   - 1st Signed: B3
-   - 2nd Signed: B1
-   - 3rd Signed: B2
-   - 4th Signed: B4
-   - 5th Signed: B6
-   - 6th Signed: B5
-   - 7th Signed: B7
+ - 1st Signed: B3
+ - 2nd Signed: B1
+ - 3rd Signed: B2
+ - 4th Signed: B4
+ - 5th Signed: B6
+ - 6th Signed: B5
+ - 7th Signed: B7
 3. Conclude:
-   - Bill B2 was signed 3rd.
+ - Bill B2 was signed 3rd.
 
 Common Trap: Confusing B1 (2nd) with B2 (3rd).
-Exam Tip: Strict order: $B3(1) \to B1(2) \to B2(3) \to B4(4) \to B6(5) \to B5(6) \to B7(7)$. 3rd is B2.","Correct. Survives elimination because the full signing timeline B3 -> B1 -> B2 -> B4 -> B6 -> B5 -> B7 places Bill B2 in the 3rd position.","Eliminated because Bill B1 was signed 2nd.","Eliminated because Bill B3 was signed 1st.","Eliminated because Bill B4 was signed 4th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Strict order: B3(1) to B1(2) to B2(3) to B4(4) to B6(5) to B5(6) to B7(7). 3rd is B2.","Correct. Survives elimination because the full signing timeline B3 -> B1 -> B2 -> B4 -> B6 -> B5 -> B7 places Bill B2 in the 3rd position.","Eliminated because Bill B1 was signed 2nd.","Eliminated because Bill B3 was signed 1st.","Eliminated because Bill B4 was signed 4th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Six historical administrative events (E1, E2, E3, E4, E5, E6) occurred in chronological order: (1) E3 occurred after E1, but before E2. (2) E5 occurred before E1. (3) E4 occurred after E2, but before E6. Which event occurred 3rd in historical sequence?","E3","E1","E2","E5","A","Step-by-Step Solution:
 1. Represent chronological relations:
-   - Rule 1: $E1 < E3 < E2$.
-   - Rule 2: $E5 < E1 \implies E5 < E1 < E3 < E2$.
-   - Rule 3: $E2 < E4 < E6 \implies E5 < E1 < E3 < E2 < E4 < E6$.
+ - Rule 1: E1 < E3 < E2.
+ - Rule 2: E5 < E1 implies E5 < E1 < E3 < E2.
+ - Rule 3: E2 < E4 < E6 implies E5 < E1 < E3 < E2 < E4 < E6.
 2. Determine the full chronological timeline:
-   - 1st: Event E5
-   - 2nd: Event E1
-   - 3rd: Event E3
-   - 4th: Event E2
-   - 5th: Event E4
-   - 6th: Event E6
+ - 1st: Event E5
+ - 2nd: Event E1
+ - 3rd: Event E3
+ - 4th: Event E2
+ - 5th: Event E4
+ - 6th: Event E6
 3. Conclude:
-   - Event E3 occurred 3rd in historical sequence.
+ - Event E3 occurred 3rd in historical sequence.
 
 Common Trap: Forgetting that E5 occurred before E1, which shifts E3 to the 3rd position rather than 2nd.
-Exam Tip: $E5(1) \to E1(2) \to E3(3) \to E2(4) \to E4(5) \to E6(6)$.","Correct. Survives elimination because the complete timeline E5 -> E1 -> E3 -> E2 -> E4 -> E6 places Event E3 in the 3rd position.","Eliminated because Event E1 occurred 2nd.","Eliminated because Event E2 occurred 4th.","Eliminated because Event E5 occurred 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: E5(1) to E1(2) to E3(3) to E2(4) to E4(5) to E6(6).","Correct. Survives elimination because the complete timeline E5 -> E1 -> E3 -> E2 -> E4 -> E6 places Event E3 in the 3rd position.","Eliminated because Event E1 occurred 2nd.","Eliminated because Event E2 occurred 4th.","Eliminated because Event E5 occurred 1st.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Five flight departures (F1, F2, F3, F4, F5) are ordered by scheduled departure time: (1) F4 departs after F2. (2) F1 departs before F3. (3) F2 departs after F3. (4) F5 departs after F4. Which flight departs 1st (EARLIEST)?","F1","F3","F2","F4","A","Step-by-Step Solution:
 1. Formulate sequential departure inequalities:
-   - Rule 2: $F1 < F3$.
-   - Rule 3: $F3 < F2 \implies F1 < F3 < F2$.
-   - Rule 1: $F2 < F4 \implies F1 < F3 < F2 < F4$.
-   - Rule 4: $F4 < F5 \implies F1 < F3 < F2 < F4 < F5$.
+ - Rule 2: F1 < F3.
+ - Rule 3: F3 < F2 implies F1 < F3 < F2.
+ - Rule 1: F2 < F4 implies F1 < F3 < F2 < F4.
+ - Rule 4: F4 < F5 implies F1 < F3 < F2 < F4 < F5.
 2. Order departures from earliest to latest:
-   - 1st (Earliest): Flight F1
-   - 2nd: Flight F3
-   - 3rd: Flight F2
-   - 4th: Flight F4
-   - 5th (Latest): Flight F5
+ - 1st (Earliest): Flight F1
+ - 2nd: Flight F3
+ - 3rd: Flight F2
+ - 4th: Flight F4
+ - 5th (Latest): Flight F5
 3. Conclude:
-   - Flight F1 departs 1st (earliest).
+ - Flight F1 departs 1st (earliest).
 
 Common Trap: Selecting F3 (2nd) or F5 (latest).
-Exam Tip: Chaining departure times: $F1 \to F3 \to F2 \to F4 \to F5$. The initial starting node is F1.","Correct. Survives elimination because the linear departure schedule F1 -> F3 -> F2 -> F4 -> F5 places Flight F1 in the 1st (earliest) position.","Eliminated because Flight F3 departs 2nd.","Eliminated because Flight F2 departs 3rd.","Eliminated because Flight F4 departs 4th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Chaining departure ×: F1 to F3 to F2 to F4 to F5. The initial starting node is F1.","Correct. Survives elimination because the linear departure schedule F1 -> F3 -> F2 -> F4 -> F5 places Flight F1 in the 1st (earliest) position.","Eliminated because Flight F3 departs 2nd.","Eliminated because Flight F2 departs 3rd.","Eliminated because Flight F4 departs 4th.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
 "Six manufacturing pipeline stages (M1, M2, M3, M4, M5, M6) follow strict prerequisite execution: M1 is executed first; M2 follows M1; M3 follows M2; M4 follows M3; M5 follows M4; and M6 follows M5. If the entire pipeline runs strictly in sequence, which stage is executed 4th?","M4","M3","M5","M2","A","Step-by-Step Solution:
 1. Trace the linear pipeline progression:
-   - Stage 1: M1
-   - Stage 2: M2
-   - Stage 3: M3
-   - Stage 4: M4
-   - Stage 5: M5
-   - Stage 6: M6
+ - Stage 1: M1
+ - Stage 2: M2
+ - Stage 3: M3
+ - Stage 4: M4
+ - Stage 5: M5
+ - Stage 6: M6
 2. Identify the 4th stage in the pipeline:
-   - Stage M4 is executed 4th.
+ - Stage M4 is executed 4th.
 3. Conclude:
-   - The 4th stage executed is M4.
+ - The 4th stage executed is M4.
 
 Common Trap: Miscounting pipeline stages from 0 rather than 1.
-Exam Tip: Linear serial pipelines execute in exact index order: $M1(1), M2(2), M3(3), M4(4), M5(5), M6(6)$.","Correct. Survives elimination because Stage M4 occupies the 4th position in the linear serial pipeline.","Eliminated because Stage M3 is executed 3rd.","Eliminated because Stage M5 is executed 5th.","Eliminated because Stage M2 is executed 2nd.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
+Exam Tip: Linear serial pipelines execute in exact index order: M1(1), M2(2), M3(3), M4(4), M5(5), M6(6).","Correct. Survives elimination because Stage M4 occupies the 4th position in the linear serial pipeline.","Eliminated because Stage M3 is executed 3rd.","Eliminated because Stage M5 is executed 5th.","Eliminated because Stage M2 is executed 2nd.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"

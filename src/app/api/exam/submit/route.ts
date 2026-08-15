@@ -198,7 +198,7 @@ export async function POST(request: Request) {
     evaluateAndAwardBadges(userId).catch(() => null);
 
     // Clear active exam draft
-    await prisma.examDraft.delete({
+    await prisma.examDraft.deleteMany({
       where: { userId },
     }).catch(() => null);
 

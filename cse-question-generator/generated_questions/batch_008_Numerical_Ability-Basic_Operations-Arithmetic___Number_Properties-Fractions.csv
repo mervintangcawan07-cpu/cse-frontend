@@ -1,155 +1,155 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Simplify the complex continued fraction to its lowest irreducible rational terms:
 
-$$S = \frac{1}{2 + \frac{1}{3 + \frac{1}{1 + \frac{2}{5}}}}$$","\frac{26}{59}","\frac{59}{26}","\frac{23}{51}","\frac{17}{43}","A","Step-by-Step Solution:
+S = 1/2 + 1/3 + 1/1 + 2/5","26/59","59/26","23/51","17/43","A","Step-by-Step Solution:
 1. Simplify from the bottom-most fraction upward:
-   - $1 + \frac{2}{5} = \frac{7}{5}$.
-   - Take the reciprocal: $\frac{1}{7/5} = \frac{5}{7}$.
+ - 1 + 2/5 = 7/5.
+ - Take the reciprocal: 1/7/5 = 5/7.
 2. Next level:
-   - $3 + \frac{5}{7} = \frac{21 + 5}{7} = \frac{26}{7}$.
-   - Take the reciprocal: $\frac{1}{26/7} = \frac{7}{26}$.
+ - 3 + 5/7 = 21 + 5/7 = 26/7.
+ - Take the reciprocal: 1/26/7 = 7/26.
 3. Next level:
-   - $2 + \frac{7}{26} = \frac{52 + 7}{26} = \frac{59}{26}$.
+ - 2 + 7/26 = 52 + 7/26 = 59/26.
 4. Final reciprocal:
-   - $\frac{1}{59/26} = \frac{26}{59}$.
+ - 1/59/26 = 26/59.
 
 Common Trap: Forgetting to take the reciprocal at the final step, erroneously giving 59/26 (Option B).
-Exam Tip: In continued fractions, always work bottom-up step-by-step, inverting the denominator at each level.","Correct. Survives elimination because resolving the continued fraction bottom-up yields 26/59.","Eliminated because this is the reciprocal before the final inversion.","Eliminated because of miscalculation in the intermediate sum 3 + 5/7.","Eliminated because arithmetic errors in the base fraction 1 + 2/5 yield 17/43.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+Exam Tip: In continued fractions, always work bottom-up step-by-step, inverting the denominator at each level.","Correct. Survives elimination because resolving the continued fraction bottom-up yields 26/59.","Eliminated because this is the reciprocal before the final inversion.","Eliminated because of miscalculation in the intermediate Σ 3 + 5/7.","Eliminated because arithmetic errors in the base fraction 1 + 2/5 yield 17/43.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
 "Evaluate the product of the following telescoping rational sequence:
 
-$$P = \left(1 - \frac{1}{4}\right)\left(1 - \frac{1}{9}\right)\left(1 - \frac{1}{16}\right) \cdots \left(1 - \frac{1}{100}\right)$$","\frac{11}{20}","\frac{9}{20}","\frac{1}{10}","\frac{19}{20}","A","Step-by-Step Solution:
-1. Factor each term using the difference of squares: $1 - \frac{1}{n^2} = \frac{n^2 - 1}{n^2} = \frac{(n-1)(n+1)}{n \cdot n}$.
-2. Rewrite for $n = 2, 3, 4, \dots, 10$:
-   - For $n=2$: $\frac{1 \cdot 3}{2 \cdot 2}$
-   - For $n=3$: $\frac{2 \cdot 4}{3 \cdot 3}$
-   - For $n=4$: $\frac{3 \cdot 5}{4 \cdot 4}$
-   - $\dots$
-   - For $n=10$: $\frac{9 \cdot 11}{10 \cdot 10}$
+P = (1 - 1/4)(1 - 1/9)(1 - 1/16)... (1 - 1/100)","11/20","9/20","1/10","19/20","A","Step-by-Step Solution:
+1. Factor each term using the difference of squares: 1 - 1/n² = n² - 1/n² = (n-1)(n+1)/n · n.
+2. Rewrite for n = 2, 3, 4,..., 10:
+ - For n=2: 1 · 3/2 · 2
+ - For n=3: 2 · 4/3 · 3
+ - For n=4: 3 · 5/4 · 4
+ -...
+ - For n=10: 9 · 11/10 · 10
 3. Regroup into two separate products:
-   - Left Product: $\left(\frac{1}{2} \cdot \frac{2}{3} \cdot \frac{3}{4} \cdots \frac{9}{10}\right) = \frac{1}{10}$.
-   - Right Product: $\left(\frac{3}{2} \cdot \frac{4}{3} \cdot \frac{5}{4} \cdots \frac{11}{10}\right) = \frac{11}{2}$.
-4. Multiply: $P = \frac{1}{10} \times \frac{11}{2} = \frac{11}{20} = 0.55$.
+ - Left Product: (1/2 · 2/3 · 3/4... 9/10) = 1/10.
+ - Right Product: (3/2 · 4/3 · 5/4... 11/10) = 11/2.
+4. Multiply: P = 1/10 × 11/2 = 11/20 = 0.55.
 
-Common Trap: Trying to multiply individual decimals ($0.75 \times 0.888 \times \dots$) which leads to severe rounding error.
-Exam Tip: Factor $1 - \frac{1}{n^2}$ algebraically into $\frac{n-1}{n} \times \frac{n+1}{n}$ for clean diagonal cancellation.","Correct. Survives elimination because the product telescopes to (1/10) * (11/2) = 11/20.","Eliminated because complementary subtraction errors give 9/20.","Eliminated because forgetting the right-hand factor leaves only 1/10.","Eliminated because subtracting the final term directly from 1 yields 19/20.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+Common Trap: Trying to multiply individual decimals (0.75 × 0.888 ×...) which leads to severe rounding error.
+Exam Tip: Factor 1 - 1/n² algebraically into n-1/n × n+1/n for clean diagonal cancellation.","Correct. Survives elimination because the product telescopes to (1/10) * (11/2) = 11/20.","Eliminated because complementary subtraction errors give 9/20.","Eliminated because forgetting the right-hand factor leaves only 1/10.","Eliminated because subtracting the final term directly from 1 yields 19/20.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
 "Find the exact simplified value of the following mixed numerical expression:
 
-$$\frac{3\frac{1}{3} \times 2\frac{2}{5} - 1\frac{1}{2} \div 3\frac{3}{4}}{2\frac{1}{4} + 1\frac{7}{8} \times \frac{2}{5}}$$","\frac{38}{15}","\frac{19}{15}","\frac{42}{15}","\frac{36}{15}","A","Step-by-Step Solution:
+31/3 × 22/5 - 11/2 ÷ 33/4/21/4 + 17/8 × 2/5","38/15","19/15","42/15","36/15","A","Step-by-Step Solution:
 1. Convert all mixed numbers to improper fractions:
-   - $3\frac{1}{3} = \frac{10}{3}$, $2\frac{2}{5} = \frac{12}{5}$
-   - $1\frac{1}{2} = \frac{3}{2}$, $3\frac{3}{4} = \frac{15}{4}$
-   - $2\frac{1}{4} = \frac{9}{4}$, $1\frac{7}{8} = \frac{15}{8}$
+ - 31/3 = 10/3, 22/5 = 12/5
+ - 11/2 = 3/2, 33/4 = 15/4
+ - 21/4 = 9/4, 17/8 = 15/8
 2. Numerator:
-   - Product: $\frac{10}{3} \times \frac{12}{5} = \frac{120}{15} = 8$.
-   - Division: $\frac{3}{2} \div \frac{15}{4} = \frac{3}{2} \times \frac{4}{15} = \frac{12}{30} = \frac{2}{5}$.
-   - Numerator Difference = $8 - \frac{2}{5} = \frac{40 - 2}{5} = \frac{38}{5}$.
+ - Product: 10/3 × 12/5 = 120/15 = 8.
+ - Division: 3/2 ÷ 15/4 = 3/2 × 4/15 = 12/30 = 2/5.
+ - Numerator Difference = 8 - 2/5 = 40 - 2/5 = 38/5.
 3. Denominator:
-   - Product: $\frac{15}{8} \times \frac{2}{5} = \frac{30}{40} = \frac{3}{4}$.
-   - Denominator Sum = $\frac{9}{4} + \frac{3}{4} = \frac{12}{4} = 3$.
-4. Final Division: $\frac{38/5}{3} = \frac{38}{15} = 2\frac{8}{15}$.
+ - Product: 15/8 × 2/5 = 30/40 = 3/4.
+ - Denominator Sum = 9/4 + 3/4 = 12/4 = 3.
+4. Final Division: 38/5/3 = 38/15 = 28/15.
 
 Common Trap: Performing addition/subtraction before multiplying or dividing improper fractions.
 Exam Tip: Convert every mixed fraction to an improper fraction first before executing any operational rules.","Correct. Survives elimination because numerator is 38/5 and denominator is 3, yielding 38/15.","Eliminated because dividing the numerator by 6 instead of 3 gives 19/15.","Eliminated because addition instead of subtraction in the numerator yields 42/15.","Eliminated because arithmetic errors in the division term yield 36/15.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
-"If $x = \frac{1}{2} + \frac{1}{3} + \frac{1}{6}$ and $y = \frac{1}{2} \times \frac{1}{3} \times \frac{1}{6}$, find the value of $\frac{x - y}{x + y}$.","\frac{35}{37}","\frac{37}{35}","\frac{31}{37}","\frac{35}{36}","A","Step-by-Step Solution:
-1. Evaluate $x$:
-   - $x = \frac{3}{6} + \frac{2}{6} + \frac{1}{6} = \frac{6}{6} = 1$.
-2. Evaluate $y$:
-   - $y = \frac{1 \times 1 \times 1}{2 \times 3 \times 6} = \frac{1}{36}$.
-3. Compute $x - y$:
-   - $1 - \frac{1}{36} = \frac{35}{36}$.
-4. Compute $x + y$:
-   - $1 + \frac{1}{36} = \frac{37}{36}$.
+"If x = 1/2 + 1/3 + 1/6 and y = 1/2 × 1/3 × 1/6, find the value of x - y/x + y.","35/37","37/35","31/37","35/36","A","Step-by-Step Solution:
+1. Evaluate x:
+ - x = 3/6 + 2/6 + 1/6 = 6/6 = 1.
+2. Evaluate y:
+ - y = 1 × 1 × 1/2 × 3 × 6 = 1/36.
+3. Compute x - y:
+ - 1 - 1/36 = 35/36.
+4. Compute x + y:
+ - 1 + 1/36 = 37/36.
 5. Evaluate ratio:
-   - $\frac{x - y}{x + y} = \frac{35/36}{37/36} = \frac{35}{37}$.
+ - x - y/x + y = 35/36/37/36 = 35/37.
 
-Common Trap: Calculating $y$ by adding denominators instead of multiplying them.
-Exam Tip: Check if the sum of fundamental Egyptian fractions ($\frac{1}{2} + \frac{1}{3} + \frac{1}{6}$) sums cleanly to 1 to simplify algebraic expressions.","Correct. Survives elimination because x = 1, y = 1/36, giving (35/36) / (37/36) = 35/37.","Eliminated because inverting the numerator and denominator yields 37/35.","Eliminated because arithmetic mistakes in computing x - y give 31/37.","Eliminated because forgetting the denominator x + y leaves 35/36.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+Common Trap: Calculating y by adding denominators instead of multiplying them.
+Exam Tip: Check if the Σ of fundamental Egyptian fractions (1/2 + 1/3 + 1/6) sums cleanly to 1 to simplify algebraic expressions.","Correct. Survives elimination because x = 1, y = 1/36, giving (35/36) / (37/36) = 35/37.","Eliminated because inverting the numerator and denominator yields 37/35.","Eliminated because arithmetic mistakes in computing x - y give 31/37.","Eliminated because forgetting the denominator x + y leaves 35/36.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
 "Convert the repeating decimals to exact fractions and simplify:
 
-$$E = \frac{0.\overline{3} + 0.1\overline{6}}{0.\overline{45} - 0.2\overline{7}}$$","\frac{99}{35}","\frac{99}{70}","\frac{198}{35}","\frac{35}{99}","A","Step-by-Step Solution:
+E = (0.3̅ + 0.16̅)/(0.4̅5̅ - 0.27̅)","99/35","99/70","198/35","35/99","A","Step-by-Step Solution:
 1. Convert repeating decimals to rational fractions:
-   - $0.\overline{3} = \frac{3}{9} = \frac{1}{3}$.
-   - $0.1\overline{6} = \frac{16 - 1}{90} = \frac{15}{90} = \frac{1}{6}$.
-   - $0.\overline{45} = \frac{45}{99} = \frac{5}{11}$.
-   - $0.2\overline{7} = \frac{27 - 2}{90} = \frac{25}{90} = \frac{5}{18}$.
-2. Numerator: $\frac{1}{3} + \frac{1}{6} = \frac{2}{6} + \frac{1}{6} = \frac{3}{6} = \frac{1}{2}$.
-3. Denominator: $\frac{5}{11} - \frac{5}{18} = \frac{5(18 - 11)}{198} = \frac{5(7)}{198} = \frac{35}{198}$.
-4. Division: $\frac{1/2}{35/198} = \frac{1}{2} \times \frac{198}{35} = \frac{99}{35} = 2\frac{29}{35}$.
+ - 0.3̅ = 3/9 = 1/3.
+ - 0.16̅ = 16 - 1/90 = 15/90 = 1/6.
+ - 0.4̅5̅ = 45/99 = 5/11.
+ - 0.27̅ = 27 - 2/90 = 25/90 = 5/18.
+2. Numerator: 1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2.
+3. Denominator: 5/11 - 5/18 = 5(18 - 11)/198 = 5(7)/198 = 35/198.
+4. Division: 1/2/35/198 = 1/2 × 198/35 = 99/35 = 229/35.
 
-Common Trap: Converting $0.1\overline{6}$ as $16/99$ or $0.2\overline{7}$ as $27/99$. Mixed repeating decimals require the formula $\frac{\text{non-repeating and repeating} - \text{non-repeating}}{9\dots0\dots}$.
-Exam Tip: Memorize standard conversions for mixed repeating decimals ($0.1\overline{6} = 1/6$, $0.8\overline{3} = 5/6$).","Correct. Survives elimination because numerator is 1/2 and denominator is 35/198, yielding 99/35.","Eliminated because failing to multiply by 1/2 correctly gives 99/70.","Eliminated because forgetting to divide 198 by 2 leaves 198/35.","Eliminated because inverting the final fraction results in 35/99.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
-"Compute the exact sum of the following telescoping partial fraction series:
+Common Trap: Converting 0.16̅ as 16/99 or 0.27̅ as 27/99. Mixed repeating decimals require the formula (non-repeating and repeating - non-repeating)/9dots0....
+Exam Tip: Memorize standard conversions for mixed repeating decimals (0.16̅ = 1/6, 0.83̅ = 5/6).","Correct. Survives elimination because numerator is 1/2 and denominator is 35/198, yielding 99/35.","Eliminated because failing to multiply by 1/2 correctly gives 99/70.","Eliminated because forgetting to divide 198 by 2 leaves 198/35.","Eliminated because inverting the final fraction results in 35/99.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+"Compute the exact Σ of the following telescoping partial fraction series:
 
-$$S = \frac{1}{1 \times 3} + \frac{1}{3 \times 5} + \frac{1}{5 \times 7} + \frac{1}{7 \times 9} + \cdots + \frac{1}{19 \times 21}$$","\frac{10}{21}","\frac{20}{21}","\frac{5}{21}","\frac{9}{20}","A","Step-by-Step Solution:
-1. Decompose the general term: $\frac{1}{(2k-1)(2k+1)} = \frac{1}{2}\left( \frac{1}{2k-1} - \frac{1}{2k+1} \right)$.
+S = 1/1 × 3 + 1/3 × 5 + 1/5 × 7 + 1/7 × 9 +... + 1/19 × 21","10/21","20/21","5/21","9/20","A","Step-by-Step Solution:
+1. Decompose the general term: 1/(2k-1)(2k+1) = 1/2( 1/2k-1 - 1/2k+1 ).
 2. Expand the series:
-   - $S = \frac{1}{2}\left[ \left(1 - \frac{1}{3}\right) + \left(\frac{1}{3} - \frac{1}{5}\right) + \left(\frac{1}{5} - \frac{1}{7}\right) + \dots + \left(\frac{1}{19} - \frac{1}{21}\right) \right]$.
+ - S = 1/2[ (1 - 1/3) + (1/3 - 1/5) + (1/5 - 1/7) +... + (1/19 - 1/21) ].
 3. Intermediate terms cancel out completely:
-   - $S = \frac{1}{2}\left( 1 - \frac{1}{21} \right)$.
-4. Compute the bracket: $1 - \frac{1}{21} = \frac{20}{21}$.
-5. Multiply by $\frac{1}{2}$: $S = \frac{1}{2} \times \frac{20}{21} = \frac{10}{21}$.
+ - S = 1/2( 1 - 1/21 ).
+4. Compute the bracket: 1 - 1/21 = 20/21.
+5. Multiply by 1/2: S = 1/2 × 20/21 = 10/21.
 
-Common Trap: Forgetting the scaling factor of $\frac{1}{2}$ derived from the difference between denominator factors ($3 - 1 = 2$).
-Exam Tip: For any series $\sum \frac{1}{n(n+d)}$, the telescoping multiplier is always $\frac{1}{d}$.","Correct. Survives elimination because the series collapses to (1/2) * (1 - 1/21) = 10/21.","Eliminated because forgetting the 1/2 multiplier leaves 20/21.","Eliminated because halving twice gives 5/21.","Eliminated because index miscounting leads to 9/20.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
-"Solve for the positive integer $n$ in the following continuous product equation:
+Common Trap: Forgetting the scaling factor of 1/2 derived from the difference between denominator factors (3 - 1 = 2).
+Exam Tip: For any series Σ 1/n(n+d), the telescoping multiplier is always 1/d.","Correct. Survives elimination because the series collapses to (1/2) * (1 - 1/21) = 10/21.","Eliminated because forgetting the 1/2 multiplier leaves 20/21.","Eliminated because halving twice gives 5/21.","Eliminated because index miscounting leads to 9/20.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+"Solve for the positive integer n in the following continuous product equation:
 
-$$\left( 1 + \frac{1}{2} \right)\left( 1 + \frac{1}{3} \right)\left( 1 + \frac{1}{4} \right) \cdots \left( 1 + \frac{1}{n} \right) = 25$$","49","50","48","25","A","Step-by-Step Solution:
+( 1 + 1/2 )( 1 + 1/3 )( 1 + 1/4 )... ( 1 + 1/n ) = 25","49","50","48","25","A","Step-by-Step Solution:
 1. Simplify each factor:
-   - $1 + \frac{1}{2} = \frac{3}{2}$
-   - $1 + \frac{1}{3} = \frac{4}{3}$
-   - $1 + \frac{1}{4} = \frac{5}{4}$
-   - $\dots$
-   - $1 + \frac{1}{n} = \frac{n+1}{n}$
+ - 1 + 1/2 = 3/2
+ - 1 + 1/3 = 4/3
+ - 1 + 1/4 = 5/4
+ -...
+ - 1 + 1/n = n+1/n
 2. Multiply factors:
-   - $\frac{3}{2} \times \frac{4}{3} \times \frac{5}{4} \times \dots \times \frac{n+1}{n}$.
-3. Notice that all numerators cancel with the succeeding denominators except the first denominator (2) and the last numerator ($n+1$):
-   - Product $= \frac{n+1}{2}$.
+ - 3/2 × 4/3 × 5/4 ×... × n+1/n.
+3. Notice that all numerators cancel with the succeeding denominators except the first denominator (2) and the last numerator (n+1):
+ - Product = n+1/2.
 4. Equate to 25:
-   - $\frac{n+1}{2} = 25 \implies n + 1 = 50 \implies n = 49$.
+ - n+1/2 = 25 implies n + 1 = 50 implies n = 49.
 
-Common Trap: Setting $\frac{n}{2} = 25 \implies n = 50$, missing the $+1$ in the final numerator.
+Common Trap: Setting n/2 = 25 implies n = 50, missing the +1 in the final numerator.
 Exam Tip: Write out the first three terms and the final term to clearly see which boundary numbers survive cancellation.","Correct. Survives elimination because the product simplifies to (n+1)/2 = 25, so n = 49.","Eliminated because failing to account for the +1 numerator shift gives 50.","Eliminated because off-by-one errors give 48.","Eliminated because assuming n equals the target value gives 25.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
-"If $A = \frac{2}{3} + \frac{3}{4} + \frac{4}{5}$ and $B = \frac{1}{3} + \frac{1}{4} + \frac{1}{5}$, determine the exact value of $A + B$ without finding a common denominator for each individual set.","3","2.5","3.25","4","A","Step-by-Step Solution:
+"If A = 2/3 + 3/4 + 4/5 and B = 1/3 + 1/4 + 1/5, determine the exact value of A + B without finding a common denominator for each individual set.","3","2.5","3.25","4","A","Step-by-Step Solution:
 1. Group corresponding fractions by identical denominators:
-   - $A + B = \left(\frac{2}{3} + \frac{1}{3}\right) + \left(\frac{3}{4} + \frac{1}{4}\right) + \left(\frac{4}{5} + \frac{1}{5}\right)$.
+ - A + B = (2/3 + 1/3) + (3/4 + 1/4) + (4/5 + 1/5).
 2. Evaluate each pair:
-   - $\frac{2}{3} + \frac{1}{3} = \frac{3}{3} = 1$.
-   - $\frac{3}{4} + \frac{1}{4} = \frac{4}{4} = 1$.
-   - $\frac{4}{5} + \frac{1}{5} = \frac{5}{5} = 1$.
+ - 2/3 + 1/3 = 3/3 = 1.
+ - 3/4 + 1/4 = 4/4 = 1.
+ - 4/5 + 1/5 = 5/5 = 1.
 3. Sum the integers:
-   - $1 + 1 + 1 = 3$.
+ - 1 + 1 + 1 = 3.
 
-Common Trap: Spending extensive time finding the LCD of 3, 4, and 5 (which is 60) for both $A$ and $B$ separately.
-Exam Tip: In competitive examinations, look for symmetric complementary pairs that sum to whole integers.","Correct. Survives elimination because each complementary pair (2/3+1/3, 3/4+1/4, 4/5+1/5) equals 1, summing to 3.","Eliminated because dropping the third fractional pair gives 2.","Eliminated because arithmetic error in the fractional sum gives 3.25.","Eliminated because adding an extraneous unit yields 4.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+Common Trap: Spending extensive time finding the LCD of 3, 4, and 5 (which is 60) for both A and B separately.
+Exam Tip: In competitive examinations, look for symmetric complementary pairs that Σ to whole integers.","Correct. Survives elimination because each complementary pair (2/3+1/3, 3/4+1/4, 4/5+1/5) equals 1, summing to 3.","Eliminated because dropping the third fractional pair gives 2.","Eliminated because arithmetic error in the fractional Σ gives 3.25.","Eliminated because adding an extraneous unit yields 4.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
 "Arrange the following four rational fractions in strict ascending order from least to greatest:
 
-$$W = \frac{7}{9}, \quad X = \frac{11}{14}, \quad Y = \frac{15}{19}, \quad Z = \frac{23}{29}$$","W < X < Y < Z","Z < Y < X < W","X < W < Y < Z","W < Y < X < Z","A","Step-by-Step Solution:
-1. Compare using the complement method ($1 - \text{Fraction}$):
-   - $1 - W = 1 - \frac{7}{9} = \frac{2}{9} \approx 0.2222$.
-   - $1 - X = 1 - \frac{11}{14} = \frac{3}{14} \approx 0.2143$.
-   - $1 - Y = 1 - \frac{15}{19} = \frac{4}{19} \approx 0.2105$.
-   - $1 - Z = 1 - \frac{23}{29} = \frac{6}{29} \approx 0.2069$.
+W = 7/9, X = 11/14, Y = 15/19, Z = 23/29","W < X < Y < Z","Z < Y < X < W","X < W < Y < Z","W < Y < X < Z","A","Step-by-Step Solution:
+1. Compare using the complement method (1 - Fraction):
+ - 1 - W = 1 - 7/9 = 2/9 ≈ 0.2222.
+ - 1 - X = 1 - 11/14 = 3/14 ≈ 0.2143.
+ - 1 - Y = 1 - 15/19 = 4/19 ≈ 0.2105.
+ - 1 - Z = 1 - 23/29 = 6/29 ≈ 0.2069.
 2. Compare the complements:
-   - $\frac{2}{9} > \frac{3}{14} > \frac{4}{19} > \frac{6}{29}$.
+ - 2/9 > 3/14 > 4/19 > 6/29.
 3. Since a larger complement means a smaller original number:
-   - $W < X < Y < Z$.
+ - W < X < Y < Z.
 4. Approximate decimal verification:
-   - $W \approx 0.7778$, $X \approx 0.7857$, $Y \approx 0.7895$, $Z \approx 0.7931$.
+ - W ≈ 0.7778, X ≈ 0.7857, Y ≈ 0.7895, Z ≈ 0.7931.
 
-Common Trap: Trying to cross-multiply all pairs or find a massive common denominator ($9 \times 14 \times 19 \times 29$).
-Exam Tip: When fractions are close to 1, comparing $1 - \frac{a}{b}$ is significantly faster and less prone to error.","Correct. Survives elimination because the complements decrease in order, proving W < X < Y < Z.","Eliminated because this is descending order (greatest to least).","Eliminated because W (0.7778) is strictly less than X (0.7857).","Eliminated because X (0.7857) is strictly less than Y (0.7895).","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
-"Simplify the rational algebraic fraction and evaluate at $a = \frac{2}{3}$ and $b = \frac{3}{4}$:
+Common Trap: Trying to cross-multiply all pairs or find a massive common denominator (9 × 14 × 19 × 29).
+Exam Tip: When fractions are close to 1, comparing 1 - a/b is significantly faster and less prone to error.","Correct. Survives elimination because the complements decrease in order, proving W < X < Y < Z.","Eliminated because this is descending order (greatest to least).","Eliminated because W (0.7778) is strictly less than X (0.7857).","Eliminated because X (0.7857) is strictly less than Y (0.7895).","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"
+"Simplify the rational algebraic fraction and evaluate at a = 2/3 and b = 3/4:
 
-$$F = \frac{\frac{a}{b} - \frac{b}{a}}{\frac{1}{a} + \frac{1}{b}}$$","-\frac{1}{12}","\frac{1}{12}","-\frac{1}{6}","\frac{17}{12}","A","Step-by-Step Solution:
+F = a/b - b/a/1/a + 1/b","-1/12","1/12","-1/6","17/12","A","Step-by-Step Solution:
 1. Simplify the algebraic structure before numerical substitution:
-   - Numerator: $\frac{a}{b} - \frac{b}{a} = \frac{a^2 - b^2}{ab} = \frac{(a - b)(a + b)}{ab}$.
-   - Denominator: $\frac{1}{a} + \frac{1}{b} = \frac{b + a}{ab} = \frac{a + b}{ab}$.
+ - Numerator: a/b - b/a = a² - b²/ab = (a - b)(a + b)/ab.
+ - Denominator: 1/a + 1/b = b + a/ab = a + b/ab.
 2. Divide numerator by denominator:
-   - $F = \frac{\frac{(a - b)(a + b)}{ab}}{\frac{a + b}{ab}} = a - b$.
-3. Substitute the given values $a = \frac{2}{3}$ and $b = \frac{3}{4}$:
-   - $F = \frac{2}{3} - \frac{3}{4}$.
+ - F = (a - b)(a + b)/ab/a + b/ab = a - b.
+3. Substitute the given values a = 2/3 and b = 3/4:
+ - F = 2/3 - 3/4.
 4. Find common denominator (12):
-   - $F = \frac{8 - 9}{12} = -\frac{1}{12}$.
+ - F = 8 - 9/12 = -1/12.
 
-Common Trap: Substituting fractions directly into the four individual sub-fractions without algebraic simplification.
+Common Trap: Substituting fractions directly into the four individual sub = fractions without algebraic simplification.
 Exam Tip: Always simplify complex rational algebraic forms before substituting numerical fractional values.","Correct. Survives elimination because the algebraic expression simplifies cleanly to a - b = 2/3 - 3/4 = -1/12.","Eliminated because dropping the negative sign in 8 - 9 gives positive 1/12.","Eliminated because arithmetic error in common denominator subtraction yields -1/6.","Eliminated because adding instead of subtracting yields 17/12.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Fractions | Very Difficult | Batch 008"

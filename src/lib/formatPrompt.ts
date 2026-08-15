@@ -1,11 +1,66 @@
+import { cleanMathText } from "@/lib/sanitizeMath";
+import { autoEnhanceDataInterpretation } from "@/lib/chartRenderer";
+
+export { cleanMathText };
+
+/**
+ * Checks if a line is a genuine Markdown table separator row (e.g., |---|---| or |:---:|---:|)
+ */
+function isTableSeparator(line: string): boolean {
+  if (!line || !line.includes("|")) return false;
+  return /^\|?[\s:-]+(\|[\s:-]+)+\|?$/.test(line.trim());
+}
+
+/**
+ * Checks if a line is part of a real Markdown table rather than a math formula with absolute values |x|
+ */
+function isTableCandidate(line: string, nextLine?: string, prevLine?: string, inTable: boolean = false): boolean {
+  const trimmed = line.trim();
+  if (!trimmed.includes("|")) return false;
+
+  // If next line is a markdown separator (|---|---|), this is definitely a table header
+  if (nextLine && isTableSeparator(nextLine)) {
+    return true;
+  }
+
+  // If previous line was a separator or header and we are in a table
+  if (inTable) {
+    // End table if line doesn't look like a row (e.g. empty or no pipes)
+    return trimmed.includes("|") && !trimmed.endsWith("?");
+  }
+
+  // If line starts and ends with pipe (| A | B | C |) and next line also starts and ends with pipe
+  if (
+    trimmed.startsWith("|") &&
+    trimmed.endsWith("|") &&
+    trimmed.split("|").filter(Boolean).length >= 2 &&
+    nextLine &&
+    nextLine.trim().startsWith("|")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 /**
  * Utility to convert raw question prompt text into clean, styled HTML elements.
  * Uncluttered design optimized for high contrast in both Light and Dark mode.
  */
-export function formatPromptHTML(promptText: string): string {
-  if (!promptText) return "";
+export function formatPromptHTML(rawPromptText: string): string {
+  if (!rawPromptText) return "";
 
-  if (promptText.includes("<svg") || (promptText.includes("<div") && !promptText.includes("my-"))) {
+  let promptText = cleanMathText(rawPromptText);
+
+  // Auto-enhance questions containing Pie Charts, Line Graphs, Bar Charts, or Data Tables into SVGs
+  promptText = autoEnhanceDataInterpretation(promptText);
+
+  if (
+    promptText.includes("<svg") ||
+    promptText.includes("<table") ||
+    promptText.includes("rounded-2xl") ||
+    promptText.includes("📑")
+  ) {
     return promptText;
   }
 
@@ -25,18 +80,22 @@ export function formatPromptHTML(promptText: string): string {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const nextLine = i + 1 < lines.length ? lines[i + 1] : undefined;
+    const prevLine = i > 0 ? lines[i - 1] : undefined;
 
-    if (line.includes("|") && !line.startsWith("<")) {
+    // Check if this line is part of a real Markdown table
+    if (isTableCandidate(line, nextLine, prevLine, inTable)) {
       if (!inTable) {
         inTable = true;
         tableHeaders = line.split("|").map((c) => c.trim()).filter((c) => c !== "");
         tableRows = [];
 
-        if (i + 1 < lines.length && /^\|?[\s:-]+(\|+[\s:-]+)+\|?$/.test(lines[i + 1])) {
+        // Skip separator row if it's the next line
+        if (nextLine && isTableSeparator(nextLine)) {
           i++;
         }
       } else {
-        if (!/^\|?[\s:-]+(\|+[\s:-]+)+\|?$/.test(line)) {
+        if (!isTableSeparator(line)) {
           const cells = line.split("|").map((c) => c.trim()).filter((c) => c !== "");
           if (cells.length > 0) {
             tableRows.push(cells);

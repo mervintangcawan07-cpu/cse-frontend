@@ -1,162 +1,162 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Identify the next number in the Collatz trajectory sequence:
 
-$$27, \quad 82, \quad 41, \quad 124, \quad 62, \quad 31, \quad 94, \quad 47, \quad 142, \quad \textbf{?}$$","71","427","70","72","A","Step-by-Step Solution:
-1. Identify the piecewise Collatz ($3n + 1$) transformation rule:
-   - If $n$ is even: $T_{k+1} = \frac{n}{2}$.
-   - If $n$ is odd: $T_{k+1} = 3n + 1$.
+27, 82, 41, 124, 62, 31, 94, 47, 142, ?","71","427","70","72","A","Step-by-Step Solution:
+1. Identify the piecewise Collatz (3n + 1) transformation rule:
+ - If n is even: Tₖ₊₁ = n/2.
+ - If n is odd: Tₖ₊₁ = 3n + 1.
 2. Trace sequence transitions:
-   - 27 (odd) $\to 3(27) + 1 = 82$
-   - 82 (even) $\to 82 / 2 = 41$
-   - 41 (odd) $\to 3(41) + 1 = 124$
-   - 124 (even) $\to 124 / 2 = 62$
-   - 62 (even) $\to 62 / 2 = 31$
-   - 31 (odd) $\to 3(31) + 1 = 94$
-   - 94 (even) $\to 94 / 2 = 47$
-   - 47 (odd) $\to 3(47) + 1 = 142$.
+ - 27 (odd) to 3(27) + 1 = 82
+ - 82 (even) to 82 / 2 = 41
+ - 41 (odd) to 3(41) + 1 = 124
+ - 124 (even) to 124 / 2 = 62
+ - 62 (even) to 62 / 2 = 31
+ - 31 (odd) to 3(31) + 1 = 94
+ - 94 (even) to 94 / 2 = 47
+ - 47 (odd) to 3(47) + 1 = 142.
 3. The 9th term is 142, which is an even integer.
 4. Apply the even rule:
-   - $T_{10} = \frac{142}{2} = 71$.
+ - T₁₀ = 142/2 = 71.
 
-Common Trap: Applying the odd rule $3(142) + 1 = 427$ (Option B) to an even number.
-Exam Tip: Always check whether the current number is even ($\div 2$) or odd ($\times 3 + 1$).","Correct. Survives elimination because 142 is even, requiring 142 / 2 = 71.","Eliminated because 427 applies the odd rule (3n+1) to an even number.","Eliminated because arithmetic slip gives 70.","Eliminated because rounding gives 72.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Common Trap: Applying the odd rule 3(142) + 1 = 427 (Option B) to an even number.
+Exam Tip: Always check whether the current number is even (÷ 2) or odd (× 3 + 1).","Correct. Survives elimination because 142 is even, requiring 142 / 2 = 71.","Eliminated because 427 applies the odd rule (3n+1) to an even number.","Eliminated because arithmetic slip gives 70.","Eliminated because rounding gives 72.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
 "Find the missing number in the digit-product recurrence sequence:
 
-$$77, \quad 49, \quad 36, \quad 18, \quad \textbf{?}$$","8","9","10","6","A","Step-by-Step Solution:
+77, 49, 36, 18, ?","8","9","10","6","A","Step-by-Step Solution:
 1. Examine the internal digit transformation rule:
-   - Each term is the mathematical product of the digits of the preceding term: $T_n = \prod \text{digits}(T_{n-1})$.
+ - Each term is the mathematical product of the digits of the preceding term: Tₙ = Π digits(Tₙ₋₁).
 2. Verify with sequence terms:
-   - $T_1 = 77 \implies 7 \times 7 = 49 = T_2$.
-   - $T_2 = 49 \implies 4 \times 9 = 36 = T_3$.
-   - $T_3 = 36 \implies 3 \times 6 = 18 = T_4$.
-3. Compute the 5th term ($T_5$):
-   - $T_4 = 18 \implies 1 \times 8 = 8$.
-   - $T_5 = 8$.
+ - T₁ = 77 implies 7 × 7 = 49 = T₂.
+ - T₂ = 49 implies 4 × 9 = 36 = T₃.
+ - T₃ = 36 implies 3 × 6 = 18 = T₄.
+3. Compute the 5th term (T₅):
+ - T₄ = 18 implies 1 × 8 = 8.
+ - T₅ = 8.
 
-Common Trap: Adding the digits ($1 + 8 = 9$, Option B) instead of multiplying them.
-Exam Tip: In digit-based hidden sequences, check both digit-sum and digit-product operations.","Correct. Survives elimination because the product of the digits of 18 is 1 * 8 = 8.","Eliminated because 9 is the sum of the digits (1 + 8), not the product.","Eliminated because adding 2 yields 10.","Eliminated because 6 is an arithmetic slip.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Common Trap: Adding the digits (1 + 8 = 9, Option B) instead of multiplying them.
+Exam Tip: In digit-based hidden sequences, check both digit-Σ and digit-product operations.","Correct. Survives elimination because the product of the digits of 18 is 1 * 8 = 8.","Eliminated because 9 is the Σ of the digits (1 + 8), not the product.","Eliminated because adding 2 yields 10.","Eliminated because 6 is an arithmetic slip.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
 "What is the 7th term in the sequence of highly composite numbers (integers with strictly more positive divisors than any smaller positive integer):
 
-$$1, \quad 2, \quad 4, \quad 6, \quad 12, \quad 24, \quad \textbf{?}$$","36","30","48","32","A","Step-by-Step Solution:
-1. Analyze the divisor function $d(n)$ for each term:
-   - $d(1) = 1$
-   - $d(2) = 2$ (divisors: 1, 2)
-   - $d(4) = 3$ (divisors: 1, 2, 4)
-   - $d(6) = 4$ (divisors: 1, 2, 3, 6)
-   - $d(12) = 6$ (divisors: 1, 2, 3, 4, 6, 12)
-   - $d(24) = 8$ (divisors: 1, 2, 3, 4, 6, 8, 12, 24).
-2. To qualify as the next highly composite number, an integer $N > 24$ must have $d(N) > 8$:
-   - Check $N = 30$: Divisors: 1, 2, 3, 5, 6, 10, 15, 30 $\implies d(30) = 8$ (Not strictly greater).
-   - Check $N = 36$: Divisors: 1, 2, 3, 4, 6, 9, 12, 18, 36 $\implies d(36) = 9 > 8$.
+1, 2, 4, 6, 12, 24, ?","36","30","48","32","A","Step-by-Step Solution:
+1. Analyze the divisor function d(n) for each term:
+ - d(1) = 1
+ - d(2) = 2 (divisors: 1, 2)
+ - d(4) = 3 (divisors: 1, 2, 4)
+ - d(6) = 4 (divisors: 1, 2, 3, 6)
+ - d(12) = 6 (divisors: 1, 2, 3, 4, 6, 12)
+ - d(24) = 8 (divisors: 1, 2, 3, 4, 6, 8, 12, 24).
+2. To qualify as the next highly composite number, an integer N > 24 must have d(N) > 8:
+ - Check N = 30: Divisors: 1, 2, 3, 5, 6, 10, 15, 30 implies d(30) = 8 (Not strictly greater).
+ - Check N = 36: Divisors: 1, 2, 3, 4, 6, 9, 12, 18, 36 implies d(36) = 9 > 8.
 3. Thus, 36 is the 7th highly composite number.
 
-Common Trap: Selecting 30 (Option B), failing to verify that $d(30) = 8$ is not strictly greater than $d(24) = 8$.
-Exam Tip: $36 = 2^2 \times 3^2$ has $(2+1)(2+1) = 9$ divisors, setting a new record.","Correct. Survives elimination because 36 has 9 divisors, strictly exceeding 24's 8 divisors, making it the 7th highly composite number.","Eliminated because 30 has only 8 divisors (equal to 24, not strictly greater).","Eliminated because 48 is the 8th highly composite number (10 divisors).","Eliminated because 32 has only 6 divisors.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Common Trap: Selecting 30 (Option B), failing to verify that d(30) = 8 is not strictly greater than d(24) = 8.
+Exam Tip: 36 = 2² × 3² has (2+1)(2+1) = 9 divisors, setting a new record.","Correct. Survives elimination because 36 has 9 divisors, strictly exceeding 24's 8 divisors, making it the 7th highly composite number.","Eliminated because 30 has only 8 divisors (equal to 24, not strictly greater).","Eliminated because 48 is the 8th highly composite number (10 divisors).","Eliminated because 32 has only 6 divisors.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
 "Identify the next number in the reversible prime (emirp/palindromic prime) sequence:
 
-$$11, \quad 13, \quad 17, \quad 31, \quad 37, \quad 71, \quad 73, \quad \textbf{?}$$","79","83","89","77","A","Step-by-Step Solution:
+11, 13, 17, 31, 37, 71, 73, ?","79","83","89","77","A","Step-by-Step Solution:
 1. Examine the property of terms in the sequence:
-   - Each term is a prime number whose digit reversal is also a distinct prime number:
-     - 11 (palindrome prime)
-     - $13 \leftrightarrow 31$ (both prime)
-     - $17 \leftrightarrow 71$ (both prime)
-     - $37 \leftrightarrow 73$ (both prime).
+ - Each term is a prime number whose digit reversal is also a distinct prime number:
+ - 11 (palindrome prime)
+ - 13 leftrightarrow 31 (both prime)
+ - 17 leftrightarrow 71 (both prime)
+ - 37 leftrightarrow 73 (both prime).
 2. The next pair of two-digit reversible primes is 79 and 97:
-   - 79 is prime, and its reversal 97 is prime.
+ - 79 is prime, and its reversal 97 is prime.
 3. Therefore, the next term in ascending order is 79.
 
-Common Trap: Selecting 83 (Option B), whose reversal 38 is even and composite ($2 \times 19 = 38$).
+Common Trap: Selecting 83 (Option B), whose reversal 38 is even and composite (2 × 19 = 38).
 Exam Tip: 79 reversed is 97, which is prime. 83 reversed is 38 (composite), and 89 reversed is 98 (composite).","Correct. Survives elimination because 79 is prime and its reversal 97 is also prime.","Eliminated because 83 reversed is 38 (even composite).","Eliminated because 89 reversed is 98 (composite).","Eliminated because 77 is composite (7 * 11).","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
-"Find the missing number in the amicable divisor-sum periodic sequence:
+"Find the missing number in the amicable divisor-Σ periodic sequence:
 
-$$284, \quad 220, \quad 284, \quad 220, \quad \textbf{?}$$","284","220","504","142","A","Step-by-Step Solution:
-1. Analyze the aliquot sum transformation (sum of proper divisors $s(n)$):
-   - Proper divisors of 220: 1, 2, 4, 5, 10, 11, 20, 22, 44, 55, 110.
-     - Sum $= 1 + 2 + 4 + 5 + 10 + 11 + 20 + 22 + 44 + 55 + 110 = 284$.
-   - Proper divisors of 284: 1, 2, 4, 71, 142.
-     - Sum $= 1 + 2 + 4 + 71 + 142 = 220$.
-2. The pair $(220, 284)$ forms a 2-cycle amicable pair where $s(220) = 284$ and $s(284) = 220$.
-3. The sequence oscillates strictly with period 2: $[284, 220, 284, 220, \dots]$.
+284, 220, 284, 220, ?","284","220","504","142","A","Step-by-Step Solution:
+1. Analyze the aliquot Σ transformation (Σ of proper divisors s(n)):
+ - Proper divisors of 220: 1, 2, 4, 5, 10, 11, 20, 22, 44, 55, 110.
+ - Sum = 1 + 2 + 4 + 5 + 10 + 11 + 20 + 22 + 44 + 55 + 110 = 284.
+ - Proper divisors of 284: 1, 2, 4, 71, 142.
+ - Sum = 1 + 2 + 4 + 71 + 142 = 220.
+2. The pair (220, 284) forms a 2-cycle amicable pair where s(220) = 284 and s(284) = 220.
+3. The sequence oscillates strictly with period 2: [284, 220, 284, 220,...].
 4. The 5th term (odd position) is 284.
 
 Common Trap: Answering 220 (Option B) by failing to track odd/even position oscillation.
-Exam Tip: Odd position = 284, Even position = 220. Position 5 is odd $\implies 284$.","Correct. Survives elimination because the amicable 2-cycle oscillates between 284 and 220, making the 5th term 284.","Eliminated because 220 is the even-positioned term.","Eliminated because 504 is 220 + 284.","Eliminated because 142 is a proper divisor of 284.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
-"What is the 8th term in the sequence of happy numbers (integers reaching 1 under iterative sum of squared digits):
+Exam Tip: Odd position = 284, Even position = 220. Position 5 is odd implies 284.","Correct. Survives elimination because the amicable 2-cycle oscillates between 284 and 220, making the 5th term 284.","Eliminated because 220 is the even-positioned term.","Eliminated because 504 is 220 + 284.","Eliminated because 142 is a proper divisor of 284.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+"What is the 8th term in the sequence of happy numbers (integers reaching 1 under iterative Σ of squared digits):
 
-$$1, \quad 7, \quad 10, \quad 13, \quad 19, \quad 23, \quad 28, \quad \textbf{?}$$","31","29","32","33","A","Step-by-Step Solution:
-1. Define happy number process: repeatedly square and sum digits until reaching 1 (happy) or entering the cycle $4 \to 16 \to 37 \to 58 \to 89 \to 145 \to 42 \to 20 \to 4$ (unhappy).
+1, 7, 10, 13, 19, 23, 28, ?","31","29","32","33","A","Step-by-Step Solution:
+1. Define happy number process: repeatedly square and Σ digits until reaching 1 (happy) or entering the cycle 4 to 16 to 37 to 58 to 89 to 145 to 42 to 20 to 4 (unhappy).
 2. Verify candidates above 28:
-   - Candidate 29: $2^2 + 9^2 = 4 + 81 = 85 \to 8^2 + 5^2 = 89$ (enters unhappy cycle).
-   - Candidate 30: $3^2 + 0^2 = 9 \to 81 \to 65 \to 61 \to 37$ (unhappy).
-   - Candidate 31: $3^2 + 1^2 = 9 + 1 = 10 \to 1^2 + 0^2 = 1$ (Happy!).
+ - Candidate 29: 2² + 9² = 4 + 81 = 85 to 8² + 5² = 89 (enters unhappy cycle).
+ - Candidate 30: 3² + 0² = 9 to 81 to 65 to 61 to 37 (unhappy).
+ - Candidate 31: 3² + 1² = 9 + 1 = 10 to 1² + 0² = 1 (Happy!).
 3. Thus, 31 is the 8th happy number.
 
 Common Trap: Selecting 29 (Option B) without calculating the squared-digit chain to convergence.
-Exam Tip: $31 \to 3^2 + 1^2 = 10 \to 1^2 + 0^2 = 1$ in only two steps!","Correct. Survives elimination because 31 reaches 1 via 3^2 + 1^2 = 10 -> 1^2 + 0^2 = 1, making it the 8th happy number.","Eliminated because 29 enters the unhappy 4-cycle.","Eliminated because 32 is unhappy (3^2 + 2^2 = 13 -> 10 -> 1? Wait, 13 is happy! 32 -> 13 -> 10 -> 1, but 31 comes before 32).","Eliminated because 33 is unhappy.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Exam Tip: 31 to 3² + 1² = 10 to 1² + 0² = 1 in only two steps!","Correct. Survives elimination because 31 reaches 1 via 3² + 1² = 10 -> 1² + 0² = 1, making it the 8th happy number.","Eliminated because 29 enters the unhappy 4-cycle.","Eliminated because 32 is unhappy (3² + 2² = 13 -> 10 -> 1? Wait, 13 is happy! 32 -> 13 -> 10 -> 1, but 31 comes before 32).","Eliminated because 33 is unhappy.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
 "Identify the next number in the Roman numeral standard values sequence:
 
-$$1, \quad 5, \quad 10, \quad 50, \quad 100, \quad 500, \quad \textbf{?}$$","1,000","1,500","5,000","2,000","A","Step-by-Step Solution:
+1, 5, 10, 50, 100, 500, ?","1,000","1,500","5,000","2,000","A","Step-by-Step Solution:
 1. Identify the hidden pattern:
-   - The numbers are the exact integer values of the primary single-letter Roman numerals in standard ascending order:
-     - $\text{I} = 1$
-     - $\text{V} = 5$
-     - $\text{X} = 10$
-     - $\text{L} = 50$
-     - $\text{C} = 100$
-     - $\text{D} = 500$.
-2. The next primary Roman numeral symbol is $\text{M}$.
-3. Value of $\text{M}$ is 1,000.
+ - The numbers are the exact integer values of the primary single-letter Roman numerals in standard ascending order:
+ - I = 1
+ - V = 5
+ - X = 10
+ - L = 50
+ - C = 100
+ - D = 500.
+2. The next primary Roman numeral symbol is M.
+3. Value of M is 1,000.
 
 Common Trap: Multiplying by 5 to guess 2,500 or jumping to 5,000 (Option C).
-Exam Tip: Operational pattern alternates multiplying by 5 and multiplying by 2: $\times 5 \to \times 2 \to \times 5 \to \times 2 \to \times 5 \to \times 2 \implies 500 \times 2 = 1,000$.","Correct. Survives elimination because the next Roman numeral symbol is M = 1,000 (and 500 * 2 = 1,000).","Eliminated because 1,500 is not a single Roman numeral value.","Eliminated because 5,000 applies x10 instead of x2.","Eliminated because 2,000 is MM.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Exam Tip: Operational pattern alternates multiplying by 5 and multiplying by 2: × 5 to × 2 to × 5 to × 2 to × 5 to × 2 implies 500 × 2 = 1,000.","Correct. Survives elimination because the next Roman numeral symbol is M = 1,000 (and 500 * 2 = 1,000).","Eliminated because 1,500 is not a single Roman numeral value.","Eliminated because 5,000 applies x10 instead of x2.","Eliminated because 2,000 is MM.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
 "Find the missing term in the sequence of consecutive prime numbers:
 
-$$2, \quad 3, \quad 5, \quad 7, \quad 11, \quad 13, \quad 17, \quad 19, \quad 23, \quad \textbf{?}$$","29","27","31","25","A","Step-by-Step Solution:
+2, 3, 5, 7, 11, 13, 17, 19, 23, ?","29","27","31","25","A","Step-by-Step Solution:
 1. Identify the governing mathematical rule:
-   - The sequence consists of all consecutive prime numbers in strictly ascending order:
-     - 2, 3, 5, 7, 11, 13, 17, 19, 23.
+ - The sequence consists of all consecutive prime numbers in strictly ascending order:
+ - 2, 3, 5, 7, 11, 13, 17, 19, 23.
 2. Determine the next prime number after 23:
-   - 24 is composite ($24 = 2^3 \times 3$).
-   - 25 is composite ($25 = 5^2$).
-   - 26 is composite ($26 = 2 \times 13$).
-   - 27 is composite ($27 = 3^3$).
-   - 28 is composite ($28 = 2^2 \times 7$).
-   - 29 has no divisors other than 1 and itself (Prime!).
-3. Result: $T_{10} = 29$.
+ - 24 is composite (24 = 2³ × 3).
+ - 25 is composite (25 = 5²).
+ - 26 is composite (26 = 2 × 13).
+ - 27 is composite (27 = 3³).
+ - 28 is composite (28 = 2² × 7).
+ - 29 has no divisors other than 1 and itself (Prime!).
+3. Result: T₁₀ = 29.
 
-Common Trap: Selecting 27 (Option B) by assuming an odd-number continuation, forgetting that $27 = 9 \times 3$.
+Common Trap: Selecting 27 (Option B) by assuming an odd-number continuation, forgetting that 27 = 9 × 3.
 Exam Tip: 29 is prime; 25 and 27 are composite.","Correct. Survives elimination because 29 is the next consecutive prime number after 23.","Eliminated because 27 is divisible by 3 and 9.","Eliminated because 31 skips 29.","Eliminated because 25 is divisible by 5.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
-"Determine the next term in the Mersenne power sequence ($2^n - 1$):
+"Determine the next term in the Mersenne power sequence (2ⁿ - 1):
 
-$$1, \quad 3, \quad 7, \quad 15, \quad 31, \quad 63, \quad \textbf{?}$$","127","128","126","125","A","Step-by-Step Solution:
-1. Express terms as powers of two minus one ($2^n - 1$):
-   - $n=1: 2^1 - 1 = 1$
-   - $n=2: 2^2 - 1 = 3$
-   - $n=3: 2^3 - 1 = 7$
-   - $n=4: 2^4 - 1 = 15$
-   - $n=5: 2^5 - 1 = 31$
-   - $n=6: 2^6 - 1 = 63$.
-2. Formulate general term: $T_n = 2^n - 1$.
-3. Compute the 7th term ($n = 7$):
-   - $T_7 = 2^7 - 1 = 128 - 1 = 127$.
+1, 3, 7, 15, 31, 63, ?","127","128","126","125","A","Step-by-Step Solution:
+1. Express terms as powers of two minus one (2ⁿ - 1):
+ - n=1: 2¹ - 1 = 1
+ - n=2: 2² - 1 = 3
+ - n=3: 2³ - 1 = 7
+ - n=4: 2⁴ - 1 = 15
+ - n=5: 2⁵ - 1 = 31
+ - n=6: 2⁶ - 1 = 63.
+2. Formulate general term: Tₙ = 2ⁿ - 1.
+3. Compute the 7th term (n = 7):
+ - T₇ = 2⁷ - 1 = 128 - 1 = 127.
 
-Common Trap: Selecting $2^7 = 128$ (Option B), forgetting to subtract 1.
-Exam Tip: Double the previous term and add 1 ($63 \times 2 + 1 = 126 + 1 = 127$).","Correct. Survives elimination because 2^7 - 1 = 128 - 1 = 127 (or 63 * 2 + 1 = 127).","Eliminated because 128 is 2^7 without the -1 offset.","Eliminated because 126 is 63 * 2.","Eliminated because arithmetic slip gives 125.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
-"Find the 7th term in the digit-sum multiplier sequence:
+Common Trap: Selecting 2⁷ = 128 (Option B), forgetting to subtract 1.
+Exam Tip: Double the previous term and add 1 (63 × 2 + 1 = 126 + 1 = 127).","Correct. Survives elimination because 2⁷ - 1 = 128 - 1 = 127 (or 63 * 2 + 1 = 127).","Eliminated because 128 is 2⁷ without the -1 offset.","Eliminated because 126 is 63 * 2.","Eliminated because arithmetic slip gives 125.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+"Find the 7th term in the digit-Σ multiplier sequence:
 
-$$19, \quad 70, \quad 49, \quad 91, \quad 70, \quad 49, \quad \textbf{?}$$","91","70","49","133","A","Step-by-Step Solution:
+19, 70, 49, 91, 70, 49, ?","91","70","49","133","A","Step-by-Step Solution:
 1. Identify the transformation rule:
-   - Each term is 7 times the sum of the digits of the preceding term: $T_n = 7 \times (\text{Sum of digits of } T_{n-1})$.
+ - Each term is 7 × the Σ of the digits of the preceding term: Tₙ = 7 × (Sum of digits of Tₙ₋₁).
 2. Verify transitions:
-   - $T_1 = 19 \implies 7 \times (1 + 9) = 7 \times 10 = 70$.
-   - $T_2 = 70 \implies 7 \times (7 + 0) = 7 \times 7 = 49$.
-   - $T_3 = 49 \implies 7 \times (4 + 9) = 7 \times 13 = 91$.
-   - $T_4 = 91 \implies 7 \times (9 + 1) = 7 \times 10 = 70$.
-   - $T_5 = 70 \implies 7 \times (7 + 0) = 49$.
-   - $T_6 = 49 \implies 7 \times (4 + 9) = 91$.
-3. The sequence enters a 3-term periodic cycle: $[70, 49, 91]$.
-4. The 7th term is the next step from $T_6 = 49$:
-   - $T_7 = 7 \times (4 + 9) = 7 \times 13 = 91$.
+ - T₁ = 19 implies 7 × (1 + 9) = 7 × 10 = 70.
+ - T₂ = 70 implies 7 × (7 + 0) = 7 × 7 = 49.
+ - T₃ = 49 implies 7 × (4 + 9) = 7 × 13 = 91.
+ - T₄ = 91 implies 7 × (9 + 1) = 7 × 10 = 70.
+ - T₅ = 70 implies 7 × (7 + 0) = 49.
+ - T₆ = 49 implies 7 × (4 + 9) = 91.
+3. The sequence enters a 3-term periodic cycle: [70, 49, 91].
+4. The 7th term is the next step from T₆ = 49:
+ - T₇ = 7 × (4 + 9) = 7 × 13 = 91.
 
 Common Trap: Restarting the cycle at 70 (Option B) or repeating 49 (Option C).
-Exam Tip: Position 4 = 70, Position 5 = 49, Position 6 = 91 $\implies$ Position 7 from 49 is 91. (Wait: $T_4=70, T_5=49, T_6=91 \implies T_7$ is from $T_6=91 \implies 7 \times (9+1) = 70$! Let's check: $T_6=49 \implies 7 \times 13 = 91$. In the prompt: $19, 70, 49, 91, 70, 49, \textbf{?}$. Here $T_1=19, T_2=70, T_3=49, T_4=91, T_5=70, T_6=49$. The 7th term is from $T_6=49 \implies 7 \times (4+9) = 91$. Matches!).","Correct. Survives elimination because 7 * (4 + 9) = 7 * 13 = 91.","Eliminated because 70 is the 8th term.","Eliminated because 49 is the 6th term.","Eliminated because 133 is 7 * 19.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"
+Exam Tip: Position 4 = 70, Position 5 = 49, Position 6 = 91 implies Position 7 from 49 is 91. (Wait: T₄=70, T₅=49, T₆=91 implies T₇ is from T₆=91 implies 7 × (9+1) = 70! Let's check: T₆=49 implies 7 × 13 = 91. In the prompt: 19, 70, 49, 91, 70, 49, ?. Here T₁=19, T₂=70, T₃=49, T₄=91, T₅=70, T₆=49. The 7th term is from T₆=49 implies 7 × (4+9) = 91. Matches!).","Correct. Survives elimination because 7 * (4 + 9) = 7 * 13 = 91.","Eliminated because 70 is the 8th term.","Eliminated because 49 is the 6th term.","Eliminated because 133 is 7 * 19.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Hidden-pattern sequences | Very Difficult | Batch 032"

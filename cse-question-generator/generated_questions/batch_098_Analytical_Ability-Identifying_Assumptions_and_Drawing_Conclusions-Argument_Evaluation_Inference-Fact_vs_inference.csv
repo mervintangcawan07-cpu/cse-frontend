@@ -1,149 +1,148 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Passage: A formal audit of a municipal accounting office documented the following four statements: (1) 'The municipal treasury disbursed exactly PHP 14,250,000 across 42 check vouchers between January 1 and June 30, 2024.' (2) 'Because check disbursements in the second quarter exceeded the first quarter by 30%, the municipal treasurer was acting under political pressure to accelerate local infrastructure projects before the election.' (3) 'All 42 check vouchers were stamped with an official receipt seal and signed by the municipal accountant.' (4) 'The municipal accounting department maintains higher administrative integrity than the municipal engineering office.' Which of the following correctly classifies the four statements?","Statements (1) and (3) are FACTS; Statement (2) is an INFERENCE; Statement (4) is a VALUE JUDGMENT / OPINION.","Statement (1) is an INFERENCE; Statements (2), (3), and (4) are FACTS.","Statements (1), (2), (3), and (4) are all direct empirical FACTS.","Statements (1) and (2) are OPINIONS; Statements (3) and (4) are INFERENCES.","A","Step-by-Step Solution:
 1. Define the categories:
-   - FACT: Directly observable, measurable, and verifiable without subjective interpretation.
-   - INFERENCE: A derived logical or causal interpretation drawn from underlying facts.
-   - VALUE JUDGMENT / OPINION: A subjective appraisal based on personal standards or moral beliefs.
+ - FACT: Directly observable, measurable, and verifiable without subjective interpretation.
+ - INFERENCE: A derived logical or causal interpretation drawn from underlying facts.
+ - VALUE JUDGMENT / OPINION: A subjective appraisal based on personal standards or moral beliefs.
 2. Analyze each statement:
-   - Statement (1): Exact monetary total (PHP 14,250,000) and voucher count (42) $\implies$ Directly verifiable empirical FACT.
-   - Statement (2): Interpreting the 30% increase as \"acting under political pressure\" $\implies$ A causal, interpretive INFERENCE.
-   - Statement (3): Physical presence of official seals and signatures $\implies$ Directly observable physical FACT.
-   - Statement (4): Claiming one department has \"higher administrative integrity\" $\implies$ Subjective VALUE JUDGMENT / OPINION.
+ - Statement (1): Exact monetary total (PHP 14,250,000) and voucher count (42) implies Directly verifiable empirical FACT.
+ - Statement (2): Interpreting the 30% increase as \""acting under political pressure\"" implies A causal, interpretive INFERENCE.
+ - Statement (3): Physical presence of official seals and signatures implies Directly observable physical FACT.
+ - Statement (4): Claiming one department has \""higher administrative integrity\"" implies Subjective VALUE JUDGMENT / OPINION.
 3. Conclude:
-   - (1) & (3) = Facts; (2) = Inference; (4) = Value Judgment.
-   - Option A is the precise classification.
+ - (1) & (3) = Facts; (2) = Inference; (4) = Value Judgment.
+ - Option A is the precise classification.
 
 Common Trap: Treating causal interpretations (Statement 2) or moral evaluations (Statement 4) as objective facts.
 Exam Tip: If a statement can be physically verified in a ledger (amounts, signatures), it is a Fact. If it interprets motives, it is an Inference. If it judges virtue, it is an Opinion.","Correct. Survives elimination because (1) and (3) are ledger-verifiable facts, (2) is a causal motive inference, and (4) is a subjective comparative value judgment.","Eliminated because (1) is a verifiable fact, while (2) and (4) are not facts.","Eliminated because (2) and (4) contain interpretive and subjective non-factual assertions.","Eliminated because (1) and (3) are empirical ledger facts.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: Consider the following statement from an environmental inspector: 'Laboratory water testing of Sample X recorded a pH level of 4.2 and a mercury concentration of 0.08 mg/L, which exceeds the national drinking water regulatory ceiling of 0.01 mg/L.' This statement is BEST classified as a(n):","Empirical FACT (a directly measurable, verifiable physical observation compared against a published statutory standard).","Subjective Opinion.","Speculative Assumption.","Logical Fallacy.","A","Step-by-Step Solution:
 1. Examine the components of the statement:
-   - Component 1: Laboratory measurement of Sample X ($\text{pH} = 4.2, \text{Mercury} = 0.08\text{ mg/L}$).
-   - Component 2: Comparison against published statutory ceiling ($0.01\text{ mg/L}$).
+ - Component 1: Laboratory measurement of Sample X (pH = 4.2, Mercury = 0.08 mg/L).
+ - Component 2: Comparison against published statutory ceiling (0.01 mg/L).
 2. Determine objectivity and verifiability:
-   - Chemical concentrations are objectively measured by certified laboratory equipment.
-   - The regulatory ceiling is documented in published statutory standards.
-   - The statement does not guess motives, express personal feelings, or speculate $\implies$ Pure Empirical FACT.
+ - Chemical concentrations are objectively measured by certified laboratory equipment.
+ - The regulatory ceiling is documented in published statutory standards.
+ - The statement does not guess motives, express personal feelings, or speculate implies Pure Empirical FACT.
 3. Conclude:
-   - Option A is the correct classification.
+ - Option A is the correct classification.
 4. Evaluate incorrect alternatives:
-   - Option B: It is objective data, not a personal preference.
-   - Option C: It is measured proof, not an unproven assumption.
-   - Option D: There is no reasoning fallacy present.
+ - Option B: It is objective data, not a personal preference.
+ - Option C: It is measured proof, not an unproven assumption.
+ - Option D: There is no reasoning fallacy present.
 
 Common Trap: Thinking regulatory thresholds are opinions when they are published legal standards.
 Exam Tip: Laboratory test measurements and mathematical comparisons against published legal standards are objective Facts.","Correct. Survives elimination because physical laboratory measurements compared against statutory regulatory ceilings constitute objective empirical facts.","Eliminated because chemical readings and legal thresholds are objective, not subjective opinions.","Eliminated because the statement relies on certified laboratory data rather than speculation.","Eliminated because measuring data against a standard does not commit a logical fallacy.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: Consider the following statement from a policy analyst: 'Since the Bureau of Customs exceeded its annual revenue collection target by 15% following the deployment of automated x-ray container scanners, the installation of automated scanners was the primary reason for the revenue surplus.' This statement is BEST classified as a(n):","INFERENCE (an interpretive conclusion derived by linking the observed revenue surplus to the scanner deployment).","Direct Empirical Fact.","Pure Fabrication.","Circular Definition.","A","Step-by-Step Solution:
 1. Analyze the statement's structure:
-   - Fact mentioned: Revenue exceeded target by 15% after scanner deployment.
-   - Claim made: Scanner installation was the *primary reason* for the surplus.
+ - Fact mentioned: Revenue exceeded target by 15% after scanner deployment.
+ - Claim made: Scanner installation was the *primary reason* for the surplus.
 2. Distinguish fact from inference:
-   - The 15% surplus is a fact.
-   - However, declaring that scanners were the *primary cause* (rather than tariff changes, currency fluctuations, or import volume spikes) is an interpretive causal INFERENCE.
+ - The 15% surplus is a fact.
+ - However, declaring that scanners were the *primary cause* (rather than tariff changes, currency fluctuations, or import volume spikes) is an interpretive causal INFERENCE.
 3. Conclude:
-   - Option A accurately identifies the statement as an Inference.
+ - Option A accurately identifies the statement as an Inference.
 4. Evaluate incorrect alternatives:
-   - Option B: The causal attribution is not directly measurable on a scale or ledger.
-   - Option C: An inference is a legitimate analytical deduction, not a deliberate lie/fabrication.
-   - Option D: The statement is not circular.
+ - Option B: The causal attribution is not directly measurable on a scale or ledger.
+ - Option C: An inference is a legitimate analytical deduction, not a deliberate lie/fabrication.
+ - Option D: The statement is not circular.
 
 Common Trap: Calling the whole statement a Fact because it mentions a real 15% revenue surplus.
-Exam Tip: When a statement asserts a causal explanation (\"X was the primary reason for Y\"), the causal claim is an Inference.","Correct. Survives elimination because attributing the revenue surplus to scanner technology is an interpretive causal deduction (Inference) rather than a raw empirical fact.","Eliminated because the causal mechanism is an analytical interpretation, not a directly observed raw fact.","Eliminated because analytical inferences are legitimate logical deductions, not fabrications.","Eliminated because the statement is not self-referential or circular.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+Exam Tip: When a statement asserts a causal explanation (\""X was the primary reason for Y\""), the causal claim is an Inference.","Correct. Survives elimination because attributing the revenue surplus to scanner technology is an interpretive causal deduction (Inference) rather than a raw empirical fact.","Eliminated because the causal mechanism is an analytical interpretation, not a directly observed raw fact.","Eliminated because analytical inferences are legitimate logical deductions, not fabrications.","Eliminated because the statement is not self-referential or circular.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: Read the following excerpt from an administrative report: Statement A: 'Employee Dela Cruz was physically absent from the office on 14 working days during the month of October.' Statement B: 'Employee Dela Cruz must be experiencing severe personal family problems that prevent regular office attendance.' How are Statements A and B correctly classified?","Statement A is a FACT; Statement B is an INFERENCE / SPECULATION.","Statement A is an INFERENCE; Statement B is a FACT.","Both Statement A and Statement B are FACTS.","Both Statement A and Statement B are VALUE JUDGMENTS.","A","Step-by-Step Solution:
 1. Evaluate Statement A:
-   - Stated: Absent on 14 working days in October.
-   - Nature: Recorded in biometric logs and attendance timesheets $\implies$ Directly verifiable empirical FACT.
+ - Stated: Absent on 14 working days in October.
+ - Nature: Recorded in biometric logs and attendance timesheets implies Directly verifiable empirical FACT.
 2. Evaluate Statement B:
-   - Stated: \"must be experiencing severe personal family problems\".
-   - Nature: Extrapolates from unexcused absence to guess the internal personal motive/cause $\implies$ Unverified INFERENCE / SPECULATION.
+ - Stated: \""must be experiencing severe personal family problems\"".
+ - Nature: Extrapolates from unexcused absence to guess the internal personal motive/cause implies Unverified INFERENCE / SPECULATION.
 3. Conclude:
-   - Statement A = Fact; Statement B = Inference / Speculation.
-   - Option A is the precise classification.
+ - Statement A = Fact; Statement B = Inference / Speculation.
+ - Option A is the precise classification.
 4. Evaluate incorrect alternatives:
-   - Option B: Inverts the correct definitions.
-   - Option C: Family problems are unproven speculation, not an established fact.
-   - Option D: Attendance counts are objective facts, not subjective value judgments.
+ - Option B: Inverts the correct definitions.
+ - Option C: Family problems are unproven speculation, not an established fact.
+ - Option D: Attendance counts are objective facts, not subjective value judgments.
 
 Common Trap: Assuming the explanation for an absence is a fact just because the absence itself is a fact.
 Exam Tip: The physical occurrence of an event (absence) is a Fact; the presumed psychological or personal reason behind it is an Inference.","Correct. Survives elimination because the recorded number of absent days is an objective fact, while guessing family troubles as the reason is an unproven inference.","Eliminated because this reverses the factual and interpretive roles of the two statements.","Eliminated because family issues are unproven speculation, not documented facts.","Eliminated because attendance counts are verifiable facts, not value judgments.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: Which of the following statements represents a pure FACT rather than an inference or value judgment?","Republic Act No. 6713 was enacted by the Eighth Congress of the Philippines and signed into law on February 20, 1989.","Republic Act No. 6713 is the most inspiring piece of anti-corruption legislation in Asian history.","Every public official who reads RA 6713 immediately becomes an incorruptible civil servant.","Philippine civil service laws are superior to the public administration frameworks of European nations.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Cites official statutory title, legislative congress number, and enactment date.
-   - Verified via the Official Gazette $\implies$ Objective, indisputable historical and legal FACT.
+ - Cites official statutory title, legislative congress number, and enactment date.
+ - Verified via the Official Gazette implies Objective, indisputable historical and legal FACT.
 2. Evaluate Option B:
-   - \"most inspiring\" $\implies$ Subjective emotional appraisal (Value Judgment).
+ - \""most inspiring\"" implies Subjective emotional appraisal (Value Judgment).
 3. Evaluate Option C:
-   - \"immediately becomes incorruptible\" $\implies$ Extreme, factually false generalization.
+ - \""immediately becomes incorruptible\"" implies Extreme, factually false generalization.
 4. Evaluate Option D:
-   - \"are superior to\" $\implies$ Subjective opinion / comparative value judgment.
+ - \""are superior to\"" implies Subjective opinion / comparative value judgment.
 5. Conclude:
-   - Option A is the only pure Fact.
+ - Option A is the only pure Fact.
 
 Common Trap: Choosing value judgments (Option B or D) that express positive patriotic sentiment.
-Exam Tip: Historical dates, statute numbers, and gazette records are pure Facts; subjective praise (\"inspiring\", \"superior\") are Value Judgments.","Correct. Survives elimination because statutory enactment dates and legislative origin are objectively verifiable historical and legal facts.","Eliminated because \"most inspiring\" is a subjective emotional value judgment.","Eliminated because claiming instant incorruptibility is an unproven extreme assertion.","Eliminated because \"superior\" represents a subjective comparative opinion.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+Exam Tip: Historical dates, statute numbers, and gazette records are pure Facts; subjective praise (\""inspiring\","\""superior\"") are Value Judgments.""","Correct. Survives elimination because statutory enactment dates and legislative origin are objectively verifiable historical and legal facts.","Eliminated because \""most inspiring\"" is a subjective emotional value judgment.","Eliminated because claiming instant incorruptibility is an unproven extreme assertion.","Eliminated because \""superior\"" represents a subjective comparative opinion.","Analytical Ability"
 "Passage: Which of the following statements represents an INFERENCE rather than an empirical fact?","Because rainfall in the province was 40% below historical averages, drought conditions will likely cause a drop in local rice harvest output this season.","The regional meteorological station measured total provincial rainfall of 65 mm in May 2024.","The Philippine Atmospheric, Geophysical and Astronomical Services Administration (PAGASA) is an attached agency of DOST.","A standard agricultural hectare contains exactly 10,000 square meters of land area.","A","Step-by-Step Solution:
 1. Examine Option A:
-   - It takes an observed fact (40% below average rain) and derives a forward-looking causal projection (\"will likely cause a drop in harvest output\").
-   - This predictive deduction is the textbook definition of an INFERENCE.
+ - It takes an observed fact (40% below average rain) and derives a forward-looking causal projection (\""will likely cause a drop in harvest output\"").
+ - This predictive deduction is the textbook definition of an INFERENCE.
 2. Examine Options B, C, and D:
-   - Option B: Measured physical rainfall (65 mm) $\implies$ Empirical Fact.
-   - Option C: Government organizational charter $\implies$ Statutory Fact.
-   - Option D: Unit definition ($1\text{ ha} = 10,000\text{ m}^2$) $\implies$ Mathematical Fact.
+ - Option B: Measured physical rainfall (65 mm) implies Empirical Fact.
+ - Option C: Government organizational charter implies Statutory Fact.
+ - Option D: Unit definition (1 ha = 10,000 m²) implies Mathematical Fact.
 3. Conclude:
-   - Option A is the only Inference.
+ - Option A is the only Inference.
 
 Common Trap: Selecting measured rainfall (Option B) instead of the derived agricultural prediction.
-Exam Tip: Statements projecting probable future outcomes (\"will likely cause...\") based on current data are Inferences.","Correct. Survives elimination because predicting a harvest decline from rainfall data is a derived logical projection (Inference).","Eliminated because measured physical rainfall depth is an empirical fact.","Eliminated because agency organizational structure under DOST is an objective statutory fact.","Eliminated because 10,000 square meters per hectare is a defined mathematical fact.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
-"Passage: Read the four statements below: (1) 'The committee hearing commenced at 9:15 AM and adjourned at 11:45 AM.' (2) 'Director Santos frowned three times during the budget presentation.' (3) 'Director Santos was deeply angered by the budget presentation.' (4) 'The conference hall was arranged with exactly 50 wooden chairs.' Which statement is an INFERENCE?","Statement (3)","Statement (1)","Statement (2)","Statement (4)","A","Step-by-Step Solution:
+Exam Tip: Statements projecting probable future outcomes (\""will likely cause...\"") based on current data are Inferences.","Correct. Survives elimination because predicting a harvest decline from rainfall data is a derived logical projection (Inference).","Eliminated because measured physical rainfall depth is an empirical fact.","Eliminated because agency organizational structure under DOST is an objective statutory fact.","Eliminated because 10,000 square meters per hectare is a defined mathematical fact.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+"Passage: Read the four statements below: (1) 'The committee hearing commenced at 9:15 AM and adjourned at 11:45 AM.' (2) 'Director Santos frowned three × during the budget presentation.' (3) 'Director Santos was deeply angered by the budget presentation.' (4) 'The conference hall was arranged with exactly 50 wooden chairs.' Which statement is an INFERENCE?","Statement (3)","Statement (1)","Statement (2)","Statement (4)","A","Step-by-Step Solution:
 1. Evaluate each statement:
-   - Statement (1): Clock start/end times $\implies$ Directly measurable physical FACT.
-   - Statement (2): Frowning three times $\implies$ Directly observable facial expression FACT.
-   - Statement (3): \"Director Santos was deeply angered\" $\implies$ Inferring an internal psychological state (anger) from observed facial expressions (frowning). Internal emotions cannot be seen directly; they are deduced $\implies$ INFERENCE.
-   - Statement (4): 50 wooden chairs $\implies$ Directly countable physical FACT.
+ - Statement (1): Clock start/end × implies Directly measurable physical FACT.
+ - Statement (2): Frowning three × implies Directly observable facial expression FACT.
+ - Statement (3): \""Director Santos was deeply angered\"" implies Inferring an internal psychological state (anger) from observed facial expressions (frowning). Internal emotions cannot be seen directly; they are deduced implies INFERENCE.
+ - Statement (4): 50 wooden chairs implies Directly countable physical FACT.
 2. Conclude:
-   - Statement (3) is an Inference.
-   - Option A is correct.
+ - Statement (3) is an Inference.
+ - Option A is correct.
 
 Common Trap: Confusing the observable physical action (frowning in Statement 2) with the inferred internal emotion (anger in Statement 3).
-Exam Tip: Physical facial movements (tears, smiles, frowns) are Facts; the attributed emotional states (sadness, joy, anger) are Inferences.","Correct. Survives elimination because attributing internal anger based on external facial movements is an interpretive deduction (Inference).","Eliminated because meeting times are directly verifiable clock facts.","Eliminated because facial frowning is a directly observable physical action.","Eliminated because counting 50 chairs is an objective physical fact.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+Exam Tip: Physical facial movements (tears, smiles, frowns) are Facts; the attributed emotional states (sadness, joy, anger) are Inferences.","Correct. Survives elimination because attributing internal anger based on external facial movements is an interpretive deduction (Inference).","Eliminated because meeting × are directly verifiable clock facts.","Eliminated because facial frowning is a directly observable physical action.","Eliminated because counting 50 chairs is an objective physical fact.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: In an agency performance appraisal, the evaluator wrote: 'Section Chief Bautista submitted all 25 division deliverables prior to the scheduled deadline, demonstrating that Bautista is the most dedicated employee in the entire department.' The first clause ('submitted all 25 division deliverables prior to the scheduled deadline') is a __________, while the second clause ('demonstrating that Bautista is the most dedicated employee in the entire department') is a __________?","Fact; Value Judgment / Subjective Inference","Inference; Fact","Value Judgment; Fact","Fallacy; Metric","A","Step-by-Step Solution:
 1. Analyze Clause 1:
-   - \"submitted all 25 division deliverables prior to the scheduled deadline\"
-   - Counts (25 deliverables) and timestamps (prior to deadline) are documented in office tracking systems $\implies$ Objective empirical FACT.
-2. Analyze Clause 2:
-   - \"demonstrating that Bautista is the most dedicated employee in the entire department\"
-   - Translates timely submission into a superlative subjective appraisal of character (\"most dedicated\") $\implies$ VALUE JUDGMENT / SUBJECTIVE INFERENCE.
-3. Conclude:
-   - Clause 1 = Fact; Clause 2 = Value Judgment / Subjective Inference.
-   - Option A is the correct pair.
-
-Common Trap: Treating performance superlatives (\"most dedicated\") as facts rather than evaluative judgments.
-Exam Tip: Quantitative deadline metrics are Facts; qualitative virtue superlatives are Value Judgments.","Correct. Survives elimination because deliverable counts and deadlines are verifiable facts, while \"most dedicated\" is an evaluative value judgment.","Eliminated because this inverts the relationship.","Eliminated because submission logs are facts, not value judgments.","Eliminated because deadline compliance is not a logical fallacy.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+ - \""submitted all 25 division deliverables prior to the scheduled deadline\","","","","","",""
+"- Counts (25 deliverables) and timestamps (prior to deadline) are documented in office tracking systems implies Objective empirical FACT.","","","","","","","","","","","",""
+"2. Analyze Clause 2:","","","","","","","","","","","",""
+"- \""demonstrating that Bautista is the most dedicated employee in the entire department\""","","","","","","","","","","","",""
+"- Translates timely submission into a superlative subjective appraisal of character (\""most dedicated\"") implies VALUE JUDGMENT / SUBJECTIVE INFERENCE.","","","","","","","","","","","",""
+"3. Conclude:","","","","","","","","","","","",""
+"- Clause 1 = Fact; Clause 2 = Value Judgment / Subjective Inference.","","","","","","","","","","","",""
+"- Option A is the correct pair.","","","","","","","","","","","",""
+"Common Trap: Treating performance superlatives (\""most dedicated\"") as facts rather than evaluative judgments.","","","","","","","","","","","",""
+"Exam Tip: Quantitative deadline metrics are Facts; qualitative virtue superlatives are Value Judgments.""","Correct. Survives elimination because deliverable counts and deadlines are verifiable facts, while \""most dedicated\"" is an evaluative value judgment.","Eliminated because this inverts the relationship.","Eliminated because submission logs are facts, not value judgments.","Eliminated because deadline compliance is not a logical fallacy.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098","","","","","",""
 "Passage: Which of the following statements is a VALID FACTUAL ASSERTION under Philippine administrative law?","An employee holding a permanent civil service appointment enjoys security of tenure and cannot be dismissed except for just cause and after due process.","Public service in government is the only noble career path for Filipino university graduates.","Corporate private executives possess greater patriotism than civil service personnel.","Every public school teacher prefers conducting weekend remedial classes.","A","Step-by-Step Solution:
 1. Examine Option A:
-   - Directly restates Article IX-B, Section 2(3) of the 1987 Philippine Constitution and the Civil Service Decree (PD 807) $\implies$ Constitutional and statutory legal FACT.
+ - Directly restates Article IX-B, Section 2(3) of the 1987 Philippine Constitution and the Civil Service Decree (PD 807) implies Constitutional and statutory legal FACT.
 2. Examine Option B:
-   - \"the only noble career path\" $\implies$ Subjective moral opinion (Value Judgment).
+ - \""the only noble career path\"" implies Subjective moral opinion (Value Judgment).
 3. Examine Option C:
-   - \"possess greater patriotism\" $\implies$ Unquantifiable subjective bias.
+ - \""possess greater patriotism\"" implies Unquantifiable subjective bias.
 4. Examine Option D:
-   - \"Every teacher prefers weekend classes\" $\implies$ Sweeping false generalization.
+ - \""Every teacher prefers weekend classes\"" implies Sweeping false generalization.
 5. Conclude:
-   - Option A is the only valid factual assertion.
+ - Option A is the only valid factual assertion.
 
 Common Trap: Confusing subjective public administration ideals with black-letter constitutional law.
-Exam Tip: Constitutional provisions and statutory rights (Security of Tenure) are codified legal Facts.","Correct. Survives elimination because Security of Tenure under just cause and due process is an established constitutional and statutory fact.","Eliminated because declaring public service the \"only noble career\" is a subjective opinion.","Eliminated because comparative patriotism is an unmeasurable subjective bias.","Eliminated because universal teacher preferences are an unsupported generalization.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
+Exam Tip: Constitutional provisions and statutory rights (Security of Tenure) are codified legal Facts.","Correct. Survives elimination because Security of Tenure under just cause and due process is an established constitutional and statutory fact.","Eliminated because declaring public service the \""only noble career\"" is a subjective opinion.","Eliminated because comparative patriotism is an unmeasurable subjective bias.","Eliminated because universal teacher preferences are an unsupported generalization.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"
 "Passage: A criminologist noted: (1) 'The city recorded 120 homicides in 2022 and 84 homicides in 2023.' (2) 'The 30% decline in homicides proves that the new municipal curfew caused violent criminals to abandon illegal activities.' How are these two statements related in critical reasoning?","Statement (1) presents empirical statistical data (FACT), while Statement (2) draws a causal conclusion (INFERENCE) that assumes the curfew was the sole driver of the decline.","Statement (1) is a hypothesis, while Statement (2) is a direct physical measurement.","Both Statement (1) and Statement (2) are unverified subjective opinions.","Statement (1) is an inference drawn from Statement (2).","A","Step-by-Step Solution:
 1. Analyze Statement (1):
-   - Numerical crime statistics (120 vs 84 homicides) recorded in police blotters $\implies$ Empirical statistical FACT.
+ - Numerical crime statistics (120 vs 84 homicides) recorded in police blotters implies Empirical statistical FACT.
 2. Analyze Statement (2):
-   - Attributing the 30% reduction to a specific causal mechanism (curfew causing criminals to quit) $\implies$ Interpretive causal INFERENCE.
+ - Attributing the 30% reduction to a specific causal mechanism (curfew causing criminals to quit) implies Interpretive causal INFERENCE.
 3. Compare the relationship:
-   - Statement (1) provides the raw data (Fact), while Statement (2) constructs a causal narrative (Inference) around that data.
-   - Option A accurately describes this foundational relationship in critical reasoning.
+ - Statement (1) provides the raw data (Fact), while Statement (2) constructs a causal narrative (Inference) around that data.
+ - Option A accurately describes this foundational relationship in critical reasoning.
 4. Evaluate incorrect alternatives:
-   - Option B: Crime counts are data, not hypotheses.
-   - Option C: Police blotter statistics are facts, not opinions.
-   - Option D: Inverts the direction of deduction.
+ - Option B: Crime counts are data, not hypotheses.
+ - Option C: Police blotter statistics are facts, not opinions.
+ - Option D: Inverts the direction of deduction.
 
 Common Trap: Failing to separate the factual percentage change from the speculative causal reason assigned to it.
 Exam Tip: Statistical numbers are Facts; the policy explanation attached to those numbers is an Inference.","Correct. Survives elimination because official homicide numbers are empirical facts, while claiming the curfew caused the reduction is a derived causal inference.","Eliminated because recorded homicide counts are empirical data, not hypotheses.","Eliminated because police blotter counts are verified facts, not personal opinions.","Eliminated because the data in (1) precedes the causal interpretation in (2).","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Fact vs inference | Very Difficult | Batch 098"

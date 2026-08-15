@@ -1,6 +1,6 @@
 "use client";
 
-import { formatPromptHTML } from "@/lib/formatPrompt";
+import { formatPromptHTML, cleanMathText } from "@/lib/formatPrompt";
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -625,7 +625,7 @@ function TakeExamPageInner() {
                     : "border-slate-200 dark:border-slate-800 hover:border-slate-300 text-slate-700 bg-slate-50/50"
                 }`}
               >
-                <span>{opt}</span>
+                <span>{cleanMathText(opt)}</span>
                 <div
                   className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                     isSelected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"

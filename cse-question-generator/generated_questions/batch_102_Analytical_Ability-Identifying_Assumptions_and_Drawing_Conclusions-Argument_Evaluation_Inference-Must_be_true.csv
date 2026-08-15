@@ -2,153 +2,153 @@
 "Passage: A committee deliberating a regional infrastructure project reviewed the following four statements made during a public hearing: Statement 1: The proposed expressway will traverse 12 barangays covering 47 kilometers. Statement 2: Engineering surveys confirm the route avoids all Class A agricultural lands and protected watershed areas. Statement 3: The Department of Public Works has certified the project as technically feasible and environmentally compliant. Statement 4: Community consultation meetings have been conducted in 11 of the 12 affected barangays, with the 12th scheduled next week. Based ONLY on these four statements, which of the following MUST BE TRUE?","At least one barangay in the affected area has not yet completed its community consultation meeting as of the hearing date.","All 12 barangays have fully endorsed the expressway project.","No affected barangay is classified as an agricultural zone.","The expressway will be completed within the current administration's term.","A","Step-by-Step Solution:
 1. Apply strict logical deduction—what MUST BE TRUE based only on the given statements:
 2. Evaluate Option A:
-   - Statement 4 explicitly states consultations have been completed in 11 of 12 barangays, with the 12th scheduled for the following week.
-   - Therefore, as of the hearing date, the 12th barangay has NOT yet had its consultation meeting.
-   - This MUST BE TRUE based directly on Statement 4 ✓.
+ - Statement 4 explicitly states consultations have been completed in 11 of 12 barangays, with the 12th scheduled for the following week.
+ - Therefore, as of the hearing date, the 12th barangay has NOT yet had its consultation meeting.
+ - This MUST BE TRUE based directly on Statement 4 ✓.
 3. Evaluate Option B:
-   - Consultation was conducted in 11 barangays, but 'conducted' ≠ 'endorsed.' No endorsement data is given. CANNOT conclude ✗.
+ - Consultation was conducted in 11 barangays, but 'conducted' ≠ 'endorsed.' No endorsement data is given. CANNOT conclude ✗.
 4. Evaluate Option C:
-   - Statement 2 says the route avoids Class A agricultural lands. This does not mean no barangay is classified as agricultural—only that the route avoids such classifications. CANNOT conclude ✗.
+ - Statement 2 says the route avoids Class A agricultural lands. This does not mean no barangay is classified as agricultural—only that the route avoids such classifications. CANNOT conclude ✗.
 5. Evaluate Option D:
-   - No completion timeline was stated. CANNOT conclude ✗.
+ - No completion timeline was stated. CANNOT conclude ✗.
 
 Common Trap: Confusing 'conducted consultations' with 'received endorsements,' or 'avoids agricultural lands' with 'no agricultural barangays.'
 Exam Tip: 'Must be true' questions require that the conclusion be necessarily and unavoidably true based on what is stated—not what is probable or implied.","Correct. Survives elimination because Statement 4 explicitly confirms only 11 of 12 consultations are complete; the 12th has not yet occurred.","Eliminated because consultation was conducted (held) in 11 barangays but endorsement or approval is not stated for any barangay.","Eliminated because the route avoids Class A agricultural lands, but this does not mean no affected barangay has an agricultural classification.","Eliminated because no timeline data or completion target is provided anywhere in the four statements.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A government audit report on a public university's fund utilization contains the following verified findings: Finding 1: PHP 12.4 million in special trust fund collections were not recorded in the official books of accounts. Finding 2: PHP 3.1 million in recorded special trust fund expenditures lacked supporting documentation. Finding 3: The university submitted financial statements that did not include special trust fund balances. Finding 4: The Commission on Audit flagged these findings as material misstatements requiring immediate management action. Based ONLY on these four findings, which of the following MUST BE TRUE?","The university's financial statements submitted for the audit period do not accurately represent its actual financial position due to material omissions and unsupported transactions.","University officials intentionally committed fraud to conceal the unrecorded collections.","The special trust funds were entirely misappropriated by university administrators.","The Commission on Audit will file criminal charges against the university president.","A","Step-by-Step Solution:
 1. Derive what necessarily follows from the four findings:
 2. Evaluate Option A:
-   - Finding 1: PHP 12.4M not recorded = omission from financial statements.
-   - Finding 3: Financial statements excluded special trust fund balances entirely.
-   - Finding 4: COA declared these material misstatements.
-   - Therefore: The submitted financial statements are materially inaccurate = MUST BE TRUE ✓.
+ - Finding 1: PHP 12.4M not recorded = omission from financial statements.
+ - Finding 3: Financial statements excluded special trust fund balances entirely.
+ - Finding 4: COA declared these material misstatements.
+ - Therefore: The submitted financial statements are materially inaccurate = MUST BE TRUE ✓.
 3. Evaluate Option B:
-   - 'Intentional fraud' requires proving intent. Audit findings document irregularities but do not establish intent. CANNOT conclude ✗.
+ - 'Intentional fraud' requires proving intent. Audit findings document irregularities but do not establish intent. CANNOT conclude ✗.
 4. Evaluate Option C:
-   - Unrecorded ≠ misappropriated. Funds could be poorly tracked without being stolen. CANNOT conclude ✗.
+ - Unrecorded ≠ misappropriated. Funds could be poorly tracked without being stolen. CANNOT conclude ✗.
 5. Evaluate Option D:
-   - COA findings lead to management action directives; criminal charges are not a necessary result. CANNOT conclude ✗.
+ - COA findings lead to management action directives; criminal charges are not a necessary result. CANNOT conclude ✗.
 
 Common Trap: Leaping from financial irregularities to intentional fraud or criminal charges.
 Exam Tip: 'Must be true' conclusions must follow logically from stated facts without additional assumptions about intent, motive, or procedural outcomes.","Correct. Survives elimination because unrecorded funds (F1), unsupported expenditures (F2), omitted balances from financial statements (F3), and COA's material misstatement classification (F4) together necessarily establish financial statement inaccuracy.","Eliminated because audit findings document irregularities but cannot establish intentional fraudulent intent without further investigation.","Eliminated because unrecorded funds could reflect poor bookkeeping rather than misappropriation—these are not equivalent conclusions.","Eliminated because COA's required management action does not necessarily result in criminal charges; these are distinct legal processes.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A legislative committee studying public sector wages received a briefing with the following data points: Data 1: The national median salary for government employees in the professional category is PHP 28,500 per month. Data 2: Forty-three percent of government employees in the professional category earn below PHP 28,500 per month. Data 3: The salary grade of 62% of government employees in the technical category falls below that of the lowest professional category salary grade. Data 4: Private sector median wages for equivalent professional roles exceed government wages by an average of 34%. Based ONLY on these four data points, which of the following MUST BE TRUE?","A majority of government employees in the technical category are compensated at a salary grade below the minimum salary grade of the professional category.","All government employees earn less than their private sector counterparts in equivalent roles.","The Philippine government pays poverty-level wages to all technical employees.","Private sector wages will continue to exceed government wages for the next decade.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Data 3: 62% of technical category employees are below the lowest professional salary grade.
-   - 62% > 50%, therefore a majority (more than half) of technical employees are below the professional minimum.
-   - This MUST BE TRUE based directly on Data 3 ✓.
+ - Data 3: 62% of technical category employees are below the lowest professional salary grade.
+ - 62% > 50%, therefore a majority (more than half) of technical employees are below the professional minimum.
+ - This MUST BE TRUE based directly on Data 3 ✓.
 2. Evaluate Option B:
-   - Data 4 gives a 34% average gap, but 'all' is too absolute. Some government roles may exceed private equivalents. CANNOT conclude 'all' ✗.
+ - Data 4 gives a 34% average gap, but 'all' is too absolute. Some government roles may exceed private equivalents. CANNOT conclude 'all' ✗.
 3. Evaluate Option C:
-   - 'Poverty-level wages' is not defined or referenced in any data point. CANNOT conclude ✗.
+ - 'Poverty-level wages' is not defined or referenced in any data po∫. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - Future projections are not derivable from current static data. CANNOT conclude ✗.
+ - Future projections are not derivable from current static data. CANNOT conclude ✗.
 
 Common Trap: Interpreting a percentage average (Data 4) as a universal absolute ('all employees').
 Exam Tip: 'A majority' (>50%) can be directly established from a percentage above 50%; 'all' requires 100% certainty and is almost never derivable from partial data.","Correct. Survives elimination because Data 3 explicitly states 62% of technical employees fall below the lowest professional salary grade—62% constitutes a majority.","Eliminated because Data 4 gives an average gap, not a universal statement; some government roles may match or exceed private sector wages.","Eliminated because 'poverty-level wages' is not defined or referenced in any of the four data points.","Eliminated because future wage trajectories cannot be logically derived from current static data alone.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
-"Passage: An HR investigation team documented the following facts about a personnel complaint: Fact 1: Employee Navarro filed a formal complaint on March 1 against supervisor Alegre for grave misconduct. Fact 2: Navarro was placed on a 30-day preventive suspension starting March 5 by the agency head. Fact 3: The Office of the Ombudsman received the complaint referral from the agency on March 10. Fact 4: Alegre's appointment was signed by the Civil Service Commission on January 15 and is within his initial probationary period. Based ONLY on these four facts, which of the following MUST BE TRUE?","The formal complaint against Alegre preceded both his preventive suspension referral to the Ombudsman and the Ombudsman's receipt of the complaint.","Navarro was suspended because the agency found him guilty of filing a baseless complaint.","Alegre cannot be held administratively liable because he is on probationary status.","The Ombudsman dismissed the complaint upon receipt due to procedural defects.","A","Step-by-Step Solution:
+"Passage: An HR investigation team documented the following facts about a personnel compla∫: Fact 1: Employee Navarro filed a formal compla∫ on March 1 against supervisor Alegre for grave misconduct. Fact 2: Navarro was placed on a 30-day preventive suspension starting March 5 by the agency head. Fact 3: The Office of the Ombudsman received the compla∫ referral from the agency on March 10. Fact 4: Alegre's appointment was signed by the Civil Service Commission on January 15 and is within his initial probationary period. Based ONLY on these four facts, which of the following MUST BE TRUE?","The formal compla∫ against Alegre preceded both his preventive suspension referral to the Ombudsman and the Ombudsman's receipt of the compla∫.","Navarro was suspended because the agency found him guilty of filing a baseless compla∫.","Alegre cannot be held administratively liable because he is on probationary status.","The Ombudsman dismissed the compla∫ upon receipt due to procedural defects.","A","Step-by-Step Solution:
 1. Establish the timeline from the facts:
-   - March 1: Navarro files complaint.
-   - March 5: Navarro placed on preventive suspension.
-   - March 10: Ombudsman receives complaint referral.
+ - March 1: Navarro files compla∫.
+ - March 5: Navarro placed on preventive suspension.
+ - March 10: Ombudsman receives compla∫ referral.
 2. Evaluate Option A:
-   - Complaint filed March 1 (Fact 1).
-   - Preventive suspension started March 5 (Fact 2) → after March 1 ✓.
-   - Ombudsman received March 10 (Fact 3) → after March 1 ✓.
-   - Therefore: The complaint necessarily preceded both events. MUST BE TRUE ✓.
+ - Compla∫ filed March 1 (Fact 1).
+ - Preventive suspension started March 5 (Fact 2) → after March 1 ✓.
+ - Ombudsman received March 10 (Fact 3) → after March 1 ✓.
+ - Therefore: The compla∫ necessarily preceded both events. MUST BE TRUE ✓.
 3. Evaluate Option B:
-   - Fact 2 states preventive suspension was ordered, but 'because the agency found him guilty' is not stated. Preventive suspension can be ordered for other administrative reasons. CANNOT conclude ✗.
+ - Fact 2 states preventive suspension was ordered, but 'because the agency found him guilty' is not stated. Preventive suspension can be ordered for other administrative reasons. CANNOT conclude ✗.
 4. Evaluate Option C:
-   - Probationary status does not exempt an employee from administrative liability. This is legally incorrect. ✗.
+ - Probationary status does not exempt an employee from administrative liability. This is legally incorrect. ✗.
 5. Evaluate Option D:
-   - No information about Ombudsman's action upon receipt is given. CANNOT conclude ✗.
+ - No information about Ombudsman's action upon receipt is given. CANNOT conclude ✗.
 
 Common Trap: Confusing the reason for preventive suspension with a finding of guilt.
-Exam Tip: Timeline deductions in 'must be true' questions require establishing simple chronological precedence based on the stated dates.","Correct. Survives elimination because March 1 (complaint filing) chronologically precedes March 5 (suspension) and March 10 (Ombudsman receipt)—this timeline necessarily follows from the stated facts.","Eliminated because the facts state the suspension occurred but do not provide the stated reason; inferring a guilt finding goes beyond the stated facts.","Eliminated because probationary status does not establish legal immunity from administrative liability under Philippine civil service law.","Eliminated because no information about the Ombudsman's action after receipt is contained in any of the four facts.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
+Exam Tip: Timeline deductions in 'must be true' questions require establishing simple chronological precedence based on the stated dates.","Correct. Survives elimination because March 1 (compla∫ filing) chronologically precedes March 5 (suspension) and March 10 (Ombudsman receipt)—this timeline necessarily follows from the stated facts.","Eliminated because the facts state the suspension occurred but do not provide the stated reason; inferring a guilt finding goes beyond the stated facts.","Eliminated because probationary status does not establish legal immunity from administrative liability under Philippine civil service law.","Eliminated because no information about the Ombudsman's action after receipt is contained in any of the four facts.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A public transportation planning study published the following conclusions: Conclusion 1: The current bus fleet in Metro Manila is operating at an average of 148% of rated passenger capacity during peak hours. Conclusion 2: The planned 40% fleet expansion will add 1,200 buses over 36 months. Conclusion 3: Route rationalization has reduced average travel time by 18 minutes per commute in pilot corridors. Conclusion 4: Zero new bus routes were approved in the past fiscal year. Based ONLY on these four conclusions, which of the following MUST BE TRUE?","The current bus fleet is overcrowded during peak hours, carrying significantly more passengers than it was designed to accommodate.","The fleet expansion will fully resolve peak-hour overcrowding within 36 months.","Route rationalization will be implemented nationwide within the next fiscal year.","No new transportation infrastructure was constructed in Metro Manila in the past fiscal year.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Conclusion 1: Average load = 148% of rated capacity during peak hours.
-   - 148% > 100% = the fleet is operating above its designed passenger capacity.
-   - This definitionally means passengers are being crowded beyond designed capacity = overcrowding. MUST BE TRUE ✓.
+ - Conclusion 1: Average load = 148% of rated capacity during peak hours.
+ - 148% > 100% = the fleet is operating above its designed passenger capacity.
+ - This definitionally means passengers are being crowded beyond designed capacity = overcrowding. MUST BE TRUE ✓.
 2. Evaluate Option B:
-   - 'Fully resolve' is absolute. Adding 1,200 buses may not fully close the capacity gap, especially if demand grows. CANNOT conclude ✗.
+ - 'Fully resolve' is absolute. Adding 1,200 buses may not fully close the capacity gap, especially if demand grows. CANNOT conclude ✗.
 3. Evaluate Option C:
-   - Nationwide implementation is not stated; only pilot corridor results are given. CANNOT conclude ✗.
+ - Nationwide implementation is not stated; only pilot corridor results are given. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - Conclusion 4 states no new bus ROUTES were approved. This doesn't mean no infrastructure was built—roads, terminals, or other transport infrastructure may have been constructed. CANNOT conclude ✗.
+ - Conclusion 4 states no new bus ROUTES were approved. This doesn't mean no infrastructure was built—roads, terminals, or other transport infrastructure may have been constructed. CANNOT conclude ✗.
 
 Common Trap: Extending 'no new bus routes' to 'no new infrastructure' (broader, unsupported claim).
 Exam Tip: 148% of rated capacity is by definition overcrowding—no assumption is needed. It is a direct mathematical truth.","Correct. Survives elimination because 148% of rated passenger capacity definitionally means passengers are packed beyond design limits, which is the definition of overcrowding.","Eliminated because 'fully resolve' is absolute; fleet expansion may reduce but not necessarily eliminate overcrowding, especially under growing demand.","Eliminated because Conclusion 3 covers only pilot corridors; nationwide rollout is not stated.","Eliminated because Conclusion 4 covers bus route approvals specifically; other transportation infrastructure projects are not addressed.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
-"Passage: A civil service eligibility certification document states the following: Point 1: The examinee passed the Career Service Professional Examination conducted on April 20, 2024. Point 2: The eligibility confers upon the holder the right to be appointed to first and second level positions in the civil service covered by the Career Service. Point 3: The eligibility is valid until the holder violates a condition that results in its cancellation. Point 4: Posting of the certification in a public database is subject to the Data Privacy Act. Based ONLY on these four points, which of the following MUST BE TRUE?","The eligibility holder is legally qualified to be appointed to both first and second level civil service positions covered by the Career Service.","The examinee is guaranteed appointment to a government position within 12 months of passing.","The eligibility cannot be cancelled under any circumstances once issued.","Posting the holder's certification data publicly is unrestricted and automatic.","A","Step-by-Step Solution:
+"Passage: A civil service eligibility certification document states the following: Po∫ 1: The examinee passed the Career Service Professional Examination conducted on April 20, 2024. Po∫ 2: The eligibility confers upon the holder the right to be appointed to first and second level positions in the civil service covered by the Career Service. Po∫ 3: The eligibility is valid until the holder violates a condition that results in its cancellation. Po∫ 4: Posting of the certification in a public database is subject to the Data Privacy Act. Based ONLY on these four points, which of the following MUST BE TRUE?","The eligibility holder is legally qualified to be appointed to both first and second level civil service positions covered by the Career Service.","The examinee is guaranteed appointment to a government position within 12 months of passing.","The eligibility cannot be cancelled under any circumstances once issued.","Posting the holder's certification data publicly is unrestricted and automatic.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Point 2 explicitly states the eligibility 'confers upon the holder the right to be appointed to first and second level positions in the civil service covered by the Career Service.'
-   - This MUST BE TRUE as a direct statement in the certification ✓.
+ - Po∫ 2 explicitly states the eligibility 'confers upon the holder the right to be appointed to first and second level positions in the civil service covered by the Career Service.'
+ - This MUST BE TRUE as a direct statement in the certification ✓.
 2. Evaluate Option B:
-   - Passing the exam confers eligibility (qualification), not guaranteed appointment. Appointment depends on vacancies, selection, and other factors. CANNOT conclude ✗.
+ - Passing the exam confers eligibility (qualification), not guaranteed appointment. Appointment depends on vacancies, selection, and other factors. CANNOT conclude ✗.
 3. Evaluate Option C:
-   - Point 3 explicitly states eligibility is valid 'until the holder violates a condition that results in cancellation.' Cancellation is possible. CANNOT conclude ✗.
+ - Po∫ 3 explicitly states eligibility is valid 'until the holder violates a condition that results in cancellation.' Cancellation is possible. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - Point 4 states posting is 'subject to the Data Privacy Act,' implying restrictions apply—not that posting is unrestricted. CANNOT conclude ✗.
+ - Po∫ 4 states posting is 'subject to the Data Privacy Act,' implying restrictions apply—not that posting is unrestricted. CANNOT conclude ✗.
 
 Common Trap: Confusing eligibility (qualification) with guaranteed appointment; mistaking 'valid until cancelled' with 'can never be cancelled'.
-Exam Tip: Directly stated rights and qualifications in official documents constitute 'must be true' conclusions without additional inference.","Correct. Survives elimination because Point 2 directly and explicitly states the eligibility confers the right to appointment at first and second level civil service positions.","Eliminated because eligibility confers qualification, not guaranteed appointment; actual appointment depends on separate selection and vacancy processes.","Eliminated because Point 3 explicitly acknowledges that eligibility can be cancelled when conditions are violated.","Eliminated because Point 4 states posting is subject to Data Privacy Act restrictions—not that it is automatic and unrestricted.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
+Exam Tip: Directly stated rights and qualifications in official documents constitute 'must be true' conclusions without additional inference.","Correct. Survives elimination because Po∫ 2 directly and explicitly states the eligibility confers the right to appointment at first and second level civil service positions.","Eliminated because eligibility confers qualification, not guaranteed appointment; actual appointment depends on separate selection and vacancy processes.","Eliminated because Po∫ 3 explicitly acknowledges that eligibility can be cancelled when conditions are violated.","Eliminated because Po∫ 4 states posting is subject to Data Privacy Act restrictions—not that it is automatic and unrestricted.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A financial inclusion report on rural banking presents the following data: Data A: Only 23% of rural barangays in Region VIII have a bank branch or ATM within 5 kilometers. Data B: Mobile banking adoption in rural areas of Region VIII grew by 67% over the past two years. Data C: Microfinance institutions serve 41% of rural households in Region VIII not reached by formal banking. Data D: The Bangko Sentral ng Pilipinas has issued 15 new rural bank licenses in Region VIII in the past 3 years. Based ONLY on these four data points, which of the following MUST BE TRUE?","A significant portion—more than half—of rural barangays in Region VIII do not have convenient physical banking access within 5 kilometers.","All rural households in Region VIII that lack formal banking are served by microfinance institutions.","Mobile banking will fully replace physical bank branches in rural Region VIII within five years.","Rural banking coverage in Region VIII is worse than in all other Philippine regions.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Data A: 23% of rural barangays have banking access within 5 km.
-   - Complement: 100% - 23% = 77% do not have convenient access.
-   - 77% > 50%, which means the majority (more than half) lack convenient physical banking.
-   - This MUST BE TRUE directly from Data A ✓.
+ - Data A: 23% of rural barangays have banking access within 5 km.
+ - Complement: 100% - 23% = 77% do not have convenient access.
+ - 77% > 50%, which means the majority (more than half) lack convenient physical banking.
+ - This MUST BE TRUE directly from Data A ✓.
 2. Evaluate Option B:
-   - Data C: Microfinance serves 41% of unbanked rural households. 'All' unbanked households are served is incorrect—41% ≠ 100%. CANNOT conclude ✗.
+ - Data C: Microfinance serves 41% of unbanked rural households. 'All' unbanked households are served is incorrect—41% ≠ 100%. CANNOT conclude ✗.
 3. Evaluate Option C:
-   - Future replacement projections cannot be derived from current adoption growth data alone. CANNOT conclude ✗.
+ - Future replacement projections cannot be derived from current adoption growth data alone. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - No comparative regional data is provided. CANNOT conclude ✗.
+ - No comparative regional data is provided. CANNOT conclude ✗.
 
 Common Trap: Confusing '41% of unbanked households served by microfinance' with 'all unbanked households are served.'
 Exam Tip: Simple arithmetic complements (100% minus a stated percentage) yield 'must be true' conclusions when the result supports a definite claim.","Correct. Survives elimination because 100% - 23% = 77% of rural barangays lack convenient banking access; 77% constitutes a large majority, making this necessarily true.","Eliminated because 41% served by microfinance means 59% of unbanked households are not served—'all' is directly contradicted by the data.","Eliminated because current growth rates do not allow future replacement to be logically concluded from static current data.","Eliminated because no comparative data for other Philippine regions is provided; cross-regional comparisons cannot be made from Region VIII data alone.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A legislative committee on judicial reform received the following documented facts during a public consultation: Fact I: The average resolution time for civil cases in first-level courts is 4.3 years from filing to decision. Fact II: The Supreme Court's most recent statistical report identifies case backlogs as the primary driver of delayed resolution. Fact III: The Philippines' case clearance rate (cases resolved vs. cases filed) for 2023 was 87%. Fact IV: A proposed bill seeks to add 150 new judgeships to address judicial manpower shortages. Based ONLY on these four facts, which of the following MUST BE TRUE?","Philippine courts in 2023 did not resolve all newly filed cases, as an 87% case clearance rate means 13% of filed cases were not resolved within the year.","The proposed bill to add 150 judgeships will reduce the average resolution time to below 1 year within 5 years.","Case backlog in Philippine courts is caused exclusively by an insufficient number of judges.","The Supreme Court's statistical report is the definitive cause of the proposed bill on new judgeships.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Fact III: Case clearance rate = 87%.
-   - Clearance rate = cases resolved ÷ cases filed × 100%.
-   - 87% clearance means 13% of newly filed cases were not resolved that year.
-   - This MUST BE TRUE as a direct mathematical consequence of Fact III ✓.
+ - Fact III: Case clearance rate = 87%.
+ - Clearance rate = cases resolved ÷ cases filed × 100%.
+ - 87% clearance means 13% of newly filed cases were not resolved that year.
+ - This MUST BE TRUE as a direct mathematical consequence of Fact III ✓.
 2. Evaluate Option B:
-   - The impact of 150 new judgeships on resolution time is not calculable from the given facts. CANNOT conclude ✗.
+ - The impact of 150 new judgeships on resolution time is not calculable from the given facts. CANNOT conclude ✗.
 3. Evaluate Option C:
-   - Fact II: Case backlogs are identified as the 'primary driver'—not 'exclusive cause.' Other causes may exist. CANNOT conclude 'exclusively' ✗.
+ - Fact II: Case backlogs are identified as the 'primary driver'—not 'exclusive cause.' Other causes may exist. CANNOT conclude 'exclusively' ✗.
 4. Evaluate Option D:
-   - The causal relationship between the Supreme Court report and the bill's origin is not stated in any fact. CANNOT conclude ✗.
+ - The causal relationship between the Supreme Court report and the bill's origin is not stated in any fact. CANNOT conclude ✗.
 
 Common Trap: Interpreting 'primary driver' as 'exclusive cause.'
 Exam Tip: An 87% clearance rate mathematically and necessarily means 13% of filed cases remain unresolved—this is a direct arithmetic derivation with no assumptions.","Correct. Survives elimination because an 87% case clearance rate is a direct mathematical statement that 13% of newly filed cases were not resolved during the period.","Eliminated because the impact of 150 judgeships on resolution time over 5 years cannot be calculated from the facts provided.","Eliminated because Fact II identifies backlogs as the 'primary driver,' not the 'exclusive cause'; other contributing factors are not excluded.","Eliminated because no causal link between the Supreme Court statistical report and the proposed bill's legislative origin is stated in any fact.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: During a barangay development planning session, the barangay captain presented the following verified statistics: Stat 1: The barangay's total registered voters numbered 3,842 as of the last election. Stat 2: Voter turnout in the last election was 74%. Stat 3: The barangay captain won by receiving 58% of all votes cast. Stat 4: The barangay has an active Youth Development Council with 312 registered youth members. Based ONLY on these four statistics, which of the following MUST BE TRUE?","The barangay captain received votes from more than half of all citizens who voted in the last election.","The barangay captain was supported by more than half of all registered voters.","The Youth Development Council membership exceeds the number of barangay officials.","The total number of votes cast in the last election exceeded 3,000 votes.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Stat 3: The barangay captain received 58% of all votes CAST.
-   - 58% > 50%, meaning more than half of actual voters voted for the captain.
-   - This MUST BE TRUE by direct application of Stat 3 ✓.
+ - Stat 3: The barangay captain received 58% of all votes CAST.
+ - 58% > 50%, meaning more than half of actual voters voted for the captain.
+ - This MUST BE TRUE by direct application of Stat 3 ✓.
 2. Evaluate Option B:
-   - 'More than half of all registered voters' requires: captain's votes > 50% of 3,842.
-   - Actual votes cast (Stat 2): 74% × 3,842 = 2,843 votes.
-   - Captain's votes: 58% × 2,843 = 1,649 votes.
-   - 1,649 ÷ 3,842 = 42.9% of registered voters → less than half. CANNOT conclude B ✗.
+ - 'More than half of all registered voters' requires: captain's votes > 50% of 3,842.
+ - Actual votes cast (Stat 2): 74% × 3,842 = 2,843 votes.
+ - Captain's votes: 58% × 2,843 = 1,649 votes.
+ - 1,649 ÷ 3,842 = 42.9% of registered voters → less than half. CANNOT conclude B ✗.
 3. Evaluate Option C:
-   - Number of barangay officials is not stated. CANNOT conclude ✗.
+ - Number of barangay officials is not stated. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - Votes cast: 74% × 3,842 = 2,843. 2,843 < 3,000. CANNOT conclude—it's actually fewer than 3,000 ✗.
+ - Votes cast: 74% × 3,842 = 2,843. 2,843 < 3,000. CANNOT conclude—it's actually fewer than 3,000 ✗.
 
 Common Trap: Confusing '58% of votes cast' with '58% of registered voters.'
 Exam Tip: Percentage of votes cast vs. percentage of registered voters are distinct calculations—always identify the correct denominator.","Correct. Survives elimination because 58% of all votes cast (Stat 3) directly means the captain received more than half of all ballots submitted by voting citizens.","Eliminated because 58% of votes cast equals approximately 43% of all registered voters—less than the required majority of registered voters.","Eliminated because the number of barangay officials is not provided in any of the four statistics.","Eliminated because the arithmetic yields 74% × 3,842 = approximately 2,843 votes cast, which is below 3,000.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"
 "Passage: A national health agency's tuberculosis monitoring report states: Report Finding A: The TB case detection rate in the Philippines in 2023 was 89%, meaning 89% of estimated TB cases were successfully identified. Report Finding B: The TB treatment success rate among detected and enrolled cases was 92%. Report Finding C: TB remains in the top 10 causes of mortality in the Philippines. Report Finding D: A new rapid diagnostic test was pilot-tested in 3 provinces, reducing diagnosis time from 2 weeks to 48 hours. Based ONLY on these four findings, which of the following MUST BE TRUE?","Some TB patients in the Philippines in 2023 were not detected, as an 89% detection rate means 11% of estimated TB cases went unidentified.","All detected TB cases were successfully treated in 2023.","The new rapid diagnostic test will be deployed nationally within the next fiscal year.","TB mortality in the Philippines is higher than in all other Southeast Asian countries.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Finding A: 89% detection rate = 89% of estimated TB cases were found.
-   - Complement: 100% - 89% = 11% of estimated TB cases were NOT detected.
-   - This MUST BE TRUE as a direct mathematical consequence of the 89% detection rate ✓.
+ - Finding A: 89% detection rate = 89% of estimated TB cases were found.
+ - Complement: 100% - 89% = 11% of estimated TB cases were NOT detected.
+ - This MUST BE TRUE as a direct mathematical consequence of the 89% detection rate ✓.
 2. Evaluate Option B:
-   - Finding B: 92% treatment success among ENROLLED cases.
-   - 'All' requires 100%; 92% ≠ 100%. 8% of enrolled cases did not succeed. CANNOT conclude ✗.
+ - Finding B: 92% treatment success among ENROLLED cases.
+ - 'All' requires 100%; 92% ≠ 100%. 8% of enrolled cases did not succeed. CANNOT conclude ✗.
 3. Evaluate Option C:
-   - Pilot testing in 3 provinces does not imply national rollout. CANNOT conclude ✗.
+ - Pilot testing in 3 provinces does not imply national rollout. CANNOT conclude ✗.
 4. Evaluate Option D:
-   - No comparative Southeast Asian data is provided. CANNOT conclude ✗.
+ - No comparative Southeast Asian data is provided. CANNOT conclude ✗.
 
 Common Trap: Treating an 89% detection rate as 'nearly all' and failing to extract the 11% non-detection implication.
 Exam Tip: Any percentage less than 100% for a detection or coverage rate necessarily means a complementary percentage went undetected or uncovered.","Correct. Survives elimination because a detection rate of 89% mathematically and necessarily implies 11% of estimated TB cases were not identified.","Eliminated because 92% treatment success among enrolled cases means 8% of enrolled cases did not succeed—'all' is directly contradicted.","Eliminated because pilot testing in 3 provinces does not provide information about national rollout timelines.","Eliminated because no Southeast Asian comparison data is provided in any of the four findings.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Must be true | Very Difficult | Batch 102"

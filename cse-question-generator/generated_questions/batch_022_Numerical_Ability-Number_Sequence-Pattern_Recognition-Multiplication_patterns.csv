@@ -1,165 +1,165 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Find the 7th term in the prime-multiplier accelerating sequence:
 
-$$2, \quad 6, \quad 30, \quad 210, \quad 2,310, \quad 30,030, \quad \textbf{?}$$","510,510","450,450","570,570","480,480","A","Step-by-Step Solution:
+2, 6, 30, 210, 2,310, 30,030, ?","510,510","450,450","570,570","480,480","A","Step-by-Step Solution:
 1. Examine the multipliers between consecutive terms:
-   - $2 \times 3 = 6$
-   - $6 \times 5 = 30$
-   - $30 \times 7 = 210$
-   - $210 \times 11 = 2,310$
-   - $2,310 \times 13 = 30,030$.
-2. The multipliers are consecutive prime numbers ($3, 5, 7, 11, 13$).
+ - 2 × 3 = 6
+ - 6 × 5 = 30
+ - 30 × 7 = 210
+ - 210 × 11 = 2,310
+ - 2,310 × 13 = 30,030.
+2. The multipliers are consecutive prime numbers (3, 5, 7, 11, 13).
 3. Identify the next prime number after 13:
-   - The next prime number is 17.
+ - The next prime number is 17.
 4. Compute the 7th term:
-   - $T_7 = 30,030 \times 17 = 510,510$.
+ - T₇ = 30,030 × 17 = 510,510.
 
-Common Trap: Multiplying by 15 ($30,030 \times 15 = 450,450$, Option B) assuming an odd-number sequence rather than prime numbers.
-Exam Tip: Notice the jump from 7 to 11 (skipping 9), which proves the multipliers are prime numbers, not odd numbers.","Correct. Survives elimination because the next prime multiplier is 17, and 30,030 * 17 = 510,510.","Eliminated because multiplying by 15 (composite odd) yields 450,450.","Eliminated because multiplying by 19 yields 570,570.","Eliminated because arithmetic error gives 480,480.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Multiplying by 15 (30,030 × 15 = 450,450, Option B) assuming an odd-number sequence rather than prime numbers.
+Exam Tip: Notice the ju∓ from 7 to 11 (skipping 9), which proves the multipliers are prime numbers, not odd numbers.","Correct. Survives elimination because the next prime multiplier is 17, and 30,030 * 17 = 510,510.","Eliminated because multiplying by 15 (composite odd) yields 450,450.","Eliminated because multiplying by 19 yields 570,570.","Eliminated because arithmetic error gives 480,480.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Find the missing number in the cumulative product sequence:
 
-$$2, \quad 3, \quad 6, \quad 18, \quad 108, \quad 1,944, \quad \textbf{?}$$","209,952","208,844","219,952","198,400","A","Step-by-Step Solution:
+2, 3, 6, 18, 108, 1,944, ?","209,952","208,844","219,952","198,400","A","Step-by-Step Solution:
 1. Identify the multiplicative recurrence relation:
-   - Each term is the product of the previous two terms: $T_n = T_{n-1} \times T_{n-2}$.
+ - Each term is the product of the previous two terms: Tₙ = Tₙ₋₁ × Tₙ₋₂.
 2. Verify with initial terms:
-   - $T_3 = 2 \times 3 = 6$
-   - $T_4 = 3 \times 6 = 18$
-   - $T_5 = 6 \times 18 = 108$
-   - $T_6 = 18 \times 108 = 1,944$.
-3. Compute the 7th term ($T_7$):
-   - $T_7 = T_5 \times T_6 = 108 \times 1,944$.
+ - T₃ = 2 × 3 = 6
+ - T₄ = 3 × 6 = 18
+ - T₅ = 6 × 18 = 108
+ - T₆ = 18 × 108 = 1,944.
+3. Compute the 7th term (T₇):
+ - T₇ = T₅ × T₆ = 108 × 1,944.
 4. Multiply:
-   - $108 \times 1,944 = 108 \times (2,000 - 56) = 216,000 - 6,048 = 209,952$.
+ - 108 × 1,944 = 108 × (2,000 - 56) = 216,000 - 6,048 = 209,952.
 
 Common Trap: Adding previous terms (Fibonacci) instead of multiplying, or arithmetic slips during the multi-digit product.
-Exam Tip: Compute $100 \times 1,944 + 8 \times 1,944 = 194,400 + 15,552 = 209,952$.","Correct. Survives elimination because 108 * 1,944 = 209,952.","Eliminated because arithmetic error in the product yields 208,844.","Eliminated because addition error yields 219,952.","Eliminated because underestimating product yields 198,400.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Exam Tip: Compute 100 × 1,944 + 8 × 1,944 = 194,400 + 15,552 = 209,952.","Correct. Survives elimination because 108 * 1,944 = 209,952.","Eliminated because arithmetic error in the product yields 208,844.","Eliminated because addition error yields 219,952.","Eliminated because underestimating product yields 198,400.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "What is the 8th term in the geometric progression:
 
-$$\frac{3}{16}, \quad \frac{3}{8}, \quad \frac{3}{4}, \quad \frac{3}{2}, \quad 3, \quad 6, \quad \dots$$","24","12","48","32","A","Step-by-Step Solution:
-1. Determine the common ratio $r$:
-   - $r = \frac{3/8}{3/16} = \frac{3}{8} \times \frac{16}{3} = 2$.
-2. Formula for the $n$-th term of a geometric sequence: $a_n = a_1 \cdot r^{n-1}$.
-3. Substitute $a_1 = \frac{3}{16}$, $r = 2$, and $n = 8$:
-   - $a_8 = \frac{3}{16} \times 2^{8 - 1} = \frac{3}{16} \times 2^7$.
+3/16, 3/8, 3/4, 3/2, 3, 6,...","24","12","48","32","A","Step-by-Step Solution:
+1. Determine the common ratio r:
+ - r = 3/8/3/16 = 3/8 × 16/3 = 2.
+2. Formula for the n-th term of a geometric sequence: aₙ = a₁ · rⁿ⁻¹.
+3. Substitute a₁ = 3/16, r = 2, and n = 8:
+ - a₈ = 3/16 × 2⁸ ⁻ ¹ = 3/16 × 2⁷.
 4. Evaluate powers of 2:
-   - $2^7 = 128$.
-   - $a_8 = \frac{3}{16} \times 128 = 3 \times \left(\frac{128}{16}\right) = 3 \times 8 = 24$.
+ - 2⁷ = 128.
+ - a₈ = 3/16 × 128 = 3 × (128/16) = 3 × 8 = 24.
 
-Common Trap: Calculating the 7th term ($6 \times 2 = 12$, Option B) instead of the requested 8th term ($12 \times 2 = 24$).
-Exam Tip: Check: $T_1=3/16, T_2=3/8, T_3=3/4, T_4=3/2, T_5=3, T_6=6, T_7=12, T_8=24$.","Correct. Survives elimination because a8 = (3/16) * 128 = 24.","Eliminated because 12 is the 7th term.","Eliminated because 48 is the 9th term.","Eliminated because 32 is an unweighted power of two.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Calculating the 7th term (6 × 2 = 12, Option B) instead of the requested 8th term (12 × 2 = 24).
+Exam Tip: Check: T₁=3/16, T₂=3/8, T₃=3/4, T₄=3/2, T₅=3, T₆=6, T₇=12, T₈=24.","Correct. Survives elimination because a8 = (3/16) * 128 = 24.","Eliminated because 12 is the 7th term.","Eliminated because 48 is the 9th term.","Eliminated because 32 is an unweighted power of two.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Identify the next term in the power-of-multipliers sequence:
 
-$$1, \quad 2, \quad 8, \quad 64, \quad 1,024, \quad \textbf{?}$$","32,768","16,384","65,536","24,576","A","Step-by-Step Solution:
+1, 2, 8, 64, 1,024, ?","32,768","16,384","65,536","24,576","A","Step-by-Step Solution:
 1. Examine the multiplier applied at each step:
-   - $1 \times 2^1 = 2$ (Multiplier: $2^1 = 2$)
-   - $2 \times 2^2 = 8$ (Multiplier: $2^2 = 4$)
-   - $8 \times 2^3 = 64$ (Multiplier: $2^3 = 8$)
-   - $64 \times 2^4 = 1,024$ (Multiplier: $2^4 = 16$).
-2. The multipliers are successive powers of two ($2^1, 2^2, 2^3, 2^4$).
-3. The next multiplier is $2^5 = 32$.
+ - 1 × 2¹ = 2 (Multiplier: 2¹ = 2)
+ - 2 × 2² = 8 (Multiplier: 2² = 4)
+ - 8 × 2³ = 64 (Multiplier: 2³ = 8)
+ - 64 × 2⁴ = 1,024 (Multiplier: 2⁴ = 16).
+2. The multipliers are successive powers of two (2¹, 2², 2³, 2⁴).
+3. The next multiplier is 2⁵ = 32.
 4. Compute the 6th term:
-   - $T_6 = 1,024 \times 32 = 32,768$.
-   - (Alternatively: $T_n = 2^{\frac{n(n-1)}{2}} \implies T_6 = 2^{15} = 32,768$).
+ - T₆ = 1,024 × 32 = 32,768.
+ - (Alternatively: Tₙ = 2ⁿ⁽ⁿ⁻¹⁾/² implies T₆ = 2¹⁵ = 32,768).
 
-Common Trap: Squaring each term ($1024^2 = 1,048,576$) or multiplying by 16 again ($16,384$, Option B).
-Exam Tip: Express in binary exponents: $2^0, 2^1, 2^3, 2^6, 2^{10}, 2^{15} \implies$ exponent differences are $1, 2, 3, 4, 5$.","Correct. Survives elimination because the next multiplier is 2^5 = 32, giving 1,024 * 32 = 32,768 = 2^15.","Eliminated because multiplying by 16 yields 16,384.","Eliminated because multiplying by 64 yields 65,536.","Eliminated because arithmetic error yields 24,576.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Squaring each term (1024² = 1,048,576) or multiplying by 16 again (16,384, Option B).
+Exam Tip: Express in binary exponents: 2⁰, 2¹, 2³, 2⁶, 2¹⁰, 2¹⁵ implies exponent differences are 1, 2, 3, 4, 5.","Correct. Survives elimination because the next multiplier is 2⁵ = 32, giving 1,024 * 32 = 32,768 = 2¹5.","Eliminated because multiplying by 16 yields 16,384.","Eliminated because multiplying by 64 yields 65,536.","Eliminated because arithmetic error yields 24,576.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Find the missing number in the triangular-multiplier sequence:
 
-$$3, \quad 9, \quad 54, \quad 540, \quad 8,100, \quad \textbf{?}$$","170,100","162,000","180,500","154,200","A","Step-by-Step Solution:
+3, 9, 54, 540, 8,100, ?","170,100","162,000","180,500","154,200","A","Step-by-Step Solution:
 1. Determine the consecutive multipliers:
-   - $3 \times 3 = 9$ (Multiplier: 3)
-   - $9 \times 6 = 54$ (Multiplier: 6)
-   - $54 \times 10 = 540$ (Multiplier: 10)
-   - $540 \times 15 = 8,100$ (Multiplier: 15).
-2. The multipliers are consecutive triangular numbers ($3, 6, 10, 15$).
-   - Differences between multipliers: $+3, +4, +5$.
-3. The next multiplier difference is $+6$:
-   - $\text{Next Multiplier} = 15 + 6 = 21$.
+ - 3 × 3 = 9 (Multiplier: 3)
+ - 9 × 6 = 54 (Multiplier: 6)
+ - 54 × 10 = 540 (Multiplier: 10)
+ - 540 × 15 = 8,100 (Multiplier: 15).
+2. The multipliers are consecutive triangular numbers (3, 6, 10, 15).
+ - Differences between multipliers: +3, +4, +5.
+3. The next multiplier difference is +6:
+ - Next Multiplier = 15 + 6 = 21.
 4. Compute the 6th term:
-   - $T_6 = 8,100 \times 21 = 8,100 \times (20 + 1) = 162,000 + 8,100 = 170,100$.
+ - T₆ = 8,100 × 21 = 8,100 × (20 + 1) = 162,000 + 8,100 = 170,100.
 
-Common Trap: Multiplying by 20 ($8,100 \times 20 = 162,000$, Option B) by assuming linear multiplier jumps.
-Exam Tip: Recognize triangular numbers: $1, 3, 6, 10, 15, 21, 28$.","Correct. Survives elimination because the next triangular multiplier is 21, giving 8,100 * 21 = 170,100.","Eliminated because multiplying by 20 yields 162,000.","Eliminated because arithmetic error in the product yields 180,500.","Eliminated because multiplying by 19 yields 154,200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Multiplying by 20 (8,100 × 20 = 162,000, Option B) by assuming linear multiplier jumps.
+Exam Tip: Recognize triangular numbers: 1, 3, 6, 10, 15, 21, 28.","Correct. Survives elimination because the next triangular multiplier is 21, giving 8,100 * 21 = 170,100.","Eliminated because multiplying by 20 yields 162,000.","Eliminated because arithmetic error in the product yields 180,500.","Eliminated because multiplying by 19 yields 154,200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "What is the 6th term in the tetration-squaring sequence:
 
-$$2, \quad 4, \quad 16, \quad 256, \quad 65,536, \quad \textbf{?}$$","4,294,967,296 \text{ (or } 2^{32}\text{)}","2,147,483,648","8,589,934,592","1,048,576","A","Step-by-Step Solution:
+2, 4, 16, 256, 65,536, ?","4,294,967,296 (or 2³²)","2,147,483,648","8,589,934,592","1,048,576","A","Step-by-Step Solution:
 1. Examine the sequence rule:
-   - Each term is the square of the preceding term: $T_n = (T_{n-1})^2$.
+ - Each term is the square of the preceding term: Tₙ = (Tₙ₋₁)².
 2. Verify powers of 2:
-   - $T_1 = 2 = 2^{2^0} = 2^1$
-   - $T_2 = 2^2 = 4 = 2^{2^1}$
-   - $T_3 = 4^2 = 16 = 2^{2^2} = 2^4$
-   - $T_4 = 16^2 = 256 = 2^{2^3} = 2^8$
-   - $T_5 = 256^2 = 65,536 = 2^{2^4} = 2^{16}$.
-3. Compute the 6th term ($T_6$):
-   - $T_6 = (65,536)^2 = (2^{16})^2 = 2^{32}$.
-4. Evaluate $2^{32}$:
-   - $2^{32} = 4,294,967,296$.
+ - T₁ = 2 = 2²^⁰ = 2¹
+ - T₂ = 2² = 4 = 2²^¹
+ - T₃ = 4² = 16 = 2²^² = 2⁴
+ - T₄ = 16² = 256 = 2²^³ = 2⁸
+ - T₅ = 256² = 65,536 = 2²^⁴ = 2¹⁶.
+3. Compute the 6th term (T₆):
+ - T₆ = (65,536)² = (2¹⁶)² = 2³².
+4. Evaluate 2³²:
+ - 2³² = 4,294,967,296.
 
-Common Trap: Multiplying $65,536 \times 2 = 131,072$ or confusing $2^{32}$ with $2^{31} = 2,147,483,648$ (Option B).
-Exam Tip: Exponents double at each squaring step: $2^1 \to 2^2 \to 2^4 \to 2^8 \to 2^{16} \to 2^{32}$.","Correct. Survives elimination because (2^16)^2 = 2^32 = 4,294,967,296.","Eliminated because 2,147,483,648 is 2^31 (signed 32-bit integer limit).","Eliminated because 8,589,934,592 is 2^33.","Eliminated because 1,048,576 is 2^20.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Multiplying 65,536 × 2 = 131,072 or confusing 2³² with 2³¹ = 2,147,483,648 (Option B).
+Exam Tip: Exponents double at each squaring step: 2¹ to 2² to 2⁴ to 2⁸ to 2¹⁶ to 2³².","Correct. Survives elimination because (2¹6)² = 2³2 = 4,294,967,296.","Eliminated because 2,147,483,648 is 2³1 (signed 32-bit integer limit).","Eliminated because 8,589,934,592 is 2³3.","Eliminated because 1,048,576 is 2²0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Find the missing number in the multiplier-with-constant-offset sequence:
 
-$$4, \quad 14, \quad 44, \quad 134, \quad 404, \quad \textbf{?}$$","1,214","1,212","1,216","1,220","A","Step-by-Step Solution:
+4, 14, 44, 134, 404, ?","1,214","1,212","1,216","1,220","A","Step-by-Step Solution:
 1. Examine the relationship connecting each term:
-   - $4 \times 3 + 2 = 12 + 2 = 14$
-   - $14 \times 3 + 2 = 42 + 2 = 44$
-   - $44 \times 3 + 2 = 132 + 2 = 134$
-   - $134 \times 3 + 2 = 402 + 2 = 404$.
-2. Formulate recurrence relation: $T_{n+1} = 3 T_n + 2$.
-3. Compute the 6th term ($T_6$):
-   - $T_6 = 3(404) + 2$.
-   - $3 \times 404 = 1,212$.
-   - $1,212 + 2 = 1,214$.
+ - 4 × 3 + 2 = 12 + 2 = 14
+ - 14 × 3 + 2 = 42 + 2 = 44
+ - 44 × 3 + 2 = 132 + 2 = 134
+ - 134 × 3 + 2 = 402 + 2 = 404.
+2. Formulate recurrence relation: Tₙ₊₁ = 3 Tₙ + 2.
+3. Compute the 6th term (T₆):
+ - T₆ = 3(404) + 2.
+ - 3 × 404 = 1,212.
+ - 1,212 + 2 = 1,214.
 
-Common Trap: Forgetting to add 2 after multiplying ($1,212$, Option B).
-Exam Tip: In $T_{n+1} = a T_n + b$, differences triple ($10, 30, 90, 270, 810 \implies 404 + 810 = 1,214$).","Correct. Survives elimination because 3 * 404 + 2 = 1,212 + 2 = 1,214 (or 404 + 810 = 1,214).","Eliminated because 1,212 is 3 * 404 without adding the +2 offset.","Eliminated because adding 4 gives 1,216.","Eliminated because arithmetic error gives 1,220.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Forgetting to add 2 after multiplying (1,212, Option B).
+Exam Tip: In Tₙ₊₁ = a Tₙ + b, differences triple (10, 30, 90, 270, 810 implies 404 + 810 = 1,214).","Correct. Survives elimination because 3 * 404 + 2 = 1,212 + 2 = 1,214 (or 404 + 810 = 1,214).","Eliminated because 1,212 is 3 * 404 without adding the +2 offset.","Eliminated because adding 4 gives 1,216.","Eliminated because arithmetic error gives 1,220.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Identify the next term in the geometric sequence with a negative rational common ratio:
 
-$$162, \quad -54, \quad 18, \quad -6, \quad 2, \quad -\frac{2}{3}, \quad \textbf{?}$$","\frac{2}{9}","-\frac{2}{9}","\frac{2}{27}","-\frac{1}{9}","A","Step-by-Step Solution:
-1. Find common ratio $r$:
-   - $r = \frac{-54}{162} = -\frac{1}{3}$.
+162, -54, 18, -6, 2, -2/3, ?","2/9","-2/9","2/27","-1/9","A","Step-by-Step Solution:
+1. Find common ratio r:
+ - r = -54/162 = -1/3.
 2. Verify ratio across subsequent terms:
-   - $-54 \times \left(-\frac{1}{3}\right) = +18$
-   - $18 \times \left(-\frac{1}{3}\right) = -6$
-   - $-6 \times \left(-\frac{1}{3}\right) = +2$
-   - $2 \times \left(-\frac{1}{3}\right) = -\frac{2}{3}$.
-3. Multiply the 6th term by $-\frac{1}{3}$ to get the 7th term:
-   - $T_7 = -\frac{2}{3} \times \left(-\frac{1}{3}\right) = +\frac{2}{9}$.
+ - -54 × (-1/3) = +18
+ - 18 × (-1/3) = -6
+ - -6 × (-1/3) = +2
+ - 2 × (-1/3) = -2/3.
+3. Multiply the 6th term by -1/3 to get the 7th term:
+ - T₇ = -2/3 × (-1/3) = +2/9.
 
-Common Trap: Dropping the sign change, producing $-\frac{2}{9}$ (Option B).
-Exam Tip: Multiplying a negative fraction by a negative common ratio yields a strictly positive result.","Correct. Survives elimination because (-2/3) * (-1/3) = +2/9.","Eliminated because negative times negative is positive (+2/9).","Eliminated because multiplying by 1/9 gives 2/27.","Eliminated because halving the numerator yields -1/9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Dropping the sign change, producing -2/9 (Option B).
+Exam Tip: Multiplying a negative fraction by a negative common ratio yields a strictly positive result.","Correct. Survives elimination because (-2/3) * (-1/3) = +2/9.","Eliminated because negative × negative is positive (+2/9).","Eliminated because multiplying by 1/9 gives 2/27.","Eliminated because halving the numerator yields -1/9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
 "Find the missing number in the square-multiplier sequence:
 
-$$2, \quad 2, \quad 8, \quad 72, \quad 1,152, \quad \textbf{?}$$","28,800","27,600","32,400","25,200","A","Step-by-Step Solution:
+2, 2, 8, 72, 1,152, ?","28,800","27,600","32,400","25,200","A","Step-by-Step Solution:
 1. Examine the multiplier at each successive step:
-   - $2 \times 1^2 = 2 \times 1 = 2$ (Multiplier: $1^2 = 1$)
-   - $2 \times 2^2 = 2 \times 4 = 8$ (Multiplier: $2^2 = 4$)
-   - $8 \times 3^2 = 8 \times 9 = 72$ (Multiplier: $3^2 = 9$)
-   - $72 \times 4^2 = 72 \times 16 = 1,152$ (Multiplier: $4^2 = 16$).
-2. The multipliers are consecutive perfect squares ($1^2, 2^2, 3^2, 4^2$).
-3. The next multiplier is $5^2 = 25$.
+ - 2 × 1² = 2 × 1 = 2 (Multiplier: 1² = 1)
+ - 2 × 2² = 2 × 4 = 8 (Multiplier: 2² = 4)
+ - 8 × 3² = 8 × 9 = 72 (Multiplier: 3² = 9)
+ - 72 × 4² = 72 × 16 = 1,152 (Multiplier: 4² = 16).
+2. The multipliers are consecutive perfect squares (1², 2², 3², 4²).
+3. The next multiplier is 5² = 25.
 4. Compute the 6th term:
-   - $T_6 = 1,152 \times 25$.
-   - $T_6 = 1,152 \times \frac{100}{4} = \frac{115,200}{4} = 28,800$.
+ - T₆ = 1,152 × 25.
+ - T₆ = 1,152 × 100/4 = 115,200/4 = 28,800.
 
-Common Trap: Multiplying by $5$ instead of $5^2 = 25$ ($1,152 \times 5 = 5,760$).
-Exam Tip: Multiply by 25 rapidly by dividing by 4 and appending two zeros ($1,152 / 4 = 288 \implies 28,800$).","Correct. Survives elimination because the next multiplier is 5^2 = 25, giving 1,152 * 25 = 28,800.","Eliminated because multiplying by 24 gives 27,600.","Eliminated because multiplying by 6^2 = 36 gives 41,472 or 32,400.","Eliminated because arithmetic error in the product yields 25,200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
-"In a geometric sequence with first term $a_1 = 3$ and common ratio $r = 2$, what is the exact mathematical product of the first 6 terms ($T_1 \times T_2 \times T_3 \times T_4 \times T_5 \times T_6$)?","3^6 \times 2^{15} \text{ (or } 23,887,872\text{)}","3^6 \times 2^{16}","3^5 \times 2^{15}","3^6 \times 2^{21}","A","Step-by-Step Solution:
-1. Express each term in standard geometric form $T_k = a_1 \cdot r^{k-1}$:
-   - $T_1 = a_1$
-   - $T_2 = a_1 r$
-   - $T_3 = a_1 r^2$
-   - $T_4 = a_1 r^3$
-   - $T_5 = a_1 r^4$
-   - $T_6 = a_1 r^5$.
+Common Trap: Multiplying by 5 instead of 5² = 25 (1,152 × 5 = 5,760).
+Exam Tip: Multiply by 25 rapidly by dividing by 4 and appending two zeros (1,152 / 4 = 288 implies 28,800).","Correct. Survives elimination because the next multiplier is 5² = 25, giving 1,152 * 25 = 28,800.","Eliminated because multiplying by 24 gives 27,600.","Eliminated because multiplying by 6² = 36 gives 41,472 or 32,400.","Eliminated because arithmetic error in the product yields 25,200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+"In a geometric sequence with first term a₁ = 3 and common ratio r = 2, what is the exact mathematical product of the first 6 terms (T₁ × T₂ × T₃ × T₄ × T₅ × T₆)?","3⁶ × 2¹⁵ (or 23,887,872)","3⁶ × 2¹⁶","3⁵ × 2¹⁵","3⁶ × 2²¹","A","Step-by-Step Solution:
+1. Express each term in standard geometric form Tₖ = a₁ · rk⁻¹:
+ - T₁ = a₁
+ - T₂ = a₁ r
+ - T₃ = a₁ r²
+ - T₄ = a₁ r³
+ - T₅ = a₁ r⁴
+ - T₆ = a₁ r⁵.
 2. Formulate the continuous product:
-   - $P_6 = T_1 \times T_2 \times T_3 \times T_4 \times T_5 \times T_6 = a_1^6 \cdot r^{(0 + 1 + 2 + 3 + 4 + 5)}$.
-3. Sum the exponent of $r$:
-   - $\text{Exponent} = \frac{5 \times 6}{2} = 15$.
-   - $P_6 = a_1^6 \cdot r^{15}$.
-4. Substitute $a_1 = 3$ and $r = 2$:
-   - $P_6 = 3^6 \times 2^{15} = 729 \times 32,768 = 23,887,872$.
+ - P₆ = T₁ × T₂ × T₃ × T₄ × T₅ × T₆ = a₁⁶ · r⁽⁰ ⁺ ¹ ⁺ ² ⁺ ³ ⁺ ⁴ ⁺ ⁵⁾.
+3. Sum the exponent of r:
+ - Exponent = 5 × 6/2 = 15.
+ - P₆ = a₁⁶ · r¹⁵.
+4. Substitute a₁ = 3 and r = 2:
+ - P₆ = 3⁶ × 2¹⁵ = 729 × 32,768 = 23,887,872.
 
-Common Trap: Summing exponents as $\frac{6 \times 7}{2} = 21$ (Option D), forgetting that $T_1$ has $r^0$.
-Exam Tip: The product of the first $n$ terms of a GP is $P_n = (a_1 \cdot a_n)^{n/2} = a_1^n \cdot r^{\frac{n(n-1)}{2}}$.","Correct. Survives elimination because the product is a1^6 * r^15 = 3^6 * 2^15 = 23,887,872.","Eliminated because exponent of 2 is 15, not 16.","Eliminated because power of 3 is 6, not 5.","Eliminated because using n(n+1)/2 = 21 instead of n(n-1)/2 = 15 yields 2^21.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"
+Common Trap: Summing exponents as 6 × 7/2 = 21 (Option D), forgetting that T₁ has r⁰.
+Exam Tip: The product of the first n terms of a GP is Pₙ = (a₁ · aₙ)ⁿ/² = a₁ⁿ · rⁿ⁽ⁿ⁻¹⁾/².","Correct. Survives elimination because the product is a1⁶ * r¹5 = 3⁶ * 2¹5 = 23,887,872.","Eliminated because exponent of 2 is 15, not 16.","Eliminated because power of 3 is 6, not 5.","Eliminated because using n(n+1)/2 = 21 instead of n(n-1)/2 = 15 yields 2²1.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Multiplication patterns | Very Difficult | Batch 022"

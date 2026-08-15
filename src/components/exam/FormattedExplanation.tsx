@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface FormattedExplanationProps {
   explanation?: string | null;
@@ -21,7 +22,7 @@ export default function FormattedExplanation({
     );
   }
 
-  const cleanText = explanation.trim();
+  const cleanText = cleanMathText(explanation.trim());
 
   // Smart bullet point parsing strategy:
   // 1. If explicit line breaks (\n) or pipes (|) exist, split by them first.
@@ -50,13 +51,13 @@ export default function FormattedExplanation({
   // Display single sentence/short explanation cleanly as plain paragraph
   if (formattedPoints.length <= 1) {
     return (
-      <div className={`space-y-1 ${className}`}>
+      <div className={`space-y-1 min-w-0 overflow-hidden ${className}`}>
         {title && (
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
             {title}
           </p>
         )}
-        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed">
+        <p className="text-sm text-gray-800 dark:text-gray-200 leading-relaxed break-words">
           {cleanText}
         </p>
       </div>
@@ -64,15 +65,15 @@ export default function FormattedExplanation({
   }
 
   return (
-    <div className={`space-y-1.5 ${className}`}>
+    <div className={`space-y-1.5 min-w-0 overflow-hidden ${className}`}>
       {title && (
         <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
           {title}
         </p>
       )}
-      <ul className="list-disc list-outside ml-5 space-y-1.5 text-sm text-gray-800 dark:text-gray-200">
+      <ul className="list-disc list-outside ml-5 space-y-1.5 text-sm text-gray-800 dark:text-gray-200 break-words">
         {formattedPoints.map((point, index) => (
-          <li key={index} className="leading-relaxed pl-1">
+          <li key={index} className="leading-relaxed pl-1 break-words">
             {point}
           </li>
         ))}

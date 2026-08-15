@@ -1,140 +1,140 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "A laboratory technician has 60.0 liters of an antiseptic solution that is 20.0% ethyl alcohol by volume. How many liters of pure (100.0%) ethyl alcohol must be added to raise the concentration of alcohol in the mixture to exactly 40.0%?","20.0 liters","18.0 liters","24.0 liters","15.0 liters","A","Step-by-Step Solution:
 1. Define variables:
-   - Let $x$ be the volume of pure 100.0% alcohol added (in liters).
+ - Let x be the volume of pure 100.0% alcohol added (in liters).
 2. Set up alcohol solute conservation equation:
-   - $\text{Initial Alcohol} + \text{Added Alcohol} = \text{Final Alcohol}$.
-   - $60.0(0.20) + x(1.00) = (60.0 + x)(0.40)$.
+ - Initial Alcohol + Added Alcohol = Final Alcohol.
+ - 60.0(0.20) + x(1.00) = (60.0 + x)(0.40).
 3. Simplify the equation:
-   - $12.0 + x = 24.0 + 0.40x$.
-4. Solve for $x$:
-   - $x - 0.40x = 24.0 - 12.0$.
-   - $0.60x = 12.0 \implies x = \frac{12.0}{0.60} = 20.0\text{ liters}$.
+ - 12.0 + x = 24.0 + 0.40x.
+4. Solve for x:
+ - x - 0.40x = 24.0 - 12.0.
+ - 0.60x = 12.0 implies x = 12.0/0.60 = 20.0 liters.
 5. Verify:
-   - Total alcohol $= 12.0 + 20.0 = 32.0\text{ L}$.
-   - Total solution $= 60.0 + 20.0 = 80.0\text{ L}$.
-   - Concentration $= \frac{32.0}{80.0} = 0.40 = 40.0\%$ (Confirmed!).
+ - Total alcohol = 12.0 + 20.0 = 32.0 L.
+ - Total solution = 60.0 + 20.0 = 80.0 L.
+ - Concentration = 32.0/80.0 = 0.40 = 40.0% (Confirmed!).
 
-Common Trap: Forgetting to add $x$ to the total final volume on the right side ($12 + x = 60(0.40) = 24 \implies x = 12$).
-Exam Tip: Total solution volume expands by the amount of solute added: $V_{\text{final}} = 60 + x$.","Correct. Survives elimination because adding 20 L of pure alcohol gives 32 L alcohol in 80 L total solution (32/80 = 40.0%).","Eliminated because adding 18 L yields 30/78 = 38.46%.","Eliminated because adding 24 L yields 36/84 = 42.86%.","Eliminated because adding 15 L yields 27/75 = 36.0%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"A container initially holds 80.0 liters of pure 100.0% concentrated disinfectant. Exactly 20.0 liters of the liquid is drained and replaced with 20.0 liters of pure water. After thorough mixing, 20.0 liters of the mixture is again removed and replaced with 20.0 liters of pure water. What is the final concentration of disinfectant remaining in the container?","56.25\% \text{ (or 45.0 liters)}","50.00\%","60.00\%","52.50\%","A","Step-by-Step Solution:
+Common Trap: Forgetting to add x to the total final volume on the right side (12 + x = 60(0.40) = 24 implies x = 12).
+Exam Tip: Total solution volume expands by the amount of solute added: Vfiₙₐₗ = 60 + x.","Correct. Survives elimination because adding 20 L of pure alcohol gives 32 L alcohol in 80 L total solution (32/80 = 40.0%).","Eliminated because adding 18 L yields 30/78 = 38.46%.","Eliminated because adding 24 L yields 36/84 = 42.86%.","Eliminated because adding 15 L yields 27/75 = 36.0%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"A container initially holds 80.0 liters of pure 100.0% concentrated disinfectant. Exactly 20.0 liters of the liquid is drained and replaced with 20.0 liters of pure water. After thorough mixing, 20.0 liters of the mixture is again removed and replaced with 20.0 liters of pure water. What is the final concentration of disinfectant remaining in the container?","56.25% (or 45.0 liters)","50.00%","60.00%","52.50%","A","Step-by-Step Solution:
 1. Apply the repeated dilution replacement formula:
-   - $C_n = C_0 \left(1 - \frac{x}{V}\right)^n$, where $V = 80.0\text{ L}$, $x = 20.0\text{ L}$, and $n = 2$ operations.
+ - Cₙ = C₀ (1 - x/V)ⁿ, where V = 80.0 L, x = 20.0 L, and n = 2 operations.
 2. Calculate the retention factor per cycle:
-   - Retention Factor $= 1 - \frac{20.0}{80.0} = 1 - 0.25 = 0.75 = \frac{3}{4}$.
-3. Compute the concentration after $n = 2$ cycles:
-   - $C_2 = 100.0\% \times (0.75)^2 = 100.0\% \times 0.5625 = 56.25\%$.
+ - Retention Factor = 1 - 20.0/80.0 = 1 - 0.25 = 0.75 = 3/4.
+3. Compute the concentration after n = 2 cycles:
+ - C₂ = 100.0% × (0.75)² = 100.0% × 0.5625 = 56.25%.
 4. Calculate absolute volume of remaining pure disinfectant:
-   - Volume $= 80.0 \times 0.5625 = 45.0\text{ liters}$.
+ - Volume = 80.0 × 0.5625 = 45.0 liters.
 
-Common Trap: Assuming simple linear subtraction ($100\% - 25\% - 25\% = 50\%$, Option B), ignoring that the second removal drains diluted solution.
-Exam Tip: Each replacement multiplies the remaining active substance by $\frac{3}{4}$ ($80 \to 60 \to 45\text{ L} \implies \frac{45}{80} = 56.25\%$).","Correct. Survives elimination because (3/4)^2 = 9/16 = 56.25%, leaving 45.0 liters of pure disinfectant.","Eliminated because 50.00% assumes linear non-compounded removal (100% - 25% - 25%).","Eliminated because 60.00% is the concentration after only 1 cycle.","Eliminated because arithmetic slip gives 52.50%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+Common Trap: Assuming simple linear subtraction (100% - 25% - 25% = 50%, Option B), ignoring that the second removal drains diluted solution.
+Exam Tip: Each replacement multiplies the remaining active substance by 3/4 (80 to 60 to 45 L implies 45/80 = 56.25%).","Correct. Survives elimination because (3/4)² = 9/16 = 56.25%, leaving 45.0 liters of pure disinfectant.","Eliminated because 50.00% assumes linear non-compounded removal (100% - 25% - 25%).","Eliminated because 60.00% is the concentration after only 1 cycle.","Eliminated because arithmetic slip gives 52.50%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
 "A municipal cooperative blends two varieties of rice: Variety A costing ₱42.00 per kilogram and Variety B costing ₱58.00 per kilogram. How many kilograms of Variety A should be blended with Variety B to produce a 120.0-kilogram mixture that costs exactly ₱48.00 per kilogram?","75.0 kg of Variety A","80.0 kg of Variety A","70.0 kg of Variety A","65.0 kg of Variety A","A","Step-by-Step Solution:
 1. Apply the Rule of Alligation Alternate:
-   - Cost of Variety A $= ₱42.00$
-   - Cost of Variety B $= ₱58.00$
-   - Mean Blend Cost $= ₱48.00$.
+ - Cost of Variety A = ₱42.00
+ - Cost of Variety B = ₱58.00
+ - Mean Blend Cost = ₱48.00.
 2. Compute price differences from the mean:
-   - Difference for Variety A: $|42.00 - 48.00| = 6.00$.
-   - Difference for Variety B: $|58.00 - 48.00| = 10.00$.
-3. Formulate the mixing ratio (Variety A : Variety B):
-   - $\frac{\text{Mass of A}}{\text{Mass of B}} = \frac{10.00}{6.00} = \frac{5}{3}$.
-4. Divide total 120.0 kg by total parts ($5 + 3 = 8\text{ parts}$):
-   - $1\text{ part} = \frac{120.0}{8} = 15.0\text{ kg}$.
+ - Difference for Variety A: |42.00 - 48.00| = 6.00.
+ - Difference for Variety B: |58.00 - 48.00| = 10.00.
+3. Formulate the mixing ratio (Variety A: Variety B):
+ - (Mass of A)/(Mass of B) = 10.00/6.00 = 5/3.
+4. Divide total 120.0 kg by total parts (5 + 3 = 8 parts):
+ - 1 part = 120.0/8 = 15.0 kg.
 5. Calculate mass of Variety A:
-   - $\text{Mass of A} = 5 \times 15.0 = 75.0\text{ kg}$.
-   - (Mass of B $= 3 \times 15.0 = 45.0\text{ kg}$).
+ - Mass of A = 5 × 15.0 = 75.0 kg.
+ - (Mass of B = 3 × 15.0 = 45.0 kg).
 
-Common Trap: Inverting the alligation ratio ($3 : 5 \implies 45.0\text{ kg}$, Option D).
-Exam Tip: Since ₱48.00 is closer to ₱42.00 than to ₱58.00 ($6 < 10$), the blend must contain more of Variety A ($75\text{ kg} > 45\text{ kg}$).","Correct. Survives elimination because 75 kg of A (₱42) + 45 kg of B (₱58) = ₱3,150 + ₱2,610 = ₱5,760; ₱5,760 / 120 kg = ₱48.00/kg.","Eliminated because 80 kg of A yields blend cost ₱47.33/kg.","Eliminated because 70 kg of A yields blend cost ₱48.67/kg.","Eliminated because 65 kg of A yields blend cost ₱49.33/kg.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"An alloy weighing 500.0 grams contains gold and copper in the mass ratio $3 : 2$. How many grams of pure copper must be melted into the alloy to change the mass ratio of gold to copper to $1 : 1$?","100.0 grams","150.0 grams","80.0 grams","120.0 grams","A","Step-by-Step Solution:
+Common Trap: Inverting the alligation ratio (3: 5 implies 45.0 kg, Option D).
+Exam Tip: Since ₱48.00 is closer to ₱42.00 than to ₱58.00 (6 < 10), the blend must contain more of Variety A (75 kg > 45 kg).","Correct. Survives elimination because 75 kg of A (₱42) + 45 kg of B (₱58) = ₱3,150 + ₱2,610 = ₱5,760; ₱5,760 / 120 kg = ₱48.00/kg.","Eliminated because 80 kg of A yields blend cost ₱47.33/kg.","Eliminated because 70 kg of A yields blend cost ₱48.67/kg.","Eliminated because 65 kg of A yields blend cost ₱49.33/kg.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"An alloy weighing 500.0 grams contains gold and copper in the mass ratio 3: 2. How many grams of pure copper must be melted into the alloy to change the mass ratio of gold to copper to 1: 1?","100.0 grams","150.0 grams","80.0 grams","120.0 grams","A","Step-by-Step Solution:
 1. Determine initial masses of gold and copper:
-   - Total parts $= 3 + 2 = 5\text{ parts}$.
-   - $1\text{ part} = \frac{500.0}{5} = 100.0\text{ grams}$.
-   - Gold mass $= 3 \times 100.0 = 300.0\text{ grams}$.
-   - Copper mass $= 2 \times 100.0 = 200.0\text{ grams}$.
-2. In the new $1 : 1$ alloy, the gold mass remains unchanged ($300.0\text{ grams}$):
-   - Target copper mass $= \text{Gold mass} = 300.0\text{ grams}$.
+ - Total parts = 3 + 2 = 5 parts.
+ - 1 part = 500.0/5 = 100.0 grams.
+ - Gold mass = 3 × 100.0 = 300.0 grams.
+ - Copper mass = 2 × 100.0 = 200.0 grams.
+2. In the new 1: 1 alloy, the gold mass remains unchanged (300.0 grams):
+ - Target copper mass = Gold mass = 300.0 grams.
 3. Calculate additional copper required:
-   - $\text{Additional Copper} = 300.0 - 200.0 = 100.0\text{ grams}$.
+ - Additional Copper = 300.0 - 200.0 = 100.0 grams.
 
-Common Trap: Calculating copper needed to make it 50% of the original 500 g ($250 - 200 = 50\text{ g}$), forgetting that total mass increases.
-Exam Tip: Gold mass is unchanged ($300\text{ g}$). A $1:1$ ratio means copper must also equal $300\text{ g} \implies 300 - 200 = 100\text{ g}$.","Correct. Survives elimination because adding 100 g copper makes both gold and copper equal to 300 g (1:1 ratio).","Eliminated because adding 150 g copper gives 300 g gold and 350 g copper (6:7 ratio).","Eliminated because adding 80 g copper gives 280 g copper (15:14 ratio).","Eliminated because adding 120 g copper gives 320 g copper.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+Common Trap: Calculating copper needed to make it 50% of the original 500 g (250 - 200 = 50 g), forgetting that total mass increases.
+Exam Tip: Gold mass is unchanged (300 g). A 1:1 ratio means copper must also equal 300 g implies 300 - 200 = 100 g.","Correct. Survives elimination because adding 100 g copper makes both gold and copper equal to 300 g (1:1 ratio).","Eliminated because adding 150 g copper gives 300 g gold and 350 g copper (6:7 ratio).","Eliminated because adding 80 g copper gives 280 g copper (15:14 ratio).","Eliminated because adding 120 g copper gives 320 g copper.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
 "Fresh seaweeds contain 90.0% water by weight, whereas commercially dried seaweeds contain only 20.0% water by weight. How many kilograms of dried seaweeds can be produced from 400.0 kilograms of fresh seaweeds?","50.0 kg","40.0 kg","60.0 kg","45.0 kg","A","Step-by-Step Solution:
 1. Identify the invariant quantity (the dry solid matter):
-   - Fresh seaweeds contain $100.0\% - 90.0\% = 10.0\%$ dry solid matter.
+ - Fresh seaweeds contain 100.0% - 90.0% = 10.0% dry solid matter.
 2. Calculate the mass of dry solid matter in 400.0 kg fresh seaweeds:
-   - $\text{Solid Mass} = 400.0 \times 0.10 = 40.0\text{ kg}$.
+ - Solid Mass = 400.0 × 0.10 = 40.0 kg.
 3. Express dry solid matter fraction in dried seaweeds:
-   - Dried seaweeds contain $100.0\% - 20.0\% = 80.0\%$ dry solid matter.
-4. Let $W$ be the total mass of dried seaweeds:
-   - $0.80 W = \text{Solid Mass} = 40.0\text{ kg}$.
-5. Solve for $W$:
-   - $W = \frac{40.0}{0.80} = 50.0\text{ kg}$.
+ - Dried seaweeds contain 100.0% - 20.0% = 80.0% dry solid matter.
+4. Let W be the total mass of dried seaweeds:
+ - 0.80 W = Solid Mass = 40.0 kg.
+5. Solve for W:
+ - W = 40.0/0.80 = 50.0 kg.
 
-Common Trap: Answering $40.0\text{ kg}$ (Option B), which is the solid mass alone without the 20% residual moisture.
-Exam Tip: $\text{Fresh Solid} = \text{Dry Solid} \implies 400(0.10) = W(0.80) \implies W = 50\text{ kg}$.","Correct. Survives elimination because the 40 kg of dry solid matter constitutes 80% of the final dried product (40 / 0.80 = 50.0 kg).","Eliminated because 40.0 kg is the dry solid mass with 0% water.","Eliminated because 60.0 kg assumes 33% water.","Eliminated because calculation slip yields 45.0 kg.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"Two storage containers contain acid-water solutions. Container 1 has acid and water in the ratio $4 : 1$, while Container 2 has acid and water in the ratio $3 : 7$. In what volume ratio should solutions from Container 1 and Container 2 be mixed to produce a solution containing 50.0% acid?","2 : 3","3 : 2","1 : 2","3 : 5","A","Step-by-Step Solution:
+Common Trap: Answering 40.0 kg (Option B), which is the solid mass alone without the 20% residual moisture.
+Exam Tip: Fresh Solid = Dry Solid implies 400(0.10) = W(0.80) implies W = 50 kg.","Correct. Survives elimination because the 40 kg of dry solid matter constitutes 80% of the final dried product (40 / 0.80 = 50.0 kg).","Eliminated because 40.0 kg is the dry solid mass with 0% water.","Eliminated because 60.0 kg assumes 33% water.","Eliminated because calculation slip yields 45.0 kg.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"Two storage containers contain acid-water solutions. Container 1 has acid and water in the ratio 4: 1, while Container 2 has acid and water in the ratio 3: 7. In what volume ratio should solutions from Container 1 and Container 2 be mixed to produce a solution containing 50.0% acid?","2: 3","3: 2","1: 2","3: 5","A","Step-by-Step Solution:
 1. Convert ratios to acid fractional concentrations:
-   - Container 1: $C_1 = \frac{4}{4 + 1} = \frac{4}{5} = 0.80$ (80.0% acid).
-   - Container 2: $C_2 = \frac{3}{3 + 7} = \frac{3}{10} = 0.30$ (30.0% acid).
-   - Target Concentration: $C_T = 0.50$ (50.0% acid).
+ - Container 1: C₁ = 4/4 + 1 = 4/5 = 0.80 (80.0% acid).
+ - Container 2: C₂ = 3/3 + 7 = 3/10 = 0.30 (30.0% acid).
+ - Target Concentration: C_T = 0.50 (50.0% acid).
 2. Apply Alligation Formula:
-   - $\frac{V_1}{V_2} = \frac{C_T - C_2}{C_1 - C_T}$.
+ - V₁/V₂ = C_T - C₂/C₁ - C_T.
 3. Substitute the values:
-   - $\frac{V_1}{V_2} = \frac{0.50 - 0.30}{0.80 - 0.50} = \frac{0.20}{0.30} = \frac{2}{3}$.
-4. The required mixing ratio is $2 : 3$.
+ - V₁/V₂ = 0.50 - 0.30/0.80 - 0.50 = 0.20/0.30 = 2/3.
+4. The required mixing ratio is 2: 3.
 
-Common Trap: Inverting the ratio to $3 : 2$ (Option B), which produces $\frac{3(0.80) + 2(0.30)}{5} = 60\%$ acid instead of 50%.
-Exam Tip: Verify: $2(0.80) + 3(0.30) = 1.60 + 0.90 = 2.50 \implies \frac{2.50}{5} = 0.50 = 50\%$.","Correct. Survives elimination because 2 parts of 80% acid + 3 parts of 30% acid = 2.50 / 5 = 50.0% acid.","Eliminated because 3:2 yields 60.0% acid.","Eliminated because 1:2 yields 46.67% acid.","Eliminated because 3:5 yields 48.75% acid.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+Common Trap: Inverting the ratio to 3: 2 (Option B), which produces 3(0.80) + 2(0.30)/5 = 60% acid instead of 50%.
+Exam Tip: Verify: 2(0.80) + 3(0.30) = 1.60 + 0.90 = 2.50 implies 2.50/5 = 0.50 = 50%.","Correct. Survives elimination because 2 parts of 80% acid + 3 parts of 30% acid = 2.50 / 5 = 50.0% acid.","Eliminated because 3:2 yields 60.0% acid.","Eliminated because 1:2 yields 46.67% acid.","Eliminated because 3:5 yields 48.75% acid.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
 "How many liters of pure water must be evaporated from 120.0 liters of a 15.0% saline solution to increase its salt concentration to exactly 25.0%?","48.0 liters","40.0 liters","50.0 liters","45.0 liters","A","Step-by-Step Solution:
 1. Determine mass of salt solute (which remains constant during evaporation):
-   - $\text{Salt Mass} = 120.0 \times 0.15 = 18.0\text{ kg}$.
-2. Let $w$ be the volume of water evaporated (in liters):
-   - New Solution Volume $= 120.0 - w$.
+ - Salt Mass = 120.0 × 0.15 = 18.0 kg.
+2. Let w be the volume of water evaporated (in liters):
+ - New Solution Volume = 120.0 - w.
 3. Set up the target concentration equation:
-   - $\frac{18.0}{120.0 - w} = 0.25 = \frac{1}{4}$.
-4. Solve for $w$:
-   - $120.0 - w = 18.0 \times 4 = 72.0$.
-   - $w = 120.0 - 72.0 = 48.0\text{ liters}$.
+ - 18.0/120.0 - w = 0.25 = 1/4.
+4. Solve for w:
+ - 120.0 - w = 18.0 × 4 = 72.0.
+ - w = 120.0 - 72.0 = 48.0 liters.
 
-Common Trap: Setting the new volume as $120(1 - 0.25) = 90 \implies w = 30\text{ L}$.
-Exam Tip: Solute balance: $120(0.15) = V_{\text{new}}(0.25) \implies V_{\text{new}} = 72\text{ L} \implies \text{Evaporated} = 120 - 72 = 48\text{ L}$.","Correct. Survives elimination because evaporating 48 L leaves 72 L of solution containing 18 kg of salt (18 / 72 = 25.0%).","Eliminated because evaporating 40 L leaves 80 L (18/80 = 22.5%).","Eliminated because evaporating 50 L leaves 70 L (18/70 = 25.71%).","Eliminated because evaporating 45 L leaves 75 L (18/75 = 24.0%).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"A pharmacist combines 30.0 mL of a 10.0% boric acid solution, 40.0 mL of a 15.0% boric acid solution, and 50.0 mL of a 25.0% boric acid solution. What is the resulting concentration of boric acid in the final combined 120.0 mL mixture?","17.92\% \text{ (or } 17\frac{11}{12}\%\text{)}","16.67\%","18.50\%","17.25\%","A","Step-by-Step Solution:
+Common Trap: Setting the new volume as 120(1 - 0.25) = 90 implies w = 30 L.
+Exam Tip: Solute balance: 120(0.15) = Vₙₑw(0.25) implies Vₙₑw = 72 L implies Evaporated = 120 - 72 = 48 L.","Correct. Survives elimination because evaporating 48 L leaves 72 L of solution containing 18 kg of salt (18 / 72 = 25.0%).","Eliminated because evaporating 40 L leaves 80 L (18/80 = 22.5%).","Eliminated because evaporating 50 L leaves 70 L (18/70 = 25.71%).","Eliminated because evaporating 45 L leaves 75 L (18/75 = 24.0%).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"A pharmacist combines 30.0 mL of a 10.0% boric acid solution, 40.0 mL of a 15.0% boric acid solution, and 50.0 mL of a 25.0% boric acid solution. What is the resulting concentration of boric acid in the final combined 120.0 mL mixture?","17.92% (or 1711/12%)","16.67%","18.50%","17.25%","A","Step-by-Step Solution:
 1. Calculate the pure boric acid in each component solution:
-   - Solution 1: $30.0\text{ mL} \times 0.10 = 3.0\text{ mL}$
-   - Solution 2: $40.0\text{ mL} \times 0.15 = 6.0\text{ mL}$
-   - Solution 3: $50.0\text{ mL} \times 0.25 = 12.5\text{ mL}$.
+ - Solution 1: 30.0 mL × 0.10 = 3.0 mL
+ - Solution 2: 40.0 mL × 0.15 = 6.0 mL
+ - Solution 3: 50.0 mL × 0.25 = 12.5 mL.
 2. Sum the total pure boric acid:
-   - $\text{Total Acid} = 3.0 + 6.0 + 12.5 = 21.5\text{ mL}$.
+ - Total Acid = 3.0 + 6.0 + 12.5 = 21.5 mL.
 3. Sum the total combined volume:
-   - $\text{Total Volume} = 30.0 + 40.0 + 50.0 = 120.0\text{ mL}$.
+ - Total Volume = 30.0 + 40.0 + 50.0 = 120.0 mL.
 4. Compute final concentration:
-   - $\text{Concentration} = \frac{21.5}{120.0} \times 100\% = \frac{215}{12}\% = 17.9167\% \approx 17.92\% = 17\frac{11}{12}\%$.
+ - Concentration = 21.5/120.0 × 100% = 215/12% = 17.9167% ≈ 17.92% = 1711/12%.
 
-Common Trap: Taking the simple unweighted average of the three percentages ($\frac{10 + 15 + 25}{3} = 16.67\%$, Option B).
-Exam Tip: Always compute weighted solute sum divided by total volume: $\frac{\sum V_i C_i}{\sum V_i} = \frac{21.5}{120} = 17.92\%$.","Correct. Survives elimination because total acid is 3 + 6 + 12.5 = 21.5 mL in 120 mL, yielding 21.5 / 120 = 17.9167% (17 11/12%).","Eliminated because 16.67% is the unweighted average (50/3).","Eliminated because rounding error yields 18.50%.","Eliminated because calculation slip yields 17.25%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"A vessel initially contains 50.0 liters of pure milk. Exactly 10.0 liters of milk is extracted and replaced by 10.0 liters of water. This replacement procedure is repeated two additional times (3 total cycles). How many liters of pure milk remain in the vessel at the conclusion of the third cycle?","25.60 liters","24.00 liters","26.80 liters","20.00 liters","A","Step-by-Step Solution:
+Common Trap: Taking the simple unweighted average of the three percentages (10 + 15 + 25/3 = 16.67%, Option B).
+Exam Tip: Always compute weighted solute Σ divided by total volume: Σ V_i C_i/Σ V_i = 21.5/120 = 17.92%.","Correct. Survives elimination because total acid is 3 + 6 + 12.5 = 21.5 mL in 120 mL, yielding 21.5 / 120 = 17.9167% (17 11/12%).","Eliminated because 16.67% is the unweighted average (50/3).","Eliminated because rounding error yields 18.50%.","Eliminated because calculation slip yields 17.25%.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"A vessel initially contains 50.0 liters of pure milk. Exactly 10.0 liters of milk is extracted and replaced by 10.0 liters of water. This replacement procedure is repeated two additional × (3 total cycles). How many liters of pure milk remain in the vessel at the conclusion of the third cycle?","25.60 liters","24.00 liters","26.80 liters","20.00 liters","A","Step-by-Step Solution:
 1. Apply the repeated replacement formula:
-   - $\text{Milk Remaining} = V \left(1 - \frac{x}{V}\right)^n$, where $V = 50.0\text{ L}$, $x = 10.0\text{ L}$, and $n = 3$.
+ - Milk Remaining = V (1 - x/V)ⁿ, where V = 50.0 L, x = 10.0 L, and n = 3.
 2. Calculate the retention factor per cycle:
-   - $\text{Factor} = 1 - \frac{10.0}{50.0} = 1 - 0.20 = 0.80 = \frac{4}{5}$.
-3. Compute milk remaining after $n = 3$ cycles:
-   - $\text{Milk} = 50.0 \times (0.80)^3 = 50.0 \times 0.512 = 25.60\text{ liters}$.
-4. (Verification of water volume: $50.0 - 25.60 = 24.40\text{ liters}$).
+ - Factor = 1 - 10.0/50.0 = 1 - 0.20 = 0.80 = 4/5.
+3. Compute milk remaining after n = 3 cycles:
+ - Milk = 50.0 × (0.80)³ = 50.0 × 0.512 = 25.60 liters.
+4. (Verification of water volume: 50.0 - 25.60 = 24.40 liters).
 
-Common Trap: Subtracting $3 \times 10 = 30\text{ L}$ linearly ($50 - 30 = 20\text{ L}$, Option D), failing to account for milk dilution in subsequent extractions.
-Exam Tip: Cycle 1: $50 \times 0.8 = 40\text{ L}$. Cycle 2: $40 \times 0.8 = 32\text{ L}$. Cycle 3: $32 \times 0.8 = 25.6\text{ L}$.","Correct. Survives elimination because 50 * (0.8)^3 = 50 * 0.512 = 25.60 liters.","Eliminated because 24.00 liters is an arithmetic slip.","Eliminated because 26.80 liters is an overestimate.","Eliminated because 20.00 liters assumes linear uncompounded subtraction (50 - 10*3).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
-"A distributor blends two grades of coffee beans costing ₱250.00/kg and ₱350.00/kg in the weight ratio $3 : 2$. If the merchant sells the blended coffee at ₱348.00/kg, what is the exact percentage profit on cost?","20.0\%","18.5\%","22.5\%","16.7\%","A","Step-by-Step Solution:
+Common Trap: Subtracting 3 × 10 = 30 L linearly (50 - 30 = 20 L, Option D), failing to account for milk dilution in subsequent extractions.
+Exam Tip: Cycle 1: 50 × 0.8 = 40 L. Cycle 2: 40 × 0.8 = 32 L. Cycle 3: 32 × 0.8 = 25.6 L.","Correct. Survives elimination because 50 * (0.8)³ = 50 * 0.512 = 25.60 liters.","Eliminated because 24.00 liters is an arithmetic slip.","Eliminated because 26.80 liters is an overestimate.","Eliminated because 20.00 liters assumes linear uncompounded subtraction (50 - 10*3).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+"A distributor blends two grades of coffee beans costing ₱250.00/kg and ₱350.00/kg in the weight ratio 3: 2. If the merchant sells the blended coffee at ₱348.00/kg, what is the exact percentage profit on cost?","20.0%","18.5%","22.5%","16.7%","A","Step-by-Step Solution:
 1. Calculate the weighted cost price per kilogram of the blend:
-   - Total parts $= 3 + 2 = 5\text{ kg}$.
-   - Cost of 5 kg $= 3(₱250.00) + 2(₱350.00) = ₱750.00 + ₱700.00 = ₱1,450.00$.
-   - $\text{Cost Price per kg} = \frac{₱1,450.00}{5} = ₱290.00\text{/kg}$.
+ - Total parts = 3 + 2 = 5 kg.
+ - Cost of 5 kg = 3(₱250.00) + 2(₱350.00) = ₱750.00 + ₱700.00 = ₱1,450.00.
+ - Cost Price per kg = ₱1,450.00/5 = ₱290.00/kg.
 2. Determine profit per kilogram:
-   - $\text{Selling Price} = ₱348.00\text{/kg}$.
-   - $\text{Profit} = ₱348.00 - ₱290.00 = ₱58.00\text{/kg}$.
+ - Selling Price = ₱348.00/kg.
+ - Profit = ₱348.00 - ₱290.00 = ₱58.00/kg.
 3. Calculate percentage profit on cost:
-   - $\text{Profit Percentage} = \frac{\text{Profit}}{\text{Cost Price}} \times 100\% = \frac{58.00}{290.00} \times 100\% = \frac{1}{5} \times 100\% = 20.0\%$.
+ - Profit Percentage = Profit/(Cost Price) × 100% = 58.00/290.00 × 100% = 1/5 × 100% = 20.0%.
 
-Common Trap: Computing profit based on selling price ($\frac{58}{348} = 16.67\%$, Option D) rather than cost price.
-Exam Tip: Standard accounting profit is always calculated over Cost Price ($\frac{\text{Profit}}{\text{Cost}} = \frac{58}{290} = 20.0\%$).","Correct. Survives elimination because blend cost is ₱290.00/kg, profit is ₱58.00/kg, and 58 / 290 = 20.0%.","Eliminated because 18.5% is an underestimate.","Eliminated because 22.5% is an overestimate.","Eliminated because 16.7% is the profit margin on selling price (58/348).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"
+Common Trap: Computing profit based on selling price (58/348 = 16.67%, Option D) rather than cost price.
+Exam Tip: Standard accounting profit is always calculated over Cost Price (Profit/Cost = 58/290 = 20.0%).","Correct. Survives elimination because blend cost is ₱290.00/kg, profit is ₱58.00/kg, and 58 / 290 = 20.0%.","Eliminated because 18.5% is an underestimate.","Eliminated because 22.5% is an overestimate.","Eliminated because 16.7% is the profit margin on selling price (58/348).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Mixture problems | Very Difficult | Batch 035"

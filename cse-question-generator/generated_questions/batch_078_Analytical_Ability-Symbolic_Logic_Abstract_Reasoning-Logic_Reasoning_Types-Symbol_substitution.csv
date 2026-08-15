@@ -1,180 +1,180 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"In an encoded accounting arithmetic system, standard mathematical symbols are substituted as follows: $\oplus$ denotes Multiplication ($\times$), $\ominus$ denotes Addition ($+$), $\otimes$ denotes Division ($\div$), and $\oslash$ denotes Subtraction ($-$). What is the exact value of the expression: $24 \otimes 4 \ominus 5 \oplus 3 \oslash 7$?","14","21","18","25","A","Step-by-Step Solution:
+"In an encoded accounting arithmetic system, standard mathematical symbols are substituted as follows: oplus denotes Multiplication (×), ominus denotes Addition (+), o× denotes Division (÷), and oslash denotes Subtraction (-). What is the exact value of the expression: 24 o× 4 ominus 5 oplus 3 oslash 7?","14","21","18","25","A","Step-by-Step Solution:
 1. Substitute the encoded operators with their standard arithmetic equivalents:
-   - $\otimes \to \div$
-   - $\ominus \to +$
-   - $\oplus \to \times$
-   - $\oslash \to -$
-   - Expression becomes: $24 \div 4 + 5 \times 3 - 7$.
+ - o× to ÷
+ - ominus to +
+ - oplus to ×
+ - oslash to -
+ - Expression becomes: 24 ÷ 4 + 5 × 3 - 7.
 2. Apply the standard Order of Operations (PEMDAS/BODMAS):
-   - Step 1 (Division): $24 \div 4 = 6$.
-   - Step 2 (Multiplication): $5 \times 3 = 15$.
-   - Substitute results: $6 + 15 - 7$.
-   - Step 3 (Addition): $6 + 15 = 21$.
-   - Step 4 (Subtraction): $21 - 7 = 14$.
+ - Step 1 (Division): 24 ÷ 4 = 6.
+ - Step 2 (Multiplication): 5 × 3 = 15.
+ - Substitute results: 6 + 15 - 7.
+ - Step 3 (Addition): 6 + 15 = 21.
+ - Step 4 (Subtraction): 21 - 7 = 14.
 3. Conclude:
-   - The evaluated result is 14.
+ - The evaluated result is 14.
 4. Evaluate incorrect alternatives:
-   - Option B (21): Result before subtracting 7.
-   - Option C (18): Left-to-right evaluation without operator precedence.
-   - Option D (25): Arithmetic calculation error.
+ - Option B (21): Result before subtracting 7.
+ - Option C (18): Left-to-right evaluation without operator precedence.
+ - Option D (25): Arithmetic calculation error.
 
 Common Trap: Performing operations strictly left-to-right instead of observing PEMDAS precedence.
 Exam Tip: Replace all symbols first, then strictly execute Division/Multiplication before Addition/Subtraction.","Correct. Survives elimination because substituting symbols gives 24 / 4 + 5 * 3 - 7 = 6 + 15 - 7 = 14.","Eliminated because 21 omits the final subtraction of 7.","Eliminated because evaluating left-to-right without PEMDAS produces an incorrect result.","Eliminated due to incorrect arithmetic calculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"Consider the custom binary mathematical operator $\diamondsuit$ defined on real numbers as: $x \diamondsuit y = 2xy - (x + y)$. What is the exact value of the nested expression: $(4 \diamondsuit 3) \diamondsuit 2$?","49","52","45","68","A","Step-by-Step Solution:
-1. Evaluate the inner parenthetical expression $(4 \diamondsuit 3)$:
-   - Formula: $x \diamondsuit y = 2xy - (x + y)$.
-   - Let $x = 4$ and $y = 3$.
-   - $(4 \diamondsuit 3) = 2(4)(3) - (4 + 3) = 24 - 7 = 17$.
-2. Substitute the intermediate result into the outer operation $(17 \diamondsuit 2)$:
-   - Let $x = 17$ and $y = 2$.
-   - $(17 \diamondsuit 2) = 2(17)(2) - (17 + 2)$.
-   - Multiply: $2 \times 17 \times 2 = 68$.
-   - Sum: $17 + 2 = 19$.
-   - Subtract: $68 - 19 = 49$.
+"Consider the custom binary mathematical operator diamondsuit defined on real numbers as: x diamondsuit y = 2xy - (x + y). What is the exact value of the nested expression: (4 diamondsuit 3) diamondsuit 2?","49","52","45","68","A","Step-by-Step Solution:
+1. Evaluate the inner parenthetical expression (4 diamondsuit 3):
+ - Formula: x diamondsuit y = 2xy - (x + y).
+ - Let x = 4 and y = 3.
+ - (4 diamondsuit 3) = 2(4)(3) - (4 + 3) = 24 - 7 = 17.
+2. Substitute the intermediate result into the outer operation (17 diamondsuit 2):
+ - Let x = 17 and y = 2.
+ - (17 diamondsuit 2) = 2(17)(2) - (17 + 2).
+ - Multiply: 2 × 17 × 2 = 68.
+ - Sum: 17 + 2 = 19.
+ - Subtract: 68 - 19 = 49.
 3. Conclude:
-   - The final evaluated numerical value is 49.
+ - The final evaluated numerical value is 49.
 4. Evaluate incorrect alternatives:
-   - Option B (52): Forgot the subtraction of $(x+y)$ in the inner operation.
-   - Option C (45): Arithmetic miscalculation.
-   - Option D (68): Only calculated $2xy$ without subtracting $(x+y)$.
+ - Option B (52): Forgot the subtraction of (x+y) in the inner operation.
+ - Option C (45): Arithmetic miscalculation.
+ - Option D (68): Only calculated 2xy without subtracting (x+y).
 
-Common Trap: Applying the operator only to the product $2xy$ and omitting the linear term $-(x+y)$.
+Common Trap: Applying the operator only to the product 2xy and omitting the linear term -(x+y).
 Exam Tip: Evaluate the inner parenthesis completely to a single integer before evaluating the outer operator.","Correct. Survives elimination because (4 diamond 3) = 24 - 7 = 17, and (17 diamond 2) = 68 - 19 = 49.","Eliminated because 52 is an arithmetic error.","Eliminated because 45 is an arithmetic error.","Eliminated because 68 omits the subtraction of (17 + 2).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"In the cryptarithmetic addition problem where letters represent distinct non-zero decimal digits: $\text{AB} + \text{BA} = \text{CDC}$. Given that the sum of the digits is $\text{A} + \text{B} = 11$, what is the exact numerical value of the 3-digit palindromic sum $\text{CDC}$?","121","111","131","141","A","Step-by-Step Solution:
+"In the cryptarithmetic addition problem where letters represent distinct non-zero decimal digits: AB + BA = CDC. Given that the Σ of the digits is A + B = 11, what is the exact numerical value of the 3-digit palindromic Σ CDC?","121","111","131","141","A","Step-by-Step Solution:
 1. Express the 2-digit numbers algebraically in expanded decimal form:
-   - $\text{AB} = 10\text{A} + \text{B}$.
-   - $\text{BA} = 10\text{B} + \text{A}$.
+ - AB = 10A + B.
+ - BA = 10B + A.
 2. Sum the two algebraic expressions:
-   - $\text{AB} + \text{BA} = (10\text{A} + \text{B}) + (10\text{B} + \text{A}) = 11\text{A} + 11\text{B} = 11(\text{A} + \text{B})$.
-3. Substitute the given condition $\text{A} + \text{B} = 11$:
-   - $\text{Sum} = 11 \times 11 = 121$.
-4. Check conformity with the variable pattern $\text{CDC}$:
-   - In $121$, the hundreds digit is $\text{C} = 1$, the tens digit is $\text{D} = 2$, and the units digit is $\text{C} = 1$.
-   - All letters represent consistent, distinct digits ($\text{C}=1, \text{D}=2$).
+ - AB + BA = (10A + B) + (10B + A) = 11A + 11B = 11(A + B).
+3. Substitute the given condition A + B = 11:
+ - Sum = 11 × 11 = 121.
+4. Check conformity with the variable pattern CDC:
+ - In 121, the hundreds digit is C = 1, the tens digit is D = 2, and the units digit is C = 1.
+ - All letters represent consistent, distinct digits (C=1, D=2).
 5. Conclude:
-   - $\text{CDC} = 121$.
+ - CDC = 121.
 
 Common Trap: Trying to guess trial values for A and B individually rather than factoring out 11.
-Exam Tip: Any two-digit number plus its reverse always equals $11 \times (\text{sum of digits})$.","Correct. Survives elimination because AB + BA = 11(A + B) = 11(11) = 121, matching CDC with C=1, D=2.","Eliminated because 111 requires A + B to equal 10.09 (not an integer).","Eliminated because 131 is not a multiple of 11.","Eliminated because 141 is not a multiple of 11.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"In a symbolic logic system, custom functions are defined as: $\alpha(P, Q) = \neg P \land Q$, $\beta(P, Q) = P \lor \neg Q$, and $\gamma(P, Q) = P \oplus Q$ (Exclusive OR). If atomic truth values are $P = \text{True}$ and $Q = \text{False}$, what is the truth value of the nested composite function: $\gamma(\alpha(P, Q), \beta(P, Q))$?","TRUE","FALSE","Indeterminate","Contradictory","A","Step-by-Step Solution:
-1. Evaluate the first argument $\alpha(P, Q)$ with $P = \text{True}, Q = \text{False}$:
-   - $\alpha(\text{True}, \text{False}) = \neg \text{True} \land \text{False} = \text{False} \land \text{False} = \text{FALSE}$.
-2. Evaluate the second argument $\beta(P, Q)$ with $P = \text{True}, Q = \text{False}$:
-   - $\beta(\text{True}, \text{False}) = \text{True} \lor \neg \text{False} = \text{True} \lor \text{True} = \text{TRUE}$.
-3. Evaluate the outer function $\gamma(\text{Arg}_1, \text{Arg}_2)$:
-   - $\text{Arg}_1 = \text{False}$.
-   - $\text{Arg}_2 = \text{True}$.
-   - $\gamma(\text{False}, \text{True}) = \text{False} \oplus \text{True}$.
-4. Recall the Exclusive OR ($\oplus$) rule:
-   - XOR evaluates to TRUE when operands have opposite truth values.
-   - $\text{False} \oplus \text{True} = \text{TRUE}$.
+Exam Tip: Any two-digit number plus its reverse always equals 11 × (Σ of digits).","Correct. Survives elimination because AB + BA = 11(A + B) = 11(11) = 121, matching CDC with C=1, D=2.","Eliminated because 111 requires A + B to equal 10.09 (not an integer).","Eliminated because 131 is not a multiple of 11.","Eliminated because 141 is not a multiple of 11.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+"In a symbolic logic system, custom functions are defined as: α(P, Q) = neg P land Q, β(P, Q) = P lor neg Q, and γ(P, Q) = P oplus Q (Exclusive OR). If atomic truth values are P = True and Q = False, what is the truth value of the nested composite function: γ(α(P, Q), β(P, Q))?","TRUE","FALSE","Indeterminate","Contradictory","A","Step-by-Step Solution:
+1. Evaluate the first argument α(P, Q) with P = True, Q = False:
+ - α(True, False) = neg True land False = False land False = FALSE.
+2. Evaluate the second argument β(P, Q) with P = True, Q = False:
+ - β(True, False) = True lor neg False = True lor True = TRUE.
+3. Evaluate the outer function γ(Arg₁, Arg₂):
+ - Arg₁ = False.
+ - Arg₂ = True.
+ - γ(False, True) = False oplus True.
+4. Recall the Exclusive OR (oplus) rule:
+ - XOR evaluates to TRUE when operands have opposite truth values.
+ - False oplus True = TRUE.
 5. Conclude:
-   - The overall nested expression evaluates to TRUE.
+ - The overall nested expression evaluates to TRUE.
 
-Common Trap: Miscalculating $\beta(\text{True}, \text{False})$ or assuming XOR of different values is False.
-Exam Tip: In XOR ($\oplus$), $\text{False} \oplus \text{True} = \text{True}$; $\text{True} \oplus \text{True} = \text{False}$.","Correct. Survives elimination because alpha evaluates to False, beta evaluates to True, and their XOR sum gamma(False, True) strictly evaluates to True.","Eliminated because operands have opposite truth values, making XOR True.","Eliminated because truth values are completely determined.","Eliminated because the logic system is consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"The operator symbols $\&, \#, \$, @$ represent standard arithmetic operations ($+, -, \times, \div$) in some order based on the sample equations: $12 \$ 4 = 48$, $48 \& 8 = 6$, $6 @ 9 = 15$, $15 \# 7 = 8$. What is the numerical value of: $(18 \# 6) \$ (20 \& 5) @ 10$?","58","48","62","38","A","Step-by-Step Solution:
+Common Trap: Miscalculating β(True, False) or assuming XOR of different values is False.
+Exam Tip: In XOR (oplus), False oplus True = True; True oplus True = False.","Correct. Survives elimination because α evaluates to False, β evaluates to True, and their XOR Σ γ(False, True) strictly evaluates to True.","Eliminated because operands have opposite truth values, making XOR True.","Eliminated because truth values are completely determined.","Eliminated because the logic system is consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+"The operator symbols \&, \#, @ represent standard arithmetic operations (+, -, ×, ÷) in some order based on the sample equations: 12 4 = 48, 48 \& 8 = 6, 6 @ 9 = 15, 15 \# 7 = 8. What is the numerical value of: (18 \# 6) (20 \& 5) @ 10?","58","48","62","38","A","Step-by-Step Solution:
 1. Decode each operator symbol from the training equations:
-   - $12 \$ 4 = 48 \implies \$ = \times$ (Multiplication).
-   - $48 \& 8 = 6 \implies \& = \div$ (Division).
-   - $6 @ 9 = 15 \implies @ = +$ (Addition).
-   - $15 \# 7 = 8 \implies \# = -$ (Subtraction).
+ - 12 4 = 48 implies = × (Multiplication).
+ - 48 \& 8 = 6 implies \& = ÷ (Division).
+ - 6 @ 9 = 15 implies @ = + (Addition).
+ - 15 \# 7 = 8 implies \# = - (Subtraction).
 2. Substitute the decoded operators into the target expression:
-   - $(18 \# 6) \$ (20 \& 5) @ 10 \implies (18 - 6) \times (20 \div 5) + 10$.
+ - (18 \# 6) (20 \& 5) @ 10 implies (18 - 6) × (20 ÷ 5) + 10.
 3. Execute operations by PEMDAS precedence:
-   - Parenthesis 1: $18 - 6 = 12$.
-   - Parenthesis 2: $20 \div 5 = 4$.
-   - Multiplication: $12 \times 4 = 48$.
-   - Addition: $48 + 10 = 58$.
+ - Parenthesis 1: 18 - 6 = 12.
+ - Parenthesis 2: 20 ÷ 5 = 4.
+ - Multiplication: 12 × 4 = 48.
+ - Addition: 48 + 10 = 58.
 4. Conclude:
-   - The final result is 58.
+ - The final result is 58.
 
-Common Trap: Mixing up the subtraction ($\#$) and addition ($@$) symbols.
+Common Trap: Mixing up the subtraction (\#) and addition (@) symbols.
 Exam Tip: Create a clear lookup table of decoded symbols before solving the compound equation.","Correct. Survives elimination because decoding yields (18 - 6) * (20 / 5) + 10 = 12 * 4 + 10 = 58.","Eliminated because 48 omits the final addition of 10.","Eliminated because 62 is an arithmetic miscalculation.","Eliminated because 38 is an arithmetic miscalculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"In a relational algebraic substitution system: $A > B$ means $A = 2B$; $A < B$ means $A = B/2$; $A = B$ means $A = B + 3$. If it is given that $X > Y$, $Y = Z$, and $Z = 5$, what is the exact numerical value of $X$?","16","10","13","8","A","Step-by-Step Solution:
+"In a relational algebraic substitution system: A > B means A = 2B; A < B means A = B/2; A = B means A = B + 3. If it is given that X > Y, Y = Z, and Z = 5, what is the exact numerical value of X?","16","10","13","8","A","Step-by-Step Solution:
 1. Parse the given base variable:
-   - Given: $Z = 5$.
-2. Decode the relation $Y = Z$:
-   - Rule for \"=\": $A = B$ means $A = B + 3$.
-   - Therefore, $Y = Z + 3 = 5 + 3 = 8$.
-3. Decode the relation $X > Y$:
-   - Rule for \">\": $A > B$ means $A = 2B$.
-   - Therefore, $X = 2Y = 2(8) = 16$.
+ - Given: Z = 5.
+2. Decode the relation Y = Z:
+ - Rule for \""=\"": A = B means A = B + 3.
+ - Therefore, Y = Z + 3 = 5 + 3 = 8.
+3. Decode the relation X > Y:
+ - Rule for \"">\"": A > B means A = 2B.
+ - Therefore, X = 2Y = 2(8) = 16.
 4. Conclude:
-   - The numerical value of $X$ is 16.
+ - The numerical value of X is 16.
 5. Evaluate incorrect alternatives:
-   - Option B (10): Computed $X = 2Z$ ignoring the intermediate relation $Y = Z$.
-   - Option C (13): Computed $2Z + 3 = 13$.
-   - Option D (8): Value of $Y$.
+ - Option B (10): Computed X = 2Z ignoring the intermediate relation Y = Z.
+ - Option C (13): Computed 2Z + 3 = 13.
+ - Option D (8): Value of Y.
 
 Common Trap: Interpreting standard relational signs literally instead of applying their redefined mathematical substitution rules.
-Exam Tip: Propagate values strictly through the chain of substituted formulas: $Z=5 \to Y=5+3=8 \to X=2(8)=16$.","Correct. Survives elimination because Y = Z + 3 = 8, and X = 2Y = 2(8) = 16.","Eliminated because 10 erroneously ignores the relation Y = Z.","Eliminated because 13 applies operations in reverse order.","Eliminated because 8 is the value of Y, not X.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"Given the defined ternary polynomial operator $[x, y, z] = x^2 + 2y - 3z$, what is the exact value of the compound sum: $[4, 5, 2] + [3, -1, 4]$?","15","18","12","20","A","Step-by-Step Solution:
-1. Evaluate the first ternary bracket $[4, 5, 2]$:
-   - $x = 4, y = 5, z = 2$.
-   - Formula: $x^2 + 2y - 3z$.
-   - $[4, 5, 2] = 4^2 + 2(5) - 3(2) = 16 + 10 - 6 = 20$.
-2. Evaluate the second ternary bracket $[3, -1, 4]$:
-   - $x = 3, y = -1, z = 4$.
-   - Formula: $x^2 + 2y - 3z$.
-   - $[3, -1, 4] = 3^2 + 2(-1) - 3(4) = 9 - 2 - 12 = -5$.
+Exam Tip: Propagate values strictly through the chain of substituted formulas: Z=5 to Y=5+3=8 to X=2(8)=16.","Correct. Survives elimination because Y = Z + 3 = 8, and X = 2Y = 2(8) = 16.","Eliminated because 10 erroneously ignores the relation Y = Z.","Eliminated because 13 applies operations in reverse order.","Eliminated because 8 is the value of Y, not X.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+"Given the defined ternary polynomial operator [x, y, z] = x² + 2y - 3z, what is the exact value of the compound Σ: [4, 5, 2] + [3, -1, 4]?","15","18","12","20","A","Step-by-Step Solution:
+1. Evaluate the first ternary bracket [4, 5, 2]:
+ - x = 4, y = 5, z = 2.
+ - Formula: x² + 2y - 3z.
+ - [4, 5, 2] = 4² + 2(5) - 3(2) = 16 + 10 - 6 = 20.
+2. Evaluate the second ternary bracket [3, -1, 4]:
+ - x = 3, y = -1, z = 4.
+ - Formula: x² + 2y - 3z.
+ - [3, -1, 4] = 3² + 2(-1) - 3(4) = 9 - 2 - 12 = -5.
 3. Sum the two evaluated terms:
-   - $\text{Total} = 20 + (-5) = 15$.
+ - Total = 20 + (-5) = 15.
 4. Conclude:
-   - The final result is 15.
+ - The final result is 15.
 
-Common Trap: Making a sign error when multiplying negative integers ($2 \times -1 = -2$).
+Common Trap: Making a sign error when multiplying negative integers (2 × -1 = -2).
 Exam Tip: Calculate each bracket independently with attention to negative signs, then add the results.","Correct. Survives elimination because [4, 5, 2] = 16 + 10 - 6 = 20, [3, -1, 4] = 9 - 2 - 12 = -5, and 20 + (-5) = 15.","Eliminated because 18 is an arithmetic error.","Eliminated because 12 is an arithmetic error.","Eliminated because 20 is only the first bracket's value.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"In an alphanumeric substitution code, digits 0 through 9 are represented by letters A through J in sequential order ($A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7, I=8, J=9$). What is the ENCODED LETTER RESULT of the arithmetic equation: $\text{CBA} \times \text{C} - \text{DEF}$?","HF","GF","IF","HE","A","Step-by-Step Solution:
+"In an alphanumeric substitution code, digits 0 through 9 are represented by letters A through J in sequential order (A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7, I=8, J=9). What is the ENCODED LETTER RESULT of the arithmetic equation: CBA × C - DEF?","HF","GF","IF","HE","A","Step-by-Step Solution:
 1. Convert letter strings to their corresponding decimal integers:
-   - $\text{CBA} \implies \text{C}(2), \text{B}(1), \text{A}(0) = 210$.
-   - $\text{C} \implies 2$.
-   - $\text{DEF} \implies \text{D}(3), \text{E}(4), \text{F}(5) = 345$.
+ - CBA implies C(2), B(1), A(0) = 210.
+ - C implies 2.
+ - DEF implies D(3), E(4), F(5) = 345.
 2. Perform the arithmetic operations:
-   - Step 1 (Multiplication): $210 \times 2 = 420$.
-   - Step 2 (Subtraction): $420 - 345 = 75$.
+ - Step 1 (Multiplication): 210 × 2 = 420.
+ - Step 2 (Subtraction): 420 - 345 = 75.
 3. Encode the numerical result (75) back into letter code:
-   - Tens digit $7 \implies \text{H}$.
-   - Units digit $5 \implies \text{F}$.
-   - Encoded Result = $\text{HF}$.
+ - Tens digit 7 implies H.
+ - Units digit 5 implies F.
+ - Encoded Result = HF.
 4. Conclude:
-   - The correct encoded answer is $\text{HF}$.
+ - The correct encoded answer is HF.
 
 Common Trap: Mismapping 7 to G or 5 to E by starting the alphabet index from 1 instead of 0.
-Exam Tip: Note carefully that $A=0$, so $H=7$ and $F=5$.","Correct. Survives elimination because CBA = 210, C = 2, DEF = 345, yielding 210 * 2 - 345 = 75, which encodes to HF (H=7, F=5).","Eliminated because GF encodes to 65.","Eliminated because IF encodes to 85.","Eliminated because HE encodes to 74.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"Consider the custom modular polynomial operator $\odot$ defined as: $a \odot b = (a^3 + b^3) \pmod 7$. What is the exact value of the nested expression: $(3 \odot 4) \odot 5$?","6","0","3","5","A","Step-by-Step Solution:
-1. Evaluate the inner operation $(3 \odot 4)$:
-   - Compute cubes: $3^3 = 27$ and $4^3 = 64$.
-   - Sum: $27 + 64 = 91$.
-   - Modulo 7: $91 \div 7 = 13$ with remainder $0$.
-   - Therefore, $(3 \odot 4) = 0$.
-2. Substitute 0 into the outer operation: $(0 \odot 5)$:
-   - Compute cubes: $0^3 = 0$ and $5^3 = 125$.
-   - Sum: $0 + 125 = 125$.
-   - Modulo 7: $125 = 7 \times 17 + 6$ ($119 + 6 = 125$).
-   - Remainder = $6$.
+Exam Tip: Note carefully that A=0, so H=7 and F=5.","Correct. Survives elimination because CBA = 210, C = 2, DEF = 345, yielding 210 * 2 - 345 = 75, which encodes to HF (H=7, F=5).","Eliminated because GF encodes to 65.","Eliminated because IF encodes to 85.","Eliminated because HE encodes to 74.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+"Consider the custom modular polynomial operator odot defined as: a odot b = (a³ + b³) pmod 7. What is the exact value of the nested expression: (3 odot 4) odot 5?","6","0","3","5","A","Step-by-Step Solution:
+1. Evaluate the inner operation (3 odot 4):
+ - Compute cubes: 3³ = 27 and 4³ = 64.
+ - Sum: 27 + 64 = 91.
+ - Modulo 7: 91 ÷ 7 = 13 with remainder 0.
+ - Therefore, (3 odot 4) = 0.
+2. Substitute 0 into the outer operation: (0 odot 5):
+ - Compute cubes: 0³ = 0 and 5³ = 125.
+ - Sum: 0 + 125 = 125.
+ - Modulo 7: 125 = 7 × 17 + 6 (119 + 6 = 125).
+ - Remainder = 6.
 3. Conclude:
-   - $(3 \odot 4) \odot 5 = 6$.
+ - (3 odot 4) odot 5 = 6.
 4. Evaluate incorrect alternatives:
-   - Option B (0): The result of the inner operation only.
-   - Option C (3): Arithmetic error.
-   - Option D (5): Arithmetic error.
+ - Option B (0): The result of the inner operation only.
+ - Option C (3): Arithmetic error.
+ - Option D (5): Arithmetic error.
 
-Common Trap: Stopping after evaluating the inner parenthesis ($(3 \odot 4) = 0$) and failing to evaluate the outer operation with 5.
-Exam Tip: Modulo arithmetic: $91 \pmod 7 = 0$; $125 \pmod 7 = 6$.","Correct. Survives elimination because 3^3 + 4^3 = 91 = 0 mod 7, and 0^3 + 5^3 = 125 = 6 mod 7.","Eliminated because 0 is only the inner operation result.","Eliminated because 3 is an incorrect modulo remainder.","Eliminated because 5 is an incorrect modulo remainder.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
-"If the symbol $\star$ represents a rational fraction operation defined on real numbers as: $x \star y = \frac{x + y}{1 + xy}$, what is the exact fractional value of $2 \star 3$?","5/7","5/6","6/7","5/8","A","Step-by-Step Solution:
+Common Trap: Stopping after evaluating the inner parenthesis ((3 odot 4) = 0) and failing to evaluate the outer operation with 5.
+Exam Tip: Modulo arithmetic: 91 pmod 7 = 0; 125 pmod 7 = 6.","Correct. Survives elimination because 3³ + 4³ = 91 = 0 mod 7, and 0³ + 5³ = 125 = 6 mod 7.","Eliminated because 0 is only the inner operation result.","Eliminated because 3 is an incorrect modulo remainder.","Eliminated because 5 is an incorrect modulo remainder.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+"If the symbol star represents a rational fraction operation defined on real numbers as: x star y = x + y/1 + xy, what is the exact fractional value of 2 star 3?","5/7","5/6","6/7","5/8","A","Step-by-Step Solution:
 1. Identify the input variables:
-   - $x = 2$ and $y = 3$.
-2. Apply the given formula $x \star y = \frac{x + y}{1 + xy}$:
-   - Numerator: $x + y = 2 + 3 = 5$.
-   - Denominator: $1 + xy = 1 + (2 \times 3) = 1 + 6 = 7$.
+ - x = 2 and y = 3.
+2. Apply the given formula x star y = x + y/1 + xy:
+ - Numerator: x + y = 2 + 3 = 5.
+ - Denominator: 1 + xy = 1 + (2 × 3) = 1 + 6 = 7.
 3. Assemble the fraction:
-   - $2 \star 3 = \frac{5}{7}$.
+ - 2 star 3 = 5/7.
 4. Evaluate incorrect alternatives:
-   - Option B ($5/6$): Computed denominator as $xy = 6$ (forgot to add 1).
-   - Option C ($6/7$): Swapped numerator terms.
-   - Option D ($5/8$): Arithmetic error in denominator.
+ - Option B (5/6): Computed denominator as xy = 6 (forgot to add 1).
+ - Option C (6/7): Swapped numerator terms.
+ - Option D (5/8): Arithmetic error in denominator.
 
-Common Trap: Forgetting to add 1 to the product $xy$ in the denominator.
-Exam Tip: Evaluate numerator $(2+3=5)$ and denominator $(1+6=7)$ independently before simplifying.","Correct. Survives elimination because (2 + 3) / (1 + 2 * 3) = 5 / (1 + 6) = 5/7.","Eliminated because 5/6 omits the constant +1 in the denominator.","Eliminated because 6/7 has an incorrect numerator.","Eliminated because 5/8 has an incorrect denominator.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"
+Common Trap: Forgetting to add 1 to the product xy in the denominator.
+Exam Tip: Evaluate numerator (2+3=5) and denominator (1+6=7) independently before simplifying.","Correct. Survives elimination because (2 + 3) / (1 + 2 * 3) = 5 / (1 + 6) = 5/7.","Eliminated because 5/6 omits the constant +1 in the denominator.","Eliminated because 6/7 has an incorrect numerator.","Eliminated because 5/8 has an incorrect denominator.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Symbol substitution | Very Difficult | Batch 078"

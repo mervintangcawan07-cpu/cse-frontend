@@ -1,214 +1,214 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "A municipal procurement division purchased 3 desktop computers, 4 office desks, and 2 executive chairs for a total cost of ₱134,000.00. Another department purchased 4 desktop computers, 2 office desks, and 5 executive chairs for ₱166,000.00. A third division purchased 2 desktop computers, 5 office desks, and 3 executive chairs for ₱118,000.00. What is the combined total cost of purchasing 1 desktop computer, 1 office desk, and 1 executive chair?","₱44,000.00","₱42,000.00","₱46,000.00","₱48,000.00","A","Step-by-Step Solution:
 1. Define linear algebraic system in 3 variables:
-   - Let $C, D, E$ be unit costs of a Computer, Desk, and Chair.
-   - $3C + 4D + 2E = 134,000.00$ (Equation 1).
-   - $4C + 2D + 5E = 166,000.00$ (Equation 2).
-   - $2C + 5D + 3E = 118,000.00$ (Equation 3).
+ - Let C, D, E be unit costs of a Computer, Desk, and Chair.
+ - 3C + 4D + 2E = 134,000.00 (Equation 1).
+ - 4C + 2D + 5E = 166,000.00 (Equation 2).
+ - 2C + 5D + 3E = 118,000.00 (Equation 3).
 2. Solve the linear system using elimination/substitution:
-   - From Equation 2: $2D = 166,000 - 4C - 5E \implies D = 83,000 - 2C - 2.5E$.
-   - Substitute into Equation 1: $3C + 4(83,000 - 2C - 2.5E) + 2E = 134,000 \implies -5C - 8E = -198,000 \implies 5C + 8E = 198,000$.
-   - Substitute into Equation 3: $2C + 5(83,000 - 2C - 2.5E) + 3E = 118,000 \implies -8C - 9.5E = -297,000 \implies 16C + 19E = 594,000$.
-3. Solve for $C$ and $E$:
-   - Multiply first by 16: $80C + 128E = 3,168,000$.
-   - Multiply second by 5: $80C + 95E = 2,970,000$.
-   - Subtract: $33E = 198,000 \implies E = ₱6,000.00\text{ (Chair)}$.
-   - $5C + 8(6,000) = 198,000 \implies 5C = 150,000 \implies C = ₱30,000.00\text{ (Computer)}$.
-4. Solve for $D$:
-   - $D = 83,000 - 2(30,000) - 2.5(6,000) = 83,000 - 60,000 - 15,000 = ₱8,000.00\text{ (Desk)}$.
+ - From Equation 2: 2D = 166,000 - 4C - 5E implies D = 83,000 - 2C - 2.5E.
+ - Substitute into Equation 1: 3C + 4(83,000 - 2C - 2.5E) + 2E = 134,000 implies -5C - 8E = -198,000 implies 5C + 8E = 198,000.
+ - Substitute into Equation 3: 2C + 5(83,000 - 2C - 2.5E) + 3E = 118,000 implies -8C - 9.5E = -297,000 implies 16C + 19E = 594,000.
+3. Solve for C and E:
+ - Multiply first by 16: 80C + 128E = 3,168,000.
+ - Multiply second by 5: 80C + 95E = 2,970,000.
+ - Subtract: 33E = 198,000 implies E = ₱6,000.00 (Chair).
+ - 5C + 8(6,000) = 198,000 implies 5C = 150,000 implies C = ₱30,000.00 (Computer).
+4. Solve for D:
+ - D = 83,000 - 2(30,000) - 2.5(6,000) = 83,000 - 60,000 - 15,000 = ₱8,000.00 (Desk).
 5. Compute combined cost:
-   - $1C + 1D + 1E = ₱30,000.00 + ₱8,000.00 + ₱6,000.00 = ₱44,000.00$.
+ - 1C + 1D + 1E = ₱30,000.00 + ₱8,000.00 + ₱6,000.00 = ₱44,000.00.
 
 Common Trap: Simply averaging the three invoices without solving for unit costs.
-Exam Tip: Unit costs: Computer $= ₱30\text{k}$, Desk $= ₱8\text{k}$, Chair $= ₱6\text{k} \implies \text{Sum} = ₱44,000.00$.","Correct. Survives elimination because solving the 3-variable system gives C = ₱30,000, D = ₱8,000, E = ₱6,000, totaling ₱44,000.00.","Eliminated because ₱42,000.00 is an underestimate.","Eliminated because ₱46,000.00 is an overestimate.","Eliminated because ₱48,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"For what exact value of constant $k$ will the system of two linear equations: $2x + 3y = 7$ and $kx + 9y = 15$ have NO solution (representing two distinct parallel lines)?","k = 6","k = 4","k = 9","k = 3","A","Step-by-Step Solution:
-1. Recall the condition for a linear system $a_1 x + b_1 y = c_1$ and $a_2 x + b_2 y = c_2$ to have NO solution:
-   - The lines must be parallel and distinct:
-   - $\frac{a_1}{a_2} = \frac{b_1}{b_2} \neq \frac{c_1}{c_2}$.
+Exam Tip: Unit costs: Computer = ₱30k, Desk = ₱8k, Chair = ₱6k implies Sum = ₱44,000.00.","Correct. Survives elimination because solving the 3-variable system gives C = ₱30,000, D = ₱8,000, E = ₱6,000, totaling ₱44,000.00.","Eliminated because ₱42,000.00 is an underestimate.","Eliminated because ₱46,000.00 is an overestimate.","Eliminated because ₱48,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"For what exact value of constant k will the system of two linear equations: 2x + 3y = 7 and kx + 9y = 15 have NO solution (representing two distinct parallel lines)?","k = 6","k = 4","k = 9","k = 3","A","Step-by-Step Solution:
+1. Recall the condition for a linear system a₁ x + b₁ y = c₁ and a₂ x + b₂ y = c₂ to have NO solution:
+ - The lines must be parallel and distinct:
+ - a₁/a₂ = b₁/b₂ ≠ c₁/c₂.
 2. Substitute coefficients from the given equations:
-   - $a_1 = 2, \quad b_1 = 3, \quad c_1 = 7$.
-   - $a_2 = k, \quad b_2 = 9, \quad c_2 = 15$.
+ - a₁ = 2, b₁ = 3, c₁ = 7.
+ - a₂ = k, b₂ = 9, c₂ = 15.
 3. Set up the coefficient ratios:
-   - $\frac{2}{k} = \frac{3}{9} \neq \frac{7}{15}$.
-4. Solve for $k$:
-   - $\frac{2}{k} = \frac{1}{3} \implies k = 2 \times 3 = 6$.
+ - 2/k = 3/9 ≠ 7/15.
+4. Solve for k:
+ - 2/k = 1/3 implies k = 2 × 3 = 6.
 5. Verify non-equality of constant ratio:
-   - $\frac{3}{9} = \frac{1}{3} \approx 0.333 \neq \frac{7}{15} \approx 0.467$ (Condition $\frac{a_1}{a_2} = \frac{b_1}{b_2} \neq \frac{c_1}{c_2}$ holds!).
-6. Therefore, the system has NO solution when $k = 6$.
+ - 3/9 = 1/3 ≈ 0.333 ≠ 7/15 ≈ 0.467 (Condition a₁/a₂ = b₁/b₂ ≠ c₁/c₂ holds!).
+6. Therefore, the system has NO solution when k = 6.
 
-Common Trap: Setting $\frac{2}{k} = \frac{7}{15} \implies k = 4.28$ or confusing no solution with infinite solutions.
-Exam Tip: Parallel slope condition: $a_1 b_2 - a_2 b_1 = 0 \implies 2(9) - 3k = 0 \implies 3k = 18 \implies k = 6$.","Correct. Survives elimination because k = 6 gives parallel slopes (2/6 = 3/9 = 1/3) with different y-intercepts (7/3 != 15/9), yielding no solution.","Eliminated because k = 4 yields intersecting lines with a unique solution.","Eliminated because k = 9 yields intersecting lines.","Eliminated because k = 3 yields intersecting lines.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+Common Trap: Setting 2/k = 7/15 implies k = 4.28 or confusing no solution with infinite solutions.
+Exam Tip: Parallel slope condition: a₁ b₂ - a₂ b₁ = 0 implies 2(9) - 3k = 0 implies 3k = 18 implies k = 6.","Correct. Survives elimination because k = 6 gives parallel slopes (2/6 = 3/9 = 1/3) with different y-intercepts (7/3!= 15/9), yielding no solution.","Eliminated because k = 4 yields intersecting lines with a unique solution.","Eliminated because k = 9 yields intersecting lines.","Eliminated because k = 3 yields intersecting lines.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
 "A treasury cashier holds 75 paper currency bills in total, consisting entirely of ₱100-peso, ₱500-peso, and ₱1,000-peso denominations, with a total monetary value of ₱40,500.00. If the number of ₱100-peso bills is exactly twice the number of ₱500-peso bills, how many ₱1,000-peso bills are in the cashier's drawer?","30 bills of ₱1,000","25 bills of ₱1,000","35 bills of ₱1,000","20 bills of ₱1,000","A","Step-by-Step Solution:
 1. Define algebraic variables:
-   - Let $x$ be the number of ₱100 bills.
-   - Let $y$ be the number of ₱500 bills.
-   - Let $z$ be the number of ₱1,000 bills.
+ - Let x be the number of ₱100 bills.
+ - Let y be the number of ₱500 bills.
+ - Let z be the number of ₱1,000 bills.
 2. Formulate equations from problem statements:
-   - Denomination ratio: $x = 2y$.
-   - Total count: $x + y + z = 75 \implies 2y + y + z = 75 \implies 3y + z = 75$ (Equation 1).
-   - Total value: $100x + 500y + 1,000z = ₱40,500.00$.
+ - Denomination ratio: x = 2y.
+ - Total count: x + y + z = 75 implies 2y + y + z = 75 implies 3y + z = 75 (Equation 1).
+ - Total value: 100x + 500y + 1,000z = ₱40,500.00.
 3. Simplify value equation by dividing by 100:
-   - $x + 5y + 10z = 405.0$.
-   - Substitute $x = 2y$: $2y + 5y + 10z = 405.0 \implies 7y + 10z = 405.0$ (Equation 2).
-4. Substitute $z = 75 - 3y$ into Equation 2:
-   - $7y + 10(75 - 3y) = 405.0$.
-   - $7y + 750 - 30y = 405.0$.
-   - $-23y = 405.0 - 750 = -345.0$.
-5. Solve for $y$:
-   - $y = \frac{-345.0}{-23} = 15\text{ bills of ₱500}$.
-6. Solve for $x$ and $z$:
-   - $x = 2(15) = 30\text{ bills of ₱100}$.
-   - $z = 75 - 3(15) = 75 - 45 = 30\text{ bills of ₱1,000}$.
+ - x + 5y + 10z = 405.0.
+ - Substitute x = 2y: 2y + 5y + 10z = 405.0 implies 7y + 10z = 405.0 (Equation 2).
+4. Substitute z = 75 - 3y into Equation 2:
+ - 7y + 10(75 - 3y) = 405.0.
+ - 7y + 750 - 30y = 405.0.
+ - -23y = 405.0 - 750 = -345.0.
+5. Solve for y:
+ - y = -345.0/-23 = 15 bills of ₱500.
+6. Solve for x and z:
+ - x = 2(15) = 30 bills of ₱100.
+ - z = 75 - 3(15) = 75 - 45 = 30 bills of ₱1,000.
 7. Verify:
-   - $30(₱100) + 15(₱500) + 30(₱1,000) = 3,000 + 7,500 + 30,000 = ₱40,500.00$ (Confirmed!).
+ - 30(₱100) + 15(₱500) + 30(₱1,000) = 3,000 + 7,500 + 30,000 = ₱40,500.00 (Confirmed!).
 
-Common Trap: Finding $y = 15$ and stopping without calculating $z = 30$.
-Exam Tip: $23y = 345 \implies y = 15 \implies z = 75 - 3(15) = 30\text{ bills of ₱1,000}$.","Correct. Survives elimination because y = 15 (₱500 bills) gives x = 30 (₱100 bills) and z = 30 (₱1,000 bills), totaling 75 bills and ₱40,500.00.","Eliminated because 25 bills yields non-integer counts for other denominations.","Eliminated because 35 bills fails the value equation.","Eliminated because 20 bills yields total value ₱32,500.00 != ₱40,500.00.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"Solve the system of simultaneous linear equations for $(x, y)$: $4x + 3y = 25$ and $3x - 2y = 6$.","(x, y) = (4, 3)","(x, y) = (3, 4)","(x, y) = (5, 2)","(x, y) = (4, 2)","A","Step-by-Step Solution:
+Common Trap: Finding y = 15 and stopping without calculating z = 30.
+Exam Tip: 23y = 345 implies y = 15 implies z = 75 - 3(15) = 30 bills of ₱1,000.","Correct. Survives elimination because y = 15 (₱500 bills) gives x = 30 (₱100 bills) and z = 30 (₱1,000 bills), totaling 75 bills and ₱40,500.00.","Eliminated because 25 bills yields non-integer counts for other denominations.","Eliminated because 35 bills fails the value equation.","Eliminated because 20 bills yields total value ₱32,500.00!= ₱40,500.00.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"Solve the system of simultaneous linear equations for (x, y): 4x + 3y = 25 and 3x - 2y = 6.","(x, y) = (4, 3)","(x, y) = (3, 4)","(x, y) = (5, 2)","(x, y) = (4, 2)","A","Step-by-Step Solution:
 1. Write down the given linear system:
-   - $4x + 3y = 25$ (Equation 1).
-   - $3x - 2y = 6$ (Equation 2).
-2. Eliminate $y$ by equalizing coefficients ($\text{LCM}(3, 2) = 6$):
-   - Multiply Equation 1 by 2: $8x + 6y = 50$ (Equation 3).
-   - Multiply Equation 2 by 3: $9x - 6y = 18$ (Equation 4).
+ - 4x + 3y = 25 (Equation 1).
+ - 3x - 2y = 6 (Equation 2).
+2. Eliminate y by equalizing coefficients (LCM(3, 2) = 6):
+ - Multiply Equation 1 by 2: 8x + 6y = 50 (Equation 3).
+ - Multiply Equation 2 by 3: 9x - 6y = 18 (Equation 4).
 3. Add Equation 3 and Equation 4:
-   - $(8x + 9x) + (6y - 6y) = 50 + 18$.
-   - $17x = 68$.
-4. Solve for $x$:
-   - $x = \frac{68}{17} = 4$.
-5. Substitute $x = 4$ into Equation 1 to solve for $y$:
-   - $4(4) + 3y = 25$.
-   - $16 + 3y = 25 \implies 3y = 9 \implies y = 3$.
+ - (8x + 9x) + (6y - 6y) = 50 + 18.
+ - 17x = 68.
+4. Solve for x:
+ - x = 68/17 = 4.
+5. Substitute x = 4 into Equation 1 to solve for y:
+ - 4(4) + 3y = 25.
+ - 16 + 3y = 25 implies 3y = 9 implies y = 3.
 6. Verify in Equation 2:
-   - $3(4) - 2(3) = 12 - 6 = 6$ (Confirmed!).
+ - 3(4) - 2(3) = 12 - 6 = 6 (Confirmed!).
 
-Common Trap: Swapping coordinates to $(3, 4)$ (Option B).
-Exam Tip: Elimination: $17x = 68 \implies x = 4 \implies 3y = 9 \implies y = 3 \implies (4, 3)$.","Correct. Survives elimination because substituting (4, 3) yields 4(4) + 3(3) = 25 and 3(4) - 2(3) = 6.","Eliminated because (3, 4) yields 4(3) + 3(4) = 24 != 25.","Eliminated because (5, 2) yields 4(5) + 3(2) = 26 != 25.","Eliminated because (4, 2) yields 3(4) - 2(2) = 8 != 6.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"The sum of the digits of a three-digit integer is 15. The units digit is twice the hundreds digit ($u = 2h$). When the hundreds and tens digits are interchanged, the newly formed number is 90 less than the original number. What is the original three-digit integer?","438","428","348","456","A","Step-by-Step Solution:
+Common Trap: Swapping coordinates to (3, 4) (Option B).
+Exam Tip: Elimination: 17x = 68 implies x = 4 implies 3y = 9 implies y = 3 implies (4, 3).","Correct. Survives elimination because substituting (4, 3) yields 4(4) + 3(3) = 25 and 3(4) - 2(3) = 6.","Eliminated because (3, 4) yields 4(3) + 3(4) = 24!= 25.","Eliminated because (5, 2) yields 4(5) + 3(2) = 26!= 25.","Eliminated because (4, 2) yields 3(4) - 2(2) = 8!= 6.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"The Σ of the digits of a three-digit integer is 15. The units digit is twice the hundreds digit (u = 2h). When the hundreds and tens digits are interchanged, the newly formed number is 90 less than the original number. What is the original three-digit integer?","438","428","348","456","A","Step-by-Step Solution:
 1. Define the 3-digit number:
-   - Original number $N = 100h + 10t + u$.
+ - Original number N = 100h + 10t + u.
 2. Formulate problem constraints:
-   - Sum of digits: $h + t + u = 15$ (Constraint 1).
-   - Units digit: $u = 2h$ (Constraint 2).
-   - Digit swap: New number $N' = 100t + 10h + u$.
-   - Difference: $N - N' = (100h + 10t + u) - (100t + 10h + u) = 90$.
+ - Sum of digits: h + t + u = 15 (Constra∫ 1).
+ - Units digit: u = 2h (Constra∫ 2).
+ - Digit swap: New number N' = 100t + 10h + u.
+ - Difference: N - N' = (100h + 10t + u) - (100t + 10h + u) = 90.
 3. Simplify the difference equation:
-   - $90h - 90t = 90 \implies h - t = 1 \implies t = h - 1$ (Constraint 3).
-4. Substitute Constraints 2 and 3 into Constraint 1:
-   - $h + (h - 1) + 2h = 15$.
-   - $4h - 1 = 15 \implies 4h = 16 \implies h = 4$.
+ - 90h - 90t = 90 implies h - t = 1 implies t = h - 1 (Constra∫ 3).
+4. Substitute Constraints 2 and 3 into Constra∫ 1:
+ - h + (h - 1) + 2h = 15.
+ - 4h - 1 = 15 implies 4h = 16 implies h = 4.
 5. Determine remaining digits:
-   - Tens digit: $t = 4 - 1 = 3$.
-   - Units digit: $u = 2(4) = 8$.
+ - Tens digit: t = 4 - 1 = 3.
+ - Units digit: u = 2(4) = 8.
 6. Form the original integer:
-   - $N = 438$.
+ - N = 438.
 7. Verify:
-   - Sum of digits: $4 + 3 + 8 = 15$.
-   - Units digit: $8 = 2(4)$.
-   - Swapped number: $348 \implies 438 - 348 = 90$ (Confirmed!).
+ - Sum of digits: 4 + 3 + 8 = 15.
+ - Units digit: 8 = 2(4).
+ - Swapped number: 348 implies 438 - 348 = 90 (Confirmed!).
 
-Common Trap: Selecting the swapped number 348 (Option C) or guessing 428 ($4+2+8 = 14 \neq 15$).
-Exam Tip: $h - t = 1 \implies 4h = 16 \implies h = 4, t = 3, u = 8 \implies 438$.","Correct. Survives elimination because 438 has digit sum 15, units digit 8 = 2(4), and 438 - 348 = 90.","Eliminated because 428 has digit sum 14 != 15.","Eliminated because 348 is the smaller swapped integer.","Eliminated because 456 has units digit 6 != 2(4) = 8.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"Two real numbers $x$ and $y$ satisfy the non-linear algebraic system: $\frac{4}{x} + \frac{3}{y} = 1$ and $\frac{8}{x} - \frac{9}{y} = \frac{1}{2}$. What are the exact values of $x$ and $y$?","x = \frac{40}{7} \text{ (or } 5.71\text{)}, y = 10","x = 6, y = 12","x = 5, y = 15","x = \frac{35}{6}, y = 9","A","Step-by-Step Solution:
+Common Trap: Selecting the swapped number 348 (Option C) or guessing 428 (4+2+8 = 14 ≠ 15).
+Exam Tip: h - t = 1 implies 4h = 16 implies h = 4, t = 3, u = 8 implies 438.","Correct. Survives elimination because 438 has digit Σ 15, units digit 8 = 2(4), and 438 - 348 = 90.","Eliminated because 428 has digit Σ 14!= 15.","Eliminated because 348 is the smaller swapped integer.","Eliminated because 456 has units digit 6!= 2(4) = 8.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"Two real numbers x and y satisfy the non-linear algebraic system: 4/x + 3/y = 1 and 8/x - 9/y = 1/2. What are the exact values of x and y?","x = 40/7 (or 5.71), y = 10","x = 6, y = 12","x = 5, y = 15","x = 35/6, y = 9","A","Step-by-Step Solution:
 1. Transform using reciprocal substitutions:
-   - Let $u = \frac{1}{x}$ and $v = \frac{1}{y}$.
+ - Let u = 1/x and v = 1/y.
 2. Rewrite as standard linear system:
-   - $4u + 3v = 1.0$ (Equation 1).
-   - $8u - 9v = 0.5$ (Equation 2).
+ - 4u + 3v = 1.0 (Equation 1).
+ - 8u - 9v = 0.5 (Equation 2).
 3. Multiply Equation 1 by 3:
-   - $12u + 9v = 3.0$ (Equation 3).
+ - 12u + 9v = 3.0 (Equation 3).
 4. Add Equation 3 and Equation 2:
-   - $(12u + 8u) + (9v - 9v) = 3.0 + 0.5$.
-   - $20u = 3.5 \implies u = \frac{3.5}{20} = \frac{7}{40}$.
-5. Solve for $v$ using Equation 1:
-   - $3v = 1.0 - 4\left(\frac{7}{40}\right) = 1.0 - \frac{7}{10} = \frac{3}{10}$.
-   - $v = \frac{1}{10}$.
-6. Invert reciprocal variables to find $x$ and $y$:
-   - $x = \frac{1}{u} = \frac{40}{7} \approx 5.7143$.
-   - $y = \frac{1}{v} = 10$.
+ - (12u + 8u) + (9v - 9v) = 3.0 + 0.5.
+ - 20u = 3.5 implies u = 3.5/20 = 7/40.
+5. Solve for v using Equation 1:
+ - 3v = 1.0 - 4(7/40) = 1.0 - 7/10 = 3/10.
+ - v = 1/10.
+6. Invert reciprocal variables to find x and y:
+ - x = 1/u = 40/7 ≈ 5.7143.
+ - y = 1/v = 10.
 7. Verify in Equation 2:
-   - $8\left(\frac{7}{40}\right) - 9\left(\frac{1}{10}\right) = \frac{56}{40} - \frac{36}{40} = \frac{20}{40} = \frac{1}{2}$ (Confirmed!).
+ - 8(7/40) - 9(1/10) = 56/40 - 36/40 = 20/40 = 1/2 (Confirmed!).
 
-Common Trap: Inverting before solving or solving for $u$ and $v$ and presenting them as $x$ and $y$.
-Exam Tip: Linear substitution in $u = 1/x, v = 1/y \implies u = 7/40, v = 1/10 \implies x = 40/7, y = 10$.","Correct. Survives elimination because x = 40/7 and y = 10 yields 4/(40/7) + 3/10 = 28/40 + 12/40 = 1, and 8/(40/7) - 9/10 = 56/40 - 36/40 = 1/2.","Eliminated because (6, 12) yields 4/6 + 3/12 = 11/12 != 1.","Eliminated because (5, 15) yields 4/5 + 3/15 = 1, but 8/5 - 9/15 = 1 != 1/2.","Eliminated because (35/6, 9) fails Equation 2.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"For what value of constant $a$ will the system of equations $3x - 5y = 12$ and $9x - 15y = 4a$ possess INFINITELY MANY solutions (dependent coincident lines)?","a = 9","a = 12","a = 6","a = 15","A","Step-by-Step Solution:
+Common Trap: Inverting before solving or solving for u and v and presenting them as x and y.
+Exam Tip: Linear substitution in u = 1/x, v = 1/y implies u = 7/40, v = 1/10 implies x = 40/7, y = 10.","Correct. Survives elimination because x = 40/7 and y = 10 yields 4/(40/7) + 3/10 = 28/40 + 12/40 = 1, and 8/(40/7) - 9/10 = 56/40 - 36/40 = 1/2.","Eliminated because (6, 12) yields 4/6 + 3/12 = 11/12!= 1.","Eliminated because (5, 15) yields 4/5 + 3/15 = 1, but 8/5 - 9/15 = 1!= 1/2.","Eliminated because (35/6, 9) fails Equation 2.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"For what value of constant a will the system of equations 3x - 5y = 12 and 9x - 15y = 4a possess INFINITELY MANY solutions (dependent coincident lines)?","a = 9","a = 12","a = 6","a = 15","A","Step-by-Step Solution:
 1. Recall the condition for infinite solutions in a linear system:
-   - For equations $a_1 x + b_1 y = c_1$ and $a_2 x + b_2 y = c_2$, infinitely many solutions exist if and only if all three coefficient ratios are equal:
-   - $\frac{a_1}{a_2} = \frac{b_1}{b_2} = \frac{c_1}{c_2}$.
+ - For equations a₁ x + b₁ y = c₁ and a₂ x + b₂ y = c₂, infinitely many solutions exist if and only if all three coefficient ratios are equal:
+ - a₁/a₂ = b₁/b₂ = c₁/c₂.
 2. Substitute the given values:
-   - $a_1 = 3, \quad b_1 = -5, \quad c_1 = 12$.
-   - $a_2 = 9, \quad b_2 = -15, \quad c_2 = 4a$.
+ - a₁ = 3, b₁ = -5, c₁ = 12.
+ - a₂ = 9, b₂ = -15, c₂ = 4a.
 3. Compute the constant scaling ratio:
-   - $\frac{a_2}{a_1} = \frac{9}{3} = 3$.
-   - $\frac{b_2}{b_1} = \frac{-15}{-5} = 3$.
+ - a₂/a₁ = 9/3 = 3.
+ - b₂/b₁ = -15/-5 = 3.
 4. Set the constant term ratio equal to 3:
-   - $\frac{c_2}{c_1} = \frac{4a}{12} = 3$.
-5. Solve for $a$:
-   - $4a = 12 \times 3 = 36$.
-   - $a = \frac{36}{4} = 9$.
+ - c₂/c₁ = 4a/12 = 3.
+5. Solve for a:
+ - 4a = 12 × 3 = 36.
+ - a = 36/4 = 9.
 6. Verify:
-   - When $a = 9$, the second equation is $9x - 15y = 36$, which is exactly $3 \times (3x - 5y = 12)$ (Coincident lines!).
+ - When a = 9, the second equation is 9x - 15y = 36, which is exactly 3 × (3x - 5y = 12) (Coincident lines!).
 
-Common Trap: Equating $4a = 12 \implies a = 3$, forgetting to scale by the multiplier 3.
-Exam Tip: Multiply first equation by 3: $9x - 15y = 36$. Match constant: $4a = 36 \implies a = 9$.","Correct. Survives elimination because 4a = 36 yields a = 9, making the second equation an exact scalar multiple (3x) of the first equation.","Eliminated because a = 12 yields 9x - 15y = 48 (parallel inconsistent lines).","Eliminated because a = 6 yields 9x - 15y = 24 (parallel inconsistent lines).","Eliminated because a = 15 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
-"If $2x + y + z = 14$, $x + 2y + z = 15$, and $x + y + 2z = 19$, what is the exact numerical value of the product $x \cdot y \cdot z$?","42","36","48","54","A","Step-by-Step Solution:
+Common Trap: Equating 4a = 12 implies a = 3, forgetting to scale by the multiplier 3.
+Exam Tip: Multiply first equation by 3: 9x - 15y = 36. Match constant: 4a = 36 implies a = 9.","Correct. Survives elimination because 4a = 36 yields a = 9, making the second equation an exact scalar multiple (3x) of the first equation.","Eliminated because a = 12 yields 9x - 15y = 48 (parallel inconsistent lines).","Eliminated because a = 6 yields 9x - 15y = 24 (parallel inconsistent lines).","Eliminated because a = 15 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+"If 2x + y + z = 14, x + 2y + z = 15, and x + y + 2z = 19, what is the exact numerical value of the product x · y · z?","42","36","48","54","A","Step-by-Step Solution:
 1. Write down the symmetric linear system:
-   - $2x + y + z = 14$ (Equation 1).
-   - $x + 2y + z = 15$ (Equation 2).
-   - $x + y + 2z = 19$ (Equation 3).
+ - 2x + y + z = 14 (Equation 1).
+ - x + 2y + z = 15 (Equation 2).
+ - x + y + 2z = 19 (Equation 3).
 2. Sum all three equations together to exploit symmetry:
-   - $(2+1+1)x + (1+2+1)y + (1+1+2)z = 14 + 15 + 19$.
-   - $4x + 4y + 4z = 48$.
-3. Divide by 4 to find the unified sum $(x + y + z)$:
-   - $x + y + z = 12$ (Master Sum Equation).
+ - (2+1+1)x + (1+2+1)y + (1+1+2)z = 14 + 15 + 19.
+ - 4x + 4y + 4z = 48.
+3. Divide by 4 to find the unified Σ (x + y + z):
+ - x + y + z = 12 (Master Sum Equation).
 4. Subtract the Master Sum Equation from each original equation:
-   - $(2x + y + z) - (x + y + z) = 14 - 12 \implies x = 2$.
-   - $(x + 2y + z) - (x + y + z) = 15 - 12 \implies y = 3$.
-   - $(x + y + 2z) - (x + y + z) = 19 - 12 \implies z = 7$.
-5. Calculate the product $x \cdot y \cdot z$:
-   - $\text{Product} = 2 \times 3 \times 7 = 42$.
+ - (2x + y + z) - (x + y + z) = 14 - 12 implies x = 2.
+ - (x + 2y + z) - (x + y + z) = 15 - 12 implies y = 3.
+ - (x + y + 2z) - (x + y + z) = 19 - 12 implies z = 7.
+5. Calculate the product x · y · z:
+ - Product = 2 × 3 × 7 = 42.
 6. Verify:
-   - $x + y + z = 2 + 3 + 7 = 12$ (Confirmed!).
+ - x + y + z = 2 + 3 + 7 = 12 (Confirmed!).
 
 Common Trap: Trying complex Cramer's rule determinants when summing the equations yields the solution in 3 lines.
-Exam Tip: Summing gives $x+y+z = 12$. Direct subtraction gives $x=2, y=3, z=7 \implies xyz = 42$.","Correct. Survives elimination because x = 2, y = 3, z = 7 satisfies all three equations, giving product 2 * 3 * 7 = 42.","Eliminated because 36 corresponds to 2 * 3 * 6.","Eliminated because 48 corresponds to 2 * 4 * 6.","Eliminated because 54 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+Exam Tip: Summing gives x+y+z = 12. Direct subtraction gives x=2, y=3, z=7 implies xyz = 42.","Correct. Survives elimination because x = 2, y = 3, z = 7 satisfies all three equations, giving product 2 * 3 * 7 = 42.","Eliminated because 36 corresponds to 2 * 3 * 6.","Eliminated because 48 corresponds to 2 * 4 * 6.","Eliminated because 54 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
 "A river patrol boat travels 24.0 km upstream against the river current in 4.0 hours, and travels 36.0 km downstream with the current in 3.0 hours. What is the speed of the boat in still water and the speed of the river current?","Boat: 9.0 km/h; Current: 3.0 km/h","Boat: 8.0 km/h; Current: 4.0 km/h","Boat: 10.0 km/h; Current: 2.0 km/h","Boat: 9.5 km/h; Current: 2.5 km/h","A","Step-by-Step Solution:
 1. Define speed variables:
-   - Let $v_b$ be boat speed in still water (km/h).
-   - Let $v_c$ be river current speed (km/h).
-2. Calculate upstream and downstream effective speeds ($\text{Speed} = \frac{\text{Distance}}{\text{Time}}$):
-   - Upstream: $v_b - v_c = \frac{24.0\text{ km}}{4.0\text{ h}} = 6.0\text{ km/h}$ (Equation 1).
-   - Downstream: $v_b + v_c = \frac{36.0\text{ km}}{3.0\text{ h}} = 12.0\text{ km/h}$ (Equation 2).
-3. Add Equation 1 and Equation 2 to eliminate $v_c$:
-   - $2v_b = 6.0 + 12.0 = 18.0 \implies v_b = \frac{18.0}{2} = 9.0\text{ km/h}$.
-4. Subtract Equation 1 from Equation 2 to eliminate $v_b$:
-   - $2v_c = 12.0 - 6.0 = 6.0 \implies v_c = \frac{6.0}{2} = 3.0\text{ km/h}$.
+ - Let v_b be boat speed in still water (km/h).
+ - Let v_c be river current speed (km/h).
+2. Calculate upstream and downstream effective speeds (Speed = Distance/Time):
+ - Upstream: v_b - v_c = (24.0 km)/(4.0 h) = 6.0 km/h (Equation 1).
+ - Downstream: v_b + v_c = (36.0 km)/(3.0 h) = 12.0 km/h (Equation 2).
+3. Add Equation 1 and Equation 2 to eliminate v_c:
+ - 2v_b = 6.0 + 12.0 = 18.0 implies v_b = 18.0/2 = 9.0 km/h.
+4. Subtract Equation 1 from Equation 2 to eliminate v_b:
+ - 2v_c = 12.0 - 6.0 = 6.0 implies v_c = 6.0/2 = 3.0 km/h.
 5. Verify:
-   - Upstream: $9.0 - 3.0 = 6.0\text{ km/h} \implies 6.0 \times 4.0 = 24.0\text{ km}$.
-   - Downstream: $9.0 + 3.0 = 12.0\text{ km/h} \implies 12.0 \times 3.0 = 36.0\text{ km}$ (Confirmed!).
+ - Upstream: 9.0 - 3.0 = 6.0 km/h implies 6.0 × 4.0 = 24.0 km.
+ - Downstream: 9.0 + 3.0 = 12.0 km/h implies 12.0 × 3.0 = 36.0 km (Confirmed!).
 
-Common Trap: Averaging distance divided by total time ($60 / 7 = 8.57\text{ km/h}$).
-Exam Tip: $v_b = \frac{\text{Downstream} + \text{Upstream}}{2} = \frac{12 + 6}{2} = 9.0\text{ km/h}$, $v_c = \frac{12 - 6}{2} = 3.0\text{ km/h}$.","Correct. Survives elimination because upstream rate is 6 km/h (9 - 3) and downstream rate is 12 km/h (9 + 3), matching given times.","Eliminated because boat 8 km/h and current 4 km/h yields upstream rate 4 km/h (24 km in 6 hrs != 4 hrs).","Eliminated because boat 10 km/h and current 2 km/h yields upstream rate 8 km/h.","Eliminated because boat 9.5 km/h and current 2.5 km/h yields upstream rate 7 km/h.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+Common Trap: Averaging distance divided by total time (60 / 7 = 8.57 km/h).
+Exam Tip: v_b = (Downstream + Upstream)/2 = 12 + 6/2 = 9.0 km/h, v_c = 12 - 6/2 = 3.0 km/h.","Correct. Survives elimination because upstream rate is 6 km/h (9 - 3) and downstream rate is 12 km/h (9 + 3), matching given ×.","Eliminated because boat 8 km/h and current 4 km/h yields upstream rate 4 km/h (24 km in 6 hrs!= 4 hrs).","Eliminated because boat 10 km/h and current 2 km/h yields upstream rate 8 km/h.","Eliminated because boat 9.5 km/h and current 2.5 km/h yields upstream rate 7 km/h.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
 "In a logistics hub, 5 forklift operators and 8 cargo handlers unload 144.0 freight pallets in 4.0 hours. In the same hub, 6 forklift operators and 5 cargo handlers unload 136.0 freight pallets in 4.0 hours. How many freight pallets can 1 forklift operator and 1 cargo handler unload working together for 1.0 hour?","6.0 pallets/hour","5.0 pallets/hour","7.0 pallets/hour","5.5 pallets/hour","A","Step-by-Step Solution:
 1. Define hourly work rate variables:
-   - Let $F$ be pallets unloaded per hour by 1 forklift operator.
-   - Let $H$ be pallets unloaded per hour by 1 cargo handler.
+ - Let F be pallets unloaded per hour by 1 forklift operator.
+ - Let H be pallets unloaded per hour by 1 cargo handler.
 2. Formulate hourly rate equations:
-   - Team 1: $5F + 8H = \frac{144.0\text{ pallets}}{4.0\text{ hours}} = 36.0\text{ pallets/hour}$ (Equation 1).
-   - Team 2: $6F + 5H = \frac{136.0\text{ pallets}}{4.0\text{ hours}} = 34.0\text{ pallets/hour}$ (Equation 2).
+ - Team 1: 5F + 8H = (144.0 pallets)/(4.0 hours) = 36.0 pallets/hour (Equation 1).
+ - Team 2: 6F + 5H = (136.0 pallets)/(4.0 hours) = 34.0 pallets/hour (Equation 2).
 3. Subtract Equation 1 from Equation 2:
-   - $(6F + 5H) - (5F + 8H) = 34.0 - 36.0$.
-   - $F - 3H = -2.0 \implies F = 3H - 2.0$.
-4. Substitute $F = 3H - 2.0$ into Equation 1:
-   - $5(3H - 2.0) + 8H = 36.0$.
-   - $15H - 10.0 + 8H = 36.0$.
-   - $23H = 46.0 \implies H = 2.0\text{ pallets/hour}$.
-5. Solve for $F$:
-   - $F = 3(2.0) - 2.0 = 6.0 - 2.0 = 4.0\text{ pallets/hour}$.
+ - (6F + 5H) - (5F + 8H) = 34.0 - 36.0.
+ - F - 3H = -2.0 implies F = 3H - 2.0.
+4. Substitute F = 3H - 2.0 into Equation 1:
+ - 5(3H - 2.0) + 8H = 36.0.
+ - 15H - 10.0 + 8H = 36.0.
+ - 23H = 46.0 implies H = 2.0 pallets/hour.
+5. Solve for F:
+ - F = 3(2.0) - 2.0 = 6.0 - 2.0 = 4.0 pallets/hour.
 6. Compute combined rate for 1 forklift operator + 1 cargo handler for 1 hour:
-   - $\text{Combined Rate} = 1F + 1H = 4.0 + 2.0 = 6.0\text{ pallets/hour}$.
+ - Combined Rate = 1F + 1H = 4.0 + 2.0 = 6.0 pallets/hour.
 7. Verify:
-   - Team 1: $5(4) + 8(2) = 20 + 16 = 36\text{ pallets/hr} \times 4\text{ h} = 144\text{ pallets}$ (Confirmed!).
+ - Team 1: 5(4) + 8(2) = 20 + 16 = 36 pallets/hr × 4 h = 144 pallets (Confirmed!).
 
-Common Trap: Finding $F = 4$ or $H = 2$ and forgetting to add them together ($4 + 2 = 6$).
-Exam Tip: $F = 4\text{ pallets/hr}, H = 2\text{ pallets/hr} \implies 1F + 1H = 6.0\text{ pallets/hr}$.","Correct. Survives elimination because 1 forklift (4 pallets/hr) + 1 handler (2 pallets/hr) unloads exactly 6.0 pallets/hour.","Eliminated because 5.0 pallets/hr assumes H = 1.","Eliminated because 7.0 pallets/hr is an overestimate.","Eliminated because 5.5 pallets/hr is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"
+Common Trap: Finding F = 4 or H = 2 and forgetting to add them together (4 + 2 = 6).
+Exam Tip: F = 4 pallets/hr, H = 2 pallets/hr implies 1F + 1H = 6.0 pallets/hr.","Correct. Survives elimination because 1 forklift (4 pallets/hr) + 1 handler (2 pallets/hr) unloads exactly 6.0 pallets/hour.","Eliminated because 5.0 pallets/hr assumes H = 1.","Eliminated because 7.0 pallets/hr is an overestimate.","Eliminated because 5.5 pallets/hr is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | System of equations | Very Difficult | Batch 052"

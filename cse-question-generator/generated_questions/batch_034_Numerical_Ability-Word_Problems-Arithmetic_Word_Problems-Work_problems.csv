@@ -1,159 +1,159 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Worker A can complete a database migration project in 12 days alone, Worker B in 18 days alone, and Worker C in 36 days alone. All three start working together. After 3 days, Worker A leaves. Worker B and Worker C continue working together for another 2 days, after which Worker B also leaves. How many additional days will Worker C need to complete the remaining work alone?","12 days","10 days","14 days","15 days","A","Step-by-Step Solution:
 1. Define individual daily rates:
-   - $r_A = \frac{1}{12} = \frac{3}{36}$
-   - $r_B = \frac{1}{18} = \frac{2}{36}$
-   - $r_C = \frac{1}{36}$.
+ - r_A = 1/12 = 3/36
+ - r_B = 1/18 = 2/36
+ - r_C = 1/36.
 2. Calculate work done during the first 3 days (A, B, and C together):
-   - Combined rate $r_{ABC} = \frac{3 + 2 + 1}{36} = \frac{6}{36} = \frac{1}{6}$.
-   - Work completed in 3 days: $W_1 = 3 \times \frac{1}{6} = \frac{1}{2}$ (50% completed).
-   - Remaining work: $1 - \frac{1}{2} = \frac{1}{2}$.
+ - Combined rate rABC = 3 + 2 + 1/36 = 6/36 = 1/6.
+ - Work completed in 3 days: W₁ = 3 × 1/6 = 1/2 (50% completed).
+ - Remaining work: 1 - 1/2 = 1/2.
 3. Calculate work done during the next 2 days (B and C together):
-   - Combined rate $r_{BC} = \frac{2 + 1}{36} = \frac{3}{36} = \frac{1}{12}$.
-   - Work completed in 2 days: $W_2 = 2 \times \frac{1}{12} = \frac{1}{6}$.
-   - Remaining work: $\frac{1}{2} - \frac{1}{6} = \frac{3 - 1}{6} = \frac{2}{6} = \frac{1}{3}$.
-4. Compute time required for Worker C to finish $\frac{1}{3}$ alone:
-   - $\text{Time} = \frac{\text{Remaining Work}}{r_C} = \frac{1/3}{1/36} = \frac{36}{3} = 12\text{ days}$.
+ - Combined rate rBC = 2 + 1/36 = 3/36 = 1/12.
+ - Work completed in 2 days: W₂ = 2 × 1/12 = 1/6.
+ - Remaining work: 1/2 - 1/6 = 3 - 1/6 = 2/6 = 1/3.
+4. Compute time required for Worker C to finish 1/3 alone:
+ - Time = (Remaining Work)/r_C = 1/3/1/36 = 36/3 = 12 days.
 
-Common Trap: Forgetting to subtract the work done by B and C during the 2 days ($\frac{1/2}{1/36} = 18\text{ days}$) or miscalculating $\frac{1}{2} - \frac{1}{6}$.
-Exam Tip: Set total work as $36\text{ units}$. First 3 days: $3 \times 6 = 18\text{ units}$. Next 2 days: $2 \times 3 = 6\text{ units}$. Remaining: $36 - 24 = 12\text{ units}$. C does $1\text{ unit/day} \implies 12\text{ days}$.","Correct. Survives elimination because total work done before C is alone is 18 + 6 = 24 units out of 36, leaving 12 units for C (1 unit/day) = 12 days.","Eliminated because 10 days would leave 2 units incomplete.","Eliminated because 14 days overshoots total units.","Eliminated because 15 days is an arithmetic error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"A public reservoir has two inlet pipes (Pipe A and Pipe B) and one drainage outlet (Pipe C). Pipe A can fill the empty reservoir in 6 hours, Pipe B can fill it in 8 hours, and Pipe C can completely drain the full reservoir in 12 hours. If all three pipes are opened simultaneously when the reservoir is completely empty, how many hours will it take to fill the reservoir completely?","4.8 hours \text{ (or 4 hours 48 minutes)}","5.0 hours","4.5 hours","5.2 hours","A","Step-by-Step Solution:
+Common Trap: Forgetting to subtract the work done by B and C during the 2 days (1/2/1/36 = 18 days) or miscalculating 1/2 - 1/6.
+Exam Tip: Set total work as 36 units. First 3 days: 3 × 6 = 18 units. Next 2 days: 2 × 3 = 6 units. Remaining: 36 - 24 = 12 units. C does 1 unit/day implies 12 days.","Correct. Survives elimination because total work done before C is alone is 18 + 6 = 24 units out of 36, leaving 12 units for C (1 unit/day) = 12 days.","Eliminated because 10 days would leave 2 units incomplete.","Eliminated because 14 days overshoots total units.","Eliminated because 15 days is an arithmetic error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+"A public reservoir has two inlet pipes (Pipe A and Pipe B) and one drainage outlet (Pipe C). Pipe A can fill the empty reservoir in 6 hours, Pipe B can fill it in 8 hours, and Pipe C can completely drain the full reservoir in 12 hours. If all three pipes are opened simultaneously when the reservoir is completely empty, how many hours will it take to fill the reservoir completely?","4.8 hours (or 4 hours 48 minutes)","5.0 hours","4.5 hours","5.2 hours","A","Step-by-Step Solution:
 1. Define hourly rates:
-   - Pipe A (inlet): $+\frac{1}{6}$ reservoir/hour.
-   - Pipe B (inlet): $+\frac{1}{8}$ reservoir/hour.
-   - Pipe C (outlet): $-\frac{1}{12}$ reservoir/hour.
-2. Determine net combined filling rate ($R$):
-   - $R = \frac{1}{6} + \frac{1}{8} - \frac{1}{12}$.
-3. Find least common denominator ($\text{LCD} = 24$):
-   - $R = \frac{4}{24} + \frac{3}{24} - \frac{2}{24} = \frac{4 + 3 - 2}{24} = \frac{5}{24}\text{ reservoir/hour}$.
+ - Pipe A (inlet): +1/6 reservoir/hour.
+ - Pipe B (inlet): +1/8 reservoir/hour.
+ - Pipe C (outlet): -1/12 reservoir/hour.
+2. Determine net combined filling rate (R):
+ - R = 1/6 + 1/8 - 1/12.
+3. Find least common denominator (LCD = 24):
+ - R = 4/24 + 3/24 - 2/24 = 4 + 3 - 2/24 = 5/24 reservoir/hour.
 4. Compute time required to fill 1 full reservoir:
-   - $\text{Time} = \frac{1}{R} = \frac{24}{5} = 4.8\text{ hours}$.
+ - Time = 1/R = 24/5 = 4.8 hours.
 5. Convert decimal hours to hours and minutes:
-   - $0.8 \times 60 = 48\text{ minutes} \implies 4\text{ hours and } 48\text{ minutes}$.
+ - 0.8 × 60 = 48 minutes implies 4 hours and 48 minutes.
 
-Common Trap: Adding the drainage rate instead of subtracting it ($\frac{4+3+2}{24} = \frac{9}{24} \implies 2.67\text{ hours}$).
-Exam Tip: Inlets add work ($+$), outlets remove work ($-$). Time is the reciprocal of the net rate $\frac{24}{5} = 4.8\text{ hours}$.","Correct. Survives elimination because net rate is 4/24 + 3/24 - 2/24 = 5/24, giving 24/5 = 4.8 hours.","Eliminated because 5.0 hours implies net rate of 5/25.","Eliminated because 4.5 hours ignores fractional remainder.","Eliminated because 5.2 hours is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"A team of 15 technicians can assemble 120 specialized voting machines in 8 days working 6 hours per day. How many days will it take a team of 20 technicians of equal efficiency to assemble 200 voting machines working 9 hours per day?","6\frac{2}{3} \text{ days (or 6 days 16 hours)}","7\text{ days}","6\text{ days}","7\frac{1}{2} \text{ days}","A","Step-by-Step Solution:
+Common Trap: Adding the drainage rate instead of subtracting it (4+3+2/24 = 9/24 implies 2.67 hours).
+Exam Tip: Inlets add work (+), outlets remove work (-). Time is the reciprocal of the net rate 24/5 = 4.8 hours.","Correct. Survives elimination because net rate is 4/24 + 3/24 - 2/24 = 5/24, giving 24/5 = 4.8 hours.","Eliminated because 5.0 hours implies net rate of 5/25.","Eliminated because 4.5 hours ignores fractional remainder.","Eliminated because 5.2 hours is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+"A team of 15 technicians can assemble 120 specialized voting machines in 8 days working 6 hours per day. How many days will it take a team of 20 technicians of equal efficiency to assemble 200 voting machines working 9 hours per day?","62/3 days (or 6 days 16 hours)","7 days","6 days","71/2 days","A","Step-by-Step Solution:
 1. Apply the standard compound work proportion:
-   - $\frac{M_1 \cdot D_1 \cdot H_1}{W_1} = \frac{M_2 \cdot D_2 \cdot H_2}{W_2}$.
+ - M₁ · D₁ · H₁/W₁ = M₂ · D₂ · H₂/W₂.
 2. Substitute the given values:
-   - $M_1 = 15, D_1 = 8, H_1 = 6, W_1 = 120$.
-   - $M_2 = 20, D_2 = ?, H_2 = 9, W_2 = 200$.
+ - M₁ = 15, D₁ = 8, H₁ = 6, W₁ = 120.
+ - M₂ = 20, D₂ =?, H₂ = 9, W₂ = 200.
 3. Set up the equation:
-   - $\frac{15 \times 8 \times 6}{120} = \frac{20 \times D_2 \times 9}{200}$.
+ - 15 × 8 × 6/120 = 20 × D₂ × 9/200.
 4. Simplify both sides:
-   - Left side: $\frac{720}{120} = 6$.
-   - Right side: $\frac{180 \cdot D_2}{200} = \frac{9}{10} D_2 = 0.9 D_2$.
-5. Solve for $D_2$:
-   - $0.9 D_2 = 6 \implies D_2 = \frac{6}{0.9} = \frac{60}{9} = \frac{20}{3} = 6\frac{2}{3}\text{ days}$.
-   - $6\frac{2}{3}\text{ days} = 6\text{ days and } 16\text{ hours}$.
+ - Left side: 720/120 = 6.
+ - Right side: 180 · D₂/200 = 9/10 D₂ = 0.9 D₂.
+5. Solve for D₂:
+ - 0.9 D₂ = 6 implies D₂ = 6/0.9 = 60/9 = 20/3 = 62/3 days.
+ - 62/3 days = 6 days and 16 hours.
 
 Common Trap: Inverting the work variable in the proportion or rounding to 7 days.
-Exam Tip: Cancel terms before multiplying: $\frac{20}{200} = \frac{1}{10} \implies \frac{9 D_2}{10} = 6 \implies D_2 = \frac{20}{3}$.","Correct. Survives elimination because (15 * 8 * 6) / 120 = 6, and 6 * 200 / (20 * 9) = 1200 / 180 = 20/3 = 6 2/3 days.","Eliminated because rounding to 7 days introduces fractional error.","Eliminated because truncating to 6 days ignores 16 hours of required work.","Eliminated because 7 1/2 days is 15/2.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+Exam Tip: Cancel terms before multiplying: 20/200 = 1/10 implies 9 D₂/10 = 6 implies D₂ = 20/3.","Correct. Survives elimination because (15 * 8 * 6) / 120 = 6, and 6 * 200 / (20 * 9) = 1200 / 180 = 20/3 = 6 2/3 days.","Eliminated because rounding to 7 days introduces fractional error.","Eliminated because truncating to 6 days ignores 16 hours of required work.","Eliminated because 7 1/2 days is 15/2.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
 "Worker X is twice as efficient as Worker Y. Together, they can complete an environmental audit report in 14 days. How many days would it take Worker Y to complete the entire report working alone?","42 days","21 days","28 days","35 days","A","Step-by-Step Solution:
 1. Define efficiency ratio and rates:
-   - Let Worker Y's daily rate $= r$.
-   - Since Worker X is twice as efficient, Worker X's daily rate $= 2r$.
+ - Let Worker Y's daily rate = r.
+ - Since Worker X is twice as efficient, Worker X's daily rate = 2r.
 2. Formulate combined daily rate:
-   - Combined Rate $= r + 2r = 3r$.
-3. Determine total work required ($W$):
-   - $W = \text{Combined Rate} \times \text{Days} = 3r \times 14 = 42r$.
+ - Combined Rate = r + 2r = 3r.
+3. Determine total work required (W):
+ - W = Combined Rate × Days = 3r × 14 = 42r.
 4. Calculate time for Worker Y alone:
-   - $\text{Time}_Y = \frac{W}{r} = \frac{42r}{r} = 42\text{ days}$.
-   - (Worker X alone would take $\frac{42r}{2r} = 21\text{ days}$).
+ - Time_Y = W/r = 42r/r = 42 days.
+ - (Worker X alone would take 42r/2r = 21 days).
 
-Common Trap: Selecting Worker X's time ($21\text{ days}$, Option B) instead of Worker Y's time ($42\text{ days}$).
-Exam Tip: Since Y is half as fast as X, Y takes twice as long as X ($42 = 2 \times 21$).","Correct. Survives elimination because combined rate is 3r, total work is 42r, and Y working at rate r requires 42 days.","Eliminated because 21 days is the time taken by Worker X (the faster worker).","Eliminated because 28 days is 2 * 14.","Eliminated because 35 days assumes 2.5 ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"An encoding project can be completed by 12 men in 16 days, or by 16 women in 15 days. If 8 men and 8 women work together, in how many days will the task be completed?","13\frac{1}{3} \text{ days (or 13 days 8 hours)}","14\text{ days}","12\frac{1}{2} \text{ days}","15\text{ days}","A","Step-by-Step Solution:
+Common Trap: Selecting Worker X's time (21 days, Option B) instead of Worker Y's time (42 days).
+Exam Tip: Since Y is half as fast as X, Y takes twice as long as X (42 = 2 × 21).","Correct. Survives elimination because combined rate is 3r, total work is 42r, and Y working at rate r requires 42 days.","Eliminated because 21 days is the time taken by Worker X (the faster worker).","Eliminated because 28 days is 2 * 14.","Eliminated because 35 days assumes 2.5 ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+"An encoding project can be completed by 12 men in 16 days, or by 16 women in 15 days. If 8 men and 8 women work together, in how many days will the task be completed?","131/3 days (or 13 days 8 hours)","14 days","121/2 days","15 days","A","Step-by-Step Solution:
 1. Calculate total work in individual worker-days:
-   - Total Work $= 12\text{ men} \times 16\text{ days} = 192\text{ man-days} \implies 1\text{ man} = \frac{1}{192}\text{ work/day}$.
-   - Total Work $= 16\text{ women} \times 15\text{ days} = 240\text{ woman-days} \implies 1\text{ woman} = \frac{1}{240}\text{ work/day}$.
+ - Total Work = 12 men × 16 days = 192 man-days implies 1 man = 1/192 work/day.
+ - Total Work = 16 women × 15 days = 240 woman-days implies 1 woman = 1/240 work/day.
 2. Calculate combined daily rate of 8 men and 8 women:
-   - Rate of 8 men $= \frac{8}{192} = \frac{1}{24}$.
-   - Rate of 8 women $= \frac{8}{240} = \frac{1}{30}$.
-   - Combined Daily Rate $= \frac{1}{24} + \frac{1}{30}$.
-3. Find common denominator ($\text{LCD} = 120$):
-   - $\text{Combined Rate} = \frac{5}{120} + \frac{4}{120} = \frac{9}{120} = \frac{3}{40}$.
+ - Rate of 8 men = 8/192 = 1/24.
+ - Rate of 8 women = 8/240 = 1/30.
+ - Combined Daily Rate = 1/24 + 1/30.
+3. Find common denominator (LCD = 120):
+ - Combined Rate = 5/120 + 4/120 = 9/120 = 3/40.
 4. Compute total days required:
-   - $\text{Days} = \frac{1}{\text{Combined Rate}} = \frac{40}{3} = 13\frac{1}{3}\text{ days} = 13\text{ days and } 8\text{ hours}$.
+ - Days = 1/(Combined Rate) = 40/3 = 131/3 days = 13 days and 8 hours.
 
-Common Trap: Averaging the men and women days ($16 + 15 = 31 \to 15.5$) without converting to daily work fractions.
-Exam Tip: $\frac{1}{24} + \frac{1}{30} = \frac{9}{120} = \frac{3}{40} \implies \text{Time} = \frac{40}{3} = 13\frac{1}{3}\text{ days}$.","Correct. Survives elimination because the daily rate of 8 men and 8 women is 1/24 + 1/30 = 3/40, giving 40/3 = 13 1/3 days.","Eliminated because 14 days is an overestimate.","Eliminated because 12 1/2 days is an underestimate.","Eliminated because 15 days ignores the addition of 8 women.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"Alex and Ben work on alternate days to digitize documents. Alex can complete the entire job alone in 9 days, while Ben can complete it alone in 12 days. If Alex starts on Day 1, in how many days will the entire digitization job be completed?","10\frac{1}{4} \text{ days (or 10.25 days)}","10\frac{1}{2} \text{ days}","10\text{ days}","11\text{ days}","A","Step-by-Step Solution:
-1. Express daily rates over common denominator ($\text{LCD} = 36$):
-   - Alex daily rate: $r_A = \frac{1}{9} = \frac{4}{36}$.
-   - Ben daily rate: $r_B = \frac{1}{12} = \frac{3}{36}$.
+Common Trap: Averaging the men and women days (16 + 15 = 31 to 15.5) without converting to daily work fractions.
+Exam Tip: 1/24 + 1/30 = 9/120 = 3/40 implies Time = 40/3 = 131/3 days.","Correct. Survives elimination because the daily rate of 8 men and 8 women is 1/24 + 1/30 = 3/40, giving 40/3 = 13 1/3 days.","Eliminated because 14 days is an overestimate.","Eliminated because 12 1/2 days is an underestimate.","Eliminated because 15 days ignores the addition of 8 women.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+"Alex and Ben work on alternate days to digitize documents. Alex can complete the entire job alone in 9 days, while Ben can complete it alone in 12 days. If Alex starts on Day 1, in how many days will the entire digitization job be completed?","101/4 days (or 10.25 days)","101/2 days","10 days","11 days","A","Step-by-Step Solution:
+1. Express daily rates over common denominator (LCD = 36):
+ - Alex daily rate: r_A = 1/9 = 4/36.
+ - Ben daily rate: r_B = 1/12 = 3/36.
 2. Calculate work done in one 2-day cycle (Alex on Day 1, Ben on Day 2):
-   - $\text{Work per 2-day cycle} = \frac{4}{36} + \frac{3}{36} = \frac{7}{36}$.
+ - Work per 2-day cycle = 4/36 + 3/36 = 7/36.
 3. Determine full cycles completed without exceeding 1:
-   - In 5 cycles ($5 \times 2 = 10\text{ days}$):
-   - Work done in 10 days $= 5 \times \frac{7}{36} = \frac{35}{36}$.
-   - Remaining work $= 1 - \frac{35}{36} = \frac{1}{36}$.
+ - In 5 cycles (5 × 2 = 10 days):
+ - Work done in 10 days = 5 × 7/36 = 35/36.
+ - Remaining work = 1 - 35/36 = 1/36.
 4. Compute time needed on Day 11 (Alex's turn):
-   - Alex does $\frac{4}{36}$ per day.
-   - Time on Day 11 $= \frac{1/36}{4/36} = \frac{1}{4}\text{ day} = 0.25\text{ day} = 6\text{ hours}$.
-5. Total time $= 10 + \frac{1}{4} = 10\frac{1}{4}\text{ days} = 10.25\text{ days}$.
+ - Alex does 4/36 per day.
+ - Time on Day 11 = 1/36/4/36 = 1/4 day = 0.25 day = 6 hours.
+5. Total time = 10 + 1/4 = 101/4 days = 10.25 days.
 
-Common Trap: Dividing remaining work by Ben's rate ($\frac{1/36}{3/36} = \frac{1}{3}$) forgetting that Alex works on odd days (Day 11).
+Common Trap: Dividing remaining work by Ben's rate (1/36/3/36 = 1/3) forgetting that Alex works on odd days (Day 11).
 Exam Tip: Odd days are Alex's turns, even days are Ben's turns. Day 11 is Alex's turn.","Correct. Survives elimination because 10 days complete 35/36 of the job, and Alex finishes the remaining 1/36 in (1/36)/(4/36) = 1/4 day, giving 10 1/4 days.","Eliminated because 10 1/2 days assumes 1/2 day on Day 11.","Eliminated because 10 days leaves 1/36 uncompleted.","Eliminated because 11 days assumes the entire 11th day is needed.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"Pipe A can fill a water storage tank in 20 minutes, and Pipe B can fill it in 30 minutes. Both pipes are opened simultaneously. After how many minutes should Pipe B be closed so that the tank is filled in exactly 15 minutes total?","7.5 minutes \text{ (or 7 min 30 sec)}","8.0 minutes","6.0 minutes","9.0 minutes","A","Step-by-Step Solution:
+"Pipe A can fill a water storage tank in 20 minutes, and Pipe B can fill it in 30 minutes. Both pipes are opened simultaneously. After how many minutes should Pipe B be closed so that the tank is filled in exactly 15 minutes total?","7.5 minutes (or 7 min 30 sec)","8.0 minutes","6.0 minutes","9.0 minutes","A","Step-by-Step Solution:
 1. Define rates per minute:
-   - Pipe A rate $= \frac{1}{20}$ tank/min.
-   - Pipe B rate $= \frac{1}{30}$ tank/min.
+ - Pipe A rate = 1/20 tank/min.
+ - Pipe B rate = 1/30 tank/min.
 2. Note that Pipe A is open for the entire 15 minutes:
-   - Work done by Pipe A $= 15 \times \frac{1}{20} = \frac{15}{20} = \frac{3}{4}$ of the tank.
+ - Work done by Pipe A = 15 × 1/20 = 15/20 = 3/4 of the tank.
 3. Calculate remaining work required from Pipe B:
-   - $\text{Remaining Work} = 1 - \frac{3}{4} = \frac{1}{4}$ of the tank.
-4. Let $t$ be the time Pipe B is open:
-   - $t \times \frac{1}{30} = \frac{1}{4}$.
-   - $t = \frac{30}{4} = 7.5\text{ minutes} = 7\text{ minutes and } 30\text{ seconds}$.
+ - Remaining Work = 1 - 3/4 = 1/4 of the tank.
+4. Let t be the time Pipe B is open:
+ - t × 1/30 = 1/4.
+ - t = 30/4 = 7.5 minutes = 7 minutes and 30 seconds.
 
-Common Trap: Setting $(r_A + r_B)t = 1 \implies t = 12\text{ minutes}$, which is the time if both remain open simultaneously without closing Pipe B.
-Exam Tip: Isolate the pipe that runs continuously for the full duration ($A$ runs for $15\text{ min} \implies 75\%$).","Correct. Survives elimination because Pipe A does 15/20 = 75% of the work, leaving 25% for Pipe B, which requires 30 * 0.25 = 7.5 minutes.","Eliminated because 8.0 minutes would overfill the tank (15/20 + 8/30 = 0.75 + 0.267 = 1.017).","Eliminated because 6.0 minutes fills only 95% of the tank.","Eliminated because 9.0 minutes overfills the tank.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
-"A contractor agrees to build a farm-to-market road in 50 days and employs 40 laborers. After 30 days, he discovers that only $\frac{1}{2}$ of the work has been completed. How many additional laborers must be hired immediately to complete the road exactly on the contractual deadline?","20 additional laborers","60 additional laborers","15 additional laborers","25 additional laborers","A","Step-by-Step Solution:
+Common Trap: Setting (r_A + r_B)t = 1 implies t = 12 minutes, which is the time if both remain open simultaneously without closing Pipe B.
+Exam Tip: Isolate the pipe that runs continuously for the full duration (A runs for 15 min implies 75%).","Correct. Survives elimination because Pipe A does 15/20 = 75% of the work, leaving 25% for Pipe B, which requires 30 * 0.25 = 7.5 minutes.","Eliminated because 8.0 minutes would overfill the tank (15/20 + 8/30 = 0.75 + 0.267 = 1.017).","Eliminated because 6.0 minutes fills only 95% of the tank.","Eliminated because 9.0 minutes overfills the tank.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+"A contractor agrees to build a farm-to-market road in 50 days and employs 40 laborers. After 30 days, he discovers that only 1/2 of the work has been completed. How many additional laborers must be hired immediately to complete the road exactly on the contractual deadline?","20 additional laborers","60 additional laborers","15 additional laborers","25 additional laborers","A","Step-by-Step Solution:
 1. Determine work completed and remaining:
-   - Initial period: 40 laborers worked for 30 days $\implies 40 \times 30 = 1,200\text{ man-days}$ to complete $\frac{1}{2}$ the road.
-   - Total road requires $1,200 \times 2 = 2,400\text{ man-days}$.
-   - Remaining work: $\frac{1}{2}$ road $= 1,200\text{ man-days}$.
+ - Initial period: 40 laborers worked for 30 days implies 40 × 30 = 1,200 man-days to complete 1/2 the road.
+ - Total road requires 1,200 × 2 = 2,400 man-days.
+ - Remaining work: 1/2 road = 1,200 man-days.
 2. Determine days remaining to deadline:
-   - $\text{Days Remaining} = 50 - 30 = 20\text{ days}$.
+ - Days Remaining = 50 - 30 = 20 days.
 3. Calculate total laborers needed for the remaining 20 days:
-   - $\text{Total Laborers} = \frac{1,200\text{ man-days}}{20\text{ days}} = 60\text{ laborers}$.
+ - Total Laborers = (1,200 man-days)/(20 days) = 60 laborers.
 4. Compute additional laborers to be hired:
-   - $\text{Additional Laborers} = 60 - 40 = 20\text{ additional laborers}$.
+ - Additional Laborers = 60 - 40 = 20 additional laborers.
 
-Common Trap: Answering $60$ (Option B), which is the total workforce needed, rather than the additional laborers to be hired ($60 - 40 = 20$).
-Exam Tip: Read carefully: \"How many additional laborers...\" always requires subtracting the existing workforce.","Correct. Survives elimination because 60 total men are needed for the remaining 20 days, requiring 60 - 40 = 20 additional laborers.","Eliminated because 60 is the total workforce required, not the additional workers.","Eliminated because 15 additional workers gives 55 men (55 * 20 = 1,100 < 1,200).","Eliminated because 25 additional workers gives 65 men.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+Common Trap: Answering 60 (Option B), which is the total workforce needed, rather than the additional laborers to be hired (60 - 40 = 20).
+Exam Tip: Read carefully: \""How many additional laborers...\"" always requires subtracting the existing workforce.","Correct. Survives elimination because 60 total men are needed for the remaining 20 days, requiring 60 - 40 = 20 additional laborers.","Eliminated because 60 is the total workforce required, not the additional workers.","Eliminated because 15 additional workers gives 55 men (55 * 20 = 1,100 < 1,200).","Eliminated because 25 additional workers gives 65 men.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
 "Workers A and B working together can assemble an emergency shelter in 12 hours. Workers B and C together can assemble it in 15 hours. Workers A and C together can assemble it in 20 hours. How many hours would Worker A require to assemble the shelter working entirely alone?","30 hours","20 hours","60 hours","25 hours","A","Step-by-Step Solution:
 1. Set up the rate equations:
-   - $r_A + r_B = \frac{1}{12}$ (Equation 1)
-   - $r_B + r_C = \frac{1}{15}$ (Equation 2)
-   - $r_A + r_C = \frac{1}{20}$ (Equation 3).
+ - r_A + r_B = 1/12 (Equation 1)
+ - r_B + r_C = 1/15 (Equation 2)
+ - r_A + r_C = 1/20 (Equation 3).
 2. Sum all three equations:
-   - $2(r_A + r_B + r_C) = \frac{1}{12} + \frac{1}{15} + \frac{1}{20}$.
-3. Find common denominator ($\text{LCD} = 60$):
-   - $2(r_A + r_B + r_C) = \frac{5 + 4 + 3}{60} = \frac{12}{60} = \frac{1}{5}$.
+ - 2(r_A + r_B + r_C) = 1/12 + 1/15 + 1/20.
+3. Find common denominator (LCD = 60):
+ - 2(r_A + r_B + r_C) = 5 + 4 + 3/60 = 12/60 = 1/5.
 4. Divide by 2 to find combined rate of all three:
-   - $r_A + r_B + r_C = \frac{1}{10}$.
-5. Isolate Worker A's rate by subtracting Equation 2 ($r_B + r_C = \frac{1}{15}$):
-   - $r_A = (r_A + r_B + r_C) - (r_B + r_C) = \frac{1}{10} - \frac{1}{15}$.
-   - $r_A = \frac{3 - 2}{30} = \frac{1}{30}\text{ shelter/hour}$.
+ - r_A + r_B + r_C = 1/10.
+5. Isolate Worker A's rate by subtracting Equation 2 (r_B + r_C = 1/15):
+ - r_A = (r_A + r_B + r_C) - (r_B + r_C) = 1/10 - 1/15.
+ - r_A = 3 - 2/30 = 1/30 shelter/hour.
 6. Time for Worker A alone:
-   - $\text{Time}_A = \frac{1}{r_A} = 30\text{ hours}$.
+ - Time_A = 1/r_A = 30 hours.
 
-Common Trap: Forgetting to divide by 2 after adding the three pairs, leading to an incorrect rate of $\frac{1}{5} - \frac{1}{15} = \frac{2}{15} \implies 7.5\text{ hours}$.
-Exam Tip: Adding cyclic pairs doubles each worker ($2(A+B+C)$). Divide by 2 first, then subtract $(B+C)$ to isolate $A$.","Correct. Survives elimination because rA = 1/10 - 1/15 = 1/30, giving 30 hours for Worker A alone.","Eliminated because 20 hours is the time for A and C together.","Eliminated because 60 hours is the time for Worker C alone (1/10 - 1/12 = 1/60).","Eliminated because arithmetic error yields 25 hours.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+Common Trap: Forgetting to divide by 2 after adding the three pairs, leading to an incorrect rate of 1/5 - 1/15 = 2/15 implies 7.5 hours.
+Exam Tip: Adding cyclic pairs doubles each worker (2(A+B+C)). Divide by 2 first, then subtract (B+C) to isolate A.","Correct. Survives elimination because rA = 1/10 - 1/15 = 1/30, giving 30 hours for Worker A alone.","Eliminated because 20 hours is the time for A and C together.","Eliminated because 60 hours is the time for Worker C alone (1/10 - 1/12 = 1/60).","Eliminated because arithmetic error yields 25 hours.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
 "A municipal water tank has a bottom leak that can empty it in 8 hours. When an inlet tap admitting 6.0 liters per minute is opened, the full tank is emptied by the leak in 12 hours. What is the total capacity of the water tank in liters?","8,640 liters","7,200 liters","9,600 liters","8,400 liters","A","Step-by-Step Solution:
-1. Define rates in terms of tank volume $C$ (liters):
-   - Emptying rate of leak alone $= \frac{1}{8}$ tank/hour.
-   - Inlet rate of tap $= 6.0\text{ liters/min} = 6.0 \times 60 = 360.0\text{ liters/hour}$.
-   - Net emptying rate with tap open $= \frac{1}{12}$ tank/hour.
-2. Set up the rate equation (Leak rate $-$ Tap rate $=$ Net emptying rate):
-   - $\frac{1}{8} - \frac{360.0}{C} = \frac{1}{12}$.
-3. Solve for $\frac{360.0}{C}$:
-   - $\frac{360.0}{C} = \frac{1}{8} - \frac{1}{12} = \frac{3 - 2}{24} = \frac{1}{24}$.
-4. Solve for $C$:
-   - $C = 360.0 \times 24 = 8,640.0\text{ liters}$.
+1. Define rates in terms of tank volume C (liters):
+ - Emptying rate of leak alone = 1/8 tank/hour.
+ - Inlet rate of tap = 6.0 liters/min = 6.0 × 60 = 360.0 liters/hour.
+ - Net emptying rate with tap open = 1/12 tank/hour.
+2. Set up the rate equation (Leak rate - Tap rate = Net emptying rate):
+ - 1/8 - 360.0/C = 1/12.
+3. Solve for 360.0/C:
+ - 360.0/C = 1/8 - 1/12 = 3 - 2/24 = 1/24.
+4. Solve for C:
+ - C = 360.0 × 24 = 8,640.0 liters.
 
-Common Trap: Forgetting to convert liters per minute to liters per hour ($6 \times 24 = 144\text{ liters}$).
-Exam Tip: Always check unit alignment: $6\text{ L/min} = 360\text{ L/hr}$. Tap offset $= \frac{1}{24}\text{ tank/hr} \implies C = 360 \times 24 = 8,640\text{ L}$.","Correct. Survives elimination because tap admits 360 L/hr, which accounts for 1/8 - 1/12 = 1/24 of tank volume per hour, giving capacity C = 360 * 24 = 8,640 liters.","Eliminated because using 5 L/min gives 7,200 liters.","Eliminated because arithmetic error gives 9,600 liters.","Eliminated because calculation slip yields 8,400 liters.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"
+Common Trap: Forgetting to convert liters per minute to liters per hour (6 × 24 = 144 liters).
+Exam Tip: Always check unit alignment: 6 L/min = 360 L/hr. Tap offset = 1/24 tank/hr implies C = 360 × 24 = 8,640 L.","Correct. Survives elimination because tap admits 360 L/hr, which accounts for 1/8 - 1/12 = 1/24 of tank volume per hour, giving capacity C = 360 * 24 = 8,640 liters.","Eliminated because using 5 L/min gives 7,200 liters.","Eliminated because arithmetic error gives 9,600 liters.","Eliminated because calculation slip yields 8,400 liters.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Work problems | Very Difficult | Batch 034"

@@ -1,173 +1,173 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Evaluate the mixed operational expression containing decimals, fractions, factorials, and negative exponents:
 
-$$M = \frac{0.75 \times \sqrt{256} - 3\frac{1}{2} \div 0.25 + 4! \div 6}{\left( \frac{2}{3} \right)^{-2} - 1.25 \times \sqrt[3]{64}}$$","-\frac{8}{11}","\frac{8}{11}","-\frac{4}{11}","-2","A","Step-by-Step Solution:
+M = (0.75 × √256 - 31/2 ÷ 0.25 + 4! ÷ 6)/( 2/3 )⁻² - 1.25 × ³√64","-8/11","8/11","-4/11","-2","A","Step-by-Step Solution:
 1. Simplify Numerator:
-   - $0.75 \times \sqrt{256} = \frac{3}{4} \times 16 = 12$.
-   - $3\frac{1}{2} \div 0.25 = \frac{7}{2} \div \frac{1}{4} = \frac{7}{2} \times 4 = 14$.
-   - $4! \div 6 = 24 \div 6 = 4$.
-   - Total Numerator $= 12 - 14 + 4 = 2$.
+ - 0.75 × √256 = 3/4 × 16 = 12.
+ - 31/2 ÷ 0.25 = 7/2 ÷ 1/4 = 7/2 × 4 = 14.
+ - 4! ÷ 6 = 24 ÷ 6 = 4.
+ - Total Numerator = 12 - 14 + 4 = 2.
 2. Simplify Denominator:
-   - $\left(\frac{2}{3}\right)^{-2} = \left(\frac{3}{2}\right)^2 = \frac{9}{4} = 2.25$.
-   - $\sqrt[3]{64} = 4$.
-   - $1.25 \times 4 = \frac{5}{4} \times 4 = 5$.
-   - Total Denominator $= 2.25 - 5 = -2.75 = -\frac{11}{4}$.
+ - (2/3)⁻² = (3/2)² = 9/4 = 2.25.
+ - ³√64 = 4.
+ - 1.25 × 4 = 5/4 × 4 = 5.
+ - Total Denominator = 2.25 - 5 = -2.75 = -11/4.
 3. Divide:
-   - $M = \frac{2}{-11/4} = 2 \times \left(-\frac{4}{11}\right) = -\frac{8}{11}$.
+ - M = 2/-11/4 = 2 × (-4/11) = -8/11.
 
-Common Trap: Evaluating $(2/3)^{-2}$ as $-4/9$ or forgetting the negative sign in the denominator difference ($2.25 - 5 = -2.75$).
-Exam Tip: Convert mixed decimals to fractions early ($1.25 = 5/4, 0.25 = 1/4, 0.75 = 3/4$) for rapid cancellation.","Correct. Survives elimination because numerator is 2 and denominator is -11/4, giving -8/11.","Eliminated because dropping the negative denominator sign yields positive 8/11.","Eliminated because halving the numerator yields -4/11.","Eliminated because rounding denominator to -1 yields -2.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Evaluating (2/3)⁻² as -4/9 or forgetting the negative sign in the denominator difference (2.25 - 5 = -2.75).
+Exam Tip: Convert mixed decimals to fractions early (1.25 = 5/4, 0.25 = 1/4, 0.75 = 3/4) for rapid cancellation.","Correct. Survives elimination because numerator is 2 and denominator is -11/4, giving -8/11.","Eliminated because dropping the negative denominator sign yields positive 8/11.","Eliminated because halving the numerator yields -4/11.","Eliminated because rounding denominator to -1 yields -2.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Determine the exact value of the following compound multi-format expression:
 
-$$E = \left[ 150\% \text{ of } \frac{4}{5} \right] - \left[ \sqrt{0.0081} \div 0.03 \right] + \left[ (-2)^4 \times 0.125 \right]$$","0.2 \text{ (or } \frac{1}{5}\text{)}","-0.2","0.4","1.2","A","Step-by-Step Solution:
+E = [ 150% of 4/5 ] - [ √0.0081 ÷ 0.03 ] + [ (-2)⁴ × 0.125 ]","0.2 (or 1/5)","-0.2","0.4","1.2","A","Step-by-Step Solution:
 1. First Bracket:
-   - $150\% \text{ of } \frac{4}{5} = 1.5 \times 0.8 = \frac{3}{2} \times \frac{4}{5} = \frac{12}{10} = 1.2$.
+ - 150% of 4/5 = 1.5 × 0.8 = 3/2 × 4/5 = 12/10 = 1.2.
 2. Second Bracket:
-   - $\sqrt{0.0081} = 0.09$.
-   - $0.09 \div 0.03 = 3.0$.
+ - √0.0081 = 0.09.
+ - 0.09 ÷ 0.03 = 3.0.
 3. Third Bracket:
-   - $(-2)^4 = 16$.
-   - $0.125 = \frac{1}{8}$.
-   - $16 \times \frac{1}{8} = 2.0$.
+ - (-2)⁴ = 16.
+ - 0.125 = 1/8.
+ - 16 × 1/8 = 2.0.
 4. Combine terms:
-   - $E = 1.2 - 3.0 + 2.0 = -1.8 + 2.0 = 0.2 = \frac{1}{5}$.
+ - E = 1.2 - 3.0 + 2.0 = -1.8 + 2.0 = 0.2 = 1/5.
 
-Common Trap: Evaluating $(-2)^4$ as $-16$ rather than $+16$, which erroneously gives negative results.
-Exam Tip: An even power applied to a negative base inside parentheses always yields a positive integer.","Correct. Survives elimination because 1.2 - 3.0 + 2.0 = 0.2.","Eliminated because evaluating (-2)^4 as -16 yields -3.8 + 1.2 = -2.6.","Eliminated because arithmetic error in the decimal sum gives 0.4.","Eliminated because failing to combine the remaining terms leaves only 1.2.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Evaluating (-2)⁴ as -16 rather than +16, which erroneously gives negative results.
+Exam Tip: An even power applied to a negative base inside parentheses always yields a positive integer.","Correct. Survives elimination because 1.2 - 3.0 + 2.0 = 0.2.","Eliminated because evaluating (-2)⁴ as -16 yields -3.8 + 1.2 = -2.6.","Eliminated because arithmetic error in the decimal Σ gives 0.4.","Eliminated because failing to combine the remaining terms leaves only 1.2.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Simplify the mixed mathematical expression:
 
-$$\frac{5! - 4! \times 3}{2^5 - \sqrt{100 - 36}} \times \left( \frac{1}{3} - 0.\overline{3} + 0.5 \right)$$","1","2","0.5","0","A","Step-by-Step Solution:
+(5! - 4! × 3)/(2⁵ - √100 - 36) × ( 1/3 - 0.3̅ + 0.5 )","1","2","0.5","0","A","Step-by-Step Solution:
 1. Simplify the first fraction:
-   - Numerator: $5! = 120$. $4! \times 3 = 24 \times 3 = 72$. Numerator $= 120 - 72 = 48$.
-   - Denominator: $2^5 = 32$. $\sqrt{100 - 36} = \sqrt{64} = 8$. Denominator $= 32 - 8 = 24$.
-   - Fraction $= \frac{48}{24} = 2$.
+ - Numerator: 5! = 120. 4! × 3 = 24 × 3 = 72. Numerator = 120 - 72 = 48.
+ - Denominator: 2⁵ = 32. √100 - 36 = √64 = 8. Denominator = 32 - 8 = 24.
+ - Fraction = 48/24 = 2.
 2. Simplify the second factor:
-   - Note that $0.\overline{3} = \frac{1}{3}$.
-   - Therefore, $\frac{1}{3} - 0.\overline{3} = \frac{1}{3} - \frac{1}{3} = 0$.
-   - $0 + 0.5 = 0.5 = \frac{1}{2}$.
+ - Note that 0.3̅ = 1/3.
+ - Therefore, 1/3 - 0.3̅ = 1/3 - 1/3 = 0.
+ - 0 + 0.5 = 0.5 = 1/2.
 3. Multiply the two factors:
-   - $2 \times 0.5 = 1$.
+ - 2 × 0.5 = 1.
 
-Common Trap: Evaluating $\sqrt{100 - 36}$ as $\sqrt{100} - \sqrt{36} = 10 - 6 = 4$, which violates the radical order of operations.
-Exam Tip: You cannot distribute square roots over subtraction: $\sqrt{a - b} \neq \sqrt{a} - \sqrt{b}$. Always subtract $100 - 36 = 64$ first.","Correct. Survives elimination because the first fraction evaluates to 2 and the second factor to 0.5, giving 2 * 0.5 = 1.","Eliminated because forgetting to multiply by 0.5 leaves 2.","Eliminated because omitting the first fraction leaves only 0.5.","Eliminated because assuming the entire second factor evaluates to 0 gives 0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Evaluating √100 - 36 as √100 - √36 = 10 - 6 = 4, which violates the radical order of operations.
+Exam Tip: You cannot distribute square roots over subtraction: √a - b ≠ √a - √b. Always subtract 100 - 36 = 64 first.","Correct. Survives elimination because the first fraction evaluates to 2 and the second factor to 0.5, giving 2 * 0.5 = 1.","Eliminated because forgetting to multiply by 0.5 leaves 2.","Eliminated because omitting the first fraction leaves only 0.5.","Eliminated because assuming the entire second factor evaluates to 0 gives 0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Evaluate the following fraction containing absolute values, radicals, and negative powers:
 
-$$S = \frac{| -3.6 \times 2.5 + 4 | + \sqrt{1.44} \times 5}{(0.5)^{-3} - 3^2}$$","-11","11","-1.1","-22","A","Step-by-Step Solution:
+S = (| -3.6 × 2.5 + 4 | + √1.44 × 5)/(0.5)⁻³ - 3²","-11","11","-1.1","-22","A","Step-by-Step Solution:
 1. Numerator:
-   - Inside absolute value: $-3.6 \times 2.5 = -9.0$.
-   - $-9.0 + 4 = -5.0$.
-   - $|-5.0| = 5.0$.
-   - Radical term: $\sqrt{1.44} = 1.2$.
-   - $1.2 \times 5 = 6.0$.
-   - Total Numerator $= 5.0 + 6.0 = 11.0$.
+ - Inside absolute value: -3.6 × 2.5 = -9.0.
+ - -9.0 + 4 = -5.0.
+ - |-5.0| = 5.0.
+ - Radical term: √1.44 = 1.2.
+ - 1.2 × 5 = 6.0.
+ - Total Numerator = 5.0 + 6.0 = 11.0.
 2. Denominator:
-   - $(0.5)^{-3} = \left(\frac{1}{2}\right)^{-3} = 2^3 = 8$.
-   - $3^2 = 9$.
-   - Total Denominator $= 8 - 9 = -1$.
+ - (0.5)⁻³ = (1/2)⁻³ = 2³ = 8.
+ - 3² = 9.
+ - Total Denominator = 8 - 9 = -1.
 3. Quotient:
-   - $S = \frac{11.0}{-1} = -11$.
+ - S = 11.0/-1 = -11.
 
-Common Trap: Forgetting the absolute value sign or evaluating $(0.5)^{-3}$ as $0.125$ or $-8$.
-Exam Tip: $(0.5)^{-n} = (1/2)^{-n} = 2^n$.","Correct. Survives elimination because numerator is 11.0 and denominator is -1, yielding -11.","Eliminated because dropping the negative sign in the denominator gives positive 11.","Eliminated because decimal shift error gives -1.1.","Eliminated because doubling the magnitude gives -22.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Forgetting the absolute value sign or evaluating (0.5)⁻³ as 0.125 or -8.
+Exam Tip: (0.5)⁻ⁿ = (1/2)⁻ⁿ = 2ⁿ.","Correct. Survives elimination because numerator is 11.0 and denominator is -1, yielding -11.","Eliminated because dropping the negative sign in the denominator gives positive 11.","Eliminated because decimal shift error gives -1.1.","Eliminated because doubling the magnitude gives -22.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Find the exact numerical value of:
 
-$$K = \left( 3\frac{3}{8} \right)^{1/3} \times \left( \frac{2}{3} \right)^{-1} - \sqrt{0.0625} \div 5^{-1}$$","1.0","0.5","1.5","2.0","A","Step-by-Step Solution:
+K = ( 33/8 )¹/³ × ( 2/3 )⁻¹ - √0.0625 ÷ 5⁻¹","1.0","0.5","1.5","2.0","A","Step-by-Step Solution:
 1. First Term:
-   - Convert mixed number: $3\frac{3}{8} = \frac{27}{8}$.
-   - Rational exponent: $\left(\frac{27}{8}\right)^{1/3} = \frac{\sqrt[3]{27}}{\sqrt[3]{8}} = \frac{3}{2} = 1.5$.
-   - Negative power: $\left(\frac{2}{3}\right)^{-1} = \frac{3}{2} = 1.5$.
-   - First Term Product $= \frac{3}{2} \times \frac{3}{2} = \frac{9}{4} = 2.25$.
+ - Convert mixed number: 33/8 = 27/8.
+ - Rational exponent: (27/8)¹/³ = ³√27/³√8 = 3/2 = 1.5.
+ - Negative power: (2/3)⁻¹ = 3/2 = 1.5.
+ - First Term Product = 3/2 × 3/2 = 9/4 = 2.25.
 2. Second Term:
-   - $\sqrt{0.0625} = 0.25 = \frac{1}{4}$.
-   - $5^{-1} = \frac{1}{5}$.
-   - Division: $\frac{1}{4} \div \frac{1}{5} = \frac{1}{4} \times 5 = \frac{5}{4} = 1.25$.
+ - √0.0625 = 0.25 = 1/4.
+ - 5⁻¹ = 1/5.
+ - Division: 1/4 ÷ 1/5 = 1/4 × 5 = 5/4 = 1.25.
 3. Subtract terms:
-   - $K = 2.25 - 1.25 = 1.00$.
+ - K = 2.25 - 1.25 = 1.00.
 
-Common Trap: Multiplying by $5^{-1}$ instead of dividing, or misinterpreting $(27/8)^{1/3}$.
-Exam Tip: Convert all terms to quarters ($\frac{9}{4} - \frac{5}{4} = \frac{4}{4} = 1$) for instantaneous mental arithmetic.","Correct. Survives elimination because 9/4 - 5/4 = 4/4 = 1.0.","Eliminated because arithmetic error in the fraction subtraction gives 0.5.","Eliminated because adding instead of subtracting gives 3.5 or miscalculating gives 1.5.","Eliminated because doubling the result yields 2.0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Multiplying by 5⁻¹ instead of dividing, or misinterpreting (27/8)¹/³.
+Exam Tip: Convert all terms to quarters (9/4 - 5/4 = 4/4 = 1) for instantaneous mental arithmetic.","Correct. Survives elimination because 9/4 - 5/4 = 4/4 = 1.0.","Eliminated because arithmetic error in the fraction subtraction gives 0.5.","Eliminated because adding instead of subtracting gives 3.5 or miscalculating gives 1.5.","Eliminated because doubling the result yields 2.0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Evaluate the rational expression:
 
-$$\frac{60\% \text{ of } 250 - 0.75 \times 120 + (-3)^3}{2^4 - \sqrt{225} + 1}$$","16.5","15.0","17.5","33.0","A","Step-by-Step Solution:
+(60% of 250 - 0.75 × 120 + (-3)³)/(2⁴ - √225 + 1)","16.5","15.0","17.5","33.0","A","Step-by-Step Solution:
 1. Numerator:
-   - $60\% \text{ of } 250 = 0.60 \times 250 = 150$.
-   - $0.75 \times 120 = \frac{3}{4} \times 120 = 90$.
-   - $(-3)^3 = -27$.
-   - Total Numerator $= 150 - 90 + (-27) = 60 - 27 = 33$.
+ - 60% of 250 = 0.60 × 250 = 150.
+ - 0.75 × 120 = 3/4 × 120 = 90.
+ - (-3)³ = -27.
+ - Total Numerator = 150 - 90 + (-27) = 60 - 27 = 33.
 2. Denominator:
-   - $2^4 = 16$.
-   - $\sqrt{225} = 15$.
-   - Total Denominator $= 16 - 15 + 1 = 1 + 1 = 2$.
+ - 2⁴ = 16.
+ - √225 = 15.
+ - Total Denominator = 16 - 15 + 1 = 1 + 1 = 2.
 3. Division:
-   - $\frac{33}{2} = 16.5 = 16\frac{1}{2}$.
+ - 33/2 = 16.5 = 161/2.
 
-Common Trap: Evaluating $(-3)^3$ as $+27$ or treating $\sqrt{225}$ as 25 instead of 15.
-Exam Tip: Odd powers of negative bases preserve their negative sign ($(-3)^3 = -27$).","Correct. Survives elimination because numerator is 33 and denominator is 2, giving 33 / 2 = 16.5.","Eliminated because arithmetic error in the numerator (yielding 30) gives 15.0.","Eliminated because miscalculating the cubic term as -25 yields 17.5.","Eliminated because omitting the denominator division by 2 leaves 33.0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Evaluating (-3)³ as +27 or treating √225 as 25 instead of 15.
+Exam Tip: Odd powers of negative bases preserve their negative sign ((-3)³ = -27).","Correct. Survives elimination because numerator is 33 and denominator is 2, giving 33 / 2 = 16.5.","Eliminated because arithmetic error in the numerator (yielding 30) gives 15.0.","Eliminated because miscalculating the cubic term as -25 yields 17.5.","Eliminated because omitting the denominator division by 2 leaves 33.0.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Compute the exact value of the difference of squared brackets:
 
-$$\left[ \frac{\sqrt{0.04} + 0.8}{0.25} \right]^2 - \left[ \frac{1\frac{1}{2} \times 4 - 2^2}{0.5} \right]^2$$","0","8","16","-8","A","Step-by-Step Solution:
+[ (√0.04 + 0.8)/0.25 ]² - [ 11/2 × 4 - 2²/0.5 ]²","0","8","16","-8","A","Step-by-Step Solution:
 1. Evaluate First Bracket:
-   - $\sqrt{0.04} = 0.2$.
-   - Numerator $= 0.2 + 0.8 = 1.0$.
-   - Divide by $0.25$: $\frac{1.0}{0.25} = 4$.
-   - Square: $4^2 = 16$.
+ - √0.04 = 0.2.
+ - Numerator = 0.2 + 0.8 = 1.0.
+ - Divide by 0.25: 1.0/0.25 = 4.
+ - Square: 4² = 16.
 2. Evaluate Second Bracket:
-   - $1\frac{1}{2} \times 4 = \frac{3}{2} \times 4 = 6$.
-   - $2^2 = 4$.
-   - Numerator $= 6 - 4 = 2$.
-   - Divide by $0.5$: $\frac{2}{0.5} = 4$.
-   - Square: $4^2 = 16$.
+ - 11/2 × 4 = 3/2 × 4 = 6.
+ - 2² = 4.
+ - Numerator = 6 - 4 = 2.
+ - Divide by 0.5: 2/0.5 = 4.
+ - Square: 4² = 16.
 3. Subtract the two squared values:
-   - $16 - 16 = 0$.
+ - 16 - 16 = 0.
 
 Common Trap: Expanding the squares before simplifying inside the brackets, creating unnecessary algebraic complexity.
-Exam Tip: Simplify within parentheses first before applying exponents.","Correct. Survives elimination because both brackets evaluate exactly to 4, and 4^2 - 4^2 = 16 - 16 = 0.","Eliminated because forgetting to square the second bracket gives 16 - 8 = 8.","Eliminated because dropping the subtrahend leaves 16.","Eliminated because sign inversion in the second bracket gives -8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Exam Tip: Simplify within parentheses first before applying exponents.","Correct. Survives elimination because both brackets evaluate exactly to 4, and 4² - 4² = 16 - 16 = 0.","Eliminated because forgetting to square the second bracket gives 16 - 8 = 8.","Eliminated because dropping the subtrahend leaves 16.","Eliminated because sign inversion in the second bracket gives -8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Simplify the complex rational expression with negative powers:
 
-$$\frac{(0.2)^{-2} + (0.5)^{-2}}{(0.1)^{-1} + (0.05)^{-1}}$$","\frac{29}{30}","\frac{30}{29}","1","\frac{27}{30}","A","Step-by-Step Solution:
+(0.2)⁻² + (0.5)⁻²/(0.1)⁻¹ + (0.05)⁻¹","29/30","30/29","1","27/30","A","Step-by-Step Solution:
 1. Simplify Numerator:
-   - $(0.2)^{-2} = \left(\frac{1}{5}\right)^{-2} = 5^2 = 25$.
-   - $(0.5)^{-2} = \left(\frac{1}{2}\right)^{-2} = 2^2 = 4$.
-   - Total Numerator $= 25 + 4 = 29$.
+ - (0.2)⁻² = (1/5)⁻² = 5² = 25.
+ - (0.5)⁻² = (1/2)⁻² = 2² = 4.
+ - Total Numerator = 25 + 4 = 29.
 2. Simplify Denominator:
-   - $(0.1)^{-1} = \left(\frac{1}{10}\right)^{-1} = 10$.
-   - $(0.05)^{-1} = \left(\frac{1}{20}\right)^{-1} = 20$.
-   - Total Denominator $= 10 + 20 = 30$.
+ - (0.1)⁻¹ = (1/10)⁻¹ = 10.
+ - (0.05)⁻¹ = (1/20)⁻¹ = 20.
+ - Total Denominator = 10 + 20 = 30.
 3. Resulting Fraction:
-   - $\frac{29}{30}$.
+ - 29/30.
 
-Common Trap: Adding decimal bases first before inverting powers ($(0.2 + 0.5)^{-2} = 0.7^{-2}$), which is algebraically invalid.
-Exam Tip: Negative exponents invert fractions: $(1/x)^{-n} = x^n$.","Correct. Survives elimination because numerator is 25 + 4 = 29 and denominator is 10 + 20 = 30, giving 29/30.","Eliminated because inverting the ratio yields 30/29.","Eliminated because rounding 29/30 gives 1.","Eliminated because arithmetic error in the numerator gives 27/30.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
+Common Trap: Adding decimal bases first before inverting powers ((0.2 + 0.5)⁻² = 0.7⁻²), which is algebraically invalid.
+Exam Tip: Negative exponents invert fractions: (1/x)⁻ⁿ = xⁿ.","Correct. Survives elimination because numerator is 25 + 4 = 29 and denominator is 10 + 20 = 30, giving 29/30.","Eliminated because inverting the ratio yields 30/29.","Eliminated because rounding 29/30 gives 1.","Eliminated because arithmetic error in the numerator gives 27/30.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
 "Evaluate the high-precision radical quotient:
 
-$$\sqrt{\frac{0.8 \times 0.09 \times 3.6}{0.0008 \times 0.25 \times 81}}$$","4","2","8","16","A","Step-by-Step Solution:
+√0.8 × 0.09 × 3.6/0.0008 × 0.25 × 81","4","2","8","16","A","Step-by-Step Solution:
 1. Convert decimals to standard integer powers of 10 under the radical:
-   - Numerator: $(8 \times 10^{-1}) \times (9 \times 10^{-2}) \times (36 \times 10^{-1}) = (8 \times 9 \times 36) \times 10^{-4} = 2,592 \times 10^{-4}$.
-   - Denominator: $(8 \times 10^{-4}) \times (0.25) \times 81 = (2 \times 81) \times 10^{-4} = 162 \times 10^{-4}$.
+ - Numerator: (8 × 10⁻¹) × (9 × 10⁻²) × (36 × 10⁻¹) = (8 × 9 × 36) × 10⁻⁴ = 2,592 × 10⁻⁴.
+ - Denominator: (8 × 10⁻⁴) × (0.25) × 81 = (2 × 81) × 10⁻⁴ = 162 × 10⁻⁴.
 2. Divide numerator by denominator:
-   - $\frac{2,592 \times 10^{-4}}{162 \times 10^{-4}} = \frac{2,592}{162}$.
+ - (2,592 × 10⁻⁴)/(162 × 10⁻⁴) = 2,592/162.
 3. Simplify the integer quotient:
-   - $\frac{2,592}{162} = 16$.
+ - 2,592/162 = 16.
 4. Take the square root:
-   - $\sqrt{16} = 4$.
+ - √16 = 4.
 
 Common Trap: Forgetting to take the square root of 16 at the final step, answering 16 (Option D).
 Exam Tip: Always check if the radical covers the entire expression before selecting the final option.","Correct. Survives elimination because the quotient inside the radical simplifies to 16, and sqrt(16) = 4.","Eliminated because taking the fourth root instead of square root yields 2.","Eliminated because arithmetic error in division gives 64, sqrt(64) = 8.","Eliminated because 16 is the value inside the radical before taking the square root.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"
-"Find the value of $Z$:
+"Find the value of Z:
 
-$$Z = \frac{25\% \text{ of } 80 + \left( \frac{1}{4} \right)^{-2} - \sqrt{400}}{0.1\overline{6} \times 72 - 2^3}$$","4","2","8","-4","A","Step-by-Step Solution:
+Z = (25% of 80 + ( 1/4 )⁻² - √400)/(0.16̅ × 72 - 2³)","4","2","8","-4","A","Step-by-Step Solution:
 1. Numerator:
-   - $25\% \text{ of } 80 = \frac{1}{4} \times 80 = 20$.
-   - $\left(\frac{1}{4}\right)^{-2} = 4^2 = 16$.
-   - $\sqrt{400} = 20$.
-   - Numerator $= 20 + 16 - 20 = 16$.
+ - 25% of 80 = 1/4 × 80 = 20.
+ - (1/4)⁻² = 4² = 16.
+ - √400 = 20.
+ - Numerator = 20 + 16 - 20 = 16.
 2. Denominator:
-   - $0.1\overline{6} = \frac{1}{6}$.
-   - $\frac{1}{6} \times 72 = 12$.
-   - $2^3 = 8$.
-   - Denominator $= 12 - 8 = 4$.
+ - 0.16̅ = 1/6.
+ - 1/6 × 72 = 12.
+ - 2³ = 8.
+ - Denominator = 12 - 8 = 4.
 3. Final Quotient:
-   - $Z = \frac{16}{4} = 4$.
+ - Z = 16/4 = 4.
 
-Common Trap: Converting $0.1\overline{6}$ as $0.16$ (which gives $0.16 \times 72 = 11.52$) rather than the exact fraction $1/6$.
+Common Trap: Converting 0.16̅ as 0.16 (which gives 0.16 × 72 = 11.52) rather than the exact fraction 1/6.
 Exam Tip: Converting recurring decimals to exact fractions prevents fractional rounding errors.","Correct. Survives elimination because numerator is 16 and denominator is 4, yielding 16 / 4 = 4.","Eliminated because dividing 16 by 8 yields 2.","Eliminated because multiplying instead of dividing yields 8 or 64.","Eliminated because sign inversion in the denominator gives -4.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Mixed operations | Very Difficult | Batch 013"

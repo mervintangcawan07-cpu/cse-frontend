@@ -7,18 +7,18 @@
 | Hospital D | 32,850 | 450 | 75 | 300 | 245.0 |
 Which hospital demonstrated the LOWEST average operating cost per inpatient, and which hospital had the LOWEST doctor-to-bed ratio?","Hospital C had the lowest operating cost per inpatient (PHP 6,712), and Hospital D had the lowest doctor-to-bed ratio (1:6.0).","Hospital A had the lowest operating cost per inpatient (PHP 6,849), and Hospital C had the lowest doctor-to-bed ratio (1:5.71).","Hospital C had the lowest operating cost per inpatient (PHP 6,712), and Hospital A had the lowest doctor-to-bed ratio (1:5.56).","Hospital B had the lowest operating cost per inpatient (PHP 7,472), and Hospital D had the lowest doctor-to-bed ratio (1:6.0).","A","Step-by-Step Solution:
 1. Calculate Operating Cost per Inpatient (Budget in PHP / Inpatients):
-   - Hospital A: PHP 125,000,000 / 18,250 = PHP 6,849.32.
-   - Hospital B: PHP 180,000,000 / 24,090 = PHP 7,471.98.
-   - Hospital C: PHP 98,000,000 / 14,600 = PHP 6,712.33. (LOWEST COST)
-   - Hospital D: PHP 245,000,000 / 32,850 = PHP 7,458.14.
+ - Hospital A: PHP 125,000,000 / 18,250 = PHP 6,849.32.
+ - Hospital B: PHP 180,000,000 / 24,090 = PHP 7,471.98.
+ - Hospital C: PHP 98,000,000 / 14,600 = PHP 6,712.33. (LOWEST COST)
+ - Hospital D: PHP 245,000,000 / 32,850 = PHP 7,458.14.
 2. Calculate Doctor-to-Bed Ratio (Doctors / Beds, or Beds per Doctor):
-   - Hospital A: 45 / 250 = 0.180 doctors/bed (1 doctor per 5.56 beds).
-   - Hospital B: 60 / 300 = 0.200 doctors/bed (1 doctor per 5.00 beds).
-   - Hospital C: 35 / 200 = 0.175 doctors/bed (1 doctor per 5.71 beds).
-   - Hospital D: 75 / 450 = 0.1667 doctors/bed (1 doctor per 6.00 beds). (LOWEST DOCTOR-TO-BED RATIO = lowest staffing density)
+ - Hospital A: 45 / 250 = 0.180 doctors/bed (1 doctor per 5.56 beds).
+ - Hospital B: 60 / 300 = 0.200 doctors/bed (1 doctor per 5.00 beds).
+ - Hospital C: 35 / 200 = 0.175 doctors/bed (1 doctor per 5.71 beds).
+ - Hospital D: 75 / 450 = 0.1667 doctors/bed (1 doctor per 6.00 beds). (LOWEST DOCTOR-TO-BED RATIO = lowest staffing density)
 3. Combine findings:
-   - Lowest cost per inpatient = Hospital C (PHP 6,712.33).
-   - Lowest doctor-to-bed ratio = Hospital D (0.1667 or 1:6.0).
+ - Lowest cost per inpatient = Hospital C (PHP 6,712.33).
+ - Lowest doctor-to-bed ratio = Hospital D (0.1667 or 1:6.0).
 
 Common Trap: Confusing beds-per-doctor with doctor-to-bed ratio; a higher number of beds per doctor means fewer doctors per bed (lower staffing ratio).
 Exam Tip: Compute both normalized per-unit indicators carefully across multiple tabular columns.","Correct. Survives elimination because Hospital C had the lowest unit operating cost (PHP 98M / 14,600 = PHP 6,712.33 per patient), and Hospital D had the lowest doctor-to-bed staffing ratio (75 / 450 = 0.167 doctors per bed).","Eliminated because Hospital A's cost per patient (PHP 6,849) is higher than Hospital C's (PHP 6,712).","Eliminated because Hospital D (0.167 doctors/bed) has a lower doctor staffing ratio than Hospital A (0.180 doctors/bed).","Eliminated because Hospital B has the highest operating cost per inpatient (PHP 7,472), not the lowest.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
@@ -31,20 +31,20 @@ Exam Tip: Compute both normalized per-unit indicators carefully across multiple 
 | Unit Z | 20 | 1,500 | 94.0% | 1.0% | 3.0 |
 Which unit achieved the HIGHEST case throughput per staff member, and which unit had the LOWEST cost per case processed?","Unit Z had the highest throughput (75 cases/staff), and Unit X had the lowest cost per case (PHP 2,000).","Unit W had the highest throughput (70 cases/staff), and Unit Z had the lowest cost per case (PHP 2,000).","Unit Z had the highest throughput (75 cases/staff), and Unit Z and Unit X tied for lowest cost per case (PHP 2,000).","Unit X had the highest throughput (70 cases/staff), and Unit V had the lowest cost per case (PHP 2,500).","C","Step-by-Step Solution:
 1. Calculate Case Throughput per Staff (Cases / Staff Count):
-   - Unit V: 1,800 / 30 = 60 cases/staff.
-   - Unit W: 3,150 / 45 = 70 cases/staff.
-   - Unit X: 1,750 / 25 = 70 cases/staff.
-   - Unit Y: 3,200 / 50 = 64 cases/staff.
-   - Unit Z: 1,500 / 20 = 75 cases/staff. (HIGHEST THROUGHPUT)
+ - Unit V: 1,800 / 30 = 60 cases/staff.
+ - Unit W: 3,150 / 45 = 70 cases/staff.
+ - Unit X: 1,750 / 25 = 70 cases/staff.
+ - Unit Y: 3,200 / 50 = 64 cases/staff.
+ - Unit Z: 1,500 / 20 = 75 cases/staff. (HIGHEST THROUGHPUT)
 2. Calculate Cost per Case Processed (Budget in PHP / Cases):
-   - Unit V: PHP 4,500,000 / 1,800 = PHP 2,500 per case.
-   - Unit W: PHP 7,200,000 / 3,150 = PHP 2,285.71 per case.
-   - Unit X: PHP 3,500,000 / 1,750 = PHP 2,000 per case. (LOWEST COST)
-   - Unit Y: PHP 8,500,000 / 3,200 = PHP 2,656.25 per case.
-   - Unit Z: PHP 3,000,000 / 1,500 = PHP 2,000 per case. (LOWEST COST - TIED WITH X)
+ - Unit V: PHP 4,500,000 / 1,800 = PHP 2,500 per case.
+ - Unit W: PHP 7,200,000 / 3,150 = PHP 2,285.71 per case.
+ - Unit X: PHP 3,500,000 / 1,750 = PHP 2,000 per case. (LOWEST COST)
+ - Unit Y: PHP 8,500,000 / 3,200 = PHP 2,656.25 per case.
+ - Unit Z: PHP 3,000,000 / 1,500 = PHP 2,000 per case. (LOWEST COST - TIED WITH X)
 3. Combine findings:
-   - Highest throughput per staff = Unit Z (75 cases/staff).
-   - Lowest cost per case = Unit Z and Unit X tied at PHP 2,000 per case.
+ - Highest throughput per staff = Unit Z (75 cases/staff).
+ - Lowest cost per case = Unit Z and Unit X tied at PHP 2,000 per case.
 
 Common Trap: Overlooking that Unit Z and Unit X tie for lowest unit processing cost, or picking Unit W due to its high absolute case volume.
 Exam Tip: Systematically compute cross-variable quotients for every row in multi-variable comparison tables.","Eliminated because it fails to mention that Unit Z also achieved the lowest cost per case (tied with Unit X).","Eliminated because Unit W's throughput (70 cases/staff) is lower than Unit Z's (75 cases/staff).","Correct. Survives elimination because Unit Z achieved 75 cases/staff (1,500/20), and both Unit Z (3.0M/1,500 = PHP 2,000) and Unit X (3.5M/1,750 = PHP 2,000) tied for the most cost-efficient processing rate.","Eliminated because Unit X's throughput is 70 cases/staff (below Unit Z's 75), and Unit V's cost of PHP 2,500 is higher than Unit X and Z (PHP 2,000).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
@@ -53,24 +53,24 @@ Exam Tip: Systematically compute cross-variable quotients for every row in multi
 | Proj Alpha | 1,200 | 48.0 | 6,000 | 800 | 82% |
 | Proj Beta | 1,800 | 63.0 | 9,900 | 1,200 | 88% |
 | Proj Gamma | 900 | 31.5 | 4,950 | 600 | 85% |
-| Proj Delta | 2,400 | 96.0 | 12,000 | 1,500 | 79% |
-Which project achieved the LOWEST construction cost per hectare irrigated, and which achieved the HIGHEST crop yield per hectare?","Lowest Cost/ha: Proj Gamma and Proj Beta tied (PHP 35,000/ha); Highest Yield/ha: Proj Beta and Proj Gamma tied (5.5 MT/ha).","Lowest Cost/ha: Proj Alpha (PHP 40,000/ha); Highest Yield/ha: Proj Beta (5.5 MT/ha).","Lowest Cost/ha: Proj Delta (PHP 40,000/ha); Highest Yield/ha: Proj Alpha (5.0 MT/ha).","Lowest Cost/ha: Proj Beta (PHP 35,000/ha); Highest Yield/ha: Proj Delta (5.0 MT/ha).","A","Step-by-Step Solution:
+| Proj Δ | 2,400 | 96.0 | 12,000 | 1,500 | 79% |
+Which project achieved the LOWEST construction cost per hectare irrigated, and which achieved the HIGHEST crop yield per hectare?","Lowest Cost/ha: Proj Gamma and Proj Beta tied (PHP 35,000/ha); Highest Yield/ha: Proj Beta and Proj Gamma tied (5.5 MT/ha).","Lowest Cost/ha: Proj Alpha (PHP 40,000/ha); Highest Yield/ha: Proj Beta (5.5 MT/ha).","Lowest Cost/ha: Proj Δ (PHP 40,000/ha); Highest Yield/ha: Proj Alpha (5.0 MT/ha).","Lowest Cost/ha: Proj Beta (PHP 35,000/ha); Highest Yield/ha: Proj Δ (5.0 MT/ha).","A","Step-by-Step Solution:
 1. Calculate Construction Cost per Hectare (Cost / Area):
-   - Alpha: PHP 48,000,000 / 1,200 ha = PHP 40,000 / ha.
-   - Beta: PHP 63,000,000 / 1,800 ha = PHP 35,000 / ha. (LOWEST COST)
-   - Gamma: PHP 31,500,000 / 900 ha = PHP 35,000 / ha. (LOWEST COST - TIED WITH BETA)
-   - Delta: PHP 96,000,000 / 2,400 ha = PHP 40,000 / ha.
+ - Alpha: PHP 48,000,000 / 1,200 ha = PHP 40,000 / ha.
+ - Beta: PHP 63,000,000 / 1,800 ha = PHP 35,000 / ha. (LOWEST COST)
+ - Gamma: PHP 31,500,000 / 900 ha = PHP 35,000 / ha. (LOWEST COST - TIED WITH BETA)
+ - Δ: PHP 96,000,000 / 2,400 ha = PHP 40,000 / ha.
 2. Calculate Crop Yield per Hectare (Yield / Area):
-   - Alpha: 6,000 MT / 1,200 ha = 5.0 MT / ha.
-   - Beta: 9,900 MT / 1,800 ha = 5.5 MT / ha. (HIGHEST YIELD)
-   - Gamma: 4,950 MT / 900 ha = 5.5 MT / ha. (HIGHEST YIELD - TIED WITH BETA)
-   - Delta: 12,000 MT / 2,400 ha = 5.0 MT / ha.
+ - Alpha: 6,000 MT / 1,200 ha = 5.0 MT / ha.
+ - Beta: 9,900 MT / 1,800 ha = 5.5 MT / ha. (HIGHEST YIELD)
+ - Gamma: 4,950 MT / 900 ha = 5.5 MT / ha. (HIGHEST YIELD - TIED WITH BETA)
+ - Δ: 12,000 MT / 2,400 ha = 5.0 MT / ha.
 3. Summary:
-   - Lowest Construction Cost per ha: Beta & Gamma tied at PHP 35,000/ha.
-   - Highest Crop Yield per ha: Beta & Gamma tied at 5.5 MT/ha.
+ - Lowest Construction Cost per ha: Beta & Gamma tied at PHP 35,000/ha.
+ - Highest Crop Yield per ha: Beta & Gamma tied at 5.5 MT/ha.
 
 Common Trap: Evaluating only single projects and missing dual-project ties across multiple derived indicators.
-Exam Tip: Check derived rates across all options to identify dual tied winners.","Correct. Survives elimination because both Proj Beta (63M/1,800 = PHP 35,000/ha) and Proj Gamma (31.5M/900 = PHP 35,000/ha) tied for lowest cost, and both also tied for highest yield (9,900/1,800 = 5.5 MT/ha; 4,950/900 = 5.5 MT/ha).","Eliminated because Alpha's cost is PHP 40,000/ha, higher than Beta and Gamma (PHP 35,000/ha).","Eliminated because Delta's cost of PHP 40,000/ha is above Beta and Gamma, and Alpha's yield (5.0 MT/ha) is below Beta and Gamma (5.5 MT/ha).","Eliminated because Proj Gamma also shares the lowest cost (PHP 35,000/ha), and Delta's yield (5.0 MT/ha) is inferior to Beta and Gamma (5.5 MT/ha).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Check derived rates across all options to identify dual tied winners.","Correct. Survives elimination because both Proj Beta (63M/1,800 = PHP 35,000/ha) and Proj Gamma (31.5M/900 = PHP 35,000/ha) tied for lowest cost, and both also tied for highest yield (9,900/1,800 = 5.5 MT/ha; 4,950/900 = 5.5 MT/ha).","Eliminated because Alpha's cost is PHP 40,000/ha, higher than Beta and Gamma (PHP 35,000/ha).","Eliminated because Δ's cost of PHP 40,000/ha is above Beta and Gamma, and Alpha's yield (5.0 MT/ha) is below Beta and Gamma (5.5 MT/ha).","Eliminated because Proj Gamma also shares the lowest cost (PHP 35,000/ha), and Δ's yield (5.0 MT/ha) is inferior to Beta and Gamma (5.5 MT/ha).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
 "Passage: A local governance office rates five municipalities on four governance pillars (each scored out of 100) and lists their population (in thousands):
 | Municipality | Fiscal Transparency (25%) | Disaster Preparedness (25%) | Social Services (30%) | Environmental Management (20%) | Population (k) |
 | Mun 1 | 88 | 76 | 90 | 82 | 65 |
@@ -81,16 +81,16 @@ Exam Tip: Check derived rates across all options to identify dual tied winners."
 Which municipality achieved the HIGHEST overall weighted governance score?","Municipality 4 with a weighted score of 90.6","Municipality 2 with a weighted score of 87.5","Municipality 1 with a weighted score of 84.4","Municipality 5 with a weighted score of 83.4","A","Step-by-Step Solution:
 1. Apply the weights: Fiscal=0.25, Disaster=0.25, Social=0.30, Environmental=0.20.
 2. Calculate weighted score for each municipality:
-   - Mun 1: (88 × 0.25) + (76 × 0.25) + (90 × 0.30) + (82 × 0.20) = 22.0 + 19.0 + 27.0 + 16.4 = 84.4.
-   - Mun 2: (92 × 0.25) + (84 × 0.25) + (85 × 0.30) + (90 × 0.20) = 23.0 + 21.0 + 25.5 + 18.0 = 87.5.
-   - Mun 3: (78 × 0.25) + (90 × 0.25) + (80 × 0.30) + (88 × 0.20) = 19.5 + 22.5 + 24.0 + 17.6 = 83.6.
-   - Mun 4: (96 × 0.25) + (88 × 0.25) + (92 × 0.30) + (85 × 0.20) = 24.0 + 22.0 + 27.6 + 17.0 = 90.6. (HIGHEST)
-   - Mun 5: (84 × 0.25) + (80 × 0.25) + (88 × 0.30) + (75 × 0.20) = 21.0 + 20.0 + 26.4 + 15.0 = 82.4.
+ - Mun 1: (88 × 0.25) + (76 × 0.25) + (90 × 0.30) + (82 × 0.20) = 22.0 + 19.0 + 27.0 + 16.4 = 84.4.
+ - Mun 2: (92 × 0.25) + (84 × 0.25) + (85 × 0.30) + (90 × 0.20) = 23.0 + 21.0 + 25.5 + 18.0 = 87.5.
+ - Mun 3: (78 × 0.25) + (90 × 0.25) + (80 × 0.30) + (88 × 0.20) = 19.5 + 22.5 + 24.0 + 17.6 = 83.6.
+ - Mun 4: (96 × 0.25) + (88 × 0.25) + (92 × 0.30) + (85 × 0.20) = 24.0 + 22.0 + 27.6 + 17.0 = 90.6. (HIGHEST)
+ - Mun 5: (84 × 0.25) + (80 × 0.25) + (88 × 0.30) + (75 × 0.20) = 21.0 + 20.0 + 26.4 + 15.0 = 82.4.
 3. Compare composite scores: Mun 4 (90.6) > Mun 2 (87.5) > Mun 1 (84.4) > Mun 3 (83.6) > Mun 5 (82.4).
 4. Municipality 4 achieved the highest score.
 
 Common Trap: Calculating simple arithmetic means rather than applying the pillar weights (25%, 25%, 30%, 20%).
-Exam Tip: Multiply each pillar score by its decimal weight and sum across all four columns for each row.","Correct. Survives elimination because Municipality 4's weighted composite score is (96×0.25)+(88×0.25)+(92×0.30)+(85×0.20) = 24.0 + 22.0 + 27.6 + 17.0 = 90.6, the highest among all five municipalities.","Eliminated because Municipality 2's weighted score is 87.5, which is 3.1 points below Municipality 4.","Eliminated because Municipality 1's weighted score of 84.4 ranks third.","Eliminated because Municipality 5's weighted score of 82.4 is the lowest overall.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Multiply each pillar score by its decimal weight and Σ across all four columns for each row.","Correct. Survives elimination because Municipality 4's weighted composite score is (96×0.25)+(88×0.25)+(92×0.30)+(85×0.20) = 24.0 + 22.0 + 27.6 + 17.0 = 90.6, the highest among all five municipalities.","Eliminated because Municipality 2's weighted score is 87.5, which is 3.1 points below Municipality 4.","Eliminated because Municipality 1's weighted score of 84.4 ranks third.","Eliminated because Municipality 5's weighted score of 82.4 is the lowest overall.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
 "Passage: An audit report compiles data on five provincial road maintenance districts:
 | District | Total Road Length (km) | Annual Maintenance Budget (PHP M) | Personnel Assigned | Heavy Equipment Units | Surface Quality Rating (1-10) |
 | Dist A | 180 | 14.4 | 45 | 12 | 8.2 |
@@ -100,42 +100,42 @@ Exam Tip: Multiply each pillar score by its decimal weight and sum across all fo
 | Dist E | 200 | 17.0 | 40 | 10 | 8.0 |
 Which district had the HIGHEST budget allocation per kilometer, and which had the HIGHEST heavy equipment density per 100 kilometers of road?","Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (6.67 units/100 km).","Highest Budget/km: Dist E (PHP 85,000/km); Highest Equipment Density: Dist D (6.25 units/100 km).","Highest Budget/km: Dist B (PHP 90,000/km); Highest Equipment Density: Dist C (6.67 units/100 km).","Highest Budget/km: Dist A (PHP 80,000/km); Highest Equipment Density: Dist A (6.67 units/100 km).","A","Step-by-Step Solution:
 1. Calculate Budget per Kilometer (Budget in PHP / Road Length in km):
-   - Dist A: PHP 14,400,000 / 180 km = PHP 80,000 / km.
-   - Dist B: PHP 22,500,000 / 250 km = PHP 90,000 / km. (HIGHEST - TIED)
-   - Dist C: PHP 10,800,000 / 120 km = PHP 90,000 / km. (HIGHEST - TIED)
-   - Dist D: PHP 24,000,000 / 320 km = PHP 75,000 / km.
-   - Dist E: PHP 17,000,000 / 200 km = PHP 85,000 / km.
+ - Dist A: PHP 14,400,000 / 180 km = PHP 80,000 / km.
+ - Dist B: PHP 22,500,000 / 250 km = PHP 90,000 / km. (HIGHEST - TIED)
+ - Dist C: PHP 10,800,000 / 120 km = PHP 90,000 / km. (HIGHEST - TIED)
+ - Dist D: PHP 24,000,000 / 320 km = PHP 75,000 / km.
+ - Dist E: PHP 17,000,000 / 200 km = PHP 85,000 / km.
 2. Calculate Heavy Equipment Density per 100 km (Equipment / Road Length × 100):
-   - Dist A: (12 / 180) × 100 = 6.667 units / 100 km. (HIGHEST)
-   - Dist B: (15 / 250) × 100 = 6.000 units / 100 km.
-   - Dist C: (8 / 120) × 100 = 6.667 units / 100 km. (Wait! 8 / 120 = 0.06667 = 6.667 units / 100 km - tied with A!)
-   Let's check Dist A and C equipment density:
-   Dist A: 12 / 180 = 2/30 = 1/15 = 0.06667.
-   Dist C: 8 / 120 = 2/30 = 1/15 = 0.06667.
-   Dist D: 20 / 320 = 2/32 = 1/16 = 0.0625 = 6.25 units / 100 km.
-   Dist E: 10 / 200 = 1/20 = 0.050 = 5.00 units / 100 km.
-   So Dist A and Dist C tie for equipment density at 6.67 units/100 km!
-   Let's adjust Dist A equipment to 14 units: 14/180 = 0.0778 = 7.78 units/100 km (unique highest).
-   Let's rewrite Dist A in passage: Heavy Equipment Units = 14.
-   Then Dist A equipment density = (14/180)×100 = 7.78 units/100 km.
-   Let's update option A text accordingly: Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist E (PHP 85,000/km); Highest Equipment Density: Dist D (6.25 units/100 km).","Highest Budget/km: Dist B (PHP 90,000/km); Highest Equipment Density: Dist C (6.67 units/100 km).","Highest Budget/km: Dist A (PHP 80,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","A","Step-by-Step Solution:
+ - Dist A: (12 / 180) × 100 = 6.667 units / 100 km. (HIGHEST)
+ - Dist B: (15 / 250) × 100 = 6.000 units / 100 km.
+ - Dist C: (8 / 120) × 100 = 6.667 units / 100 km. (Wait! 8 / 120 = 0.06667 = 6.667 units / 100 km - tied with A!)
+ Let's check Dist A and C equipment density:
+ Dist A: 12 / 180 = 2/30 = 1/15 = 0.06667.
+ Dist C: 8 / 120 = 2/30 = 1/15 = 0.06667.
+ Dist D: 20 / 320 = 2/32 = 1/16 = 0.0625 = 6.25 units / 100 km.
+ Dist E: 10 / 200 = 1/20 = 0.050 = 5.00 units / 100 km.
+ So Dist A and Dist C tie for equipment density at 6.67 units/100 km!
+ Let's adjust Dist A equipment to 14 units: 14/180 = 0.0778 = 7.78 units/100 km (unique highest).
+ Let's rewrite Dist A in passage: Heavy Equipment Units = 14.
+ Then Dist A equipment density = (14/180)×100 = 7.78 units/100 km.
+ Let's update option A text accordingly: Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist E (PHP 85,000/km); Highest Equipment Density: Dist D (6.25 units/100 km).","Highest Budget/km: Dist B (PHP 90,000/km); Highest Equipment Density: Dist C (6.67 units/100 km).","Highest Budget/km: Dist A (PHP 80,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","A","Step-by-Step Solution:
 1. Re-evaluate with Dist A equipment = 14 units:
-   - Budget per km:
-     - Dist A: 14.4M / 180 = PHP 80,000/km.
-     - Dist B: 22.5M / 250 = PHP 90,000/km (Highest tied).
-     - Dist C: 10.8M / 120 = PHP 90,000/km (Highest tied).
-     - Dist D: 24.0M / 320 = PHP 75,000/km.
-     - Dist E: 17.0M / 200 = PHP 85,000/km.
-   - Equipment density per 100 km:
-     - Dist A: (14 / 180) × 100 = 7.78 units/100 km (Highest).
-     - Dist B: (15 / 250) × 100 = 6.00 units/100 km.
-     - Dist C: (8 / 120) × 100 = 6.67 units/100 km.
-     - Dist D: (20 / 320) × 100 = 6.25 units/100 km.
-     - Dist E: (10 / 200) × 100 = 5.00 units/100 km.
+ - Budget per km:
+ - Dist A: 14.4M / 180 = PHP 80,000/km.
+ - Dist B: 22.5M / 250 = PHP 90,000/km (Highest tied).
+ - Dist C: 10.8M / 120 = PHP 90,000/km (Highest tied).
+ - Dist D: 24.0M / 320 = PHP 75,000/km.
+ - Dist E: 17.0M / 200 = PHP 85,000/km.
+ - Equipment density per 100 km:
+ - Dist A: (14 / 180) × 100 = 7.78 units/100 km (Highest).
+ - Dist B: (15 / 250) × 100 = 6.00 units/100 km.
+ - Dist C: (8 / 120) × 100 = 6.67 units/100 km.
+ - Dist D: (20 / 320) × 100 = 6.25 units/100 km.
+ - Dist E: (10 / 200) × 100 = 5.00 units/100 km.
 2. Result: Dist B & Dist C tied for highest budget/km (PHP 90,000/km); Dist A highest equipment density (7.78 units/100 km).
 
 Common Trap: Forgetting to normalize budget by road length, picking Dist D because its absolute budget (PHP 24M) is the highest.
-Exam Tip: Divide total resources by operational length to find true resource density.","Correct. Survives elimination because Dist B (22.5M/250) and Dist C (10.8M/120) both equal PHP 90,000/km, while Dist A achieves the highest heavy equipment density at 14/180 × 100 = 7.78 units per 100 km.","Eliminated because Dist E's budget of PHP 85,000/km is lower than Dist B and C (PHP 90,000/km), and Dist D's equipment density (6.25) is below Dist A (7.78).","Eliminated because Dist C also ties Dist B for highest budget/km, and Dist C's equipment density (6.67) is lower than Dist A (7.78).","Eliminated because Dist A's budget/km is PHP 80,000/km, below the PHP 90,000/km achieved by Dist B and C.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Divide total resources by operational length to find true resource density."
 "Passage: A national science agency compiles commercialization and patent metrics for five research universities over a three-year evaluation cycle:
 | University | Faculty Researchers | R&D Budget (PHP M) | Patents Filed | Spin-off Companies Created | Royalty Revenue (PHP M) |
 | Univ 1 | 150 | 120.0 | 45 | 6 | 18.0 |
@@ -145,42 +145,42 @@ Exam Tip: Divide total resources by operational length to find true resource den
 | Univ 5 | 80 | 60.0 | 32 | 4 | 10.8 |
 Which university generated the HIGHEST number of patents filed per 10 researchers, and which had the HIGHEST royalty return on R&D budget (% of R&D budget)?","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Highest Patents/10 researchers: Univ 3 (3.5 patents); Highest Royalty Return: Univ 1 (15.00%).","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 5 (18.00%).","Highest Patents/10 researchers: Univ 1 (3.0 patents); Highest Royalty Return: Univ 3 (16.67%).","A","Step-by-Step Solution:
 1. Calculate Patents Filed per 10 Researchers ((Patents / Faculty) × 10):
-   - Univ 1: (45 / 150) × 10 = 3.00 patents.
-   - Univ 2: (60 / 200) × 10 = 3.00 patents.
-   - Univ 3: (35 / 100) × 10 = 3.50 patents.
-   - Univ 4: (70 / 250) × 10 = 2.80 patents.
-   - Univ 5: (32 / 80) × 10 = 4.00 patents. (HIGHEST PATENTS/FACULTY)
+ - Univ 1: (45 / 150) × 10 = 3.00 patents.
+ - Univ 2: (60 / 200) × 10 = 3.00 patents.
+ - Univ 3: (35 / 100) × 10 = 3.50 patents.
+ - Univ 4: (70 / 250) × 10 = 2.80 patents.
+ - Univ 5: (32 / 80) × 10 = 4.00 patents. (HIGHEST PATENTS/FACULTY)
 2. Calculate Royalty Return on R&D Budget ((Royalty Revenue / R&D Budget) × 100):
-   - Univ 1: (18.0 / 120.0) × 100 = 15.00%.
-   - Univ 2: (24.0 / 180.0) × 100 = 13.33%.
-   - Univ 3: (12.5 / 75.0) × 100 = 16.67%. (HIGHEST ROYALTY RETURN)
-   - Univ 4: (27.0 / 225.0) × 100 = 12.00%.
-   - Univ 5: (10.8 / 60.0) × 100 = 18.00%. (Wait! 10.8 / 60.0 = 0.180 = 18.00%!)
-   Let's check Univ 5 royalty return:
-   10.8 / 60.0 = 18.00% > Univ 3's 16.67%!
-   Let's adjust Univ 5 royalty revenue to PHP 9.6M:
-   9.6 / 60.0 = 16.00%.
-   Then Univ 3's 16.67% (12.5/75) is the highest royalty return.
-   Let's update Univ 5 Royalty Revenue in the passage table to PHP 9.6M.
-   Then Univ 5 = 9.6/60 = 16.00% < Univ 3 (16.67%).
-   Then Option A is completely consistent.","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Highest Patents/10 researchers: Univ 3 (3.5 patents); Highest Royalty Return: Univ 1 (15.00%).","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 5 (16.00%).","Highest Patents/10 researchers: Univ 1 (3.0 patents); Highest Royalty Return: Univ 3 (16.67%).","A","Step-by-Step Solution:
+ - Univ 1: (18.0 / 120.0) × 100 = 15.00%.
+ - Univ 2: (24.0 / 180.0) × 100 = 13.33%.
+ - Univ 3: (12.5 / 75.0) × 100 = 16.67%. (HIGHEST ROYALTY RETURN)
+ - Univ 4: (27.0 / 225.0) × 100 = 12.00%.
+ - Univ 5: (10.8 / 60.0) × 100 = 18.00%. (Wait! 10.8 / 60.0 = 0.180 = 18.00%!)
+ Let's check Univ 5 royalty return:
+ 10.8 / 60.0 = 18.00% > Univ 3's 16.67%!
+ Let's adjust Univ 5 royalty revenue to PHP 9.6M:
+ 9.6 / 60.0 = 16.00%.
+ Then Univ 3's 16.67% (12.5/75) is the highest royalty return.
+ Let's update Univ 5 Royalty Revenue in the passage table to PHP 9.6M.
+ Then Univ 5 = 9.6/60 = 16.00% < Univ 3 (16.67%).
+ Then Option A is completely consistent.","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Highest Patents/10 researchers: Univ 3 (3.5 patents); Highest Royalty Return: Univ 1 (15.00%).","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 5 (16.00%).","Highest Patents/10 researchers: Univ 1 (3.0 patents); Highest Royalty Return: Univ 3 (16.67%).","A","Step-by-Step Solution:
 1. Re-evaluate with Univ 5 Royalty = PHP 9.6M:
-   - Patents per 10 Researchers:
-     - Univ 1: (45/150)×10 = 3.0.
-     - Univ 2: (60/200)×10 = 3.0.
-     - Univ 3: (35/100)×10 = 3.5.
-     - Univ 4: (70/250)×10 = 2.8.
-     - Univ 5: (32/80)×10 = 4.0 (Highest).
-   - Royalty Return on R&D Budget:
-     - Univ 1: 18.0/120.0 = 15.00%.
-     - Univ 2: 24.0/180.0 = 13.33%.
-     - Univ 3: 12.5/75.0 = 16.67% (Highest).
-     - Univ 4: 27.0/225.0 = 12.00%.
-     - Univ 5: 9.6/60.0 = 16.00%.
+ - Patents per 10 Researchers:
+ - Univ 1: (45/150)×10 = 3.0.
+ - Univ 2: (60/200)×10 = 3.0.
+ - Univ 3: (35/100)×10 = 3.5.
+ - Univ 4: (70/250)×10 = 2.8.
+ - Univ 5: (32/80)×10 = 4.0 (Highest).
+ - Royalty Return on R&D Budget:
+ - Univ 1: 18.0/120.0 = 15.00%.
+ - Univ 2: 24.0/180.0 = 13.33%.
+ - Univ 3: 12.5/75.0 = 16.67% (Highest).
+ - Univ 4: 27.0/225.0 = 12.00%.
+ - Univ 5: 9.6/60.0 = 16.00%.
 2. Univ 5 achieved the highest patents per 10 researchers (4.0), and Univ 3 achieved the highest royalty return on budget (16.67%).
 
 Common Trap: Selecting Univ 4 because of its largest raw patent count (70) and largest royalty revenue (PHP 27.0M), ignoring its massive base of 250 faculty and PHP 225M budget.
-Exam Tip: Efficiency metrics normalize output by resource inputs to reveal true underlying productivity.","Correct. Survives elimination because Univ 5 generated 4.0 patents per 10 faculty (32/80 × 10), and Univ 3 yielded a 16.67% return on its research budget (12.5M / 75.0M), both representing peak relative efficiencies.","Eliminated because Univ 3's patent rate of 3.5 is below Univ 5's 4.0, and Univ 1's return (15.0%) is below Univ 3's 16.67%.","Eliminated because Univ 5's royalty return (16.00%) is lower than Univ 3's 16.67%.","Eliminated because Univ 1's patent rate (3.0) ranks fourth overall.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Efficiency metrics normalize output by resource inputs to reveal true underlying productivity."
 "Passage: A public school division audits resource distribution across four district high schools:
 | School | Student Enrollment | Total Classrooms | Regular Teachers | Lab Facilities | Annual Operating Fund (PHP M) |
 | High School A | 2,400 | 50 | 60 | 4 | 7.2 |
@@ -189,18 +189,18 @@ Exam Tip: Efficiency metrics normalize output by resource inputs to reveal true 
 | High School D | 4,200 | 84 | 100 | 7 | 13.44 |
 Which school had the BEST student-to-teacher ratio (fewest students per teacher), and which had the LOWEST average classroom occupancy (fewest students per classroom)?","Best Student-to-Teacher Ratio: High School C and High School A tied (40:1); Lowest Classroom Occupancy: High School C (45 students/room).","Best Student-to-Teacher Ratio: High School D (42:1); Lowest Classroom Occupancy: High School B (48 students/room).","Best Student-to-Teacher Ratio: High School C (40:1); Lowest Classroom Occupancy: High School A (48 students/room).","Best Student-to-Teacher Ratio: High School B (45:1); Lowest Classroom Occupancy: High School D (50 students/room).","A","Step-by-Step Solution:
 1. Calculate Student-to-Teacher Ratio (Enrollment / Teachers):
-   - School A: 2,400 / 60 = 40.0 students per teacher. (BEST - TIED)
-   - School B: 3,600 / 80 = 45.0 students per teacher.
-   - School C: 1,800 / 45 = 40.0 students per teacher. (BEST - TIED)
-   - School D: 4,200 / 100 = 42.0 students per teacher.
+ - School A: 2,400 / 60 = 40.0 students per teacher. (BEST - TIED)
+ - School B: 3,600 / 80 = 45.0 students per teacher.
+ - School C: 1,800 / 45 = 40.0 students per teacher. (BEST - TIED)
+ - School D: 4,200 / 100 = 42.0 students per teacher.
 2. Calculate Classroom Occupancy (Enrollment / Classrooms):
-   - School A: 2,400 / 50 = 48.0 students per classroom.
-   - School B: 3,600 / 75 = 48.0 students per classroom.
-   - School C: 1,800 / 40 = 45.0 students per classroom. (LOWEST OCCUPANCY = BEST)
-   - School D: 4,200 / 84 = 50.0 students per classroom.
+ - School A: 2,400 / 50 = 48.0 students per classroom.
+ - School B: 3,600 / 75 = 48.0 students per classroom.
+ - School C: 1,800 / 40 = 45.0 students per classroom. (LOWEST OCCUPANCY = BEST)
+ - School D: 4,200 / 84 = 50.0 students per classroom.
 3. Summary:
-   - Best student-teacher ratio: Schools A and C tied at 40:1.
-   - Lowest classroom occupancy: School C at 45.0 students/classroom.
+ - Best student-teacher ratio: Schools A and C tied at 40:1.
+ - Lowest classroom occupancy: School C at 45.0 students/classroom.
 
 Common Trap: Picking School D because it has the largest raw number of teachers (100) and classrooms (84), without computing the per-student density ratios.
 Exam Tip: 'Best ratio' in education metrics means lowest number of students per staff member or facility.","Correct. Survives elimination because Schools A and C both achieved the lowest student-to-teacher ratio of 40:1 (2,400/60 and 1,800/45), while School C had the lowest classroom congestion at 45 students per room (1,800/40).","Eliminated because School D's student-teacher ratio of 42:1 is inferior to Schools A and C (40:1).","Eliminated because School A also tied School C for the best student-to-teacher ratio, and School A's classroom occupancy is 48, not 45.","Eliminated because School B has the worst student-to-teacher ratio (45:1), and School D has the highest classroom density (50:1).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
@@ -213,40 +213,40 @@ Exam Tip: 'Best ratio' in education metrics means lowest number of students per 
 | Zone Central | 80 | 640 | 360 | 16 | 88% |
 Which zone had the LOWEST PM2.5 emissions per manufacturing plant, and which zone had the HIGHEST SO2 emissions per manufacturing plant?","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone Central (4.5 tons/plant).","Lowest PM2.5 per plant: Zone North (8.0 tons/plant); Highest SO2 per plant: Zone South (4.0 tons/plant).","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone West (4.5 tons/plant).","Lowest PM2.5 per plant: Zone Central (8.0 tons/plant); Highest SO2 per plant: Zone North (4.0 tons/plant).","A","Step-by-Step Solution:
 1. Calculate PM2.5 Emissions per Plant (Total PM2.5 / Plants):
-   - Zone North: 320 / 40 = 8.0 tons/plant.
-   - Zone South: 585 / 65 = 9.0 tons/plant.
-   - Zone East: 175 / 25 = 7.0 tons/plant. (LOWEST PM2.5)
-   - Zone West: 450 / 50 = 9.0 tons/plant.
-   - Zone Central: 640 / 80 = 8.0 tons/plant.
+ - Zone North: 320 / 40 = 8.0 tons/plant.
+ - Zone South: 585 / 65 = 9.0 tons/plant.
+ - Zone East: 175 / 25 = 7.0 tons/plant. (LOWEST PM2.5)
+ - Zone West: 450 / 50 = 9.0 tons/plant.
+ - Zone Central: 640 / 80 = 8.0 tons/plant.
 2. Calculate SO2 Emissions per Plant (Total SO2 / Plants):
-   - Zone North: 160 / 40 = 4.0 tons/plant.
-   - Zone South: 260 / 65 = 4.0 tons/plant.
-   - Zone East: 100 / 25 = 4.0 tons/plant.
-   - Zone West: 225 / 50 = 4.5 tons/plant. (TIED HIGHEST)
-   - Zone Central: 360 / 80 = 4.5 tons/plant. (TIED HIGHEST)
+ - Zone North: 160 / 40 = 4.0 tons/plant.
+ - Zone South: 260 / 65 = 4.0 tons/plant.
+ - Zone East: 100 / 25 = 4.0 tons/plant.
+ - Zone West: 225 / 50 = 4.5 tons/plant. (TIED HIGHEST)
+ - Zone Central: 360 / 80 = 4.5 tons/plant. (TIED HIGHEST)
 3. Notice Zone West and Zone Central both tie for highest SO2 per plant (4.5 tons/plant).
-   Let's check Zone West: 225 / 50 = 4.5. Zone Central: 360 / 80 = 4.5.
-   If we adjust Zone West SO2 to 210 tons: 210 / 50 = 4.2 tons/plant.
-   Then Zone Central (360/80 = 4.5 tons/plant) is the unique highest.
-   Let's update Zone West SO2 in passage table to 210 tons/yr.
-   Then Zone Central is uniquely highest at 4.5 tons/plant, and Zone East is lowest PM2.5 at 7.0 tons/plant.","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone Central (4.5 tons/plant).","Lowest PM2.5 per plant: Zone North (8.0 tons/plant); Highest SO2 per plant: Zone South (4.0 tons/plant).","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone West (4.2 tons/plant).","Lowest PM2.5 per plant: Zone Central (8.0 tons/plant); Highest SO2 per plant: Zone North (4.0 tons/plant).","A","Step-by-Step Solution:
+ Let's check Zone West: 225 / 50 = 4.5. Zone Central: 360 / 80 = 4.5.
+ If we adjust Zone West SO2 to 210 tons: 210 / 50 = 4.2 tons/plant.
+ Then Zone Central (360/80 = 4.5 tons/plant) is the unique highest.
+ Let's update Zone West SO2 in passage table to 210 tons/yr.
+ Then Zone Central is uniquely highest at 4.5 tons/plant, and Zone East is lowest PM2.5 at 7.0 tons/plant.","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone Central (4.5 tons/plant).","Lowest PM2.5 per plant: Zone North (8.0 tons/plant); Highest SO2 per plant: Zone South (4.0 tons/plant).","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone West (4.2 tons/plant).","Lowest PM2.5 per plant: Zone Central (8.0 tons/plant); Highest SO2 per plant: Zone North (4.0 tons/plant).","A","Step-by-Step Solution:
 1. Re-evaluate with Zone West SO2 = 210 tons:
-   - PM2.5 per plant:
-     - North: 320/40 = 8.0 tons.
-     - South: 585/65 = 9.0 tons.
-     - East: 175/25 = 7.0 tons (Lowest).
-     - West: 450/50 = 9.0 tons.
-     - Central: 640/80 = 8.0 tons.
-   - SO2 per plant:
-     - North: 160/40 = 4.0 tons.
-     - South: 260/65 = 4.0 tons.
-     - East: 100/25 = 4.0 tons.
-     - West: 210/50 = 4.2 tons.
-     - Central: 360/80 = 4.5 tons (Highest).
+ - PM2.5 per plant:
+ - North: 320/40 = 8.0 tons.
+ - South: 585/65 = 9.0 tons.
+ - East: 175/25 = 7.0 tons (Lowest).
+ - West: 450/50 = 9.0 tons.
+ - Central: 640/80 = 8.0 tons.
+ - SO2 per plant:
+ - North: 160/40 = 4.0 tons.
+ - South: 260/65 = 4.0 tons.
+ - East: 100/25 = 4.0 tons.
+ - West: 210/50 = 4.2 tons.
+ - Central: 360/80 = 4.5 tons (Highest).
 2. Zone East had the lowest PM2.5 emissions per plant (7.0 tons), and Zone Central had the highest SO2 emissions per plant (4.5 tons).
 
 Common Trap: Relying on gross total emissions rather than per-facility rates, which misleads because Zone Central has twice as many plants as North.
-Exam Tip: Divide pollutant volume by number of sources to determine unit environmental intensity.","Correct. Survives elimination because Zone East produced the cleanest PM2.5 profile at 175/25 = 7.0 tons/plant, and Zone Central emitted the highest SO2 density at 360/80 = 4.5 tons/plant.","Eliminated because Zone North's PM2.5 per plant (8.0) is higher than Zone East's (7.0), and Zone South's SO2 rate (4.0) is below Zone Central's (4.5).","Eliminated because Zone West's SO2 rate of 4.2 tons/plant is lower than Zone Central's 4.5 tons/plant.","Eliminated because Zone Central's PM2.5 rate (8.0) is higher than Zone East's (7.0).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Divide pollutant volume by number of sources to determine unit environmental intensity."
 "Passage: A regional maritime authority monitors four seaports:
 | Port | Cargo Handled (k MT) | Ship Calls | Berthing Capacity | Port Revenue (PHP M) | Operational Expenses (PHP M) |
 | Port Pier 1 | 4,500 | 900 | 12 | 180.0 | 108.0 |
@@ -255,36 +255,36 @@ Exam Tip: Divide pollutant volume by number of sources to determine unit environ
 | Port Pier 4 | 8,100 | 1,800 | 20 | 324.0 | 194.4 |
 Which port generated the HIGHEST revenue per metric ton of cargo handled, and which achieved the HIGHEST operating profit margin (% of Port Revenue)?","Highest Revenue/MT: Port Pier 1, Port Pier 3, and Port Pier 4 tied (PHP 40.00/MT); Highest Operating Margin: Port Pier 1 and Port Pier 4 tied (40.0%).","Highest Revenue/MT: Port Pier 2 (PHP 37.50/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Highest Revenue/MT: Port Pier 1 (PHP 40.00/MT); Highest Operating Margin: Port Pier 3 (30.0%).","Highest Revenue/MT: Port Pier 4 (PHP 40.00/MT); Highest Operating Margin: Port Pier 2 (30.0%).","A","Step-by-Step Solution:
 1. Calculate Revenue per MT (Revenue in PHP / Cargo in MT; Note Cargo is in thousands, Revenue in Millions, so PHP M / k MT = PHP / MT):
-   - Pier 1: PHP 180M / 4.5M MT = PHP 40.00 / MT. (TIED HIGHEST)
-   - Pier 2: PHP 240M / 6.4M MT = PHP 37.50 / MT.
-   - Pier 3: PHP 120M / 3.2M MT = PHP 37.50 / MT.
-     Wait: 120 / 3.2 = 37.50!
-     Pier 4: 324 / 8.1 = 40.00!
-     So Pier 1 and Pier 4 tie for highest revenue per MT at PHP 40.00/MT!
-     Let's check Pier 3: 120 / 3.2 = 37.50.
+ - Pier 1: PHP 180M / 4.5M MT = PHP 40.00 / MT. (TIED HIGHEST)
+ - Pier 2: PHP 240M / 6.4M MT = PHP 37.50 / MT.
+ - Pier 3: PHP 120M / 3.2M MT = PHP 37.50 / MT.
+ Wait: 120 / 3.2 = 37.50!
+ Pier 4: 324 / 8.1 = 40.00!
+ So Pier 1 and Pier 4 tie for highest revenue per MT at PHP 40.00/MT!
+ Let's check Pier 3: 120 / 3.2 = 37.50.
 2. Calculate Operating Profit Margin ((Revenue - Expenses) / Revenue × 100):
-   - Pier 1: (180.0 - 108.0) / 180.0 = 72.0 / 180.0 = 40.0%. (TIED HIGHEST)
-   - Pier 2: (240.0 - 168.0) / 240.0 = 72.0 / 240.0 = 30.0%.
-   - Pier 3: (120.0 - 84.0) / 120.0 = 36.0 / 120.0 = 30.0%.
-   - Pier 4: (324.0 - 194.4) / 324.0 = 129.6 / 324.0 = 40.0%. (TIED HIGHEST)
+ - Pier 1: (180.0 - 108.0) / 180.0 = 72.0 / 180.0 = 40.0%. (TIED HIGHEST)
+ - Pier 2: (240.0 - 168.0) / 240.0 = 72.0 / 240.0 = 30.0%.
+ - Pier 3: (120.0 - 84.0) / 120.0 = 36.0 / 120.0 = 30.0%.
+ - Pier 4: (324.0 - 194.4) / 324.0 = 129.6 / 324.0 = 40.0%. (TIED HIGHEST)
 3. Summary:
-   - Highest Revenue per MT: Pier 1 and Pier 4 tied at PHP 40.00/MT.
-   - Highest Operating Profit Margin: Pier 1 and Pier 4 tied at 40.0%.
-   Let's adjust Option A wording to reflect Pier 1 and Pier 4 tie.","Highest Revenue/MT: Port Pier 1 and Port Pier 4 tied (PHP 40.00/MT); Highest Operating Margin: Port Pier 1 and Port Pier 4 tied (40.0%).","Highest Revenue/MT: Port Pier 2 (PHP 37.50/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Highest Revenue/MT: Port Pier 3 (PHP 37.50/MT); Highest Operating Margin: Port Pier 3 (30.0%).","Highest Revenue/MT: Port Pier 4 (PHP 40.00/MT); Highest Operating Margin: Port Pier 2 (30.0%).","A","Step-by-Step Solution:
+ - Highest Revenue per MT: Pier 1 and Pier 4 tied at PHP 40.00/MT.
+ - Highest Operating Profit Margin: Pier 1 and Pier 4 tied at 40.0%.
+ Let's adjust Option A wording to reflect Pier 1 and Pier 4 tie.","Highest Revenue/MT: Port Pier 1 and Port Pier 4 tied (PHP 40.00/MT); Highest Operating Margin: Port Pier 1 and Port Pier 4 tied (40.0%).","Highest Revenue/MT: Port Pier 2 (PHP 37.50/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Highest Revenue/MT: Port Pier 3 (PHP 37.50/MT); Highest Operating Margin: Port Pier 3 (30.0%).","Highest Revenue/MT: Port Pier 4 (PHP 40.00/MT); Highest Operating Margin: Port Pier 2 (30.0%).","A","Step-by-Step Solution:
 1. Cross-verification of derived quotients:
-   - Revenue per MT:
-     - Pier 1: 180M / 4.5k kMT = PHP 40.00/MT.
-     - Pier 2: 240M / 6.4k kMT = PHP 37.50/MT.
-     - Pier 3: 120M / 3.2k kMT = PHP 37.50/MT.
-     - Pier 4: 324M / 8.1k kMT = PHP 40.00/MT.
-     - Winners: Pier 1 & Pier 4 tied at PHP 40.00/MT.
-   - Operating Profit Margin:
-     - Pier 1: (180 - 108)/180 = 72/180 = 40.0%.
-     - Pier 2: (240 - 168)/240 = 72/240 = 30.0%.
-     - Pier 3: (120 - 84)/120 = 36/120 = 30.0%.
-     - Pier 4: (324 - 194.4)/324 = 129.6/324 = 40.0%.
-     - Winners: Pier 1 & Pier 4 tied at 40.0%.
+ - Revenue per MT:
+ - Pier 1: 180M / 4.5k kMT = PHP 40.00/MT.
+ - Pier 2: 240M / 6.4k kMT = PHP 37.50/MT.
+ - Pier 3: 120M / 3.2k kMT = PHP 37.50/MT.
+ - Pier 4: 324M / 8.1k kMT = PHP 40.00/MT.
+ - Winners: Pier 1 & Pier 4 tied at PHP 40.00/MT.
+ - Operating Profit Margin:
+ - Pier 1: (180 - 108)/180 = 72/180 = 40.0%.
+ - Pier 2: (240 - 168)/240 = 72/240 = 30.0%.
+ - Pier 3: (120 - 84)/120 = 36/120 = 30.0%.
+ - Pier 4: (324 - 194.4)/324 = 129.6/324 = 40.0%.
+ - Winners: Pier 1 & Pier 4 tied at 40.0%.
 2. Both metrics show a tie between Port Pier 1 and Port Pier 4.
 
 Common Trap: Looking only at gross operating profit (Pier 4 = PHP 129.6M vs Pier 1 = PHP 72.0M) rather than percentage profit margin relative to revenue.
-Exam Tip: Margin is always expressed as a percentage of gross revenue.","Correct. Survives elimination because both Port Pier 1 (180M/4.5k = PHP 40/MT; 72M/180M = 40%) and Port Pier 4 (324M/8.1k = PHP 40/MT; 129.6M/324M = 40%) achieve identical peak revenue intensity and profit margin.","Eliminated because Port Pier 2 has a lower revenue per MT (PHP 37.50) and a lower profit margin (30.0%).","Eliminated because Port Pier 3's revenue intensity is PHP 37.50/MT and its profit margin is 30.0%, both inferior to Pier 1 and Pier 4.","Eliminated because Port Pier 2's profit margin of 30.0% is 10 percentage points below the 40.0% margin achieved by Pier 1 and Pier 4.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
+Exam Tip: Margin is always expressed as a percentage of gross revenue."

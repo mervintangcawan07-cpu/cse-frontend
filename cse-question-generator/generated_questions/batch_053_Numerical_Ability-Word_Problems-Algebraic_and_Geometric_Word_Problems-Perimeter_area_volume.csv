@@ -1,136 +1,136 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"A circular municipal botanical park has a radius of 14.0 meters. A concrete pedestrian perimeter promenade of uniform width 3.5 meters is constructed completely around the outer boundary of the park. Using $\pi = \frac{22}{7}$, what is the total surface area of the promenade in square meters, and what is the total cost of paving it at ₱450.00 per square meter?","Area: 346.5 m²; Cost: ₱155,925.00","Area: 350.0 m²; Cost: ₱157,500.00","Area: 338.5 m²; Cost: ₱152,325.00","Area: 360.0 m²; Cost: ₱162,000.00","A","Step-by-Step Solution:
+"A circular municipal botanical park has a radius of 14.0 meters. A concrete pedestrian perimeter promenade of uniform width 3.5 meters is constructed completely around the outer boundary of the park. Using π = 22/7, what is the total surface area of the promenade in square meters, and what is the total cost of paving it at ₱450.00 per square meter?","Area: 346.5 m²; Cost: ₱155,925.00","Area: 350.0 m²; Cost: ₱157,500.00","Area: 338.5 m²; Cost: ₱152,325.00","Area: 360.0 m²; Cost: ₱162,000.00","A","Step-by-Step Solution:
 1. Identify circular ring (annulus) radii:
-   - Inner radius $r = 14.0\text{ meters}$.
-   - Outer radius $R = 14.0 + 3.5 = 17.5\text{ meters} = \frac{35}{2}\text{ meters}$.
+ - Inner radius r = 14.0 meters.
+ - Outer radius R = 14.0 + 3.5 = 17.5 meters = 35/2 meters.
 2. Formulate the area of the circular ring:
-   - $\text{Area} = \pi (R^2 - r^2) = \pi (R - r)(R + r)$.
-3. Substitute $\pi = \frac{22}{7}, R - r = 3.5 = \frac{7}{2}, R + r = 17.5 + 14.0 = 31.5$:
-   - $\text{Area} = \frac{22}{7} \times \frac{7}{2} \times 31.5$.
-   - Notice that $\frac{22}{7} \times \frac{7}{2} = 11.0$.
-   - $\text{Area} = 11.0 \times 31.5 = 346.5\text{ m}^2$.
+ - Area = π (R² - r²) = π (R - r)(R + r).
+3. Substitute π = 22/7, R - r = 3.5 = 7/2, R + r = 17.5 + 14.0 = 31.5:
+ - Area = 22/7 × 7/2 × 31.5.
+ - Notice that 22/7 × 7/2 = 11.0.
+ - Area = 11.0 × 31.5 = 346.5 m².
 4. Calculate total paving cost:
-   - $\text{Cost} = 346.5\text{ m}^2 \times ₱450.00\text{/m}^2 = ₱155,925.00$.
+ - Cost = 346.5 m² × ₱450.00/m² = ₱155,925.00.
 
-Common Trap: Using outer area alone ($\pi R^2 = 962.5\text{ m}^2$) or taking perimeter times width without radial curve integration.
-Exam Tip: Difference of squares factorization: $\text{Area} = \pi(R-r)(R+r) = 11 \times 31.5 = 346.5\text{ m}^2 \implies ₱155,925.00$.","Correct. Survives elimination because the annulus area is 346.5 m^2 and 346.5 * ₱450 = ₱155,925.00.","Eliminated because 350.0 m^2 uses an imprecise approximation.","Eliminated because 338.5 m^2 is an underestimate.","Eliminated because 360.0 m^2 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Using outer area alone (π R² = 962.5 m²) or taking perimeter × width without radial curve integration.
+Exam Tip: Difference of squares factorization: Area = π(R-r)(R+r) = 11 × 31.5 = 346.5 m² implies ₱155,925.00.","Correct. Survives elimination because the annulus area is 346.5 m² and 346.5 * ₱450 = ₱155,925.00.","Eliminated because 350.0 m² uses an imprecise approximation.","Eliminated because 338.5 m² is an underestimate.","Eliminated because 360.0 m² is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
 "A solid industrial metal cylinder with base radius 6.0 cm and height 15.0 cm is completely melted down and recast into identical solid spheres, each having a radius of 3.0 cm. Assuming zero loss of metal during casting, how many complete solid spheres can be manufactured?","15 spheres","12 spheres","18 spheres","20 spheres","A","Step-by-Step Solution:
-1. Compute the volume of the original cylinder ($V_{\text{cylinder}} = \pi r_c^2 h_c$):
-   - $V_{\text{cylinder}} = \pi \times (6.0)^2 \times 15.0 = \pi \times 36.0 \times 15.0 = 540\pi\text{ cm}^3$.
-2. Compute the volume of one recast sphere ($V_{\text{sphere}} = \frac{4}{3} \pi r_s^3$):
-   - $V_{\text{sphere}} = \frac{4}{3} \pi \times (3.0)^3 = \frac{4}{3} \pi \times 27.0 = 36\pi\text{ cm}^3$.
+1. Compute the volume of the original cylinder (Vcyₗiₙdₑr = π r_c² h_c):
+ - Vcyₗiₙdₑr = π × (6.0)² × 15.0 = π × 36.0 × 15.0 = 540π cm³.
+2. Compute the volume of one recast sphere (Vₛₚₕₑrₑ = 4/3 π rₛ³):
+ - Vₛₚₕₑrₑ = 4/3 π × (3.0)³ = 4/3 π × 27.0 = 36π cm³.
 3. Divide the total cylinder volume by the unit sphere volume:
-   - $N = \frac{V_{\text{cylinder}}}{V_{\text{sphere}}} = \frac{540\pi}{36\pi} = \frac{540}{36} = 15\text{ spheres}$.
+ - N = Vcyₗiₙdₑr/Vₛₚₕₑrₑ = 540π/36π = 540/36 = 15 spheres.
 4. Verify:
-   - $15 \times 36\pi = 540\pi\text{ cm}^3$ (Zero volume discrepancy!).
+ - 15 × 36π = 540π cm³ (Zero volume discrepancy!).
 
-Common Trap: Forgetting the $\frac{4}{3}$ factor in the sphere volume formula (computing $4\pi r^3 = 108\pi \implies 5\text{ spheres}$).
-Exam Tip: Cancel $\pi$: $N = \frac{r_c^2 h_c}{\frac{4}{3} r_s^3} = \frac{36 \times 15}{\frac{4}{3} \times 27} = \frac{540}{36} = 15\text{ spheres}$.","Correct. Survives elimination because cylinder volume is 540*pi cm^3 and sphere volume is 36*pi cm^3, giving 540 / 36 = 15 spheres.","Eliminated because 12 spheres leaves 108*pi cm^3 of uncast metal.","Eliminated because 18 spheres exceeds total metal volume.","Eliminated because 20 spheres exceeds metal volume.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Forgetting the 4/3 factor in the sphere volume formula (computing 4π r³ = 108π implies 5 spheres).
+Exam Tip: Cancel π: N = r_c² h_c/4/3 rₛ³ = 36 × 15/4/3 × 27 = 540/36 = 15 spheres.","Correct. Survives elimination because cylinder volume is 540*π cm³ and sphere volume is 36*π cm³, giving 540 / 36 = 15 spheres.","Eliminated because 12 spheres leaves 108*π cm³ of uncast metal.","Eliminated because 18 spheres exceeds total metal volume.","Eliminated because 20 spheres exceeds metal volume.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
 "A municipal swimming pool measures 25.0 meters in length and 10.0 meters in width. The bottom floor of the pool slopes uniformly from a shallow depth of 1.0 meter at one end to a deep depth of 3.0 meters at the opposite end. What is the total volume of water required to fill the pool completely (in cubic meters and in liters)?","500.0 m³ (500,000 liters)","750.0 m³ (750,000 liters)","450.0 m³ (450,000 liters)","600.0 m³ (600,000 liters)","A","Step-by-Step Solution:
 1. Identify the pool's 3D geometric shape:
-   - The pool is a right prism whose base is a right trapezoid (longitudinal vertical cross-section).
-2. Compute the cross-sectional area of the trapezoid ($A_{\text{trap}}$):
-   - $A_{\text{trap}} = \text{Length} \times \left(\frac{d_{\text{shallow}} + d_{\text{deep}}}{2}\right)$.
-   - $A_{\text{trap}} = 25.0\text{ m} \times \left(\frac{1.0\text{ m} + 3.0\text{ m}}{2}\right) = 25.0 \times 2.0 = 50.0\text{ m}^2$.
+ - The pool is a right prism whose base is a right trapezoid (longitudinal vertical cross-section).
+2. Compute the cross-sectional area of the trapezoid (Aₜrₐₚ):
+ - Aₜrₐₚ = Length × ((dₛₕₐₗₗₒw + ddₑₑₚ)/2).
+ - Aₜrₐₚ = 25.0 m × ((1.0 m + 3.0 m)/2) = 25.0 × 2.0 = 50.0 m².
 3. Compute total water volume:
-   - $\text{Volume} = A_{\text{trap}} \times \text{Width} = 50.0\text{ m}^2 \times 10.0\text{ m} = 500.0\text{ m}^3$.
-4. Convert cubic meters to liters ($1.0\text{ m}^3 = 1,000.0\text{ liters}$):
-   - $\text{Volume in Liters} = 500.0 \times 1,000.0 = 500,000\text{ liters}$.
+ - Volume = Aₜrₐₚ × Width = 50.0 m² × 10.0 m = 500.0 m³.
+4. Convert cubic meters to liters (1.0 m³ = 1,000.0 liters):
+ - Volume in Liters = 500.0 × 1,000.0 = 500,000 liters.
 
-Common Trap: Using the maximum depth of 3.0 m across the whole pool ($25 \times 10 \times 3 = 750\text{ m}^3$, Option B).
-Exam Tip: Average depth is $\frac{1.0 + 3.0}{2} = 2.0\text{ m}$. $\text{Volume} = 25 \times 10 \times 2.0 = 500.0\text{ m}^3 = 500,000\text{ L}$.","Correct. Survives elimination because average depth is 2.0 m, giving volume 25 * 10 * 2.0 = 500.0 m^3 (500,000 liters).","Eliminated because 750.0 m^3 assumes a uniform 3.0 m depth throughout.","Eliminated because 450.0 m^3 is an underestimate.","Eliminated because 600.0 m^3 assumes average depth 2.4 m.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Using the maximum depth of 3.0 m across the whole pool (25 × 10 × 3 = 750 m³, Option B).
+Exam Tip: Average depth is 1.0 + 3.0/2 = 2.0 m. Volume = 25 × 10 × 2.0 = 500.0 m³ = 500,000 L.","Correct. Survives elimination because average depth is 2.0 m, giving volume 25 * 10 * 2.0 = 500.0 m³ (500,000 liters).","Eliminated because 750.0 m³ assumes a uniform 3.0 m depth throughout.","Eliminated because 450.0 m³ is an underestimate.","Eliminated because 600.0 m³ assumes average depth 2.4 m.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
 "If the radius of a spherical storage tank is increased by 20.0%, what is the exact percentage increase in its total surface area, and what is the exact percentage increase in its internal volume?","Surface Area: +44.0%; Volume: +72.8%","Surface Area: +40.0%; Volume: +60.0%","Surface Area: +44.0%; Volume: +60.0%","Surface Area: +20.0%; Volume: +72.8%","A","Step-by-Step Solution:
-1. Determine the linear dimensional scale factor $k$:
-   - $k = 1.0 + 0.20 = 1.20$.
-2. Compute surface area scaling factor ($A \propto r^2$):
-   - Area Multiplier $= k^2 = (1.20)^2 = 1.44$.
-   - $\text{Percentage Increase in Surface Area} = (1.44 - 1.0) \times 100\% = +44.0\%$.
-3. Compute volume scaling factor ($V \propto r^3$):
-   - Volume Multiplier $= k^3 = (1.20)^3 = 1.728$.
-   - $\text{Percentage Increase in Volume} = (1.728 - 1.0) \times 100\% = +72.8\%$.
-4. (Verification: Let initial $r = 10 \implies A_0 = 400\pi, V_0 = \frac{4000\pi}{3}$. New $r = 12 \implies A_1 = 576\pi (+44\%), V_1 = \frac{6912\pi}{3} (+72.8\%)$).
+1. Determine the linear dimensional scale factor k:
+ - k = 1.0 + 0.20 = 1.20.
+2. Compute surface area scaling factor (A propto r²):
+ - Area Multiplier = k² = (1.20)² = 1.44.
+ - Percentage Increase in Surface Area = (1.44 - 1.0) × 100% = +44.0%.
+3. Compute volume scaling factor (V propto r³):
+ - Volume Multiplier = k³ = (1.20)³ = 1.728.
+ - Percentage Increase in Volume = (1.728 - 1.0) × 100% = +72.8%.
+4. (Verification: Let initial r = 10 implies A₀ = 400π, V₀ = 4000π/3. New r = 12 implies A₁ = 576π (+44%), V₁ = 6912π/3 (+72.8%)).
 
-Common Trap: Doubling and tripling the 20% linearly ($+40\%$ area and $+60\%$ volume, Option B).
-Exam Tip: 2D area scales with $k^2 = (1.2)^2 = 1.44 \implies +44\%$. 3D volume scales with $k^3 = (1.2)^3 = 1.728 \implies +72.8\%$.","Correct. Survives elimination because (1.20)^2 = 1.44 (+44.0% area) and (1.20)^3 = 1.728 (+72.8% volume).","Eliminated because +40.0% and +60.0% assumes linear multiplication.","Eliminated because +60.0% volume omits exponential compounding.","Eliminated because +20.0% area assumes 1D linear scaling.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Doubling and tripling the 20% linearly (+40% area and +60% volume, Option B).
+Exam Tip: 2D area scales with k² = (1.2)² = 1.44 implies +44%. 3D volume scales with k³ = (1.2)³ = 1.728 implies +72.8%.","Correct. Survives elimination because (1.20)² = 1.44 (+44.0% area) and (1.20)³ = 1.728 (+72.8% volume).","Eliminated because +40.0% and +60.0% assumes linear multiplication.","Eliminated because +60.0% volume omits exponential compounding.","Eliminated because +20.0% area assumes 1D linear scaling.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
 "A flat rectangular sheet of corrugated packaging cardboard measures 40.0 cm by 25.0 cm. Equal square cutouts of side length 5.0 cm are removed from each of the four corners, and the remaining flaps are folded perpendicularly upward to form an open-top container box. What is the internal volume of the resulting box in cubic centimeters?","2,250.0 cm³","2,500.0 cm³","2,000.0 cm³","2,400.0 cm³","A","Step-by-Step Solution:
 1. Determine the folded base dimensions:
-   - Base Length $= \text{Sheet Length} - 2(\text{Corner Cutout}) = 40.0 - 2(5.0) = 40.0 - 10.0 = 30.0\text{ cm}$.
-   - Base Width $= \text{Sheet Width} - 2(\text{Corner Cutout}) = 25.0 - 2(5.0) = 25.0 - 10.0 = 15.0\text{ cm}$.
+ - Base Length = Sheet Length - 2(Corner Cutout) = 40.0 - 2(5.0) = 40.0 - 10.0 = 30.0 cm.
+ - Base Width = Sheet Width - 2(Corner Cutout) = 25.0 - 2(5.0) = 25.0 - 10.0 = 15.0 cm.
 2. Determine the box height:
-   - Height $= \text{Corner Cutout Side} = 5.0\text{ cm}$.
+ - Height = Corner Cutout Side = 5.0 cm.
 3. Compute the volume of the rectangular container:
-   - $\text{Volume} = \text{Length} \times \text{Width} \times \text{Height}$.
-   - $\text{Volume} = 30.0\text{ cm} \times 15.0\text{ cm} \times 5.0\text{ cm}$.
-   - $\text{Volume} = 450.0 \times 5.0 = 2,250.0\text{ cm}^3$.
+ - Volume = Length × Width × Height.
+ - Volume = 30.0 cm × 15.0 cm × 5.0 cm.
+ - Volume = 450.0 × 5.0 = 2,250.0 cm³.
 
-Common Trap: Subtracting the cutout length once instead of twice ($35 \times 20 \times 5 = 3,500\text{ cm}^3$).
-Exam Tip: Both opposite corners are removed per side: $L = 40 - 10 = 30, W = 25 - 10 = 15, H = 5 \implies V = 30 \times 15 \times 5 = 2,250.0\text{ cm}^3$.","Correct. Survives elimination because base dimensions are 30 cm by 15 cm and height is 5 cm, giving volume 30 * 15 * 5 = 2,250.0 cm^3.","Eliminated because 2,500.0 cm^3 is an arithmetic error.","Eliminated because 2,000.0 cm^3 is an underestimate.","Eliminated because 2,400.0 cm^3 assumes base 30 cm by 16 cm.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
-"A cylindrical water storage tank with a base diameter of 1.4 meters contains water. When a solid iron cuboid of dimensions 77.0 cm by 50.0 cm by 40.0 cm is completely submerged into the tank, by how many centimeters does the water level rise? (Use $\pi = \frac{22}{7}$).","10.0 cm","8.0 cm","12.0 cm","15.0 cm","A","Step-by-Step Solution:
+Common Trap: Subtracting the cutout length once instead of twice (35 × 20 × 5 = 3,500 cm³).
+Exam Tip: Both opposite corners are removed per side: L = 40 - 10 = 30, W = 25 - 10 = 15, H = 5 implies V = 30 × 15 × 5 = 2,250.0 cm³.","Correct. Survives elimination because base dimensions are 30 cm by 15 cm and height is 5 cm, giving volume 30 * 15 * 5 = 2,250.0 cm³.","Eliminated because 2,500.0 cm³ is an arithmetic error.","Eliminated because 2,000.0 cm³ is an underestimate.","Eliminated because 2,400.0 cm³ assumes base 30 cm by 16 cm.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+"A cylindrical water storage tank with a base diameter of 1.4 meters contains water. When a solid iron cuboid of dimensions 77.0 cm by 50.0 cm by 40.0 cm is completely submerged into the tank, by how many centimeters does the water level rise? (Use π = 22/7).","10.0 cm","8.0 cm","12.0 cm","15.0 cm","A","Step-by-Step Solution:
 1. Compute the volume of the submerged solid iron cuboid:
-   - $V_{\text{cuboid}} = 77.0\text{ cm} \times 50.0\text{ cm} \times 40.0\text{ cm}$.
-   - $V_{\text{cuboid}} = 77.0 \times 2,000.0 = 154,000.0\text{ cm}^3$.
+ - Vcubₒid = 77.0 cm × 50.0 cm × 40.0 cm.
+ - Vcubₒid = 77.0 × 2,000.0 = 154,000.0 cm³.
 2. Convert tank dimensions to centimeters and compute base area:
-   - Base Diameter $= 1.4\text{ m} = 140.0\text{ cm} \implies \text{Radius } r = 70.0\text{ cm}$.
-   - Base Area $= \pi r^2 = \frac{22}{7} \times (70.0)^2 = \frac{22}{7} \times 4,900.0 = 22 \times 700.0 = 15,400.0\text{ cm}^2$.
-3. Apply Archimedes' Principle ($\text{Displaced Volume} = \text{Base Area} \times \text{Rise in Height } h$):
-   - $15,400.0 \times h = 154,000.0$.
-4. Solve for $h$:
-   - $h = \frac{154,000.0}{15,400.0} = 10.0\text{ cm}$.
+ - Base Diameter = 1.4 m = 140.0 cm implies Radius r = 70.0 cm.
+ - Base Area = π r² = 22/7 × (70.0)² = 22/7 × 4,900.0 = 22 × 700.0 = 15,400.0 cm².
+3. Apply Archimedes' Principle (Displaced Volume = Base Area × Rise in Height h):
+ - 15,400.0 × h = 154,000.0.
+4. Solve for h:
+ - h = 154,000.0/15,400.0 = 10.0 cm.
 
-Common Trap: Using the diameter 140 cm as radius (dividing by 4 to get $2.5\text{ cm}$).
-Exam Tip: $h = \frac{V_{\text{solid}}}{\pi r^2} = \frac{154,000}{15,400} = 10.0\text{ cm}$.","Correct. Survives elimination because displaced volume is 154,000 cm^3 and tank base area is 15,400 cm^2, giving water rise h = 10.0 cm.","Eliminated because 8.0 cm assumes base area 19,250 cm^2.","Eliminated because 12.0 cm is an overestimate.","Eliminated because 15.0 cm is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
-"An equilateral triangular traffic island has an inscribed circle (incircle) with a radius of $r = 4\sqrt{3}\text{ cm}$. What is the total area of the equilateral triangle, and what is the area of the region inside the triangle but outside the inscribed circle? (Use $\pi \approx 3.1416$).","Triangle Area: 144√3 cm² (249.42 cm²); Difference: 98.62 cm²","Triangle Area: 128√3 cm² (221.70 cm²); Difference: 85.40 cm²","Triangle Area: 160√3 cm² (277.13 cm²); Difference: 110.25 cm²","Triangle Area: 144√3 cm² (249.42 cm²); Difference: 88.50 cm²","A","Step-by-Step Solution:
-1. Relate inradius $r$ to side length $s$ for an equilateral triangle:
-   - $r = \frac{s \sqrt{3}}{6} \implies s = \frac{6r}{\sqrt{3}} = 2\sqrt{3} r$.
-2. Substitute $r = 4\sqrt{3}\text{ cm}$:
-   - $s = 2\sqrt{3}(4\sqrt{3}) = 8 \times 3 = 24.0\text{ cm}$.
-3. Calculate area of the equilateral triangle ($A_{\text{tri}} = \frac{\sqrt{3}}{4} s^2$):
-   - $A_{\text{tri}} = \frac{\sqrt{3}}{4} (24.0)^2 = \frac{\sqrt{3}}{4} (576.0) = 144\sqrt{3}\text{ cm}^2 \approx 144(1.73205) \approx 249.415\text{ cm}^2$.
-4. Calculate area of the inscribed circle ($A_{\text{circle}} = \pi r^2$):
-   - $A_{\text{circle}} = \pi (4\sqrt{3})^2 = \pi (48.0) \approx 48.0(3.1416) \approx 150.797\text{ cm}^2$.
+Common Trap: Using the diameter 140 cm as radius (dividing by 4 to get 2.5 cm).
+Exam Tip: h = Vₛₒₗid/(π r²) = 154,000/15,400 = 10.0 cm.","Correct. Survives elimination because displaced volume is 154,000 cm³ and tank base area is 15,400 cm², giving water rise h = 10.0 cm.","Eliminated because 8.0 cm assumes base area 19,250 cm².","Eliminated because 12.0 cm is an overestimate.","Eliminated because 15.0 cm is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+"An equilateral triangular traffic island has an inscribed °≤ (in°≤) with a radius of r = 4√3 cm. What is the total area of the equilateral triangle, and what is the area of the region inside the triangle but outside the inscribed °≤? (Use π ≈ 3.1416).","Triangle Area: 144√3 cm² (249.42 cm²); Difference: 98.62 cm²","Triangle Area: 128√3 cm² (221.70 cm²); Difference: 85.40 cm²","Triangle Area: 160√3 cm² (277.13 cm²); Difference: 110.25 cm²","Triangle Area: 144√3 cm² (249.42 cm²); Difference: 88.50 cm²","A","Step-by-Step Solution:
+1. Relate inradius r to side length s for an equilateral triangle:
+ - r = (s √3)/6 implies s = 6r/√3 = 2√3 r.
+2. Substitute r = 4√3 cm:
+ - s = 2√3(4√3) = 8 × 3 = 24.0 cm.
+3. Calculate area of the equilateral triangle (Aₜri = √3/4 s²):
+ - Aₜri = √3/4 (24.0)² = √3/4 (576.0) = 144√3 cm² ≈ 144(1.73205) ≈ 249.415 cm².
+4. Calculate area of the inscribed °≤ (A°ₗₑ = π r²):
+ - A°ₗₑ = π (4√3)² = π (48.0) ≈ 48.0(3.1416) ≈ 150.797 cm².
 5. Compute the remaining difference area:
-   - $\text{Difference Area} = A_{\text{tri}} - A_{\text{circle}} = 249.415 - 150.797 = 98.618\text{ cm}^2 \approx 98.62\text{ cm}^2$.
+ - Difference Area = Aₜri - A°ₗₑ = 249.415 - 150.797 = 98.618 cm² ≈ 98.62 cm².
 
-Common Trap: Using the circumscribed circle formula ($R = \frac{s\sqrt{3}}{3}$) instead of inradius formula.
-Exam Tip: $s = 2\sqrt{3} r = 24 \implies A_{\text{tri}} = 144\sqrt{3} \approx 249.42\text{ cm}^2 \implies \text{Diff} = 249.42 - 150.80 = 98.62\text{ cm}^2$.","Correct. Survives elimination because side length is 24 cm, yielding triangle area 144*sqrt(3) (249.42 cm^2) and difference area 98.62 cm^2.","Eliminated because 128*sqrt(3) assumes side length 22.6 cm.","Eliminated because 160*sqrt(3) is an overestimate.","Eliminated because 88.50 cm^2 difference is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
-"A right circular cone and a right circular cylinder share identical base radii and identical vertical heights. If the volume of the cylinder is 720.0 cubic centimeters, what is the volume of the cone, and what is the ratio of the cone's volume to the cylinder's volume?","Volume: 240.0 cm³; Ratio: 1 : 3","Volume: 360.0 cm³; Ratio: 1 : 2","Volume: 180.0 cm³; Ratio: 1 : 4","Volume: 240.0 cm³; Ratio: 2 : 3","A","Step-by-Step Solution:
-1. Recall the volumetric geometric formulas for identical radius $r$ and height $h$:
-   - Cylinder Volume: $V_{\text{cylinder}} = \pi r^2 h$.
-   - Cone Volume: $V_{\text{cone}} = \frac{1}{3} \pi r^2 h$.
+Common Trap: Using the circumscribed °≤ formula (R = s√3/3) instead of inradius formula.
+Exam Tip: s = 2√3 r = 24 implies Aₜri = 144√3 ≈ 249.42 cm² implies Diff = 249.42 - 150.80 = 98.62 cm².","Correct. Survives elimination because side length is 24 cm, yielding triangle area 144*sqrt(3) (249.42 cm²) and difference area 98.62 cm².","Eliminated because 128*sqrt(3) assumes side length 22.6 cm.","Eliminated because 160*sqrt(3) is an overestimate.","Eliminated because 88.50 cm² difference is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+"A right circular cone and a right circular cylinder share identical base radii and identical vertical heights. If the volume of the cylinder is 720.0 cubic centimeters, what is the volume of the cone, and what is the ratio of the cone's volume to the cylinder's volume?","Volume: 240.0 cm³; Ratio: 1: 3","Volume: 360.0 cm³; Ratio: 1: 2","Volume: 180.0 cm³; Ratio: 1: 4","Volume: 240.0 cm³; Ratio: 2: 3","A","Step-by-Step Solution:
+1. Recall the volumetric geometric formulas for identical radius r and height h:
+ - Cylinder Volume: Vcyₗiₙdₑr = π r² h.
+ - Cone Volume: Vcₒₙₑ = 1/3 π r² h.
 2. Formulate the ratio of cone volume to cylinder volume:
-   - $\frac{V_{\text{cone}}}{V_{\text{cylinder}}} = \frac{\frac{1}{3} \pi r^2 h}{\pi r^2 h} = \frac{1}{3} = 1 : 3$.
-3. Substitute the given cylinder volume ($V_{\text{cylinder}} = 720.0\text{ cm}^3$):
-   - $V_{\text{cone}} = \frac{1}{3} \times 720.0 = 240.0\text{ cm}^3$.
-4. (Verification: $3 \times 240.0 = 720.0\text{ cm}^3$).
+ - Vcₒₙₑ/Vcyₗiₙdₑr = 1/3 π r² h/π r² h = 1/3 = 1: 3.
+3. Substitute the given cylinder volume (Vcyₗiₙdₑr = 720.0 cm³):
+ - Vcₒₙₑ = 1/3 × 720.0 = 240.0 cm³.
+4. (Verification: 3 × 240.0 = 720.0 cm³).
 
-Common Trap: Confusing the cone formula with a sphere ($\frac{4}{3}$) or pyramid ($1:2$).
-Exam Tip: A cone occupies EXACTLY one-third ($\frac{1}{3}$) the volume of a cylinder with matching base and height: $\frac{720}{3} = 240.0\text{ cm}^3$.","Correct. Survives elimination because a cone is exactly 1/3 the volume of a cylinder with equal base and height, giving 720 / 3 = 240.0 cm^3 (1:3 ratio).","Eliminated because 360.0 cm^3 assumes a 1:2 ratio.","Eliminated because 180.0 cm^3 assumes a 1:4 ratio.","Eliminated because 2:3 ratio is for a hemisphere inscribed in a cylinder.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Confusing the cone formula with a sphere (4/3) or pyramid (1:2).
+Exam Tip: A cone occupies EXACTLY one-third (1/3) the volume of a cylinder with matching base and height: 720/3 = 240.0 cm³.","Correct. Survives elimination because a cone is exactly 1/3 the volume of a cylinder with equal base and height, giving 720 / 3 = 240.0 cm³ (1:3 ratio).","Eliminated because 360.0 cm³ assumes a 1:2 ratio.","Eliminated because 180.0 cm³ assumes a 1:4 ratio.","Eliminated because 2:3 ratio is for a hemisphere inscribed in a cylinder.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
 "The perimeter of a rhombus is 100.0 cm, and one of its diagonals measures 40.0 cm. What is the length of the other diagonal, and what is the surface area of the rhombus?","Diagonal: 30.0 cm; Area: 600.0 cm²","Diagonal: 35.0 cm; Area: 700.0 cm²","Diagonal: 28.0 cm; Area: 560.0 cm²","Diagonal: 32.0 cm; Area: 640.0 cm²","A","Step-by-Step Solution:
-1. Determine side length $s$ of the rhombus from its perimeter ($P = 4s$):
-   - $4s = 100.0\text{ cm} \implies s = \frac{100.0}{4} = 25.0\text{ cm}$.
+1. Determine side length s of the rhombus from its perimeter (P = 4s):
+ - 4s = 100.0 cm implies s = 100.0/4 = 25.0 cm.
 2. Apply the perpendicular diagonal bisection property of rhombuses:
-   - The diagonals $d_1$ and $d_2$ bisect each other at right angles into four congruent right triangles:
-   - $\left(\frac{d_1}{2}\right)^2 + \left(\frac{d_2}{2}\right)^2 = s^2$.
-3. Substitute $d_1 = 40.0\text{ cm} \implies \frac{d_1}{2} = 20.0\text{ cm}$ and $s = 25.0\text{ cm}$:
-   - $(20.0)^2 + \left(\frac{d_2}{2}\right)^2 = (25.0)^2$.
-   - $400.0 + \left(\frac{d_2}{2}\right)^2 = 625.0$.
-4. Solve for $d_2$:
-   - $\left(\frac{d_2}{2}\right)^2 = 625.0 - 400.0 = 225.0$.
-   - $\frac{d_2}{2} = \sqrt{225.0} = 15.0\text{ cm} \implies d_2 = 2 \times 15.0 = 30.0\text{ cm}$.
-5. Compute the area of the rhombus ($A = \frac{1}{2} d_1 d_2$):
-   - $A = \frac{1}{2} \times 40.0 \times 30.0 = 20.0 \times 30.0 = 600.0\text{ cm}^2$.
+ - The diagonals d₁ and d₂ bisect each other at right angles into four congruent right triangles:
+ - (d₁/2)² + (d₂/2)² = s².
+3. Substitute d₁ = 40.0 cm implies d₁/2 = 20.0 cm and s = 25.0 cm:
+ - (20.0)² + (d₂/2)² = (25.0)².
+ - 400.0 + (d₂/2)² = 625.0.
+4. Solve for d₂:
+ - (d₂/2)² = 625.0 - 400.0 = 225.0.
+ - d₂/2 = √225.0 = 15.0 cm implies d₂ = 2 × 15.0 = 30.0 cm.
+5. Compute the area of the rhombus (A = 1/2 d₁ d₂):
+ - A = 1/2 × 40.0 × 30.0 = 20.0 × 30.0 = 600.0 cm².
 
-Common Trap: Forgetting to multiply half-diagonal 15 by 2 ($d_2 = 15$) or multiplying diagonals without dividing by 2 ($40 \times 30 = 1,200$).
-Exam Tip: Pythagorean triple $15-20-25 \implies d_2 = 2(15) = 30.0\text{ cm} \implies \text{Area} = \frac{1}{2}(40)(30) = 600.0\text{ cm}^2$.","Correct. Survives elimination because half-diagonals are 20 cm and 15 cm (hypotenuse 25 cm), giving second diagonal 30.0 cm and area 600.0 cm^2.","Eliminated because 35.0 cm diagonal yields side length 26.5 cm != 25 cm.","Eliminated because 28.0 cm diagonal yields side length 24.4 cm.","Eliminated because 32.0 cm diagonal yields side length 25.6 cm.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
-"A secure government storage warehouse has interior floor dimensions of 30.0 meters by 20.0 meters and a clear ceiling height of 6.0 meters. If all four interior vertical walls and the ceiling are to be coated with protective paint (excluding the floor surface), what is the total surface area to be painted in square meters?","1,200.0 m²","1,800.0 m²","1,000.0 m²","1,400.0 m²","A","Step-by-Step Solution:
+Common Trap: Forgetting to multiply half-diagonal 15 by 2 (d₂ = 15) or multiplying diagonals without dividing by 2 (40 × 30 = 1,200).
+Exam Tip: Pythagorean triple 15-20-25 implies d₂ = 2(15) = 30.0 cm implies Area = 1/2(40)(30) = 600.0 cm².","Correct. Survives elimination because half-diagonals are 20 cm and 15 cm (hypotenuse 25 cm), giving second diagonal 30.0 cm and area 600.0 cm².","Eliminated because 35.0 cm diagonal yields side length 26.5 cm!= 25 cm.","Eliminated because 28.0 cm diagonal yields side length 24.4 cm.","Eliminated because 32.0 cm diagonal yields side length 25.6 cm.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+"A secure government storage warehouse has interior floor dimensions of 30.0 meters by 20.0 meters and a clear ceiling height of 6.0 meters. If all four interior vertical walls and the ceiling are to be coated with protective pa∫ (excluding the floor surface), what is the total surface area to be painted in square meters?","1,200.0 m²","1,800.0 m²","1,000.0 m²","1,400.0 m²","A","Step-by-Step Solution:
 1. Compute the surface area of the ceiling:
-   - $\text{Ceiling Area} = \text{Length} \times \text{Width} = 30.0\text{ m} \times 20.0\text{ m} = 600.0\text{ m}^2$.
+ - Ceiling Area = Length × Width = 30.0 m × 20.0 m = 600.0 m².
 2. Compute the combined surface area of the 4 vertical walls (Lateral Surface Area):
-   - $\text{Lateral Area} = 2(\text{Length} + \text{Width}) \times \text{Height}$.
-   - $\text{Lateral Area} = 2(30.0 + 20.0) \times 6.0 = 2(50.0) \times 6.0 = 100.0 \times 6.0 = 600.0\text{ m}^2$.
+ - Lateral Area = 2(Length + Width) × Height.
+ - Lateral Area = 2(30.0 + 20.0) × 6.0 = 2(50.0) × 6.0 = 100.0 × 6.0 = 600.0 m².
 3. Sum the areas to be painted (Ceiling + 4 Walls):
-   - $\text{Total Area to Paint} = \text{Ceiling Area} + \text{Lateral Area} = 600.0\text{ m}^2 + 600.0\text{ m}^2 = 1,200.0\text{ m}^2$.
-4. (Note: Total 6-sided surface area including floor would be $1,200 + 600 = 1,800.0\text{ m}^2$).
+ - Total Area to Pa∫ = Ceiling Area + Lateral Area = 600.0 m² + 600.0 m² = 1,200.0 m².
+4. (Note: Total 6-sided surface area including floor would be 1,200 + 600 = 1,800.0 m²).
 
-Common Trap: Including the floor surface ($1,800.0\text{ m}^2$, Option B) when the problem explicitly specifies excluding the floor.
-Exam Tip: $\text{Paint Area} = LW + 2(L+W)H = 600 + 600 = 1,200.0\text{ m}^2$.","Correct. Survives elimination because ceiling area is 600 m^2 and lateral wall area is 600 m^2, totaling 1,200.0 m^2 excluding floor.","Eliminated because 1,800.0 m^2 includes the floor.","Eliminated because 1,000.0 m^2 is an underestimate.","Eliminated because 1,400.0 m^2 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"
+Common Trap: Including the floor surface (1,800.0 m², Option B) when the problem explicitly specifies excluding the floor.
+Exam Tip: Pa∫ Area = LW + 2(L+W)H = 600 + 600 = 1,200.0 m².","Correct. Survives elimination because ceiling area is 600 m² and lateral wall area is 600 m², totaling 1,200.0 m² excluding floor.","Eliminated because 1,800.0 m² includes the floor.","Eliminated because 1,000.0 m² is an underestimate.","Eliminated because 1,400.0 m² is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Algebraic & Geometric Word Problems | Perimeter/area/volume | Very Difficult | Batch 053"

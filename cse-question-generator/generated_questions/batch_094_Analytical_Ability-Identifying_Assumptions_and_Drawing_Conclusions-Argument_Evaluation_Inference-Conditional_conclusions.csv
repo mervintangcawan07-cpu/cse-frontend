@@ -1,175 +1,175 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Passage: Under national disaster risk reduction protocols: (1) If a tropical storm reaches Signal No. 3, all government offices in the affected province are automatically suspended. (2) If government offices are suspended, the provincial disaster command center activates Level Red Emergency Response. (3) If Level Red Emergency Response is activated, all municipal rescue vehicles must be deployed to flood-prone river basins. Assuming all protocols are strictly followed, which of the following is a logically necessary CONDITIONAL CONCLUSION?","If a tropical storm reaches Signal No. 3 in the province, all municipal rescue vehicles must be deployed to flood-prone river basins.","If municipal rescue vehicles are deployed to river basins, the tropical storm must have reached Signal No. 3.","If government offices are not suspended, no flood-prone river basins will experience flooding.","Level Red Emergency Response is activated exclusively during Signal No. 3 tropical storm events.","A","Step-by-Step Solution:
 1. Map the conditional premises into formal logic:
-   - Premise 1: $\text{Signal No. 3} \implies \text{Offices Suspended}$.
-   - Premise 2: $\text{Offices Suspended} \implies \text{Level Red Activated}$.
-   - Premise 3: $\text{Level Red Activated} \implies \text{Rescue Vehicles Deployed}$.
+ - Premise 1: Signal No. 3 implies Offices Suspended.
+ - Premise 2: Offices Suspended implies Level Red Activated.
+ - Premise 3: Level Red Activated implies Rescue Vehicles Deployed.
 2. Apply the Law of Hypothetical Syllogism (Transitivity):
-   - Chain: $\text{Signal No. 3} \implies \text{Offices Suspended} \implies \text{Level Red} \implies \text{Rescue Vehicles Deployed}$.
-   - Deductive Conclusion: $\text{Signal No. 3} \implies \text{Rescue Vehicles Deployed}$.
-   - Option A matches this exact transitive conditional deduction.
+ - Chain: Signal No. 3 implies Offices Suspended implies Level Red implies Rescue Vehicles Deployed.
+ - Deductive Conclusion: Signal No. 3 implies Rescue Vehicles Deployed.
+ - Option A matches this exact transitive conditional deduction.
 3. Evaluate incorrect alternatives:
-   - Option B: Affirms the consequent ($\text{Vehicles Deployed} \implies \text{Signal No. 3}$ is invalid; vehicles could be deployed for tsunamis or volcanic mudflows).
-   - Option C: Inverse fallacy and conflates administrative office status with weather flooding.
-   - Option D: Assumes biconditional exclusivity (\"exclusively\") unsupported by the one-way conditional premises.
+ - Option B: Affirms the consequent (Vehicles Deployed implies Signal No. 3 is invalid; vehicles could be deployed for tsunamis or volcanic mudflows).
+ - Option C: Inverse fallacy and conflates administrative office status with weather flooding.
+ - Option D: Assumes biconditional exclusivity (\""exclusively\"") unsupported by the one-way conditional premises.
 
 Common Trap: Reversing the direction of the conditional arrow (Option B).
-Exam Tip: Hypothetical Syllogism: If $A \implies B$ and $B \implies C$ and $C \implies D$, then $A \implies D$ is unconditionally valid.","Correct. Survives elimination because the chained conditional premises form an unbroken deductive link: Signal No. 3 -> Suspended Offices -> Level Red -> Vehicle Deployment.","Eliminated because inferring Signal No. 3 from vehicle deployment commits Affirming the Consequent.","Eliminated because river flooding can occur regardless of government office work status.","Eliminated because Level Red could be triggered by other non-storm emergencies.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: Hypothetical Syllogism: If A implies B and B implies C and C implies D, then A implies D is unconditionally valid.","Correct. Survives elimination because the chained conditional premises form an unbroken deductive link: Signal No. 3 -> Suspended Offices -> Level Red -> Vehicle Deployment.","Eliminated because inferring Signal No. 3 from vehicle deployment commits Affirming the Consequent.","Eliminated because river flooding can occur regardless of government office work status.","Eliminated because Level Red could be triggered by other non-storm emergencies.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
 "Passage: According to Commission on Audit guidelines: If a government agency fails to conduct competitive public bidding for an infrastructure project, the disbursement will be issued a Notice of Disallowance, UNLESS the project qualifies under statutory emergency procurement exemptions. Agency Alpha was issued a Notice of Disallowance for an infrastructure project disbursement. Which conditional conclusion is validly supported?","If Agency Alpha's infrastructure project was not exempt under statutory emergency procurement, it failed to conduct competitive public bidding.","If Agency Alpha conducted competitive bidding, it was guaranteed to qualify for an emergency exemption.","Agency Alpha's infrastructure project was guaranteed to be an emergency procurement project.","Notices of Disallowance are issued exclusively for competitive public bidding failures.","A","Step-by-Step Solution:
 1. Formalize the regulatory condition:
-   - Rule: $(\neg\text{Bidding} \land \neg\text{Emergency}) \implies \text{Disallowance}$.
-   - Given: Agency Alpha received a Notice of Disallowance.
+ - Rule: (negBidding land negEmergency) implies Disallowance.
+ - Given: Agency Alpha received a Notice of Disallowance.
 2. Analyze the conditional relationship under the disallowance rule:
-   - Under this specific auditing provision, disallowance arises when competitive bidding was omitted AND no emergency exemption existed.
-   - Therefore, if we assume the project did NOT qualify for an emergency exemption ($\neg\text{Emergency}$), the only condition triggering the disallowance under this rule is the failure to conduct competitive bidding ($\neg\text{Bidding}$).
-   - Option A accurately frames this conditional contrapositive deduction.
+ - Under this specific auditing provision, disallowance arises when competitive bidding was omitted AND no emergency exemption existed.
+ - Therefore, if we assume the project did NOT qualify for an emergency exemption (negEmergency), the only condition triggering the disallowance under this rule is the failure to conduct competitive bidding (negBidding).
+ - Option A accurately frames this conditional contrapositive deduction.
 3. Evaluate incorrect alternatives:
-   - Option B: Competitive bidding does not qualify someone for an emergency exemption.
-   - Option C: Being disallowed does not prove it was an emergency.
-   - Option D: Disallowances can be issued for many other violations (e.g., irregular, unnecessary, or unconscionable spending).
+ - Option B: Competitive bidding does not qualify someone for an emergency exemption.
+ - Option C: Being disallowed does not prove it was an emergency.
+ - Option D: Disallowances can be issued for many other violations (e.g., irregular, unnecessary, or unconscionable spending).
 
 Common Trap: Assuming disallowances only exist for bidding failures (Option D).
-Exam Tip: In rules with an \"unless\" clause, if the exception does not apply, the violation directly triggers the stated penalty.","Correct. Survives elimination because if the emergency exemption did not apply, the disallowance under this guideline confirms the omission of competitive bidding.","Eliminated because bidding compliance does not grant an emergency exemption.","Eliminated because a disallowance does not prove emergency status.","Eliminated because disallowances apply to a wide range of irregular or excessive expenditures.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: In rules with an \""unless\"" clause, if the exception does not apply, the violation directly triggers the stated penalty.","Correct. Survives elimination because if the emergency exemption did not apply, the disallowance under this guideline confirms the omission of competitive bidding.","Eliminated because bidding compliance does not grant an emergency exemption.","Eliminated because a disallowance does not prove emergency status.","Eliminated because disallowances apply to a wide range of irregular or excessive expenditures.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
 "Passage: A civil service rule specifies: An employee is eligible for the Outstanding Public Servant Award ONLY IF the employee receives an 'Outstanding' Individual Performance Commitment and Review (IPCR) rating for two consecutive semesters AND has zero pending administrative cases. Based on the rule, which of the following conditional statements is GUARANTEED to be true?","If Officer Javier has a pending administrative case, Officer Javier is not eligible for the Outstanding Public Servant Award.","If Officer Javier receives an 'Outstanding' IPCR rating for two consecutive semesters, Officer Javier is guaranteed to win the award.","If Officer Javier is not eligible for the award, Officer Javier must have a pending administrative case.","Having zero pending administrative cases is sufficient by itself to qualify for the award.","A","Step-by-Step Solution:
-1. Formalize the \"ONLY IF\" (Necessary Condition) rule:
-   - Structure: $A \text{ only if } (B \land C) \implies A \implies (B \land C)$.
-   - Here: $\text{Award Eligible} \implies (\text{2 Outstanding IPCRs} \land \text{0 Pending Cases})$.
+1. Formalize the \""ONLY IF\"" (Necessary Condition) rule:
+ - Structure: A only if (B land C) implies A implies (B land C).
+ - Here: Award Eligible implies (2 Outstanding IPCRs land 0 Pending Cases).
 2. Apply Contrapositive Deduction:
-   - Contrapositive: $\neg(B \land C) \implies \neg A$.
-   - De Morgan's Law: $(\neg B \lor \neg C) \implies \neg A$.
-   - Breakdown: (Lacks 2 Outstanding IPCRs OR Has a Pending Case) $\implies$ NOT Eligible.
+ - Contrapositive: neg(B land C) implies neg A.
+ - De Morgan's Law: (neg B lor neg C) implies neg A.
+ - Breakdown: (Lacks 2 Outstanding IPCRs OR Has a Pending Case) implies NOT Eligible.
 3. Match with answer choices:
-   - If Officer Javier has a pending administrative case ($\neg C$), then Javier is NOT eligible ($\neg A$).
-   - Option A is a mathematically and logically flawless contrapositive deduction!
+ - If Officer Javier has a pending administrative case (neg C), then Javier is NOT eligible (neg A).
+ - Option A is a mathematically and logically flawless contrapositive deduction!
 4. Evaluate incorrect alternatives:
-   - Option B: Confuses a necessary condition with a sufficient guarantee.
-   - Option C: Ineligibility could be caused by poor IPCRs, not necessarily a pending case.
-   - Option D: Zero cases is necessary, not sufficient on its own.
+ - Option B: Confuses a necessary condition with a sufficient guarantee.
+ - Option C: Ineligibility could be caused by poor IPCRs, not necessarily a pending case.
+ - Option D: Zero cases is necessary, not sufficient on its own.
 
-Common Trap: Confusing \"Only If\" (Necessary) with \"If\" (Sufficient).
-Exam Tip: \"A only if B\" means $A \implies B$. The contrapositive is \"Not B implies Not A\". Failing ANY necessary condition guarantees non-eligibility.","Correct. Survives elimination because having a pending case violates a mandatory prerequisite, guaranteeing ineligibility via contrapositive deduction.","Eliminated because meeting the IPCR requirement is only necessary, not a sufficient guarantee to win the award.","Eliminated because ineligibility could be caused by substandard IPCR ratings.","Eliminated because zero pending cases is only one of two mandatory conditions.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Common Trap: Confusing \""Only If\"" (Necessary) with \""If\"" (Sufficient).
+Exam Tip: \""A only if B\"" means A implies B. The contrapositive is \""Not B implies Not A\"". Failing ANY necessary condition guarantees non-eligibility.","Correct. Survives elimination because having a pending case violates a mandatory prerequisite, guaranteeing ineligibility via contrapositive deduction.","Eliminated because meeting the IPCR requirement is only necessary, not a sufficient guarantee to win the award.","Eliminated because ineligibility could be caused by substandard IPCR ratings.","Eliminated because zero pending cases is only one of two mandatory conditions.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
 "Passage: Consider the following policy framework: (1) If national inflation exceeds 6%, the central bank raises the benchmark policy interest rate. (2) If the central bank raises the benchmark policy rate, commercial mortgage lending rates increase. (3) Commercial mortgage lending rates did NOT increase during the second quarter. Which conditional conclusion MUST be true?","If the central bank adhered to its policy framework, national inflation did not exceed 6% during the second quarter.","National inflation exceeded 8% during the second quarter.","The central bank will lower commercial mortgage lending rates in the third quarter.","Commercial banking institutions suffered severe liquidity shortages during the second quarter.","A","Step-by-Step Solution:
 1. Map the conditional premises:
-   - Premise 1: $I > 6\% \implies \text{Raise Rate}$.
-   - Premise 2: $\text{Raise Rate} \implies \text{Mortgage Rates Increase}$.
-   - Chained Statement: $I > 6\% \implies \text{Mortgage Rates Increase}$.
+ - Premise 1: I > 6% implies Raise Rate.
+ - Premise 2: Raise Rate implies Mortgage Rates Increase.
+ - Chained Statement: I > 6% implies Mortgage Rates Increase.
 2. Introduce the factual negation:
-   - Fact: Mortgage rates did NOT increase ($\neg\text{Mortgage Rates Increase}$).
+ - Fact: Mortgage rates did NOT increase (negMortgage Rates Increase).
 3. Apply Modus Tollens (Denial of the Consequent):
-   - Form: If $P \implies Q$ and $\neg Q$, then $\neg P$.
-   - Deduce: $\neg(I > 6\%) \implies I \le 6\%$ (Inflation did NOT exceed 6%).
+ - Form: If P implies Q and neg Q, then neg P.
+ - Deduce: neg(I > 6%) implies I ≤ 6% (Inflation did NOT exceed 6%).
 4. Conclude:
-   - Option A is the precise Modus Tollens deduction.
+ - Option A is the precise Modus Tollens deduction.
 5. Evaluate incorrect alternatives:
-   - Option B: Directly contradicts Modus Tollens ($I \le 6\%$).
-   - Option C: Future third-quarter rate cuts are unmentioned.
-   - Option D: Liquidity shortages are unsupported speculation.
+ - Option B: Directly contradicts Modus Tollens (I ≤ 6%).
+ - Option C: Future third-quarter rate cuts are unmentioned.
+ - Option D: Liquidity shortages are unsupported speculation.
 
 Common Trap: Guessing third-quarter future policy actions instead of applying Modus Tollens to the second-quarter data.
-Exam Tip: Modus Tollens: If $P \implies Q$, then $\neg Q \implies \neg P$. If the final outcome didn't happen, the initial trigger didn't happen.","Correct. Survives elimination because if mortgage rates did not increase, Modus Tollens proves that the initial trigger (inflation exceeding 6%) did not occur.","Eliminated because inflation exceeding 8% contradicts the proven Modus Tollens result ($I \le 6\%$).","Eliminated because third-quarter monetary policy is unstated speculation.","Eliminated because bank liquidity shortages are unmentioned.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: Modus Tollens: If P implies Q, then neg Q implies neg P. If the final outcome didn't happen, the initial trigger didn't happen.","Correct. Survives elimination because if mortgage rates did not increase, Modus Tollens proves that the initial trigger (inflation exceeding 6%) did not occur.","Eliminated because inflation exceeding 8% contradicts the proven Modus Tollens result (I ≤ 6%).","Eliminated because third-quarter monetary policy is unstated speculation.","Eliminated because bank liquidity shortages are unmentioned.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
 "Passage: In an automated public document authentication system: An applicant's document verification is approved if and only if the biometric facial scan matches the national registry AND the applicant has no active court-issued hold-departure order. Applicant Mendoza's document verification was rejected by the system. Which conditional statement MUST be true?","If Applicant Mendoza's biometric facial scan matched the national registry, Mendoza must have an active court-issued hold-departure order.","Applicant Mendoza's biometric facial scan definitely failed to match the national registry.","Applicant Mendoza is legally prohibited from ever applying for document verification in the future.","Hold-departure orders are issued exclusively to individuals with biometric match errors.","A","Step-by-Step Solution:
 1. Formalize the biconditional rule:
-   - $\text{Approved} \iff (\text{Biometric Match} \land \text{No Hold-Departure Order})$.
+ - Approved iff (Biometric Match land No Hold-Departure Order).
 2. Apply the given outcome:
-   - System Outcome: Verification was REJECTED ($\neg\text{Approved}$).
+ - System Outcome: Verification was REJECTED (negApproved).
 3. Analyze the negation of the conjunctive conditions:
-   - $\neg(\text{Biometric Match} \land \text{No Hold-Departure Order}) \equiv (\neg\text{Biometric Match} \lor \text{Active Hold-Departure Order})$.
+ - neg(Biometric Match land No Hold-Departure Order) ≡ (negBiometric Match lor Active Hold-Departure Order).
 4. Convert the disjunction to conditional form (Material Implication):
-   - $(P \lor Q) \equiv (\neg P \implies Q)$.
-   - Here: $\text{Biometric Match} \implies \text{Active Hold-Departure Order}$.
-   - Meaning: If the facial scan successfully matched ($\text{Biometric Match}$), the rejection MUST have been triggered by an active hold-departure order!
+ - (P lor Q) ≡ (neg P implies Q).
+ - Here: Biometric Match implies Active Hold-Departure Order.
+ - Meaning: If the facial scan successfully matched (Biometric Match), the rejection MUST have been triggered by an active hold-departure order!
 5. Conclude:
-   - Option A is a deductively certain conditional statement.
+ - Option A is a deductively certain conditional statement.
 6. Evaluate incorrect alternatives:
-   - Option B: We cannot be certain it was a biometric failure; it could have been a hold-departure order.
-   - Option C: Permanent lifetime bans are unsupported.
-   - Option D: Court orders are independent of biometric errors.
+ - Option B: We cannot be certain it was a biometric failure; it could have been a hold-departure order.
+ - Option C: Permanent lifetime bans are unsupported.
+ - Option D: Court orders are independent of biometric errors.
 
 Common Trap: Claiming definitely that biometrics failed (Option B) when the failure could have been the legal hold order.
-Exam Tip: In an \"A AND B\" approval system, if rejected and A was satisfied, then B must have failed.","Correct. Survives elimination because in a dual-requirement system, if the biometric match was verified, the rejection must conditionally stem from the active hold order.","Eliminated because rejection could be caused entirely by a hold-departure order while the biometric scan was successful.","Eliminated because permanent lifetime bans are unsupported.","Eliminated because court orders are legally independent of biometric software errors.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: In an \""A AND B\"" approval system, if rejected and A was satisfied, then B must have failed.","Correct. Survives elimination because in a dual-requirement system, if the biometric match was verified, the rejection must conditionally stem from the active hold order.","Eliminated because rejection could be caused entirely by a hold-departure order while the biometric scan was successful.","Eliminated because permanent lifetime bans are unsupported.","Eliminated because court orders are legally independent of biometric software errors.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
 "Passage: Under the Local Government Code: If a municipality reaches a population of 250,000 AND an annual local income of at least PHP 100 million, it may be converted into a Highly Urbanized City (HUC). If a municipality is converted into an HUC, it becomes administratively independent from the provincial government. Which conditional conclusion VALIDLY follows?","If a municipality is not administratively independent from the provincial government, it was not converted into a Highly Urbanized City.","If a municipality generates an annual local income of PHP 100 million, it is automatically converted into an HUC.","Any municipality with 250,000 residents is administratively independent of the provincial government.","All provinces in the Philippines contain at least one Highly Urbanized City.","A","Step-by-Step Solution:
 1. Isolate the key conditional premise linking HUC status to provincial independence:
-   - Premise: $\text{Converted to HUC} \implies \text{Administratively Independent of Province}$.
+ - Premise: Converted to HUC implies Administratively Independent of Province.
 2. Formulate the Contrapositive:
-   - Contrapositive rule: $P \implies Q \equiv \neg Q \implies \neg P$.
-   - Contrapositive deduction: $\neg\text{Administratively Independent} \implies \neg\text{Converted to HUC}$.
-   - In words: If a municipality is NOT administratively independent of the province, it was NOT converted into an HUC.
+ - Contrapositive rule: P implies Q ≡ neg Q implies neg P.
+ - Contrapositive deduction: negAdministratively Independent implies negConverted to HUC.
+ - In words: If a municipality is NOT administratively independent of the province, it was NOT converted into an HUC.
 3. Match with answer choices:
-   - Option A is the exact contrapositive statement, which is logically equivalent and 100% valid.
+ - Option A is the exact contrapositive statement, which is logically equivalent and 100% valid.
 4. Evaluate incorrect alternatives:
-   - Option B: Income is only one prerequisite, and conversion is permissive (\"may\"), not automatic.
-   - Option C: Population alone does not make a town independent without income and formal conversion.
-   - Option D: Provincial HUC distribution is unmentioned.
+ - Option B: Income is only one prerequisite, and conversion is permissive (\""may\""), not automatic.
+ - Option C: Population alone does not make a town independent without income and formal conversion.
+ - Option D: Provincial HUC distribution is unmentioned.
 
 Common Trap: Believing income alone guarantees conversion (Option B).
-Exam Tip: The contrapositive of any true conditional statement is always logically valid: $(\text{HUC} \implies \text{Independent}) \equiv (\text{Not Independent} \implies \text{Not HUC})$.","Correct. Survives elimination because the contrapositive of \"HUC -> Administratively Independent\" is \"Not Independent -> Not an HUC\", which is logically airtight.","Eliminated because income alone is not sufficient, and conversion is discretionary rather than automatic.","Eliminated because population alone does not grant independence without income and formal HUC conversion.","Eliminated because provincial distribution of HUCs is unstated.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: The contrapositive of any true conditional statement is always logically valid: (HUC implies Independent) ≡ (Not Independent implies Not HUC).","Correct. Survives elimination because the contrapositive of \""HUC -> Administratively Independent\"" is \""Not Independent -> Not an HUC\","which is logically airtight.""","Eliminated because income alone is not sufficient, and conversion is discretionary rather than automatic.","Eliminated because population alone does not grant independence without income and formal HUC conversion.","Eliminated because provincial distribution of HUCs is unstated.","Analytical Ability"
 "Passage: A municipal building code stipulates: A building construction permit will be issued provided that the architectural design complies with zoning density limits, earthquake seismic resilience standards, and fire exit spacing regulations. Architect Dela Rosa's design complies with zoning density limits and earthquake seismic standards, but fails to satisfy fire exit spacing regulations. What is the valid CONDITIONAL CONCLUSION?","If municipal building code regulations are strictly enforced, Architect Dela Rosa will not be issued a building construction permit for the current design.","Architect Dela Rosa will be granted a permanent exemption from municipal fire exit standards.","The municipal zoning board will lower fire exit spacing requirements for all future commercial designs.","Earthquakes pose zero structural hazard to Architect Dela Rosa's proposed building design.","A","Step-by-Step Solution:
 1. Examine the mandatory conditions for permit issuance:
-   - Prerequisite 1: Zoning density compliance.
-   - Prerequisite 2: Seismic resilience compliance.
-   - Prerequisite 3: Fire exit spacing compliance.
+ - Prerequisite 1: Zoning density compliance.
+ - Prerequisite 2: Seismic resilience compliance.
+ - Prerequisite 3: Fire exit spacing compliance.
 2. Evaluate the architect's design:
-   - Satisfies Prerequisite 1 (Zoning: Compliant).
-   - Satisfies Prerequisite 2 (Seismic: Compliant).
-   - FAILS Prerequisite 3 (Fire Exit: Non-compliant).
+ - Satisfies Prerequisite 1 (Zoning: Compliant).
+ - Satisfies Prerequisite 2 (Seismic: Compliant).
+ - FAILS Prerequisite 3 (Fire Exit: Non-compliant).
 3. Formulate the conditional conclusion:
-   - If the code is strictly enforced, the failure of Prerequisite 3 prevents the issuance of a construction permit for this design.
-   - Option A is a direct, unavoidable conditional deduction.
+ - If the code is strictly enforced, the failure of Prerequisite 3 prevents the issuance of a construction permit for this design.
+ - Option A is a direct, unavoidable conditional deduction.
 4. Evaluate incorrect alternatives:
-   - Option B: Exemptions are unmentioned and illegal for life-safety codes.
-   - Option C: Lowering standards for future applicants is unsupported speculation.
-   - Option D: Seismic compliance reduces risk, but does not make a building 100% hazard-free.
+ - Option B: Exemptions are unmentioned and illegal for life-safety codes.
+ - Option C: Lowering standards for future applicants is unsupported speculation.
+ - Option D: Seismic compliance reduces risk, but does not make a building 100% hazard-free.
 
 Common Trap: Assuming meeting 2 out of 3 standards is enough to receive a permit.
-Exam Tip: When multiple requirements are linked by \"AND\", failing even one requirement strictly prevents permit issuance under full enforcement.","Correct. Survives elimination because failing the mandatory fire exit requirement means that, under strict enforcement, a construction permit cannot be issued.","Eliminated because permanent fire safety exemptions are unsupported and violate building codes.","Eliminated because altering future municipal regulations is speculative.","Eliminated because seismic compliance does not eliminate all natural disaster hazards.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+Exam Tip: When multiple requirements are linked by \""AND\","failing even one requirement strictly prevents permit issuance under full enforcement.""","Correct. Survives elimination because failing the mandatory fire exit requirement means that, under strict enforcement, a construction permit cannot be issued.","Eliminated because permanent fire safety exemptions are unsupported and violate building codes.","Eliminated because altering future municipal regulations is speculative.","Eliminated because seismic compliance does not eliminate all natural disaster hazards.","Analytical Ability"
 "Passage: A cybersecurity protocol specifies: If an agency server experiences an unauthorized data breach, the Data Protection Officer (DPO) must notify the National Privacy Commission (NPC) within 72 hours. If the NPC is notified within 72 hours, an independent technical forensic audit is initiated. Assuming full compliance with the protocol, which conditional statement is TRUE?","If an agency server experiences an unauthorized data breach, an independent technical forensic audit will be initiated.","If an independent technical forensic audit is initiated, an unauthorized data breach must have occurred.","If no unauthorized data breach occurs, no scheduled server maintenance can be performed.","Independent technical forensic audits are conducted exclusively during data breach investigations.","A","Step-by-Step Solution:
 1. Map the conditional chain:
-   - Step 1: $\text{Unauthorized Data Breach} \implies \text{Notify NPC within 72 Hours}$.
-   - Step 2: $\text{Notify NPC within 72 Hours} \implies \text{Forensic Audit Initiated}$.
+ - Step 1: Unauthorized Data Breach implies Notify NPC within 72 Hours.
+ - Step 2: Notify NPC within 72 Hours implies Forensic Audit Initiated.
 2. Apply Hypothetical Syllogism (Transitivity):
-   - Chain: $\text{Data Breach} \implies \text{Notify NPC} \implies \text{Forensic Audit}$.
-   - Deduce: $\text{Data Breach} \implies \text{Forensic Audit Initiated}$.
-   - Option A directly matches this transitive deduction.
+ - Chain: Data Breach implies Notify NPC implies Forensic Audit.
+ - Deduce: Data Breach implies Forensic Audit Initiated.
+ - Option A directly matches this transitive deduction.
 3. Evaluate incorrect alternatives:
-   - Option B: Affirming the Consequent ($\text{Audit} \implies \text{Breach}$ is invalid; audits can be conducted for ISO certification or routine compliance).
-   - Option C: Scheduled maintenance is unrelated to data breaches.
-   - Option D: Absolutist claim (\"exclusively\") unsupported by the one-way conditional rule.
+ - Option B: Affirming the Consequent (Audit implies Breach is invalid; audits can be conducted for ISO certification or routine compliance).
+ - Option C: Scheduled maintenance is unrelated to data breaches.
+ - Option D: Absolutist claim (\""exclusively\"") unsupported by the one-way conditional rule.
 
 Common Trap: Assuming forensic audits can only ever occur after data breaches (Option D).
-Exam Tip: $A \implies B$ and $B \implies C$ guarantees $A \implies C$. The converse ($C \implies A$) is NOT logically guaranteed.","Correct. Survives elimination because the transitive chain of conditional requirements directly establishes that a data breach triggers an independent forensic audit.","Eliminated because inferring a breach from an audit commits the fallacy of Affirming the Consequent.","Eliminated because routine server maintenance is unrelated to data breach protocols.","Eliminated because forensic audits can be initiated for routine security or certification purposes.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
-"Passage: An environmental regulation specifies: A manufacturing plant is subject to an immediate cease-and-desist closure order IF its smokestack sulfur dioxide emissions exceed 500 ppm OR its industrial wastewater Chemical Oxygen Demand (COD) exceeds 200 mg/L. Plant Z was NOT issued a cease-and-desist closure order under this regulation. Assuming the regulation was strictly enforced, what can be CONDITIONALLY concluded?","If Plant Z operated in full compliance with the regulation, its sulfur dioxide emissions did not exceed 500 ppm AND its wastewater COD did not exceed 200 mg/L.","Plant Z's smokestack sulfur dioxide emissions were measured at exactly 0 ppm.","Plant Z generates zero industrial wastewater.","Cease-and-desist orders are issued exclusively to chemical manufacturing plants.","A","Step-by-Step Solution:
+Exam Tip: A implies B and B implies C guarantees A implies C. The converse (C implies A) is NOT logically guaranteed.","Correct. Survives elimination because the transitive chain of conditional requirements directly establishes that a data breach triggers an independent forensic audit.","Eliminated because inferring a breach from an audit commits the fallacy of Affirming the Consequent.","Eliminated because routine server maintenance is unrelated to data breach protocols.","Eliminated because forensic audits can be initiated for routine security or certification purposes.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+"Passage: An environmental regulation specifies: A manufacturing plant is subject to an immediate cease-and-desist closure order IF its smokestack sulfur dioxide emissions exceed 500 p± OR its industrial wastewater Chemical Oxygen Demand (COD) exceeds 200 mg/L. Plant Z was NOT issued a cease-and-desist closure order under this regulation. Assuming the regulation was strictly enforced, what can be CONDITIONALLY concluded?","If Plant Z operated in full compliance with the regulation, its sulfur dioxide emissions did not exceed 500 p± AND its wastewater COD did not exceed 200 mg/L.","Plant Z's smokestack sulfur dioxide emissions were measured at exactly 0 p±.","Plant Z generates zero industrial wastewater.","Cease-and-desist orders are issued exclusively to chemical manufacturing plants.","A","Step-by-Step Solution:
 1. Formalize the disjunctive trigger for closure:
-   - Rule: $(\text{SO}_2 > 500 \lor \text{COD} > 200) \implies \text{Closure Order}$.
+ - Rule: (SO₂ > 500 lor COD > 200) implies Closure Order.
 2. Apply the given outcome:
-   - Plant Z received NO closure order ($\neg\text{Closure Order}$).
+ - Plant Z received NO closure order (negClosure Order).
 3. Derive the Contrapositive using De Morgan's Laws:
-   - Contrapositive: $\neg\text{Closure Order} \implies \neg(\text{SO}_2 > 500 \lor \text{COD} > 200)$.
-   - De Morgan's Law: $\neg(P \lor Q) \equiv (\neg P \land \neg Q)$.
-   - Deduction: $(\text{SO}_2 \le 500) \land (\text{COD} \le 200)$.
-   - Meaning: Both sulfur dioxide emissions were $\le 500\text{ ppm}$ AND wastewater COD was $\le 200\text{ mg/L}$.
+ - Contrapositive: negClosure Order implies neg(SO₂ > 500 lor COD > 200).
+ - De Morgan's Law: neg(P lor Q) ≡ (neg P land neg Q).
+ - Deduction: (SO₂ ≤ 500) land (COD ≤ 200).
+ - Meaning: Both sulfur dioxide emissions were ≤ 500 p± AND wastewater COD was ≤ 200 mg/L.
 4. Conclude:
-   - Option A captures this exact dual conjunction.
+ - Option A captures this exact dual conjunction.
 5. Evaluate incorrect alternatives:
-   - Option B: Emissions must be $\le 500$, not necessarily 0.
-   - Option C: Wastewater can exist, as long as $\text{COD} \le 200\text{ mg/L}$.
-   - Option D: The rule applies to any manufacturing plant, not exclusively chemical plants.
+ - Option B: Emissions must be ≤ 500, not necessarily 0.
+ - Option C: Wastewater can exist, as long as COD ≤ 200 mg/L.
+ - Option D: The rule applies to any manufacturing plant, not exclusively chemical plants.
 
-Common Trap: Forgetting that the negation of an \"OR\" statement becomes an \"AND\" statement ($\neg(P \lor Q) \equiv \neg P \land \neg Q$).
-Exam Tip: When either violation triggers a penalty, avoiding the penalty means avoiding BOTH violations simultaneously.","Correct. Survives elimination because avoiding a closure order triggered by either violation means Plant Z must have satisfied both conditions (SO2 <= 500 ppm AND COD <= 200 mg/L).","Eliminated because emissions need only stay within the 500 ppm limit, not be exactly zero.","Eliminated because wastewater is permitted provided COD does not exceed 200 mg/L.","Eliminated because the regulation applies to all manufacturing plants, not exclusively chemical facilities.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
-"Passage: Under civil service promotion rules: If a candidate achieves the highest rating in the promotional examination, the candidate is placed on the promotion shortlist. If a candidate is placed on the promotion shortlist, the appointing authority may legally select that candidate for the vacant position. Candidate Tan achieved the highest rating in the promotional examination. Which of the following is a VALID CONDITIONAL CONCLUSION?","If standard promotional rules are followed, Candidate Tan is legally eligible for selection by the appointing authority for the vacant position.","The appointing authority is legally mandated to appoint Candidate Tan to the vacant position.","Candidate Tan is the only applicant qualified for public employment in the department.","If Candidate Tan is appointed, all other shortlisted applicants will be terminated from government service.","A","Step-by-Step Solution:
+Common Trap: Forgetting that the negation of an \""OR\"" statement becomes an \""AND\"" statement (neg(P lor Q) ≡ neg P land neg Q).
+Exam Tip: When either violation triggers a penalty, avoiding the penalty means avoiding BOTH violations simultaneously.","Correct. Survives elimination because avoiding a closure order triggered by either violation means Plant Z must have satisfied both conditions (SO2 <= 500 p± AND COD <= 200 mg/L).","Eliminated because emissions need only stay within the 500 p± limit, not be exactly zero.","Eliminated because wastewater is permitted provided COD does not exceed 200 mg/L.","Eliminated because the regulation applies to all manufacturing plants, not exclusively chemical facilities.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"
+"Passage: Under civil service promotion rules: If a candidate achieves the highest rating in the promotional examination, the candidate is placed on the promotion shortlist. If a candidate is placed on the promotion shortlist, the appointing authority may legally select that candidate for the vacant position. Candidate Tan achieved the highest rating in the promotional examination. Which of the following is a VALID CONDITIONAL CONCLUSION?","If standard promotional rules are followed, Candidate Tan is legally eligible for selection by the appointing authority for the vacant position.","The appointing authority is legally mandated to appo∫ Candidate Tan to the vacant position.","Candidate Tan is the only applicant qualified for public employment in the department.","If Candidate Tan is appointed, all other shortlisted applicants will be terminated from government service.","A","Step-by-Step Solution:
 1. Trace Candidate Tan's path through the promotional conditions:
-   - Premise 1: $\text{Highest Exam Rating} \implies \text{Placed on Shortlist}$.
-   - Premise 2: $\text{Placed on Shortlist} \implies \text{Appointing Authority May Select Candidate}$.
-   - Fact: Candidate Tan achieved the highest exam rating.
+ - Premise 1: Highest Exam Rating implies Placed on Shortlist.
+ - Premise 2: Placed on Shortlist implies Appointing Authority May Select Candidate.
+ - Fact: Candidate Tan achieved the highest exam rating.
 2. Deduce Tan's status:
-   - Step 1: Tan is placed on the shortlist.
-   - Step 2: Because Tan is on the shortlist, the appointing authority may legally select Tan for appointment.
-   - Tan is officially and legally eligible for selection.
-   - Option A accurately expresses this permissive conditional outcome.
+ - Step 1: Tan is placed on the shortlist.
+ - Step 2: Because Tan is on the shortlist, the appointing authority may legally select Tan for appointment.
+ - Tan is officially and legally eligible for selection.
+ - Option A accurately expresses this permissive conditional outcome.
 3. Evaluate incorrect alternatives:
-   - Option B: Appointing authority has discretion (\"may select\"); appointment is not legally mandated.
-   - Option C: Other candidates on the shortlist are also qualified.
-   - Option D: Non-selection does not mean termination from existing public employment.
+ - Option B: Appointing authority has discretion (\""may select\""); appointment is not legally mandated.
+ - Option C: Other candidates on the shortlist are also qualified.
+ - Option D: Non-selection does not mean termination from existing public employment.
 
-Common Trap: Confusing permissive authority (\"may select\") with a mandatory directive (\"must appoint\").
+Common Trap: Confusing permissive authority (\""may select\"") with a mandatory directive (\""must appo∫\"").
 Exam Tip: Executive discretion: Being placed on a shortlist confers legal eligibility for appointment, not an automatic guarantee of appointment.","Correct. Survives elimination because achieving the highest score places Tan on the shortlist, thereby establishing legal eligibility for selection by the appointing authority.","Eliminated because the appointing authority exercises discretionary choice among shortlisted candidates and is not mandated to select the top scorer.","Eliminated because other shortlisted applicants are also qualified.","Eliminated because failing to win a promotion does not cause termination of existing employment.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Conditional conclusions | Very Difficult | Batch 094"

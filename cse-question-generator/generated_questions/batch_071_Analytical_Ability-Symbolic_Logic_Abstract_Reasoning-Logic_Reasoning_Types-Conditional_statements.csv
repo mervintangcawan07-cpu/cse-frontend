@@ -1,163 +1,160 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"In formal symbolic logic, the statutory statement: \"Passing the Civil Service Examination ($P$) is a NECESSARY condition for securing permanent government appointment ($S$)\" is correctly represented by which propositional formula?","S \implies P \text{ (or } \neg P \implies \neg S\text{)}","P \implies S","P \land S","P \lor S","A","Step-by-Step Solution:
-1. Analyze the formal definition of a \"Necessary Condition\":
-   - If $A$ is necessary for $B$, it means that $B$ cannot possibly occur or hold true without $A$ also holding true.
-   - Therefore, if $B$ occurs, $A$ MUST have occurred: $B \implies A$.
-   - The contrapositive expresses the necessity directly: $\neg A \implies \neg B$ (\"Without $A$, no $B$\").
+"In formal symbolic logic, the statutory statement: \""Passing the Civil Service Examination (P) is a NECESSARY condition for securing permanent government appointment (S)\"" is correctly represented by which propositional formula?","S implies P (or neg P implies neg S)","P implies S","P land S","P lor S","A","Step-by-Step Solution:
+1. Analyze the formal definition of a \""Necessary Condition\"":
+ - If A is necessary for B, it means that B cannot possibly occur or hold true without A also holding true.
+ - Therefore, if B occurs, A MUST have occurred: B implies A.
+ - The contrapositive expresses the necessity directly: neg A implies neg B (\""Without A, no B\"").
 2. Apply to the variables:
-   - $P$ = Passing the examination (the necessary condition / prerequisite).
-   - $S$ = Securing permanent appointment.
-   - Since $P$ is necessary for $S$, holding $S$ guarantees that $P$ was fulfilled: $S \implies P$ (or equivalently, $\neg P \implies \neg S$).
+ - P = Passing the examination (the necessary condition / prerequisite).
+ - S = Securing permanent appointment.
+ - Since P is necessary for S, holding S guarantees that P was fulfilled: S implies P (or equivalently, neg P implies neg S).
 3. Evaluate incorrect alternatives:
-   - Option B ($P \implies S$): Represents $P$ as a *sufficient* condition (passing the exam guarantees permanent appointment, which is untrue since vacancies and interviews are also required).
-   - Option C ($P \land S$): A conjunction asserting both are currently true.
-   - Option D ($P \lor S$): A disjunction asserting at least one is true.
+ - Option B (P implies S): Represents P as a *sufficient* condition (passing the exam guarantees permanent appointment, which is untrue since vacancies and interviews are also required).
+ - Option C (P land S): A conjunction asserting both are currently true.
+ - Option D (P lor S): A disjunction asserting at least one is true.
 
-Common Trap: Confusing \"Necessary\" ($S \implies P$) with \"Sufficient\" ($P \implies S$).
-Exam Tip: \"A is Necessary for B\" means $B \implies A$; \"A is Sufficient for B\" means $A \implies B$.","Correct. Survives elimination because a necessary condition forms the consequent (S -> P), meaning if permanent appointment is secured, the exam must have been passed.","Eliminated because P -> S treats passing the exam as sufficient to guarantee appointment.","Eliminated because P and S is a conjunction.","Eliminated because P or S is a disjunction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"In formal symbolic logic, the statement: \"Possessing a recognized Master's degree ($M$) is a SUFFICIENT condition for qualifying for the Senior Director position ($D$)\" is correctly represented by which propositional formula?","M \implies D","D \implies M","M \leftrightarrow D","\neg M \implies \neg D","A","Step-by-Step Solution:
-1. Analyze the formal definition of a \"Sufficient Condition\":
-   - If $A$ is sufficient for $B$, it means that the truth of $A$ by itself is entirely adequate to guarantee the truth of $B$.
-   - The logical formula is: $A \implies B$.
+Common Trap: Confusing \""Necessary\"" (S implies P) with \""Sufficient\"" (P implies S).
+Exam Tip: \""A is Necessary for B\"" means B implies A; \""A is Sufficient for B\"" means A implies B.","Correct. Survives elimination because a necessary condition forms the consequent (S -> P), meaning if permanent appointment is secured, the exam must have been passed.","Eliminated because P -> S treats passing the exam as sufficient to guarantee appointment.","Eliminated because P and S is a conjunction.","Eliminated because P or S is a disjunction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"In formal symbolic logic, the statement: \""Possessing a recognized Master's ° (M) is a SUFFICIENT condition for qualifying for the Senior Director position (D)\"" is correctly represented by which propositional formula?","M implies D","D implies M","M leftrightarrow D","neg M implies neg D","A","Step-by-Step Solution:
+1. Analyze the formal definition of a \""Sufficient Condition\"":
+ - If A is sufficient for B, it means that the truth of A by itself is entirely adequate to guarantee the truth of B.
+ - The logical formula is: A implies B.
 2. Apply to the given statement:
-   - $M$ = Possessing a Master's degree (the sufficient condition).
-   - $D$ = Qualifying for the Senior Director position (the result).
-   - Therefore: $M \implies D$ (\"If one possesses a Master's degree, then one qualifies for Senior Director\").
+ - M = Possessing a Master's ° (the sufficient condition).
+ - D = Qualifying for the Senior Director position (the result).
+ - Therefore: M implies D (\""If one possesses a Master's °, then one qualifies for Senior Director\"").
 3. Evaluate incorrect alternatives:
-   - Option B ($D \implies M$): Represents $M$ as a *necessary* condition (stating one must have a Master's degree to qualify).
-   - Option C ($M \leftrightarrow D$): Represents $M$ as both necessary and sufficient.
-   - Option D ($\neg M \implies \neg D$): The inverse of the conditional.
+ - Option B (D implies M): Represents M as a *necessary* condition (stating one must have a Master's ° to qualify).
+ - Option C (M leftrightarrow D): Represents M as both necessary and sufficient.
+ - Option D (neg M implies neg D): The inverse of the conditional.
 
-Common Trap: Confusing sufficient ($M \implies D$) with necessary ($D \implies M$).
-Exam Tip: \"Sufficient\" introduces the antecedent (IF part): $M \implies D$.","Correct. Survives elimination because a sufficient condition serves as the antecedent (M -> D), guaranteeing that having a Master's degree qualifies the applicant.","Eliminated because D -> M treats the Master's degree as a necessary condition.","Eliminated because M <-> D is a biconditional.","Eliminated because ~M -> ~D is the inverse fallacy.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Consider the nested conditional proposition: \"If the national budget is approved ($B$), then if the infrastructure project is certified ($C$), funding will be disbursed ($D$)\" [$B \implies (C \implies D)$]. By the logical Law of Exportation, this statement is strictly equivalent to:","(B \land C) \implies D","(B \lor C) \implies D","(B \implies C) \implies D","B \land (C \implies D)","A","Step-by-Step Solution:
+Common Trap: Confusing sufficient (M implies D) with necessary (D implies M).
+Exam Tip: \""Sufficient\"" introduces the antecedent (IF part): M implies D.","Correct. Survives elimination because a sufficient condition serves as the antecedent (M -> D), guaranteeing that having a Master's ° qualifies the applicant.","Eliminated because D -> M treats the Master's ° as a necessary condition.","Eliminated because M <-> D is a biconditional.","Eliminated because ~M -> ~D is the inverse fallacy.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"Consider the nested conditional proposition: \""If the national budget is approved (B), then if the infrastructure project is certified (C), funding will be disbursed (D)\"" [B implies (C implies D)]. By the logical Law of Exportation, this statement is strictly equivalent to:","(B land C) implies D","(B lor C) implies D","(B implies C) implies D","B land (C implies D)","A","Step-by-Step Solution:
 1. State the nested conditional formula:
-   - Formula: $B \implies (C \implies D)$.
+ - Formula: B implies (C implies D).
 2. Recall the classical logical Law of Exportation / Importation:
-   - In propositional calculus: $P \implies (Q \implies R) \equiv (P \land Q) \implies R$.
+ - In propositional calculus: P implies (Q implies R) ≡ (P land Q) implies R.
 3. Apply the equivalence to the given formula:
-   - Let $P = B, Q = C, R = D$.
-   - $B \implies (C \implies D) \equiv (B \land C) \implies D$.
+ - Let P = B, Q = C, R = D.
+ - B implies (C implies D) ≡ (B land C) implies D.
 4. Translate to natural language:
-   - \"If the national budget is approved AND the infrastructure project is certified, then funding will be disbursed.\"
-5. Evaluate incorrect alternatives:
-   - Option B ($(B \lor C) \implies D$): Disjunctive antecedent (would allow disbursement if only budget is approved without certification).
-   - Option C ($(B \implies C) \implies D$): Alters the grouping hierarchy of conditionals.
-   - Option D ($B \land (C \implies D)$): A conjunction rather than an overall conditional.
-
-Common Trap: Confusing $(B \land C) \implies D$ with $(B \lor C) \implies D$.
-Exam Tip: Law of Exportation: $P \implies (Q \implies R) \equiv (P \land Q) \implies R$.","Correct. Survives elimination because by the Law of Exportation, a nested conditional B -> (C -> D) is strictly equivalent to (B and C) -> D.","Eliminated because (B or C) -> D incorrectly allows either condition alone to trigger disbursement.","Eliminated because (B -> C) -> D changes the antecedent truth structure.","Eliminated because B and (C -> D) asserts that B is unconditionally true.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Under what exact combination of truth assignments is the material conditional proposition $P \implies Q$ evaluated as FALSE in formal truth-functional logic?","When P is TRUE and Q is FALSE.","When P is FALSE and Q is TRUE.","When P is FALSE and Q is FALSE.","When P is TRUE and Q is TRUE.","A","Step-by-Step Solution:
-1. Recall the formal truth table of the Material Implication ($P \implies Q$):
-   - Row 1: $P = \text{True}, Q = \text{True} \implies P \implies Q = \text{True}$.
-   - Row 2: $P = \text{True}, Q = \text{False} \implies P \implies Q = \text{FALSE}$.
-   - Row 3: $P = \text{False}, Q = \text{True} \implies P \implies Q = \text{True}$ (Vacuous Truth).
-   - Row 4: $P = \text{False}, Q = \text{False} \implies P \implies Q = \text{True}$ (Vacuous Truth).
+ - \""If the national budget is approved AND the infrastructure project is certified, then funding will be disbursed.\","","","","","",""
+"5. Evaluate incorrect alternatives:","","","","","","","","","","","",""
+"- Option B ((B lor C) implies D): Disjunctive antecedent (would allow disbursement if only budget is approved without certification).","","","","","","","","","","","",""
+"- Option C ((B implies C) implies D): Alters the grouping hierarchy of conditionals.","","","","","","","","","","","",""
+"- Option D (B land (C implies D)): A conjunction rather than an overall conditional.","","","","","","","","","","","",""
+"Common Trap: Confusing (B land C) implies D with (B lor C) implies D.","","","","","","","","","","","",""
+"Exam Tip: Law of Exportation: P implies (Q implies R) ≡ (P land Q) implies R.""","Correct. Survives elimination because by the Law of Exportation, a nested conditional B -> (C -> D) is strictly equivalent to (B and C) -> D.","Eliminated because (B or C) -> D incorrectly allows either condition alone to trigger disbursement.","Eliminated because (B -> C) -> D changes the antecedent truth structure.","Eliminated because B and (C -> D) asserts that B is unconditionally true.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
+"Under what exact combination of truth assignments is the material conditional proposition P implies Q evaluated as FALSE in formal truth-functional logic?","When P is TRUE and Q is FALSE.","When P is FALSE and Q is TRUE.","When P is FALSE and Q is FALSE.","When P is TRUE and Q is TRUE.","A","Step-by-Step Solution:
+1. Recall the formal truth table of the Material Implication (P implies Q):
+ - Row 1: P = True, Q = True implies P implies Q = True.
+ - Row 2: P = True, Q = False implies P implies Q = FALSE.
+ - Row 3: P = False, Q = True implies P implies Q = True (Vacuous Truth).
+ - Row 4: P = False, Q = False implies P implies Q = True (Vacuous Truth).
 2. Identify the unique falsifying condition:
-   - A conditional promise \"If $P$, then $Q$\" is broken (False) ONLY when the hypothesis/antecedent $P$ is satisfied (True) but the conclusion/consequent $Q$ fails to occur (False).
+ - A conditional promise \""If P, then Q\"" is broken (False) ONLY when the hypothesis/antecedent P is satisfied (True) but the conclusion/consequent Q fails to occur (False).
 3. Evaluate incorrect alternatives:
-   - Options B, C, and D all result in a truth value of TRUE.
+ - Options B, C, and D all result in a truth value of TRUE.
 
-Common Trap: Assuming False $\implies$ False is False. (If the condition is not met, the promise is never broken, so it is vacuously TRUE).
-Exam Tip: A conditional statement is FALSE in ONLY ONE CASE: True antecedent ($\text{T}$) and False consequent ($\text{F}$).","Correct. Survives elimination because by truth-table definition, P -> Q is False exclusively when P is True and Q is False.","Eliminated because False -> True evaluates to True.","Eliminated because False -> False evaluates to True (vacuous truth).","Eliminated because True -> True evaluates to True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Given the conditional proposition: \"If an applicant has 5 years of government experience ($E$), then the applicant is exempt from the preliminary examination ($S$).\" What is the formal INVERSE of this conditional statement?","If an applicant does not have 5 years of government experience ($\neg E$), then the applicant is not exempt from the preliminary examination ($\neg S$).","If an applicant is not exempt from the preliminary examination ($\neg S$), then the applicant does not have 5 years of government experience ($\neg E$).","If an applicant is exempt from the preliminary examination ($S$), then the applicant has 5 years of government experience ($E$).","The applicant has 5 years of government experience and is not exempt from the examination.","A","Step-by-Step Solution:
-1. Define the four standard conditional forms for $P \implies Q$:
-   - Original Statement: $P \implies Q$.
-   - Converse: $Q \implies P$ (Swap terms).
-   - Inverse: $\neg P \implies \neg Q$ (Negate both terms in place).
-   - Contrapositive: $\neg Q \implies \neg P$ (Swap and negate terms).
+Common Trap: Assuming False implies False is False. (If the condition is not met, the promise is never broken, so it is vacuously TRUE).
+Exam Tip: A conditional statement is FALSE in ONLY ONE CASE: True antecedent (T) and False consequent (F).","Correct. Survives elimination because by truth-table definition, P -> Q is False exclusively when P is True and Q is False.","Eliminated because False -> True evaluates to True.","Eliminated because False -> False evaluates to True (vacuous truth).","Eliminated because True -> True evaluates to True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"Given the conditional proposition: \""If an applicant has 5 years of government experience (E), then the applicant is exempt from the preliminary examination (S).\"" What is the formal INVERSE of this conditional statement?","If an applicant does not have 5 years of government experience (neg E), then the applicant is not exempt from the preliminary examination (neg S).","If an applicant is not exempt from the preliminary examination (neg S), then the applicant does not have 5 years of government experience (neg E).","If an applicant is exempt from the preliminary examination (S), then the applicant has 5 years of government experience (E).","The applicant has 5 years of government experience and is not exempt from the examination.","A","Step-by-Step Solution:
+1. Define the four standard conditional forms for P implies Q:
+ - Original Statement: P implies Q.
+ - Converse: Q implies P (Swap terms).
+ - Inverse: neg P implies neg Q (Negate both terms in place).
+ - Contrapositive: neg Q implies neg P (Swap and negate terms).
 2. Apply the rule for the INVERSE:
-   - Given: $E \implies S$.
-   - Inverse: $\neg E \implies \neg S$.
+ - Given: E implies S.
+ - Inverse: neg E implies neg S.
 3. Translate to natural language:
-   - \"If an applicant does not have 5 years of government experience ($\neg E$), then the applicant is not exempt from the preliminary examination ($\neg S$).\"
-4. Evaluate incorrect alternatives:
-   - Option B ($\neg S \implies \neg E$): The Contrapositive.
-   - Option C ($S \implies E$): The Converse.
-   - Option D ($E \land \neg S$): The Logical Negation.
-
-Common Trap: Confusing the Inverse ($\neg P \implies \neg Q$) with the Contrapositive ($\neg Q \implies \neg P$) or Converse ($Q \implies P$).
-Exam Tip: Original = $P \implies Q$; Inverse = $\neg P \implies \neg Q$; Converse = $Q \implies P$; Contrapositive = $\neg Q \implies \neg P$.","Correct. Survives elimination because the formal inverse of P -> Q is constructed by negating both terms in place: ~P -> ~Q.","Eliminated because ~S -> ~E is the contrapositive.","Eliminated because S -> E is the converse.","Eliminated because E and ~S is the logical negation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Given the conditional rule: \"If a government procurement contract exceeds ₱50 million ($C$), then it requires mandatory public bidding ($B$).\" What is the formal CONVERSE of this statement?","If a government procurement contract requires mandatory public bidding ($B$), then it exceeds ₱50 million ($C$).","If a government procurement contract does not require public bidding ($\neg B$), then it does not exceed ₱50 million ($\neg C$).","If a government procurement contract does not exceed ₱50 million ($\neg C$), then it does not require public bidding ($\neg B$).","All government contracts exceeding ₱50 million require mandatory public bidding.","A","Step-by-Step Solution:
+ - \""If an applicant does not have 5 years of government experience (neg E), then the applicant is not exempt from the preliminary examination (neg S).\","","","","","",""
+"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
+"- Option B (neg S implies neg E): The Contrapositive.","","","","","","","","","","","",""
+"- Option C (S implies E): The Converse.","","","","","","","","","","","",""
+"- Option D (E land neg S): The Logical Negation.","","","","","","","","","","","",""
+"Common Trap: Confusing the Inverse (neg P implies neg Q) with the Contrapositive (neg Q implies neg P) or Converse (Q implies P).","","","","","","","","","","","",""
+"Exam Tip: Original = P implies Q; Inverse = neg P implies neg Q; Converse = Q implies P; Contrapositive = neg Q implies neg P.""","Correct. Survives elimination because the formal inverse of P -> Q is constructed by negating both terms in place: ~P -> ~Q.","Eliminated because ~S -> ~E is the contrapositive.","Eliminated because S -> E is the converse.","Eliminated because E and ~S is the logical negation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
+"Given the conditional rule: \""If a government procurement contract exceeds ₱50 million (C), then it requires mandatory public bidding (B).\"" What is the formal CONVERSE of this statement?","If a government procurement contract requires mandatory public bidding (B), then it exceeds ₱50 million (C).","If a government procurement contract does not require public bidding (neg B), then it does not exceed ₱50 million (neg C).","If a government procurement contract does not exceed ₱50 million (neg C), then it does not require public bidding (neg B).","All government contracts exceeding ₱50 million require mandatory public bidding.","A","Step-by-Step Solution:
 1. Recall the formal definition of the CONVERSE of a conditional statement:
-   - The converse of $P \implies Q$ is formed by swapping the antecedent and consequent:
-   - $\text{Converse} = Q \implies P$.
+ - The converse of P implies Q is formed by swapping the antecedent and consequent:
+ - Converse = Q implies P.
 2. Apply to the given proposition:
-   - Given: $C \implies B$.
-   - Converse: $B \implies C$.
+ - Given: C implies B.
+ - Converse: B implies C.
 3. Translate to natural language:
-   - \"If a government procurement contract requires mandatory public bidding ($B$), then it exceeds ₱50 million ($C$).\"
-4. Evaluate incorrect alternatives:
-   - Option B ($\neg B \implies \neg C$): The Contrapositive.
-   - Option C ($\neg C \implies \neg B$): The Inverse.
-   - Option D: A categorical rephrasing of the original statement.
-
-Common Trap: Confusing the converse (swapping terms, $Q \implies P$) with the inverse (negating terms, $\neg P \implies \neg Q$).
-Exam Tip: Converse of $P \implies Q$ is simply $Q \implies P$.","Correct. Survives elimination because the formal converse is created strictly by interchanging the antecedent and consequent (B -> C).","Eliminated because ~B -> ~C is the contrapositive.","Eliminated because ~C -> ~B is the inverse.","Eliminated because Option D is a rephrasing of the original conditional.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Consider the biconditional statement: \"An employee receives an outstanding rating ($R$) IF AND ONLY IF all quarterly performance targets are surpassed ($T$).\" Which of the following compound propositions is strictly logically equivalent to this biconditional?","(R \implies T) \land (T \implies R)","(R \implies T) \lor (T \implies R)","(R \land T) \implies (R \lor T)","\neg R \implies \neg T","A","Step-by-Step Solution:
-1. Analyze the formal definition of the Biconditional operator ($P \leftrightarrow Q$):
-   - \"P if and only if Q\" expresses a two-way conditional relationship (both mutual necessity and mutual sufficiency).
-   - Formula: $P \leftrightarrow Q \equiv (P \implies Q) \land (Q \implies P)$.
-2. Apply to the variables $R$ and $T$:
-   - $R \leftrightarrow T \equiv (R \implies T) \land (T \implies R)$.
+ - \""If a government procurement contract requires mandatory public bidding (B), then it exceeds ₱50 million (C).\","","","","","",""
+"4. Evaluate incorrect alternatives:","","","","","","","","","","","",""
+"- Option B (neg B implies neg C): The Contrapositive.","","","","","","","","","","","",""
+"- Option C (neg C implies neg B): The Inverse.","","","","","","","","","","","",""
+"- Option D: A categorical rephrasing of the original statement.","","","","","","","","","","","",""
+"Common Trap: Confusing the converse (swapping terms","Q implies P) with the inverse (negating terms","neg P implies neg Q).","","","","","","","","","",""
+"Exam Tip: Converse of P implies Q is simply Q implies P.""","Correct. Survives elimination because the formal converse is created strictly by interchanging the antecedent and consequent (B -> C).","Eliminated because ~B -> ~C is the contrapositive.","Eliminated because ~C -> ~B is the inverse.","Eliminated because Option D is a rephrasing of the original conditional.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071","","","","","",""
+"Consider the biconditional statement: \""An employee receives an outstanding rating (R) IF AND ONLY IF all quarterly performance targets are surpassed (T).\"" Which of the following compound propositions is strictly logically equivalent to this biconditional?","(R implies T) land (T implies R)","(R implies T) lor (T implies R)","(R land T) implies (R lor T)","neg R implies neg T","A","Step-by-Step Solution:
+1. Analyze the formal definition of the Biconditional operator (P leftrightarrow Q):
+ - \""P if and only if Q\"" expresses a two-way conditional relationship (both mutual necessity and mutual sufficiency).
+ - Formula: P leftrightarrow Q ≡ (P implies Q) land (Q implies P).
+2. Apply to the variables R and T:
+ - R leftrightarrow T ≡ (R implies T) land (T implies R).
 3. Translate the logical components:
-   - \"If $R$, then $T$\" AND \"If $T$, then $R$\".
+ - \""If R, then T\"" AND \""If T, then R\"".
 4. Evaluate incorrect alternatives:
-   - Option B: Uses disjunction ($\lor$) instead of conjunction ($\land$).
-   - Option C: A tautology unrelated to the specific equivalence.
-   - Option D ($\neg R \implies \neg T$): Only one half of the biconditional (the contrapositive of $T \implies R$).
+ - Option B: Uses disjunction (lor) instead of conjunction (land).
+ - Option C: A tautology unrelated to the specific equivalence.
+ - Option D (neg R implies neg T): Only one half of the biconditional (the contrapositive of T implies R).
 
 Common Trap: Confusing the full two-way biconditional with a one-way conditional or disjunction.
-Exam Tip: Biconditional ($P \leftrightarrow Q$) means: $P \implies Q$ AND $Q \implies P$.","Correct. Survives elimination because a biconditional proposition P <-> Q is defined as the logical conjunction of both directional conditionals (P -> Q) and (Q -> P).","Eliminated because a disjunction of conditionals is always true and fails to establish equivalence.","Eliminated because Option C is an uninformative tautology.","Eliminated because ~R -> ~T captures only one directional implication.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Given the complex conditional premise: $\neg P \implies (Q \lor R)$. If empirical observation confirms that $P$ is FALSE and $Q$ is FALSE, what must be the deductive truth value of proposition $R$?","R must be TRUE.","R must be FALSE.","R can be either TRUE or FALSE (indeterminate).","R is self-contradictory.","A","Step-by-Step Solution:
+Exam Tip: Biconditional (P leftrightarrow Q) means: P implies Q AND Q implies P.","Correct. Survives elimination because a biconditional proposition P <-> Q is defined as the logical conjunction of both directional conditionals (P -> Q) and (Q -> P).","Eliminated because a disjunction of conditionals is always true and fails to establish equivalence.","Eliminated because Option C is an uninformative tautology.","Eliminated because ~R -> ~T captures only one directional implication.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"Given the complex conditional premise: neg P implies (Q lor R). If empirical observation confirms that P is FALSE and Q is FALSE, what must be the deductive truth value of proposition R?","R must be TRUE.","R must be FALSE.","R can be either TRUE or FALSE (indeterminate).","R is self-contradictory.","A","Step-by-Step Solution:
 1. State the given information:
-   - Master Premise: $\neg P \implies (Q \lor R)$ (is True).
-   - Fact 1: $P = \text{False} \implies \neg P = \text{True}$.
-   - Fact 2: $Q = \text{False}$.
+ - Master Premise: neg P implies (Q lor R) (is True).
+ - Fact 1: P = False implies neg P = True.
+ - Fact 2: Q = False.
 2. Apply Modus Ponens to Master Premise:
-   - Since the antecedent $\neg P$ is True, the consequent $(Q \lor R)$ must necessarily be TRUE.
-3. Evaluate the disjunction $(Q \lor R) = \text{True}$:
-   - A disjunction is True if at least one operand is True.
-   - We are given that $Q = \text{False}$.
-   - For $(\text{False} \lor R)$ to evaluate to True, $R$ MUST be TRUE.
+ - Since the antecedent neg P is True, the consequent (Q lor R) must necessarily be TRUE.
+3. Evaluate the disjunction (Q lor R) = True:
+ - A disjunction is True if at least one operand is True.
+ - We are given that Q = False.
+ - For (False lor R) to evaluate to True, R MUST be TRUE.
 4. Conclude:
-   - Proposition $R$ is deductively proven to be TRUE.
+ - Proposition R is deductively proven to be TRUE.
 
-Common Trap: Stopping at $(Q \lor R) = \text{True}$ and assuming $R$ is indeterminate without factoring in that $Q = \text{False}$.
-Exam Tip: Disjunctive Syllogism: If $(Q \lor R)$ is True and $Q$ is False, then $R$ MUST be True.","Correct. Survives elimination because ~P is True, making (Q or R) True by Modus Ponens; since Q is False, R must be True by Disjunctive Syllogism.","Eliminated because if R were False, (Q or R) would be False, violating Modus Ponens.","Eliminated because R is definitively constrained to True.","Eliminated because R is a valid truth-functional proposition.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"What is the exact formal contrapositive of the compound conditional proposition: \"(A \land B) \implies C\"?","\neg C \implies (\neg A \lor \neg B)","\neg C \implies (\neg A \land \neg B)","C \implies (A \land B)","(\neg A \lor \neg B) \implies \neg C","A","Step-by-Step Solution:
+Common Trap: Stopping at (Q lor R) = True and assuming R is indeterminate without factoring in that Q = False.
+Exam Tip: Disjunctive Syllogism: If (Q lor R) is True and Q is False, then R MUST be True.","Correct. Survives elimination because ~P is True, making (Q or R) True by Modus Ponens; since Q is False, R must be True by Disjunctive Syllogism.","Eliminated because if R were False, (Q or R) would be False, violating Modus Ponens.","Eliminated because R is definitively constrained to True.","Eliminated because R is a valid truth-functional proposition.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"What is the exact formal contrapositive of the compound conditional proposition: \""(A land B) implies C\""?","neg C implies (neg A lor neg B)","neg C implies (neg A land neg B)","C implies (A land B)","(neg A lor neg B) implies neg C","A","Step-by-Step Solution:
 1. Recall the Law of Contraposition:
-   - For any conditional proposition $P \implies Q$, its contrapositive is $\neg Q \implies \neg P$.
+ - For any conditional proposition P implies Q, its contrapositive is neg Q implies neg P.
 2. Identify antecedent and consequent in the given formula:
-   - Antecedent $P = (A \land B)$.
-   - Consequent $Q = C$.
+ - Antecedent P = (A land B).
+ - Consequent Q = C.
 3. Form the preliminary contrapositive:
-   - $\neg C \implies \neg(A \land B)$.
+ - neg C implies neg(A land B).
 4. Apply De Morgan's Law to negate the antecedent conjunction:
-   - $\neg(A \land B) \equiv \neg A \lor \neg B$.
+ - neg(A land B) ≡ neg A lor neg B.
 5. Substitute back:
-   - $\neg C \implies (\neg A \lor \neg B)$.
+ - neg C implies (neg A lor neg B).
 6. Evaluate incorrect alternatives:
-   - Option B ($\neg C \implies (\neg A \land \neg B)$): Erroneously maintains the conjunction inside the negation.
-   - Option C ($C \implies (A \land B)$): The Converse.
-   - Option D ($(\neg A \lor \neg B) \implies \neg C$): The Inverse.
+ - Option B (neg C implies (neg A land neg B)): Erroneously maintains the conjunction inside the negation.
+ - Option C (C implies (A land B)): The Converse.
+ - Option D ((neg A lor neg B) implies neg C): The Inverse.
 
-Common Trap: Forgetting to apply De Morgan's Law to the negated conjunction ($\neg(A \land B) \equiv \neg A \lor \neg B$).
-Exam Tip: Negating $(A \land B)$ yields $(\neg A \lor \neg B)$ in the contrapositive's consequent.","Correct. Survives elimination because the contrapositive negates and swaps terms (~C -> ~(A and B)), and by De Morgan's law ~(A and B) expands to (~A or ~B).","Eliminated because Option B fails to flip the conjunction to a disjunction under De Morgan's law.","Eliminated because Option C is the converse.","Eliminated because Option D is the inverse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
-"Which of the following deductive arguments commits the formal logical fallacy of \"DENYING THE ANTECEDENT\"?","If an officer violates the Code of Conduct ($V$), they are penalized ($P$). Officer Santos did not violate the Code ($\neg V$). Therefore, Officer Santos is not penalized ($\neg P$).","If an officer violates the Code of Conduct ($V$), they are penalized ($P$). Officer Santos was penalized ($P$). Therefore, Officer Santos violated the Code ($V$).","If an officer violates the Code of Conduct ($V$), they are penalized ($P$). Officer Santos was not penalized ($\neg P$). Therefore, Officer Santos did not violate the Code ($\neg V$).","If an officer violates the Code of Conduct ($V$), they are penalized ($P$). Officer Santos violated the Code ($V$). Therefore, Officer Santos is penalized ($P$).","A","Step-by-Step Solution:
-1. Define the formal structure of \"Denying the Antecedent\":
-   - Premise 1: $P \implies Q$ (Conditional).
-   - Premise 2: $\neg P$ (Denial of the Antecedent).
-   - Invalid Conclusion: $\neg Q$ (Denial of the Consequent).
+Common Trap: Forgetting to apply De Morgan's Law to the negated conjunction (neg(A land B) ≡ neg A lor neg B).
+Exam Tip: Negating (A land B) yields (neg A lor neg B) in the contrapositive's consequent.","Correct. Survives elimination because the contrapositive negates and swaps terms (~C -> ~(A and B)), and by De Morgan's law ~(A and B) expands to (~A or ~B).","Eliminated because Option B fails to flip the conjunction to a disjunction under De Morgan's law.","Eliminated because Option C is the converse.","Eliminated because Option D is the inverse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+"Which of the following deductive arguments commits the formal logical fallacy of \""DENYING THE ANTECEDENT\""?","If an officer violates the Code of Conduct (V), they are penalized (P). Officer Santos did not violate the Code (neg V). Therefore, Officer Santos is not penalized (neg P).","If an officer violates the Code of Conduct (V), they are penalized (P). Officer Santos was penalized (P). Therefore, Officer Santos violated the Code (V).","If an officer violates the Code of Conduct (V), they are penalized (P). Officer Santos was not penalized (neg P). Therefore, Officer Santos did not violate the Code (neg V).","If an officer violates the Code of Conduct (V), they are penalized (P). Officer Santos violated the Code (V). Therefore, Officer Santos is penalized (P).","A","Step-by-Step Solution:
+1. Define the formal structure of \""Denying the Antecedent\"":
+ - Premise 1: P implies Q (Conditional).
+ - Premise 2: neg P (Denial of the Antecedent).
+ - Invalid Conclusion: neg Q (Denial of the Consequent).
 2. Match with Option A:
-   - Premise 1: $V \implies P$.
-   - Premise 2: $\neg V$ (Santos did not violate the Code).
-   - Conclusion: $\neg P$ (Santos is not penalized).
-   - Logical Flaw: Officer Santos could still be penalized for non-Code reasons (e.g., gross incompetence or attendance deficit under different civil service rules). This is the exact fallacy of DENYING THE ANTECEDENT.
+ - Premise 1: V implies P.
+ - Premise 2: neg V (Santos did not violate the Code).
+ - Conclusion: neg P (Santos is not penalized).
+ - Logical Flaw: Officer Santos could still be penalized for non-Code reasons (e.g., gross incompetence or attendance deficit under different civil service rules). This is the exact fallacy of DENYING THE ANTECEDENT.
 3. Evaluate other options:
-   - Option B ($V \implies P, P \vdash V$): Fallacy of Affirming the Consequent.
-   - Option C ($V \implies P, \neg P \vdash \neg V$): VALID inference (Modus Tollens).
-   - Option D ($V \implies P, V \vdash P$): VALID inference (Modus Ponens).
+ - Option B (V implies P, P vdash V): Fallacy of Affirming the Consequent.
+ - Option C (V implies P, neg P vdash neg V): VALID inference (Modus Tollens).
+ - Option D (V implies P, V vdash P): VALID inference (Modus Ponens).
 
-Common Trap: Confusing Denying the Antecedent (invalid: $\neg P \vdash \neg Q$) with Modus Tollens (valid: $\neg Q \vdash \neg P$).
-Exam Tip: Modus Tollens starts from $\neg Q$ (valid); Denying the Antecedent starts from $\neg P$ (invalid fallacy).","Correct. Survives elimination because inferring ~P from V -> P and ~V is the textbook formal fallacy of Denying the Antecedent.","Eliminated because Option B commits Affirming the Consequent.","Eliminated because Option C is valid Modus Tollens.","Eliminated because Option D is valid Modus Ponens.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"
+Common Trap: Confusing Denying the Antecedent (invalid: neg P vdash neg Q) with Modus Tollens (valid: neg Q vdash neg P).
+Exam Tip: Modus Tollens starts from neg Q (valid); Denying the Antecedent starts from neg P (invalid fallacy).","Correct. Survives elimination because inferring ~P from V -> P and ~V is the textbook formal fallacy of Denying the Antecedent.","Eliminated because Option B commits Affirming the Consequent.","Eliminated because Option C is valid Modus Tollens.","Eliminated because Option D is valid Modus Ponens.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Conditional statements | Very Difficult | Batch 071"

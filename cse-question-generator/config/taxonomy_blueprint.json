@@ -7,6 +7,78 @@
       "category_name": "Verbal Ability",
       "components": [
         {
+          "component_id": "VOCAB",
+          "component_name": "Vocabulary",
+          "subtopics": [
+            {
+              "subtopic_id": "VOCAB_CORE",
+              "subtopic_name": "Lexical Knowledge and Word Associations",
+              "micro_subtopics": [
+                { "micro_id": "SYNONYMS_ENG_FIL", "micro_name": "Synonyms", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "ANTONYMS_ENG_FIL", "micro_name": "Antonyms", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "CONTEXT_CLUES", "micro_name": "Context clues", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "ENGLISH_IDIOMS", "micro_name": "English idioms and idiomatic expressions", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "SAWIKAIN_SALAWIKAIN", "micro_name": "Sawikain at salawikain", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "CONFUSING_WORDS", "micro_name": "Confusing word pairs and precise diction", "status": "COMPLETED", "target_batches": 1 }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "GRAMMAR",
+          "component_name": "Grammar and Correct Usage",
+          "subtopics": [
+            {
+              "subtopic_id": "GRAMMAR_CORE",
+              "subtopic_name": "Structural Grammar and Balarila",
+              "micro_subtopics": [
+                { "micro_id": "SUBJECT_VERB_AGREEMENT", "micro_name": "Subject-verb agreement", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "VERB_TENSES_MOOD", "micro_name": "Verb tenses and subjunctive mood", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "PRONOUN_AGREEMENT_CASE", "micro_name": "Pronoun-antecedent agreement and case", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "PREPOSITIONS_IDIOMATIC", "micro_name": "Prepositions and idiomatic prepositions", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "PARALLELISM_CONJUNCTIONS", "micro_name": "Parallel structure and correlative conjunctions", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "MODIFIERS_DANGLING", "micro_name": "Dangling and misplaced modifiers", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "WASTONG_GAMIT_SALITA", "micro_name": "Wastong gamit ng salita sa Filipino", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "WASTONG_GAMIT_PANDIWA", "micro_name": "Wastong gamit ng pandiwa at pang-uri sa Filipino", "status": "COMPLETED", "target_batches": 1 }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "PARAGRAPH_ORG",
+          "component_name": "Paragraph Organization",
+          "subtopics": [
+            {
+              "subtopic_id": "PARA_CORE",
+              "subtopic_name": "Logical Sequencing and Text Cohesion",
+              "micro_subtopics": [
+                { "micro_id": "CHRONOLOGICAL_ORDERING", "micro_name": "Chronological and sequential ordering", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "CAUSE_EFFECT_ORDERING", "micro_name": "Cause-effect and problem-solution ordering", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "GENERAL_SPECIFIC_ORDERING", "micro_name": "General-to-specific and deductive ordering", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "TRANSITIONAL_COHESION", "micro_name": "Transitional cohesion and sentence insertion", "status": "COMPLETED", "target_batches": 1 }
+              ]
+            }
+          ]
+        },
+        {
+          "component_id": "SENTENCE_CORRECTION",
+          "component_name": "Sentence Correction and Error Identification",
+          "subtopics": [
+            {
+              "subtopic_id": "SENTENCE_CORE",
+              "subtopic_name": "Error Detection and Sentence Mechanics",
+              "micro_subtopics": [
+                { "micro_id": "RUNON_COMMA_SPLICE", "micro_name": "Run-on sentences and comma splices", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "SENTENCE_FRAGMENTS", "micro_name": "Sentence fragments and subordination errors", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "REDUNDANCY_WORDINESS", "micro_name": "Redundancy and wordiness", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "FAULTY_COMPARISONS", "micro_name": "Faulty comparisons and degree of adjectives", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "UNDERLINED_ERROR_ID", "micro_name": "Identifying sentence errors (underlined format)", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "KAYARIAN_NG_PANGUNGUSAP", "micro_name": "Wastong kayarian ng pangungusap sa Filipino", "status": "COMPLETED", "target_batches": 1 }
+              ]
+            }
+          ]
+        },
+        {
           "component_id": "RC",
           "component_name": "Reading Comprehension",
           "subtopics": [
@@ -14,42 +86,12 @@
               "subtopic_id": "RC_CORE",
               "subtopic_name": "Core Reading Skills",
               "micro_subtopics": [
-                {
-                  "micro_id": "CAUSEEFFECT",
-                  "micro_name": "Cause and Effect",
-                  "status": "NEXT_UP",
-                  "target_batches": 1
-                },
-                {
-                  "micro_id": "COMPARISON",
-                  "micro_name": "Comparison",
-                  "status": "PENDING",
-                  "target_batches": 1
-                },
-                {
-                  "micro_id": "SEQUENCE",
-                  "micro_name": "Sequence",
-                  "status": "PENDING",
-                  "target_batches": 1
-                },
-                {
-                  "micro_id": "BEST_TITLE",
-                  "micro_name": "Best title",
-                  "status": "PENDING",
-                  "target_batches": 1
-                },
-                {
-                  "micro_id": "STMT_SUPPORTED",
-                  "micro_name": "Which statement is supported",
-                  "status": "PENDING",
-                  "target_batches": 1
-                },
-                {
-                  "micro_id": "STMT_NOT_SUPPORTED",
-                  "micro_name": "Which statement is NOT supported",
-                  "status": "PENDING",
-                  "target_batches": 1
-                }
+                { "micro_id": "CAUSEEFFECT", "micro_name": "Cause and Effect", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "COMPARISON", "micro_name": "Comparison", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "SEQUENCE", "micro_name": "Sequence", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "BEST_TITLE", "micro_name": "Best title", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "STMT_SUPPORTED", "micro_name": "Which statement is supported", "status": "COMPLETED", "target_batches": 1 },
+                { "micro_id": "STMT_NOT_SUPPORTED", "micro_name": "Which statement is NOT supported", "status": "COMPLETED", "target_batches": 1 }
               ]
             }
           ]

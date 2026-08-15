@@ -1,183 +1,183 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Three regional business partners—Arthur, Brian, and Cesar—invest in a joint commercial venture. Arthur invests ₱120,000.00 for 12 months, Brian invests ₱180,000.00 for 8 months, and Cesar invests ₱240,000.00 for 6 months. If the total annual profit of the enterprise is ₱324,000.00, what is Arthur's exact profit share?","₱108,000.00","₱96,000.00","₱120,000.00","₱114,000.00","A","Step-by-Step Solution:
-1. Understand that profit sharing in a compound partnership is proportional to the product of capital invested and active duration ($\text{Capital} \times \text{Time}$):
-   - Arthur: $₱120,000.00 \times 12\text{ months} = 1,440,000.00\text{ capital-months}$.
-   - Brian: $₱180,000.00 \times 8\text{ months} = 1,440,000.00\text{ capital-months}$.
-   - Cesar: $₱240,000.00 \times 6\text{ months} = 1,440,000.00\text{ capital-months}$.
-2. Formulate the profit-sharing ratio (Arthur : Brian : Cesar):
-   - $1,440,000 : 1,440,000 : 1,440,000 = 1 : 1 : 1$.
+"Three regional business partners—Arthur, Brian, and Cesar—invest in a jo∫ commercial venture. Arthur invests ₱120,000.00 for 12 months, Brian invests ₱180,000.00 for 8 months, and Cesar invests ₱240,000.00 for 6 months. If the total annual profit of the enterprise is ₱324,000.00, what is Arthur's exact profit share?","₱108,000.00","₱96,000.00","₱120,000.00","₱114,000.00","A","Step-by-Step Solution:
+1. Understand that profit sharing in a compound partnership is proportional to the product of capital invested and active duration (Capital × Time):
+ - Arthur: ₱120,000.00 × 12 months = 1,440,000.00 capital-months.
+ - Brian: ₱180,000.00 × 8 months = 1,440,000.00 capital-months.
+ - Cesar: ₱240,000.00 × 6 months = 1,440,000.00 capital-months.
+2. Formulate the profit-sharing ratio (Arthur: Brian: Cesar):
+ - 1,440,000: 1,440,000: 1,440,000 = 1: 1: 1.
 3. Divide the total profit equally among the 3 equal shares:
-   - $\text{Arthur's Share} = \frac{₱324,000.00}{3} = ₱108,000.00$.
-4. (Brian and Cesar also receive exactly $₱108,000.00$ each).
+ - Arthur's Share = ₱324,000.00/3 = ₱108,000.00.
+4. (Brian and Cesar also receive exactly ₱108,000.00 each).
 
-Common Trap: Dividing profit by capital investment alone ($120 : 180 : 240 = 2 : 3 : 4 \implies \text{Arthur} = \frac{2}{9}(324,000) = ₱72,000$), ignoring investment duration.
-Exam Tip: Partnership share $\propto (\text{Capital} \times \text{Time})$. Since all three products equal $1,440,000$, profit splits into 3 equal thirds.","Correct. Survives elimination because capital-month products are equal (1,440,000 each), dividing the ₱324,000 profit into 3 equal parts of ₱108,000.00.","Eliminated because ₱96,000.00 is an underestimate.","Eliminated because ₱120,000.00 assumes Arthur had the largest capital-time product.","Eliminated because ₱114,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"The ratio of male to female students in a science high school was $5 : 3$. At the beginning of the second semester, 40 new female students enrolled and 20 male students transferred out, adjusting the gender ratio to $1 : 1$. What was the original total student population of the school?","240 students","200 students","280 students","260 students","A","Step-by-Step Solution:
-1. Define original quantities in terms of multiplier $x$:
-   - Original male students $= 5x$.
-   - Original female students $= 3x$.
-   - Original total students $= 5x + 3x = 8x$.
+Common Trap: Dividing profit by capital investment alone (120: 180: 240 = 2: 3: 4 implies Arthur = 2/9(324,000) = ₱72,000), ignoring investment duration.
+Exam Tip: Partnership share propto (Capital × Time). Since all three products equal 1,440,000, profit splits into 3 equal thirds.","Correct. Survives elimination because capital-month products are equal (1,440,000 each), dividing the ₱324,000 profit into 3 equal parts of ₱108,000.00.","Eliminated because ₱96,000.00 is an underestimate.","Eliminated because ₱120,000.00 assumes Arthur had the largest capital-time product.","Eliminated because ₱114,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"The ratio of male to female students in a science high school was 5: 3. At the beginning of the second semester, 40 new female students enrolled and 20 male students transferred out, adjusting the gender ratio to 1: 1. What was the original total student population of the school?","240 students","200 students","280 students","260 students","A","Step-by-Step Solution:
+1. Define original quantities in terms of multiplier x:
+ - Original male students = 5x.
+ - Original female students = 3x.
+ - Original total students = 5x + 3x = 8x.
 2. Formulate semester change expressions:
-   - New male students $= 5x - 20$.
-   - New female students $= 3x + 40$.
-3. Set up the new $1 : 1$ ratio equation:
-   - $\frac{5x - 20}{3x + 40} = \frac{1}{1}$.
-4. Solve for $x$:
-   - $5x - 20 = 3x + 40$.
-   - $5x - 3x = 40 + 20$.
-   - $2x = 60 \implies x = 30$.
+ - New male students = 5x - 20.
+ - New female students = 3x + 40.
+3. Set up the new 1: 1 ratio equation:
+ - 5x - 20/3x + 40 = 1/1.
+4. Solve for x:
+ - 5x - 20 = 3x + 40.
+ - 5x - 3x = 40 + 20.
+ - 2x = 60 implies x = 30.
 5. Compute original total student population:
-   - $\text{Original Total} = 8x = 8(30) = 240\text{ students}$.
+ - Original Total = 8x = 8(30) = 240 students.
 6. Verify:
-   - Original: Males $= 150$, Females $= 90$.
-   - New: Males $= 150 - 20 = 130$, Females $= 90 + 40 = 130$ ($130 : 130 = 1 : 1$ Confirmed!).
+ - Original: Males = 150, Females = 90.
+ - New: Males = 150 - 20 = 130, Females = 90 + 40 = 130 (130: 130 = 1: 1 Confirmed!).
 
-Common Trap: Finding only the original male count ($150$) or new total population ($260$, Option D).
-Exam Tip: Read carefully: \"original total student population\" is $8x = 8(30) = 240$.","Correct. Survives elimination because x = 30 gives original counts of 150 males and 90 females, totaling 240 students.","Eliminated because 200 students corresponds to x = 25 (105 males != 115 females).","Eliminated because 280 students corresponds to x = 35.","Eliminated because 260 is the new total student population after changes (130 + 130).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"Given the compound ratios $A : B = 2 : 3$, $B : C = 4 : 5$, and $C : D = 6 : 7$, what is the unified ratio $A : B : C : D$, and what is the value of $A$ if the total sum $A + B + C + D = 840.0$?","Ratio: 16 : 24 : 30 : 35; A = 128.0","Ratio: 16 : 24 : 30 : 35; A = 112.0","Ratio: 8 : 12 : 15 : 21; A = 120.0","Ratio: 16 : 20 : 30 : 35; A = 136.0","A","Step-by-Step Solution:
-1. Combine $A : B = 2 : 3$ and $B : C = 4 : 5$:
-   - Equalize $B$ ($\text{LCM}(3, 4) = 12$):
-   - $A : B = 8 : 12$
-   - $B : C = 12 : 15$
-   - $A : B : C = 8 : 12 : 15$.
-2. Combine $A : B : C = 8 : 12 : 15$ and $C : D = 6 : 7$:
-   - Equalize $C$ ($\text{LCM}(15, 6) = 30$):
-   - Multiply $A : B : C$ by 2: $A : B : C = 16 : 24 : 30$.
-   - Multiply $C : D$ by 5: $C : D = 30 : 35$.
-   - Unified Ratio: $A : B : C : D = 16 : 24 : 30 : 35$.
+Common Trap: Finding only the original male count (150) or new total population (260, Option D).
+Exam Tip: Read carefully: \""original total student population\"" is 8x = 8(30) = 240.","Correct. Survives elimination because x = 30 gives original counts of 150 males and 90 females, totaling 240 students.","Eliminated because 200 students corresponds to x = 25 (105 males!= 115 females).","Eliminated because 280 students corresponds to x = 35.","Eliminated because 260 is the new total student population after changes (130 + 130).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"Given the compound ratios A: B = 2: 3, B: C = 4: 5, and C: D = 6: 7, what is the unified ratio A: B: C: D, and what is the value of A if the total Σ A + B + C + D = 840.0?","Ratio: 16: 24: 30: 35; A = 128.0","Ratio: 16: 24: 30: 35; A = 112.0","Ratio: 8: 12: 15: 21; A = 120.0","Ratio: 16: 20: 30: 35; A = 136.0","A","Step-by-Step Solution:
+1. Combine A: B = 2: 3 and B: C = 4: 5:
+ - Equalize B (LCM(3, 4) = 12):
+ - A: B = 8: 12
+ - B: C = 12: 15
+ - A: B: C = 8: 12: 15.
+2. Combine A: B: C = 8: 12: 15 and C: D = 6: 7:
+ - Equalize C (LCM(15, 6) = 30):
+ - Multiply A: B: C by 2: A: B: C = 16: 24: 30.
+ - Multiply C: D by 5: C: D = 30: 35.
+ - Unified Ratio: A: B: C: D = 16: 24: 30: 35.
 3. Sum the ratio parts:
-   - $\text{Total Parts} = 16 + 24 + 30 + 35 = 105\text{ parts}$.
+ - Total Parts = 16 + 24 + 30 + 35 = 105 parts.
 4. Calculate value per part:
-   - $1\text{ part} = \frac{840.0}{105} = 8.0$.
-5. Compute value of $A$:
-   - $A = 16 \times 8.0 = 128.0$.
-   - (Values: $A = 128, B = 192, C = 240, D = 280$. Sum $= 840.0$).
+ - 1 part = 840.0/105 = 8.0.
+5. Compute value of A:
+ - A = 16 × 8.0 = 128.0.
+ - (Values: A = 128, B = 192, C = 240, D = 280. Sum = 840.0).
 
-Common Trap: Simply appending ratios without finding common LCM multipliers ($2:3:5:7$).
-Exam Tip: LCM chaining: $B = 12, C = 30 \implies A = 16, B = 24, C = 30, D = 35$. Sum $= 105$. $A = \frac{16}{105}(840) = 128$.","Correct. Survives elimination because the unified ratio is 16:24:30:35 (sum 105 parts), and A = 16 * (840/105) = 128.0.","Eliminated because A = 112.0 assumes 14 parts for A.","Eliminated because 8:12:15:21 fails C:D ratio (15:21 = 5:7 != 6:7).","Eliminated because 16:20:30:35 fails A:B ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"The electrical resistance $R$ of a wire varies directly as its length $L$ and inversely as the square of its diameter $d$ ($R = k \frac{L}{d^2}$). If a wire of length 50.0 meters and diameter 2.0 mm has a resistance of 5.0 ohms, what is the resistance of a wire of the same material having a length of 120.0 meters and a diameter of 4.0 mm?","3.0 ohms","4.5 ohms","2.5 ohms","3.6 ohms","A","Step-by-Step Solution:
-1. Formulate the joint-inverse proportion equation:
-   - $\frac{R_1 d_1^2}{L_1} = \frac{R_2 d_2^2}{L_2} = k$.
-2. Isolate $R_2$:
-   - $R_2 = R_1 \times \left(\frac{L_2}{L_1}\right) \times \left(\frac{d_1}{d_2}\right)^2$.
+Common Trap: Simply appending ratios without finding common LCM multipliers (2:3:5:7).
+Exam Tip: LCM chaining: B = 12, C = 30 implies A = 16, B = 24, C = 30, D = 35. Sum = 105. A = 16/105(840) = 128.","Correct. Survives elimination because the unified ratio is 16:24:30:35 (Σ 105 parts), and A = 16 * (840/105) = 128.0.","Eliminated because A = 112.0 assumes 14 parts for A.","Eliminated because 8:12:15:21 fails C:D ratio (15:21 = 5:7!= 6:7).","Eliminated because 16:20:30:35 fails A:B ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"The electrical resistance R of a wire varies directly as its length L and inversely as the square of its diameter d (R = k L/d²). If a wire of length 50.0 meters and diameter 2.0 mm has a resistance of 5.0 ohms, what is the resistance of a wire of the same material having a length of 120.0 meters and a diameter of 4.0 mm?","3.0 ohms","4.5 ohms","2.5 ohms","3.6 ohms","A","Step-by-Step Solution:
+1. Formulate the jo∫-inverse proportion equation:
+ - R₁ d₁²/L₁ = R₂ d₂²/L₂ = k.
+2. Isolate R₂:
+ - R₂ = R₁ × (L₂/L₁) × (d₁/d₂)².
 3. Substitute the given values:
-   - $R_1 = 5.0\text{ ohms}$
-   - $L_1 = 50.0\text{ m}, \quad L_2 = 120.0\text{ m}$
-   - $d_1 = 2.0\text{ mm}, \quad d_2 = 4.0\text{ mm}$.
+ - R₁ = 5.0 ohms
+ - L₁ = 50.0 m, L₂ = 120.0 m
+ - d₁ = 2.0 mm, d₂ = 4.0 mm.
 4. Compute the ratios:
-   - Length Ratio: $\frac{L_2}{L_1} = \frac{120.0}{50.0} = 2.4$.
-   - Diameter Ratio Squared: $\left(\frac{d_1}{d_2}\right)^2 = \left(\frac{2.0}{4.0}\right)^2 = \left(\frac{1}{2}\right)^2 = \frac{1}{4} = 0.25$.
-5. Calculate $R_2$:
-   - $R_2 = 5.0 \times 2.4 \times 0.25 = 12.0 \times 0.25 = 3.0\text{ ohms}$.
+ - Length Ratio: L₂/L₁ = 120.0/50.0 = 2.4.
+ - Diameter Ratio Squared: (d₁/d₂)² = (2.0/4.0)² = (1/2)² = 1/4 = 0.25.
+5. Calculate R₂:
+ - R₂ = 5.0 × 2.4 × 0.25 = 12.0 × 0.25 = 3.0 ohms.
 
-Common Trap: Forgetting to square the diameter ratio ($5.0 \times 2.4 \times 0.5 = 6.0\text{ ohms}$).
-Exam Tip: Squaring the diameter quadruples the cross-sectional area, reducing resistance by a factor of 4. $R_2 = \frac{5.0 \times 2.4}{4} = 3.0\text{ ohms}$.","Correct. Survives elimination because R2 = 5.0 * (120/50) * (2/4)^2 = 5.0 * 2.4 * 0.25 = 3.0 ohms.","Eliminated because 4.5 ohms is an overestimate.","Eliminated because 2.5 ohms is an underestimate.","Eliminated because 3.6 ohms is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"A local government subsidy of ₱57,000.00 is divided among three community projects—Project X, Project Y, and Project Z—such that 4 times Project X's allocation equals 6 times Project Y's allocation, which equals 9 times Project Z's allocation ($4X = 6Y = 9Z$). What is Project Y's allocation?","₱18,000.00","₱27,000.00","₱12,000.00","₱21,000.00","A","Step-by-Step Solution:
-1. Set the equality to constant $k$:
-   - $4X = 6Y = 9Z = k$.
-2. Express allocations in terms of $k$:
-   - $X = \frac{k}{4}, \quad Y = \frac{k}{6}, \quad Z = \frac{k}{9}$.
-3. Find least common multiple of denominators ($\text{LCM}(4, 6, 9) = 36$):
-   - Let $k = 36m$.
-   - $X = \frac{36m}{4} = 9m$.
-   - $Y = \frac{36m}{6} = 6m$.
-   - $Z = \frac{36m}{9} = 4m$.
+Common Trap: Forgetting to square the diameter ratio (5.0 × 2.4 × 0.5 = 6.0 ohms).
+Exam Tip: Squaring the diameter quadruples the cross-sectional area, reducing resistance by a factor of 4. R₂ = 5.0 × 2.4/4 = 3.0 ohms.","Correct. Survives elimination because R2 = 5.0 * (120/50) * (2/4)² = 5.0 * 2.4 * 0.25 = 3.0 ohms.","Eliminated because 4.5 ohms is an overestimate.","Eliminated because 2.5 ohms is an underestimate.","Eliminated because 3.6 ohms is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"A local government subsidy of ₱57,000.00 is divided among three community projects—Project X, Project Y, and Project Z—such that 4 × Project X's allocation equals 6 × Project Y's allocation, which equals 9 × Project Z's allocation (4X = 6Y = 9Z). What is Project Y's allocation?","₱18,000.00","₱27,000.00","₱12,000.00","₱21,000.00","A","Step-by-Step Solution:
+1. Set the equality to constant k:
+ - 4X = 6Y = 9Z = k.
+2. Express allocations in terms of k:
+ - X = k/4, Y = k/6, Z = k/9.
+3. Find least common multiple of denominators (LCM(4, 6, 9) = 36):
+ - Let k = 36m.
+ - X = 36m/4 = 9m.
+ - Y = 36m/6 = 6m.
+ - Z = 36m/9 = 4m.
 4. Determine allocation ratio:
-   - $X : Y : Z = 9 : 6 : 4$.
+ - X: Y: Z = 9: 6: 4.
 5. Sum ratio parts:
-   - $\text{Total Parts} = 9 + 6 + 4 = 19\text{ parts}$.
+ - Total Parts = 9 + 6 + 4 = 19 parts.
 6. Calculate value per part:
-   - $1\text{ part} = \frac{₱57,000.00}{19} = ₱3,000.00$.
+ - 1 part = ₱57,000.00/19 = ₱3,000.00.
 7. Compute Project Y's allocation:
-   - $\text{Project Y} = 6 \times ₱3,000.00 = ₱18,000.00$.
-8. (Verification: $X = ₱27,000$, $Z = ₱12,000$. $4(27,000) = 6(18,000) = 9(12,000) = 108,000$).
+ - Project Y = 6 × ₱3,000.00 = ₱18,000.00.
+8. (Verification: X = ₱27,000, Z = ₱12,000. 4(27,000) = 6(18,000) = 9(12,000) = 108,000).
 
-Common Trap: Assuming the ratio is $4 : 6 : 9$ ($Y = \frac{6}{19}(57,000) = ₱18,000$ purely coincidentally for 6, but $X$ and $Z$ would be completely inverted!).
-Exam Tip: For $aX = bY = cZ$, the ratio is the reciprocal ratio $\frac{1}{a} : \frac{1}{b} : \frac{1}{c} = \frac{1}{4} : \frac{1}{6} : \frac{1}{9} = 9 : 6 : 4$.","Correct. Survives elimination because the reciprocal ratio is 9:6:4 (19 parts), giving Y = 6 * (57,000/19) = ₱18,000.00.","Eliminated because ₱27,000.00 is Project X's allocation.","Eliminated because ₱12,000.00 is Project Z's allocation.","Eliminated because ₱21,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"In a municipal development fund of ₱720,000.00, appropriations were initially divided among Infrastructure, Healthcare, and Education in the ratio $5 : 4 : 3$. Later, the council reallocated ₱40,000.00 from Infrastructure directly to Education. What is the new simplified ratio of Infrastructure to Healthcare to Education?","13 : 12 : 11","14 : 12 : 10","12 : 12 : 12","15 : 11 : 10","A","Step-by-Step Solution:
+Common Trap: Assuming the ratio is 4: 6: 9 (Y = 6/19(57,000) = ₱18,000 purely coincidentally for 6, but X and Z would be completely inverted!).
+Exam Tip: For aX = bY = cZ, the ratio is the reciprocal ratio 1/a: 1/b: 1/c = 1/4: 1/6: 1/9 = 9: 6: 4.","Correct. Survives elimination because the reciprocal ratio is 9:6:4 (19 parts), giving Y = 6 * (57,000/19) = ₱18,000.00.","Eliminated because ₱27,000.00 is Project X's allocation.","Eliminated because ₱12,000.00 is Project Z's allocation.","Eliminated because ₱21,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"In a municipal development fund of ₱720,000.00, appropriations were initially divided among Infrastructure, Healthcare, and Education in the ratio 5: 4: 3. Later, the council reallocated ₱40,000.00 from Infrastructure directly to Education. What is the new simplified ratio of Infrastructure to Healthcare to Education?","13: 12: 11","14: 12: 10","12: 12: 12","15: 11: 10","A","Step-by-Step Solution:
 1. Calculate initial appropriations:
-   - Total initial parts $= 5 + 4 + 3 = 12\text{ parts}$.
-   - $1\text{ part} = \frac{₱720,000.00}{12} = ₱60,000.00$.
-   - Infrastructure $= 5 \times ₱60,000.00 = ₱300,000.00$.
-   - Healthcare $= 4 \times ₱60,000.00 = ₱240,000.00$.
-   - Education $= 3 \times ₱60,000.00 = ₱180,000.00$.
+ - Total initial parts = 5 + 4 + 3 = 12 parts.
+ - 1 part = ₱720,000.00/12 = ₱60,000.00.
+ - Infrastructure = 5 × ₱60,000.00 = ₱300,000.00.
+ - Healthcare = 4 × ₱60,000.00 = ₱240,000.00.
+ - Education = 3 × ₱60,000.00 = ₱180,000.00.
 2. Apply the ₱40,000.00 reallocation:
-   - New Infrastructure $= ₱300,000.00 - ₱40,000.00 = ₱260,000.00$.
-   - New Healthcare $= ₱240,000.00$ (Unchanged).
-   - New Education $= ₱180,000.00 + ₱40,000.00 = ₱220,000.00$.
+ - New Infrastructure = ₱300,000.00 - ₱40,000.00 = ₱260,000.00.
+ - New Healthcare = ₱240,000.00 (Unchanged).
+ - New Education = ₱180,000.00 + ₱40,000.00 = ₱220,000.00.
 3. Express new simplified ratio:
-   - $\text{Ratio} = 260,000 : 240,000 : 220,000$.
-   - Divide by $20,000$: $\text{Ratio} = 13 : 12 : 11$.
+ - Ratio = 260,000: 240,000: 220,000.
+ - Divide by 20,000: Ratio = 13: 12: 11.
 
 Common Trap: Transferring funds from Healthcare instead of Infrastructure or forgetting to simplify by dividing by 20,000.
-Exam Tip: New amounts: $260\text{k} : 240\text{k} : 220\text{k} \implies 26 : 24 : 22 = 13 : 12 : 11$.","Correct. Survives elimination because new amounts are ₱260,000 : ₱240,000 : ₱220,000, which simplifies to 13 : 12 : 11.","Eliminated because 14 : 12 : 10 represents a transfer of only ₱20,000.","Eliminated because 12 : 12 : 12 assumes equal ₱240,000 split across all three.","Eliminated because 15 : 11 : 10 is an arithmetic error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"Two positive numbers are in the ratio $3 : 5$. If 9 is subtracted from each number, the ratio of the resulting numbers becomes $12 : 23$. What is the value of the smaller of the two original numbers?","33","27","36","30","A","Step-by-Step Solution:
-1. Define original numbers in terms of $x$:
-   - Smaller number $= 3x$.
-   - Larger number $= 5x$.
+Exam Tip: New amounts: 260k: 240k: 220k implies 26: 24: 22 = 13: 12: 11.","Correct. Survives elimination because new amounts are ₱260,000: ₱240,000: ₱220,000, which simplifies to 13: 12: 11.","Eliminated because 14: 12: 10 represents a transfer of only ₱20,000.","Eliminated because 12: 12: 12 assumes equal ₱240,000 split across all three.","Eliminated because 15: 11: 10 is an arithmetic error.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"Two positive numbers are in the ratio 3: 5. If 9 is subtracted from each number, the ratio of the resulting numbers becomes 12: 23. What is the value of the smaller of the two original numbers?","33","27","36","30","A","Step-by-Step Solution:
+1. Define original numbers in terms of x:
+ - Smaller number = 3x.
+ - Larger number = 5x.
 2. Formulate ratio equation after subtracting 9 from each:
-   - $\frac{3x - 9}{5x - 9} = \frac{12}{23}$.
+ - 3x - 9/5x - 9 = 12/23.
 3. Cross-multiply:
-   - $23(3x - 9) = 12(5x - 9)$.
+ - 23(3x - 9) = 12(5x - 9).
 4. Expand both sides:
-   - $69x - 207 = 60x - 108$.
-5. Solve for $x$:
-   - $69x - 60x = 207 - 108$.
-   - $9x = 99 \implies x = 11$.
+ - 69x - 207 = 60x - 108.
+5. Solve for x:
+ - 69x - 60x = 207 - 108.
+ - 9x = 99 implies x = 11.
 6. Calculate original numbers:
-   - Smaller number $= 3(11) = 33$.
-   - Larger number $= 5(11) = 55$.
+ - Smaller number = 3(11) = 33.
+ - Larger number = 5(11) = 55.
 7. Verify:
-   - $\frac{33 - 9}{55 - 9} = \frac{24}{46} = \frac{12}{23}$ (Confirmed!).
+ - 33 - 9/55 - 9 = 24/46 = 12/23 (Confirmed!).
 
-Common Trap: Answering $x = 11$ or selecting the larger number $55$.
-Exam Tip: Smaller number is $3x = 3(11) = 33$.","Correct. Survives elimination because x = 11 gives numbers 33 and 55, and (33 - 9)/(55 - 9) = 24/46 = 12/23.","Eliminated because 27 gives (27 - 9)/(45 - 9) = 18/36 = 1/2 != 12/23.","Eliminated because 36 gives (36 - 9)/(60 - 9) = 27/51 = 9/17 != 12/23.","Eliminated because 30 gives 21/41 != 12/23.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"If three positive quantities $a, b, c$ are in continued proportion (geometric progression such that $\frac{a}{b} = \frac{b}{c}$), and $a = 8.0$ and $c = 18.0$, what is the positive value of the mean proportional $b$?","12.0","10.0","14.0","16.0","A","Step-by-Step Solution:
+Common Trap: Answering x = 11 or selecting the larger number 55.
+Exam Tip: Smaller number is 3x = 3(11) = 33.","Correct. Survives elimination because x = 11 gives numbers 33 and 55, and (33 - 9)/(55 - 9) = 24/46 = 12/23.","Eliminated because 27 gives (27 - 9)/(45 - 9) = 18/36 = 1/2!= 12/23.","Eliminated because 36 gives (36 - 9)/(60 - 9) = 27/51 = 9/17!= 12/23.","Eliminated because 30 gives 21/41!= 12/23.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"If three positive quantities a, b, c are in continued proportion (geometric progression such that a/b = b/c), and a = 8.0 and c = 18.0, what is the positive value of the mean proportional b?","12.0","10.0","14.0","16.0","A","Step-by-Step Solution:
 1. Define continued proportion / mean proportional property:
-   - $\frac{a}{b} = \frac{b}{c} \implies b^2 = a \cdot c$.
-2. Substitute the given values $a = 8.0$ and $c = 18.0$:
-   - $b^2 = 8.0 \times 18.0 = 144.0$.
+ - a/b = b/c implies b² = a · c.
+2. Substitute the given values a = 8.0 and c = 18.0:
+ - b² = 8.0 × 18.0 = 144.0.
 3. Take the positive square root:
-   - $b = \sqrt{144.0} = 12.0$.
+ - b = √144.0 = 12.0.
 4. Verify the common ratio:
-   - $\frac{a}{b} = \frac{8}{12} = \frac{2}{3}$.
-   - $\frac{b}{c} = \frac{12}{18} = \frac{2}{3}$ (Holds!).
+ - a/b = 8/12 = 2/3.
+ - b/c = 12/18 = 2/3 (Holds!).
 
-Common Trap: Taking the arithmetic mean $\frac{8 + 18}{2} = 13.0$ instead of geometric mean $\sqrt{8 \times 18} = 12.0$.
-Exam Tip: Mean proportional between $a$ and $c$ is ALWAYS the geometric mean $\sqrt{ac} = \sqrt{144} = 12.0$.","Correct. Survives elimination because b^2 = 8 * 18 = 144, giving mean proportional b = 12.0.","Eliminated because 10.0 gives b^2 = 100 != 144.","Eliminated because 14.0 gives b^2 = 196 != 144.","Eliminated because 16.0 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"The ratio of the monthly incomes of two administrative officers is $9 : 7$, and the ratio of their monthly expenditures is $4 : 3$. If each officer saves exactly ₱10,000.00 per month, what is the monthly income of the higher-earning officer?","₱90,000.00","₱70,000.00","₱85,000.00","₱100,000.00","A","Step-by-Step Solution:
-1. Define incomes in terms of variable $x$:
-   - Income of Officer 1 $= 9x$.
-   - Income of Officer 2 $= 7x$.
-2. Express monthly expenditures ($\text{Expenditure} = \text{Income} - \text{Savings}$):
-   - Expenditure of Officer 1 $= 9x - 10,000.00$.
-   - Expenditure of Officer 2 $= 7x - 10,000.00$.
+Common Trap: Taking the arithmetic mean 8 + 18/2 = 13.0 instead of geometric mean √8 × 18 = 12.0.
+Exam Tip: Mean proportional between a and c is ALWAYS the geometric mean √ac = √144 = 12.0.","Correct. Survives elimination because b² = 8 * 18 = 144, giving mean proportional b = 12.0.","Eliminated because 10.0 gives b² = 100!= 144.","Eliminated because 14.0 gives b² = 196!= 144.","Eliminated because 16.0 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"The ratio of the monthly incomes of two administrative officers is 9: 7, and the ratio of their monthly expenditures is 4: 3. If each officer saves exactly ₱10,000.00 per month, what is the monthly income of the higher-earning officer?","₱90,000.00","₱70,000.00","₱85,000.00","₱100,000.00","A","Step-by-Step Solution:
+1. Define incomes in terms of variable x:
+ - Income of Officer 1 = 9x.
+ - Income of Officer 2 = 7x.
+2. Express monthly expenditures (Expenditure = Income - Savings):
+ - Expenditure of Officer 1 = 9x - 10,000.00.
+ - Expenditure of Officer 2 = 7x - 10,000.00.
 3. Set up the given expenditure ratio equation:
-   - $\frac{9x - 10,000.00}{7x - 10,000.00} = \frac{4}{3}$.
-4. Cross-multiply and solve for $x$:
-   - $3(9x - 10,000.00) = 4(7x - 10,000.00)$.
-   - $27x - 30,000.00 = 28x - 40,000.00$.
-   - $28x - 27x = 40,000.00 - 30,000.00 \implies x = 10,000.00$.
+ - 9x - 10,000.00/7x - 10,000.00 = 4/3.
+4. Cross-multiply and solve for x:
+ - 3(9x - 10,000.00) = 4(7x - 10,000.00).
+ - 27x - 30,000.00 = 28x - 40,000.00.
+ - 28x - 27x = 40,000.00 - 30,000.00 implies x = 10,000.00.
 5. Calculate income of the higher-earning officer:
-   - $\text{Income} = 9x = 9(₱10,000.00) = ₱90,000.00$.
-   - (Lower-earning officer $= 7x = ₱70,000.00$).
+ - Income = 9x = 9(₱10,000.00) = ₱90,000.00.
+ - (Lower-earning officer = 7x = ₱70,000.00).
 
-Common Trap: Selecting the lower-earning officer's income ($₱70,000.00$, Option B).
-Exam Tip: Cross-multiplication gives $x = 10,000$. Higher income is $9x = ₱90,000.00$.","Correct. Survives elimination because x = 10,000 gives incomes ₱90,000 and ₱70,000 (expenditures ₱80,000 and ₱60,000 in 4:3 ratio).","Eliminated because ₱70,000.00 is the income of the lower-earning officer.","Eliminated because ₱85,000.00 is not a multiple of 9.","Eliminated because ₱100,000.00 fails the expenditure ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
-"A commemorative gold bar broke into three pieces whose weights are in the ratio $3 : 4 : 5$. The monetary value of the gold bar is directly proportional to the square of its total weight ($V = k W^2$). If the original unbroken bar had an appraised value of ₱144,000.00, what is the combined value of the three broken fragments, and what was the net financial loss caused by the breakage?","Combined Value: ₱50,000.00; Net Loss: ₱94,000.00","Combined Value: ₱60,000.00; Net Loss: ₱84,000.00","Combined Value: ₱48,000.00; Net Loss: ₱96,000.00","Combined Value: ₱72,000.00; Net Loss: ₱72,000.00","A","Step-by-Step Solution:
-1. Express weights of the three fragments in terms of $x$:
-   - Fragment weights: $3x, \quad 4x, \quad 5x$.
-   - Total unbroken weight: $W = 3x + 4x + 5x = 12x$.
+Common Trap: Selecting the lower-earning officer's income (₱70,000.00, Option B).
+Exam Tip: Cross-multiplication gives x = 10,000. Higher income is 9x = ₱90,000.00.","Correct. Survives elimination because x = 10,000 gives incomes ₱90,000 and ₱70,000 (expenditures ₱80,000 and ₱60,000 in 4:3 ratio).","Eliminated because ₱70,000.00 is the income of the lower-earning officer.","Eliminated because ₱85,000.00 is not a multiple of 9.","Eliminated because ₱100,000.00 fails the expenditure ratio.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+"A commemorative gold bar broke into three pieces whose weights are in the ratio 3: 4: 5. The monetary value of the gold bar is directly proportional to the square of its total weight (V = k W²). If the original unbroken bar had an appraised value of ₱144,000.00, what is the combined value of the three broken fragments, and what was the net financial loss caused by the breakage?","Combined Value: ₱50,000.00; Net Loss: ₱94,000.00","Combined Value: ₱60,000.00; Net Loss: ₱84,000.00","Combined Value: ₱48,000.00; Net Loss: ₱96,000.00","Combined Value: ₱72,000.00; Net Loss: ₱72,000.00","A","Step-by-Step Solution:
+1. Express weights of the three fragments in terms of x:
+ - Fragment weights: 3x, 4x, 5x.
+ - Total unbroken weight: W = 3x + 4x + 5x = 12x.
 2. Formulate original appraised value:
-   - $V_{\text{original}} = k W^2 = k (12x)^2 = 144 k x^2 = ₱144,000.00$.
-   - Solve for constant term: $k x^2 = \frac{₱144,000.00}{144} = 1,000.00$.
+ - Vₒrigiₙₐₗ = k W² = k (12x)² = 144 k x² = ₱144,000.00.
+ - Solve for constant term: k x² = ₱144,000.00/144 = 1,000.00.
 3. Compute combined value of the three separate fragments:
-   - $V_{\text{fragments}} = k(3x)^2 + k(4x)^2 + k(5x)^2$.
-   - $V_{\text{fragments}} = k(9x^2 + 16x^2 + 25x^2) = 50 k x^2$.
-   - Substitute $k x^2 = 1,000.00$:
-   - $V_{\text{fragments}} = 50 \times 1,000.00 = ₱50,000.00$.
+ - Vfrₐgₘₑₙₜₛ = k(3x)² + k(4x)² + k(5x)².
+ - Vfrₐgₘₑₙₜₛ = k(9x² + 16x² + 25x²) = 50 k x².
+ - Substitute k x² = 1,000.00:
+ - Vfrₐgₘₑₙₜₛ = 50 × 1,000.00 = ₱50,000.00.
 4. Calculate net financial loss caused by breakage:
-   - $\text{Net Loss} = V_{\text{original}} - V_{\text{fragments}} = ₱144,000.00 - ₱50,000.00 = ₱94,000.00$.
+ - Net Loss = Vₒrigiₙₐₗ - Vfrₐgₘₑₙₜₛ = ₱144,000.00 - ₱50,000.00 = ₱94,000.00.
 
-Common Trap: Assuming value splits linearly ($₱144,000$) with no loss, forgetting that $(a+b+c)^2 > a^2 + b^2 + c^2$.
-Exam Tip: Ratio of fragment value to original value is $\frac{3^2 + 4^2 + 5^2}{(3+4+5)^2} = \frac{50}{144} \implies V = \frac{50}{144}(144,000) = ₱50,000.00$.","Correct. Survives elimination because the sum of squared weights is 9 + 16 + 25 = 50 parts out of 144 total, giving fragment value ₱50,000.00 and loss ₱94,000.00.","Eliminated because ₱60,000.00 assumes 60/144.","Eliminated because ₱48,000.00 is an underestimate.","Eliminated because ₱72,000.00 assumes 50% value retention.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"
+Common Trap: Assuming value splits linearly (₱144,000) with no loss, forgetting that (a+b+c)² > a² + b² + c².
+Exam Tip: Ratio of fragment value to original value is 3² + 4² + 5²/(3+4+5)² = 50/144 implies V = 50/144(144,000) = ₱50,000.00.","Correct. Survives elimination because the Σ of squared weights is 9 + 16 + 25 = 50 parts out of 144 total, giving fragment value ₱50,000.00 and loss ₱94,000.00.","Eliminated because ₱60,000.00 assumes 60/144.","Eliminated because ₱48,000.00 is an underestimate.","Eliminated because ₱72,000.00 assumes 50% value retention.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Ratio/proportion word problems | Very Difficult | Batch 043"

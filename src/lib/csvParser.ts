@@ -1,6 +1,7 @@
 // Relative Path: src/lib/csvParser.ts
 import Papa from "papaparse";
 import { StructuredQuestion } from "@/types/question";
+import { cleanMathText } from "@/lib/sanitizeMath";
 
 export interface RawQuestionItem extends StructuredQuestion {}
 
@@ -51,18 +52,25 @@ export function parseCSVToQuestions(csvText: string): StructuredQuestion[] {
     .map((item: any) => {
       const category = getCSVFieldValue(item, ["category", "subject"]) || "General";
       const subtopic = getCSVFieldValue(item, ["subtopic", "sub_topic", "subTopic", "topic"]) || "General";
-      const prompt = getCSVFieldValue(item, ["prompt", "question", "Question", "Prompt"]);
-      const explanation = getCSVFieldValue(item, ["explanation", "solution", "Explanation", "Solution"]) || null;
+      const rawPrompt = getCSVFieldValue(item, ["prompt", "question", "Question", "Prompt"]);
+      const prompt = cleanMathText(rawPrompt);
+      const rawExplanation = getCSVFieldValue(item, ["explanation", "solution", "Explanation", "Solution"]) || null;
+      const explanation = rawExplanation ? cleanMathText(rawExplanation) : null;
       const imageUrl = getCSVFieldValue(item, ["imageUrl", "image_url", "image", "ImageUrl"]) || null;
 
-      const optA = getCSVFieldValue(item, ["optionA", "option_a", "choiceA", "Option A", "Choice A", "a"]);
-      const optB = getCSVFieldValue(item, ["optionB", "option_b", "choiceB", "Option B", "Choice B", "b"]);
-      const optC = getCSVFieldValue(item, ["optionC", "option_c", "choiceC", "Option C", "Choice C", "c"]);
-      const optD = getCSVFieldValue(item, ["optionD", "option_d", "choiceD", "Option D", "Choice D", "d"]);
+      const rawOptA = getCSVFieldValue(item, ["optionA", "option_a", "choiceA", "Option A", "Choice A", "a"]);
+      const rawOptB = getCSVFieldValue(item, ["optionB", "option_b", "choiceB", "Option B", "Choice B", "b"]);
+      const rawOptC = getCSVFieldValue(item, ["optionC", "option_c", "choiceC", "Option C", "Choice C", "c"]);
+      const rawOptD = getCSVFieldValue(item, ["optionD", "option_d", "choiceD", "Option D", "Choice D", "d"]);
+
+      const optA = rawOptA ? cleanMathText(rawOptA) : "";
+      const optB = rawOptB ? cleanMathText(rawOptB) : "";
+      const optC = rawOptC ? cleanMathText(rawOptC) : "";
+      const optD = rawOptD ? cleanMathText(rawOptD) : "";
 
       let options: string[] = [];
       if (Array.isArray(item.options) && item.options.length > 0) {
-        options = item.options.map((o: any) => String(o).trim());
+        options = item.options.map((o: any) => cleanMathText(String(o).trim()));
       } else {
         options = [optA, optB, optC, optD].filter(Boolean);
       }
@@ -97,14 +105,14 @@ export function parseCSVToQuestions(csvText: string): StructuredQuestion[] {
             }
           } else {
             // Check if exact text matches an option
-            const matchingIdx = options.findIndex((opt) => opt.toLowerCase() === rawAns.toLowerCase());
+            const matchingIdx = options.findIndex((opt) => opt.toLowerCase() === rawAns.toLowerCase() || cleanMathText(opt).toLowerCase() === cleanMathText(rawAns).toLowerCase());
             if (matchingIdx !== -1) answerIndex = matchingIdx;
           }
         }
       }
 
       // Extended Educational Reasoning Fields
-      const stepByStep = getCSVFieldValue(item, [
+      const rawStepByStep = getCSVFieldValue(item, [
         "stepByStep",
         "step_by_step",
         "Step-by-Step Solution",
@@ -112,33 +120,42 @@ export function parseCSVToQuestions(csvText: string): StructuredQuestion[] {
         "step_solution",
         "solution_steps",
       ]) || null;
+      const stepByStep = rawStepByStep ? cleanMathText(rawStepByStep) : null;
 
-      const whyA = getCSVFieldValue(item, ["whyA", "why_a", "Why A Is Wrong/Right", "Why A is Right/Wrong", "Why A", "why_option_a"]) || null;
-      const whyB = getCSVFieldValue(item, ["whyB", "why_b", "Why B Is Wrong/Right", "Why B is Right/Wrong", "Why B", "why_option_b"]) || null;
-      const whyC = getCSVFieldValue(item, ["whyC", "why_c", "Why C Is Wrong/Right", "Why C is Right/Wrong", "Why C", "why_option_c"]) || null;
-      const whyD = getCSVFieldValue(item, ["whyD", "why_d", "Why D Is Wrong/Right", "Why D is Right/Wrong", "Why D", "why_option_d"]) || null;
+      const rawWhyA = getCSVFieldValue(item, ["whyA", "why_a", "Why A Is Wrong/Right", "Why A is Right/Wrong", "Why A", "why_option_a"]) || null;
+      const rawWhyB = getCSVFieldValue(item, ["whyB", "why_b", "Why B Is Wrong/Right", "Why B is Right/Wrong", "Why B", "why_option_b"]) || null;
+      const rawWhyC = getCSVFieldValue(item, ["whyC", "why_c", "Why C Is Wrong/Right", "Why C is Right/Wrong", "Why C", "why_option_c"]) || null;
+      const rawWhyD = getCSVFieldValue(item, ["whyD", "why_d", "Why D Is Wrong/Right", "Why D is Right/Wrong", "Why D", "why_option_d"]) || null;
 
-      const eliminationStrategy = getCSVFieldValue(item, [
+      const whyA = rawWhyA ? cleanMathText(rawWhyA) : null;
+      const whyB = rawWhyB ? cleanMathText(rawWhyB) : null;
+      const whyC = rawWhyC ? cleanMathText(rawWhyC) : null;
+      const whyD = rawWhyD ? cleanMathText(rawWhyD) : null;
+
+      const rawEliminationStrategy = getCSVFieldValue(item, [
         "eliminationStrategy",
         "elimination_strategy",
         "Elimination Strategy",
         "Strategy",
       ]) || null;
+      const eliminationStrategy = rawEliminationStrategy ? cleanMathText(rawEliminationStrategy) : null;
 
-      const commonTrap = getCSVFieldValue(item, [
+      const rawCommonTrap = getCSVFieldValue(item, [
         "commonTrap",
         "common_trap",
         "Common Trap",
         "Trap",
       ]) || null;
+      const commonTrap = rawCommonTrap ? cleanMathText(rawCommonTrap) : null;
 
-      const examTip = getCSVFieldValue(item, [
+      const rawExamTip = getCSVFieldValue(item, [
         "examTip",
         "exam_tip",
         "Exam Day Tip",
         "Exam Tip",
         "tip",
       ]) || null;
+      const examTip = rawExamTip ? cleanMathText(rawExamTip) : null;
 
       const difficulty = getCSVFieldValue(item, ["difficulty", "Difficulty", "level"]) || "MEDIUM";
 

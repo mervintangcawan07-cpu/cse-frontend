@@ -2,155 +2,155 @@
 "Passage: A National Government Agency is reviewing its annual inventory of properties. The inventory committee noted: Fact 1: The agency owns 6 vehicles classified as 'serviceable' and 4 vehicles classified as 'unserviceable.' Fact 2: All unserviceable vehicles are at least 15 years old. Fact 3: The 6 serviceable vehicles have an average age of 8 years. Fact 4: Current policy allows disposal of unserviceable vehicles pending Commission on Audit clearance. Based ONLY on these four facts, which of the following COULD BE TRUE?","One of the serviceable vehicles is 14 years old.","All 10 vehicles in the agency's fleet are at least 15 years old.","The 4 unserviceable vehicles have an average age of exactly 12 years.","The agency's unserviceable vehicles were all acquired in the same fiscal year.","A","Step-by-Step Solution:
 1. Understand 'Could be true': The statement is not contradicted by the given facts and is logically possible.
 2. Evaluate Option A:
-   - Fact 3: The 6 serviceable vehicles have an AVERAGE age of 8 years. An average of 8 does not preclude any individual vehicle from being 14 years old, as long as the others compensate to maintain the average.
-   - Example: Five vehicles aged 6 years and one aged 14 years → average = (5×6+14)/6 = 44/6 ≈ 7.3 years.
-   - A 14-year-old vehicle in a serviceable fleet with an average of 8 years IS mathematically possible. COULD BE TRUE ✓.
+ - Fact 3: The 6 serviceable vehicles have an AVERAGE age of 8 years. An average of 8 does not preclude any individual vehicle from being 14 years old, as long as the others compensate to maintain the average.
+ - Example: Five vehicles aged 6 years and one aged 14 years → average = (5×6+14)/6 = 44/6 ≈ 7.3 years.
+ - A 14-year-old vehicle in a serviceable fleet with an average of 8 years IS mathematically possible. COULD BE TRUE ✓.
 3. Evaluate Option B:
-   - Fact 3: Serviceable vehicles average 8 years. If all serviceable vehicles were ≥15 years, the average would be ≥15 years, contradicting the stated 8-year average. CANNOT BE TRUE ✗.
+ - Fact 3: Serviceable vehicles average 8 years. If all serviceable vehicles were ≥15 years, the average would be ≥15 years, contradicting the stated 8-year average. CANNOT BE TRUE ✗.
 4. Evaluate Option C:
-   - Fact 2: All unserviceable vehicles are at least 15 years old. An average of 12 years is impossible if all four are ≥15 years (minimum average = 15). CANNOT BE TRUE ✗.
+ - Fact 2: All unserviceable vehicles are at least 15 years old. An average of 12 years is impossible if all four are ≥15 years (minimum average = 15). CANNOT BE TRUE ✗.
 5. Evaluate Option D:
-   - Four unserviceable vehicles all ≥15 years old acquired in the same year is theoretically possible—but Fact 2 specifies age, not acquisition year. However, Option A is more directly supported as 'could be true.' Option D is not contradicted but also less clearly established than Option A's direct mathematical derivation.
+ - Four unserviceable vehicles all ≥15 years old acquired in the same year is theoretically possible—but Fact 2 specifies age, not acquisition year. However, Option A is more directly supported as 'could be true.' Option D is not contradicted but also less clearly established than Option A's direct mathematical derivation.
 
 Common Trap: Assuming that an 8-year average rules out individual vehicles older than 8 years.
 Exam Tip: 'Could be true' tests logical possibility—a statement is valid if it doesn't contradict any stated fact, even if not certain.","Correct. Survives elimination because a serviceable vehicle being 14 years old is mathematically consistent with a fleet average of 8 years when combined with younger vehicles.","Eliminated because if all serviceable vehicles were ≥15 years, the average age would be ≥15, directly contradicting the stated 8-year average.","Eliminated because if all 4 unserviceable vehicles are ≥15 years old (Fact 2), the minimum possible average is 15 years, making 12 impossible.","Eliminated because same-year acquisition doesn't directly conflict with the stated facts, but Option A is more clearly and precisely established as 'could be true' from the given mathematics.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A disaster risk reduction committee presented the following findings after a typhoon assessment: Finding 1: Barangay Mabuhay sustained total damage to 312 houses, of which 198 were declared completely destroyed. Finding 2: All 198 completely destroyed houses were located in the coastal zone. Finding 3: Barangay Mabuhay has a total of 580 registered households. Finding 4: Emergency relief goods were distributed to all affected households. Based ONLY on these four findings, which of the following COULD BE TRUE?","Some households in the coastal zone had their houses damaged but not completely destroyed.","All 580 registered households in Barangay Mabuhay had their houses completely destroyed.","No house in Barangay Mabuhay sustained any damage outside the coastal zone.","All houses located outside the coastal zone were completely destroyed.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Finding 1: 312 houses sustained damage total; 198 of those were completely destroyed.
-   - 312 - 198 = 114 houses were damaged but NOT completely destroyed.
-   - Finding 2: All 198 completely destroyed houses were in the coastal zone. This does NOT mean the 114 partially damaged houses were outside the coastal zone.
-   - COULD BE TRUE: Some of the 114 partially damaged houses could also be in the coastal zone. ✓
+ - Finding 1: 312 houses sustained damage total; 198 of those were completely destroyed.
+ - 312 - 198 = 114 houses were damaged but NOT completely destroyed.
+ - Finding 2: All 198 completely destroyed houses were in the coastal zone. This does NOT mean the 114 partially damaged houses were outside the coastal zone.
+ - COULD BE TRUE: Some of the 114 partially damaged houses could also be in the coastal zone. ✓
 2. Evaluate Option B:
-   - Finding 1: 312 houses sustained total damage, not 580. Option B claims all 580 registered households were completely destroyed—this contradicts the stated total of 312. CANNOT BE TRUE ✗.
+ - Finding 1: 312 houses sustained total damage, not 580. Option B claims all 580 registered households were completely destroyed—this contradicts the stated total of 312. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Finding 1: 312 total houses were damaged. Of those, 198 were completely destroyed in the coastal zone. The remaining 114 damaged houses are not specified to be coastal—they COULD be outside it. Option C says NO house was damaged outside the coastal zone; this is not established as necessarily true or necessarily false by the facts, but is presented as a definitive negative claim. Finding 2 only addresses 'completely destroyed' houses; the 114 partially damaged ones could be anywhere. CANNOT confirm or deny this definitively. Actually, this could be true—but it is not established. However, Option A is more clearly and cleanly 'could be true.'
+ - Finding 1: 312 total houses were damaged. Of those, 198 were completely destroyed in the coastal zone. The remaining 114 damaged houses are not specified to be coastal—they COULD be outside it. Option C says NO house was damaged outside the coastal zone; this is not established as necessarily true or necessarily false by the facts, but is presented as a definitive negative claim. Finding 2 only addresses 'completely destroyed' houses; the 114 partially damaged ones could be anywhere. CANNOT confirm or deny this definitively. Actually, this could be true—but it is not established. However, Option A is more clearly and cleanly 'could be true.'
 4. Evaluate Option D:
-   - Finding 2: Completely destroyed houses were in the coastal zone. Option D says outside coastal zone houses were completely destroyed—directly contradicts Finding 2. CANNOT BE TRUE ✗.
+ - Finding 2: Completely destroyed houses were in the coastal zone. Option D says outside coastal zone houses were completely destroyed—directly contradicts Finding 2. CANNOT BE TRUE ✗.
 
 Common Trap: Assuming that 'all completely destroyed = coastal zone' also means 'all coastal zone houses = completely destroyed.'
 Exam Tip: The direction of 'all A are B' does not mean 'all B are A'—avoid this common logical conversion error.","Correct. Survives elimination because Finding 1 establishes 114 partially damaged houses that are not specified as exclusively outside the coastal zone; some could be within it.","Eliminated because only 312 of 580 registered households had their homes damaged—claiming 580 complete destructions directly contradicts Finding 1.","Eliminated because Finding 1's 114 partially damaged (but not destroyed) houses have no stated location; they could plausibly be outside the coastal zone, so this claim is uncertain rather than 'could be true' definitively.","Eliminated because Finding 2 establishes that all completely destroyed houses were IN the coastal zone, making destruction outside the coastal zone a direct contradiction.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
-"Passage: A regional science research council reviewed grant applications with the following policies: Policy 1: All approved research grants must have at least one principal investigator who holds a doctoral degree. Policy 2: Research grants categorized as 'basic research' receive funding of up to PHP 2 million per year. Policy 3: Applied research grants may receive up to PHP 5 million per year. Policy 4: Research teams with fewer than 3 members are ineligible for applied research grants. Which of the following COULD BE TRUE under these four policies?","A 2-member research team with a doctoral-degree principal investigator successfully receives a basic research grant of PHP 1.8 million.","A 2-member research team receives an applied research grant of PHP 3 million.","A 4-member basic research team receives a PHP 6 million annual grant.","A research team without any doctoral-degree holder receives an approved grant.","A","Step-by-Step Solution:
+"Passage: A regional science research council reviewed grant applications with the following policies: Policy 1: All approved research grants must have at least one principal investigator who holds a doctoral °. Policy 2: Research grants categorized as 'basic research' receive funding of up to PHP 2 million per year. Policy 3: Applied research grants may receive up to PHP 5 million per year. Policy 4: Research teams with fewer than 3 members are ineligible for applied research grants. Which of the following COULD BE TRUE under these four policies?","A 2-member research team with a doctoral-° principal investigator successfully receives a basic research grant of PHP 1.8 million.","A 2-member research team receives an applied research grant of PHP 3 million.","A 4-member basic research team receives a PHP 6 million annual grant.","A research team without any doctoral-° holder receives an approved grant.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Policy 1: Must have at least one doctoral PI → 2-member team with doctoral PI satisfies this ✓.
-   - Policy 2: Basic research grants up to PHP 2M → PHP 1.8M ≤ PHP 2M ✓.
-   - Policy 4: Fewer than 3 members ineligible for APPLIED research only, not basic research → 2-member team is eligible for basic research ✓.
-   - All conditions satisfied. COULD BE TRUE ✓.
+ - Policy 1: Must have at least one doctoral PI → 2-member team with doctoral PI satisfies this ✓.
+ - Policy 2: Basic research grants up to PHP 2M → PHP 1.8M ≤ PHP 2M ✓.
+ - Policy 4: Fewer than 3 members ineligible for APPLIED research only, not basic research → 2-member team is eligible for basic research ✓.
+ - All conditions satisfied. COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Policy 4: Teams fewer than 3 members are ineligible for applied research grants. A 2-member team receiving an applied research grant directly violates Policy 4. CANNOT BE TRUE ✗.
+ - Policy 4: Teams fewer than 3 members are ineligible for applied research grants. A 2-member team receiving an applied research grant directly violates Policy 4. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Policy 2: Basic research grants fund up to PHP 2M/year. PHP 6M > PHP 2M → exceeds the maximum. CANNOT BE TRUE ✗.
+ - Policy 2: Basic research grants fund up to PHP 2M/year. PHP 6M > PHP 2M → exceeds the maximum. CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Policy 1: All approved grants must have at least one doctoral PI. A team without any doctoral holder cannot receive an approved grant. CANNOT BE TRUE ✗.
+ - Policy 1: All approved grants must have at least one doctoral PI. A team without any doctoral holder cannot receive an approved grant. CANNOT BE TRUE ✗.
 
 Common Trap: Applying Policy 4's team size restriction to basic research grants when it only applies to applied research.
-Exam Tip: Read eligibility restrictions carefully—Policy 4 restricts small teams from applied research only, leaving basic research open to smaller teams.","Correct. Survives elimination because a 2-member team with a doctoral PI satisfies Policy 1, PHP 1.8M satisfies Policy 2's ceiling, and Policy 4's restriction applies only to applied research—not basic research.","Eliminated because Policy 4 explicitly prohibits teams with fewer than 3 members from receiving applied research grants.","Eliminated because Policy 2 caps basic research funding at PHP 2 million per year; PHP 6 million exceeds this limit.","Eliminated because Policy 1 requires all approved grants to have at least one doctoral-degree principal investigator—no exception is provided.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
-"Passage: A regional detention facility conducted an internal population audit with the following documented data: Data Point 1: The facility's official rated capacity is 450 detainees. Data Point 2: Current detainee population is 1,127. Data Point 3: Of the current detainees, 634 are persons deprived of liberty (PDLs) awaiting trial and have not yet been convicted. Data Point 4: The average length of detention for awaiting-trial detainees is 2.3 years. Based ONLY on these four data points, which of the following COULD BE TRUE?","Some awaiting-trial detainees have been detained in the facility for more than 3 years without conviction.","All 1,127 detainees in the facility have been convicted of a criminal offense.","The facility's current detainee population is within its rated design capacity.","All awaiting-trial detainees will be released within 6 months under existing policy.","A","Step-by-Step Solution:
+Exam Tip: Read eligibility restrictions carefully—Policy 4 restricts small teams from applied research only, leaving basic research open to smaller teams.","Correct. Survives elimination because a 2-member team with a doctoral PI satisfies Policy 1, PHP 1.8M satisfies Policy 2's ceiling, and Policy 4's restriction applies only to applied research—not basic research.","Eliminated because Policy 4 explicitly prohibits teams with fewer than 3 members from receiving applied research grants.","Eliminated because Policy 2 caps basic research funding at PHP 2 million per year; PHP 6 million exceeds this limit.","Eliminated because Policy 1 requires all approved grants to have at least one doctoral-° principal investigator—no exception is provided.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
+"Passage: A regional detention facility conducted an internal population audit with the following documented data: Data Po∫ 1: The facility's official rated capacity is 450 detainees. Data Po∫ 2: Current detainee population is 1,127. Data Po∫ 3: Of the current detainees, 634 are persons deprived of liberty (PDLs) awaiting trial and have not yet been convicted. Data Po∫ 4: The average length of detention for awaiting-trial detainees is 2.3 years. Based ONLY on these four data points, which of the following COULD BE TRUE?","Some awaiting-trial detainees have been detained in the facility for more than 3 years without conviction.","All 1,127 detainees in the facility have been convicted of a criminal offense.","The facility's current detainee population is within its rated design capacity.","All awaiting-trial detainees will be released within 6 months under existing policy.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Data Point 4: The AVERAGE length of detention for awaiting-trial detainees is 2.3 years.
-   - An average of 2.3 years means some detainees are below 2.3 years and some are above.
-   - Some detainees being detained for more than 3 years is mathematically possible within a distribution averaging 2.3 years.
-   - This COULD BE TRUE ✓.
+ - Data Po∫ 4: The AVERAGE length of detention for awaiting-trial detainees is 2.3 years.
+ - An average of 2.3 years means some detainees are below 2.3 years and some are above.
+ - Some detainees being detained for more than 3 years is mathematically possible within a distribution averaging 2.3 years.
+ - This COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Data Point 3: 634 detainees are awaiting trial and have NOT been convicted. Option B claims ALL 1,127 are convicted—directly contradicted by Data Point 3. CANNOT BE TRUE ✗.
+ - Data Po∫ 3: 634 detainees are awaiting trial and have NOT been convicted. Option B claims ALL 1,127 are convicted—directly contradicted by Data Po∫ 3. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Data Point 1: Rated capacity = 450. Current population = 1,127. 1,127 > 450 → the facility is at 250% of capacity. CANNOT BE TRUE ✗.
+ - Data Po∫ 1: Rated capacity = 450. Current population = 1,127. 1,127 > 450 → the facility is at 250% of capacity. CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Data Point 4 gives historical average detention duration of 2.3 years. No policy guaranteeing release within 6 months is stated. CANNOT conclude ✗.
+ - Data Po∫ 4 gives historical average detention duration of 2.3 years. No policy guaranteeing release within 6 months is stated. CANNOT conclude ✗.
 
 Common Trap: Treating an average as the maximum or minimum value in the distribution.
-Exam Tip: Averages describe the central tendency of a distribution; individual values can be significantly above or below the average.","Correct. Survives elimination because with an average detention period of 2.3 years for awaiting-trial detainees, individual cases above the average (e.g., 3+ years) are mathematically consistent with the data.","Eliminated because Data Point 3 explicitly identifies 634 detainees as unconvicted awaiting-trial PDLs; they cannot simultaneously be classified as convicted.","Eliminated because the current population of 1,127 exceeds the rated capacity of 450 by more than 150%; the facility is severely overcrowded.","Eliminated because no policy on mandatory release timelines is mentioned in any of the four data points.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
+Exam Tip: Averages describe the central tendency of a distribution; individual values can be significantly above or below the average.","Correct. Survives elimination because with an average detention period of 2.3 years for awaiting-trial detainees, individual cases above the average (e.g., 3+ years) are mathematically consistent with the data.","Eliminated because Data Po∫ 3 explicitly identifies 634 detainees as unconvicted awaiting-trial PDLs; they cannot simultaneously be classified as convicted.","Eliminated because the current population of 1,127 exceeds the rated capacity of 450 by more than 150%; the facility is severely overcrowded.","Eliminated because no policy on mandatory release timelines is mentioned in any of the four data points.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A civil service commission unit is reviewing the eligibility records of five government employees—Aguilar, Bautista, Cruz, Domingo, and Estrada—with the following established facts: Fact 1: Aguilar and Bautista both hold Career Service Professional eligibility. Fact 2: Cruz and Domingo do not hold Career Service Professional eligibility. Fact 3: Estrada holds either Career Service Professional eligibility or Career Service Subprofessional eligibility, but not both. Fact 4: An employee holding Career Service Subprofessional eligibility cannot be promoted to a second-level position. Based ONLY on these four facts, which of the following COULD BE TRUE?","Estrada holds Career Service Professional eligibility and is eligible for promotion to a second-level position.","Cruz holds Career Service Professional eligibility.","Estrada holds both Career Service Professional and Subprofessional eligibilities simultaneously.","Aguilar is ineligible for a second-level position.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Fact 3: Estrada holds either CS Professional or CS Subprofessional—but not both.
-   - Estrada holding CS Professional is one of the two valid possibilities from Fact 3.
-   - If Estrada holds CS Professional: Fact 4 (restriction applies only to Subprofessional holders) does not apply.
-   - Estrada with CS Professional = eligible for second-level promotion. COULD BE TRUE ✓.
+ - Fact 3: Estrada holds either CS Professional or CS Subprofessional—but not both.
+ - Estrada holding CS Professional is one of the two valid possibilities from Fact 3.
+ - If Estrada holds CS Professional: Fact 4 (restriction applies only to Subprofessional holders) does not apply.
+ - Estrada with CS Professional = eligible for second-level promotion. COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Fact 2: Cruz does NOT hold Career Service Professional eligibility. Option B directly contradicts Fact 2. CANNOT BE TRUE ✗.
+ - Fact 2: Cruz does NOT hold Career Service Professional eligibility. Option B directly contradicts Fact 2. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Fact 3: Estrada holds either CS Professional OR Subprofessional—explicitly NOT BOTH. CANNOT BE TRUE ✗.
+ - Fact 3: Estrada holds either CS Professional OR Subprofessional—explicitly NOT BOTH. CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Fact 1: Aguilar holds Career Service Professional eligibility. Professional eligibility qualifies for second-level positions. Option D (ineligible for second-level) contradicts this. CANNOT BE TRUE ✗.
+ - Fact 1: Aguilar holds Career Service Professional eligibility. Professional eligibility qualifies for second-level positions. Option D (ineligible for second-level) contradicts this. CANNOT BE TRUE ✗.
 
 Common Trap: Treating Fact 3's exclusive or ('either...but not both') as meaning Estrada definitely holds Subprofessional eligibility.
 Exam Tip: An 'either A or B but not both' statement means exactly one of the two options is true; both possible realizations (A alone, or B alone) must be assessed for 'could be true.'","Correct. Survives elimination because Fact 3 permits Estrada to hold CS Professional eligibility (one of the two valid outcomes), and CS Professional eligibility qualifies for second-level positions per Fact 4's logic.","Eliminated because Fact 2 explicitly states Cruz does NOT hold Career Service Professional eligibility—this is a direct factual contradiction.","Eliminated because Fact 3 uses an exclusive 'either...but not both' formulation; simultaneous holding of both eligibilities is explicitly prohibited.","Eliminated because Fact 1 establishes Aguilar as a CS Professional eligibility holder, which qualifies for second-level positions.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A budget execution report for a government agency's fourth quarter contains: Item 1: Total agency budget for the fiscal year was PHP 480 million. Item 2: As of Q3, 68% of the total budget had been obligated. Item 3: In Q4, the agency obligated an additional PHP 76.8 million. Item 4: Unobligated balances at year-end are subject to reversion to the National Treasury unless covered by a Special Allotment Release Order. Based ONLY on these four items, which of the following COULD BE TRUE?","The agency had sufficient unobligated funds at year-end to cover a PHP 15 million SARO-covered project carryover.","The agency obligated 100% of its total fiscal year budget by year-end.","The agency's year-end unobligated balance exceeded its total fiscal year budget.","The agency obligated zero additional funds during Q4.","A","Step-by-Step Solution:
 1. Calculate total obligated budget:
-   - Q1–Q3 obligated: 68% × PHP 480M = PHP 326.4M.
-   - Q4 additional: PHP 76.8M.
-   - Total obligated: PHP 326.4M + PHP 76.8M = PHP 403.2M.
-   - Unobligated balance: PHP 480M - PHP 403.2M = PHP 76.8M.
+ - Q1–Q3 obligated: 68% × PHP 480M = PHP 326.4M.
+ - Q4 additional: PHP 76.8M.
+ - Total obligated: PHP 326.4M + PHP 76.8M = PHP 403.2M.
+ - Unobligated balance: PHP 480M - PHP 403.2M = PHP 76.8M.
 2. Evaluate Option A:
-   - Year-end unobligated balance = PHP 76.8M.
-   - PHP 76.8M > PHP 15M → the agency had sufficient unobligated funds to cover a PHP 15M SARO project.
-   - Item 4 allows unobligated funds to be covered by SARO → COULD BE TRUE ✓.
+ - Year-end unobligated balance = PHP 76.8M.
+ - PHP 76.8M > PHP 15M → the agency had sufficient unobligated funds to cover a PHP 15M SARO project.
+ - Item 4 allows unobligated funds to be covered by SARO → COULD BE TRUE ✓.
 3. Evaluate Option B:
-   - Total obligated = PHP 403.2M ≠ PHP 480M. Obligating 100% would require PHP 480M total. CANNOT BE TRUE given the stated Q4 obligation ✗.
+ - Total obligated = PHP 403.2M ≠ PHP 480M. Obligating 100% would require PHP 480M total. CANNOT BE TRUE given the stated Q4 obligation ✗.
 4. Evaluate Option C:
-   - Unobligated balance = PHP 76.8M < PHP 480M total budget. Exceeding the total budget is impossible. CANNOT BE TRUE ✗.
+ - Unobligated balance = PHP 76.8M < PHP 480M total budget. Exceeding the total budget is impossible. CANNOT BE TRUE ✗.
 5. Evaluate Option D:
-   - Item 3 explicitly states PHP 76.8M was obligated in Q4. CANNOT BE TRUE ✗.
+ - Item 3 explicitly states PHP 76.8M was obligated in Q4. CANNOT BE TRUE ✗.
 
 Common Trap: Miscalculating the unobligated balance by forgetting to add Q4 obligations to the Q3 cumulative total.
 Exam Tip: Compute cumulative obligations systematically: Q1-Q3 percentage × total + Q4 stated amount = total obligated; then subtract from total budget for the unobligated balance.","Correct. Survives elimination because the unobligated balance of PHP 76.8M is sufficient to cover a PHP 15M SARO-covered carryover, and Item 4 explicitly provides the SARO mechanism for this purpose.","Eliminated because total year obligations are PHP 403.2M, not PHP 480M (100%); the calculation does not reach full obligation.","Eliminated because an unobligated balance (PHP 76.8M) cannot exceed the total annual budget (PHP 480M)—mathematically impossible.","Eliminated because Item 3 explicitly states PHP 76.8M in additional obligations were made in Q4; zero Q4 obligations directly contradict this.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A national social welfare agency is analyzing data from its conditional cash transfer beneficiary database: Statistic A: 74% of registered beneficiaries are female-headed households. Statistic B: The average monthly benefit per household is PHP 1,450. Statistic C: 12% of current beneficiaries have been enrolled for more than 10 years. Statistic D: The program covers beneficiaries in all 17 administrative regions of the Philippines. Based ONLY on these four statistics, which of the following COULD BE TRUE?","An individual beneficiary household has been enrolled in the program for 15 years and receives PHP 1,200 per month.","All registered beneficiaries receive exactly PHP 1,450 per month.","More than 74% of beneficiaries in a specific region are from female-headed households.","Exactly 12% of beneficiaries in each of the 17 regions have been enrolled for more than 10 years.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Statistic C: 12% have been enrolled for MORE than 10 years → 15-year enrollment is within this category. POSSIBLE ✓.
-   - Statistic B: Average monthly benefit = PHP 1,450. An individual receiving PHP 1,200 is below the average, which is consistent with a distribution where some receive above and below the average. POSSIBLE ✓.
-   - Both conditions COULD BE TRUE ✓.
+ - Statistic C: 12% have been enrolled for MORE than 10 years → 15-year enrollment is within this category. POSSIBLE ✓.
+ - Statistic B: Average monthly benefit = PHP 1,450. An individual receiving PHP 1,200 is below the average, which is consistent with a distribution where some receive above and below the average. POSSIBLE ✓.
+ - Both conditions COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Statistic B gives an average of PHP 1,450. An average implies distribution—some above, some below. 'All receive exactly PHP 1,450' would only be possible if there's no variation, which is not established. However, technically possible if the distribution has zero variance—but this is an extremely restrictive assumption. More critically, individual benefit amounts vary by household size in most CCT programs, and the statistic is given as an 'average' implying variance. NOT cleanly 'could be true.'
+ - Statistic B gives an average of PHP 1,450. An average implies distribution—some above, some below. 'All receive exactly PHP 1,450' would only be possible if there's no variation, which is not established. However, technically possible if the distribution has zero variance—but this is an extremely restrictive assumption. More critically, individual benefit amounts vary by household size in most CCT programs, and the statistic is given as an 'average' implying variance. NOT cleanly 'could be true.'
 3. Evaluate Option C:
-   - Statistic A: 74% is the NATIONAL average. A specific region could have a higher regional percentage (e.g., 85% female-headed) while others have lower, averaging to 74% nationally. COULD BE TRUE—but less directly supported than Option A.
+ - Statistic A: 74% is the NATIONAL average. A specific region could have a higher regional percentage (e.g., 85% female-headed) while others have lower, averaging to 74% nationally. COULD BE TRUE—but less directly supported than Option A.
 4. Evaluate Option D:
-   - Statistic C: 12% is the NATIONAL figure. The regional distribution could vary significantly; requiring exactly 12% in each region adds a specific requirement not established by the statistics. Less cleanly 'could be true.'
+ - Statistic C: 12% is the NATIONAL figure. The regional distribution could vary significantly; requiring exactly 12% in each region adds a specific requirement not established by the statistics. Less cleanly 'could be true.'
 
 Common Trap: Treating national average statistics as uniformly applying to all sub-national units.
-Exam Tip: A household receiving below-average benefits and enrolled above-average years simultaneously satisfies both statistics by being a valid data point within their respective distributions.","Correct. Survives elimination because 15-year enrollment falls within the 10+ year category (Statistic C), and PHP 1,200 monthly benefit below the average is consistent with an average of PHP 1,450 (Statistic B).","Eliminated because an average of PHP 1,450 implies a distribution with variance; 'exactly PHP 1,450 for all beneficiaries' requires zero variance, which is an assumption beyond the stated statistics.","Eliminated because while regional variation is theoretically possible, Option A more directly satisfies 'could be true' with precise mathematical consistency rather than requiring regional distribution inference.","Eliminated because national averages do not necessarily translate into identical percentages for every subunit; requiring exact 12% in all 17 regions is an unsupported restriction.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
+Exam Tip: A household receiving below-average benefits and enrolled above-average years simultaneously satisfies both statistics by being a valid data po∫ within their respective distributions.","Correct. Survives elimination because 15-year enrollment falls within the 10+ year category (Statistic C), and PHP 1,200 monthly benefit below the average is consistent with an average of PHP 1,450 (Statistic B).","Eliminated because an average of PHP 1,450 implies a distribution with variance; 'exactly PHP 1,450 for all beneficiaries' requires zero variance, which is an assumption beyond the stated statistics.","Eliminated because while regional variation is theoretically possible, Option A more directly satisfies 'could be true' with precise mathematical consistency rather than requiring regional distribution inference.","Eliminated because national averages do not necessarily translate into identical percentages for every subunit; requiring exact 12% in all 17 regions is an unsupported restriction.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A public utility's electricity distribution network covers five municipalities: Halcyon, Ilaya, Jacinto, Kambal, and Laguerta. The utility's operational report states: Fact 1: Halcyon and Ilaya have reliable 24-hour electricity supply. Fact 2: Jacinto experienced at least one power interruption per week throughout the review period. Fact 3: Kambal and Laguerta are scheduled for grid rehabilitation starting next quarter. Fact 4: Municipalities under grid rehabilitation receive only 12-hour daily electricity supply during the rehabilitation period. Based ONLY on these four facts, which of the following COULD BE TRUE?","Laguerta currently receives 24-hour electricity supply but will transition to 12-hour supply once rehabilitation begins next quarter.","Halcyon and Jacinto both experienced weekly power interruptions during the review period.","Kambal is currently receiving only 12-hour daily electricity supply.","All five municipalities experienced at least one power interruption per week throughout the review period.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Fact 3: Kambal and Laguerta are SCHEDULED for rehabilitation starting NEXT QUARTER—not yet begun.
-   - Fact 4: 12-hour supply applies DURING rehabilitation.
-   - Therefore, Laguerta currently (before next quarter) has not yet entered rehabilitation. Its current supply status is not explicitly stated as reduced.
-   - Laguerta's current 24-hour supply is not contradicted by any fact → COULD BE TRUE ✓.
-   - After rehabilitation starts: Fact 4 confirms 12-hour supply → transition is consistent ✓.
+ - Fact 3: Kambal and Laguerta are SCHEDULED for rehabilitation starting NEXT QUARTER—not yet begun.
+ - Fact 4: 12-hour supply applies DURING rehabilitation.
+ - Therefore, Laguerta currently (before next quarter) has not yet entered rehabilitation. Its current supply status is not explicitly stated as reduced.
+ - Laguerta's current 24-hour supply is not contradicted by any fact → COULD BE TRUE ✓.
+ - After rehabilitation starts: Fact 4 confirms 12-hour supply → transition is consistent ✓.
 2. Evaluate Option B:
-   - Fact 1: Halcyon has reliable 24-hour supply. Fact 2: Only Jacinto is stated to have weekly interruptions. Halcyon experiencing weekly interruptions contradicts Fact 1. CANNOT BE TRUE ✗.
+ - Fact 1: Halcyon has reliable 24-hour supply. Fact 2: Only Jacinto is stated to have weekly interruptions. Halcyon experiencing weekly interruptions contradicts Fact 1. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Fact 3: Rehabilitation starts NEXT QUARTER—not currently. Fact 4 applies during rehabilitation only. Currently, Kambal is not in rehabilitation. 12-hour supply now would contradict the 'starting next quarter' timing. CANNOT BE TRUE ✗.
+ - Fact 3: Rehabilitation starts NEXT QUARTER—not currently. Fact 4 applies during rehabilitation only. Currently, Kambal is not in rehabilitation. 12-hour supply now would contradict the 'starting next quarter' timing. CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Fact 1: Halcyon and Ilaya have reliable 24-hour supply, implying they do NOT experience weekly interruptions. CANNOT BE TRUE ✗.
+ - Fact 1: Halcyon and Ilaya have reliable 24-hour supply, implying they do NOT experience weekly interruptions. CANNOT BE TRUE ✗.
 
 Common Trap: Assuming Kambal and Laguerta are already in rehabilitation and receiving 12-hour supply, when Fact 3 says it starts next quarter.
 Exam Tip: Scheduled future events and current conditions are distinct; 'starts next quarter' means the change has not yet occurred.","Correct. Survives elimination because Laguerta's current supply status is not stated to be reduced (rehabilitation hasn't begun), and its transition to 12-hour supply once rehabilitation starts is explicitly supported by Fact 4.","Eliminated because Fact 1 establishes Halcyon as having reliable 24-hour supply, directly contradicting the claim that it also experienced weekly interruptions.","Eliminated because Fact 3 states rehabilitation begins next quarter; Fact 4's 12-hour supply applies during rehabilitation, which has not yet started for Kambal.","Eliminated because Fact 1 establishes Halcyon and Ilaya have reliable supply without weekly interruptions, directly contradicting a claim that all five municipalities experienced interruptions.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A national poverty assessment released the following provincial statistics for Province Z: Indicator 1: Overall poverty incidence in Province Z is 34.7%. Indicator 2: Urban poverty incidence within Province Z is 18.2%. Indicator 3: Rural poverty incidence within Province Z is 51.4%. Indicator 4: Province Z's poverty incidence decreased from 41.3% in 2019 to 34.7% in 2023. Based ONLY on these four indicators, which of the following COULD BE TRUE?","The rural population of Province Z is larger than the urban population, contributing disproportionately to the overall poverty rate of 34.7%.","The poverty incidence in urban areas of Province Z exceeds 50%.","Province Z's poverty incidence increased between 2019 and 2023.","The overall poverty incidence in Province Z (34.7%) is lower than the urban poverty incidence (18.2%).","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - Indicators 1, 2, and 3: Overall = 34.7%, Urban = 18.2%, Rural = 51.4%.
-   - The overall rate (34.7%) is between the urban (18.2%) and rural (51.4%) rates, closer to rural.
-   - For a weighted average to yield 34.7% when urban = 18.2% and rural = 51.4%, the rural population weight must be higher than urban weight.
-   - Weighted average: w_rural × 51.4% + (1-w_rural) × 18.2% = 34.7% → w_rural ≈ 50.2%.
-   - A rural population larger than urban (majority rural weight) is mathematically consistent with the overall rate. COULD BE TRUE ✓.
+ - Indicators 1, 2, and 3: Overall = 34.7%, Urban = 18.2%, Rural = 51.4%.
+ - The overall rate (34.7%) is between the urban (18.2%) and rural (51.4%) rates, closer to rural.
+ - For a weighted average to yield 34.7% when urban = 18.2% and rural = 51.4%, the rural population weight must be higher than urban weight.
+ - Weighted average: w_rural × 51.4% + (1-w_rural) × 18.2% = 34.7% → w_rural ≈ 50.2%.
+ - A rural population larger than urban (majority rural weight) is mathematically consistent with the overall rate. COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Indicator 2: Urban poverty incidence is 18.2%. Option B claims >50%. Directly contradicts Indicator 2. CANNOT BE TRUE ✗.
+ - Indicator 2: Urban poverty incidence is 18.2%. Option B claims >50%. Directly contradicts Indicator 2. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Indicator 4: Poverty decreased from 41.3% (2019) to 34.7% (2023). An increase contradicts this directly. CANNOT BE TRUE ✗.
+ - Indicator 4: Poverty decreased from 41.3% (2019) to 34.7% (2023). An increase contradicts this directly. CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Overall = 34.7%; Urban = 18.2%. 34.7% is NOT lower than 18.2%—it is higher. Direct contradiction. CANNOT BE TRUE ✗.
+ - Overall = 34.7%; Urban = 18.2%. 34.7% is NOT lower than 18.2%—it is higher. Direct contradiction. CANNOT BE TRUE ✗.
 
 Common Trap: Assuming overall poverty rates are simple averages of urban and rural rates, when they are actually weighted averages dependent on population distribution.
 Exam Tip: A weighted average between two values (18.2% and 51.4%) that yields 34.7% implies a specific population weight distribution—the larger weight goes to the segment closer to the overall rate.","Correct. Survives elimination because the weighted average calculation reveals that a larger rural population proportion is mathematically required to produce an overall rate of 34.7% between urban 18.2% and rural 51.4%.","Eliminated because Indicator 2 explicitly states urban poverty is 18.2%, directly contradicting the claim that it exceeds 50%.","Eliminated because Indicator 4 explicitly states poverty DECREASED from 41.3% to 34.7%; an increase directly contradicts this.","Eliminated because 34.7% overall is higher than 18.2% urban—the claim that 34.7% is lower than 18.2% is arithmetically impossible.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"
 "Passage: A government employee training registry records the following about a 5-day leadership seminar: Record 1: Eighty-three participants completed all 5 days of the seminar. Record 2: Fourteen participants attended at least 3 but fewer than 5 days. Record 3: Eight participants attended fewer than 3 days and received no certificate. Record 4: Certificates of completion were issued to participants who attended all 5 days. Based ONLY on these four records, which of the following COULD BE TRUE?","At least one participant who attended all 5 days also attended an optional review session on Day 6 organized separately from the official seminar.","A participant who attended exactly 4 days received a certificate of completion.","All 105 registered seminar participants received a certificate of completion.","A participant who attended fewer than 3 days received a certificate of completion.","A","Step-by-Step Solution:
 1. Evaluate Option A:
-   - The four records describe only the official 5-day seminar. A separate optional review session on Day 6 is not mentioned—but crucially, it is also not prohibited or contradicted by any fact.
-   - A participant completing all 5 days attending an optional additional session is not addressed by the records. COULD BE TRUE ✓.
+ - The four records describe only the official 5-day seminar. A separate optional review session on Day 6 is not mentioned—but crucially, it is also not prohibited or contradicted by any fact.
+ - A participant completing all 5 days attending an optional additional session is not addressed by the records. COULD BE TRUE ✓.
 2. Evaluate Option B:
-   - Record 4: Certificates were issued ONLY to participants who attended ALL 5 days. Attending exactly 4 days = not all 5 days → no certificate. Record 2 covers 3–4 day attendees; no certificate provision applies to them. CANNOT BE TRUE ✗.
+ - Record 4: Certificates were issued ONLY to participants who attended ALL 5 days. Attending exactly 4 days = not all 5 days → no certificate. Record 2 covers 3–4 day attendees; no certificate provision applies to them. CANNOT BE TRUE ✗.
 3. Evaluate Option C:
-   - Total participants: 83 (complete) + 14 (3–4 days) + 8 (fewer than 3) = 105.
-   - Record 4: Certificates only for 5-day completers = 83 certificates.
-   - Not all 105 received certificates (only 83 did). CANNOT BE TRUE ✗.
+ - Total participants: 83 (complete) + 14 (3–4 days) + 8 (fewer than 3) = 105.
+ - Record 4: Certificates only for 5-day completers = 83 certificates.
+ - Not all 105 received certificates (only 83 did). CANNOT BE TRUE ✗.
 4. Evaluate Option D:
-   - Record 3: Participants attending fewer than 3 days received NO certificate. Direct contradiction. CANNOT BE TRUE ✗.
+ - Record 3: Participants attending fewer than 3 days received NO certificate. Direct contradiction. CANNOT BE TRUE ✗.
 
 Common Trap: Assuming that because Day 6 is not mentioned, it cannot exist.
 Exam Tip: 'Could be true' accepts any scenario not explicitly excluded by the given facts—events, activities, or conditions not mentioned are neither confirmed nor prohibited.","Correct. Survives elimination because an optional Day 6 review session organized separately from the official seminar is not mentioned, contradicted, or prohibited by any of the four stated records.","Eliminated because Record 4 restricts certificates to all-5-day attendees; a 4-day attendee does not qualify and cannot have received a certificate.","Eliminated because total participants = 105 but only 83 (5-day completers) received certificates; claiming all 105 received certificates directly contradicts Record 4.","Eliminated because Record 3 explicitly states that participants attending fewer than 3 days received no certificate—directly contradicted.","Analytical Ability","Analytical Ability | Identifying Assumptions and Drawing Conclusions | Argument Evaluation & Inference | Could be true | Very Difficult | Batch 103"

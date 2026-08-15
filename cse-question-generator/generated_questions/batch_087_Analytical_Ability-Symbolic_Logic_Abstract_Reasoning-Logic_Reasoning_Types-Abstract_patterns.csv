@@ -1,155 +1,155 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"In a 3x3 geometric pattern matrix, each row's 3rd figure is formed by the Exclusive OR (XOR) superposition of the 1st and 2nd figures (lines in exactly one figure are kept; lines in both figures are deleted): Row 1: [Square with Vertical diagonal \oplus Square with Horizontal diagonal] => [Square with Both diagonals]. Row 2: [Triangle with Median \oplus Triangle with Median and Altitude] => [Triangle with Altitude only]. Row 3: [Circle with Horizontal and Vertical diameters \oplus Circle with Horizontal diameter and Main diagonal] => [?]. What figure completes Row 3?","Circle with Vertical diameter and Main diagonal","Circle with Horizontal diameter only","Circle with all three lines","Circle with No internal lines","A","Step-by-Step Solution:
+"In a 3x3 geometric pattern matrix, each row's 3rd figure is formed by the Exclusive OR (XOR) superposition of the 1st and 2nd figures (lines in exactly one figure are kept; lines in both figures are deleted): Row 1: [Square with Vertical diagonal oplus Square with Horizontal diagonal] => [Square with Both diagonals]. Row 2: [Triangle with Median oplus Triangle with Median and Altitude] => [Triangle with Altitude only]. Row 3: [Circle with Horizontal and Vertical diameters oplus Circle with Horizontal diameter and Main diagonal] => [?]. What figure completes Row 3?","Circle with Vertical diameter and Main diagonal","Circle with Horizontal diameter only","Circle with all three lines","Circle with No internal lines","A","Step-by-Step Solution:
 1. Analyze the boolean XOR superposition rule:
-   - $A \oplus B = (A \cup B) \setminus (A \cap B)$.
-   - Elements present in BOTH inputs are CANCELLED / REMOVED.
-   - Elements present in ONLY ONE input are RETAINED.
+ - A oplus B = (A cup B) setminus (A cap B).
+ - Elements present in BOTH inputs are CANCELLED / REMOVED.
+ - Elements present in ONLY ONE input are RETAINED.
 2. Identify internal line elements in Row 3 inputs:
-   - Figure 1 lines: $\{ \text{Horizontal diameter}, \text{Vertical diameter} \}$.
-   - Figure 2 lines: $\{ \text{Horizontal diameter}, \text{Main diagonal} \}$.
+ - Figure 1 lines: { Horizontal diameter, Vertical diameter }.
+ - Figure 2 lines: { Horizontal diameter, Main diagonal }.
 3. Apply XOR superposition:
-   - Shared line: Horizontal diameter (present in both) $\implies$ REMOVED.
-   - Unique lines: Vertical diameter (only in Fig 1) and Main diagonal (only in Fig 2) $\implies$ KEPT.
+ - Shared line: Horizontal diameter (present in both) implies REMOVED.
+ - Unique lines: Vertical diameter (only in Fig 1) and Main diagonal (only in Fig 2) implies KEPT.
 4. Assemble the resulting figure:
-   - Circle containing a Vertical diameter and a Main diagonal.
+ - Circle containing a Vertical diameter and a Main diagonal.
 5. Conclude:
-   - Option A completes the pattern.
+ - Option A completes the pattern.
 
-Common Trap: Applying set union ($\cup$, keeping all lines) or set intersection ($\cap$, keeping only the common line).
-Exam Tip: XOR cancels identical overlapping lines and preserves distinct unique lines.","Correct. Survives elimination because the horizontal diameter cancels out in XOR superposition, leaving the vertical diameter and main diagonal inside the circle.","Eliminated because the horizontal diameter is present in both and must be cancelled.","Eliminated because this represents set union (OR), not XOR.","Eliminated because the unique lines must be retained.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Common Trap: Applying set union (cup, keeping all lines) or set intersection (cap, keeping only the common line).
+Exam Tip: XOR cancels identical overlapping lines and preserves distinct unique lines.","Correct. Survives elimination because the horizontal diameter cancels out in XOR superposition, leaving the vertical diameter and main diagonal inside the °≤.","Eliminated because the horizontal diameter is present in both and must be cancelled.","Eliminated because this represents set union (OR), not XOR.","Eliminated because the unique lines must be retained.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
 "Consider a 4-step cyclical 3D cube rotation sequence: Step 1: Front face = Red, Top face = White, Right face = Blue. The cube is rotated 90 degrees clockwise around its vertical axis at each step (Front moves to Left, Right moves to Front): Step 1: Front = Red; Step 2: Front = Blue; Step 3: Front = Yellow (opposite Red); Step 4: Front = Green (opposite Blue). What color is on the FRONT face at Step 15?","Yellow","Blue","Red","Green","A","Step-by-Step Solution:
 1. Identify the modular cycle period of the front face:
-   - The cube has $P = 4$ side faces rotating sequentially:
-     - State 1 ($1 \pmod 4$): Red
-     - State 2 ($2 \pmod 4$): Blue
-     - State 3 ($3 \pmod 4$): Yellow
-     - State 0 ($0 \pmod 4$): Green
-2. Compute the state index for Step $N = 15$:
-   - $15 \pmod 4$:
-   - $15 = 4 \times 3 + 3$.
-   - Remainder = $3$.
+ - The cube has P = 4 side faces rotating sequentially:
+ - State 1 (1 pmod 4): Red
+ - State 2 (2 pmod 4): Blue
+ - State 3 (3 pmod 4): Yellow
+ - State 0 (0 pmod 4): Green
+2. Compute the state index for Step N = 15:
+ - 15 pmod 4:
+ - 15 = 4 × 3 + 3.
+ - Remainder = 3.
 3. Map remainder 3 to the corresponding face color:
-   - Remainder 3 corresponds to State 3: YELLOW.
+ - Remainder 3 corresponds to State 3: YELLOW.
 4. Conclude:
-   - At Step 15, the front face is Yellow.
+ - At Step 15, the front face is Yellow.
 
-Common Trap: Miscalculating $15 \pmod 4$ as 1 or 2.
-Exam Tip: $15 \div 4 = 3 \text{ R } 3 \implies \text{3rd state in cycle} = \text{Yellow}$.","Correct. Survives elimination because 15 mod 4 = 3, which corresponds to the 3rd state in the 4-step rotation cycle (Yellow).","Eliminated because Blue corresponds to remainder 2.","Eliminated because Red corresponds to remainder 1.","Eliminated because Green corresponds to remainder 0.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
-"In an abstract spatial sequence, two operations occur simultaneously at each step: (1) An outer shape rotates 45 degrees clockwise. (2) An inner dot moves 1 position counter-clockwise along the 8 vertices of a regular octagon. Starting at Step 1 with Rotation 0 degrees and Dot at Vertex 1, at what step number ($N > 1$) will BOTH elements FIRST return simultaneously to their initial state?","Step 9","Step 8","Step 16","Step 17","A","Step-by-Step Solution:
-1. Calculate the rotation cycle period ($P_1$):
-   - Step size = $45^\circ$.
-   - Full revolution = $360^\circ / 45^\circ = 8$ steps.
-   - Outer shape returns to $0^\circ$ after every 8 steps.
-2. Calculate the dot movement cycle period ($P_2$):
-   - Octagon has 8 vertices; dot moves 1 vertex per step.
-   - Dot returns to Vertex 1 after every 8 steps.
+Common Trap: Miscalculating 15 pmod 4 as 1 or 2.
+Exam Tip: 15 ÷ 4 = 3 R 3 implies 3rd state in cycle = Yellow.","Correct. Survives elimination because 15 mod 4 = 3, which corresponds to the 3rd state in the 4-step rotation cycle (Yellow).","Eliminated because Blue corresponds to remainder 2.","Eliminated because Red corresponds to remainder 1.","Eliminated because Green corresponds to remainder 0.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+"In an abstract spatial sequence, two operations occur simultaneously at each step: (1) An outer shape rotates 45 degrees clockwise. (2) An inner dot moves 1 position counter-clockwise along the 8 vertices of a regular octagon. Starting at Step 1 with Rotation 0 degrees and Dot at Vertex 1, at what step number (N > 1) will BOTH elements FIRST return simultaneously to their initial state?","Step 9","Step 8","Step 16","Step 17","A","Step-by-Step Solution:
+1. Calculate the rotation cycle period (P₁):
+ - Step size = 45^°.
+ - Full revolution = 360^° / 45^° = 8 steps.
+ - Outer shape returns to 0^° after every 8 steps.
+2. Calculate the dot movement cycle period (P₂):
+ - Octagon has 8 vertices; dot moves 1 vertex per step.
+ - Dot returns to Vertex 1 after every 8 steps.
 3. Compute the least common multiple of both cycle periods:
-   - $\text{LCM}(8, 8) = 8$ steps.
-4. Determine the first recurrence step number ($N > 1$):
-   - Initial state is at Step 1.
-   - First simultaneous return occurs after 8 complete steps:
-   - $N = 1 + 8 = \text{Step 9}$.
+ - LCM(8, 8) = 8 steps.
+4. Determine the first recurrence step number (N > 1):
+ - Initial state is at Step 1.
+ - First simultaneous return occurs after 8 complete steps:
+ - N = 1 + 8 = Step 9.
 5. Conclude:
-   - Both elements return to their initial state at Step 9.
+ - Both elements return to their initial state at Step 9.
 
 Common Trap: Confusing number of elapsed steps (8) with the resulting step number (Step 9).
-Exam Tip: If initial state is Step 1, the first return after period $P$ is Step $1 + P = 1 + 8 = 9$.","Correct. Survives elimination because both 8-step cycles synchronize after 8 transitions, reaching initial state at Step 1 + 8 = Step 9.","Eliminated because Step 8 represents the 7th transition.","Eliminated because Step 16 is the second return, not the first.","Eliminated because Step 17 is the third return.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Exam Tip: If initial state is Step 1, the first return after period P is Step 1 + P = 1 + 8 = 9.","Correct. Survives elimination because both 8-step cycles synchronize after 8 transitions, reaching initial state at Step 1 + 8 = Step 9.","Eliminated because Step 8 represents the 7th transition.","Eliminated because Step 16 is the second return, not the first.","Eliminated because Step 17 is the third return.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
 "In a standard 6-face folded cube net labeled Top=1, Bottom=6, Front=2, Back=5, Left=3, Right=4: When the net is folded into a 3D cube, which pair of numbers resides on OPPOSITE faces?","2 and 5","1 and 3","2 and 6","3 and 5","A","Step-by-Step Solution:
 1. Identify the spatial pairs of opposite faces on a 3D cube:
-   - Top is opposite Bottom $\implies (1, 6)$.
-   - Front is opposite Back $\implies (2, 5)$.
-   - Left is opposite Right $\implies (3, 4)$.
+ - Top is opposite Bottom implies (1, 6).
+ - Front is opposite Back implies (2, 5).
+ - Left is opposite Right implies (3, 4).
 2. Evaluate the given options:
-   - Option A: (2, 5) — Front and Back (Exact opposite pair!).
-   - Option B: (1, 3) — Top and Left (Adjacent faces).
-   - Option C: (2, 6) — Front and Bottom (Adjacent faces).
-   - Option D: (3, 5) — Left and Back (Adjacent faces).
+ - Option A: (2, 5) — Front and Back (Exact opposite pair!).
+ - Option B: (1, 3) — Top and Left (Adjacent faces).
+ - Option C: (2, 6) — Front and Bottom (Adjacent faces).
+ - Option D: (3, 5) — Left and Back (Adjacent faces).
 3. Conclude:
-   - Numbers 2 and 5 are on opposite faces.
+ - Numbers 2 and 5 are on opposite faces.
 
 Common Trap: Confusing adjacent faces with opposite faces on an unfolded net.
-Exam Tip: Memorize opposite pairs in standard cube coordinates: $(1, 6), (2, 5), (3, 4)$.","Correct. Survives elimination because Front(2) and Back(5) form an exact pair of opposing faces on the folded cube.","Eliminated because Top(1) and Left(3) are adjacent.","Eliminated because Front(2) and Bottom(6) are adjacent.","Eliminated because Left(3) and Back(5) are adjacent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Exam Tip: Memorize opposite pairs in standard cube coordinates: (1, 6), (2, 5), (3, 4).","Correct. Survives elimination because Front(2) and Back(5) form an exact pair of opposing faces on the folded cube.","Eliminated because Top(1) and Left(3) are adjacent.","Eliminated because Front(2) and Bottom(6) are adjacent.","Eliminated because Left(3) and Back(5) are adjacent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
 "In a 3x3 pattern matrix where each cell contains a 3x3 grid of 9 small squares, the count of shaded squares in each row follows an arithmetic progression: Row 1: [1 shaded, 3 shaded, 5 shaded] (+2 step). Row 2: [2 shaded, 5 shaded, 8 shaded] (+3 step). Row 3: [1 shaded, 5 shaded, ?]. How many squares must be shaded in the missing figure of Row 3?","9","8","7","6","A","Step-by-Step Solution:
 1. Determine the arithmetic common difference for each row:
-   - Row 1: $1 \xrightarrow{+2} 3 \xrightarrow{+2} 5$ (Common difference $d = +2$).
-   - Row 2: $2 \xrightarrow{+3} 5 \xrightarrow{+3} 8$ (Common difference $d = +3$).
+ - Row 1: 1 xrightarrow{+2} 3 xrightarrow{+2} 5 (Common difference d = +2).
+ - Row 2: 2 xrightarrow{+3} 5 xrightarrow{+3} 8 (Common difference d = +3).
 2. Determine the common difference for Row 3:
-   - Row 3 entries: 1, 5, ?
-   - Difference: $5 - 1 = +4$ (Common difference $d = +4$).
-   - Notice the step progression between rows: $d = 2, 3, 4$.
+ - Row 3 entries: 1, 5, ?
+ - Difference: 5 - 1 = +4 (Common difference d = +4).
+ - Notice the step progression between rows: d = 2, 3, 4.
 3. Compute the missing 3rd entry of Row 3:
-   - $\text{Missing entry} = 5 + 4 = 9$ shaded squares.
+ - Missing entry = 5 + 4 = 9 shaded squares.
 4. Conclude:
-   - Exactly 9 squares must be shaded in the missing figure (all 9 squares).
+ - Exactly 9 squares must be shaded in the missing figure (all 9 squares).
 
-Common Trap: Assuming the common difference in Row 3 is $+3$ (which would give 8).
-Exam Tip: Differences across rows form their own arithmetic sequence: $+2 \to +3 \to +4$. $5 + 4 = 9$.","Correct. Survives elimination because the row difference increments by 1 (+2, +3, +4), giving 1 + 4 = 5 and 5 + 4 = 9 shaded squares.","Eliminated because 8 assumes a constant difference of +3.","Eliminated because 7 is an arithmetic miscalculation.","Eliminated because 6 is an arithmetic miscalculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Common Trap: Assuming the common difference in Row 3 is +3 (which would give 8).
+Exam Tip: Differences across rows form their own arithmetic sequence: +2 to +3 to +4. 5 + 4 = 9.","Correct. Survives elimination because the row difference increments by 1 (+2, +3, +4), giving 1 + 4 = 5 and 5 + 4 = 9 shaded squares.","Eliminated because 8 assumes a constant difference of +3.","Eliminated because 7 is an arithmetic miscalculation.","Eliminated because 6 is an arithmetic miscalculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
 "Consider an abstract geometric component accumulation sequence: Figure 1: 1 line; Figure 2: 2 lines; Figure 3: 3 lines; Figure 4: 4 lines; Figure 5: 5 components. If exactly 1 new distinct geometric component is added at each step, how many distinct geometric components are present in Figure 12?","12","11","13","10","A","Step-by-Step Solution:
 1. Identify the mathematical function governing component count:
-   - Formula: $C(n) = n$, where $n$ is the figure index.
-2. Evaluate for Figure $n = 12$:
-   - $C(12) = 12$.
+ - Formula: C(n) = n, where n is the figure index.
+2. Evaluate for Figure n = 12:
+ - C(12) = 12.
 3. Conclude:
-   - There are 12 distinct components in Figure 12.
+ - There are 12 distinct components in Figure 12.
 
-Common Trap: Counting cumulative sum ($n(n+1)/2$) instead of components within the individual figure.
-Exam Tip: Check whether the question asks for total components in Figure $n$ ($n$) or total cumulative components added.","Correct. Survives elimination because the component count in Figure n strictly equals the index n = 12.","Eliminated because 11 corresponds to Figure 11.","Eliminated because 13 corresponds to Figure 13.","Eliminated because 10 corresponds to Figure 10.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
-"In an abstract symbol matrix, each row's 3rd figure is formed by retaining ONLY the overlapping elements (logical AND / set intersection) of the 1st and 2nd figures: Row 1: [Square + Circle] \land [Square + Triangle] => [Square only]. Row 2: [Star + Cross] \land [Cross + Diamond] => [Cross only]. Row 3: [Pentagon + Diagonal Line + Central Dot] \land [Pentagon + Vertical Line + Central Dot] => [?]. What is the resulting figure in Row 3?","Pentagon with Central Dot","Pentagon only","Central Dot only","Pentagon with Diagonal and Vertical Lines","A","Step-by-Step Solution:
+Common Trap: Counting cumulative Σ (n(n+1)/2) instead of components within the individual figure.
+Exam Tip: Check whether the question asks for total components in Figure n (n) or total cumulative components added.","Correct. Survives elimination because the component count in Figure n strictly equals the index n = 12.","Eliminated because 11 corresponds to Figure 11.","Eliminated because 13 corresponds to Figure 13.","Eliminated because 10 corresponds to Figure 10.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+"In an abstract symbol matrix, each row's 3rd figure is formed by retaining ONLY the overlapping elements (logical AND / set intersection) of the 1st and 2nd figures: Row 1: [Square + Circle] land [Square + Triangle] => [Square only]. Row 2: [Star + Cross] land [Cross + Diamond] => [Cross only]. Row 3: [Pentagon + Diagonal Line + Central Dot] land [Pentagon + Vertical Line + Central Dot] => [?]. What is the resulting figure in Row 3?","Pentagon with Central Dot","Pentagon only","Central Dot only","Pentagon with Diagonal and Vertical Lines","A","Step-by-Step Solution:
 1. Define the logical AND / Intersection operator:
-   - The output figure contains ONLY elements present in BOTH input figures ($A \cap B$).
+ - The output figure contains ONLY elements present in BOTH input figures (A cap B).
 2. List elements in Row 3 inputs:
-   - Figure 1 elements: $\{ \text{Pentagon}, \text{Diagonal Line}, \text{Central Dot} \}$.
-   - Figure 2 elements: $\{ \text{Pentagon}, \text{Vertical Line}, \text{Central Dot} \}$.
+ - Figure 1 elements: { Pentagon, Diagonal Line, Central Dot }.
+ - Figure 2 elements: { Pentagon, Vertical Line, Central Dot }.
 3. Compute the intersection:
-   - Elements in both: Pentagon and Central Dot.
-   - Elements unique to Fig 1: Diagonal Line (excluded).
-   - Elements unique to Fig 2: Vertical Line (excluded).
+ - Elements in both: Pentagon and Central Dot.
+ - Elements unique to Fig 1: Diagonal Line (excluded).
+ - Elements unique to Fig 2: Vertical Line (excluded).
 4. Assemble the resulting figure:
-   - A Pentagon with a Central Dot.
+ - A Pentagon with a Central Dot.
 5. Conclude:
-   - Option A is the correct resulting figure.
+ - Option A is the correct resulting figure.
 
 Common Trap: Omitting the central dot or including non-shared lines.
 Exam Tip: In logical AND, keep ONLY the exact common elements present in BOTH input cells.","Correct. Survives elimination because Pentagon and Central Dot are the only elements shared by both input figures.","Eliminated because it omits the common Central Dot.","Eliminated because it omits the common Pentagon.","Eliminated because it includes non-shared lines.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
-"In an alternating 2D geometric transformation sequence starting with an asymmetric character F: Step 1: Base orientation (F). Step 2: Reflected horizontally across the vertical axis. Step 3: Rotated 90 degrees clockwise. Step 4: Reflected horizontally. Step 5: Rotated 90 degrees clockwise. What exact transformation relative to base orientation (F) is applied at Step 2?","Horizontal reflection (Mirror image across vertical axis)","180-degree rotation","Vertical reflection (Mirror image across horizontal axis)","270-degree rotation","A","Step-by-Step Solution:
+"In an alternating 2D geometric transformation sequence starting with an asymmetric character F: Step 1: Base orientation (F). Step 2: Reflected horizontally across the vertical axis. Step 3: Rotated 90 degrees clockwise. Step 4: Reflected horizontally. Step 5: Rotated 90 degrees clockwise. What exact transformation relative to base orientation (F) is applied at Step 2?","Horizontal reflection (Mirror image across vertical axis)","180-° rotation","Vertical reflection (Mirror image across horizontal axis)","270-° rotation","A","Step-by-Step Solution:
 1. Read the explicit sequential transformation rule:
-   - Step 1: Base orientation.
-   - Step 2: Horizontal reflection across the vertical axis.
+ - Step 1: Base orientation.
+ - Step 2: Horizontal reflection across the vertical axis.
 2. Identify the geometric transformation at Step 2:
-   - A horizontal reflection creates a lateral mirror image reversing left and right.
+ - A horizontal reflection creates a lateral mirror image reversing left and 
 3. Conclude:
-   - The transformation applied at Step 2 is a Horizontal Reflection.
+ - The transformation applied at Step 2 is a Horizontal Reflection.
 
 Common Trap: Confusing horizontal reflection (left-right flip) with vertical reflection (top-bottom flip).
-Exam Tip: Reflection across a vertical axis flips horizontal coordinates $(x \to -x)$.","Correct. Survives elimination because Step 2 is explicitly defined as a horizontal reflection across the vertical axis.","Eliminated because 180-degree rotation flips both axes.","Eliminated because vertical reflection flips across the horizontal axis.","Eliminated because 270-degree rotation is an orthogonal rotation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
-"Consider a sequence of polygons containing internal numbers defined by the rule $V_n = (\text{Sides}) \times n$: Term 1: Triangle (3 sides) with number 3 ($3 \times 1 = 3$). Term 2: Square (4 sides) with number 8 ($4 \times 2 = 8$). Term 3: Pentagon (5 sides) with number 15 ($5 \times 3 = 15$). Term 4: Hexagon (6 sides) with number 24 ($6 \times 4 = 24$). What polygon and internal number appears at Term 7?","Nonagon (9 sides) containing number 63","Octagon (8 sides) containing number 48","Nonagon (9 sides) containing number 54","Decagon (10 sides) containing number 70","A","Step-by-Step Solution:
-1. Determine the formula for the number of sides at term $n$:
-   - $\text{Sides}(n) = n + 2$.
-   - For $n = 7$: $\text{Sides} = 7 + 2 = 9$ (A 9-sided polygon is a NONAGON).
-2. Determine the formula for the internal number at term $n$:
-   - $V_n = \text{Sides}(n) \times n = (n + 2) \times n$.
-   - For $n = 7$: $V_7 = (7 + 2) \times 7 = 9 \times 7 = 63$.
+Exam Tip: Reflection across a vertical axis flips horizontal coordinates (x to -x).","Correct. Survives elimination because Step 2 is explicitly defined as a horizontal reflection across the vertical axis.","Eliminated because 180-° rotation flips both axes.","Eliminated because vertical reflection flips across the horizontal axis.","Eliminated because 270-° rotation is an orthogonal rotation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+"Consider a sequence of polygons containing internal numbers defined by the rule Vₙ = (Sides) × n: Term 1: Triangle (3 sides) with number 3 (3 × 1 = 3). Term 2: Square (4 sides) with number 8 (4 × 2 = 8). Term 3: Pentagon (5 sides) with number 15 (5 × 3 = 15). Term 4: Hexagon (6 sides) with number 24 (6 × 4 = 24). What polygon and internal number appears at Term 7?","Nonagon (9 sides) containing number 63","Octagon (8 sides) containing number 48","Nonagon (9 sides) containing number 54","Decagon (10 sides) containing number 70","A","Step-by-Step Solution:
+1. Determine the formula for the number of sides at term n:
+ - Sides(n) = n + 2.
+ - For n = 7: Sides = 7 + 2 = 9 (A 9-sided polygon is a NONAGON).
+2. Determine the formula for the internal number at term n:
+ - Vₙ = Sides(n) × n = (n + 2) × n.
+ - For n = 7: V₇ = (7 + 2) × 7 = 9 × 7 = 63.
 3. Combine attributes:
-   - At Term 7, the figure is a NONAGON containing the number 63.
+ - At Term 7, the figure is a NONAGON containing the number 63.
 4. Conclude:
-   - Option A is the correct answer.
+ - Option A is the correct answer.
 
-Common Trap: Selecting octagon (8 sides) or miscalculating $9 \times 7 = 54$.
-Exam Tip: $\text{Sides} = n + 2 = 9$; $\text{Value} = 9 \times 7 = 63$.","Correct. Survives elimination because term 7 has 7 + 2 = 9 sides (nonagon) and internal value 9 * 7 = 63.","Eliminated because an octagon has 8 sides.","Eliminated because 54 is 9 * 6, not 9 * 7.","Eliminated because a decagon has 10 sides.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Common Trap: Selecting octagon (8 sides) or miscalculating 9 × 7 = 54.
+Exam Tip: Sides = n + 2 = 9; Value = 9 × 7 = 63.","Correct. Survives elimination because term 7 has 7 + 2 = 9 sides (nonagon) and internal value 9 * 7 = 63.","Eliminated because an octagon has 8 sides.","Eliminated because 54 is 9 * 6, not 9 * 7.","Eliminated because a decagon has 10 sides.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
 "In a 3x3 matrix where each figure's value represents its total number of line intersections: Row 1: [0, 1, 2 intersections] (Row Sum = 3). Row 2: [1, 2, 3 intersections] (Row Sum = 6). Row 3: [2, 3, ? intersections] (Target Row Sum = 9). How many line intersections must the missing figure in Row 3 have?","4","3","5","2","A","Step-by-Step Solution:
 1. Analyze row-wise progressions:
-   - Row 1: $0, 1, 2 \implies \text{Sum} = 3$ (Step $+1$).
-   - Row 2: $1, 2, 3 \implies \text{Sum} = 6$ (Step $+1$).
-   - Row 3: $2, 3, ? \implies \text{Step } +1$.
+ - Row 1: 0, 1, 2 implies Sum = 3 (Step +1).
+ - Row 2: 1, 2, 3 implies Sum = 6 (Step +1).
+ - Row 3: 2, 3, ? implies Step +1.
 2. Compute the missing cell in Row 3:
-   - Continuing the $+1$ step: $3 + 1 = 4$ intersections.
-3. Cross-verify via row sum arithmetic sequence:
-   - Row sums: $3, 6, 9$ (Step $+3$).
-   - Row 3 equation: $2 + 3 + x = 9 \implies 5 + x = 9 \implies x = 4$.
+ - Continuing the +1 step: 3 + 1 = 4 intersections.
+3. Cross-verify via row Σ arithmetic sequence:
+ - Row sums: 3, 6, 9 (Step +3).
+ - Row 3 equation: 2 + 3 + x = 9 implies 5 + x = 9 implies x = 4.
 4. Cross-verify via Column 3 progression:
-   - Column 3 entries: Row 1 (2), Row 2 (3), Row 3 (4) $\implies 2 \to 3 \to 4$.
+ - Column 3 entries: Row 1 (2), Row 2 (3), Row 3 (4) implies 2 to 3 to 4.
 5. Conclude:
-   - The missing figure must have 4 line intersections.
+ - The missing figure must have 4 line intersections.
 
-Common Trap: Miscalculating the row sum or column progression.
-Exam Tip: In an intersection matrix, verify that the solution satisfies row, column, and sum constraints simultaneously ($x = 4$).","Correct. Survives elimination because 2 -> 3 -> 4 satisfies the horizontal +1 step, vertical +1 step, and the row sum target of 9.","Eliminated because 3 yields a row sum of 8.","Eliminated because 5 yields a row sum of 10.","Eliminated because 2 yields a row sum of 7.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"
+Common Trap: Miscalculating the row Σ or column progression.
+Exam Tip: In an intersection matrix, verify that the solution satisfies row, column, and Σ constraints simultaneously (x = 4).","Correct. Survives elimination because 2 -> 3 -> 4 satisfies the horizontal +1 step, vertical +1 step, and the row Σ target of 9.","Eliminated because 3 yields a row Σ of 8.","Eliminated because 5 yields a row Σ of 10.","Eliminated because 2 yields a row Σ of 7.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Abstract patterns | Very Difficult | Batch 087"

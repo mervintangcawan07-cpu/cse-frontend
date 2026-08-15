@@ -1,136 +1,136 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Two marathon runners, Runner A and Runner B, start running simultaneously from the exact same point on a 400.0-meter circular track in the same direction. Runner A runs at a constant speed of 8.0 m/s and Runner B runs at 6.0 m/s. After how many seconds will Runner A lap Runner B for the first time?","200.0 seconds \text{ (or 3 min 20 sec)}","180.0 seconds","240.0 seconds","150.0 seconds","A","Step-by-Step Solution:
+"Two marathon runners, Runner A and Runner B, start running simultaneously from the exact same po∫ on a 400.0-meter circular track in the same direction. Runner A runs at a constant speed of 8.0 m/s and Runner B runs at 6.0 m/s. After how many seconds will Runner A lap Runner B for the first time?","200.0 seconds (or 3 min 20 sec)","180.0 seconds","240.0 seconds","150.0 seconds","A","Step-by-Step Solution:
 1. Determine relative speed between the two runners in the same direction:
-   - $V_{\text{rel}} = v_A - v_B = 8.0\text{ m/s} - 6.0\text{ m/s} = 2.0\text{ m/s}$.
-2. For Runner A to lap Runner B, Runner A must gain exactly one full lap ($400.0\text{ meters}$) on Runner B.
+ - Vrₑₗ = v_A - v_B = 8.0 m/s - 6.0 m/s = 2.0 m/s.
+2. For Runner A to lap Runner B, Runner A must gain exactly one full lap (400.0 meters) on Runner B.
 3. Compute time required:
-   - $T = \frac{\text{Lap Distance}}{V_{\text{rel}}} = \frac{400.0\text{ m}}{2.0\text{ m/s}} = 200.0\text{ seconds}$.
+ - T = (Lap Distance)/Vrₑₗ = (400.0 m)/(2.0 m/s) = 200.0 seconds.
 4. Convert to minutes and seconds:
-   - $200.0\text{ seconds} = 3\text{ minutes and } 20\text{ seconds}$.
-5. (Verification: In 200 s, Runner A covers $8 \times 200 = 1,600\text{ m}$ [4 laps] and Runner B covers $6 \times 200 = 1,200\text{ m}$ [3 laps]. Difference $= 1\text{ lap}$).
+ - 200.0 seconds = 3 minutes and 20 seconds.
+5. (Verification: In 200 s, Runner A covers 8 × 200 = 1,600 m [4 laps] and Runner B covers 6 × 200 = 1,200 m [3 laps]. Difference = 1 lap).
 
-Common Trap: Using total track length divided by individual speed ($400 / 8 = 50\text{ s}$) or dividing by sum of speeds ($400 / 14 = 28.6\text{ s}$).
-Exam Tip: Lapping on a circular track in the same direction requires gaining $1\text{ circumference} = 400\text{ m}$ at relative speed $v_1 - v_2$.","Correct. Survives elimination because relative speed is 2.0 m/s, giving 400.0 / 2.0 = 200.0 seconds (3 min 20 sec).","Eliminated because 180.0 seconds gives a separation of only 360 meters.","Eliminated because 240.0 seconds gives a separation of 480 meters.","Eliminated because 150.0 seconds gives a separation of 300 meters.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Using total track length divided by individual speed (400 / 8 = 50 s) or dividing by Σ of speeds (400 / 14 = 28.6 s).
+Exam Tip: Lapping on a circular track in the same direction requires gaining 1 circumference = 400 m at relative speed v₁ - v₂.","Correct. Survives elimination because relative speed is 2.0 m/s, giving 400.0 / 2.0 = 200.0 seconds (3 min 20 sec).","Eliminated because 180.0 seconds gives a separation of only 360 meters.","Eliminated because 240.0 seconds gives a separation of 480 meters.","Eliminated because 150.0 seconds gives a separation of 300 meters.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "An inter-island transport aircraft flies 1,200.0 km from Manila to Davao with a tailwind in 2.0 hours. On the return flight against the same headwind, the trip requires 2.5 hours. What is the cruising airspeed of the aircraft in calm air and the speed of the wind?","Airspeed: 540.0 km/h; Wind: 60.0 km/h","Airspeed: 550.0 km/h; Wind: 50.0 km/h","Airspeed: 520.0 km/h; Wind: 80.0 km/h","Airspeed: 560.0 km/h; Wind: 40.0 km/h","A","Step-by-Step Solution:
 1. Calculate effective ground speeds:
-   - Tailwind speed: $v_{\text{tail}} = \frac{1,200.0\text{ km}}{2.0\text{ hrs}} = 600.0\text{ km/h}$.
-   - Headwind speed: $v_{\text{head}} = \frac{1,200.0\text{ km}}{2.5\text{ hrs}} = 480.0\text{ km/h}$.
-2. Express in terms of airspeed ($v_a$) and wind speed ($v_w$):
-   - $v_a + v_w = 600.0$ (Equation 1)
-   - $v_a - v_w = 480.0$ (Equation 2).
-3. Solve for airspeed $v_a$:
-   - $v_a = \frac{v_{\text{tail}} + v_{\text{head}}}{2} = \frac{600.0 + 480.0}{2} = \frac{1,080.0}{2} = 540.0\text{ km/h}$.
-4. Solve for wind speed $v_w$:
-   - $v_w = \frac{v_{\text{tail}} - v_{\text{head}}}{2} = \frac{600.0 - 480.0}{2} = \frac{120.0}{2} = 60.0\text{ km/h}$.
+ - Tailwind speed: vₜₐiₗ = (1,200.0 km)/(2.0 hrs) = 600.0 km/h.
+ - Headwind speed: vₕₑₐd = (1,200.0 km)/(2.5 hrs) = 480.0 km/h.
+2. Express in terms of airspeed (vₐ) and wind speed (v_w):
+ - vₐ + v_w = 600.0 (Equation 1)
+ - vₐ - v_w = 480.0 (Equation 2).
+3. Solve for airspeed vₐ:
+ - vₐ = (vₜₐiₗ + vₕₑₐd)/2 = 600.0 + 480.0/2 = 1,080.0/2 = 540.0 km/h.
+4. Solve for wind speed v_w:
+ - v_w = (vₜₐiₗ - vₕₑₐd)/2 = 600.0 - 480.0/2 = 120.0/2 = 60.0 km/h.
 
-Common Trap: Subtracting $600 - 480 = 120\text{ km/h}$ and mistaking it for the wind speed instead of $2 v_w$.
-Exam Tip: Wind speed is half the difference between tailwind and headwind ground speeds ($\frac{600 - 480}{2} = 60$).","Correct. Survives elimination because va = (600 + 480)/2 = 540.0 km/h and vw = (600 - 480)/2 = 60.0 km/h.","Eliminated because 550 and 50 give headwind speed 500 != 480.","Eliminated because 520 and 80 give tailwind speed 600 but headwind speed 440 != 480.","Eliminated because 560 and 40 give headwind speed 520 != 480.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Subtracting 600 - 480 = 120 km/h and mistaking it for the wind speed instead of 2 v_w.
+Exam Tip: Wind speed is half the difference between tailwind and headwind ground speeds (600 - 480/2 = 60).","Correct. Survives elimination because va = (600 + 480)/2 = 540.0 km/h and vw = (600 - 480)/2 = 60.0 km/h.","Eliminated because 550 and 50 give headwind speed 500!= 480.","Eliminated because 520 and 80 give tailwind speed 600 but headwind speed 440!= 480.","Eliminated because 560 and 40 give headwind speed 520!= 480.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "A provincial commuter bus travels between two terminal cities. Excluding scheduled rest stops, the average speed of the bus is 54.0 km/h. Including scheduled rest stops, the average speed drops to 45.0 km/h. For how many minutes per hour does the bus remain stopped?","10.0 minutes per hour","12.0 minutes per hour","8.0 minutes per hour","15.0 minutes per hour","A","Step-by-Step Solution:
 1. Identify the standard stoppage formula:
-   - $\text{Stoppage Time per Hour} = \frac{V_{\text{without stops}} - V_{\text{with stops}}}{V_{\text{without stops}}} \times 60.0\text{ minutes}$.
+ - Stoppage Time per Hour = (Vwiₜₕₒuₜ ₛₜₒₚₛ - Vwiₜₕ ₛₜₒₚₛ)/(Vwiₜₕₒuₜ ₛₜₒₚₛ) × 60.0 minutes.
 2. Substitute the speeds:
-   - $\text{Stoppage Time} = \frac{54.0 - 45.0}{54.0} \times 60.0$.
+ - Stoppage Time = 54.0 - 45.0/54.0 × 60.0.
 3. Simplify the calculation:
-   - $\frac{9.0}{54.0} = \frac{1}{6}$.
-   - $\frac{1}{6} \times 60.0\text{ minutes} = 10.0\text{ minutes per hour}$.
-4. (Explanation: In 1 hour without stopping, the bus covers 54 km. With stops, it covers 45 km. The 9 km lost would have taken $\frac{9}{54}\text{ hr} = 10\text{ min}$ of driving).
+ - 9.0/54.0 = 1/6.
+ - 1/6 × 60.0 minutes = 10.0 minutes per hour.
+4. (Explanation: In 1 hour without stopping, the bus covers 54 km. With stops, it covers 45 km. The 9 km lost would have taken 9/54 hr = 10 min of driving).
 
-Common Trap: Dividing the speed difference by the stopped speed ($\frac{9}{45} \times 60 = 12\text{ min}$, Option B).
-Exam Tip: Always divide the speed difference by the NON-STOP speed in the denominator ($\frac{54 - 45}{54} \times 60 = 10\text{ min}$).","Correct. Survives elimination because (54 - 45)/54 * 60 = (1/6) * 60 = 10.0 minutes per hour.","Eliminated because 12.0 minutes uses the stopped speed in the denominator (9/45 * 60).","Eliminated because 8.0 minutes is an underestimate.","Eliminated because 15.0 minutes assumes a 25% speed drop.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Dividing the speed difference by the stopped speed (9/45 × 60 = 12 min, Option B).
+Exam Tip: Always divide the speed difference by the NON-STOP speed in the denominator (54 - 45/54 × 60 = 10 min).","Correct. Survives elimination because (54 - 45)/54 * 60 = (1/6) * 60 = 10.0 minutes per hour.","Eliminated because 12.0 minutes uses the stopped speed in the denominator (9/45 * 60).","Eliminated because 8.0 minutes is an underestimate.","Eliminated because 15.0 minutes assumes a 25% speed drop.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "A train 150.0 meters long passes a person walking in the same direction along the tracks at 6.0 km/h in exactly 10.0 seconds. What is the speed of the train in km/h?","60.0 km/h","54.0 km/h","66.0 km/h","48.0 km/h","A","Step-by-Step Solution:
 1. Calculate relative speed of the train with respect to the person:
-   - $V_{\text{rel}} = \frac{\text{Train Length}}{\text{Time}} = \frac{150.0\text{ m}}{10.0\text{ s}} = 15.0\text{ m/s}$.
+ - Vrₑₗ = (Train Length)/Time = (150.0 m)/(10.0 s) = 15.0 m/s.
 2. Convert relative speed to km/h:
-   - $V_{\text{rel}} = 15.0 \times \frac{18}{5} = 3 \times 18 = 54.0\text{ km/h}$.
-3. Relate relative speed to actual train speed ($v_t$) and pedestrian speed ($v_p = 6.0\text{ km/h}$):
-   - Since they move in the same direction: $V_{\text{rel}} = v_t - v_p$.
-   - $54.0 = v_t - 6.0$.
-4. Solve for $v_t$:
-   - $v_t = 54.0 + 6.0 = 60.0\text{ km/h}$.
+ - Vrₑₗ = 15.0 × 18/5 = 3 × 18 = 54.0 km/h.
+3. Relate relative speed to actual train speed (vₜ) and pedestrian speed (vₚ = 6.0 km/h):
+ - Since they move in the same direction: Vrₑₗ = vₜ - vₚ.
+ - 54.0 = vₜ - 6.0.
+4. Solve for vₜ:
+ - vₜ = 54.0 + 6.0 = 60.0 km/h.
 
-Common Trap: Selecting $54.0\text{ km/h}$ (Option B), which is the relative speed, forgetting to add the pedestrian's speed ($6.0\text{ km/h}$).
-Exam Tip: Same direction: $v_{\text{train}} = V_{\text{rel}} + v_{\text{person}} = 54 + 6 = 60\text{ km/h}$.","Correct. Survives elimination because relative speed is 15 m/s = 54 km/h, and train speed in the same direction is 54 + 6 = 60.0 km/h.","Eliminated because 54.0 km/h is the relative speed without adding pedestrian speed.","Eliminated because 66.0 km/h assumes opposite direction motion.","Eliminated because 48.0 km/h subtracts pedestrian speed twice.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
-"Two cyclists, Carlos and Danny, start from the same point at the same time and travel around a 1,200.0-meter circular velodrome in opposite directions. Carlos rides at 18.0 km/h and Danny rides at 27.0 km/h. How many seconds will elapse before they meet for the first time?","96.0 seconds \text{ (or 1 min 36 sec)}","100.0 seconds","90.0 seconds","105.0 seconds","A","Step-by-Step Solution:
+Common Trap: Selecting 54.0 km/h (Option B), which is the relative speed, forgetting to add the pedestrian's speed (6.0 km/h).
+Exam Tip: Same direction: vₜrₐiₙ = Vrₑₗ + vₚₑrₛₒₙ = 54 + 6 = 60 km/h.","Correct. Survives elimination because relative speed is 15 m/s = 54 km/h, and train speed in the same direction is 54 + 6 = 60.0 km/h.","Eliminated because 54.0 km/h is the relative speed without adding pedestrian speed.","Eliminated because 66.0 km/h assumes opposite direction motion.","Eliminated because 48.0 km/h subtracts pedestrian speed twice.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+"Two cyclists, Carlos and Danny, start from the same po∫ at the same time and travel around a 1,200.0-meter circular velodrome in opposite directions. Carlos rides at 18.0 km/h and Danny rides at 27.0 km/h. How many seconds will elapse before they meet for the first time?","96.0 seconds (or 1 min 36 sec)","100.0 seconds","90.0 seconds","105.0 seconds","A","Step-by-Step Solution:
 1. Convert speeds from km/h to m/s:
-   - Carlos: $v_C = 18.0 \times \frac{5}{18} = 5.0\text{ m/s}$.
-   - Danny: $v_D = 27.0 \times \frac{5}{18} = 7.5\text{ m/s}$.
+ - Carlos: v_C = 18.0 × 5/18 = 5.0 m/s.
+ - Danny: v_D = 27.0 × 5/18 = 7.5 m/s.
 2. Calculate relative speed for opposite directions:
-   - $V_{\text{rel}} = v_C + v_D = 5.0 + 7.5 = 12.5\text{ m/s}$.
-3. Calculate time required to cover the track perimeter ($1,200.0\text{ m}$):
-   - $T = \frac{1,200.0\text{ m}}{12.5\text{ m/s}} = \frac{2,400.0}{25.0} = 96.0\text{ seconds}$.
+ - Vrₑₗ = v_C + v_D = 5.0 + 7.5 = 12.5 m/s.
+3. Calculate time required to cover the track perimeter (1,200.0 m):
+ - T = (1,200.0 m)/(12.5 m/s) = 2,400.0/25.0 = 96.0 seconds.
 4. Convert to minutes and seconds:
-   - $96.0\text{ seconds} = 1\text{ minute and } 36\text{ seconds}$.
+ - 96.0 seconds = 1 minute and 36 seconds.
 
-Common Trap: Subtracting speeds ($7.5 - 5.0 = 2.5\text{ m/s} \implies 480\text{ s}$), confusing opposite direction with same direction.
-Exam Tip: Opposite directions = Add speeds ($5.0 + 7.5 = 12.5\text{ m/s}$). $1,200 / 12.5 = 96\text{ s}$.","Correct. Survives elimination because relative speed is 5.0 + 7.5 = 12.5 m/s, giving 1,200 / 12.5 = 96.0 seconds.","Eliminated because 100.0 seconds assumes 12.0 m/s relative speed.","Eliminated because 90.0 seconds is an underestimate.","Eliminated because 105.0 seconds is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Subtracting speeds (7.5 - 5.0 = 2.5 m/s implies 480 s), confusing opposite direction with same direction.
+Exam Tip: Opposite directions = Add speeds (5.0 + 7.5 = 12.5 m/s). 1,200 / 12.5 = 96 s.","Correct. Survives elimination because relative speed is 5.0 + 7.5 = 12.5 m/s, giving 1,200 / 12.5 = 96.0 seconds.","Eliminated because 100.0 seconds assumes 12.0 m/s relative speed.","Eliminated because 90.0 seconds is an underestimate.","Eliminated because 105.0 seconds is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "A motorist travels a total distance of 180.0 km. He travels the first 60.0 km at 40.0 km/h, the next 60.0 km at 60.0 km/h, and the final 60.0 km at 120.0 km/h. What is the average speed of the vehicle for the entire 180.0 km trip?","60.0 km/h","73.3 km/h","65.0 km/h","55.0 km/h","A","Step-by-Step Solution:
 1. Compute the time spent on each of the three equal 60.0 km segments:
-   - Segment 1: $t_1 = \frac{60.0\text{ km}}{40.0\text{ km/h}} = 1.5\text{ hours}$.
-   - Segment 2: $t_2 = \frac{60.0\text{ km}}{60.0\text{ km/h}} = 1.0\text{ hour}$.
-   - Segment 3: $t_3 = \frac{60.0\text{ km}}{120.0\text{ km/h}} = 0.5\text{ hours}$.
+ - Segment 1: t₁ = (60.0 km)/(40.0 km/h) = 1.5 hours.
+ - Segment 2: t₂ = (60.0 km)/(60.0 km/h) = 1.0 hour.
+ - Segment 3: t₃ = (60.0 km)/(120.0 km/h) = 0.5 hours.
 2. Sum the total travel time:
-   - $T_{\text{total}} = 1.5 + 1.0 + 0.5 = 3.0\text{ hours}$.
+ - Tₜₒₜₐₗ = 1.5 + 1.0 + 0.5 = 3.0 hours.
 3. Calculate average speed:
-   - $V_{\text{avg}} = \frac{\text{Total Distance}}{T_{\text{total}}} = \frac{180.0\text{ km}}{3.0\text{ hours}} = 60.0\text{ km/h}$.
+ - Vₐvg = (Total Distance)/Tₜₒₜₐₗ = (180.0 km)/(3.0 hours) = 60.0 km/h.
 
-Common Trap: Taking the simple arithmetic average $\frac{40 + 60 + 120}{3} = \frac{220}{3} = 73.33\text{ km/h}$ (Option B).
-Exam Tip: Average speed is ALWAYS $\frac{\text{Total Distance}}{\text{Total Time}} = \frac{180}{3} = 60.0\text{ km/h}$.","Correct. Survives elimination because total time is 1.5 + 1.0 + 0.5 = 3.0 hours, giving average speed 180 / 3.0 = 60.0 km/h.","Eliminated because 73.3 km/h is the false arithmetic average (220/3).","Eliminated because 65.0 km/h is an overestimate.","Eliminated because 55.0 km/h is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Taking the simple arithmetic average 40 + 60 + 120/3 = 220/3 = 73.33 km/h (Option B).
+Exam Tip: Average speed is ALWAYS (Total Distance)/(Total Time) = 180/3 = 60.0 km/h.","Correct. Survives elimination because total time is 1.5 + 1.0 + 0.5 = 3.0 hours, giving average speed 180 / 3.0 = 60.0 km/h.","Eliminated because 73.3 km/h is the false arithmetic average (220/3).","Eliminated because 65.0 km/h is an overestimate.","Eliminated because 55.0 km/h is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "A police highway patrol car traveling at 100.0 km/h is pursuing a speeding violator traveling at 80.0 km/h. When the patrol car initiates pursuit, the violator is exactly 5.0 km ahead. How many minutes will it take the patrol car to intercept the speeding vehicle?","15.0 minutes","12.0 minutes","18.0 minutes","20.0 minutes","A","Step-by-Step Solution:
 1. Determine relative speed of pursuit:
-   - $V_{\text{rel}} = v_{\text{patrol}} - v_{\text{violator}} = 100.0\text{ km/h} - 80.0\text{ km/h} = 20.0\text{ km/h}$.
+ - Vrₑₗ = vₚₐₜrₒₗ - vviₒₗₐₜₒr = 100.0 km/h - 80.0 km/h = 20.0 km/h.
 2. Determine initial separation distance to close:
-   - $D = 5.0\text{ km}$.
+ - D = 5.0 km.
 3. Calculate time required in hours:
-   - $T = \frac{D}{V_{\text{rel}}} = \frac{5.0\text{ km}}{20.0\text{ km/h}} = 0.25\text{ hours} = \frac{1}{4}\text{ hour}$.
+ - T = D/Vrₑₗ = (5.0 km)/(20.0 km/h) = 0.25 hours = 1/4 hour.
 4. Convert to minutes:
-   - $T = 0.25 \times 60.0 = 15.0\text{ minutes}$.
+ - T = 0.25 × 60.0 = 15.0 minutes.
 
-Common Trap: Dividing distance by patrol speed alone ($\frac{5}{100} \times 60 = 3\text{ min}$), ignoring the violator's motion.
-Exam Tip: Pursuit time depends solely on initial gap and relative speed ($5\text{ km} / 20\text{ km/h} = 0.25\text{ hr} = 15\text{ min}$).","Correct. Survives elimination because relative speed is 20.0 km/h, and closing 5.0 km takes 5/20 = 0.25 hours = 15.0 minutes.","Eliminated because 12.0 minutes assumes 25 km/h relative speed.","Eliminated because 18.0 minutes is an overestimate.","Eliminated because 20.0 minutes assumes 15 km/h relative speed.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Dividing distance by patrol speed alone (5/100 × 60 = 3 min), ignoring the violator's motion.
+Exam Tip: Pursuit time depends solely on initial gap and relative speed (5 km / 20 km/h = 0.25 hr = 15 min).","Correct. Survives elimination because relative speed is 20.0 km/h, and closing 5.0 km takes 5/20 = 0.25 hours = 15.0 minutes.","Eliminated because 12.0 minutes assumes 25 km/h relative speed.","Eliminated because 18.0 minutes is an overestimate.","Eliminated because 20.0 minutes assumes 15 km/h relative speed.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
 "A train passes two pedestrians walking in the same direction as the train at speeds of 3.0 km/h and 5.0 km/h in 9.0 seconds and 10.0 seconds respectively. What is the speed of the train in km/h and its length in meters?","Speed: 23.0 km/h; Length: 50.0 meters","Speed: 25.0 km/h; Length: 60.0 meters","Speed: 20.0 km/h; Length: 45.0 meters","Speed: 22.5 km/h; Length: 55.0 meters","A","Step-by-Step Solution:
 1. Convert pedestrian speeds to m/s:
-   - Pedestrian 1: $v_1 = 3.0 \times \frac{5}{18} = \frac{15}{18} = \frac{5}{6}\text{ m/s}$.
-   - Pedestrian 2: $v_2 = 5.0 \times \frac{5}{18} = \frac{25}{18}\text{ m/s}$.
-2. Let train speed be $v$ (m/s) and train length be $L$ (meters):
-   - $L = 9.0\left(v - \frac{5}{6}\right) = 9v - \frac{15}{2}$ (Equation 1).
-   - $L = 10.0\left(v - \frac{25}{18}\right) = 10v - \frac{125}{9}$ (Equation 2).
-3. Equate the two expressions for $L$:
-   - $9v - \frac{15}{2} = 10v - \frac{125}{9}$.
-   - $10v - 9v = \frac{125}{9} - \frac{15}{2} = \frac{250 - 135}{18} = \frac{115}{18}\text{ m/s}$.
-4. Convert train speed $v$ to km/h:
-   - $v = \frac{115}{18}\text{ m/s} \times \frac{18}{5} = \frac{115}{5} = 23.0\text{ km/h}$.
-5. Calculate train length $L$:
-   - $L = 9.0\left(\frac{115}{18} - \frac{15}{18}\right) = 9.0\left(\frac{100}{18}\right) = \frac{900}{18} = 50.0\text{ meters}$.
+ - Pedestrian 1: v₁ = 3.0 × 5/18 = 15/18 = 5/6 m/s.
+ - Pedestrian 2: v₂ = 5.0 × 5/18 = 25/18 m/s.
+2. Let train speed be v (m/s) and train length be L (meters):
+ - L = 9.0(v - 5/6) = 9v - 15/2 (Equation 1).
+ - L = 10.0(v - 25/18) = 10v - 125/9 (Equation 2).
+3. Equate the two expressions for L:
+ - 9v - 15/2 = 10v - 125/9.
+ - 10v - 9v = 125/9 - 15/2 = 250 - 135/18 = 115/18 m/s.
+4. Convert train speed v to km/h:
+ - v = 115/18 m/s × 18/5 = 115/5 = 23.0 km/h.
+5. Calculate train length L:
+ - L = 9.0(115/18 - 15/18) = 9.0(100/18) = 900/18 = 50.0 meters.
 
 Common Trap: Arithmetic slips in fraction subtractions with LCD 18.
-Exam Tip: Substitute $v = \frac{115}{18}$ back into $L = 9(v - v_1)$ to verify: $9(\frac{100}{18}) = 50\text{ meters}$.","Correct. Survives elimination because train speed is 23.0 km/h (115/18 m/s) and train length is 50.0 meters.","Eliminated because 25.0 km/h and 60.0 meters fail the 10-second clearance time.","Eliminated because 20.0 km/h and 45.0 meters fail the equations.","Eliminated because 22.5 km/h is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
-"Two runners start together from the same starting mark on a 600.0-meter circular track and run in the same direction. Runner 1 completes a full lap in 60.0 seconds, and Runner 2 completes a full lap in 75.0 seconds. After how many minutes will they meet at the starting mark again for the first time?","5.0 minutes \text{ (or 300 seconds)}","4.5 minutes","6.0 minutes","4.0 minutes","A","Step-by-Step Solution:
+Exam Tip: Substitute v = 115/18 back into L = 9(v - v₁) to verify: 9(100/18) = 50 meters.","Correct. Survives elimination because train speed is 23.0 km/h (115/18 m/s) and train length is 50.0 meters.","Eliminated because 25.0 km/h and 60.0 meters fail the 10-second clearance time.","Eliminated because 20.0 km/h and 45.0 meters fail the equations.","Eliminated because 22.5 km/h is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+"Two runners start together from the same starting mark on a 600.0-meter circular track and run in the same direction. Runner 1 completes a full lap in 60.0 seconds, and Runner 2 completes a full lap in 75.0 seconds. After how many minutes will they meet at the starting mark again for the first time?","5.0 minutes (or 300 seconds)","4.5 minutes","6.0 minutes","4.0 minutes","A","Step-by-Step Solution:
 1. Identify the condition for meeting specifically at the starting mark:
-   - Both runners must complete an exact integer number of full laps.
-   - The elapsed time must be a common multiple of their individual lap times ($T_1 = 60.0\text{ s}$ and $T_2 = 75.0\text{ s}$).
+ - Both runners must complete an exact integer number of full laps.
+ - The elapsed time must be a common multiple of their individual lap × (T₁ = 60.0 s and T₂ = 75.0 s).
 2. Find the Least Common Multiple (LCM) of 60 and 75:
-   - Prime factorization of 60: $60 = 2^2 \times 3 \times 5$.
-   - Prime factorization of 75: $75 = 3 \times 5^2$.
-   - $\text{LCM}(60, 75) = 2^2 \times 3 \times 5^2 = 4 \times 3 \times 25 = 300.0\text{ seconds}$.
+ - Prime factorization of 60: 60 = 2² × 3 × 5.
+ - Prime factorization of 75: 75 = 3 × 5².
+ - LCM(60, 75) = 2² × 3 × 5² = 4 × 3 × 25 = 300.0 seconds.
 3. Convert seconds to minutes:
-   - $\text{Time} = \frac{300.0}{60.0} = 5.0\text{ minutes}$.
-4. (Verification: In 300 s, Runner 1 completes $\frac{300}{60} = 5\text{ laps}$, Runner 2 completes $\frac{300}{75} = 4\text{ laps}$).
+ - Time = 300.0/60.0 = 5.0 minutes.
+4. (Verification: In 300 s, Runner 1 completes 300/60 = 5 laps, Runner 2 completes 300/75 = 4 laps).
 
-Common Trap: Finding when they meet anywhere on the track ($\frac{600}{10 - 8} = 300\text{ s}$ happens to coincide here, but generally differs from starting point LCM).
-Exam Tip: Meeting at the STARTING point is ALWAYS the $\text{LCM}$ of lap times.","Correct. Survives elimination because LCM(60, 75) = 300 seconds = 5.0 minutes.","Eliminated because 4.5 minutes = 270 seconds is not divisible by 60 or 75.","Eliminated because 6.0 minutes = 360 seconds is not the minimum common multiple.","Eliminated because 4.0 minutes = 240 seconds is not divisible by 75.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
-"A government transport van drives 120.0 km from Depot A to Depot B at 40.0 km/h, takes a mandatory 30.0-minute rest stop, and then drives another 150.0 km to Depot C at 50.0 km/h. What is the average speed of the vehicle for the entire journey including the rest period?","41.54 km/h \text{ (or } \frac{540}{13}\text{ km/h)}","45.00 km/h","43.25 km/h","40.00 km/h","A","Step-by-Step Solution:
+Common Trap: Finding when they meet anywhere on the track (600/10 - 8 = 300 s happens to coincide here, but generally differs from starting po∫ LCM).
+Exam Tip: Meeting at the STARTING po∫ is ALWAYS the LCM of lap ×.","Correct. Survives elimination because LCM(60, 75) = 300 seconds = 5.0 minutes.","Eliminated because 4.5 minutes = 270 seconds is not divisible by 60 or 75.","Eliminated because 6.0 minutes = 360 seconds is not the minimum common multiple.","Eliminated because 4.0 minutes = 240 seconds is not divisible by 75.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+"A government transport van drives 120.0 km from Depot A to Depot B at 40.0 km/h, takes a mandatory 30.0-minute rest stop, and then drives another 150.0 km to Depot C at 50.0 km/h. What is the average speed of the vehicle for the entire journey including the rest period?","41.54 km/h (or 540/13 km/h)","45.00 km/h","43.25 km/h","40.00 km/h","A","Step-by-Step Solution:
 1. Calculate travel time for Leg 1:
-   - $t_1 = \frac{120.0\text{ km}}{40.0\text{ km/h}} = 3.0\text{ hours}$.
+ - t₁ = (120.0 km)/(40.0 km/h) = 3.0 hours.
 2. Convert rest time to hours:
-   - $t_{\text{rest}} = \frac{30.0\text{ min}}{60.0\text{ min/hr}} = 0.5\text{ hours}$.
+ - trₑₛₜ = (30.0 min)/(60.0 min/hr) = 0.5 hours.
 3. Calculate travel time for Leg 2:
-   - $t_2 = \frac{150.0\text{ km}}{50.0\text{ km/h}} = 3.0\text{ hours}$.
+ - t₂ = (150.0 km)/(50.0 km/h) = 3.0 hours.
 4. Sum total elapsed time:
-   - $T_{\text{total}} = 3.0 + 0.5 + 3.0 = 6.5\text{ hours} = \frac{13}{2}\text{ hours}$.
+ - Tₜₒₜₐₗ = 3.0 + 0.5 + 3.0 = 6.5 hours = 13/2 hours.
 5. Calculate total distance traveled:
-   - $D_{\text{total}} = 120.0 + 150.0 = 270.0\text{ km}$.
+ - Dₜₒₜₐₗ = 120.0 + 150.0 = 270.0 km.
 6. Compute overall average speed:
-   - $V_{\text{avg}} = \frac{270.0}{6.5} = \frac{540.0}{13} \approx 41.5385\text{ km/h} \approx 41.54\text{ km/h}$.
+ - Vₐvg = 270.0/6.5 = 540.0/13 ≈ 41.5385 km/h ≈ 41.54 km/h.
 
-Common Trap: Omitting the 30-minute rest stop ($\frac{270}{6} = 45.0\text{ km/h}$, Option B).
-Exam Tip: When instructions specify \"including the rest period\", total elapsed time must include all stops ($6.5\text{ hrs}$).","Correct. Survives elimination because total distance is 270.0 km and total time including rest is 6.5 hours, giving 270 / 6.5 = 540/13 = 41.54 km/h.","Eliminated because 45.00 km/h excludes the 30-minute rest period.","Eliminated because 43.25 km/h is a calculation slip.","Eliminated because 40.00 km/h is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Motion/travel problems | Very Difficult | Batch 037"
+Common Trap: Omitting the 30-minute rest stop (270/6 = 45.0 km/h, Option B).
+Exam Tip: When instructions specify \""including the rest period\","total elapsed time must include all stops (6.5 hrs).""","Correct. Survives elimination because total distance is 270.0 km and total time including rest is 6.5 hours, giving 270 / 6.5 = 540/13 = 41.54 km/h.","Eliminated because 45.00 km/h excludes the 30-minute rest period.","Eliminated because 43.25 km/h is a calculation slip.","Eliminated because 40.00 km/h is an underestimate.","Numerical Ability"

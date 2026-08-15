@@ -1,149 +1,149 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "A commercial real estate broker earns a graduated tiered commission on property sales: 5.0% on the first ₱2,000,000.00, 3.5% on the next ₱3,000,000.00, and 2.0% on any amount exceeding ₱5,000,000.00. If the broker negotiated the sale of a commercial property for ₱8,500,000.00, what was his total commission?","₱275,000.00","₱285,000.00","₱260,000.00","₱297,500.00","A","Step-by-Step Solution:
-1. Break down total property value ($₱8,500,000.00$) into the three specified tiers:
-   - Tier 1: First $₱2,000,000.00$ at $5.0\%$.
-   - Tier 2: Next $₱3,000,000.00$ (from $₱2,000,000.01$ to $₱5,000,000.00$) at $3.5\%$.
-   - Tier 3: Excess over $₱5,000,000.00$ ($₱8,500,000.00 - ₱5,000,000.00 = ₱3,500,000.00$) at $2.0\%$.
+1. Break down total property value (₱8,500,000.00) into the three specified tiers:
+ - Tier 1: First ₱2,000,000.00 at 5.0%.
+ - Tier 2: Next ₱3,000,000.00 (from ₱2,000,000.01 to ₱5,000,000.00) at 3.5%.
+ - Tier 3: Excess over ₱5,000,000.00 (₱8,500,000.00 - ₱5,000,000.00 = ₱3,500,000.00) at 2.0%.
 2. Calculate commission for each bracket:
-   - Tier 1 Commission: $₱2,000,000.00 \times 0.05 = ₱100,000.00$.
-   - Tier 2 Commission: $₱3,000,000.00 \times 0.035 = ₱105,000.00$.
-   - Tier 3 Commission: $₱3,500,000.00 \times 0.02 = ₱70,000.00$.
+ - Tier 1 Commission: ₱2,000,000.00 × 0.05 = ₱100,000.00.
+ - Tier 2 Commission: ₱3,000,000.00 × 0.035 = ₱105,000.00.
+ - Tier 3 Commission: ₱3,500,000.00 × 0.02 = ₱70,000.00.
 3. Sum the commissions across all three brackets:
-   - $\text{Total Commission} = ₱100,000.00 + ₱105,000.00 + ₱70,000.00 = ₱275,000.00$.
+ - Total Commission = ₱100,000.00 + ₱105,000.00 + ₱70,000.00 = ₱275,000.00.
 
-Common Trap: Applying the lowest 2.0% or average 3.5% rate to the entire ₱8.5M ($8.5\text{M} \times 0.035 = ₱297,500.00$, Option D).
-Exam Tip: Tiered rates must be computed bracket-by-bracket: $100\text{k} + 105\text{k} + 70\text{k} = ₱275,000.00$.","Correct. Survives elimination because Tier 1 (₱100k) + Tier 2 (₱105k) + Tier 3 (₱70k) = ₱275,000.00 total commission.","Eliminated because ₱285,000.00 calculates Tier 3 on ₱4.0M.","Eliminated because ₱260,000.00 is an underestimate.","Eliminated because ₱297,500.00 applies 3.5% flat across the entire sale.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Applying the lowest 2.0% or average 3.5% rate to the entire ₱8.5M (8.5M × 0.035 = ₱297,500.00, Option D).
+Exam Tip: Tiered rates must be computed bracket-by-bracket: 100k + 105k + 70k = ₱275,000.00.","Correct. Survives elimination because Tier 1 (₱100k) + Tier 2 (₱105k) + Tier 3 (₱70k) = ₱275,000.00 total commission.","Eliminated because ₱285,000.00 calculates Tier 3 on ₱4.0M.","Eliminated because ₱260,000.00 is an underestimate.","Eliminated because ₱297,500.00 applies 3.5% flat across the entire sale.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A sales executive is offered two compensation packages: Plan A provides a fixed monthly salary of ₱35,000.00 plus a 4.0% commission on all sales; Plan B provides a straight commission of 7.5% on all sales with no base salary. What monthly sales volume will make both compensation plans yield the exact same total earnings?","₱1,000,000.00","₱900,000.00","₱1,200,000.00","₱850,000.00","A","Step-by-Step Solution:
-1. Define total monthly sales volume as $S$.
+1. Define total monthly sales volume as S.
 2. Formulate monthly earnings functions for both plans:
-   - $\text{Earnings}_A = ₱35,000.00 + 0.04 S$.
-   - $\text{Earnings}_B = 0.075 S$.
-3. Set the two earnings expressions equal (breakeven point):
-   - $₱35,000.00 + 0.04 S = 0.075 S$.
-4. Isolate and solve for $S$:
-   - $0.075 S - 0.04 S = ₱35,000.00$.
-   - $0.035 S = ₱35,000.00$.
-   - $S = \frac{₱35,000.00}{0.035} = \frac{35,000,000.00}{35} = ₱1,000,000.00$.
+ - Earnings_A = ₱35,000.00 + 0.04 S.
+ - Earnings_B = 0.075 S.
+3. Set the two earnings expressions equal (breakeven po∫):
+ - ₱35,000.00 + 0.04 S = 0.075 S.
+4. Isolate and solve for S:
+ - 0.075 S - 0.04 S = ₱35,000.00.
+ - 0.035 S = ₱35,000.00.
+ - S = ₱35,000.00/0.035 = 35,000,000.00/35 = ₱1,000,000.00.
 5. Verify earnings at ₱1,000,000.00 sales:
-   - Plan A: $₱35,000 + (1,000,000 \times 0.04) = ₱35,000 + ₱40,000 = ₱75,000.00$.
-   - Plan B: $1,000,000 \times 0.075 = ₱75,000.00$ (Equal!).
+ - Plan A: ₱35,000 + (1,000,000 × 0.04) = ₱35,000 + ₱40,000 = ₱75,000.00.
+ - Plan B: 1,000,000 × 0.075 = ₱75,000.00 (Equal!).
 
-Common Trap: Adding the commission rates ($7.5\% + 4.0\% = 11.5\%$) instead of finding the marginal differential ($3.5\%$).
-Exam Tip: Breakeven Sales $= \frac{\text{Fixed Base Salary}}{\text{Commission Rate Difference}} = \frac{35,000}{0.075 - 0.04} = \frac{35,000}{0.035} = ₱1,000,000.00$.","Correct. Survives elimination because at ₱1,000,000.00 sales, both plans yield exactly ₱75,000.00 in monthly compensation.","Eliminated because at ₱900,000.00 sales, Plan A (₱71k) > Plan B (₱67.5k).","Eliminated because at ₱1,200,000.00 sales, Plan B (₱90k) > Plan A (₱83k).","Eliminated because ₱850,000.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Adding the commission rates (7.5% + 4.0% = 11.5%) instead of finding the marginal differential (3.5%).
+Exam Tip: Breakeven Sales = (Fixed Base Salary)/(Commission Rate Difference) = 35,000/0.075 - 0.04 = 35,000/0.035 = ₱1,000,000.00.","Correct. Survives elimination because at ₱1,000,000.00 sales, both plans yield exactly ₱75,000.00 in monthly compensation.","Eliminated because at ₱900,000.00 sales, Plan A (₱71k) > Plan B (₱67.5k).","Eliminated because at ₱1,200,000.00 sales, Plan B (₱90k) > Plan A (₱83k).","Eliminated because ₱850,000.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A medical sales representative receives a base monthly salary of ₱20,000.00 plus an 8.0% commission on net sales exceeding a monthly quota threshold of ₱150,000.00. In a month where gross sales were ₱420,000.00, customer returns and cancellations totaled ₱30,000.00. What were the representative's total net monthly earnings?","₱39,200.00","₱41,600.00","₱36,800.00","₱40,000.00","A","Step-by-Step Solution:
 1. Determine net sales after customer returns:
-   - $\text{Net Sales} = \text{Gross Sales} - \text{Returns} = ₱420,000.00 - ₱30,000.00 = ₱390,000.00$.
+ - Net Sales = Gross Sales - Returns = ₱420,000.00 - ₱30,000.00 = ₱390,000.00.
 2. Calculate sales volume exceeding the monthly quota threshold:
-   - $\text{Eligible Excess Sales} = \text{Net Sales} - \text{Quota} = ₱390,000.00 - ₱150,000.00 = ₱240,000.00$.
+ - Eligible Excess Sales = Net Sales - Quota = ₱390,000.00 - ₱150,000.00 = ₱240,000.00.
 3. Compute commission earned on eligible excess:
-   - $\text{Commission} = ₱240,000.00 \times 0.08 = ₱19,200.00$.
+ - Commission = ₱240,000.00 × 0.08 = ₱19,200.00.
 4. Calculate total monthly earnings:
-   - $\text{Total Earnings} = \text{Base Salary} + \text{Commission} = ₱20,000.00 + ₱19,200.00 = ₱39,200.00$.
+ - Total Earnings = Base Salary + Commission = ₱20,000.00 + ₱19,200.00 = ₱39,200.00.
 
-Common Trap: Calculating commission on gross sales before returns ($420\text{k} - 150\text{k} = 270\text{k} \implies \text{Earnings} = ₱41,600.00$, Option B).
-Exam Tip: Always subtract customer returns FIRST to get net sales before subtracting quota: $(390\text{k} - 150\text{k}) \times 0.08 + 20\text{k} = ₱39,200.00$.","Correct. Survives elimination because net sales are ₱390,000, excess over quota is ₱240,000, giving commission ₱19,200 and total earnings ₱39,200.00.","Eliminated because ₱41,600.00 fails to deduct customer returns before applying commission.","Eliminated because ₱36,800.00 is an underestimate.","Eliminated because ₱40,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Calculating commission on gross sales before returns (420k - 150k = 270k implies Earnings = ₱41,600.00, Option B).
+Exam Tip: Always subtract customer returns FIRST to get net sales before subtracting quota: (390k - 150k) × 0.08 + 20k = ₱39,200.00.","Correct. Survives elimination because net sales are ₱390,000, excess over quota is ₱240,000, giving commission ₱19,200 and total earnings ₱39,200.00.","Eliminated because ₱41,600.00 fails to deduct customer returns before applying commission.","Eliminated because ₱36,800.00 is an underestimate.","Eliminated because ₱40,000.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "An agent remits ₱68,400.00 to his principal company after deducting his sales commission of 5.0%. What was the gross sales value of the merchandise sold?","₱72,000.00","₱71,820.00","₱70,000.00","₱75,000.00","A","Step-by-Step Solution:
-1. Identify the relationship between Gross Sales ($S$), Commission Rate ($c$), and Net Remittance ($R$):
-   - $R = S \times (1.0 - c)$.
-2. Substitute $R = ₱68,400.00$ and $c = 0.05$:
-   - $₱68,400.00 = S \times (1.0 - 0.05) = 0.95 S$.
-3. Solve for Gross Sales $S$:
-   - $S = \frac{₱68,400.00}{0.95} = \frac{6,840,000.00}{95} = ₱72,000.00$.
+1. Identify the relationship between Gross Sales (S), Commission Rate (c), and Net Remittance (R):
+ - R = S × (1.0 - c).
+2. Substitute R = ₱68,400.00 and c = 0.05:
+ - ₱68,400.00 = S × (1.0 - 0.05) = 0.95 S.
+3. Solve for Gross Sales S:
+ - S = ₱68,400.00/0.95 = 6,840,000.00/95 = ₱72,000.00.
 4. Verify:
-   - Gross Sales $= ₱72,000.00$.
-   - Commission (5%) $= ₱72,000.00 \times 0.05 = ₱3,600.00$.
-   - Net Remittance $= ₱72,000.00 - ₱3,600.00 = ₱68,400.00$ (Confirmed!).
+ - Gross Sales = ₱72,000.00.
+ - Commission (5%) = ₱72,000.00 × 0.05 = ₱3,600.00.
+ - Net Remittance = ₱72,000.00 - ₱3,600.00 = ₱68,400.00 (Confirmed!).
 
-Common Trap: Adding 5% of the remittance to itself ($68,400 \times 1.05 = ₱71,820.00$, Option B), which mistakenly calculates commission on the net remittance rather than gross sales.
-Exam Tip: $S = \frac{\text{Net Remittance}}{1 - c} = \frac{68,400}{0.95} = ₱72,000.00$.","Correct. Survives elimination because ₱68,400.00 / 0.95 = ₱72,000.00 gross sales.","Eliminated because ₱71,820.00 adds 5% directly to remittance instead of dividing by 0.95.","Eliminated because ₱70,000.00 yields remittance ₱66,500.00.","Eliminated because ₱75,000.00 yields remittance ₱71,250.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Adding 5% of the remittance to itself (68,400 × 1.05 = ₱71,820.00, Option B), which mistakenly calculates commission on the net remittance rather than gross sales.
+Exam Tip: S = (Net Remittance)/(1 - c) = 68,400/0.95 = ₱72,000.00.","Correct. Survives elimination because ₱68,400.00 / 0.95 = ₱72,000.00 gross sales.","Eliminated because ₱71,820.00 adds 5% directly to remittance instead of dividing by 0.95.","Eliminated because ₱70,000.00 yields remittance ₱66,500.00.","Eliminated because ₱75,000.00 yields remittance ₱71,250.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A regional distributor pays its senior agents a base commission of 6.0% on all sales, plus an override bonus of 3.0% on the portion of sales in excess of ₱500,000.00. If an agent received total commission earnings of ₱48,000.00 in a given month, what was his total sales volume?","₱700,000.00","₱650,000.00","₱750,000.00","₱800,000.00","A","Step-by-Step Solution:
 1. Check if sales exceeded ₱500,000.00:
-   - Commission on ₱500,000.00 $= 500,000.00 \times 0.06 = ₱30,000.00$.
-   - Since total earnings ($₱48,000.00$) exceed $₱30,000.00$, sales $S > ₱500,000.00$.
-2. Formulate total earnings equation for $S > 500,000$:
-   - $\text{Earnings} = 0.06 S + 0.03(S - 500,000.00) = ₱48,000.00$.
+ - Commission on ₱500,000.00 = 500,000.00 × 0.06 = ₱30,000.00.
+ - Since total earnings (₱48,000.00) exceed ₱30,000.00, sales S > ₱500,000.00.
+2. Formulate total earnings equation for S > 500,000:
+ - Earnings = 0.06 S + 0.03(S - 500,000.00) = ₱48,000.00.
 3. Expand and collect terms:
-   - $0.06 S + 0.03 S - 15,000.00 = 48,000.00$.
-   - $0.09 S = 48,000.00 + 15,000.00 = 63,000.00$.
-4. Solve for $S$:
-   - $S = \frac{₱63,000.00}{0.09} = \frac{6,300,000.00}{9} = ₱700,000.00$.
+ - 0.06 S + 0.03 S - 15,000.00 = 48,000.00.
+ - 0.09 S = 48,000.00 + 15,000.00 = 63,000.00.
+4. Solve for S:
+ - S = ₱63,000.00/0.09 = 6,300,000.00/9 = ₱700,000.00.
 5. Verify:
-   - Base 6% on ₱700,000 $= ₱42,000.00$.
-   - Bonus 3% on excess (₱200,000) $= ₱6,000.00$.
-   - Total $= ₱42,000.00 + ₱6,000.00 = ₱48,000.00$ (Confirmed!).
+ - Base 6% on ₱700,000 = ₱42,000.00.
+ - Bonus 3% on excess (₱200,000) = ₱6,000.00.
+ - Total = ₱42,000.00 + ₱6,000.00 = ₱48,000.00 (Confirmed!).
 
-Common Trap: Dividing ₱48,000 by 9% directly ($₱533,333.33$) without accounting for the ₱500k threshold on the 3% bonus.
-Exam Tip: Excess sales $= \frac{48,000 - 30,000}{0.06 + 0.03} = \frac{18,000}{0.09} = 200,000 \implies S = 500\text{k} + 200\text{k} = ₱700,000.00$.","Correct. Survives elimination because 6% on ₱700k (₱42k) + 3% on ₱200k (₱6k) = ₱48,000.00 total commission.","Eliminated because ₱650,000.00 yields earnings ₱43,500.00 != ₱48,000.00.","Eliminated because ₱750,000.00 yields earnings ₱52,500.00.","Eliminated because ₱800,000.00 yields earnings ₱57,000.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Dividing ₱48,000 by 9% directly (₱533,333.33) without accounting for the ₱500k threshold on the 3% bonus.
+Exam Tip: Excess sales = 48,000 - 30,000/0.06 + 0.03 = 18,000/0.09 = 200,000 implies S = 500k + 200k = ₱700,000.00.","Correct. Survives elimination because 6% on ₱700k (₱42k) + 3% on ₱200k (₱6k) = ₱48,000.00 total commission.","Eliminated because ₱650,000.00 yields earnings ₱43,500.00!= ₱48,000.00.","Eliminated because ₱750,000.00 yields earnings ₱52,500.00.","Eliminated because ₱800,000.00 yields earnings ₱57,000.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A sales supervisor earns a 10.0% commission on her personal sales, plus a 2.5% override commission on the sales generated by the three junior agents in her team. In a given month, her personal sales were ₱180,000.00, while the three junior agents achieved sales of ₱220,000.00, ₱260,000.00, and ₱320,000.00 respectively. What was the supervisor's total income for that month?","₱38,000.00","₱36,000.00","₱40,000.00","₱35,500.00","A","Step-by-Step Solution:
 1. Compute commission from personal sales:
-   - $\text{Personal Commission} = ₱180,000.00 \times 0.10 = ₱18,000.00$.
+ - Personal Commission = ₱180,000.00 × 0.10 = ₱18,000.00.
 2. Calculate total team sales generated by junior agents:
-   - $\text{Team Sales} = ₱220,000.00 + ₱260,000.00 + ₱320,000.00 = ₱800,000.00$.
+ - Team Sales = ₱220,000.00 + ₱260,000.00 + ₱320,000.00 = ₱800,000.00.
 3. Compute override commission on team sales:
-   - $\text{Override Commission} = ₱800,000.00 \times 0.025 = ₱20,000.00$.
+ - Override Commission = ₱800,000.00 × 0.025 = ₱20,000.00.
 4. Sum total monthly income:
-   - $\text{Total Income} = ₱18,000.00 + ₱20,000.00 = ₱38,000.00$.
+ - Total Income = ₱18,000.00 + ₱20,000.00 = ₱38,000.00.
 
-Common Trap: Applying 10% to the team sales ($₱80,000$) or omitting personal sales commission.
-Exam Tip: Personal: $180\text{k} \times 0.10 = 18\text{k}$. Team override: $800\text{k} \times 0.025 = 20\text{k}$. Total $= ₱38,000.00$.","Correct. Survives elimination because personal commission (₱18,000) + team override on ₱800k (₱20,000) = ₱38,000.00.","Eliminated because ₱36,000.00 is an underestimate.","Eliminated because ₱40,000.00 is an overestimate.","Eliminated because ₱35,500.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Applying 10% to the team sales (₱80,000) or omitting personal sales commission.
+Exam Tip: Personal: 180k × 0.10 = 18k. Team override: 800k × 0.025 = 20k. Total = ₱38,000.00.","Correct. Survives elimination because personal commission (₱18,000) + team override on ₱800k (₱20,000) = ₱38,000.00.","Eliminated because ₱36,000.00 is an underestimate.","Eliminated because ₱40,000.00 is an overestimate.","Eliminated because ₱35,500.00 is a calculation slip.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A sales agent is compensated via a tiered commission schedule: 12.0% on the first ₱50,000.00 of monthly sales, 15.0% on the next ₱50,000.00, and 18.0% on all sales exceeding ₱100,000.00. In a particular month, the agent earned a total commission of ₱21,600.00. What was her total sales volume for that month?","₱145,000.00","₱140,000.00","₱150,000.00","₱135,000.00","A","Step-by-Step Solution:
 1. Compute commission from the first two fully satisfied brackets:
-   - Bracket 1 (First ₱50k): $₱50,000.00 \times 0.12 = ₱6,000.00$.
-   - Bracket 2 (Next ₱50k): $₱50,000.00 \times 0.15 = ₱7,500.00$.
-   - Cumulative Commission from first ₱100,000.00 sales: $₱6,000.00 + ₱7,500.00 = ₱13,500.00$.
+ - Bracket 1 (First ₱50k): ₱50,000.00 × 0.12 = ₱6,000.00.
+ - Bracket 2 (Next ₱50k): ₱50,000.00 × 0.15 = ₱7,500.00.
+ - Cumulative Commission from first ₱100,000.00 sales: ₱6,000.00 + ₱7,500.00 = ₱13,500.00.
 2. Determine remaining commission earned from the third bracket:
-   - $\text{Remaining Commission} = ₱21,600.00 - ₱13,500.00 = ₱8,100.00$.
+ - Remaining Commission = ₱21,600.00 - ₱13,500.00 = ₱8,100.00.
 3. Compute sales volume in Bracket 3 (taxed at 18.0%):
-   - $\text{Excess Sales} = \frac{₱8,100.00}{0.18} = \frac{810,000.00}{18} = ₱45,000.00$.
+ - Excess Sales = ₱8,100.00/0.18 = 810,000.00/18 = ₱45,000.00.
 4. Calculate total monthly sales volume:
-   - $\text{Total Sales} = ₱100,000.00 + ₱45,000.00 = ₱145,000.00$.
+ - Total Sales = ₱100,000.00 + ₱45,000.00 = ₱145,000.00.
 5. Verify:
-   - $50\text{k}(0.12) + 50\text{k}(0.15) + 45\text{k}(0.18) = 6,000 + 7,500 + 8,100 = ₱21,600.00$ (Confirmed!).
+ - 50k(0.12) + 50k(0.15) + 45k(0.18) = 6,000 + 7,500 + 8,100 = ₱21,600.00 (Confirmed!).
 
-Common Trap: Dividing the entire ₱21,600 commission by 18% ($₱120,000.00$).
-Exam Tip: Subtract base bracket earnings ($13.5\text{k}$), divide remainder by top bracket rate ($8.1\text{k} / 0.18 = 45\text{k}$), add back base ($100\text{k} + 45\text{k} = ₱145,000.00$).","Correct. Survives elimination because Tier 1 (₱6k) + Tier 2 (₱7.5k) + Tier 3 (18% of ₱45k = ₱8.1k) = ₱21,600.00 on ₱145,000.00 sales.","Eliminated because ₱140,000.00 yields commission ₱20,700.00 != ₱21,600.00.","Eliminated because ₱150,000.00 yields commission ₱22,500.00.","Eliminated because ₱135,000.00 yields commission ₱19,800.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Dividing the entire ₱21,600 commission by 18% (₱120,000.00).
+Exam Tip: Subtract base bracket earnings (13.5k), divide remainder by top bracket rate (8.1k / 0.18 = 45k), add back base (100k + 45k = ₱145,000.00).","Correct. Survives elimination because Tier 1 (₱6k) + Tier 2 (₱7.5k) + Tier 3 (18% of ₱45k = ₱8.1k) = ₱21,600.00 on ₱145,000.00 sales.","Eliminated because ₱140,000.00 yields commission ₱20,700.00!= ₱21,600.00.","Eliminated because ₱150,000.00 yields commission ₱22,500.00.","Eliminated because ₱135,000.00 yields commission ₱19,800.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "An insurance underwriter earns a 20.0% first-year commission on life insurance policies sold, and a 5.0% recurring annual renewal commission on those same policies from Year 2 through Year 5. If she sold policies generating ₱300,000.00 in annual premiums in Year 1, and all policyholders persist in renewing through Year 5, what is the total cumulative commission earned by the underwriter over the complete 5-year period?","₱120,000.00","₱105,000.00","₱135,000.00","₱150,000.00","A","Step-by-Step Solution:
 1. Compute Year 1 initial acquisition commission:
-   - $\text{Year 1 Commission} = ₱300,000.00 \times 0.20 = ₱60,000.00$.
+ - Year 1 Commission = ₱300,000.00 × 0.20 = ₱60,000.00.
 2. Identify number of renewal years (Years 2, 3, 4, and 5):
-   - $\text{Number of Renewal Years} = 5 - 1 = 4\text{ years}$.
+ - Number of Renewal Years = 5 - 1 = 4 years.
 3. Calculate annual renewal commission per year:
-   - $\text{Annual Renewal Commission} = ₱300,000.00 \times 0.05 = ₱15,000.00\text{/year}$.
+ - Annual Renewal Commission = ₱300,000.00 × 0.05 = ₱15,000.00/year.
 4. Compute total renewal commission across the 4 renewal years:
-   - $\text{Total Renewal Commission} = 4 \times ₱15,000.00 = ₱60,000.00$.
+ - Total Renewal Commission = 4 × ₱15,000.00 = ₱60,000.00.
 5. Sum cumulative commission over all 5 years:
-   - $\text{Cumulative Commission} = ₱60,000.00 (\text{Year 1}) + ₱60,000.00 (\text{Years 2--5}) = ₱120,000.00$.
+ - Cumulative Commission = ₱60,000.00 (Year 1) + ₱60,000.00 (Years 2--5) = ₱120,000.00.
 
-Common Trap: Counting 5 renewal years instead of 4 ($60\text{k} + 75\text{k} = ₱135,000.00$, Option C) or calculating Year 1 only.
-Exam Tip: Total percentage over 5 years is $20\% + (4 \times 5\%) = 40\%$. Cumulative commission $= 40\% \text{ of } ₱300,000 = ₱120,000.00$.","Correct. Survives elimination because Year 1 yields ₱60,000 and 4 renewal years yield ₱15,000 each (₱60,000), totaling ₱120,000.00.","Eliminated because ₱105,000.00 assumes only 3 renewal years.","Eliminated because ₱135,000.00 mistakenly counts 5 renewal years on top of Year 1.","Eliminated because ₱150,000.00 assumes 50% commission.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Counting 5 renewal years instead of 4 (60k + 75k = ₱135,000.00, Option C) or calculating Year 1 only.
+Exam Tip: Total percentage over 5 years is 20% + (4 × 5%) = 40%. Cumulative commission = 40% of ₱300,000 = ₱120,000.00.","Correct. Survives elimination because Year 1 yields ₱60,000 and 4 renewal years yield ₱15,000 each (₱60,000), totaling ₱120,000.00.","Eliminated because ₱105,000.00 assumes only 3 renewal years.","Eliminated because ₱135,000.00 mistakenly counts 5 renewal years on top of Year 1.","Eliminated because ₱150,000.00 assumes 50% commission.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A company pays a straight commission of 9.0% on total sales to its representative. Under an alternative plan, the representative is offered a fixed monthly salary of ₱4,000.00 plus a 5.0% commission on sales exceeding ₱10,000.00. If the alternative plan yields ₱1,600.00 less than the straight commission, what was the representative's total sales volume?","₱127,500.00","₱120,000.00","₱135,000.00","₱130,000.00","A","Step-by-Step Solution:
-1. Define total sales volume as $S$.
+1. Define total sales volume as S.
 2. Formulate compensation under both schemes:
-   - Straight Commission: $C_1 = 0.09 S$.
-   - Alternative Scheme: $C_2 = ₱4,000.00 + 0.05(S - 10,000.00) = ₱4,000.00 + 0.05 S - ₱500.00 = ₱3,500.00 + 0.05 S$.
-3. Set up the difference equation ($C_1 - C_2 = ₱1,600.00$):
-   - $0.09 S - (3,500.00 + 0.05 S) = 1,600.00$.
-4. Collect terms and solve for $S$:
-   - $0.04 S - 3,500.00 = 1,600.00$.
-   - $0.04 S = 1,600.00 + 3,500.00 = 5,100.00$.
-   - $S = \frac{₱5,100.00}{0.04} = \frac{510,000.00}{4} = ₱127,500.00$.
+ - Straight Commission: C₁ = 0.09 S.
+ - Alternative Scheme: C₂ = ₱4,000.00 + 0.05(S - 10,000.00) = ₱4,000.00 + 0.05 S - ₱500.00 = ₱3,500.00 + 0.05 S.
+3. Set up the difference equation (C₁ - C₂ = ₱1,600.00):
+ - 0.09 S - (3,500.00 + 0.05 S) = 1,600.00.
+4. Collect terms and solve for S:
+ - 0.04 S - 3,500.00 = 1,600.00.
+ - 0.04 S = 1,600.00 + 3,500.00 = 5,100.00.
+ - S = ₱5,100.00/0.04 = 510,000.00/4 = ₱127,500.00.
 5. Verify:
-   - Straight Commission $= ₱127,500 \times 0.09 = ₱11,475.00$.
-   - Alternative Scheme $= ₱4,000 + 0.05(117,500) = ₱4,000 + ₱5,875 = ₱9,875.00$.
-   - Difference $= ₱11,475.00 - ₱9,875.00 = ₱1,600.00$ (Confirmed!).
+ - Straight Commission = ₱127,500 × 0.09 = ₱11,475.00.
+ - Alternative Scheme = ₱4,000 + 0.05(117,500) = ₱4,000 + ₱5,875 = ₱9,875.00.
+ - Difference = ₱11,475.00 - ₱9,875.00 = ₱1,600.00 (Confirmed!).
 
-Common Trap: Forgetting to subtract $0.05 \times 10,000 = ₱500$ when expanding the alternative formula.
-Exam Tip: $(0.09 - 0.05)S = 1,600 + (4,000 - 500) \implies 0.04 S = 5,100 \implies S = ₱127,500.00$.","Correct. Survives elimination because 0.04 S = ₱5,100.00, yielding sales volume S = ₱127,500.00.","Eliminated because ₱120,000.00 yields difference ₱1,300.00 != ₱1,600.00.","Eliminated because ₱135,000.00 yields difference ₱1,900.00.","Eliminated because ₱130,000.00 yields difference ₱1,700.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Forgetting to subtract 0.05 × 10,000 = ₱500 when expanding the alternative formula.
+Exam Tip: (0.09 - 0.05)S = 1,600 + (4,000 - 500) implies 0.04 S = 5,100 implies S = ₱127,500.00.","Correct. Survives elimination because 0.04 S = ₱5,100.00, yielding sales volume S = ₱127,500.00.","Eliminated because ₱120,000.00 yields difference ₱1,300.00!= ₱1,600.00.","Eliminated because ₱135,000.00 yields difference ₱1,900.00.","Eliminated because ₱130,000.00 yields difference ₱1,700.00.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
 "A retail vehicle dealership pays its sales associates a 2.0% commission on the invoice price of vehicles sold. An associate sold 4 vehicles in a month at invoice prices of ₱1,250,000.00, ₱1,400,000.00, ₱950,000.00, and ₱1,600,000.00. If the dealership withholds a 10.0% creditable withholding tax on all commission disbursements, what was the net commission received by the associate?","₱93,600.00","₱104,000.00","₱91,000.00","₱95,200.00","A","Step-by-Step Solution:
 1. Calculate total gross vehicle sales:
-   - $\text{Total Sales} = ₱1,250,000.00 + ₱1,400,000.00 + ₱950,000.00 + ₱1,600,000.00 = ₱5,200,000.00$.
+ - Total Sales = ₱1,250,000.00 + ₱1,400,000.00 + ₱950,000.00 + ₱1,600,000.00 = ₱5,200,000.00.
 2. Compute gross commission at 2.0%:
-   - $\text{Gross Commission} = ₱5,200,000.00 \times 0.02 = ₱104,000.00$.
+ - Gross Commission = ₱5,200,000.00 × 0.02 = ₱104,000.00.
 3. Compute 10.0% withholding tax deduction:
-   - $\text{Withholding Tax} = ₱104,000.00 \times 0.10 = ₱10,400.00$.
+ - Withholding Tax = ₱104,000.00 × 0.10 = ₱10,400.00.
 4. Calculate net take-home commission:
-   - $\text{Net Commission} = \text{Gross Commission} - \text{Withholding Tax} = ₱104,000.00 - ₱10,400.00 = ₱93,600.00$.
-   - (Shortcut: $\text{Net Commission} = ₱104,000.00 \times (1 - 0.10) = ₱104,000.00 \times 0.90 = ₱93,600.00$).
+ - Net Commission = Gross Commission - Withholding Tax = ₱104,000.00 - ₱10,400.00 = ₱93,600.00.
+ - (Shortcut: Net Commission = ₱104,000.00 × (1 - 0.10) = ₱104,000.00 × 0.90 = ₱93,600.00).
 
-Common Trap: Selecting gross commission ($₱104,000.00$, Option B), omitting the mandatory tax withholding.
-Exam Tip: $\text{Net} = 5.2\text{M} \times 0.02 \times 0.90 = ₱93,600.00$.","Correct. Survives elimination because gross sales are ₱5.2M, gross commission is ₱104,000, and net after 10% withholding tax is ₱93,600.00.","Eliminated because ₱104,000.00 is gross commission without tax withholding.","Eliminated because ₱91,000.00 assumes 12.5% tax withholding.","Eliminated because ₱95,200.00 assumes 8.46% tax withholding.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"
+Common Trap: Selecting gross commission (₱104,000.00, Option B), omitting the mandatory tax withholding.
+Exam Tip: Net = 5.2M × 0.02 × 0.90 = ₱93,600.00.","Correct. Survives elimination because gross sales are ₱5.2M, gross commission is ₱104,000, and net after 10% withholding tax is ₱93,600.00.","Eliminated because ₱104,000.00 is gross commission without tax withholding.","Eliminated because ₱91,000.00 assumes 12.5% tax withholding.","Eliminated because ₱95,200.00 assumes 8.46% tax withholding.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Commission | Very Difficult | Batch 048"

@@ -8,32 +8,32 @@
 - Year 6: Deficit = PHP 15M; Growth = +5.5%
 Which of the following inferences is STRONGLY SUPPORTED by the graphical relationship between local economic growth and the municipal budget deficit?","Periods of accelerating economic growth are strongly associated with a narrowing municipal budget deficit, while economic contraction coincided with the peak deficit.","The municipal budget deficit is entirely independent of broader economic growth conditions.","Economic growth causes the deficit to expand because infrastructure spending rises during growth phases.","The municipal budget achieved a budget surplus by Year 6 due to strong local economic performance.","A","Step-by-Step Solution:
 1. Examine the correlation between the two time series:
-   - Years 1-3: Economic growth slows down (1.2% -> 0.8% -> -0.5%), while the deficit widens significantly (45M -> 62M -> 85M). Peak deficit (PHP 85M) occurs in Year 3 during the only year of economic contraction (-0.5%).
-   - Years 4-6: Economic growth accelerates sharply (+2.4% -> +4.1% -> +5.5%), while the deficit drops consistently (50M -> 30M -> 15M).
+ - Years 1-3: Economic growth slows down (1.2% -> 0.8% -> -0.5%), while the deficit widens significantly (45M -> 62M -> 85M). Peak deficit (PHP 85M) occurs in Year 3 during the only year of economic contraction (-0.5%).
+ - Years 4-6: Economic growth accelerates sharply (+2.4% -> +4.1% -> +5.5%), while the deficit drops consistently (50M -> 30M -> 15M).
 2. Evaluate Option A:
-   - Accurately captures that faster growth correlates with a shrinking deficit, and contraction coincided with peak deficit. Strong inference supported directly by data.
+ - Accurately captures that faster growth correlates with a shrinking deficit, and contraction coincided with peak deficit. Strong inference supported directly by data.
 3. Evaluate Option B:
-   - False; there is a clear inverse relationship.
+ - False; there is a clear inverse relationship.
 4. Evaluate Option C:
-   - False; data shows the deficit shrank (did not expand) as growth accelerated.
+ - False; data shows the deficit shrank (did not expand) as growth accelerated.
 5. Evaluate Option D:
-   - False; in Year 6, the deficit was PHP 15M (a deficit still exists; no surplus was achieved).
+ - False; in Year 6, the deficit was PHP 15M (a deficit still exists; no surplus was achieved).
 
 Common Trap: Concluding that a low deficit (PHP 15M) means a budget surplus was achieved.
 Exam Tip: A declining positive deficit is still a deficit; a surplus only occurs when the deficit becomes negative (Revenues > Expenditures).","Correct. Survives elimination because the data demonstrates an inverse relationship: the deficit peaked at PHP 85M during the economic contraction (-0.5% in Year 3) and shrank continuously to PHP 15M as economic growth accelerated to +5.5% in Year 6.","Eliminated because the two variables show a clear inverse co-movement across all six years, refuting independence.","Eliminated because the deficit decreased (from 85M down to 15M) during the growth acceleration phase (Years 4-6), contradicting the claim that growth expands deficits.","Eliminated because in Year 6 there was still a deficit of PHP 15M; a surplus requires revenues to exceed expenditures (deficit < 0).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
 "Passage: A scatter plot analyzes the relationship between Average Daily Class Size (x-axis, ranging from 25 to 60 students) and National Achievement Test (NAT) Passing Rate (y-axis, ranging from 40% to 95%) across 50 public high schools in a division. The trendline exhibits a downward slope with an R-squared value of 0.78. Schools with class sizes between 25 and 35 average an 88% passing rate, while schools with class sizes above 50 average a 52% passing rate. Which conclusion can be MOST VALIDLY inferred from this graph?","There is a strong negative association between class size and NAT passing rates, indicating that larger class sizes are systematically linked with lower institutional pass rates.","Reducing class sizes to below 25 students is guaranteed to produce a 100% NAT passing rate in every school.","Teacher quality and instructional materials have no influence on NAT passing rates because class size explains all variation.","Class size has a negligible effect on NAT outcomes because schools with 50 students still managed to pass the test.","A","Step-by-Step Solution:
 1. Analyze the scatter plot properties:
-   - Downward slope = Negative correlation (as class size increases, passing rate decreases).
-   - R-squared = 0.78 = Strong explanatory power / strong correlation.
-   - Distinct cluster differences: 25-35 students = 88% pass rate vs >50 students = 52% pass rate.
+ - Downward slope = Negative correlation (as class size increases, passing rate decreases).
+ - R-squared = 0.78 = Strong explanatory power / strong correlation.
+ - Distinct cluster differences: 25-35 students = 88% pass rate vs >50 students = 52% pass rate.
 2. Evaluate Option A:
-   - Accurately describes the strong negative statistical association shown by the downward slope and R^2=0.78. Valid inference.
+ - Accurately describes the strong negative statistical association shown by the downward slope and R²=0.78. Valid inference.
 3. Evaluate Option B:
-   - Invalid extrapolation; the graph only covers class sizes from 25 to 60, and correlation does not guarantee a 100% deterministic outcome.
+ - Invalid extrapolation; the graph only covers class sizes from 25 to 60, and correlation does not guarantee a 100% deterministic outcome.
 4. Evaluate Option C:
-   - False; R^2=0.78 leaves 22% unexplained variance, and the graph does not isolate or disprove other variables.
+ - False; R²=0.78 leaves 22% unexplained variance, and the graph does not isolate or disprove other variables.
 5. Evaluate Option D:
-   - False; an R^2 of 0.78 and a 36-percentage-point performance drop (88% vs 52%) represents a major, not negligible, effect.
+ - False; an R² of 0.78 and a 36-percentage-po∫ performance drop (88% vs 52%) represents a major, not negligible, effect.
 
 Common Trap: Confusing strong statistical correlation with an absolute deterministic guarantee of 100% success (Option B).
 Exam Tip: Valid graphical inferences stick strictly to observable trends and avoid making unproven absolute causal or out-of-range claims.","Correct. Survives elimination because the downward trendline and high R-squared (0.78) provide strong empirical evidence of an inverse relationship between class size and student passing performance.","Eliminated because claiming a guaranteed 100% passing rate makes an ungrounded deterministic assertion and extrapolates beyond the observed 25-60 data range.","Eliminated because an R-squared of 0.78 leaves 22% unexplained variance, and scatter plot correlations do not disprove the impact of unplotted educational factors.","Eliminated because an 88% vs 52% disparity is substantial and statistically robust, refuting the claim of a negligible effect.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
@@ -44,40 +44,40 @@ Exam Tip: Valid graphical inferences stick strictly to observable trends and avo
 - Years 8-10 (Full Institutionalization): Year 8=14.5, Year 9=13.8, Year 10=13.5
 Which inference is BEST SUPPORTED by the trajectory shown in the line graph?","The introduction and expansion of the maternal care program coincided with a sustained and substantial decline in infant mortality, with the fastest gains occurring during the active expansion phase.","Infant mortality was already falling rapidly before Year 3, proving the maternal care program had no measurable impact.","The program achieved zero infant mortality by Year 10 through universal healthcare coverage.","Infant mortality began to rise again during the full institutionalization phase (Years 8-10).","A","Step-by-Step Solution:
 1. Analyze the time series phases:
-   - Pre-program (Y1-Y2): 28.5 -> 28.2 = Flat/negligible change (-0.3 over 1 year).
-   - Expansion phase (Y3-Y7): 27.8 -> 16.2 = Massive drop of 11.6 points over 4 years (average drop ≈ 2.9 points/year).
-   - Institutionalization (Y8-Y10): 14.5 -> 13.5 = Continued decline at a slower, stabilizing pace (average drop ≈ 0.5 points/year).
+ - Pre-program (Y1-Y2): 28.5 -> 28.2 = Flat/negligible change (-0.3 over 1 year).
+ - Expansion phase (Y3-Y7): 27.8 -> 16.2 = Massive drop of 11.6 points over 4 years (average drop ≈ 2.9 points/year).
+ - Institutionalization (Y8-Y10): 14.5 -> 13.5 = Continued decline at a slower, stabilizing pace (average drop ≈ 0.5 points/year).
 2. Evaluate Option A:
-   - Accurately states that the program rollout coincided with a major sustained decline, and the steepest gains occurred during the expansion phase (Y4-Y7). Supported by data.
+ - Accurately states that the program rollout coincided with a major sustained decline, and the steepest gains occurred during the expansion phase (Y4-Y7). Supported by data.
 3. Evaluate Option B:
-   - Contradicted by data; Y1 to Y2 was virtually flat (28.5 to 28.2).
+ - Contradicted by data; Y1 to Y2 was virtually flat (28.5 to 28.2).
 4. Evaluate Option C:
-   - False; Year 10 rate was 13.5 deaths per 1,000 live births, not zero.
+ - False; Year 10 rate was 13.5 deaths per 1,000 live births, not zero.
 5. Evaluate Option D:
-   - False; Years 8-10 continued to decline (14.5 -> 13.8 -> 13.5).
+ - False; Years 8-10 continued to decline (14.5 -> 13.8 -> 13.5).
 
 Common Trap: Asserting that the program eliminated all infant mortality (Option C) when the graph clearly shows a positive rate of 13.5 in Year 10.
-Exam Tip: Identify the inflection point in the time series and examine differences in slope across distinct intervention phases.","Correct. Survives elimination because the data shows a plateau prior to Year 3 (28.5 to 28.2), followed by a sharp drop during expansion (dropping from 27.8 in Year 3 to 16.2 in Year 7) and continued gradual reduction through Year 10 (13.5).","Eliminated because the pre-program baseline was virtually flat (28.5 to 28.2), refuting the assertion of a pre-existing rapid decline.","Eliminated because the mortality rate in Year 10 was 13.5 per 1,000 live births, not zero.","Eliminated because the mortality rate continued to drop during Years 8-10 (from 14.5 down to 13.5), with no rebound.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
+Exam Tip: Identify the inflection po∫ in the time series and examine differences in slope across distinct intervention phases.","Correct. Survives elimination because the data shows a plateau prior to Year 3 (28.5 to 28.2), followed by a sharp drop during expansion (dropping from 27.8 in Year 3 to 16.2 in Year 7) and continued gradual reduction through Year 10 (13.5).","Eliminated because the pre-program baseline was virtually flat (28.5 to 28.2), refuting the assertion of a pre-existing rapid decline.","Eliminated because the mortality rate in Year 10 was 13.5 per 1,000 live births, not zero.","Eliminated because the mortality rate continued to drop during Years 8-10 (from 14.5 down to 13.5), with no rebound.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
 "Passage: A comparative bar chart shows annual municipal solid waste generation (tons/year) versus waste diversion/recycling rates (%) across five cities:
 - City Alpha: Generation = 120,000 tons; Diversion Rate = 65%
 - City Beta: Generation = 250,000 tons; Diversion Rate = 30%
 - City Gamma: Generation = 80,000 tons; Diversion Rate = 70%
-- City Delta: Generation = 300,000 tons; Diversion Rate = 25%
+- City Δ: Generation = 300,000 tons; Diversion Rate = 25%
 - City Epsilon: Generation = 150,000 tons; Diversion Rate = 60%
-Which inference regarding RESIDUAL WASTE SENT TO LANDFILLS (Generation × [1 - Diversion Rate]) is CORRECT?","City Delta sends the largest absolute volume of residual waste to landfills, while City Gamma sends the smallest.","City Beta sends more residual waste to landfills than City Delta due to its lower diversion efficiency.","City Alpha sends more residual waste to landfills than City Epsilon because of its larger population base.","All five cities send approximately equal tonnages of residual waste to landfills.","A","Step-by-Step Solution:
+Which inference regarding RESIDUAL WASTE SENT TO LANDFILLS (Generation × [1 - Diversion Rate]) is CORRECT?","City Δ sends the largest absolute volume of residual waste to landfills, while City Gamma sends the smallest.","City Beta sends more residual waste to landfills than City Δ due to its lower diversion efficiency.","City Alpha sends more residual waste to landfills than City Epsilon because of its larger population base.","All five cities send approximately equal tonnages of residual waste to landfills.","A","Step-by-Step Solution:
 1. Calculate residual waste sent to landfill for each city (Generation × [1 - Diversion %]):
-   - City Alpha: 120,000 × (1 - 0.65) = 120,000 × 0.35 = 42,000 tons.
-   - City Beta: 250,000 × (1 - 0.30) = 250,000 × 0.70 = 175,000 tons.
-   - City Gamma: 80,000 × (1 - 0.70) = 80,000 × 0.30 = 24,000 tons. (SMALLEST RESIDUAL)
-   - City Delta: 300,000 × (1 - 0.25) = 300,000 × 0.75 = 225,000 tons. (LARGEST RESIDUAL)
-   - City Epsilon: 150,000 × (1 - 0.60) = 150,000 × 0.40 = 60,000 tons.
+ - City Alpha: 120,000 × (1 - 0.65) = 120,000 × 0.35 = 42,000 tons.
+ - City Beta: 250,000 × (1 - 0.30) = 250,000 × 0.70 = 175,000 tons.
+ - City Gamma: 80,000 × (1 - 0.70) = 80,000 × 0.30 = 24,000 tons. (SMALLEST RESIDUAL)
+ - City Δ: 300,000 × (1 - 0.25) = 300,000 × 0.75 = 225,000 tons. (LARGEST RESIDUAL)
+ - City Epsilon: 150,000 × (1 - 0.60) = 150,000 × 0.40 = 60,000 tons.
 2. Compare extremes:
-   - Largest landfill burden = City Delta (225,000 tons).
-   - Smallest landfill burden = City Gamma (24,000 tons).
+ - Largest landfill burden = City Δ (225,000 tons).
+ - Smallest landfill burden = City Gamma (24,000 tons).
 3. Option A correctly identifies both extremes.
 
 Common Trap: Relying solely on diversion percentage without multiplying by gross generation.
-Exam Tip: In dual-variable comparisons, compute the derived composite quantity across all entities before drawing conclusions.","Correct. Survives elimination because City Delta disposes of 225,000 tons of landfill waste (300k × 0.75), the highest volume, while City Gamma disposes of 24,000 tons (80k × 0.30), the lowest.","Eliminated because City Beta dumps 175,000 tons, which is less than City Delta's 225,000 tons.","Eliminated because City Alpha sends 42,000 tons to landfills, which is less than City Epsilon's 60,000 tons.","Eliminated because landfill tonnage varies widely from 24,000 tons (Gamma) to 225,000 tons (Delta).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
+Exam Tip: In dual-variable comparisons, compute the derived composite quantity across all entities before drawing conclusions.","Correct. Survives elimination because City Δ disposes of 225,000 tons of landfill waste (300k × 0.75), the highest volume, while City Gamma disposes of 24,000 tons (80k × 0.30), the lowest.","Eliminated because City Beta dumps 175,000 tons, which is less than City Δ's 225,000 tons.","Eliminated because City Alpha sends 42,000 tons to landfills, which is less than City Epsilon's 60,000 tons.","Eliminated because landfill tonnage varies widely from 24,000 tons (Gamma) to 225,000 tons (Δ).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
 "Passage: A multi-line graph plots quarterly business registrations (Line 1) and commercial loan interest rates (Line 2) in a metropolitan region over eight quarters:
 - Q1: Registrations = 4,200; Interest Rate = 4.5%
 - Q2: Registrations = 4,500; Interest Rate = 4.2%
@@ -89,16 +89,16 @@ Exam Tip: In dual-variable comparisons, compute the derived composite quantity a
 - Q8: Registrations = 3,600; Interest Rate = 6.2%
 What logical inference is STRONGLY SUPPORTED by the co-movement of these two time series?","Business registrations exhibit an inverse relationship with commercial loan interest rates, peaking when borrowing costs were at their lowest.","Business registrations rose steadily across all eight quarters regardless of interest rate shifts.","Rising interest rates stimulated higher entrepreneurship by rewarding capital investments.","Commercial loan interest rates were kept completely stable by monetary authorities throughout the two-year period.","A","Step-by-Step Solution:
 1. Examine the interaction between Registrations and Interest Rates:
-   - Q1 to Q4: Interest rates fell from 4.5% to 3.5% (trough in Q4). Concurrently, business registrations expanded from 4,200 to a peak of 5,400 in Q4.
-   - Q5 to Q8: Interest rates rose steadily from 4.0% to 6.2%. Concurrently, business registrations contracted from 5,100 down to 3,600 in Q8.
+ - Q1 to Q4: Interest rates fell from 4.5% to 3.5% (trough in Q4). Concurrently, business registrations expanded from 4,200 to a peak of 5,400 in Q4.
+ - Q5 to Q8: Interest rates rose steadily from 4.0% to 6.2%. Concurrently, business registrations contracted from 5,100 down to 3,600 in Q8.
 2. Evaluate Option A:
-   - Perfectly describes the inverse co-movement: lowest rate (3.5% in Q4) aligned with peak registrations (5,400 in Q4), while highest rate (6.2% in Q8) aligned with lowest registrations (3,600 in Q8).
+ - Perfectly describes the inverse co-movement: lowest rate (3.5% in Q4) aligned with peak registrations (5,400 in Q4), while highest rate (6.2% in Q8) aligned with lowest registrations (3,600 in Q8).
 3. Other options:
-   - Option B is factually wrong (registrations fell in Q5-Q8).
-   - Option C contradicts the data.
-   - Option D is factually wrong (rates ranged from 3.5% to 6.2%).
+ - Option B is factually wrong (registrations fell in Q5-Q8).
+ - Option C contradicts the data.
+ - Option D is factually wrong (rates ranged from 3.5% to 6.2%).
 
-Common Trap: Missing the turning point in Q4 where both lines reversed direction.
+Common Trap: Missing the turning po∫ in Q4 where both lines reversed direction.
 Exam Tip: Check the coincidence of peaks and troughs across dual time-series lines to deduce the nature of their relationship.","Correct. Survives elimination because registrations reached their maximum (5,400) when interest rates hit their minimum (3.5% in Q4), and steadily declined as borrowing rates escalated to 6.2% by Q8.","Eliminated because business registrations declined consistently from Q5 (5,100) through Q8 (3,600).","Eliminated because rising interest rates in Q5-Q8 coincided with declining registrations (from 5,100 down to 3,600), refuting the claim that higher rates stimulate business formation.","Eliminated because interest rates fluctuated significantly between 3.5% and 6.2%, refuting stability.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
 "Passage: A regional climate graph displays monthly average rainfall (bars, in mm) and dengue fever incidence (line, cases per month) over a 12-month calendar cycle:
 - Jan-Mar (Dry Season): Rainfall = 25-40 mm/month; Dengue = 120-150 cases/month
@@ -108,16 +108,16 @@ Exam Tip: Check the coincidence of peaks and troughs across dual time-series lin
 - Nov-Dec (Cool Dry): Rainfall = 60-90 mm/month; Dengue = 340-420 cases/month
 Which inference regarding the EPIDEMIOLOGICAL PATTERN is MOST JUSTIFIED by the data?","Peak dengue incidence lags peak rainfall by approximately one to two months, reflecting the biological gestation and vector breeding lifecycle.","Dengue transmission occurs exclusively during months with rainfall under 50 mm.","Rainfall and dengue cases reach their absolute minimums in September and October.","Heavy rainfall immediately eradicates mosquito breeding, causing an instantaneous drop in disease cases.","A","Step-by-Step Solution:
 1. Identify the timing of peaks:
-   - Peak rainfall occurs in June-August (320-380 mm).
-   - Peak dengue incidence occurs in September-October (890-950 cases), 1-2 months AFTER peak rainfall.
+ - Peak rainfall occurs in June-August (320-380 mm).
+ - Peak dengue incidence occurs in September-October (890-950 cases), 1-2 months AFTER peak rainfall.
 2. Evaluate Option A:
-   - Directly supported by the observed 1-2 month time lag between heavy rain accumulation and peak infection numbers. Valid inference based on data.
+ - Directly supported by the observed 1-2 month time lag between heavy rain accumulation and peak infection numbers. Valid inference based on data.
 3. Evaluate Option B:
-   - False; cases were lowest in Jan-Mar (120-150) and much higher in wet months.
+ - False; cases were lowest in Jan-Mar (120-150) and much higher in wet months.
 4. Evaluate Option C:
-   - False; September-October had peak dengue cases (890-950), not minimums.
+ - False; September-October had peak dengue cases (890-950), not minimums.
 5. Evaluate Option D:
-   - False; cases expanded substantially during and after heavy rains.
+ - False; cases expanded substantially during and after heavy rains.
 
 Common Trap: Assuming peak cases must occur in the exact same month as peak rainfall, ignoring standard environmental lag effects.
 Exam Tip: When comparing environmental and epidemiological curves, look for delayed peak alignments (lagged correlation).","Correct. Survives elimination because peak rainfall occurred in Jun-Aug (320-380 mm), followed 1-2 months later by peak dengue cases in Sep-Oct (890-950 cases), demonstrating a clear lagged epidemiological dynamic.","Eliminated because dengue cases were at their lowest (120-150) during dry months (<50 mm), and highest (up to 950) following heavy rainfall.","Eliminated because Sep-Oct recorded the highest dengue cases of the entire year (890-950 cases), not the minimum.","Eliminated because heavy rainfall was followed by soaring infection counts, contradicting any immediate eradication claim.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
@@ -127,39 +127,39 @@ Exam Tip: When comparing environmental and epidemiological curves, look for dela
 - 2020: Youth (0-14) = 26%; Working Age (15-64) = 66%; Elderly (65+) = 8%; LFPR = 69%
 Which demographic trend and economic implication can be MOST REASONABLY inferred from the data?","The province is experiencing a demographic dividend, characterized by an expanding working-age share, a shrinking youth dependency ratio, and rising labor participation.","The province is facing an immediate labor shortage driven by a collapsing working-age population.","The total dependency ratio (Youth + Elderly / Working Age) increased substantially from 2000 to 2020.","The elderly population is growing so rapidly that it has surpassed the youth population by 2020.","A","Step-by-Step Solution:
 1. Analyze the demographic shifts from 2000 to 2020:
-   - Working-age population (15-64) expanded from 57% -> 62% -> 66%.
-   - Youth population (0-14) declined from 38% -> 32% -> 26%.
-   - Elderly population (65+) rose modestly from 5% -> 6% -> 8%.
-   - LFPR increased from 61% -> 65% -> 69%.
+ - Working-age population (15-64) expanded from 57% -> 62% -> 66%.
+ - Youth population (0-14) declined from 38% -> 32% -> 26%.
+ - Elderly population (65+) rose modestly from 5% -> 6% -> 8%.
+ - LFPR increased from 61% -> 65% -> 69%.
 2. Calculate Dependency Ratios (Non-working / Working-age):
-   - 2000: (38 + 5) / 57 = 43 / 57 ≈ 75.4%.
-   - 2010: (32 + 6) / 62 = 38 / 62 ≈ 61.3%.
-   - 2020: (26 + 8) / 66 = 34 / 66 ≈ 51.5%.
-   - Total dependency ratio dropped significantly (from 75.4% down to 51.5%).
+ - 2000: (38 + 5) / 57 = 43 / 57 ≈ 75.4%.
+ - 2010: (32 + 6) / 62 = 38 / 62 ≈ 61.3%.
+ - 2020: (26 + 8) / 66 = 34 / 66 ≈ 51.5%.
+ - Total dependency ratio dropped significantly (from 75.4% down to 51.5%).
 3. Evaluate Option A:
-   - Accurately defines the 'demographic dividend' (larger working-age cohort, lower dependency burden, higher labor participation). Fully supported.
+ - Accurately defines the 'demographic dividend' (larger working-age cohort, lower dependency burden, higher labor participation). Fully supported.
 4. Other options:
-   - Option B is contradicted (working age expanded from 57% to 66%).
-   - Option C is mathematically false (dependency dropped from 75.4% to 51.5%).
-   - Option D is false (Youth in 2020 = 26%, Elderly = 8%; youth still outnumbers elderly by more than 3 to 1).
+ - Option B is contradicted (working age expanded from 57% to 66%).
+ - Option C is mathematically false (dependency dropped from 75.4% to 51.5%).
+ - Option D is false (Youth in 2020 = 26%, Elderly = 8%; youth still outnumbers elderly by more than 3 to 1).
 
 Common Trap: Assuming an aging population (Elderly 5% to 8%) automatically means total dependency increased, ignoring the much larger drop in youth dependency (38% to 26%).
-Exam Tip: Compute the total dependency ratio explicitly: (Youth % + Elderly %) / Working-Age %.","Correct. Survives elimination because the working-age cohort expanded to 66%, total dependency dropped from 75.4% to 51.5%, and LFPR rose to 69%, classic indicators of a demographic dividend window.","Eliminated because the working-age population expanded from 57% to 66%, refuting any labor collapse.","Eliminated because the total dependency ratio actually declined sharply from 75.4% (43/57) in 2000 to 51.5% (34/66) in 2020.","Eliminated because youth (26%) remained more than three times larger than the elderly population (8%) in 2020.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
+Exam Tip: Compute the total dependency ratio explicitly: (Youth % + Elderly %) / Working-Age %.","Correct. Survives elimination because the working-age cohort expanded to 66%, total dependency dropped from 75.4% to 51.5%, and LFPR rose to 69%, classic indicators of a demographic dividend window.","Eliminated because the working-age population expanded from 57% to 66%, refuting any labor collapse.","Eliminated because the total dependency ratio actually declined sharply from 75.4% (43/57) in 2000 to 51.5% (34/66) in 2020.","Eliminated because youth (26%) remained more than three × larger than the elderly population (8%) in 2020.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
 "Passage: A line chart plots the Customer Satisfaction Index (CSI, scale 1-100) of a frontline government licensing agency before and after implementing a fully digital online application portal in Month 6:
 - Months 1-5 (Manual In-Person System): M1=62.0, M2=60.5, M3=61.8, M4=59.0, M5=60.2 (Avg ≈ 60.7)
 - Month 6 (Digital Launch & System Transition): M6=52.4 (sharp dip)
 - Months 7-12 (Post-Digital Stabilization): M7=68.0, M8=76.5, M9=84.2, M10=88.6, M11=91.0, M12=92.5
 Which inference regarding the DIGITAL TRANSFORMATION IMPACT is MOST ACCURATE?","The digital transition caused a temporary short-term disruption in Month 6, followed by a substantial and sustained long-term improvement in citizen satisfaction.","The digital system permanently impaired citizen satisfaction, which never recovered to pre-launch levels.","Citizen satisfaction was completely unaffected by the transition to the digital platform.","Citizen satisfaction increased immediately in Month 6 without any transition friction or learning curve.","A","Step-by-Step Solution:
 1. Examine the three distinct phases:
-   - Pre-launch baseline (M1-M5): Stagnant around ~60 points.
-   - Transition month (M6): Sharp drop to 52.4 (user adaptation / technical teething issues).
-   - Post-launch stabilization (M7-M12): Steep, continuous climb from 68.0 to 92.5 points (+32 points above pre-launch baseline).
+ - Pre-launch baseline (M1-M5): Stagnant around ~60 points.
+ - Transition month (M6): Sharp drop to 52.4 (user adaptation / technical teething issues).
+ - Post-launch stabilization (M7-M12): Steep, continuous climb from 68.0 to 92.5 points (+32 points above pre-launch baseline).
 2. Evaluate Option A:
-   - Accurately captures both the temporary Month 6 dip (52.4) and the subsequent dramatic, sustained surge (reaching 92.5 by Month 12). Strong, nuanced inference.
+ - Accurately captures both the temporary Month 6 dip (52.4) and the subsequent dramatic, sustained surge (reaching 92.5 by Month 12). Strong, nuanced inference.
 3. Other options:
-   - Option B is contradicted by the 92.5 score in Month 12.
-   - Option C is contradicted by the large score movements.
-   - Option D is contradicted by the drop in Month 6.
+ - Option B is contradicted by the 92.5 score in Month 12.
+ - Option C is contradicted by the large score movements.
+ - Option D is contradicted by the drop in Month 6.
 
 Common Trap: Overemphasizing the Month 6 dip to label the project a failure, or ignoring the Month 6 dip to claim immediate perfection.
 Exam Tip: Good data interpretation captures both temporary transitional shocks and permanent structural shifts.","Correct. Survives elimination because the data clearly demonstrates a short-lived transition dip in Month 6 (52.4), followed by a dramatic structural rise from 68.0 to 92.5, significantly exceeding the baseline of ~60.7.","Eliminated because CSI climbed to 92.5 by Month 12, well above the pre-launch baseline of ~60.7, disproving permanent impairment.","Eliminated because CSI shifted by more than 30 points between Month 6 and Month 12, showing profound impact.","Eliminated because Month 6 saw a sharp decline to 52.4, demonstrating transitional friction.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
@@ -171,17 +171,17 @@ Exam Tip: Good data interpretation captures both temporary transitional shocks a
 - SUC 5: Budget = PHP 350M; Pass Rate = 82%; Employment Rate = 85% (Large Bubble)
 Which conclusion regarding INSTITUTIONAL EFFICIENCY is STRONGLY SUPPORTED by the bubble chart?","SUC 1 achieves top-tier licensure and graduate employment outcomes while operating on one of the lowest annual budgets, demonstrating high resource efficiency.","A higher budget is strictly necessary to achieve high licensure passing rates and strong graduate employment.","SUC 3 is the most efficient institution because it utilizes a large budget to serve students.","SUC 4 outperforms SUC 1 across all academic and employment metrics.","A","Step-by-Step Solution:
 1. Compare SUC 1 vs other institutions:
-   - SUC 1 operates on a modest budget of PHP 200M (second lowest).
-   - Yet SUC 1 achieves an 85% licensure pass rate (comparable to SUC 2's 88% on PHP 750M) and an 88% employment rate.
-   - By contrast, SUC 3 has a massive PHP 600M budget but only achieves a 55% pass rate and 60% employment.
+ - SUC 1 operates on a modest budget of PHP 200M (second lowest).
+ - Yet SUC 1 achieves an 85% licensure pass rate (comparable to SUC 2's 88% on PHP 750M) and an 88% employment rate.
+ - By contrast, SUC 3 has a massive PHP 600M budget but only achieves a 55% pass rate and 60% employment.
 2. Evaluate Option A:
-   - SUC 1 delivers top-tier performance on a fraction of SUC 2 or SUC 3's budget, demonstrating superior institutional efficiency. Highly valid inference.
+ - SUC 1 delivers top-tier performance on a fraction of SUC 2 or SUC 3's budget, demonstrating superior institutional efficiency. Highly valid inference.
 3. Evaluate Option B:
-   - Disproven by SUC 1 and SUC 5, which achieve high passing and employment rates on low-to-moderate budgets.
+ - Disproven by SUC 1 and SUC 5, which achieve high passing and employment rates on low-to-moderate budgets.
 4. Evaluate Option C:
-   - SUC 3 is the least efficient (PHP 600M budget yielding weak 55% pass and 60% employment rates).
+ - SUC 3 is the least efficient (PHP 600M budget yielding weak 55% pass and 60% employment rates).
 5. Evaluate Option D:
-   - SUC 4 (PHP 180M, 50% pass, 58% employment) is strictly inferior to SUC 1 (PHP 200M, 85% pass, 88% employment).
+ - SUC 4 (PHP 180M, 50% pass, 58% employment) is strictly inferior to SUC 1 (PHP 200M, 85% pass, 88% employment).
 
 Common Trap: Assuming budget scale directly correlates with institutional quality without examining low-budget high-performing outliers.
 Exam Tip: Efficiency is output per unit of input; look for entities in the top-left quadrant (high outcomes, low input) with large bubble size.","Correct. Survives elimination because SUC 1 achieves an 85% pass rate and 88% employment rate on just PHP 200M, matching the outcomes of SUC 2 (PHP 750M) with less than a third of the funding.","Eliminated because SUC 1 (PHP 200M) and SUC 5 (PHP 350M) both achieve top-tier passing (>80%) and employment (>85%) rates without mega-budgets.","Eliminated because SUC 3 yields poor outcomes (55% pass rate, 60% employment) despite absorbing a huge PHP 600M budget, making it inefficient.","Eliminated because SUC 4's outcomes (50% pass rate, 58% employment) are far below SUC 1's (85% pass rate, 88% employment).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
@@ -194,15 +194,15 @@ Exam Tip: Efficiency is output per unit of input; look for entities in the top-l
 - Year 6: Inflation = 2.8%; Poverty = 24.8%
 Which inference is BEST SUPPORTED by the observed relationship between inflation spikes and poverty incidence?","Poverty incidence moves in the same direction as inflation surges, but poverty levels exhibit persistence, recovering more slowly during periods of disinflation.","Inflation and poverty incidence have a strong inverse relationship, with higher inflation reducing poverty.","Poverty incidence dropped to its historical minimum during the peak inflation years (Years 3-4).","Disinflation in Years 5 and 6 immediately returned poverty incidence to below Year 1 levels.","A","Step-by-Step Solution:
 1. Examine the co-movement across the six years:
-   - Years 1-2: Low inflation (2.5%-3.0%) aligned with lowest poverty (24.0% -> 23.2%).
-   - Years 3-4: Inflation surged (3.0% -> 6.8% -> 8.4%). Concurrently, poverty spiked sharply from 23.2% to 27.5% (+4.3 percentage points).
-   - Years 5-6: Inflation dropped rapidly (8.4% -> 4.2% -> 2.8%). Poverty declined, but much more slowly (27.5% -> 26.0% -> 24.8%), remaining 1.6 points above the Year 2 baseline (23.2%).
+ - Years 1-2: Low inflation (2.5%-3.0%) aligned with lowest poverty (24.0% -> 23.2%).
+ - Years 3-4: Inflation surged (3.0% -> 6.8% -> 8.4%). Concurrently, poverty spiked sharply from 23.2% to 27.5% (+4.3 percentage points).
+ - Years 5-6: Inflation dropped rapidly (8.4% -> 4.2% -> 2.8%). Poverty declined, but much more slowly (27.5% -> 26.0% -> 24.8%), remaining 1.6 points above the Year 2 baseline (23.2%).
 2. Evaluate Option A:
-   - Accurately describes that poverty rises alongside inflation surges, but exhibits 'hysteresis' / persistence (recovers more sluggishly than the inflation rate itself). Deep and valid inference.
+ - Accurately describes that poverty rises alongside inflation surges, but exhibits 'hysteresis' / persistence (recovers more sluggishly than the inflation rate itself). Deep and valid inference.
 3. Other options:
-   - Option B is contradicted (poverty rose when inflation rose).
-   - Option C is contradicted (poverty peaked in Year 4 at 27.5%).
-   - Option D is contradicted (Year 6 poverty was 24.8%, which is above Year 1's 24.0% and Year 2's 23.2%).
+ - Option B is contradicted (poverty rose when inflation rose).
+ - Option C is contradicted (poverty peaked in Year 4 at 27.5%).
+ - Option D is contradicted (Year 6 poverty was 24.8%, which is above Year 1's 24.0% and Year 2's 23.2%).
 
 Common Trap: Assuming that when inflation returns to baseline (2.8% in Year 6 vs 2.5% in Year 1), poverty must have fully normalized as well.
 Exam Tip: Pay attention to asymmetric adjustment speeds between leading economic variables (inflation) and lagging social welfare indicators (poverty).","Correct. Survives elimination because poverty surged alongside the inflation spike (reaching 27.5% in Year 4) and remained elevated at 24.8% in Year 6 even after inflation cooled down to 2.8%, proving poverty persistence.","Eliminated because inflation surges directly coincided with rising poverty (from 23.2% up to 27.5%), proving a positive co-movement, not an inverse relationship.","Eliminated because poverty reached its MAXIMUM (27.5%) during peak inflation in Year 4, not its minimum.","Eliminated because Year 6 poverty (24.8%) remained higher than Year 1 (24.0%) and Year 2 (23.2%), refuting full immediate normalization.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"

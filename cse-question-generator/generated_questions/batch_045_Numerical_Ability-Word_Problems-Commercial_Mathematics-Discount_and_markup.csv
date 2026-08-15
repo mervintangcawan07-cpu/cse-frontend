@@ -1,148 +1,148 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "A wholesale office supplier offers a successive trade discount chain of 20.0%, 10.0%, and 5.0% on an office equipment package with a catalog list price of ₱80,000.00. What is the single equivalent discount percentage, and what is the final net invoice price payable by the purchasing agency?","Equivalent Discount: 31.6%; Net Price: ₱54,720.00","Equivalent Discount: 35.0%; Net Price: ₱52,000.00","Equivalent Discount: 32.5%; Net Price: ₱54,000.00","Equivalent Discount: 30.0%; Net Price: ₱56,000.00","A","Step-by-Step Solution:
 1. Apply the successive chain discount formula:
-   - $\text{Net Price Factor} = (1 - d_1)(1 - d_2)(1 - d_3)$.
-2. Substitute $d_1 = 0.20, d_2 = 0.10, d_3 = 0.05$:
-   - $\text{Net Price Factor} = (1 - 0.20)(1 - 0.10)(1 - 0.05) = (0.80)(0.90)(0.95)$.
-   - $(0.80)(0.90) = 0.72$.
-   - $0.72 \times 0.95 = 0.684$.
+ - Net Price Factor = (1 - d₁)(1 - d₂)(1 - d₃).
+2. Substitute d₁ = 0.20, d₂ = 0.10, d₃ = 0.05:
+ - Net Price Factor = (1 - 0.20)(1 - 0.10)(1 - 0.05) = (0.80)(0.90)(0.95).
+ - (0.80)(0.90) = 0.72.
+ - 0.72 × 0.95 = 0.684.
 3. Compute the single equivalent discount percentage:
-   - $\text{Equivalent Discount \%} = (1 - 0.684) \times 100\% = 0.316 \times 100\% = 31.6\%$.
+ - Equivalent Discount % = (1 - 0.684) × 100% = 0.316 × 100% = 31.6%.
 4. Calculate final net invoice price:
-   - $\text{Net Invoice Price} = ₱80,000.00 \times 0.684 = ₱54,720.00$.
-5. (Verification of total discount amount: $₱80,000.00 - ₱54,720.00 = ₱25,280.00 = 31.6\%$ of $₱80,000.00$).
+ - Net Invoice Price = ₱80,000.00 × 0.684 = ₱54,720.00.
+5. (Verification of total discount amount: ₱80,000.00 - ₱54,720.00 = ₱25,280.00 = 31.6% of ₱80,000.00).
 
-Common Trap: Adding the discounts linearly ($20\% + 10\% + 5\% = 35.0\%$, Option B), which produces an incorrect net price of $₱52,000.00$.
-Exam Tip: Successive discounts compound multiplicatively: $1 - (0.8 \times 0.9 \times 0.95) = 1 - 0.684 = 31.6\%$.","Correct. Survives elimination because 0.80 * 0.90 * 0.95 = 0.684, giving single equivalent discount 31.6% and net price ₱54,720.00.","Eliminated because 35.0% is the false arithmetic sum (20% + 10% + 5%).","Eliminated because 32.5% is a calculation slip.","Eliminated because 30.0% is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Adding the discounts linearly (20% + 10% + 5% = 35.0%, Option B), which produces an incorrect net price of ₱52,000.00.
+Exam Tip: Successive discounts compound multiplicatively: 1 - (0.8 × 0.9 × 0.95) = 1 - 0.684 = 31.6%.","Correct. Survives elimination because 0.80 * 0.90 * 0.95 = 0.684, giving single equivalent discount 31.6% and net price ₱54,720.00.","Eliminated because 35.0% is the false arithmetic Σ (20% + 10% + 5%).","Eliminated because 32.5% is a calculation slip.","Eliminated because 30.0% is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "A retail merchant marks up his merchandise such that after granting a promotional discount of 12.0% on the marked price, he still realizes a net profit of 10.0% on the cost price. If the cost price of an item is ₱4,400.00, what should be its marked price?","₱5,500.00","₱5,400.00","₱5,600.00","₱5,250.00","A","Step-by-Step Solution:
-1. Express Selling Price ($SP$) in terms of Cost Price ($CP$):
-   - For a 10.0% profit: $SP = CP \times (1 + 0.10) = ₱4,400.00 \times 1.10 = ₱4,840.00$.
-2. Relate Selling Price to Marked Price ($MP$) after a 12.0% discount:
-   - $SP = MP \times (1 - 0.12) = 0.88 MP$.
+1. Express Selling Price (SP) in terms of Cost Price (CP):
+ - For a 10.0% profit: SP = CP × (1 + 0.10) = ₱4,400.00 × 1.10 = ₱4,840.00.
+2. Relate Selling Price to Marked Price (MP) after a 12.0% discount:
+ - SP = MP × (1 - 0.12) = 0.88 MP.
 3. Set the expressions equal:
-   - $0.88 MP = ₱4,840.00$.
-4. Solve for $MP$:
-   - $MP = \frac{₱4,840.00}{0.88} = \frac{48,400.00}{8.8} = ₱5,500.00$.
+ - 0.88 MP = ₱4,840.00.
+4. Solve for MP:
+ - MP = ₱4,840.00/0.88 = 48,400.00/8.8 = ₱5,500.00.
 5. Verify:
-   - Marked Price $= ₱5,500.00$.
-   - Discount of 12% $= 5,500 \times 0.12 = ₱660.00$.
-   - Selling Price $= 5,500 - 660 = ₱4,840.00$.
-   - Profit $= 4,840 - 4,400 = ₱440.00 = 10.0\%$ of $₱4,400.00$ (Confirmed!).
+ - Marked Price = ₱5,500.00.
+ - Discount of 12% = 5,500 × 0.12 = ₱660.00.
+ - Selling Price = 5,500 - 660 = ₱4,840.00.
+ - Profit = 4,840 - 4,400 = ₱440.00 = 10.0% of ₱4,400.00 (Confirmed!).
 
-Common Trap: Adding $10\% + 12\% = 22\%$ to the cost price ($4,400 \times 1.22 = ₱5,368$), ignoring different percentage bases.
-Exam Tip: Formula: $MP = CP \times \frac{100 + \text{Profit \%}}{100 - \text{Discount \%}} = 4,400 \times \frac{110}{88} = 4,400 \times 1.25 = ₱5,500.00$.","Correct. Survives elimination because 4,400 * (1.10 / 0.88) = 4,400 * 1.25 = ₱5,500.00.","Eliminated because ₱5,400.00 yields SP ₱4,752 (only 8% profit).","Eliminated because ₱5,600.00 yields SP ₱4,928 (12% profit).","Eliminated because ₱5,250.00 yields SP ₱4,620 (5% profit).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Adding 10% + 12% = 22% to the cost price (4,400 × 1.22 = ₱5,368), ignoring different percentage bases.
+Exam Tip: Formula: MP = CP × (100 + Profit %)/(100 - Discount %) = 4,400 × 110/88 = 4,400 × 1.25 = ₱5,500.00.","Correct. Survives elimination because 4,400 * (1.10 / 0.88) = 4,400 * 1.25 = ₱5,500.00.","Eliminated because ₱5,400.00 yields SP ₱4,752 (only 8% profit).","Eliminated because ₱5,600.00 yields SP ₱4,928 (12% profit).","Eliminated because ₱5,250.00 yields SP ₱4,620 (5% profit).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "A store purchased an office laser printer for ₱12,000.00 and marked it up by 40.0% above cost. During a year-end clearance sale, the store offered successive discounts of 20.0% and 10.0% on the marked price. What was the final selling price, and did the store gain or lose?","Selling Price: ₱12,096.00; Net Gain: ₱96.00 (0.8%)","Selling Price: ₱12,000.00; Break even (₱0.00)","Selling Price: ₱11,904.00; Net Loss: ₱96.00 (0.8%)","Selling Price: ₱12,240.00; Net Gain: ₱240.00 (2.0%)","A","Step-by-Step Solution:
-1. Compute the Marked Price ($MP$) with 40.0% markup:
-   - $MP = ₱12,000.00 \times (1 + 0.40) = ₱12,000.00 \times 1.40 = ₱16,800.00$.
+1. Compute the Marked Price (MP) with 40.0% markup:
+ - MP = ₱12,000.00 × (1 + 0.40) = ₱12,000.00 × 1.40 = ₱16,800.00.
 2. Apply successive discounts of 20.0% and 10.0%:
-   - Discount Factor $= (1 - 0.20)(1 - 0.10) = 0.80 \times 0.90 = 0.72$.
-3. Calculate final Selling Price ($SP$):
-   - $SP = ₱16,800.00 \times 0.72 = ₱12,096.00$.
-4. Determine net gain or loss compared to Cost Price ($CP = ₱12,000.00$):
-   - Since $SP > CP$ ($₱12,096.00 > ₱12,000.00$), the transaction resulted in a NET GAIN.
-   - $\text{Net Gain} = ₱12,096.00 - ₱12,000.00 = ₱96.00$.
-   - $\text{Percentage Gain} = \frac{₱96.00}{₱12,000.00} \times 100\% = 0.8\%$.
+ - Discount Factor = (1 - 0.20)(1 - 0.10) = 0.80 × 0.90 = 0.72.
+3. Calculate final Selling Price (SP):
+ - SP = ₱16,800.00 × 0.72 = ₱12,096.00.
+4. Determine net gain or loss compared to Cost Price (CP = ₱12,000.00):
+ - Since SP > CP (₱12,096.00 > ₱12,000.00), the transaction resulted in a NET GAIN.
+ - Net Gain = ₱12,096.00 - ₱12,000.00 = ₱96.00.
+ - Percentage Gain = ₱96.00/₱12,000.00 × 100% = 0.8%.
 
-Common Trap: Subtracting $+40\% - 20\% - 10\% = +10\%$ to guess $₱13,200$, or assuming it breaks even at $₱12,000$.
-Exam Tip: Compound multiplier: $1.40 \times 0.80 \times 0.90 = 1.008 \implies SP = 1.008 \times CP = ₱12,096.00$ ($+0.8\%$ gain).","Correct. Survives elimination because 1.40 * 0.80 * 0.90 = 1.008, giving final SP ₱12,096.00 and a net gain of ₱96.00 (0.8%).","Eliminated because transaction yields a positive gain, not break-even.","Eliminated because transaction is a gain, not a loss.","Eliminated because ₱12,240.00 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Subtracting +40% - 20% - 10% = +10% to guess ₱13,200, or assuming it breaks even at ₱12,000.
+Exam Tip: Compound multiplier: 1.40 × 0.80 × 0.90 = 1.008 implies SP = 1.008 × CP = ₱12,096.00 (+0.8% gain).","Correct. Survives elimination because 1.40 * 0.80 * 0.90 = 1.008, giving final SP ₱12,096.00 and a net gain of ₱96.00 (0.8%).","Eliminated because transaction yields a positive gain, not break-even.","Eliminated because transaction is a gain, not a loss.","Eliminated because ₱12,240.00 is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "A government procurement order lists supplies totaling ₱250,000.00 list price subject to a 20.0% trade discount. The invoice terms are 2/10, n/30. If the agency pays within 5 days to take full advantage of the cash discount, what is the net cash disbursement, and what is the total combined savings from the list price?","Net Disbursement: ₱196,000.00; Total Savings: ₱54,000.00","Net Disbursement: ₱195,000.00; Total Savings: ₱55,000.00","Net Disbursement: ₱200,000.00; Total Savings: ₱50,000.00","Net Disbursement: ₱198,000.00; Total Savings: ₱52,000.00","A","Step-by-Step Solution:
 1. Apply the 20.0% trade discount to the list price:
-   - $\text{Trade Discount Amount} = ₱250,000.00 \times 0.20 = ₱50,000.00$.
-   - $\text{Invoice Subtotal} = ₱250,000.00 - ₱50,000.00 = ₱200,000.00$.
+ - Trade Discount Amount = ₱250,000.00 × 0.20 = ₱50,000.00.
+ - Invoice Subtotal = ₱250,000.00 - ₱50,000.00 = ₱200,000.00.
 2. Apply the 2.0% cash discount on the invoice subtotal (valid for payment within 10 days):
-   - $\text{Cash Discount Amount} = ₱200,000.00 \times 0.02 = ₱4,000.00$.
-   - $\text{Net Cash Disbursement} = ₱200,000.00 - ₱4,000.00 = ₱196,000.00$.
+ - Cash Discount Amount = ₱200,000.00 × 0.02 = ₱4,000.00.
+ - Net Cash Disbursement = ₱200,000.00 - ₱4,000.00 = ₱196,000.00.
 3. Compute total combined savings from catalog list price:
-   - $\text{Total Savings} = ₱250,000.00 - ₱196,000.00 = ₱54,000.00$.
-   - ($\text{Effective Discount \%} = \frac{₱54,000.00}{₱250,000.00} \times 100\% = 21.6\%$).
+ - Total Savings = ₱250,000.00 - ₱196,000.00 = ₱54,000.00.
+ - (Effective Discount % = ₱54,000.00/₱250,000.00 × 100% = 21.6%).
 
-Common Trap: Applying the 2% cash discount to the original ₱250,000 list price ($₱5,000$ discount) rather than the invoice subtotal ($₱4,000$).
+Common Trap: Applying the 2% cash discount to the original ₱250,000 list price (₱5,000 discount) rather than the invoice subtotal (₱4,000).
 Exam Tip: Trade discounts reduce the list price to invoice subtotal; cash discounts apply to the resulting net invoice subtotal.","Correct. Survives elimination because invoice subtotal is ₱200,000.00, cash discount is ₱4,000.00, giving net disbursement ₱196,000.00 and savings ₱54,000.00.","Eliminated because ₱195,000.00 applies cash discount to list price.","Eliminated because ₱200,000.00 omits the 2% cash discount.","Eliminated because ₱198,000.00 applies only 1% cash discount.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
-"A furniture cooperative desires to achieve a markup of 25.0% based on the SELLING PRICE of its products. What is the exact equivalent markup percentage when calculated based on the COST PRICE?","33.33\% \text{ (or } 33\frac{1}{3}\%\text{)}","25.00\%","20.00\%","30.00\%","A","Step-by-Step Solution:
-1. Apply the formula converting markup on Selling Price ($M_{\text{SP}}$) to markup on Cost Price ($M_{\text{CP}}$):
-   - $M_{\text{CP}} = \frac{M_{\text{SP}}}{1.0 - M_{\text{SP}}} \times 100.0\%$.
-2. Substitute $M_{\text{SP}} = 0.25$:
-   - $M_{\text{CP}} = \frac{0.25}{1.0 - 0.25} \times 100.0\% = \frac{0.25}{0.75} \times 100.0\%$.
+"A furniture cooperative desires to achieve a markup of 25.0% based on the SELLING PRICE of its products. What is the exact equivalent markup percentage when calculated based on the COST PRICE?","33.33% (or 331/3%)","25.00%","20.00%","30.00%","A","Step-by-Step Solution:
+1. Apply the formula converting markup on Selling Price (MSP) to markup on Cost Price (MCP):
+ - MCP = MSP/(1.0 - MSP) × 100.0%.
+2. Substitute MSP = 0.25:
+ - MCP = 0.25/1.0 - 0.25 × 100.0% = 0.25/0.75 × 100.0%.
 3. Simplify the fraction:
-   - $\frac{0.25}{0.75} = \frac{1}{3} = 33.3333\% \approx 33.33\% = 33\frac{1}{3}\%$.
-4. (Verification: Let $SP = ₱100.00 \implies \text{Markup} = ₱25.00 \implies CP = ₱75.00$. $\text{Markup on } CP = \frac{₱25.00}{₱75.00} = \frac{1}{3} = 33\frac{1}{3}\%$).
+ - 0.25/0.75 = 1/3 = 33.3333% ≈ 33.33% = 331/3%.
+4. (Verification: Let SP = ₱100.00 implies Markup = ₱25.00 implies CP = ₱75.00. Markup on CP = ₱25.00/₱75.00 = 1/3 = 331/3%).
 
-Common Trap: Assuming markup percentages on Cost Price and Selling Price are identical ($25.0\%$, Option B).
-Exam Tip: Markup on CP is always strictly greater than markup on SP: $\frac{25\%}{75\%} = 33\frac{1}{3}\%$.","Correct. Survives elimination because 25% margin on SP corresponds to 25 / (100 - 25) = 1/3 = 33.33% markup on CP.","Eliminated because 25.00% assumes equal bases.","Eliminated because 20.00% is markup on SP when markup on CP is 25%.","Eliminated because 30.00% is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Assuming markup percentages on Cost Price and Selling Price are identical (25.0%, Option B).
+Exam Tip: Markup on CP is always strictly greater than markup on SP: 25%/75% = 331/3%.","Correct. Survives elimination because 25% margin on SP corresponds to 25 / (100 - 25) = 1/3 = 33.33% markup on CP.","Eliminated because 25.00% assumes equal bases.","Eliminated because 20.00% is markup on SP when markup on CP is 25%.","Eliminated because 30.00% is an overestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "An appliance center offers two alternative discount options for an air-conditioning unit with a list price of ₱50,000.00: Option 1 provides a single flat discount of 30.0%; Option 2 provides successive discounts of 20.0% and 10.0%. Which option provides greater savings to the customer, and by how much?","Option 1 is better by ₱1,000.00","Option 2 is better by ₱1,000.00","Both options are identical (₱0.00 difference)","Option 1 is better by ₱500.00","A","Step-by-Step Solution:
 1. Calculate savings under Option 1 (Single 30.0% discount):
-   - $\text{Discount}_1 = ₱50,000.00 \times 0.30 = ₱15,000.00$.
-   - $\text{Net Price}_1 = ₱50,000.00 - ₱15,000.00 = ₱35,000.00$.
+ - Discount₁ = ₱50,000.00 × 0.30 = ₱15,000.00.
+ - Net Price₁ = ₱50,000.00 - ₱15,000.00 = ₱35,000.00.
 2. Calculate savings under Option 2 (Successive 20.0% and 10.0% discounts):
-   - Net Factor $= (1 - 0.20)(1 - 0.10) = 0.80 \times 0.90 = 0.72$.
-   - $\text{Net Price}_2 = ₱50,000.00 \times 0.72 = ₱36,000.00$.
-   - $\text{Discount}_2 = ₱50,000.00 - ₱36,000.00 = ₱14,000.00$ ($28.0\%$).
+ - Net Factor = (1 - 0.20)(1 - 0.10) = 0.80 × 0.90 = 0.72.
+ - Net Price₂ = ₱50,000.00 × 0.72 = ₱36,000.00.
+ - Discount₂ = ₱50,000.00 - ₱36,000.00 = ₱14,000.00 (28.0%).
 3. Compare the two options:
-   - Option 1 discount ($₱15,000.00$) exceeds Option 2 discount ($₱14,000.00$) by:
-   - $\text{Difference} = ₱15,000.00 - ₱14,000.00 = ₱1,000.00$.
-   - Option 1 is better for the customer by ₱1,000.00.
+ - Option 1 discount (₱15,000.00) exceeds Option 2 discount (₱14,000.00) by:
+ - Difference = ₱15,000.00 - ₱14,000.00 = ₱1,000.00.
+ - Option 1 is better for the customer by ₱1,000.00.
 
-Common Trap: Believing that successive $20\% + 10\%$ equals a single $30\%$ discount (Option C).
-Exam Tip: A single discount of $(A + B)\%$ is ALWAYS strictly better for the buyer than successive discounts of $A\%$ and $B\%$ by $(A \times B)\%$ of list price ($20 \times 10 / 100 = 2\% \implies 2\% \text{ of } 50,000 = ₱1,000$).","Correct. Survives elimination because Option 1 yields ₱15,000 discount and Option 2 yields ₱14,000 discount, making Option 1 better by ₱1,000.00.","Eliminated because Option 2 gives higher net price (₱36,000 vs ₱35,000).","Eliminated because successive discounts do not equal the simple sum (28% != 30%).","Eliminated because ₱500.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
-"A merchant lists a commercial desktop computer at ₱2,500.00. After granting two successive discounts of 10.0% and $x\%$, the computer is sold for exactly ₱1,800.00. What is the value of the second discount percentage $x$?","20.0\%","15.0\%","25.0\%","18.0\%","A","Step-by-Step Solution:
+Common Trap: Believing that successive 20% + 10% equals a single 30% discount (Option C).
+Exam Tip: A single discount of (A + B)% is ALWAYS strictly better for the buyer than successive discounts of A% and B% by (A × B)% of list price (20 × 10 / 100 = 2% implies 2% of 50,000 = ₱1,000).","Correct. Survives elimination because Option 1 yields ₱15,000 discount and Option 2 yields ₱14,000 discount, making Option 1 better by ₱1,000.00.","Eliminated because Option 2 gives higher net price (₱36,000 vs ₱35,000).","Eliminated because successive discounts do not equal the simple Σ (28%!= 30%).","Eliminated because ₱500.00 is an underestimate.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+"A merchant lists a commercial desktop computer at ₱2,500.00. After granting two successive discounts of 10.0% and x%, the computer is sold for exactly ₱1,800.00. What is the value of the second discount percentage x?","20.0%","15.0%","25.0%","18.0%","A","Step-by-Step Solution:
 1. Calculate the intermediate price after the first 10.0% discount:
-   - $\text{Price}_1 = ₱2,500.00 \times (1 - 0.10) = ₱2,500.00 \times 0.90 = ₱2,250.00$.
-2. Express the final selling price after the second $x\%$ discount:
-   - $\text{Price}_2 = ₱2,250.00 \times \left(1 - \frac{x}{100}\right) = ₱1,800.00$.
-3. Solve for $\left(1 - \frac{x}{100}\right)$:
-   - $1 - \frac{x}{100} = \frac{₱1,800.00}{₱2,250.00} = \frac{180}{225} = \frac{4}{5} = 0.80$.
-4. Solve for $x$:
-   - $\frac{x}{100} = 1.0 - 0.80 = 0.20 \implies x = 20.0\%$.
+ - Price₁ = ₱2,500.00 × (1 - 0.10) = ₱2,500.00 × 0.90 = ₱2,250.00.
+2. Express the final selling price after the second x% discount:
+ - Price₂ = ₱2,250.00 × (1 - x/100) = ₱1,800.00.
+3. Solve for (1 - x/100):
+ - 1 - x/100 = ₱1,800.00/₱2,250.00 = 180/225 = 4/5 = 0.80.
+4. Solve for x:
+ - x/100 = 1.0 - 0.80 = 0.20 implies x = 20.0%.
 5. Verify:
-   - $₱2,500 \times 0.90 \times 0.80 = ₱2,500 \times 0.72 = ₱1,800.00$ (Confirmed!).
+ - ₱2,500 × 0.90 × 0.80 = ₱2,500 × 0.72 = ₱1,800.00 (Confirmed!).
 
-Common Trap: Finding total discount ($2,500 - 1,800 = 700 \implies 28\%$) and subtracting 10% linearly ($28 - 10 = 18\%$, Option D).
-Exam Tip: Discount factor $1 - d_2 = \frac{1,800}{2,250} = 0.80 \implies d_2 = 20.0\%$.","Correct. Survives elimination because after 10% discount price is ₱2,250, and ₱1,800 / ₱2,250 = 0.80, giving x = 20.0%.","Eliminated because x = 15.0% yields final price ₱1,912.50.","Eliminated because x = 25.0% yields final price ₱1,687.50.","Eliminated because 18.0% assumes linear discount subtraction.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Finding total discount (2,500 - 1,800 = 700 implies 28%) and subtracting 10% linearly (28 - 10 = 18%, Option D).
+Exam Tip: Discount factor 1 - d₂ = 1,800/2,250 = 0.80 implies d₂ = 20.0%.","Correct. Survives elimination because after 10% discount price is ₱2,250, and ₱1,800 / ₱2,250 = 0.80, giving x = 20.0%.","Eliminated because x = 15.0% yields final price ₱1,912.50.","Eliminated because x = 25.0% yields final price ₱1,687.50.","Eliminated because 18.0% assumes linear discount subtraction.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "A wholesaler purchases an emergency backup generator for ₱32,000.00. What should be the marked price of the generator so that after allowing a customer discount of 20.0%, the wholesaler still realizes a net profit of 25.0% on cost?","₱50,000.00","₱48,000.00","₱52,000.00","₱45,000.00","A","Step-by-Step Solution:
-1. Determine required Selling Price ($SP$) to achieve 25.0% profit on cost ($CP = ₱32,000.00$):
-   - $SP = CP \times (1 + 0.25) = ₱32,000.00 \times 1.25 = ₱40,000.00$.
-2. Express Selling Price in terms of Marked Price ($MP$) after a 20.0% discount:
-   - $SP = MP \times (1 - 0.20) = 0.80 MP$.
+1. Determine required Selling Price (SP) to achieve 25.0% profit on cost (CP = ₱32,000.00):
+ - SP = CP × (1 + 0.25) = ₱32,000.00 × 1.25 = ₱40,000.00.
+2. Express Selling Price in terms of Marked Price (MP) after a 20.0% discount:
+ - SP = MP × (1 - 0.20) = 0.80 MP.
 3. Set the equations equal:
-   - $0.80 MP = ₱40,000.00$.
-4. Solve for $MP$:
-   - $MP = \frac{₱40,000.00}{0.80} = \frac{400,000.00}{8} = ₱50,000.00$.
+ - 0.80 MP = ₱40,000.00.
+4. Solve for MP:
+ - MP = ₱40,000.00/0.80 = 400,000.00/8 = ₱50,000.00.
 5. Verify:
-   - Marked Price $= ₱50,000.00$.
-   - Discount $= 50,000 \times 0.20 = ₱10,000.00$.
-   - Selling Price $= ₱40,000.00$.
-   - Profit $= 40,000 - 32,000 = ₱8,000.00 = 25.0\%$ of $₱32,000.00$ (Confirmed!).
+ - Marked Price = ₱50,000.00.
+ - Discount = 50,000 × 0.20 = ₱10,000.00.
+ - Selling Price = ₱40,000.00.
+ - Profit = 40,000 - 32,000 = ₱8,000.00 = 25.0% of ₱32,000.00 (Confirmed!).
 
-Common Trap: Calculating $32,000 \times 1.45 = ₱46,400$, ignoring the multiplicative nature of markup and discount.
-Exam Tip: $MP = \frac{CP \times (1 + P)}{1 - D} = \frac{32,000 \times 1.25}{0.80} = \frac{40,000}{0.80} = ₱50,000.00$.","Correct. Survives elimination because required SP is ₱40,000.00, and ₱40,000 / 0.80 = ₱50,000.00 marked price.","Eliminated because ₱48,000.00 yields SP ₱38,400 (only 20% profit).","Eliminated because ₱52,000.00 yields SP ₱41,600 (30% profit).","Eliminated because ₱45,000.00 yields SP ₱36,000 (12.5% profit).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Calculating 32,000 × 1.45 = ₱46,400, ignoring the multiplicative nature of markup and discount.
+Exam Tip: MP = CP × (1 + P)/1 - D = 32,000 × 1.25/0.80 = 40,000/0.80 = ₱50,000.00.","Correct. Survives elimination because required SP is ₱40,000.00, and ₱40,000 / 0.80 = ₱50,000.00 marked price.","Eliminated because ₱48,000.00 yields SP ₱38,400 (only 20% profit).","Eliminated because ₱52,000.00 yields SP ₱41,600 (30% profit).","Eliminated because ₱45,000.00 yields SP ₱36,000 (12.5% profit).","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "A boutique lists a designer corporate suit at a marked price of ₱6,000.00. If the store reduces the marked price by 20.0% and still earns a net profit of 20.0% on cost, what was the original cost price of the suit?","₱4,000.00","₱3,800.00","₱4,200.00","₱4,500.00","A","Step-by-Step Solution:
-1. Calculate actual Selling Price ($SP$) after the 20.0% discount:
-   - $SP = ₱6,000.00 \times (1 - 0.20) = ₱6,000.00 \times 0.80 = ₱4,800.00$.
-2. Formulate equation connecting $SP$ and Cost Price ($CP$) at 20.0% profit:
-   - $SP = CP \times (1 + 0.20) = 1.20 CP$.
+1. Calculate actual Selling Price (SP) after the 20.0% discount:
+ - SP = ₱6,000.00 × (1 - 0.20) = ₱6,000.00 × 0.80 = ₱4,800.00.
+2. Formulate equation connecting SP and Cost Price (CP) at 20.0% profit:
+ - SP = CP × (1 + 0.20) = 1.20 CP.
 3. Set equal to ₱4,800.00:
-   - $1.20 CP = ₱4,800.00$.
-4. Solve for $CP$:
-   - $CP = \frac{₱4,800.00}{1.20} = \frac{48,000.00}{12} = ₱4,000.00$.
+ - 1.20 CP = ₱4,800.00.
+4. Solve for CP:
+ - CP = ₱4,800.00/1.20 = 48,000.00/12 = ₱4,000.00.
 5. Verify:
-   - Cost $= ₱4,000.00$.
-   - Profit $= ₱4,000.00 \times 0.20 = ₱800.00$.
-   - Selling Price $= ₱4,800.00 = 80\%$ of Marked Price $₱6,000.00$ (Confirmed!).
+ - Cost = ₱4,000.00.
+ - Profit = ₱4,000.00 × 0.20 = ₱800.00.
+ - Selling Price = ₱4,800.00 = 80% of Marked Price ₱6,000.00 (Confirmed!).
 
-Common Trap: Assuming $+20\%$ and $-20\%$ cancel out to give $CP = ₱4,800.00$.
-Exam Tip: $CP = \frac{MP \times (1 - D)}{1 + P} = \frac{6,000 \times 0.80}{1.20} = \frac{4,800}{1.20} = ₱4,000.00$.","Correct. Survives elimination because SP is ₱4,800.00, and ₱4,800 / 1.20 = ₱4,000.00 cost price.","Eliminated because ₱3,800.00 yields profit of 26.3%.","Eliminated because ₱4,200.00 yields profit of 14.3%.","Eliminated because ₱4,500.00 yields profit of 6.7%.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Assuming +20% and -20% cancel out to give CP = ₱4,800.00.
+Exam Tip: CP = MP × (1 - D)/1 + P = 6,000 × 0.80/1.20 = 4,800/1.20 = ₱4,000.00.","Correct. Survives elimination because SP is ₱4,800.00, and ₱4,800 / 1.20 = ₱4,000.00 cost price.","Eliminated because ₱3,800.00 yields profit of 26.3%.","Eliminated because ₱4,200.00 yields profit of 14.3%.","Eliminated because ₱4,500.00 yields profit of 6.7%.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
 "An inventory item with a cost price of ₱8,000.00 is marked up by 50.0%. The store subsequently offers a promotional discount of 20.0%. A customer purchases the item using a commercial card that charges the merchant a transaction fee of 2.5% on the gross settlement amount. What is the merchant's net profit in pesos after deducting the processing fee?","₱1,360.00 (17.0%)","₱1,600.00 (20.0%)","₱1,340.00 (16.75%)","₱1,400.00 (17.5%)","A","Step-by-Step Solution:
-1. Compute Marked Price ($MP$) with 50.0% markup:
-   - $MP = ₱8,000.00 \times (1 + 0.50) = ₱8,000.00 \times 1.50 = ₱12,000.00$.
-2. Compute customer invoice Selling Price ($SP$) after 20.0% discount:
-   - $SP = ₱12,000.00 \times (1 - 0.20) = ₱12,000.00 \times 0.80 = ₱9,600.00$.
-3. Compute payment card processing fee (2.5% of $SP$):
-   - $\text{Fee} = ₱9,600.00 \times 0.025 = ₱240.00$.
+1. Compute Marked Price (MP) with 50.0% markup:
+ - MP = ₱8,000.00 × (1 + 0.50) = ₱8,000.00 × 1.50 = ₱12,000.00.
+2. Compute customer invoice Selling Price (SP) after 20.0% discount:
+ - SP = ₱12,000.00 × (1 - 0.20) = ₱12,000.00 × 0.80 = ₱9,600.00.
+3. Compute payment card processing fee (2.5% of SP):
+ - Fee = ₱9,600.00 × 0.025 = ₱240.00.
 4. Calculate net proceeds received by the merchant:
-   - $\text{Net Proceeds} = ₱9,600.00 - ₱240.00 = ₱9,360.00$.
-5. Calculate final net profit on cost ($CP = ₱8,000.00$):
-   - $\text{Net Profit} = ₱9,360.00 - ₱8,000.00 = ₱1,360.00$.
-   - $\text{Profit \% on Cost} = \frac{₱1,360.00}{₱8,000.00} \times 100\% = 17.0\%$.
+ - Net Proceeds = ₱9,600.00 - ₱240.00 = ₱9,360.00.
+5. Calculate final net profit on cost (CP = ₱8,000.00):
+ - Net Profit = ₱9,360.00 - ₱8,000.00 = ₱1,360.00.
+ - Profit % on Cost = ₱1,360.00/₱8,000.00 × 100% = 17.0%.
 
-Common Trap: Omitting the card transaction fee ($9,600 - 8,000 = ₱1,600.00$, Option B).
-Exam Tip: Net profit $= (SP \times 0.975) - CP = (9,600 \times 0.975) - 8,000 = 9,360 - 8,000 = ₱1,360.00$.","Correct. Survives elimination because net proceeds after 2.5% card fee are ₱9,360.00, yielding net profit ₱9,360 - ₱8,000 = ₱1,360.00 (17.0%).","Eliminated because ₱1,600.00 omits the ₱240.00 credit card transaction fee.","Eliminated because ₱1,340.00 is a calculation slip.","Eliminated because ₱1,400.00 assumes a ₱200 fee.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"
+Common Trap: Omitting the card transaction fee (9,600 - 8,000 = ₱1,600.00, Option B).
+Exam Tip: Net profit = (SP × 0.975) - CP = (9,600 × 0.975) - 8,000 = 9,360 - 8,000 = ₱1,360.00.","Correct. Survives elimination because net proceeds after 2.5% card fee are ₱9,360.00, yielding net profit ₱9,360 - ₱8,000 = ₱1,360.00 (17.0%).","Eliminated because ₱1,600.00 omits the ₱240.00 credit card transaction fee.","Eliminated because ₱1,340.00 is a calculation slip.","Eliminated because ₱1,400.00 assumes a ₱200 fee.","Numerical Ability","Numerical Ability | Word Problems | Commercial Mathematics | Discount and markup | Very Difficult | Batch 045"

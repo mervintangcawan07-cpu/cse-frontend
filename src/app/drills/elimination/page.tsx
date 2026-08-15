@@ -1,6 +1,7 @@
 "use client";
 
 import { formatPromptHTML } from "@/lib/formatPrompt";
+import { cleanMathText } from "@/lib/sanitizeMath";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -271,12 +272,12 @@ export default function EliminationTrainerPage() {
           {/* 💡 IMMEDIATE ELIMINATION & ANSWER REVIEW BOX */}
           {isRevealed && (
             <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-4 border border-slate-800 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <span className="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
                   <span>💡</span> Elimination Strategy Breakdown
                 </span>
-                <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                  Correct Answer: {currentQ.options[currentQ.answerIndex]}
+                <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20 break-words max-w-full sm:max-w-[65%]">
+                  Correct Answer: {cleanMathText(currentQ.options[currentQ.answerIndex] || "")}
                 </span>
               </div>
 

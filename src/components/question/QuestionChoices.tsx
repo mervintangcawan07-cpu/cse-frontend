@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface QuestionChoicesProps {
   options: string[];
@@ -71,7 +72,7 @@ export default function QuestionChoices({
               >
                 {letter}
               </span>
-              <span className="leading-relaxed">{opt}</span>
+              <span className="leading-relaxed">{cleanMathText(opt)}</span>
             </div>
 
             {isSubmitted && (

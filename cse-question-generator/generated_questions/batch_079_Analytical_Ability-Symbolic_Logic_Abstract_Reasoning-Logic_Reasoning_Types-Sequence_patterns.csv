@@ -1,188 +1,188 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "In a 3-state cyclical abstract layer permutation sequence: Step 1: Outer Square, Middle Triangle, Inner Circle. Step 2: Outer Triangle, Middle Circle, Inner Square. Step 3: Outer Circle, Middle Square, Inner Triangle. Step 4: Outer Square, Middle Triangle, Inner Circle (repeating every 3 steps). What is the exact layer arrangement at Step 29?","Outer Triangle, Middle Circle, Inner Square","Outer Square, Middle Triangle, Inner Circle","Outer Circle, Middle Square, Inner Triangle","Outer Circle, Middle Triangle, Inner Square","A","Step-by-Step Solution:
 1. Identify the modular period of the layer permutation:
-   - The cyclic permutation repeats every $P = 3$ steps:
-     - State 1 ($1 \pmod 3$): Outer Square, Middle Triangle, Inner Circle
-     - State 2 ($2 \pmod 3$): Outer Triangle, Middle Circle, Inner Square
-     - State 0 ($0 \pmod 3$): Outer Circle, Middle Square, Inner Triangle
-2. Compute the position for Step $N = 29$:
-   - $29 \pmod 3$:
-   - $29 = 3 \times 9 + 2$.
-   - Remainder = $2$.
+ - The cyclic permutation repeats every P = 3 steps:
+ - State 1 (1 pmod 3): Outer Square, Middle Triangle, Inner Circle
+ - State 2 (2 pmod 3): Outer Triangle, Middle Circle, Inner Square
+ - State 0 (0 pmod 3): Outer Circle, Middle Square, Inner Triangle
+2. Compute the position for Step N = 29:
+ - 29 pmod 3:
+ - 29 = 3 × 9 + 2.
+ - Remainder = 2.
 3. Map remainder 2 to the corresponding permutation state:
-   - Remainder 2 corresponds to State 2: \"Outer Triangle, Middle Circle, Inner Square\".
+ - Remainder 2 corresponds to State 2: \""Outer Triangle, Middle Circle, Inner Square\"".
 4. Conclude:
-   - The layer arrangement at Step 29 is Outer Triangle, Middle Circle, Inner Square.
+ - The layer arrangement at Step 29 is Outer Triangle, Middle Circle, Inner Square.
 
-Common Trap: Miscalculating $29 \pmod 3$ or mapping remainder 2 to State 3.
-Exam Tip: Divide step number by the period ($29 \div 3 = 9 \text{ R } 2$); the remainder gives the exact matching state.","Correct. Survives elimination because 29 mod 3 = 2, which corresponds exactly to State 2 of the cyclical layer permutation.","Eliminated because State 1 corresponds to remainder 1.","Eliminated because State 3 corresponds to remainder 0.","Eliminated because this is an invalid layer combination not in the sequence.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"On a standard 12-hour circular clock dial, Indicator A moves $+3$ positions clockwise per step, while Indicator B moves $-2$ positions counter-clockwise per step. Both start at Position 12 (Step 0). At what positive step number ($n > 0$) will Indicator A and Indicator B FIRST coincide at the exact same position on the dial?","Step 12","Step 24","Step 6","Step 10","A","Step-by-Step Solution:
-1. Formulate modular position equations on the 12-position clock dial ($\mathbb{Z}_{12}$):
-   - Position of Indicator A at step $n$: $P_A(n) \equiv 3n \pmod{12}$.
-   - Position of Indicator B at step $n$: $P_B(n) \equiv -2n \equiv 10n \pmod{12}$.
+Common Trap: Miscalculating 29 pmod 3 or mapping remainder 2 to State 3.
+Exam Tip: Divide step number by the period (29 ÷ 3 = 9 R 2); the remainder gives the exact matching state.","Correct. Survives elimination because 29 mod 3 = 2, which corresponds exactly to State 2 of the cyclical layer permutation.","Eliminated because State 1 corresponds to remainder 1.","Eliminated because State 3 corresponds to remainder 0.","Eliminated because this is an invalid layer combination not in the sequence.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"On a standard 12-hour circular clock dial, Indicator A moves +3 positions clockwise per step, while Indicator B moves -2 positions counter-clockwise per step. Both start at Position 12 (Step 0). At what positive step number (n > 0) will Indicator A and Indicator B FIRST coincide at the exact same position on the dial?","Step 12","Step 24","Step 6","Step 10","A","Step-by-Step Solution:
+1. Formulate modular position equations on the 12-position clock dial (mathbb{Z}₁₂):
+ - Position of Indicator A at step n: P_A(n) ≡ 3n pmod{12}.
+ - Position of Indicator B at step n: P_B(n) ≡ -2n ≡ 10n pmod{12}.
 2. Set positions equal to find coincidence:
-   - $3n \equiv -2n \pmod{12}$.
-   - $5n \equiv 0 \pmod{12}$.
+ - 3n ≡ -2n pmod{12}.
+ - 5n ≡ 0 pmod{12}.
 3. Solve the modular linear congruence:
-   - Since $\gcd(5, 12) = 1$, 5 is coprime to 12.
-   - Therefore, $5n$ is a multiple of 12 if and only if $n$ is a multiple of 12 ($n \equiv 0 \pmod{12}$).
-4. Determine the smallest positive integer $n > 0$:
-   - The smallest positive multiple of 12 is $n = 12$.
-5. Verify positions at step $n = 12$:
-   - Indicator A: $3(12) = 36 \equiv 12 \equiv \text{Position 12}$.
-   - Indicator B: $-2(12) = -24 \equiv 12 \equiv \text{Position 12}$.
-   - Both indicators meet at Position 12 at Step 12!
+ - Since gcd(5, 12) = 1, 5 is coprime to 12.
+ - Therefore, 5n is a multiple of 12 if and only if n is a multiple of 12 (n ≡ 0 pmod{12}).
+4. Determine the smallest positive integer n > 0:
+ - The smallest positive multiple of 12 is n = 12.
+5. Verify positions at step n = 12:
+ - Indicator A: 3(12) = 36 ≡ 12 ≡ Position 12.
+ - Indicator B: -2(12) = -24 ≡ 12 ≡ Position 12.
+ - Both indicators meet at Position 12 at Step 12!
 
-Common Trap: Adding speeds to get $3 + 2 = 5$ and wrongly guessing $12 / 5$ or Step 6.
-Exam Tip: Coincidence on a modulo $M$ circle requires $(v_1 - v_2)n \equiv 0 \pmod M$.","Correct. Survives elimination because 5n = 0 mod 12 requires n = 12 since gcd(5, 12) = 1.","Eliminated because 24 is the second coincidence, not the first.","Eliminated because at Step 6, A is at 6 and B is at 0 (distinct positions).","Eliminated because at Step 10, A is at 6 and B is at 4 (distinct positions).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"Consider the composite alphanumeric and Greek symbol sequence: $A_1\alpha, C_4\gamma, F_9\zeta, J_{16}\kappa, \text{?}$. What is the 5th term in this sequence?","O_{25}\omicron","N_{25}\xi","O_{25}\pi","P_{36}\rho","A","Step-by-Step Solution:
-1. Deconstruct the three parallel sequence rules for term $n = 5$:
-   - Rule 1 (English Leading Letter):
-     - $A(1) \xrightarrow{+2} C(3) \xrightarrow{+3} F(6) \xrightarrow{+4} J(10) \xrightarrow{+5} O(15)$.
-     - 5th letter is O (15th alphabetical position).
-   - Rule 2 (Numerical Subscript):
-     - $1^2=1, 2^2=4, 3^2=9, 4^2=16, 5^2=25$.
-     - 5th subscript is 25.
-   - Rule 3 (Greek Trailing Letter):
-     - Follows the identical index progression: $1, 3, 6, 10, 15$.
-     - $\alpha(1), \gamma(3), \zeta(6), \kappa(10), \omicron(15)$.
-     - 15th Greek letter is Omicron ($\omicron$).
+Common Trap: Adding speeds to get 3 + 2 = 5 and wrongly guessing 12 / 5 or Step 6.
+Exam Tip: Coincidence on a modulo M °≤ requires (v₁ - v₂)n ≡ 0 pmod M.","Correct. Survives elimination because 5n = 0 mod 12 requires n = 12 since gcd(5, 12) = 1.","Eliminated because 24 is the second coincidence, not the first.","Eliminated because at Step 6, A is at 6 and B is at 0 (distinct positions).","Eliminated because at Step 10, A is at 6 and B is at 4 (distinct positions).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"Consider the composite alphanumeric and Greek symbol sequence: A₁α, C₄γ, F₉zeta, J₁₆kappa, ?. What is the 5th term in this sequence?","O₂₅omicron","N₂₅xi","O₂₅π","P₃₆rho","A","Step-by-Step Solution:
+1. Deconstruct the three parallel sequence rules for term n = 5:
+ - Rule 1 (English Leading Letter):
+ - A(1) xrightarrow{+2} C(3) xrightarrow{+3} F(6) xrightarrow{+4} J(10) xrightarrow{+5} O(15).
+ - 5th letter is O (15th alphabetical position).
+ - Rule 2 (Numerical Subscript):
+ - 1²=1, 2²=4, 3²=9, 4²=16, 5²=25.
+ - 5th subscript is 25.
+ - Rule 3 (Greek Trailing Letter):
+ - Follows the identical index progression: 1, 3, 6, 10, 15.
+ - α(1), γ(3), zeta(6), kappa(10), omicron(15).
+ - 15th Greek letter is Omicron (omicron).
 2. Assemble the 5th composite term:
-   - Term 5 = $O_{25}\omicron$.
+ - Term 5 = O₂₅omicron.
 3. Evaluate incorrect alternatives:
-   - Option B ($N_{25}\xi$): Letter N is index 14 (+4 instead of +5).
-   - Option C ($O_{25}\pi$): Pi ($\pi$) is index 16.
-   - Option D ($P_{36}\rho$): Evaluated for $n=6$.
+ - Option B (N₂₅xi): Letter N is index 14 (+4 instead of +5).
+ - Option C (O₂₅π): Pi (π) is index 16.
+ - Option D (P₃₆rho): Evaluated for n=6.
 
-Common Trap: Misidentifying the second-difference step in the letter index ($+2, +3, +4, +5 \implies 10 + 5 = 15$).
-Exam Tip: English letters and Greek letters share the exact triangular index sequence: $1, 3, 6, 10, 15$.","Correct. Survives elimination because index 15 corresponds to English letter O, subscript 5^2 = 25, and Greek letter Omicron.","Eliminated because N is index 14.","Eliminated because Pi is index 16.","Eliminated because this corresponds to term 6.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"In an 8-node circular network labeled 0 through 7, an active data packet starts at Node 0 and jumps $+3$ nodes clockwise at every step: $S_n = (S_0 + 3n) \pmod 8$. What node contains the packet at Step 15?","Node 5","Node 3","Node 7","Node 1","A","Step-by-Step Solution:
-1. Apply the discrete dynamic jump formula:
-   - Formula: $S_n = (S_0 + 3n) \pmod 8$.
-   - Given: $S_0 = 0$ and $n = 15$.
+Common Trap: Misidentifying the second-difference step in the letter index (+2, +3, +4, +5 implies 10 + 5 = 15).
+Exam Tip: English letters and Greek letters share the exact triangular index sequence: 1, 3, 6, 10, 15.","Correct. Survives elimination because index 15 corresponds to English letter O, subscript 5² = 25, and Greek letter Omicron.","Eliminated because N is index 14.","Eliminated because Pi is index 16.","Eliminated because this corresponds to term 6.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"In an 8-node circular network labeled 0 through 7, an active data packet starts at Node 0 and jumps +3 nodes clockwise at every step: Sₙ = (S₀ + 3n) pmod 8. What node contains the packet at Step 15?","Node 5","Node 3","Node 7","Node 1","A","Step-by-Step Solution:
+1. Apply the discrete dynamic ju∓ formula:
+ - Formula: Sₙ = (S₀ + 3n) pmod 8.
+ - Given: S₀ = 0 and n = 15.
 2. Calculate total raw clockwise steps:
-   - $\text{Total steps} = 3 \times 15 = 45$.
+ - Total steps = 3 × 15 = 45.
 3. Compute the modulo 8 remainder:
-   - $45 = 8 \times 5 + 5$.
-   - $45 \pmod 8 = 5$.
+ - 45 = 8 × 5 + 5.
+ - 45 pmod 8 = 5.
 4. Conclude:
-   - At Step 15, the data packet resides at Node 5.
+ - At Step 15, the data packet resides at Node 5.
 5. Evaluate incorrect alternatives:
-   - Option B (Node 3): Arithmetic error.
-   - Option C (Node 7): Arithmetic error.
-   - Option D (Node 1): Arithmetic error.
+ - Option B (Node 3): Arithmetic error.
+ - Option C (Node 7): Arithmetic error.
+ - Option D (Node 1): Arithmetic error.
 
 Common Trap: Performing single iterative jumps manually instead of using direct modulo multiplication.
-Exam Tip: $S_{15} = (3 \times 15) \pmod 8 = 45 \pmod 8 = 5$.","Correct. Survives elimination because (3 * 15) mod 8 = 45 mod 8 = 5, landing exactly on Node 5.","Eliminated because 3 is an incorrect modulo remainder.","Eliminated because 7 is an incorrect modulo remainder.","Eliminated because 1 is an incorrect modulo remainder.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"Examine the multi-attribute periodic sequence: Term 1: $\diamondsuit_1 (0^\circ, \text{White})$, Term 2: $\heartsuit_2 (90^\circ, \text{Black})$, Term 3: $\clubsuit_3 (180^\circ, \text{White})$, Term 4: $\spadesuit_4 (270^\circ, \text{Black})$, Term 5: $\diamondsuit_5 (0^\circ, \text{White})$. What is the complete profile of Term 18?","\heartsuit_{18} (90^\circ, \text{Black})","\clubsuit_{18} (180^\circ, \text{White})","\spadesuit_{18} (270^\circ, \text{Black})","\diamondsuit_{18} (0^\circ, \text{White})","A","Step-by-Step Solution:
+Exam Tip: S₁₅ = (3 × 15) pmod 8 = 45 pmod 8 = 5.","Correct. Survives elimination because (3 * 15) mod 8 = 45 mod 8 = 5, landing exactly on Node 5.","Eliminated because 3 is an incorrect modulo remainder.","Eliminated because 7 is an incorrect modulo remainder.","Eliminated because 1 is an incorrect modulo remainder.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"Examine the multi-attribute periodic sequence: Term 1: diamondsuit₁ (0^°, White), Term 2: heartsuit₂ (90^°, Black), Term 3: clubsuit₃ (180^°, White), Term 4: spadesuit₄ (270^°, Black), Term 5: diamondsuit₅ (0^°, White). What is the complete profile of Term 18?","heartsuit₁₈ (90^°, Black)","clubsuit₁₈ (180^°, White)","spadesuit₁₈ (270^°, Black)","diamondsuit₁₈ (0^°, White)","A","Step-by-Step Solution:
 1. Analyze the Subscript:
-   - Subscript strictly equals term index: $n = 18$.
-2. Analyze the Card Suit Cycle (Period $P = 4$):
-   - Sequence: $\diamondsuit(1), \heartsuit(2), \clubsuit(3), \spadesuit(0)$.
-   - $18 \pmod 4 = 2 \implies \heartsuit$ (Hearts).
-3. Analyze the Rotation Angle Cycle (Period $P = 4$):
-   - Sequence: $0^\circ(1), 90^\circ(2), 180^\circ(3), 270^\circ(0)$.
-   - $18 \pmod 4 = 2 \implies 90^\circ$.
-4. Analyze the Shading Cycle (Period $P = 2$):
-   - Sequence: White (Odd), Black (Even).
-   - Since 18 is an even number $\implies \text{Black}$.
+ - Subscript strictly equals term index: n = 18.
+2. Analyze the Card Suit Cycle (Period P = 4):
+ - Sequence: diamondsuit(1), heartsuit(2), clubsuit(3), spadesuit(0).
+ - 18 pmod 4 = 2 implies heartsuit (Hearts).
+3. Analyze the Rotation Angle Cycle (Period P = 4):
+ - Sequence: 0^°(1), 90^°(2), 180^°(3), 270^°(0).
+ - 18 pmod 4 = 2 implies 90^°.
+4. Analyze the Shading Cycle (Period P = 2):
+ - Sequence: White (Odd), Black (Even).
+ - Since 18 is an even number implies Black.
 5. Assemble the complete profile of Term 18:
-   - $\heartsuit_{18} (90^\circ, \text{Black})$.
+ - heartsuit₁₈ (90^°, Black).
 
 Common Trap: Misidentifying 18 mod 4 as 3 instead of 2.
-Exam Tip: Break composite multi-attribute sequences into individual modulo cycles: $18 \pmod 4 = 2 \implies \heartsuit, 90^\circ$; $18 \pmod 2 = 0 \implies \text{Black}$.","Correct. Survives elimination because 18 mod 4 = 2 selects Hearts and 90 degrees, while even index 18 selects Black shading.","Eliminated because Clubs and 180 degrees correspond to remainder 3.","Eliminated because Spades and 270 degrees correspond to remainder 0.","Eliminated because Diamonds and 0 degrees correspond to remainder 1.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"Consider the sequence of algebraic symbol fractions: $\frac{\alpha}{2}, \frac{\beta}{5}, \frac{\gamma}{10}, \frac{\delta}{17}, \frac{\epsilon}{26}, \text{?}$. What is the 6th term in this progression?","\frac{\zeta}{37}","\frac{\eta}{37}","\frac{\zeta}{35}","\frac{\theta}{37}","A","Step-by-Step Solution:
-1. Determine the numerator rule for term $n = 6$:
-   - Numerator sequence: Greek alphabet in standard canonical order:
-   - $\alpha(1), \beta(2), \gamma(3), \delta(4), \epsilon(5), \zeta(6)$.
-   - 6th Greek letter = Zeta ($\zeta$).
-2. Determine the denominator rule for term $n = 6$:
-   - Denominators: $2, 5, 10, 17, 26, \dots$
-   - Differences: $+3, +5, +7, +9, +11$.
-   - Explicit formula: $D_n = n^2 + 1$.
-   - For $n = 6$: $D_6 = 6^2 + 1 = 36 + 1 = 37$.
+Exam Tip: Break composite multi-attribute sequences into individual modulo cycles: 18 pmod 4 = 2 implies heartsuit, 90^°; 18 pmod 2 = 0 implies Black.","Correct. Survives elimination because 18 mod 4 = 2 selects Hearts and 90 degrees, while even index 18 selects Black shading.","Eliminated because Clubs and 180 degrees correspond to remainder 3.","Eliminated because Spades and 270 degrees correspond to remainder 0.","Eliminated because Diamonds and 0 degrees correspond to remainder 1.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"Consider the sequence of algebraic symbol fractions: α/2, β/5, γ/10, δ/17, epsilon/26, ?. What is the 6th term in this progression?","zeta/37","eta/37","zeta/35","θ/37","A","Step-by-Step Solution:
+1. Determine the numerator rule for term n = 6:
+ - Numerator sequence: Greek alphabet in standard canonical order:
+ - α(1), β(2), γ(3), δ(4), epsilon(5), zeta(6).
+ - 6th Greek letter = Zeta (zeta).
+2. Determine the denominator rule for term n = 6:
+ - Denominators: 2, 5, 10, 17, 26,...
+ - Differences: +3, +5, +7, +9, +11.
+ - Explicit formula: Dₙ = n² + 1.
+ - For n = 6: D₆ = 6² + 1 = 36 + 1 = 37.
 3. Combine numerator and denominator:
-   - 6th term = $\frac{\zeta}{37}$.
+ - 6th term = zeta/37.
 4. Evaluate incorrect alternatives:
-   - Option B ($\frac{\eta}{37}$): Eta ($\eta$) is the 7th Greek letter.
-   - Option C ($\frac{\zeta}{35}$): Arithmetic error in denominator.
-   - Option D ($\frac{\theta}{37}$): Theta ($\theta$) is the 8th Greek letter.
+ - Option B (eta/37): Eta (eta) is the 7th Greek letter.
+ - Option C (zeta/35): Arithmetic error in denominator.
+ - Option D (θ/37): Theta (θ) is the 8th Greek letter.
 
-Common Trap: Skipping Zeta ($\zeta$) in the Greek alphabet or miscalculating $6^2 + 1$.
-Exam Tip: $\alpha(1), \beta(2), \gamma(3), \delta(4), \epsilon(5), \zeta(6)$. Denominator = $n^2 + 1 = 37$.","Correct. Survives elimination because the 6th Greek letter is Zeta and 6^2 + 1 = 37, producing zeta / 37.","Eliminated because Eta is the 7th Greek letter.","Eliminated because 35 is an incorrect denominator.","Eliminated because Theta is the 8th Greek letter.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"In an 8-state cyclic 4-bit Johnson counter (Mobius counter), the binary sequence progresses as: $S_0 = 0000, S_1 = 1000, S_2 = 1100, S_3 = 1110, S_4 = 1111, S_5 = 0111, S_6 = 0011, S_7 = 0001$. What is the binary state at Step 35?","1110","1100","0111","1111","A","Step-by-Step Solution:
+Common Trap: Skipping Zeta (zeta) in the Greek alphabet or miscalculating 6² + 1.
+Exam Tip: α(1), β(2), γ(3), δ(4), epsilon(5), zeta(6). Denominator = n² + 1 = 37.","Correct. Survives elimination because the 6th Greek letter is Zeta and 6² + 1 = 37, producing zeta / 37.","Eliminated because Eta is the 7th Greek letter.","Eliminated because 35 is an incorrect denominator.","Eliminated because Theta is the 8th Greek letter.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"In an 8-state cyclic 4-bit Johnson counter (Mobius counter), the binary sequence progresses as: S₀ = 0000, S₁ = 1000, S₂ = 1100, S₃ = 1110, S₄ = 1111, S₅ = 0111, S₆ = 0011, S₇ = 0001. What is the binary state at Step 35?","1110","1100","0111","1111","A","Step-by-Step Solution:
 1. Identify the modular cycle period:
-   - The Johnson counter sequence has a period of $P = 8$ states ($S_0$ through $S_7$).
-2. Compute the state index for Step $N = 35$:
-   - $35 \pmod 8$:
-   - $35 = 8 \times 4 + 3$.
-   - Remainder = $3$.
-3. Look up state $S_3$ in the sequence table:
-   - $S_0 = 0000$
-   - $S_1 = 1000$
-   - $S_2 = 1100$
-   - $S_3 = 1110$.
+ - The Johnson counter sequence has a period of P = 8 states (S₀ through S₇).
+2. Compute the state index for Step N = 35:
+ - 35 pmod 8:
+ - 35 = 8 × 4 + 3.
+ - Remainder = 3.
+3. Look up state S₃ in the sequence table:
+ - S₀ = 0000
+ - S₁ = 1000
+ - S₂ = 1100
+ - S₃ = 1110.
 4. Conclude:
-   - The binary state at Step 35 is 1110.
+ - The binary state at Step 35 is 1110.
 
-Common Trap: Assuming a 4-bit register has 16 states (a Johnson counter has only $2n = 8$ states).
-Exam Tip: $35 \pmod 8 = 3 \implies S_3 = 1110$.","Correct. Survives elimination because 35 mod 8 = 3, which maps directly to the 3rd state in the Johnson counter sequence (1110).","Eliminated because 1100 corresponds to remainder 2.","Eliminated because 0111 corresponds to remainder 5.","Eliminated because 1111 corresponds to remainder 4.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"Consider a geometric polygon sequence where the number of polygon sides increases by 1 and the side length doubles at each step: Step 1: Triangle with side $s=1$ ($n=3$). Step 2: Square with side $s=2$ ($n=4$). Step 3: Pentagon with side $s=4$ ($n=5$). Step 4: Hexagon with side $s=8$ ($n=6$). What polygon and side length appears at Step 7?","Regular nonagon with side length 64","Regular octagon with side length 64","Regular nonagon with side length 128","Regular decagon with side length 64","A","Step-by-Step Solution:
-1. Determine the formula for the number of sides $n$ at step $k$:
-   - $k = 1 \implies n = 3$.
-   - $k = 2 \implies n = 4$.
-   - Formula: $n = k + 2$.
-   - For $k = 7$: $n = 7 + 2 = 9$ (A 9-sided polygon is a NONAGON).
-2. Determine the formula for side length $s$ at step $k$:
-   - $k = 1 \implies s = 1 = 2^0$.
-   - $k = 2 \implies s = 2 = 2^1$.
-   - $k = 3 \implies s = 4 = 2^2$.
-   - Formula: $s = 2^{k-1}$.
-   - For $k = 7$: $s = 2^{7-1} = 2^6 = 64$.
+Common Trap: Assuming a 4-bit register has 16 states (a Johnson counter has only 2n = 8 states).
+Exam Tip: 35 pmod 8 = 3 implies S₃ = 1110.","Correct. Survives elimination because 35 mod 8 = 3, which maps directly to the 3rd state in the Johnson counter sequence (1110).","Eliminated because 1100 corresponds to remainder 2.","Eliminated because 0111 corresponds to remainder 5.","Eliminated because 1111 corresponds to remainder 4.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"Consider a geometric polygon sequence where the number of polygon sides increases by 1 and the side length doubles at each step: Step 1: Triangle with side s=1 (n=3). Step 2: Square with side s=2 (n=4). Step 3: Pentagon with side s=4 (n=5). Step 4: Hexagon with side s=8 (n=6). What polygon and side length appears at Step 7?","Regular nonagon with side length 64","Regular octagon with side length 64","Regular nonagon with side length 128","Regular decagon with side length 64","A","Step-by-Step Solution:
+1. Determine the formula for the number of sides n at step k:
+ - k = 1 implies n = 3.
+ - k = 2 implies n = 4.
+ - Formula: n = k + 2.
+ - For k = 7: n = 7 + 2 = 9 (A 9-sided polygon is a NONAGON).
+2. Determine the formula for side length s at step k:
+ - k = 1 implies s = 1 = 2⁰.
+ - k = 2 implies s = 2 = 2¹.
+ - k = 3 implies s = 4 = 2².
+ - Formula: s = 2k⁻¹.
+ - For k = 7: s = 2⁷⁻¹ = 2⁶ = 64.
 3. Combine attributes:
-   - At Step 7, the figure is a REGULAR NONAGON with side length 64.
+ - At Step 7, the figure is a REGULAR NONAGON with side length 64.
 4. Evaluate incorrect alternatives:
-   - Option B: Octagon has 8 sides ($k=6$).
-   - Option C: Side length 128 corresponds to $2^7$ ($k=8$).
-   - Option D: Decagon has 10 sides ($k=8$).
+ - Option B: Octagon has 8 sides (k=6).
+ - Option C: Side length 128 corresponds to 2⁷ (k=8).
+ - Option D: Decagon has 10 sides (k=8).
 
-Common Trap: Selecting octagon by confusing step 7 with 7 sides ($n = k + 2 = 9$).
-Exam Tip: Step $k=7 \implies \text{Sides} = 7 + 2 = 9$ (Nonagon); $\text{Side Length} = 2^{7-1} = 64$.","Correct. Survives elimination because step 7 has 7 + 2 = 9 sides (nonagon) and side length 2^(7-1) = 64.","Eliminated because an octagon has 8 sides.","Eliminated because side length 128 corresponds to step 8.","Eliminated because a decagon has 10 sides.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
-"Consider the composite sequence of terms defined by: $T_n = \Delta(n, n^2)$, where the transformation function is $\Delta(x, y) = 3x^2 - y$. What is the numerical value of term $T_{10}$?","200","300","100","250","A","Step-by-Step Solution:
-1. Parse the input arguments for term $n = 10$:
-   - $x = n = 10$.
-   - $y = n^2 = 10^2 = 100$.
-2. Substitute $x = 10$ and $y = 100$ into the transformation function $\Delta(x, y)$:
-   - Formula: $\Delta(x, y) = 3x^2 - y$.
-   - $\Delta(10, 100) = 3(10^2) - 100$.
+Common Trap: Selecting octagon by confusing step 7 with 7 sides (n = k + 2 = 9).
+Exam Tip: Step k=7 implies Sides = 7 + 2 = 9 (Nonagon); Side Length = 2⁷⁻¹ = 64.","Correct. Survives elimination because step 7 has 7 + 2 = 9 sides (nonagon) and side length 2^(7-1) = 64.","Eliminated because an octagon has 8 sides.","Eliminated because side length 128 corresponds to step 8.","Eliminated because a decagon has 10 sides.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+"Consider the composite sequence of terms defined by: Tₙ = Δ(n, n²), where the transformation function is Δ(x, y) = 3x² - y. What is the numerical value of term T₁₀?","200","300","100","250","A","Step-by-Step Solution:
+1. Parse the input arguments for term n = 10:
+ - x = n = 10.
+ - y = n² = 10² = 100.
+2. Substitute x = 10 and y = 100 into the transformation function Δ(x, y):
+ - Formula: Δ(x, y) = 3x² - y.
+ - Δ(10, 100) = 3(10²) - 100.
 3. Execute the arithmetic calculations:
-   - $3(100) - 100 = 300 - 100 = 200$.
+ - 3(100) - 100 = 300 - 100 = 200.
 4. Conclude:
-   - The numerical value of $T_{10}$ is 200.
+ - The numerical value of T₁₀ is 200.
 5. Evaluate incorrect alternatives:
-   - Option B (300): Forgot to subtract $y$.
-   - Option C (100): Calculated $2x^2 - y = 100$.
-   - Option D (250): Arithmetic miscalculation.
+ - Option B (300): Forgot to subtract y.
+ - Option C (100): Calculated 2x² - y = 100.
+ - Option D (250): Arithmetic miscalculation.
 
-Common Trap: Omitting the subtraction of $y = n^2$ after computing $3x^2$.
-Exam Tip: $T_{10} = 3(10^2) - 10^2 = 2(10^2) = 2(100) = 200$.","Correct. Survives elimination because Delta(10, 100) = 3(100) - 100 = 200.","Eliminated because 300 omits the subtraction of y.","Eliminated because 100 is an arithmetic error.","Eliminated because 250 is an arithmetic error.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+Common Trap: Omitting the subtraction of y = n² after computing 3x².
+Exam Tip: T₁₀ = 3(10²) - 10² = 2(10²) = 2(100) = 200.","Correct. Survives elimination because Δ(10, 100) = 3(100) - 100 = 200.","Eliminated because 300 omits the subtraction of y.","Eliminated because 100 is an arithmetic error.","Eliminated because 250 is an arithmetic error.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
 "In an alternating 6-step cyclic logic sequence: Step 1: AND gate, Step 2: OR gate, Step 3: XOR gate, Step 4: NAND gate, Step 5: NOR gate, Step 6: XNOR gate. The sequence repeats indefinitely every 6 steps. Which logic gate appears at Step 46?","NAND gate","XOR gate","OR gate","NOR gate","A","Step-by-Step Solution:
 1. Identify the modular period of the logic gate sequence:
-   - Period $P = 6$ distinct gates:
-     - State 1 ($1 \pmod 6$): AND gate
-     - State 2 ($2 \pmod 6$): OR gate
-     - State 3 ($3 \pmod 6$): XOR gate
-     - State 4 ($4 \pmod 6$): NAND gate
-     - State 5 ($5 \pmod 6$): NOR gate
-     - State 0 ($0 \pmod 6$): XNOR gate
-2. Compute the position for Step $N = 46$:
-   - $46 \pmod 6$:
-   - $46 = 6 \times 7 + 4$.
-   - Remainder = $4$.
+ - Period P = 6 distinct gates:
+ - State 1 (1 pmod 6): AND gate
+ - State 2 (2 pmod 6): OR gate
+ - State 3 (3 pmod 6): XOR gate
+ - State 4 (4 pmod 6): NAND gate
+ - State 5 (5 pmod 6): NOR gate
+ - State 0 (0 pmod 6): XNOR gate
+2. Compute the position for Step N = 46:
+ - 46 pmod 6:
+ - 46 = 6 × 7 + 4.
+ - Remainder = 4.
 3. Map remainder 4 to the corresponding gate state:
-   - Remainder 4 corresponds to State 4 = NAND GATE.
+ - Remainder 4 corresponds to State 4 = NAND GATE.
 4. Conclude:
-   - At Step 46, the logic gate is a NAND gate.
+ - At Step 46, the logic gate is a NAND gate.
 
-Common Trap: Miscalculating $46 \pmod 6$ as 2 or 3.
-Exam Tip: $46 \div 6 = 7 \text{ with remainder } 4 \implies \text{4th gate in cycle} = \text{NAND gate}$.","Correct. Survives elimination because 46 mod 6 = 4, which corresponds to the 4th gate in the 6-step cycle (NAND gate).","Eliminated because XOR gate corresponds to remainder 3.","Eliminated because OR gate corresponds to remainder 2.","Eliminated because NOR gate corresponds to remainder 5.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"
+Common Trap: Miscalculating 46 pmod 6 as 2 or 3.
+Exam Tip: 46 ÷ 6 = 7 with remainder 4 implies 4th gate in cycle = NAND gate.","Correct. Survives elimination because 46 mod 6 = 4, which corresponds to the 4th gate in the 6-step cycle (NAND gate).","Eliminated because XOR gate corresponds to remainder 3.","Eliminated because OR gate corresponds to remainder 2.","Eliminated because NOR gate corresponds to remainder 5.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Sequence patterns | Very Difficult | Batch 079"

@@ -1,132 +1,132 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "If 18 public health officers working 8 hours a day can complete epidemiological contact tracing for 2,160 households in 15 days, how many days will it take for 24 health officers working 6 hours a day to trace 4,320 households at the identical productivity rate?","30 days","25 days","36 days","28 days","A","Step-by-Step Solution:
-1. Apply the combined variation work formula: $\frac{W_1}{M_1 \times H_1 \times D_1} = \frac{W_2}{M_2 \times H_2 \times D_2}$.
+1. Apply the combined variation work formula: W₁/M₁ × H₁ × D₁ = W₂/M₂ × H₂ × D₂.
 2. Assign variables from the first condition:
-   - $W_1 = 2,160\text{ households}$.
-   - $M_1 = 18\text{ officers}$.
-   - $H_1 = 8\text{ hours/day}$.
-   - $D_1 = 15\text{ days}$.
-   - Total Man-Hours $1 = 18 \times 8 \times 15 = 2,160\text{ man-hours}$.
-   - Work Rate $= \frac{2,160\text{ households}}{2,160\text{ man-hours}} = 1\text{ household per man-hour}$.
+ - W₁ = 2,160 households.
+ - M₁ = 18 officers.
+ - H₁ = 8 hours/day.
+ - D₁ = 15 days.
+ - Total Man-Hours 1 = 18 × 8 × 15 = 2,160 man-hours.
+ - Work Rate = (2,160 households)/(2,160 man-hours) = 1 household per man-hour.
 3. Assign variables from the second condition:
-   - $W_2 = 4,320\text{ households}$.
-   - $M_2 = 24\text{ officers}$.
-   - $H_2 = 6\text{ hours/day}$.
-   - $D_2 = ?\text{ days}$.
-   - Man-Hours per Day $= 24 \times 6 = 144\text{ man-hours/day}$.
-4. Solve for $D_2$:
-   - $D_2 = \frac{W_2}{144 \times \text{Rate}} = \frac{4,320}{144 \times 1} = 30\text{ days}$.
+ - W₂ = 4,320 households.
+ - M₂ = 24 officers.
+ - H₂ = 6 hours/day.
+ - D₂ =? days.
+ - Man-Hours per Day = 24 × 6 = 144 man-hours/day.
+4. Solve for D₂:
+ - D₂ = W₂/(144 × Rate) = 4,320/144 × 1 = 30 days.
 
-Common Trap: Inverting the relationship between workers and days, or forgetting to multiply daily hours ($H$).
-Exam Tip: In compound proportion problems, work is directly proportional to ($M \times H \times D$). Always set up $\frac{W_1}{M_1 H_1 D_1} = \frac{W_2}{M_2 H_2 D_2}$.","Correct. Survives elimination because total man-hours required is 4,320, and 24 * 6 = 144 hours/day, giving 4320 / 144 = 30 days.","Eliminated because ignoring the reduction in daily working hours yields 25 days.","Eliminated because inverted worker ratios yield 36 days.","Eliminated because arithmetic error in division gives 28 days.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"The illumination $I$ provided by a floodlight varies directly as the luminous intensity $L$ in candelas and inversely as the square of the distance $d$ in meters ($I = k \frac{L}{d^2}$). If a 900-candela lamp placed 6 meters away produces an illumination of 25 lux, what illumination (in lux) is produced by a 1,600-candela lamp placed 8 meters away?","25 lux","20 lux","30 lux","16 lux","A","Step-by-Step Solution:
-1. Formulate the variation equation: $I = k \frac{L}{d^2}$.
-2. Solve for constant of proportionality $k$ using the first condition:
-   - $I = 25\text{ lux}, L = 900\text{ cd}, d = 6\text{ m}$.
-   - $25 = k \frac{900}{6^2} = k \frac{900}{36} = 25k$.
-   - $k = \frac{25}{25} = 1$.
-3. Calculate illumination under the new conditions ($L = 1,600\text{ cd}, d = 8\text{ m}$):
-   - $I = 1 \times \frac{1,600}{8^2} = \frac{1,600}{64} = 25\text{ lux}$.
+Common Trap: Inverting the relationship between workers and days, or forgetting to multiply daily hours (H).
+Exam Tip: In compound proportion problems, work is directly proportional to (M × H × D). Always set up W₁/M₁ H₁ D₁ = W₂/M₂ H₂ D₂.","Correct. Survives elimination because total man-hours required is 4,320, and 24 * 6 = 144 hours/day, giving 4320 / 144 = 30 days.","Eliminated because ignoring the reduction in daily working hours yields 25 days.","Eliminated because inverted worker ratios yield 36 days.","Eliminated because arithmetic error in division gives 28 days.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"The illumination I provided by a floodlight varies directly as the luminous intensity L in candelas and inversely as the square of the distance d in meters (I = k L/d²). If a 900-candela la∓ placed 6 meters away produces an illumination of 25 lux, what illumination (in lux) is produced by a 1,600-candela la∓ placed 8 meters away?","25 lux","20 lux","30 lux","16 lux","A","Step-by-Step Solution:
+1. Formulate the variation equation: I = k L/d².
+2. Solve for constant of proportionality k using the first condition:
+ - I = 25 lux, L = 900 cd, d = 6 m.
+ - 25 = k 900/6² = k 900/36 = 25k.
+ - k = 25/25 = 1.
+3. Calculate illumination under the new conditions (L = 1,600 cd, d = 8 m):
+ - I = 1 × 1,600/8² = 1,600/64 = 25 lux.
 
-Common Trap: Dividing by $d$ instead of $d^2$ (e.g., $1600 / 8 = 200$), forgetting the inverse-square law of illumination.
-Exam Tip: When $L$ and $d^2$ increase by the exact same ratio ($\frac{1600}{900} = \frac{16}{9}$ and $\frac{8^2}{6^2} = \frac{64}{36} = \frac{16}{9}$), the resulting illumination remains constant.","Correct. Survives elimination because k = 1, and 1600 / 64 = 25 lux.","Eliminated because dividing by 80 instead of 64 yields 20 lux.","Eliminated because arithmetic errors in squaring 8 yield 30 lux.","Eliminated because failing to divide by distance squared gives 16 lux.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"A physical quantity $Z$ varies jointly as $X$ and the square root of $Y$, and inversely as the cube of $W$ ($Z = k \frac{X \sqrt{Y}}{W^3}$). When $X = 3$, $Y = 16$, and $W = 2$, $Z = 15$. What is the value of $Z$ when $X = 5$, $Y = 64$, and $W = 4$?","\frac{25}{4} \text{ (or } 6.25\text{)}","\frac{15}{2}","5.0","\frac{25}{8}","A","Step-by-Step Solution:
-1. Determine the proportionality constant $k$:
-   - $15 = k \frac{3 \sqrt{16}}{2^3} = k \frac{3 \times 4}{8} = k \frac{12}{8} = 1.5k$.
-   - $k = \frac{15}{1.5} = 10$.
-2. Calculate $Z$ for $X = 5$, $Y = 64$, and $W = 4$:
-   - $Z = 10 \times \frac{5 \sqrt{64}}{4^3}$.
-   - $\sqrt{64} = 8$.
-   - $4^3 = 64$.
-   - $Z = 10 \times \frac{5 \times 8}{64} = 10 \times \frac{40}{64} = 10 \times \frac{5}{8} = \frac{50}{8} = \frac{25}{4} = 6.25$.
+Common Trap: Dividing by d instead of d² (e.g., 1600 / 8 = 200), forgetting the inverse-square law of illumination.
+Exam Tip: When L and d² increase by the exact same ratio (1600/900 = 16/9 and 8²/6² = 64/36 = 16/9), the resulting illumination remains constant.","Correct. Survives elimination because k = 1, and 1600 / 64 = 25 lux.","Eliminated because dividing by 80 instead of 64 yields 20 lux.","Eliminated because arithmetic errors in squaring 8 yield 30 lux.","Eliminated because failing to divide by distance squared gives 16 lux.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"A physical quantity Z varies jointly as X and the square root of Y, and inversely as the cube of W (Z = k (X √Y)/W³). When X = 3, Y = 16, and W = 2, Z = 15. What is the value of Z when X = 5, Y = 64, and W = 4?","25/4 (or 6.25)","15/2","5.0","25/8","A","Step-by-Step Solution:
+1. Determine the proportionality constant k:
+ - 15 = k (3 √16)/2³ = k 3 × 4/8 = k 12/8 = 1.5k.
+ - k = 15/1.5 = 10.
+2. Calculate Z for X = 5, Y = 64, and W = 4:
+ - Z = 10 × (5 √64)/4³.
+ - √64 = 8.
+ - 4³ = 64.
+ - Z = 10 × 5 × 8/64 = 10 × 40/64 = 10 × 5/8 = 50/8 = 25/4 = 6.25.
 
-Common Trap: Squaring $Y$ instead of taking its square root, or squaring $W$ instead of cubing it ($4^2 = 16$ vs $4^3 = 64$).
-Exam Tip: Write down the explicit power on each variable before plugging in numbers.","Correct. Survives elimination because k = 10, and 10 * (5 * 8) / 64 = 400 / 64 = 25/4 = 6.25.","Eliminated because using W^2 = 16 instead of W^3 = 64 yields 25/2.","Eliminated because arithmetic error in canceling 40/64 gives 5.0.","Eliminated because halving the numerator gives 25/8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"Four quantities $A, B, C,$ and $D$ are in a continuous geometric proportion such that $A : B = B : C = C : D$. If $A = 16$ and $D = 54$, find the exact sum $B + C$.","60","50","70","54","A","Step-by-Step Solution:
+Common Trap: Squaring Y instead of taking its square root, or squaring W instead of cubing it (4² = 16 vs 4³ = 64).
+Exam Tip: Write down the explicit power on each variable before plugging in numbers.","Correct. Survives elimination because k = 10, and 10 * (5 * 8) / 64 = 400 / 64 = 25/4 = 6.25.","Eliminated because using W² = 16 instead of W³ = 64 yields 25/2.","Eliminated because arithmetic error in canceling 40/64 gives 5.0.","Eliminated because halving the numerator gives 25/8.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"Four quantities A, B, C, and D are in a continuous geometric proportion such that A: B = B: C = C: D. If A = 16 and D = 54, find the exact Σ B + C.","60","50","70","54","A","Step-by-Step Solution:
 1. In a continuous proportion, the terms form a geometric sequence:
-   - $A = a = 16$.
-   - $B = ar$.
-   - $C = ar^2$.
-   - $D = ar^3 = 54$.
-2. Solve for common ratio $r$:
-   - $16 r^3 = 54 \implies r^3 = \frac{54}{16} = \frac{27}{8}$.
-   - $r = \sqrt[3]{\frac{27}{8}} = \frac{3}{2}$.
-3. Calculate $B$ and $C$:
-   - $B = 16 \times \frac{3}{2} = 24$.
-   - $C = 24 \times \frac{3}{2} = 36$.
-4. Sum $B + C$:
-   - $B + C = 24 + 36 = 60$.
+ - A = a = 16.
+ - B = ar.
+ - C = ar².
+ - D = ar³ = 54.
+2. Solve for common ratio r:
+ - 16 r³ = 54 implies r³ = 54/16 = 27/8.
+ - r = ³√27/8 = 3/2.
+3. Calculate B and C:
+ - B = 16 × 3/2 = 24.
+ - C = 24 × 3/2 = 36.
+4. Sum B + C:
+ - B + C = 24 + 36 = 60.
 
-Common Trap: Assuming arithmetic progression differences ($D - A = 38$) rather than geometric ratio scaling.
-Exam Tip: Continuous proportion $A:B=B:C=C:D$ means $B = \sqrt[3]{A^2 D}$ and $C = \sqrt[3]{A D^2}$.","Correct. Survives elimination because r = 3/2, giving B = 24 and C = 36, so B + C = 60.","Eliminated because arithmetic error in summing B + C yields 50.","Eliminated because adding D to B gives 78.","Eliminated because 54 is the value of D alone.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"The electrical resistance $R$ of a metallic conductor varies directly as its length $L$ and inversely as the square of its cross-sectional diameter $d$ ($R = k \frac{L}{d^2}$). If a copper wire of length 50 meters and diameter 2 mm has a resistance of 6 ohms, what is the electrical resistance of another copper wire of length 75 meters and diameter 3 mm?","4 ohms","6 ohms","4.5 ohms","3 ohms","A","Step-by-Step Solution:
+Common Trap: Assuming arithmetic progression differences (D - A = 38) rather than geometric ratio scaling.
+Exam Tip: Continuous proportion A:B=B:C=C:D means B = ³√A² D and C = ³√A D².","Correct. Survives elimination because r = 3/2, giving B = 24 and C = 36, so B + C = 60.","Eliminated because arithmetic error in summing B + C yields 50.","Eliminated because adding D to B gives 78.","Eliminated because 54 is the value of D alone.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"The electrical resistance R of a metallic conductor varies directly as its length L and inversely as the square of its cross-sectional diameter d (R = k L/d²). If a copper wire of length 50 meters and diameter 2 mm has a resistance of 6 ohms, what is the electrical resistance of another copper wire of length 75 meters and diameter 3 mm?","4 ohms","6 ohms","4.5 ohms","3 ohms","A","Step-by-Step Solution:
 1. Set up the proportionality ratio:
-   - $\frac{R_1 d_1^2}{L_1} = \frac{R_2 d_2^2}{L_2}$.
+ - R₁ d₁²/L₁ = R₂ d₂²/L₂.
 2. Substitute known values:
-   - $R_1 = 6\text{ ohms}, L_1 = 50\text{ m}, d_1 = 2\text{ mm}$.
-   - $R_2 = ?\text{ ohms}, L_2 = 75\text{ m}, d_2 = 3\text{ mm}$.
-   - $\frac{6 \times 2^2}{50} = \frac{R_2 \times 3^2}{75}$.
+ - R₁ = 6 ohms, L₁ = 50 m, d₁ = 2 mm.
+ - R₂ =? ohms, L₂ = 75 m, d₂ = 3 mm.
+ - 6 × 2²/50 = R₂ × 3²/75.
 3. Simplify both sides:
-   - $\frac{6 \times 4}{50} = \frac{24}{50} = \frac{12}{25}$.
-   - $\frac{9 R_2}{75} = \frac{3 R_2}{25}$.
-4. Equate and solve for $R_2$:
-   - $\frac{12}{25} = \frac{3 R_2}{25} \implies 3 R_2 = 12 \implies R_2 = 4\text{ ohms}$.
+ - 6 × 4/50 = 24/50 = 12/25.
+ - 9 R₂/75 = 3 R₂/25.
+4. Equate and solve for R₂:
+ - 12/25 = 3 R₂/25 implies 3 R₂ = 12 implies R₂ = 4 ohms.
 
-Common Trap: Forgetting that diameter is squared ($d^2$), leading to $\frac{6 \times 2}{50} = \frac{R \times 3}{75} \implies R = 6\text{ ohms}$.
-Exam Tip: Resistance scales with $\frac{L}{d^2}$. Here, $L$ increases by $1.5\times$ and $d^2$ increases by $2.25\times$, so $R_2 = 6 \times \frac{1.5}{2.25} = 6 \times \frac{2}{3} = 4\text{ ohms}$.","Correct. Survives elimination because R2 = 6 * (75/50) * (2/3)^2 = 6 * (3/2) * (4/9) = 4 ohms.","Eliminated because treating diameter linearly without squaring yields 6 ohms.","Eliminated because arithmetic error in the fraction multiplier gives 4.5 ohms.","Eliminated because overestimating diameter attenuation yields 3 ohms.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"If four quantities $a, b, c,$ and $d$ satisfy the proportion $\frac{a}{b} = \frac{c}{d}$, which of the following algebraic transformations is strictly valid under the classic Componendo and Dividendo rule of proportions?","\frac{a + b}{a - b} = \frac{c + d}{c - d}","\frac{a + b}{c + d} = \frac{a - b}{c - d}","\frac{a - b}{a + b} = \frac{c + d}{c - d}","\frac{a + c}{b + d} = \frac{a - c}{b - d}","A","Step-by-Step Solution:
-1. State the given proportion: $\frac{a}{b} = \frac{c}{d}$.
-2. Componendo rule: Adding 1 to both sides gives $\frac{a}{b} + 1 = \frac{c}{d} + 1 \implies \frac{a + b}{b} = \frac{c + d}{d}$ (Equation 1).
-3. Dividendo rule: Subtracting 1 from both sides gives $\frac{a}{b} - 1 = \frac{c}{d} - 1 \implies \frac{a - b}{b} = \frac{c - d}{d}$ (Equation 2).
+Common Trap: Forgetting that diameter is squared (d²), leading to 6 × 2/50 = R × 3/75 implies R = 6 ohms.
+Exam Tip: Resistance scales with L/d². Here, L increases by 1.5× and d² increases by 2.25×, so R₂ = 6 × 1.5/2.25 = 6 × 2/3 = 4 ohms.","Correct. Survives elimination because R2 = 6 * (75/50) * (2/3)² = 6 * (3/2) * (4/9) = 4 ohms.","Eliminated because treating diameter linearly without squaring yields 6 ohms.","Eliminated because arithmetic error in the fraction multiplier gives 4.5 ohms.","Eliminated because overestimating diameter attenuation yields 3 ohms.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"If four quantities a, b, c, and d satisfy the proportion a/b = c/d, which of the following algebraic transformations is strictly valid under the classic Componendo and Dividendo rule of proportions?","a + b/a - b = c + d/c - d","a + b/c + d = a - b/c - d","a - b/a + b = c + d/c - d","a + c/b + d = a - c/b - d","A","Step-by-Step Solution:
+1. State the given proportion: a/b = c/d.
+2. Componendo rule: Adding 1 to both sides gives a/b + 1 = c/d + 1 implies a + b/b = c + d/d (Equation 1).
+3. Dividendo rule: Subtracting 1 from both sides gives a/b - 1 = c/d - 1 implies a - b/b = c - d/d (Equation 2).
 4. Divide Equation 1 by Equation 2:
-   - $\frac{\frac{a + b}{b}}{\frac{a - b}{b}} = \frac{\frac{c + d}{d}}{\frac{c - d}{d}}$.
-   - $\frac{a + b}{a - b} = \frac{c + d}{c - d}$.
+ - a + b/b/a - b/b = c + d/d/c - d/d.
+ - a + b/a - b = c + d/c - d.
 
 Common Trap: Inverting the right-hand sign structure (Option C), which introduces an invalid negative sign.
-Exam Tip: Componendo and Dividendo states: $\frac{\text{Numerator} + \text{Denominator}}{\text{Numerator} - \text{Denominator}}$ must be applied identically to both sides.","Correct. Survives elimination because Componendo and Dividendo strictly yields (a + b)/(a - b) = (c + d)/(c - d).","Eliminated because swapping denominators across the equal sign produces an un-standardized non-simplified form.","Eliminated because the left and right sides have inverted reciprocal signs.","Eliminated because this applies operations across numerators rather than within each ratio.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+Exam Tip: Componendo and Dividendo states: (Numerator + Denominator)/(Numerator - Denominator) must be applied identically to both sides.","Correct. Survives elimination because Componendo and Dividendo strictly yields (a + b)/(a - b) = (c + d)/(c - d).","Eliminated because swapping denominators across the equal sign produces an un-standardized non-simplified form.","Eliminated because the left and right sides have inverted reciprocal signs.","Eliminated because this applies operations across numerators rather than within each ratio.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
 "The cost of paving a municipal public plaza varies jointly as its length and width, and directly as the thickness of the asphalt overlay. If paving a plaza measuring 40 meters by 25 meters with a 5 cm asphalt overlay costs ₱600,000, what will be the total cost of paving a larger plaza measuring 60 meters by 30 meters with an 8 cm overlay?","₱1,728,000","₱1,500,000","₱1,850,000","₱1,440,000","A","Step-by-Step Solution:
-1. Formulate joint variation equation: $\text{Cost} = k \times L \times W \times T$.
-2. Solve for $k$ using initial project data:
-   - $600,000 = k \times (40 \times 25 \times 5) = k \times 5,000$.
-   - $k = \frac{600,000}{5,000} = 120$.
-3. Compute cost for new dimensions ($L = 60\text{ m}, W = 30\text{ m}, T = 8\text{ cm}$):
-   - $\text{Volume Index} = 60 \times 30 \times 8 = 14,400$.
-   - $\text{New Cost} = 120 \times 14,400 = ₱1,728,000$.
+1. Formulate jo∫ variation equation: Cost = k × L × W × T.
+2. Solve for k using initial project data:
+ - 600,000 = k × (40 × 25 × 5) = k × 5,000.
+ - k = 600,000/5,000 = 120.
+3. Compute cost for new dimensions (L = 60 m, W = 30 m, T = 8 cm):
+ - Volume Index = 60 × 30 × 8 = 14,400.
+ - New Cost = 120 × 14,400 = ₱1,728,000.
 
-Common Trap: Calculating area without multiplying by thickness ($60 \times 30 = 1,800$), which omits the 3D volume dependency.
-Exam Tip: Factor the ratio of volumes directly: $\frac{60 \times 30 \times 8}{40 \times 25 \times 5} = \frac{14,400}{5,000} = 2.88 \implies 600,000 \times 2.88 = ₱1,728,000$.","Correct. Survives elimination because the volume index ratio is 2.88, and 600,000 * 2.88 = ₱1,728,000.","Eliminated because rounding the multiplier to 2.5 yields ₱1,500,000.","Eliminated because arithmetic errors in multiplying 120 * 14,400 yield ₱1,850,000.","Eliminated because omitting the constant factor yields ₱1,440,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+Common Trap: Calculating area without multiplying by thickness (60 × 30 = 1,800), which omits the 3D volume dependency.
+Exam Tip: Factor the ratio of volumes directly: 60 × 30 × 8/40 × 25 × 5 = 14,400/5,000 = 2.88 implies 600,000 × 2.88 = ₱1,728,000.","Correct. Survives elimination because the volume index ratio is 2.88, and 600,000 * 2.88 = ₱1,728,000.","Eliminated because rounding the multiplier to 2.5 yields ₱1,500,000.","Eliminated because arithmetic errors in multiplying 120 * 14,400 yield ₱1,850,000.","Eliminated because omitting the constant factor yields ₱1,440,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
 "Find the fourth proportional to the three numbers 12, 18, and 14.","21","24","19","28","A","Step-by-Step Solution:
-1. By definition, if $x$ is the fourth proportional to $a, b,$ and $c$, then:
-   - $a : b = c : x \implies \frac{a}{b} = \frac{c}{x}$.
-2. Substitute the given numbers $a = 12, b = 18, c = 14$:
-   - $\frac{12}{18} = \frac{14}{x}$.
+1. By definition, if x is the fourth proportional to a, b, and c, then:
+ - a: b = c: x implies a/b = c/x.
+2. Substitute the given numbers a = 12, b = 18, c = 14:
+ - 12/18 = 14/x.
 3. Simplify the left ratio:
-   - $\frac{12}{18} = \frac{2}{3}$.
-4. Solve for $x$:
-   - $\frac{2}{3} = \frac{14}{x} \implies 2x = 3 \times 14 = 42 \implies x = \frac{42}{2} = 21$.
+ - 12/18 = 2/3.
+4. Solve for x:
+ - 2/3 = 14/x implies 2x = 3 × 14 = 42 implies x = 42/2 = 21.
 
-Common Trap: Finding the third proportional ($b^2 / a = 18^2 / 12 = 27$) instead of the fourth proportional.
-Exam Tip: For fourth proportional $x$, product of extremes equals product of means ($12x = 18 \times 14 \implies x = 21$).","Correct. Survives elimination because 12/18 = 14/x simplifies to 2/3 = 14/x, so x = 21.","Eliminated because 24 fails the proportion check (12/18 != 14/24).","Eliminated because arithmetic error yields 19.","Eliminated because doubling 14 gives 28, which violates the ratio.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"Determine the exact mean proportional (geometric mean) between the two conjugate radical expressions $(3 + \sqrt{5})$ and $(3 - \sqrt{5})$.","2","4","\sqrt{5}","3","A","Step-by-Step Solution:
-1. Definition: The mean proportional $x$ between two quantities $A$ and $B$ satisfies $x = \sqrt{A \times B}$.
+Common Trap: Finding the third proportional (b² / a = 18² / 12 = 27) instead of the fourth proportional.
+Exam Tip: For fourth proportional x, product of extremes equals product of means (12x = 18 × 14 implies x = 21).","Correct. Survives elimination because 12/18 = 14/x simplifies to 2/3 = 14/x, so x = 21.","Eliminated because 24 fails the proportion check (12/18!= 14/24).","Eliminated because arithmetic error yields 19.","Eliminated because doubling 14 gives 28, which violates the ratio.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"Determine the exact mean proportional (geometric mean) between the two conjugate radical expressions (3 + √5) and (3 - √5).","2","4","√5","3","A","Step-by-Step Solution:
+1. Definition: The mean proportional x between two quantities A and B satisfies x = √A × B.
 2. Multiply the conjugate binomials using difference of squares:
-   - $A \times B = (3 + \sqrt{5})(3 - \sqrt{5}) = 3^2 - (\sqrt{5})^2 = 9 - 5 = 4$.
+ - A × B = (3 + √5)(3 - √5) = 3² - (√5)² = 9 - 5 = 4.
 3. Take the square root:
-   - $x = \sqrt{4} = 2$.
+ - x = √4 = 2.
 
-Common Trap: Forgetting to take the final square root of the product ($A \times B = 4$), erroneously answering 4 (Option B).
-Exam Tip: The mean proportional between $a+\sqrt{b}$ and $a-\sqrt{b}$ is always $\sqrt{a^2 - b}$.","Correct. Survives elimination because the product is 3^2 - 5 = 4, and sqrt(4) = 2.","Eliminated because 4 is the product before taking the square root.","Eliminated because sqrt(5) is an individual component, not the geometric mean.","Eliminated because 3 is the arithmetic mean, not the geometric mean proportional.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
-"If $\frac{x + y}{x - y} = \frac{a + b}{a - b}$, which fundamental proportional relationship must necessarily be true?","\frac{x}{y} = \frac{a}{b}","\frac{x}{a} = \frac{b}{y}","xy = ab","x + a = y + b","A","Step-by-Step Solution:
-1. Given: $\frac{x + y}{x - y} = \frac{a + b}{a - b}$.
+Common Trap: Forgetting to take the final square root of the product (A × B = 4), erroneously answering 4 (Option B).
+Exam Tip: The mean proportional between a+√b and a-√b is always √a² - b.","Correct. Survives elimination because the product is 3² - 5 = 4, and sqrt(4) = 2.","Eliminated because 4 is the product before taking the square root.","Eliminated because sqrt(5) is an individual component, not the geometric mean.","Eliminated because 3 is the arithmetic mean, not the geometric mean proportional.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+"If x + y/x - y = a + b/a - b, which fundamental proportional relationship must necessarily be true?","x/y = a/b","x/a = b/y","xy = ab","x + a = y + b","A","Step-by-Step Solution:
+1. Given: x + y/x - y = a + b/a - b.
 2. Apply the Componendo and Dividendo rule to both sides:
-   - $\frac{(x + y) + (x - y)}{(x + y) - (x - y)} = \frac{(a + b) + (a - b)}{(a + b) - (a - b)}$.
+ - (x + y) + (x - y)/(x + y) - (x - y) = (a + b) + (a - b)/(a + b) - (a - b).
 3. Simplify numerators and denominators:
-   - Numerator left: $x + y + x - y = 2x$.
-   - Denominator left: $x + y - x + y = 2y$.
-   - Numerator right: $a + b + a - b = 2a$.
-   - Denominator right: $a + b - a + b = 2b$.
+ - Numerator left: x + y + x - y = 2x.
+ - Denominator left: x + y - x + y = 2y.
+ - Numerator right: a + b + a - b = 2a.
+ - Denominator right: a + b - a + b = 2b.
 4. Cancel the factor of 2:
-   - $\frac{2x}{2y} = \frac{2a}{2b} \implies \frac{x}{y} = \frac{a}{b}$.
+ - 2x/2y = 2a/2b implies x/y = a/b.
 
-Common Trap: Attempting long cross-multiplication $(x+y)(a-b) = (x-y)(a+b)$ which requires extensive polynomial expansion.
-Exam Tip: Applying Componendo and Dividendo to symmetric sum/difference fractions isolates $\frac{x}{y} = \frac{a}{b}$ in one step.","Correct. Survives elimination because applying Componendo-Dividendo simplifies directly to x/y = a/b.","Eliminated because cross-multiplying does not equate x/a to b/y.","Eliminated because the product equation is x/y = a/b, which is xb = ya, not xy = ab.","Eliminated because additive equality is invalid for proportional ratios.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"
+Common Trap: Attempting long cross-multiplication (x+y)(a-b) = (x-y)(a+b) which requires extensive polynomial expansion.
+Exam Tip: Applying Componendo and Dividendo to symmetric Σ/difference fractions isolates x/y = a/b in one step.","Correct. Survives elimination because applying Componendo-Dividendo simplifies directly to x/y = a/b.","Eliminated because cross-multiplying does not equate x/a to b/y.","Eliminated because the product equation is x/y = a/b, which is xb = ya, not xy = ab.","Eliminated because additive equality is invalid for proportional ratios.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Proportions | Very Difficult | Batch 012"

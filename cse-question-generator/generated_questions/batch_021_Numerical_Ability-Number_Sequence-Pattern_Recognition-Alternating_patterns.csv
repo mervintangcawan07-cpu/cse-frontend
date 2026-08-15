@@ -1,154 +1,154 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Find the missing two numbers $(X, Y)$ in the interleaved dual-track numerical sequence:
+"Find the missing two numbers (X, Y) in the interleaved dual-track numerical sequence:
 
-$$4, \quad 81, \quad 7, \quad 64, \quad 12, \quad 49, \quad 19, \quad 36, \quad X, \quad Y$$","X = 28, \quad Y = 25","X = 26, \quad Y = 25","X = 28, \quad Y = 16","X = 27, \quad Y = 25","A","Step-by-Step Solution:
+4, 81, 7, 64, 12, 49, 19, 36, X, Y","X = 28, Y = 25","X = 26, Y = 25","X = 28, Y = 16","X = 27, Y = 25","A","Step-by-Step Solution:
 1. Separate the sequence into two independent interleaved sub-sequences:
 2. Track 1 (Odd-positioned terms: 1st, 3rd, 5th, 7th, 9th):
-   - $4, \quad 7, \quad 12, \quad 19, \quad X$.
-   - Differences: $7 - 4 = 3$, $12 - 7 = 5$, $19 - 12 = 7$.
-   - The differences form consecutive odd numbers ($3, 5, 7, 9$).
-   - Next difference is 9: $X = 19 + 9 = 28$.
+ - 4, 7, 12, 19, X.
+ - Differences: 7 - 4 = 3, 12 - 7 = 5, 19 - 12 = 7.
+ - The differences form consecutive odd numbers (3, 5, 7, 9).
+ - Next difference is 9: X = 19 + 9 = 28.
 3. Track 2 (Even-positioned terms: 2nd, 4th, 6th, 8th, 10th):
-   - $81, \quad 64, \quad 49, \quad 36, \quad Y$.
-   - These are descending perfect squares: $9^2, 8^2, 7^2, 6^2, 5^2$.
-   - Next term is $5^2$: $Y = 25$.
-4. Result: $X = 28, Y = 25$.
+ - 81, 64, 49, 36, Y.
+ - These are descending perfect squares: 9², 8², 7², 6², 5².
+ - Next term is 5²: Y = 25.
+4. Result: X = 28, Y = 25.
 
 Common Trap: Trying to find a single alternating operation between adjacent terms, failing to separate odd and even indices.
-Exam Tip: When numbers alternate up and down without an obvious single rule, immediately separate into two independent tracks.","Correct. Survives elimination because Track 1 gives X = 19 + 9 = 28 and Track 2 gives Y = 5^2 = 25.","Eliminated because X = 26 uses a difference of +7 instead of +9.","Eliminated because Y = 16 skips 5^2 to 4^2.","Eliminated because X = 27 is an arithmetic error.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Exam Tip: When numbers alternate up and down without an obvious single rule, immediately separate into two independent tracks.","Correct. Survives elimination because Track 1 gives X = 19 + 9 = 28 and Track 2 gives Y = 5² = 25.","Eliminated because X = 26 uses a difference of +7 instead of +9.","Eliminated because Y = 16 skips 5² to 4².","Eliminated because X = 27 is an arithmetic error.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Identify the next number in the alternating operations sequence:
 
-$$6, \quad 18, \quad 14, \quad 42, \quad 38, \quad 114, \quad \textbf{?}$$","110","118","342","108","A","Step-by-Step Solution:
+6, 18, 14, 42, 38, 114, ?","110","118","342","108","A","Step-by-Step Solution:
 1. Examine the sequential transitions between consecutive terms:
-   - $6 \to 18$: Multiply by 3 ($6 \times 3 = 18$).
-   - $18 \to 14$: Subtract 4 ($18 - 4 = 14$).
-   - $14 \to 42$: Multiply by 3 ($14 \times 3 = 42$).
-   - $42 \to 38$: Subtract 4 ($42 - 4 = 38$).
-   - $38 \to 114$: Multiply by 3 ($38 \times 3 = 114$).
-2. The operational pattern is strictly periodic: $[\times 3, \quad -4, \quad \times 3, \quad -4, \quad \times 3, \quad \dots]$.
-3. Apply the next scheduled operation ($-4$):
-   - $T_7 = 114 - 4 = 110$.
+ - 6 to 18: Multiply by 3 (6 × 3 = 18).
+ - 18 to 14: Subtract 4 (18 - 4 = 14).
+ - 14 to 42: Multiply by 3 (14 × 3 = 42).
+ - 42 to 38: Subtract 4 (42 - 4 = 38).
+ - 38 to 114: Multiply by 3 (38 × 3 = 114).
+2. The operational pattern is strictly periodic: [× 3, -4, × 3, -4, × 3,...].
+3. Apply the next scheduled operation (-4):
+ - T₇ = 114 - 4 = 110.
 
-Common Trap: Multiplying by 3 again ($114 \times 3 = 342$, Option C) instead of subtracting 4.
-Exam Tip: Write the operational operators above the arrows: $\xrightarrow{\times 3} \xrightarrow{-4} \xrightarrow{\times 3} \xrightarrow{-4} \xrightarrow{\times 3} \xrightarrow{-4}$.","Correct. Survives elimination because the alternating operation rule dictates -4, yielding 114 - 4 = 110.","Eliminated because adding 4 gives 118.","Eliminated because multiplying by 3 gives 342, violating the alternating operator cycle.","Eliminated because subtracting 6 gives 108.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Multiplying by 3 again (114 × 3 = 342, Option C) instead of subtracting 4.
+Exam Tip: Write the operational operators above the arrows: xrightarrow{× 3} xrightarrow{-4} xrightarrow{× 3} xrightarrow{-4} xrightarrow{× 3} xrightarrow{-4}.","Correct. Survives elimination because the alternating operation rule dictates -4, yielding 114 - 4 = 110.","Eliminated because adding 4 gives 118.","Eliminated because multiplying by 3 gives 342, violating the alternating operator cycle.","Eliminated because subtracting 6 gives 108.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Find the 10th term in the alternating signed square sequence:
 
-$$1, \quad -4, \quad 9, \quad -16, \quad 25, \quad -36, \quad 49, \quad -64, \quad 81, \quad \textbf{?}$$","-100","100","-121","-81","A","Step-by-Step Solution:
+1, -4, 9, -16, 25, -36, 49, -64, 81, ?","-100","100","-121","-81","A","Step-by-Step Solution:
 1. Observe the magnitude:
-   - Magnitudes are consecutive perfect squares: $1^2, 2^2, 3^2, 4^2, 5^2, 6^2, 7^2, 8^2, 9^2, \dots$
+ - Magnitudes are consecutive perfect squares: 1², 2², 3², 4², 5², 6², 7², 8², 9²,...
 2. Observe the sign structure:
-   - Odd positions ($n = 1, 3, 5, 7, 9$): Positive ($+$).
-   - Even positions ($n = 2, 4, 6, 8, 10$): Negative ($-$).
-3. Formulate general term: $T_n = (-1)^{n+1} \cdot n^2$.
-4. Compute the 10th term ($n = 10$, an even position):
-   - $T_{10} = (-1)^{11} \cdot 10^2 = -1 \cdot 100 = -100$.
+ - Odd positions (n = 1, 3, 5, 7, 9): Positive (+).
+ - Even positions (n = 2, 4, 6, 8, 10): Negative (-).
+3. Formulate general term: Tₙ = (-1)ⁿ⁺¹ · n².
+4. Compute the 10th term (n = 10, an even position):
+ - T₁₀ = (-1)¹¹ · 10² = -1 · 100 = -100.
 
-Common Trap: Providing $+100$ (Option B) by forgetting that all even-indexed terms in this sequence carry negative signs.
-Exam Tip: Even position = Negative sign for $(-1)^{n+1}$.","Correct. Survives elimination because the 10th term is at an even index, giving -10^2 = -100.","Eliminated because +100 drops the required alternating negative sign.","Eliminated because -121 is the 11th term with an incorrect negative sign.","Eliminated because -81 is the 9th term with an incorrect negative sign.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Providing +100 (Option B) by forgetting that all even-indexed terms in this sequence carry negative signs.
+Exam Tip: Even position = Negative sign for (-1)ⁿ⁺¹.","Correct. Survives elimination because the 10th term is at an even index, giving -10² = -100.","Eliminated because +100 drops the required alternating negative sign.","Eliminated because -121 is the 11th term with an incorrect negative sign.","Eliminated because -81 is the 9th term with an incorrect negative sign.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "What is the next term in the three-track interleaved numerical sequence:
 
-$$2, \quad 5, \quad 10, \quad 4, \quad 10, \quad 20, \quad 8, \quad 15, \quad 30, \quad 16, \quad 20, \quad \textbf{?}$$","40","32","25","50","A","Step-by-Step Solution:
-1. Deconstruct the sequence into three interleaved independent streams ($k = 3$ period):
-   - Stream 1 (Positions 1, 4, 7, 10): $2, 4, 8, 16$ (Geometric doubling: $\times 2$).
-   - Stream 2 (Positions 2, 5, 8, 11): $5, 10, 15, 20$ (Arithmetic sequence: $+5$).
-   - Stream 3 (Positions 3, 6, 9, 12): $10, 20, 30, \textbf{?}$ (Arithmetic sequence: $+10$).
+2, 5, 10, 4, 10, 20, 8, 15, 30, 16, 20, ?","40","32","25","50","A","Step-by-Step Solution:
+1. Deconstruct the sequence into three interleaved independent streams (k = 3 period):
+ - Stream 1 (Positions 1, 4, 7, 10): 2, 4, 8, 16 (Geometric doubling: × 2).
+ - Stream 2 (Positions 2, 5, 8, 11): 5, 10, 15, 20 (Arithmetic sequence: +5).
+ - Stream 3 (Positions 3, 6, 9, 12): 10, 20, 30, ? (Arithmetic sequence: +10).
 2. The target missing term is at Position 12, which belongs to Stream 3.
 3. Compute 4th term of Stream 3:
-   - $T_{12} = 30 + 10 = 40$.
+ - T₁₂ = 30 + 10 = 40.
 
-Common Trap: Applying the Stream 1 doubling rule ($16 \times 2 = 32$, Option B) to the 12th term instead of continuing Stream 3.
-Exam Tip: Number the positions $1, 2, 3 \dots 12$ and take index modulo 3: $12 \equiv 0 \pmod 3$, which maps to the 3rd stream.","Correct. Survives elimination because Position 12 is in the 3rd stream (10, 20, 30, 40), giving exactly 40.","Eliminated because 32 is the continuation of Stream 1 (doubling).","Eliminated because 25 is the continuation of Stream 2 (+5).","Eliminated because 50 is an overestimation.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Applying the Stream 1 doubling rule (16 × 2 = 32, Option B) to the 12th term instead of continuing Stream 3.
+Exam Tip: Number the positions 1, 2, 3... 12 and take index modulo 3: 12 ≡ 0 pmod 3, which maps to the 3rd stream.","Correct. Survives elimination because Position 12 is in the 3rd stream (10, 20, 30, 40), giving exactly 40.","Eliminated because 32 is the continuation of Stream 1 (doubling).","Eliminated because 25 is the continuation of Stream 2 (+5).","Eliminated because 50 is an overestimation.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Find the missing number in the alternating geometric-arithmetic sequence:
 
-$$3, \quad 6, \quad 9, \quad 18, \quad 21, \quad 42, \quad \textbf{?}$$","45","84","48","44","A","Step-by-Step Solution:
+3, 6, 9, 18, 21, 42, ?","45","84","48","44","A","Step-by-Step Solution:
 1. Determine the operational transitions between successive terms:
-   - $3 \to 6$: Multiply by 2 ($3 \times 2 = 6$).
-   - $6 \to 9$: Add 3 ($6 + 3 = 9$).
-   - $9 \to 18$: Multiply by 2 ($9 \times 2 = 18$).
-   - $18 \to 21$: Add 3 ($18 + 3 = 21$).
-   - $21 \to 42$: Multiply by 2 ($21 \times 2 = 42$).
-2. The pattern alternates strictly between $[\times 2]$ and $[+3]$.
-3. Apply the next scheduled operation ($+3$):
-   - $T_7 = 42 + 3 = 45$.
+ - 3 to 6: Multiply by 2 (3 × 2 = 6).
+ - 6 to 9: Add 3 (6 + 3 = 9).
+ - 9 to 18: Multiply by 2 (9 × 2 = 18).
+ - 18 to 21: Add 3 (18 + 3 = 21).
+ - 21 to 42: Multiply by 2 (21 × 2 = 42).
+2. The pattern alternates strictly between [× 2] and [+3].
+3. Apply the next scheduled operation (+3):
+ - T₇ = 42 + 3 = 45.
 
-Common Trap: Doubling again ($42 \times 2 = 84$, Option B) instead of adding 3.
-Exam Tip: Alternate operations: $\times 2 \to +3 \to \times 2 \to +3 \to \times 2 \to +3$.","Correct. Survives elimination because following the alternating rule (x2, +3), the next operation is +3, yielding 42 + 3 = 45.","Eliminated because 84 applies x2 again, violating alternation.","Eliminated because adding 6 yields 48.","Eliminated because adding 2 yields 44.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Doubling again (42 × 2 = 84, Option B) instead of adding 3.
+Exam Tip: Alternate operations: × 2 to +3 to × 2 to +3 to × 2 to +3.","Correct. Survives elimination because following the alternating rule (x2, +3), the next operation is +3, yielding 42 + 3 = 45.","Eliminated because 84 applies x2 again, violating alternation.","Eliminated because adding 6 yields 48.","Eliminated because adding 2 yields 44.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Identify the next number in the sequence with alternating and expanding operations:
 
-$$2, \quad 4, \quad 1, \quad 5, \quad 0, \quad 6, \quad -1, \quad \textbf{?}$$","7","-8","8","6","A","Step-by-Step Solution:
+2, 4, 1, 5, 0, 6, -1, ?","7","-8","8","6","A","Step-by-Step Solution:
 1. Calculate operations between consecutive numbers:
-   - $2 + 2 = 4$
-   - $4 - 3 = 1$
-   - $1 + 4 = 5$
-   - $5 - 5 = 0$
-   - $0 + 6 = 6$
-   - $6 - 7 = -1$.
-2. The operational sequence is $[+2, \quad -3, \quad +4, \quad -5, \quad +6, \quad -7, \quad \dots]$.
-3. The signs alternate $(+, -, +, -, +, -)$ while the integer magnitude increments by 1 ($2, 3, 4, 5, 6, 7$).
-4. The next operation is $+8$:
-   - $T_8 = -1 + 8 = 7$.
+ - 2 + 2 = 4
+ - 4 - 3 = 1
+ - 1 + 4 = 5
+ - 5 - 5 = 0
+ - 0 + 6 = 6
+ - 6 - 7 = -1.
+2. The operational sequence is [+2, -3, +4, -5, +6, -7,...].
+3. The signs alternate (+, -, +, -, +, -) while the integer magnitude increments by 1 (2, 3, 4, 5, 6, 7).
+4. The next operation is +8:
+ - T₈ = -1 + 8 = 7.
 
-Common Trap: Subtracting 8 ($-1 - 8 = -9$) or failing to alternate the sign.
-Exam Tip: Next operator is $(+) \text{ and next magnitude is } 8 \implies -1 + 8 = 7$.","Correct. Survives elimination because the next operation is +8, giving -1 + 8 = 7.","Eliminated because -8 applies negative sign and fails addition.","Eliminated because 8 is the operation magnitude, not the resulting term.","Eliminated because repeating the prior term gives 6.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Subtracting 8 (-1 - 8 = -9) or failing to alternate the sign.
+Exam Tip: Next operator is (+) and next magnitude is 8 implies -1 + 8 = 7.","Correct. Survives elimination because the next operation is +8, giving -1 + 8 = 7.","Eliminated because -8 applies negative sign and fails addition.","Eliminated because 8 is the operation magnitude, not the resulting term.","Eliminated because repeating the prior term gives 6.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Find the missing term in the oscillating signed geometric progression:
 
-$$1.5, \quad -3.0, \quad 6.0, \quad -12.0, \quad 24.0, \quad \textbf{?}$$","-48.0","48.0","-36.0","-96.0","A","Step-by-Step Solution:
-1. Calculate common ratio $r$:
-   - $r = \frac{-3.0}{1.5} = -2.0$.
+1.5, -3.0, 6.0, -12.0, 24.0, ?","-48.0","48.0","-36.0","-96.0","A","Step-by-Step Solution:
+1. Calculate common ratio r:
+ - r = -3.0/1.5 = -2.0.
 2. Verify across the sequence:
-   - $-3.0 \times (-2.0) = +6.0$
-   - $+6.0 \times (-2.0) = -12.0$
-   - $-12.0 \times (-2.0) = +24.0$.
-3. Multiply the 5th term by $-2.0$ to obtain the 6th term:
-   - $T_6 = 24.0 \times (-2.0) = -48.0$.
+ - -3.0 × (-2.0) = +6.0
+ - +6.0 × (-2.0) = -12.0
+ - -12.0 × (-2.0) = +24.0.
+3. Multiply the 5th term by -2.0 to obtain the 6th term:
+ - T₆ = 24.0 × (-2.0) = -48.0.
 
-Common Trap: Dropping the negative sign ($+48.0$, Option B).
-Exam Tip: Positive $\times$ Negative = Negative.","Correct. Survives elimination because 24.0 * (-2.0) = -48.0.","Eliminated because +48.0 violates the negative sign resulting from multiplying by -2.","Eliminated because arithmetic error gives -36.0.","Eliminated because multiplying by -4 yields -96.0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
-"Find the missing value $K$ in the alternating rational sequence:
+Common Trap: Dropping the negative sign (+48.0, Option B).
+Exam Tip: Positive × Negative = Negative.","Correct. Survives elimination because 24.0 * (-2.0) = -48.0.","Eliminated because +48.0 violates the negative sign resulting from multiplying by -2.","Eliminated because arithmetic error gives -36.0.","Eliminated because multiplying by -4 yields -96.0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+"Find the missing value K in the alternating rational sequence:
 
-$$\frac{1}{2}, \quad \frac{3}{4}, \quad \frac{2}{3}, \quad \frac{5}{6}, \quad \frac{3}{4}, \quad \frac{7}{8}, \quad K$$","\frac{4}{5}","\frac{5}{6}","\frac{9}{10}","\frac{4}{7}","A","Step-by-Step Solution:
+1/2, 3/4, 2/3, 5/6, 3/4, 7/8, K","4/5","5/6","9/10","4/7","A","Step-by-Step Solution:
 1. Separate into two interleaved tracks:
 2. Track 1 (Odd-positioned terms: 1st, 3rd, 5th, 7th):
-   - $T_1 = \frac{1}{2}$
-   - $T_3 = \frac{2}{3}$
-   - $T_5 = \frac{3}{4}$
-   - $T_7 = K$.
-   - General formula for Track 1: $T_{2m-1} = \frac{m}{m+1}$.
-   - For $m = 4$ (7th position): $K = \frac{4}{4+1} = \frac{4}{5}$.
+ - T₁ = 1/2
+ - T₃ = 2/3
+ - T₅ = 3/4
+ - T₇ = K.
+ - General formula for Track 1: T₂ₘ₋₁ = m/m+1.
+ - For m = 4 (7th position): K = 4/4+1 = 4/5.
 3. Track 2 (Even-positioned terms: 2nd, 4th, 6th):
-   - $T_2 = \frac{3}{4}, \quad T_4 = \frac{5}{6}, \quad T_6 = \frac{7}{8}$ (Formula: $\frac{2m+1}{2m+2}$).
-4. The 7th term $K$ belongs to Track 1, so $K = \frac{4}{5}$.
+ - T₂ = 3/4, T₄ = 5/6, T₆ = 7/8 (Formula: 2m+1/2m+2).
+4. The 7th term K belongs to Track 1, so K = 4/5.
 
-Common Trap: Continuing Track 2's pattern ($\frac{9}{10}$, Option C), which would be the 8th term, not the 7th term.
-Exam Tip: Track 1 numerators increment as $1, 2, 3, 4$, so the 7th term numerator must be 4.","Correct. Survives elimination because the odd track is 1/2, 2/3, 3/4, 4/5.","Eliminated because 5/6 is the 4th term.","Eliminated because 9/10 is the 8th term (from the even track).","Eliminated because 4/7 has an incorrect denominator.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Continuing Track 2's pattern (9/10, Option C), which would be the 8th term, not the 7th term.
+Exam Tip: Track 1 numerators increment as 1, 2, 3, 4, so the 7th term numerator must be 4.","Correct. Survives elimination because the odd track is 1/2, 2/3, 3/4, 4/5.","Eliminated because 5/6 is the 4th term.","Eliminated because 9/10 is the 8th term (from the even track).","Eliminated because 4/7 has an incorrect denominator.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Determine the next number in the alternating multiplying-dividing sequence:
 
-$$100, \quad 200, \quad 50, \quad 150, \quad 30, \quad 120, \quad \textbf{?}$$","20","24","600","15","A","Step-by-Step Solution:
+100, 200, 50, 150, 30, 120, ?","20","24","600","15","A","Step-by-Step Solution:
 1. Examine operations connecting successive terms:
-   - $100 \times 2 = 200$
-   - $200 \div 4 = 50$
-   - $50 \times 3 = 150$
-   - $150 \div 5 = 30$
-   - $30 \times 4 = 120$.
+ - 100 × 2 = 200
+ - 200 ÷ 4 = 50
+ - 50 × 3 = 150
+ - 150 ÷ 5 = 30
+ - 30 × 4 = 120.
 2. Analyze the alternating operators:
-   - Multipliers: $\times 2, \quad \times 3, \quad \times 4$ (increment by 1).
-   - Divisors: $\div 4, \quad \div 5, \quad \dots$ (increment by 1).
-3. The next operation is $\div 6$:
-   - $T_7 = 120 \div 6 = 20$.
+ - Multipliers: × 2, × 3, × 4 (increment by 1).
+ - Divisors: ÷ 4, ÷ 5,... (increment by 1).
+3. The next operation is ÷ 6:
+ - T₇ = 120 ÷ 6 = 20.
 
-Common Trap: Dividing by 5 again ($120 \div 5 = 24$, Option B) or multiplying by 5 ($120 \times 5 = 600$, Option C).
-Exam Tip: Multipliers increment ($\times 2, \times 3, \times 4$), and divisors increment ($\div 4, \div 5, \div 6$).","Correct. Survives elimination because the next divisor increments to 6, giving 120 / 6 = 20.","Eliminated because dividing by 5 gives 24, failing to increment the divisor.","Eliminated because multiplying by 5 yields 600.","Eliminated because dividing by 8 yields 15.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Dividing by 5 again (120 ÷ 5 = 24, Option B) or multiplying by 5 (120 × 5 = 600, Option C).
+Exam Tip: Multipliers increment (× 2, × 3, × 4), and divisors increment (÷ 4, ÷ 5, ÷ 6).","Correct. Survives elimination because the next divisor increments to 6, giving 120 / 6 = 20.","Eliminated because dividing by 5 gives 24, failing to increment the divisor.","Eliminated because multiplying by 5 yields 600.","Eliminated because dividing by 8 yields 15.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
 "Find the 15th term of the alternating sign Fibonacci sequence:
 
-$$1, \quad -1, \quad 2, \quad -3, \quad 5, \quad -8, \quad 13, \quad -21, \quad 34, \quad \dots$$","610","-610","377","-987","A","Step-by-Step Solution:
+1, -1, 2, -3, 5, -8, 13, -21, 34,...","610","-610","377","-987","A","Step-by-Step Solution:
 1. The absolute magnitude of each term follows the standard Fibonacci sequence:
-   - $F_1 = 1, F_2 = 1, F_3 = 2, F_4 = 3, F_5 = 5, F_6 = 8, F_7 = 13, F_8 = 21, F_9 = 34, F_{10} = 55, F_{11} = 89, F_{12} = 144, F_{13} = 233, F_{14} = 377, F_{15} = 610$.
+ - F₁ = 1, F₂ = 1, F₃ = 2, F₄ = 3, F₅ = 5, F₆ = 8, F₇ = 13, F₈ = 21, F₉ = 34, F₁₀ = 55, F₁₁ = 89, F₁₂ = 144, F₁₃ = 233, F₁₄ = 377, F₁₅ = 610.
 2. Analyze the sign rule:
-   - $T_n = (-1)^{n+1} \cdot F_n$.
-   - Odd indices ($n = 1, 3, 5, \dots$): Positive ($+$).
-   - Even indices ($n = 2, 4, 6, \dots$): Negative ($-$).
-3. For $n = 15$ (an odd index):
-   - $T_{15} = (-1)^{16} \cdot F_{15} = +1 \times 610 = 610$.
+ - Tₙ = (-1)ⁿ⁺¹ · Fₙ.
+ - Odd indices (n = 1, 3, 5,...): Positive (+).
+ - Even indices (n = 2, 4, 6,...): Negative (-).
+3. For n = 15 (an odd index):
+ - T₁₅ = (-1)¹⁶ · F₁₅ = +1 × 610 = 610.
 
-Common Trap: Giving $-610$ (Option B) by assuming all large terms are negative, or giving the 14th term $377$ (Option C).
-Exam Tip: Odd index in this sequence is always positive. $F_{15} = 610$.","Correct. Survives elimination because F15 = 610 and odd-positioned terms are positive (+610).","Eliminated because -610 applies an incorrect negative sign to an odd position.","Eliminated because 377 is F14.","Eliminated because -987 is -F16.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"
+Common Trap: Giving -610 (Option B) by assuming all large terms are negative, or giving the 14th term 377 (Option C).
+Exam Tip: Odd index in this sequence is always positive. F₁₅ = 610.","Correct. Survives elimination because F15 = 610 and odd-positioned terms are positive (+610).","Eliminated because -610 applies an incorrect negative sign to an odd position.","Eliminated because 377 is F14.","Eliminated because -987 is -F16.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Alternating patterns | Very Difficult | Batch 021"

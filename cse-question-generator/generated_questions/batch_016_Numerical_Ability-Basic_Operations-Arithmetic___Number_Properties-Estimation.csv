@@ -1,134 +1,134 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Using Front-End Estimation with adjustment, estimate the total budget required for four provincial public health initiatives with actual allocations of ₱4,380,000, ₱2,740,000, ₱6,890,000, and ₱3,620,000. What is the estimated total, and what is the absolute discrepancy between this estimate and the exact sum?","₱17,600,000 and ₱30,000","₱15,000,000 and ₱2,630,000","₱18,000,000 and ₱370,000","₱17,500,000 and ₱130,000","A","Step-by-Step Solution:
+"Using Front-End Estimation with adjustment, estimate the total budget required for four provincial public health initiatives with actual allocations of ₱4,380,000, ₱2,740,000, ₱6,890,000, and ₱3,620,000. What is the estimated total, and what is the absolute discrepancy between this estimate and the exact Σ?","₱17,600,000 and ₱30,000","₱15,000,000 and ₱2,630,000","₱18,000,000 and ₱370,000","₱17,500,000 and ₱130,000","A","Step-by-Step Solution:
 1. Exact Sum:
-   - $4,380,000 + 2,740,000 + 6,890,000 + 3,620,000 = ₱17,630,000$.
+ - 4,380,000 + 2,740,000 + 6,890,000 + 3,620,000 = ₱17,630,000.
 2. Front-End Estimation:
-   - Add leading front digits (millions): $4\text{M} + 2\text{M} + 6\text{M} + 3\text{M} = ₱15,000,000$.
+ - Add leading front digits (millions): 4M + 2M + 6M + 3M = ₱15,000,000.
 3. Adjustment Step:
-   - Group remaining thousands: $380\text{k} + 740\text{k} + 890\text{k} + 620\text{k}$.
-   - Pair compatible numbers: $(380\text{k} + 620\text{k} = 1,000\text{k} = 1\text{M})$ and $(740\text{k} + 890\text{k} \approx 1,600\text{k} = 1.6\text{M})$.
-   - Total Adjustment $= 1.0\text{M} + 1.6\text{M} = ₱2,600,000$.
+ - Group remaining thousands: 380k + 740k + 890k + 620k.
+ - Pair compatible numbers: (380k + 620k = 1,000k = 1M) and (740k + 890k ≈ 1,600k = 1.6M).
+ - Total Adjustment = 1.0M + 1.6M = ₱2,600,000.
 4. Combined Front-End Estimate:
-   - $15,000,000 + 2,600,000 = ₱17,600,000$.
+ - 15,000,000 + 2,600,000 = ₱17,600,000.
 5. Absolute Discrepancy:
-   - $|17,630,000 - 17,600,000| = ₱30,000$.
+ - |17,630,000 - 17,600,000| = ₱30,000.
 
 Common Trap: Using raw front-end estimation without adjustment (₱15,000,000, Option B), which understates the total by over ₱2.6M.
-Exam Tip: Front-end estimation with adjustment provides rapid estimation within 0.2% of exact fiscal values.","Correct. Survives elimination because the adjusted front-end estimate is ₱17,600,000, differing by only ₱30,000 from the exact ₱17,630,000.","Eliminated because ₱15,000,000 is the raw front digit sum without remainder adjustment.","Eliminated because rounding all items upward gives ₱18,000,000 with a ₱370,000 error.","Eliminated because underestimating the adjustment gives ₱17,500,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"Estimate the value of the non-perfect radical expression $\sqrt{750}$ using the linear differential approximation formula $\sqrt{x_0 + \Delta x} \approx \sqrt{x_0} + \frac{\Delta x}{2\sqrt{x_0}}$ centered at the nearest perfect square:","27\frac{7}{18} \text{ (approx. } 27.39\text{)}","27.50","26.85","28.12","A","Step-by-Step Solution:
+Exam Tip: Front-end estimation with adjustment provides rapid estimation within 0.2% of exact fiscal values.","Correct. Survives elimination because the adjusted front-end estimate is ₱17,600,000, differing by only ₱30,000 from the exact ₱17,630,000.","Eliminated because ₱15,000,000 is the raw front digit Σ without remainder adjustment.","Eliminated because rounding all items upward gives ₱18,000,000 with a ₱370,000 error.","Eliminated because underestimating the adjustment gives ₱17,500,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"Estimate the value of the non-perfect radical expression √750 using the linear differential approximation formula √x₀ + Δ x ≈ √x₀ + (Δ x)/2√x₀ centered at the nearest perfect square:","277/18 (≈. 27.39)","27.50","26.85","28.12","A","Step-by-Step Solution:
 1. Identify the nearest perfect square to 750:
-   - $27^2 = 729$ (since $28^2 = 784$).
-   - Choose baseline $x_0 = 729$, so $\sqrt{x_0} = 27$.
-2. Calculate remainder $\Delta x$:
-   - $\Delta x = 750 - 729 = 21$.
+ - 27² = 729 (since 28² = 784).
+ - Choose baseline x₀ = 729, so √x₀ = 27.
+2. Calculate remainder Δ x:
+ - Δ x = 750 - 729 = 21.
 3. Apply linear differential formula:
-   - $\sqrt{750} \approx \sqrt{729} + \frac{21}{2 \sqrt{729}}$.
-   - $\sqrt{750} \approx 27 + \frac{21}{2(27)} = 27 + \frac{21}{54}$.
+ - √750 ≈ √729 + 21/(2 √729).
+ - √750 ≈ 27 + 21/2(27) = 27 + 21/54.
 4. Simplify fraction:
-   - $\frac{21}{54} = \frac{7}{18} \approx 0.3889$.
-   - Estimated Value $= 27\frac{7}{18} \approx 27.3889 \approx 27.39$.
-5. (Exact value $= \sqrt{750} \approx 27.3861$, showing estimation accuracy within $0.01\%$).
+ - 21/54 = 7/18 ≈ 0.3889.
+ - Estimated Value = 277/18 ≈ 27.3889 ≈ 27.39.
+5. (Exact value = √750 ≈ 27.3861, showing estimation accuracy within 0.01%).
 
-Common Trap: Linearly interpolating between 27 and 28 as $(750-729)/(784-729) = 21/55 \approx 0.38$, but miscalculating the base integer.
-Exam Tip: For any $\sqrt{N}$, $\sqrt{N} \approx a + \frac{N - a^2}{2a}$ where $a^2 \le N$.","Correct. Survives elimination because 27 + 21/54 = 27 + 7/18 = 27.3889 (approx. 27.39).","Eliminated because 27.50 is the midpoint between 27 and 28, overestimating the square root.","Eliminated because 26.85 is below the lower integer root bound of 27.","Eliminated because 28.12 exceeds the upper integer root bound of 28.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"A disaster risk reduction logistics officer estimates the order of magnitude of potable water (in liters) required for an evacuation camp sheltering 12,000 displaced families for 14 days, assuming each family consumes approximately 18.5 liters daily. Which power of ten ($10^n$) best represents this total humanitarian demand?","10^6\text{ liters}","10^7\text{ liters}","10^5\text{ liters}","10^8\text{ liters}","A","Step-by-Step Solution:
+Common Trap: Linearly interpolating between 27 and 28 as (750-729)/(784-729) = 21/55 ≈ 0.38, but miscalculating the base integer.
+Exam Tip: For any √N, √N ≈ a + N - a²/2a where a² ≤ N.","Correct. Survives elimination because 27 + 21/54 = 27 + 7/18 = 27.3889 (≈. 27.39).","Eliminated because 27.50 is the midpo∫ between 27 and 28, overestimating the square root.","Eliminated because 26.85 is below the lower integer root bound of 27.","Eliminated because 28.12 exceeds the upper integer root bound of 28.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"A disaster risk reduction logistics officer estimates the order of magnitude of potable water (in liters) required for an evacuation ca∓ sheltering 12,000 displaced families for 14 days, assuming each family consumes approximately 18.5 liters daily. Which power of ten (10ⁿ) best represents this total humanitarian demand?","10⁶ liters","10⁷ liters","10⁵ liters","10⁸ liters","A","Step-by-Step Solution:
 1. Formulate total consumption:
-   - $\text{Total Liters} = 12,000\text{ families} \times 14\text{ days} \times 18.5\text{ liters/day}$.
+ - Total Liters = 12,000 families × 14 days × 18.5 liters/day.
 2. Perform exact multiplication:
-   - $12,000 \times 14 = 168,000$.
-   - $168,000 \times 18.5 = 3,108,000\text{ liters}$.
+ - 12,000 × 14 = 168,000.
+ - 168,000 × 18.5 = 3,108,000 liters.
 3. Express in scientific notation:
-   - $3.108,000 = 3.108 \times 10^6\text{ liters}$.
+ - 3.108,000 = 3.108 × 10⁶ liters.
 4. Determine Fermi Order of Magnitude:
-   - The geometric midpoint on a logarithmic scale is $\sqrt{10} \approx 3.162$.
-   - Since $3.108 < 3.162$, the quantity rounds to $10^6$ (millions of liters).
+ - The geometric midpo∫ on a logarithmic scale is √10 ≈ 3.162.
+ - Since 3.108 < 3.162, the quantity rounds to 10⁶ (millions of liters).
 
-Common Trap: Rounding $3.108 \times 10^6$ up to $10^7$ because 3 is non-zero, forgetting that order of magnitude threshold is $\sqrt{10} \approx 3.162$.
-Exam Tip: In order of magnitude (Fermi) estimation, $A \times 10^n$ has order $10^n$ if $A < 3.162$ and $10^{n+1}$ if $A \ge 3.162$.","Correct. Survives elimination because 3.108 * 10^6 liters has an order of magnitude of exactly 10^6 liters.","Eliminated because 10^7 represents tens of millions of liters, an order of magnitude too high.","Eliminated because 10^5 represents hundreds of thousands of liters, an order of magnitude too low.","Eliminated because 10^8 represents hundreds of millions of liters.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"Estimate the value of the quotient $Q = \frac{48,723 \times 0.0812}{19.87}$ by replacing each factor with compatible, easily divisible benchmark numbers:","200","20","2,000","20,000","A","Step-by-Step Solution:
+Common Trap: Rounding 3.108 × 10⁶ up to 10⁷ because 3 is non-zero, forgetting that order of magnitude threshold is √10 ≈ 3.162.
+Exam Tip: In order of magnitude (Fermi) estimation, A × 10ⁿ has order 10ⁿ if A < 3.162 and 10ⁿ⁺¹ if A ≥ 3.162.","Correct. Survives elimination because 3.108 * 10⁶ liters has an order of magnitude of exactly 10⁶ liters.","Eliminated because 10⁷ represents tens of millions of liters, an order of magnitude too high.","Eliminated because 10⁵ represents hundreds of thousands of liters, an order of magnitude too low.","Eliminated because 10⁸ represents hundreds of millions of liters.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"Estimate the value of the quotient Q = 48,723 × 0.0812/19.87 by replacing each factor with compatible, easily divisible benchmark numbers:","200","20","2,000","20,000","A","Step-by-Step Solution:
 1. Select compatible numbers close to each term:
-   - $48,723 \approx 50,000 = 5 \times 10^4$.
-   - $0.0812 \approx 0.08 = \frac{8}{100}$.
-   - $19.87 \approx 20$.
+ - 48,723 ≈ 50,000 = 5 × 10⁴.
+ - 0.0812 ≈ 0.08 = 8/100.
+ - 19.87 ≈ 20.
 2. Compute estimated numerator:
-   - $\text{Numerator} \approx 50,000 \times 0.08 = 4,000$.
+ - Numerator ≈ 50,000 × 0.08 = 4,000.
 3. Divide by estimated denominator:
-   - $Q \approx \frac{4,000}{20} = 200$.
-4. (Verification: Exact calculation gives $\frac{3,956.31}{19.87} = 199.11$, demonstrating that 200 is an exceptionally accurate compatible estimate within $0.4\%$).
+ - Q ≈ 4,000/20 = 200.
+4. (Verification: Exact calculation gives 3,956.31/19.87 = 199.11, demonstrating that 200 is an exceptionally accurate compatible estimate within 0.4%).
 
 Common Trap: Shifting decimal places during the division of 4,000 by 20, erroneously obtaining 20 (Option B) or 2,000 (Option C).
 Exam Tip: Compatible numbers should simplify mental cancellation while maintaining original decimal magnitude.","Correct. Survives elimination because 50,000 * 0.08 / 20 = 4,000 / 20 = 200.","Eliminated because decimal shift error by one place yields 20.","Eliminated because decimal shift error by one place upward yields 2,000.","Eliminated because multiplying instead of dividing yields 20,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
 "An administration officer conducts clustered estimation of monthly electricity expenditures across six regional field offices: ₱89,450, ₱91,200, ₱88,900, ₱92,500, ₱90,100, and ₱89,850. By clustering around the central benchmark value of ₱90,000, what is the estimated total annual utility budget required for all six offices combined?","₱6,480,000","₱5,400,000","₱7,200,000","₱6,120,000","A","Step-by-Step Solution:
 1. Observe the data cluster:
-   - All six numbers hover closely around the benchmark $B = ₱90,000$.
+ - All six numbers hover closely around the benchmark B = ₱90,000.
 2. Calculate estimated total monthly expenditure for 6 offices:
-   - $\text{Monthly Total} \approx 6 \times ₱90,000 = ₱540,000$.
+ - Monthly Total ≈ 6 × ₱90,000 = ₱540,000.
 3. Calculate estimated total annual expenditure (12 months):
-   - $\text{Annual Total} \approx ₱540,000 \times 12 = ₱6,480,000$.
-4. (Check: Exact sum per month $= ₱542,000 \implies$ Annual $= ₱6,504,000$. Clustered estimate error is under $0.37\%$).
+ - Annual Total ≈ ₱540,000 × 12 = ₱6,480,000.
+4. (Check: Exact Σ per month = ₱542,000 implies Annual = ₱6,504,000. Clustered estimate error is under 0.37%).
 
 Common Trap: Multiplying by 10 months instead of 12 months (₱5,400,000, Option B) when converting monthly to annual figures.
-Exam Tip: When values cluster tightly around a single value $C$, the sum of $n$ items is approximately $n \times C$.","Correct. Survives elimination because 6 offices * ₱90,000/month * 12 months = ₱6,480,000.","Eliminated because multiplying by only 10 months yields ₱5,400,000.","Eliminated because benchmark overestimation to ₱100,000 yields ₱7,200,000.","Eliminated because arithmetic error in annual conversion gives ₱6,120,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"Estimate the cube root value $\sqrt[3]{1,030}$ using linear differential approximation centered at the baseline $x_0 = 1,000$:","10.10","10.30","10.03","10.50","A","Step-by-Step Solution:
-1. Function: $f(x) = \sqrt[3]{x} = x^{1/3}$.
-2. Derivative: $f'(x) = \frac{1}{3}x^{-2/3} = \frac{1}{3(\sqrt[3]{x})^2}$.
-3. Center at $x_0 = 1,000$:
-   - $f(1,000) = \sqrt[3]{1,000} = 10$.
-   - $f'(1,000) = \frac{1}{3(10)^2} = \frac{1}{300}$.
-4. Differential shift $\Delta x = 1,030 - 1,000 = 30$:
-   - $f(1,030) \approx f(1,000) + f'(1,000) \cdot \Delta x$.
-   - $f(1,030) \approx 10 + \frac{1}{300} \times 30 = 10 + \frac{30}{300} = 10 + 0.10 = 10.10$.
-5. (Exact: $\sqrt[3]{1,030} \approx 10.0990$, showing accuracy to four decimal places).
+Exam Tip: When values cluster tightly around a single value C, the Σ of n items is approximately n × C.","Correct. Survives elimination because 6 offices * ₱90,000/month * 12 months = ₱6,480,000.","Eliminated because multiplying by only 10 months yields ₱5,400,000.","Eliminated because benchmark overestimation to ₱100,000 yields ₱7,200,000.","Eliminated because arithmetic error in annual conversion gives ₱6,120,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"Estimate the cube root value ³√1,030 using linear differential approximation centered at the baseline x₀ = 1,000:","10.10","10.30","10.03","10.50","A","Step-by-Step Solution:
+1. Function: f(x) = ³√x = x¹/³.
+2. Derivative: f'(x) = 1/3x⁻²/³ = 1/3(³√x)².
+3. Center at x₀ = 1,000:
+ - f(1,000) = ³√1,000 = 10.
+ - f'(1,000) = 1/3(10)² = 1/300.
+4. Differential shift Δ x = 1,030 - 1,000 = 30:
+ - f(1,030) ≈ f(1,000) + f'(1,000) · Δ x.
+ - f(1,030) ≈ 10 + 1/300 × 30 = 10 + 30/300 = 10 + 0.10 = 10.10.
+5. (Exact: ³√1,030 ≈ 10.0990, showing accuracy to four decimal places).
 
-Common Trap: Adding the increment directly as $10 + \frac{30}{100} = 10.30$ (Option B), forgetting the factor of 3 in the cube root derivative.
-Exam Tip: For cube roots, $\sqrt[3]{a^3 + \Delta x} \approx a + \frac{\Delta x}{3a^2}$.","Correct. Survives elimination because 10 + 30 / (3 * 10^2) = 10 + 30/300 = 10.10.","Eliminated because failing to divide by 3 yields 10.30.","Eliminated because dividing by 3000 yields 10.03.","Eliminated because overestimating linear slope yields 10.50.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"A structural engineer estimates the required volume of concrete for 50 cylindrical bridge piers, each with a diameter of 2.0 meters (radius $r = 1.0\text{ m}$) and height $h = 8.0\text{ meters}$. Using $\pi \approx 3.14$, what is the estimated total volume of concrete required?","1,256 m³","1,570 m³","1,000 m³","1,440 m³","A","Step-by-Step Solution:
-1. Formula for volume of a single cylinder: $V = \pi r^2 h$.
+Common Trap: Adding the increment directly as 10 + 30/100 = 10.30 (Option B), forgetting the factor of 3 in the cube root derivative.
+Exam Tip: For cube roots, ³√a³ + Δ x ≈ a + Δ x/3a².","Correct. Survives elimination because 10 + 30 / (3 * 10²) = 10 + 30/300 = 10.10.","Eliminated because failing to divide by 3 yields 10.30.","Eliminated because dividing by 3000 yields 10.03.","Eliminated because overestimating linear slope yields 10.50.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"A structural engineer estimates the required volume of concrete for 50 cylindrical bridge piers, each with a diameter of 2.0 meters (radius r = 1.0 m) and height h = 8.0 meters. Using π ≈ 3.14, what is the estimated total volume of concrete required?","1,256 m³","1,570 m³","1,000 m³","1,440 m³","A","Step-by-Step Solution:
+1. Formula for volume of a single cylinder: V = π r² h.
 2. Calculate volume per pier:
-   - $r = 1.0\text{ m}$, $h = 8.0\text{ m}$.
-   - $V_{\text{pier}} = 3.14 \times (1.0)^2 \times 8.0 = 3.14 \times 8 = 25.12\text{ m}^3$.
+ - r = 1.0 m, h = 8.0 m.
+ - Vₚiₑr = 3.14 × (1.0)² × 8.0 = 3.14 × 8 = 25.12 m³.
 3. Multiply by 50 piers:
-   - $V_{\text{total}} = 50 \times 25.12\text{ m}^3$.
-   - $V_{\text{total}} = \frac{100}{2} \times 25.12 = \frac{2,512}{2} = 1,256\text{ m}^3$.
+ - Vₜₒₜₐₗ = 50 × 25.12 m³.
+ - Vₜₒₜₐₗ = 100/2 × 25.12 = 2,512/2 = 1,256 m³.
 
-Common Trap: Using diameter instead of radius ($r = 2.0\text{ m}$), which inflates the total volume by a factor of 4 ($5,024\text{ m}^3$).
-Exam Tip: In cylinder volume problems, always ensure you halve the diameter ($r = d/2$) before squaring.","Correct. Survives elimination because 50 * (3.14 * 1^2 * 8) = 50 * 25.12 = 1,256 m³.","Eliminated because using h = 10 yields 1,570 m³.","Eliminated because rounding volume per pier to 20 yields 1,000 m³.","Eliminated because arithmetic errors in multiplying 50 * 25.12 yield 1,440 m³.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+Common Trap: Using diameter instead of radius (r = 2.0 m), which inflates the total volume by a factor of 4 (5,024 m³).
+Exam Tip: In cylinder volume problems, always ensure you halve the diameter (r = d/2) before squaring.","Correct. Survives elimination because 50 * (3.14 * 1² * 8) = 50 * 25.12 = 1,256 m³.","Eliminated because using h = 10 yields 1,570 m³.","Eliminated because rounding volume per pier to 20 yields 1,000 m³.","Eliminated because arithmetic errors in multiplying 50 * 25.12 yield 1,440 m³.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
 "A procurement officer estimates the total acquisition cost for 398 high-spec desktop workstations priced at ₱49,950 each. Using rounding to two significant figures for rapid preliminary budgeting, what is the estimated total procurement expenditure?","₱20,000,000","₱19,000,000","₱22,000,000","₱18,500,000","A","Step-by-Step Solution:
 1. Round each factor to two significant figures:
-   - $398 \approx 400$ (2 significant figures).
-   - $₱49,950 \approx ₱50,000$ (2 significant figures).
+ - 398 ≈ 400 (2 significant figures).
+ - ₱49,950 ≈ ₱50,000 (2 significant figures).
 2. Multiply the rounded factors:
-   - $\text{Estimated Budget} = 400 \times ₱50,000 = ₱20,000,000$ (₱20 Million).
+ - Estimated Budget = 400 × ₱50,000 = ₱20,000,000 (₱20 Million).
 3. Compare with exact figure:
-   - $\text{Exact Cost} = 398 \times 49,950 = ₱19,880,100$.
-   - Discrepancy $= |20,000,000 - 19,880,100| = ₱119,900$ (less than $0.6\%$ relative error).
+ - Exact Cost = 398 × 49,950 = ₱19,880,100.
+ - Discrepancy = |20,000,000 - 19,880,100| = ₱119,900 (less than 0.6% relative error).
 
 Common Trap: Rounding 398 down to 350 or 49,950 down to 40,000.
-Exam Tip: In public bidding estimates, rounding $(400) \times (50,000)$ gives an immediate ceiling figure.","Correct. Survives elimination because 400 * ₱50,000 = ₱20,000,000.","Eliminated because rounding down yields ₱19,000,000.","Eliminated because gross overestimation yields ₱22,000,000.","Eliminated because underestimating unit price gives ₱18,500,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"Estimate the relative percentage error introduced when Archimedes' rational fraction $\frac{22}{7}$ is used as an approximation for the mathematical constant $\pi$ ($3.14159265\dots$):","+0.04%","+0.40%","-0.04%","+0.14%","A","Step-by-Step Solution:
-1. Rational expansion of $\frac{22}{7}$:
-   - $\frac{22}{7} \approx 3.142857$.
-2. True value of $\pi$:
-   - $\pi \approx 3.141593$.
+Exam Tip: In public bidding estimates, rounding (400) × (50,000) gives an immediate ceiling figure.","Correct. Survives elimination because 400 * ₱50,000 = ₱20,000,000.","Eliminated because rounding down yields ₱19,000,000.","Eliminated because gross overestimation yields ₱22,000,000.","Eliminated because underestimating unit price gives ₱18,500,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"Estimate the relative percentage error introduced when Archimedes' rational fraction 22/7 is used as an approximation for the mathematical constant π (3.14159265...):","+0.04%","+0.40%","-0.04%","+0.14%","A","Step-by-Step Solution:
+1. Rational expansion of 22/7:
+ - 22/7 ≈ 3.142857.
+2. True value of π:
+ - π ≈ 3.141593.
 3. Compute absolute error:
-   - $\text{Error} = 3.142857 - 3.141593 = +0.001264$.
+ - Error = 3.142857 - 3.141593 = +0.001264.
 4. Compute relative percentage error:
-   - $\text{Relative Error} = \frac{+0.001264}{3.141593} \times 100\% = \frac{0.1264}{3.141593}\% \approx +0.04023\% \approx +0.04\%$.
+ - Relative Error = +0.001264/3.141593 × 100% = 0.1264/3.141593% ≈ +0.04023% ≈ +0.04%.
 
-Common Trap: Misplacing the decimal point when converting relative error to percentage ($0.0004 \to 0.04\%$, avoiding $0.40\%$).
-Exam Tip: $\frac{22}{7}$ overestimates $\pi$ by approximately 4 parts in 10,000 ($+0.04\%$).","Correct. Survives elimination because (22/7 - pi) / pi * 100% = +0.0402% (approx. +0.04%).","Eliminated because decimal shift error by one place yields +0.40%.","Eliminated because 22/7 is larger than pi, making the error positive, not negative.","Eliminated because subtracting 3.1428 - 3.1414 without normalizing yields +0.14%.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
-"Determine the tightest valid consecutive integer bounding interval that encloses the fourth root $\sqrt[4]{50,000}$:","14 < \sqrt[4]{50,000} < 15","15 < \sqrt[4]{50,000} < 16","13 < \sqrt[4]{50,000} < 14","12 < \sqrt[4]{50,000} < 13","A","Step-by-Step Solution:
+Common Trap: Misplacing the decimal po∫ when converting relative error to percentage (0.0004 to 0.04%, avoiding 0.40%).
+Exam Tip: 22/7 overestimates π by approximately 4 parts in 10,000 (+0.04%).","Correct. Survives elimination because (22/7 - π) / π * 100% = +0.0402% (≈. +0.04%).","Eliminated because decimal shift error by one place yields +0.40%.","Eliminated because 22/7 is larger than π, making the error positive, not negative.","Eliminated because subtracting 3.1428 - 3.1414 without normalizing yields +0.14%.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+"Determine the tightest valid consecutive integer bounding interval that encloses the fourth root ⁴√50,000:","14 < ⁴√50,000 < 15","15 < ⁴√50,000 < 16","13 < ⁴√50,000 < 14","12 < ⁴√50,000 < 13","A","Step-by-Step Solution:
 1. Evaluate fourth powers of candidate integers:
-   - $13^4 = (13^2)^2 = (169)^2 = 28,561$.
-   - $14^4 = (14^2)^2 = (196)^2 = 38,416$.
-   - $15^4 = (15^2)^2 = (225)^2 = 50,625$.
-   - $16^4 = (16^2)^2 = (256)^2 = 65,536$.
+ - 13⁴ = (13²)² = (169)² = 28,561.
+ - 14⁴ = (14²)² = (196)² = 38,416.
+ - 15⁴ = (15²)² = (225)² = 50,625.
+ - 16⁴ = (16²)² = (256)² = 65,536.
 2. Compare 50,000 against the fourth powers:
-   - $38,416 < 50,000 < 50,625$.
-   - $14^4 < 50,000 < 15^4$.
+ - 38,416 < 50,000 < 50,625.
+ - 14⁴ < 50,000 < 15⁴.
 3. Take the fourth root across the inequality:
-   - $14 < \sqrt[4]{50,000} < 15$.
-4. (Note: $\sqrt[4]{50,000} \approx 14.953$, which is extremely close to 15 but strictly less than 15).
+ - 14 < ⁴√50,000 < 15.
+4. (Note: ⁴√50,000 ≈ 14.953, which is extremely close to 15 but strictly less than 15).
 
-Common Trap: Assuming $\sqrt[4]{50,000} > 15$ because 50,000 is large, forgetting that $15^4 = 50,625 > 50,000$.
-Exam Tip: Compute $(n^2)^2$ to evaluate fourth powers quickly: $15^2 = 225 \implies 225^2 = 50,625$.","Correct. Survives elimination because 14^4 = 38,416 and 15^4 = 50,625, perfectly bracketing 50,000.","Eliminated because 15^4 = 50,625 > 50,000, so the fourth root is strictly below 15.","Eliminated because 13^4 = 28,561, which is too low.","Eliminated because 12^4 = 20,736, far below 50,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"
+Common Trap: Assuming ⁴√50,000 > 15 because 50,000 is large, forgetting that 15⁴ = 50,625 > 50,000.
+Exam Tip: Compute (n²)² to evaluate fourth powers quickly: 15² = 225 implies 225² = 50,625.","Correct. Survives elimination because 14⁴ = 38,416 and 15⁴ = 50,625, perfectly bracketing 50,000.","Eliminated because 15⁴ = 50,625 > 50,000, so the fourth root is strictly below 15.","Eliminated because 13⁴ = 28,561, which is too low.","Eliminated because 12⁴ = 20,736, far below 50,000.","Numerical Ability","Numerical Ability | Basic Operations | Arithmetic & Number Properties | Estimation | Very Difficult | Batch 016"

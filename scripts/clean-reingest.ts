@@ -16,7 +16,7 @@ function normalizeCategory(filename: string): string {
 
 function extractSubtopic(filename: string): string {
   const baseName = path.basename(filename, ".csv");
-  const parts = baseName.replace(/^batch_\d+_/, "").split("-");
+  const parts = baseName.replace(/^batch_(?:VA_)?\d+_/, "").split("-");
   
   if (parts.length >= 2) {
     const component = parts[1].replace(/_/g, " ").trim();
@@ -67,17 +67,13 @@ function extractExamTip(explanation: string | null): string | null {
 
 async function main() {
   console.log("===============================================================");
-  console.log("🚀 PRECISE RE-INGESTION & CLEANUP: 181 CSV FILES");
+  console.log("🚀 PRECISE RE-INGESTION & CLEANUP: ALL CSV FILES");
   console.log("===============================================================\n");
 
   const files = fs
     .readdirSync(GENERATED_DIR)
     .filter((f) => f.startsWith("batch_") && f.endsWith(".csv"))
-    .sort((a, b) => {
-      const numA = parseInt(a.match(/^batch_(\d+)/)?.[1] || "0", 10);
-      const numB = parseInt(b.match(/^batch_(\d+)/)?.[1] || "0", 10);
-      return numA - numB;
-    });
+    .sort((a, b) => a.localeCompare(b));
 
   console.log(`Found ${files.length} CSV files.\n`);
 
@@ -96,7 +92,7 @@ async function main() {
 
     const category = normalizeCategory(file);
     const subtopic = extractSubtopic(file);
-    const batchNum = file.match(/^batch_(\d+)/)?.[1] || "000";
+    const batchNum = file.match(/^batch_(?:VA_)?(\d+)/)?.[1] || "000";
 
     let validRowsInFile = 0;
 

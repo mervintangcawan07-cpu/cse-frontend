@@ -1,172 +1,172 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Identify the next number in the square-offset sequence:
 
-$$2, \quad 7, \quad 14, \quad 23, \quad 34, \quad 47, \quad \textbf{?}$$","62","64","60","66","A","Step-by-Step Solution:
-1. Examine the terms relative to perfect squares ($k^2$):
-   - $2^2 - 2 = 4 - 2 = 2$
-   - $3^2 - 2 = 9 - 2 = 7$
-   - $4^2 - 2 = 16 - 2 = 14$
-   - $5^2 - 2 = 25 - 2 = 23$
-   - $6^2 - 2 = 36 - 2 = 34$
-   - $7^2 - 2 = 49 - 2 = 47$.
-2. Formulate general term: $T_n = (n + 1)^2 - 2$.
-3. Compute the 7th term ($n = 7 \implies$ base $7 + 1 = 8$):
-   - $T_7 = 8^2 - 2 = 64 - 2 = 62$.
+2, 7, 14, 23, 34, 47, ?","62","64","60","66","A","Step-by-Step Solution:
+1. Examine the terms relative to perfect squares (k²):
+ - 2² - 2 = 4 - 2 = 2
+ - 3² - 2 = 9 - 2 = 7
+ - 4² - 2 = 16 - 2 = 14
+ - 5² - 2 = 25 - 2 = 23
+ - 6² - 2 = 36 - 2 = 34
+ - 7² - 2 = 49 - 2 = 47.
+2. Formulate general term: Tₙ = (n + 1)² - 2.
+3. Compute the 7th term (n = 7 implies base 7 + 1 = 8):
+ - T₇ = 8² - 2 = 64 - 2 = 62.
 
-Common Trap: Selecting $8^2 = 64$ (Option B), forgetting to subtract the constant offset 2.
-Exam Tip: Differences between terms are consecutive odd numbers ($5, 7, 9, 11, 13 \implies \text{next is } 15 \implies 47 + 15 = 62$).","Correct. Survives elimination because 8^2 - 2 = 64 - 2 = 62 (or 47 + 15 = 62).","Eliminated because 64 is 8^2 without the -2 offset.","Eliminated because subtracting 4 yields 60.","Eliminated because adding 2 yields 66.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Selecting 8² = 64 (Option B), forgetting to subtract the constant offset 2.
+Exam Tip: Differences between terms are consecutive odd numbers (5, 7, 9, 11, 13 implies next is 15 implies 47 + 15 = 62).","Correct. Survives elimination because 8² - 2 = 64 - 2 = 62 (or 47 + 15 = 62).","Eliminated because 64 is 8² without the -2 offset.","Eliminated because subtracting 4 yields 60.","Eliminated because adding 2 yields 66.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "Find the missing number in the prime-squares sequence:
 
-$$4, \quad 9, \quad 25, \quad 49, \quad 121, \quad 169, \quad 289, \quad \textbf{?}$$","361","324","441","299","A","Step-by-Step Solution:
+4, 9, 25, 49, 121, 169, 289, ?","361","324","441","299","A","Step-by-Step Solution:
 1. Take the square root of each term:
-   - $\sqrt{4} = 2$
-   - $\sqrt{9} = 3$
-   - $\sqrt{25} = 5$
-   - $\sqrt{49} = 7$
-   - $\sqrt{121} = 11$
-   - $\sqrt{169} = 13$
-   - $\sqrt{289} = 17$.
-2. The roots form the sequence of consecutive prime numbers ($2, 3, 5, 7, 11, 13, 17$).
+ - √4 = 2
+ - √9 = 3
+ - √25 = 5
+ - √49 = 7
+ - √121 = 11
+ - √169 = 13
+ - √289 = 17.
+2. The roots form the sequence of consecutive prime numbers (2, 3, 5, 7, 11, 13, 17).
 3. Identify the next prime number after 17:
-   - The next prime is 19.
+ - The next prime is 19.
 4. Compute the 8th term:
-   - $T_8 = 19^2 = 361$.
+ - T₈ = 19² = 361.
 
-Common Trap: Selecting $18^2 = 324$ (Option B) or $21^2 = 441$ (Option C) by assuming an odd-number pattern rather than prime bases.
-Exam Tip: Prime squares skip composite numbers: $9^2 = 81$ and $15^2 = 225$ are absent from this sequence.","Correct. Survives elimination because the next prime is 19, and 19^2 = 361.","Eliminated because 324 is 18^2 (composite base).","Eliminated because 441 is 21^2.","Eliminated because 299 is not a perfect square.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Selecting 18² = 324 (Option B) or 21² = 441 (Option C) by assuming an odd-number pattern rather than prime bases.
+Exam Tip: Prime squares skip composite numbers: 9² = 81 and 15² = 225 are absent from this sequence.","Correct. Survives elimination because the next prime is 19, and 19² = 361.","Eliminated because 324 is 18² (composite base).","Eliminated because 441 is 21².","Eliminated because 299 is not a perfect square.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "What is the 8th term in the centered square numbers sequence:
 
-$$1, \quad 5, \quad 13, \quad 25, \quad 41, \quad 61, \quad 85, \quad \textbf{?}$$","113","109","117","121","A","Step-by-Step Solution:
+1, 5, 13, 25, 41, 61, 85, ?","113","109","117","121","A","Step-by-Step Solution:
 1. Analyze the sequence of centered square numbers:
-   - Formula: $C_n = n^2 + (n - 1)^2 = 2n^2 - 2n + 1$.
+ - Formula: Cₙ = n² + (n - 1)² = 2n² - 2n + 1.
 2. Verify initial terms:
-   - $n=1: 1^2 + 0^2 = 1$
-   - $n=2: 2^2 + 1^2 = 5$
-   - $n=3: 3^2 + 2^2 = 13$
-   - $n=4: 4^2 + 3^2 = 25$
-   - $n=5: 5^2 + 4^2 = 41$
-   - $n=6: 6^2 + 5^2 = 61$
-   - $n=7: 7^2 + 6^2 = 85$.
-3. Compute the 8th term ($n = 8$):
-   - $C_8 = 8^2 + 7^2 = 64 + 49 = 113$.
-   - (Verification via differences: $+4, +8, +12, +16, +20, +24 \implies \text{next is } +28 \implies 85 + 28 = 113$).
+ - n=1: 1² + 0² = 1
+ - n=2: 2² + 1² = 5
+ - n=3: 3² + 2² = 13
+ - n=4: 4² + 3² = 25
+ - n=5: 5² + 4² = 41
+ - n=6: 6² + 5² = 61
+ - n=7: 7² + 6² = 85.
+3. Compute the 8th term (n = 8):
+ - C₈ = 8² + 7² = 64 + 49 = 113.
+ - (Verification via differences: +4, +8, +12, +16, +20, +24 implies next is +28 implies 85 + 28 = 113).
 
-Common Trap: Adding 24 again ($85 + 24 = 109$, Option B) or jumping to $11^2 = 121$ (Option D).
-Exam Tip: Differences between centered squares are consecutive multiples of 4 ($4n$).","Correct. Survives elimination because 8^2 + 7^2 = 64 + 49 = 113 (or 85 + 28 = 113).","Eliminated because repeating the +24 increment yields 109.","Eliminated because adding 32 yields 117.","Eliminated because 121 is 11^2.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Adding 24 again (85 + 24 = 109, Option B) or jumping to 11² = 121 (Option D).
+Exam Tip: Differences between centered squares are consecutive multiples of 4 (4n).","Correct. Survives elimination because 8² + 7² = 64 + 49 = 113 (or 85 + 28 = 113).","Eliminated because repeating the +24 increment yields 109.","Eliminated because adding 32 yields 117.","Eliminated because 121 is 11².","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "Find the next term in the alternating sign square-offset sequence:
 
-$$0, \quad 5, \quad 8, \quad 17, \quad 24, \quad 37, \quad 48, \quad \textbf{?}$$","65","63","64","67","A","Step-by-Step Solution:
-1. Compare each term with consecutive perfect squares ($n^2$ for $n = 1, 2, \dots, 7$):
-   - $n=1: 1^2 - 1 = 0$
-   - $n=2: 2^2 + 1 = 5$
-   - $n=3: 3^2 - 1 = 8$
-   - $n=4: 4^2 + 1 = 17$
-   - $n=5: 5^2 - 1 = 24$
-   - $n=6: 6^2 + 1 = 37$
-   - $n=7: 7^2 - 1 = 48$.
-2. Formulate general term: $T_n = n^2 + (-1)^n$.
-3. Compute the 8th term ($n = 8$, an even index $\implies (-1)^8 = +1$):
-   - $T_8 = 8^2 + 1 = 64 + 1 = 65$.
+0, 5, 8, 17, 24, 37, 48, ?","65","63","64","67","A","Step-by-Step Solution:
+1. Compare each term with consecutive perfect squares (n² for n = 1, 2,..., 7):
+ - n=1: 1² - 1 = 0
+ - n=2: 2² + 1 = 5
+ - n=3: 3² - 1 = 8
+ - n=4: 4² + 1 = 17
+ - n=5: 5² - 1 = 24
+ - n=6: 6² + 1 = 37
+ - n=7: 7² - 1 = 48.
+2. Formulate general term: Tₙ = n² + (-1)ⁿ.
+3. Compute the 8th term (n = 8, an even index implies (-1)⁸ = +1):
+ - T₈ = 8² + 1 = 64 + 1 = 65.
 
-Common Trap: Subtracting 1 instead of adding ($8^2 - 1 = 63$, Option B) by failing to track alternating sign offset.
-Exam Tip: Even positions have $+1$ offset ($n^2 + 1$), and odd positions have $-1$ offset ($n^2 - 1$).","Correct. Survives elimination because T8 = 8^2 + (-1)^8 = 64 + 1 = 65.","Eliminated because 63 is 8^2 - 1 (incorrect offset sign for even index).","Eliminated because 64 is 8^2 without offset.","Eliminated because adding 3 gives 67.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Subtracting 1 instead of adding (8² - 1 = 63, Option B) by failing to track alternating sign offset.
+Exam Tip: Even positions have +1 offset (n² + 1), and odd positions have -1 offset (n² - 1).","Correct. Survives elimination because T8 = 8² + (-1)⁸ = 64 + 1 = 65.","Eliminated because 63 is 8² - 1 (incorrect offset sign for even index).","Eliminated because 64 is 8² without offset.","Eliminated because adding 3 gives 67.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "Identify the next number in the consecutive odd-squares difference progression:
 
-$$8, \quad 16, \quad 24, \quad 32, \quad 40, \quad 48, \quad \textbf{?}$$","56","54","60","64","A","Step-by-Step Solution:
+8, 16, 24, 32, 40, 48, ?","56","54","60","64","A","Step-by-Step Solution:
 1. Observe the algebraic identity for differences of consecutive odd squares:
-   - $(2n + 1)^2 - (2n - 1)^2 = (4n^2 + 4n + 1) - (4n^2 - 4n + 1) = 8n$.
+ - (2n + 1)² - (2n - 1)² = (4n² + 4n + 1) - (4n² - 4n + 1) = 8n.
 2. Verify terms:
-   - $n=1: 3^2 - 1^2 = 9 - 1 = 8$
-   - $n=2: 5^2 - 3^2 = 25 - 9 = 16$
-   - $n=3: 7^2 - 5^2 = 49 - 25 = 24$
-   - $n=4: 9^2 - 7^2 = 81 - 49 = 32$
-   - $n=5: 11^2 - 9^2 = 121 - 81 = 40$
-   - $n=6: 13^2 - 11^2 = 169 - 121 = 48$.
-3. The sequence is an exact arithmetic progression with common difference $d = 8$.
-4. Compute the 7th term ($n = 7$):
-   - $T_7 = 15^2 - 13^2 = 225 - 169 = 56$ (or $48 + 8 = 56$).
+ - n=1: 3² - 1² = 9 - 1 = 8
+ - n=2: 5² - 3² = 25 - 9 = 16
+ - n=3: 7² - 5² = 49 - 25 = 24
+ - n=4: 9² - 7² = 81 - 49 = 32
+ - n=5: 11² - 9² = 121 - 81 = 40
+ - n=6: 13² - 11² = 169 - 121 = 48.
+3. The sequence is an exact arithmetic progression with common difference d = 8.
+4. Compute the 7th term (n = 7):
+ - T₇ = 15² - 13² = 225 - 169 = 56 (or 48 + 8 = 56).
 
 Common Trap: Arithmetic error resulting in 54 (Option B) or jumping to 64 (Option D).
-Exam Tip: Differences between consecutive odd squares always equal multiples of 8 ($8n$).","Correct. Survives elimination because 15^2 - 13^2 = 225 - 169 = 56 (or 48 + 8 = 56).","Eliminated because arithmetic error gives 54.","Eliminated because adding 12 gives 60.","Eliminated because 64 is 8 * 8 (skipping to n = 8).","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
-"Find the missing number in the sum-of-two-consecutive-squares sequence:
+Exam Tip: Differences between consecutive odd squares always equal multiples of 8 (8n).","Correct. Survives elimination because 15² - 13² = 225 - 169 = 56 (or 48 + 8 = 56).","Eliminated because arithmetic error gives 54.","Eliminated because adding 12 gives 60.","Eliminated because 64 is 8 * 8 (skipping to n = 8).","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+"Find the missing number in the Σ-of-two-consecutive-squares sequence:
 
-$$5, \quad 13, \quad 25, \quad 41, \quad 61, \quad 85, \quad 113, \quad \textbf{?}$$","145","144","149","137","A","Step-by-Step Solution:
-1. Examine each term as the sum of two consecutive squares ($k^2 + (k+1)^2$):
-   - $1^2 + 2^2 = 1 + 4 = 5$
-   - $2^2 + 3^2 = 4 + 9 = 13$
-   - $3^2 + 4^2 = 9 + 16 = 25$
-   - $4^2 + 5^2 = 16 + 25 = 41$
-   - $5^2 + 6^2 = 25 + 36 = 61$
-   - $6^2 + 7^2 = 36 + 49 = 85$
-   - $7^2 + 8^2 = 49 + 64 = 113$.
-2. Compute the 8th term ($k = 8$):
-   - $T_8 = 8^2 + 9^2 = 64 + 81 = 145$.
+5, 13, 25, 41, 61, 85, 113, ?","145","144","149","137","A","Step-by-Step Solution:
+1. Examine each term as the Σ of two consecutive squares (k² + (k+1)²):
+ - 1² + 2² = 1 + 4 = 5
+ - 2² + 3² = 4 + 9 = 13
+ - 3² + 4² = 9 + 16 = 25
+ - 4² + 5² = 16 + 25 = 41
+ - 5² + 6² = 25 + 36 = 61
+ - 6² + 7² = 36 + 49 = 85
+ - 7² + 8² = 49 + 64 = 113.
+2. Compute the 8th term (k = 8):
+ - T₈ = 8² + 9² = 64 + 81 = 145.
 
-Common Trap: Answering $12^2 = 144$ (Option B) or miscalculating $64 + 81$.
-Exam Tip: Second difference is constant ($+4$), confirming $T_n = 2n^2 + 2n + 1$. For $n = 8$, $2(64) + 2(8) + 1 = 128 + 16 + 1 = 145$.","Correct. Survives elimination because 8^2 + 9^2 = 64 + 81 = 145.","Eliminated because 144 is 12^2.","Eliminated because arithmetic error gives 149.","Eliminated because adding 24 yields 137.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Answering 12² = 144 (Option B) or miscalculating 64 + 81.
+Exam Tip: Second difference is constant (+4), confirming Tₙ = 2n² + 2n + 1. For n = 8, 2(64) + 2(8) + 1 = 128 + 16 + 1 = 145.","Correct. Survives elimination because 8² + 9² = 64 + 81 = 145.","Eliminated because 144 is 12².","Eliminated because arithmetic error gives 149.","Eliminated because adding 24 yields 137.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "What is the next number in the inverted square-offset sequence:
 
-$$3, \quad 8, \quad 15, \quad 24, \quad 35, \quad 48, \quad 63, \quad \textbf{?}$$","80","81","79","82","A","Step-by-Step Solution:
+3, 8, 15, 24, 35, 48, 63, ?","80","81","79","82","A","Step-by-Step Solution:
 1. Examine terms relative to perfect squares:
-   - $2^2 - 1 = 4 - 1 = 3$
-   - $3^2 - 1 = 9 - 1 = 8$
-   - $4^2 - 1 = 16 - 1 = 15$
-   - $5^2 - 1 = 25 - 1 = 24$
-   - $6^2 - 1 = 36 - 1 = 35$
-   - $7^2 - 1 = 49 - 1 = 48$
-   - $8^2 - 1 = 64 - 1 = 63$.
-2. Formulate general term: $T_n = (n + 1)^2 - 1$.
-3. Compute the 8th term ($n = 8 \implies$ base $8 + 1 = 9$):
-   - $T_8 = 9^2 - 1 = 81 - 1 = 80$.
+ - 2² - 1 = 4 - 1 = 3
+ - 3² - 1 = 9 - 1 = 8
+ - 4² - 1 = 16 - 1 = 15
+ - 5² - 1 = 25 - 1 = 24
+ - 6² - 1 = 36 - 1 = 35
+ - 7² - 1 = 49 - 1 = 48
+ - 8² - 1 = 64 - 1 = 63.
+2. Formulate general term: Tₙ = (n + 1)² - 1.
+3. Compute the 8th term (n = 8 implies base 8 + 1 = 9):
+ - T₈ = 9² - 1 = 81 - 1 = 80.
 
-Common Trap: Answering $9^2 = 81$ (Option B), forgetting to subtract 1.
-Exam Tip: Notice $T_n = (n)(n+2)$: $1\times3=3, 2\times4=8, 3\times5=15\dots 8\times10=80$.","Correct. Survives elimination because 9^2 - 1 = 81 - 1 = 80 (or 8 * 10 = 80).","Eliminated because 81 is 9^2 without the -1 offset.","Eliminated because subtracting 2 yields 79.","Eliminated because adding 1 yields 82.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Answering 9² = 81 (Option B), forgetting to subtract 1.
+Exam Tip: Notice Tₙ = (n)(n+2): 1times3=3, 2times4=8, 3times5=15... 8times10=80.","Correct. Survives elimination because 9² - 1 = 81 - 1 = 80 (or 8 * 10 = 80).","Eliminated because 81 is 9² without the -1 offset.","Eliminated because subtracting 2 yields 79.","Eliminated because adding 1 yields 82.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "Find the missing term in the cubic power sequence:
 
-$$1, \quad 8, \quad 27, \quad 64, \quad 125, \quad 216, \quad \textbf{?}$$","343","342","349","336","A","Step-by-Step Solution:
+1, 8, 27, 64, 125, 216, ?","343","342","349","336","A","Step-by-Step Solution:
 1. Identify the power relation:
-   - $1^3 = 1$
-   - $2^3 = 8$
-   - $3^3 = 27$
-   - $4^3 = 64$
-   - $5^3 = 125$
-   - $6^3 = 216$.
-2. General term: $T_n = n^3$.
+ - 1³ = 1
+ - 2³ = 8
+ - 3³ = 27
+ - 4³ = 64
+ - 5³ = 125
+ - 6³ = 216.
+2. General term: Tₙ = n³.
 3. Compute the 7th term:
-   - $T_7 = 7^3 = 343$.
+ - T₇ = 7³ = 343.
 
-Common Trap: Subtracting 1 ($342$, Option B) or arithmetic error in evaluating $7 \times 49$.
-Exam Tip: $7^3 = 343$ is a fundamental cube benchmark in numerical reasoning.","Correct. Survives elimination because 7^3 = 343.","Eliminated because 342 is 7^3 - 1.","Eliminated because adding 6 yields 349.","Eliminated because arithmetic error gives 336.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Subtracting 1 (342, Option B) or arithmetic error in evaluating 7 × 49.
+Exam Tip: 7³ = 343 is a fundamental cube benchmark in numerical reasoning.","Correct. Survives elimination because 7³ = 343.","Eliminated because 342 is 7³ - 1.","Eliminated because adding 6 yields 349.","Eliminated because arithmetic error gives 336.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
 "Determine the next term in the even-square increment sequence:
 
-$$10, \quad 14, \quad 30, \quad 66, \quad 130, \quad 230, \quad \textbf{?}$$","374","364","384","370","A","Step-by-Step Solution:
+10, 14, 30, 66, 130, 230, ?","374","364","384","370","A","Step-by-Step Solution:
 1. Calculate consecutive differences:
-   - $14 - 10 = 4 = 2^2$
-   - $30 - 14 = 16 = 4^2$
-   - $66 - 30 = 36 = 6^2$
-   - $130 - 66 = 64 = 8^2$
-   - $230 - 130 = 100 = 10^2$.
-2. The added increments are the squares of consecutive even integers ($2^2, 4^2, 6^2, 8^2, 10^2$).
-3. The next increment is $12^2 = 144$.
+ - 14 - 10 = 4 = 2²
+ - 30 - 14 = 16 = 4²
+ - 66 - 30 = 36 = 6²
+ - 130 - 66 = 64 = 8²
+ - 230 - 130 = 100 = 10².
+2. The added increments are the squares of consecutive even integers (2², 4², 6², 8², 10²).
+3. The next increment is 12² = 144.
 4. Compute the 7th term:
-   - $T_7 = 230 + 144 = 374$.
+ - T₇ = 230 + 144 = 374.
 
-Common Trap: Adding $11^2 = 121$ ($230 + 121 = 351$) or arithmetic error yielding 364 (Option B).
-Exam Tip: Increments are $(2n)^2 = 4n^2$. For $n = 6$, increment is $4(36) = 144$.","Correct. Survives elimination because the next increment is 12^2 = 144, giving 230 + 144 = 374.","Eliminated because arithmetic error in the sum yields 364.","Eliminated because adding 154 yields 384.","Eliminated because adding 140 yields 370.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
-"Find the 7th term in the digit-sum squaring sequence:
+Common Trap: Adding 11² = 121 (230 + 121 = 351) or arithmetic error yielding 364 (Option B).
+Exam Tip: Increments are (2n)² = 4n². For n = 6, increment is 4(36) = 144.","Correct. Survives elimination because the next increment is 12² = 144, giving 230 + 144 = 374.","Eliminated because arithmetic error in the Σ yields 364.","Eliminated because adding 154 yields 384.","Eliminated because adding 140 yields 370.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+"Find the 7th term in the digit-Σ squaring sequence:
 
-$$89, \quad 289, \quad 361, \quad 100, \quad 1, \quad 1, \quad \textbf{?}$$","1","4","9","0","A","Step-by-Step Solution:
+89, 289, 361, 100, 1, 1, ?","1","4","9","0","A","Step-by-Step Solution:
 1. Trace the transformation rule:
-   - Each term is the square of the sum of the digits of the preceding term: $T_n = (\text{Sum of digits of } T_{n-1})^2$.
+ - Each term is the square of the Σ of the digits of the preceding term: Tₙ = (Sum of digits of Tₙ₋₁)².
 2. Verify transitions:
-   - $T_1 = 89 \implies \text{Sum} = 8 + 9 = 17 \implies T_2 = 17^2 = 289$.
-   - $T_2 = 289 \implies \text{Sum} = 2 + 8 + 9 = 19 \implies T_3 = 19^2 = 361$.
-   - $T_3 = 361 \implies \text{Sum} = 3 + 6 + 1 = 10 \implies T_4 = 10^2 = 100$.
-   - $T_4 = 100 \implies \text{Sum} = 1 + 0 + 0 = 1 \implies T_5 = 1^2 = 1$.
-   - $T_5 = 1 \implies \text{Sum} = 1 \implies T_6 = 1^2 = 1$.
+ - T₁ = 89 implies Sum = 8 + 9 = 17 implies T₂ = 17² = 289.
+ - T₂ = 289 implies Sum = 2 + 8 + 9 = 19 implies T₃ = 19² = 361.
+ - T₃ = 361 implies Sum = 3 + 6 + 1 = 10 implies T₄ = 10² = 100.
+ - T₄ = 100 implies Sum = 1 + 0 + 0 = 1 implies T₅ = 1² = 1.
+ - T₅ = 1 implies Sum = 1 implies T₆ = 1² = 1.
 3. Compute the 7th term:
-   - $T_6 = 1 \implies \text{Sum} = 1 \implies T_7 = 1^2 = 1$.
-4. (The sequence reaches a stable fixed point attractor at 1).
+ - T₆ = 1 implies Sum = 1 implies T₇ = 1² = 1.
+4. (The sequence reaches a stable fixed po∫ attractor at 1).
 
-Common Trap: Assuming the sequence alternates or jumps to 4 or 9 without checking the fixed-point convergence at 1.
-Exam Tip: When $T_n = 1$, the sum of digits is 1, so $1^2 = 1$ repeats indefinitely.","Correct. Survives elimination because 1 is an invariant fixed point of the digit-sum squaring operation (1 -> 1^2 = 1).","Eliminated because 4 assumes an artificial increment.","Eliminated because 9 assumes digits sum to 3.","Eliminated because the sequence never vanishes to 0.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"
+Common Trap: Assuming the sequence alternates or jumps to 4 or 9 without checking the fixed-po∫ convergence at 1.
+Exam Tip: When Tₙ = 1, the Σ of digits is 1, so 1² = 1 repeats indefinitely.","Correct. Survives elimination because 1 is an invariant fixed po∫ of the digit-Σ squaring operation (1 -> 1² = 1).","Eliminated because 4 assumes an artificial increment.","Eliminated because 9 assumes digits Σ to 3.","Eliminated because the sequence never vanishes to 0.","Numerical Ability","Numerical Ability | Number Sequence | Special Sequences | Squares | Very Difficult | Batch 026"

@@ -1,219 +1,219 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Find the 8th term of the quadratic sequence with a constant second difference of 6:
 
-$$5, \quad 12, \quad 25, \quad 44, \quad 69, \quad 100, \quad 137, \quad \textbf{?}$$","180","175","184","174","A","Step-by-Step Solution:
+5, 12, 25, 44, 69, 100, 137, ?","180","175","184","174","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $12 - 5 = 7$
-   - $25 - 12 = 13$
-   - $44 - 25 = 19$
-   - $69 - 44 = 25$
-   - $100 - 69 = 31$
-   - $137 - 100 = 37$.
+ - 12 - 5 = 7
+ - 25 - 12 = 13
+ - 44 - 25 = 19
+ - 69 - 44 = 25
+ - 100 - 69 = 31
+ - 137 - 100 = 37.
 2. Calculate second-level differences:
-   - $13 - 7 = 6$
-   - $19 - 13 = 6$
-   - $25 - 19 = 6$
-   - $31 - 25 = 6$
-   - $37 - 31 = 6$ (Constant second difference: $\Delta^2 = 6$).
+ - 13 - 7 = 6
+ - 19 - 13 = 6
+ - 25 - 19 = 6
+ - 31 - 25 = 6
+ - 37 - 31 = 6 (Constant second difference: Δ² = 6).
 3. Compute the next first-level difference:
-   - $\Delta_7 = 37 + 6 = 43$.
-4. Compute the 8th term ($T_8$):
-   - $T_8 = 137 + 43 = 180$.
-   - (Verification via closed form: $2a = 6 \implies a = 3 \implies T_n = 3n^2 - 2n + 4$. For $n = 8$: $3(64) - 2(8) + 4 = 192 - 16 + 4 = 180$).
+ - Δ₇ = 37 + 6 = 43.
+4. Compute the 8th term (T₈):
+ - T₈ = 137 + 43 = 180.
+ - (Verification via closed form: 2a = 6 implies a = 3 implies Tₙ = 3n² - 2n + 4. For n = 8: 3(64) - 2(8) + 4 = 192 - 16 + 4 = 180).
 
-Common Trap: Adding 37 again ($137 + 37 = 174$, Option D), forgetting to add the second difference of 6.
-Exam Tip: Since $\Delta^2 = 6$, $T_n$ is a quadratic polynomial $3n^2 + bn + c$.","Correct. Survives elimination because the next first difference is 37 + 6 = 43, giving 137 + 43 = 180.","Eliminated because arithmetic error gives 175.","Eliminated because adding 47 gives 184.","Eliminated because repeating the prior difference of 37 yields 174.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
-"Identify the next number in the pentagonal number sequence ($P_n = \frac{3n^2 - n}{2}$):
+Common Trap: Adding 37 again (137 + 37 = 174, Option D), forgetting to add the second difference of 6.
+Exam Tip: Since Δ² = 6, Tₙ is a quadratic polynomial 3n² + bn + c.","Correct. Survives elimination because the next first difference is 37 + 6 = 43, giving 137 + 43 = 180.","Eliminated because arithmetic error gives 175.","Eliminated because adding 47 gives 184.","Eliminated because repeating the prior difference of 37 yields 174.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+"Identify the next number in the pentagonal number sequence (Pₙ = 3n² - n/2):
 
-$$1, \quad 5, \quad 12, \quad 22, \quad 35, \quad 51, \quad \textbf{?}$$","70","68","72","67","A","Step-by-Step Solution:
+1, 5, 12, 22, 35, 51, ?","70","68","72","67","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $5 - 1 = 4$
-   - $12 - 5 = 7$
-   - $22 - 12 = 10$
-   - $35 - 22 = 13$
-   - $51 - 35 = 16$.
+ - 5 - 1 = 4
+ - 12 - 5 = 7
+ - 22 - 12 = 10
+ - 35 - 22 = 13
+ - 51 - 35 = 16.
 2. Calculate second-level differences:
-   - $7 - 4 = 3$
-   - $10 - 7 = 3$
-   - $13 - 10 = 3$
-   - $16 - 13 = 3$ (Constant second difference: $\Delta^2 = 3$).
+ - 7 - 4 = 3
+ - 10 - 7 = 3
+ - 13 - 10 = 3
+ - 16 - 13 = 3 (Constant second difference: Δ² = 3).
 3. Compute the next first-level difference:
-   - $\Delta_6 = 16 + 3 = 19$.
+ - Δ₆ = 16 + 3 = 19.
 4. Compute the 7th term:
-   - $T_7 = 51 + 19 = 70$.
-   - (Verification via formula: $P_7 = \frac{3(7^2) - 7}{2} = \frac{3(49) - 7}{2} = \frac{147 - 7}{2} = \frac{140}{2} = 70$).
+ - T₇ = 51 + 19 = 70.
+ - (Verification via formula: P₇ = 3(7²) - 7/2 = 3(49) - 7/2 = 147 - 7/2 = 140/2 = 70).
 
-Common Trap: Adding 16 again ($51 + 16 = 67$, Option D) or miscalculating $51 + 19$.
+Common Trap: Adding 16 again (51 + 16 = 67, Option D) or miscalculating 51 + 19.
 Exam Tip: Pentagonal numbers always have a constant second difference of 3.","Correct. Survives elimination because the next first difference is 19, giving 51 + 19 = 70.","Eliminated because arithmetic slip gives 68.","Eliminated because adding 21 gives 72.","Eliminated because repeating the +16 difference gives 67.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
-"What is the 8th term in the sequence of hexagonal numbers ($H_n = 2n^2 - n$):
+"What is the 8th term in the sequence of hexagonal numbers (Hₙ = 2n² - n):
 
-$$1, \quad 6, \quad 15, \quad 28, \quad 45, \quad 66, \quad 91, \quad \textbf{?}$$","120","116","124","115","A","Step-by-Step Solution:
+1, 6, 15, 28, 45, 66, 91, ?","120","116","124","115","A","Step-by-Step Solution:
 1. Calculate first differences:
-   - $6 - 1 = 5$
-   - $15 - 6 = 9$
-   - $28 - 15 = 13$
-   - $45 - 28 = 17$
-   - $66 - 45 = 21$
-   - $91 - 66 = 25$.
+ - 6 - 1 = 5
+ - 15 - 6 = 9
+ - 28 - 15 = 13
+ - 45 - 28 = 17
+ - 66 - 45 = 21
+ - 91 - 66 = 25.
 2. Calculate second differences:
-   - $9 - 5 = 4$
-   - $13 - 9 = 4$
-   - $17 - 13 = 4$
-   - $21 - 17 = 4$
-   - $25 - 21 = 4$ (Constant second difference: $\Delta^2 = 4$).
+ - 9 - 5 = 4
+ - 13 - 9 = 4
+ - 17 - 13 = 4
+ - 21 - 17 = 4
+ - 25 - 21 = 4 (Constant second difference: Δ² = 4).
 3. Compute next first difference:
-   - $\Delta_7 = 25 + 4 = 29$.
-4. Compute the 8th term ($T_8$):
-   - $T_8 = 91 + 29 = 120$.
-   - (Verification via formula: $H_8 = 2(8^2) - 8 = 2(64) - 8 = 128 - 8 = 120$).
+ - Δ₇ = 25 + 4 = 29.
+4. Compute the 8th term (T₈):
+ - T₈ = 91 + 29 = 120.
+ - (Verification via formula: H₈ = 2(8²) - 8 = 2(64) - 8 = 128 - 8 = 120).
 
-Common Trap: Adding 25 again ($91 + 25 = 116$, Option B) or calculation error.
-Exam Tip: Hexagonal numbers satisfy $H_n = n(2n - 1)$, producing constant second differences of 4.","Correct. Survives elimination because the next difference is 29, giving 91 + 29 = 120.","Eliminated because repeating the +25 difference yields 116.","Eliminated because adding 33 yields 124.","Eliminated because arithmetic slip gives 115.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Common Trap: Adding 25 again (91 + 25 = 116, Option B) or calculation error.
+Exam Tip: Hexagonal numbers satisfy Hₙ = n(2n - 1), producing constant second differences of 4.","Correct. Survives elimination because the next difference is 29, giving 91 + 29 = 120.","Eliminated because repeating the +25 difference yields 116.","Eliminated because adding 33 yields 124.","Eliminated because arithmetic slip gives 115.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
 "Find the missing number in the second-difference progression:
 
-$$7, \quad 14, \quad 25, \quad 40, \quad 59, \quad 82, \quad \textbf{?}$$","109","105","112","107","A","Step-by-Step Solution:
+7, 14, 25, 40, 59, 82, ?","109","105","112","107","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $14 - 7 = 7$
-   - $25 - 14 = 11$
-   - $40 - 25 = 15$
-   - $59 - 40 = 19$
-   - $82 - 59 = 23$.
+ - 14 - 7 = 7
+ - 25 - 14 = 11
+ - 40 - 25 = 15
+ - 59 - 40 = 19
+ - 82 - 59 = 23.
 2. Calculate second-level differences:
-   - $11 - 7 = 4$
-   - $15 - 11 = 4$
-   - $19 - 15 = 4$
-   - $23 - 19 = 4$ (Constant second difference: $\Delta^2 = 4$).
+ - 11 - 7 = 4
+ - 15 - 11 = 4
+ - 19 - 15 = 4
+ - 23 - 19 = 4 (Constant second difference: Δ² = 4).
 3. Compute next first difference:
-   - $\Delta_6 = 23 + 4 = 27$.
+ - Δ₆ = 23 + 4 = 27.
 4. Compute the 7th term:
-   - $T_7 = 82 + 27 = 109$.
-   - (Verification: $T_n = 2n^2 + n + 4 \implies T_7 = 2(49) + 7 + 4 = 98 + 11 = 109$).
+ - T₇ = 82 + 27 = 109.
+ - (Verification: Tₙ = 2n² + n + 4 implies T₇ = 2(49) + 7 + 4 = 98 + 11 = 109).
 
-Common Trap: Adding 23 again ($82 + 23 = 105$, Option B) or arithmetic error.
-Exam Tip: Notice first differences are $4k + 3$ ($7, 11, 15, 19, 23, 27$).","Correct. Survives elimination because 82 + 27 = 109.","Eliminated because repeating the difference 23 yields 105.","Eliminated because adding 30 yields 112.","Eliminated because arithmetic slip gives 107.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
-"Determine the next term in the decelerating quadratic sequence where the second difference is $-4$:
+Common Trap: Adding 23 again (82 + 23 = 105, Option B) or arithmetic error.
+Exam Tip: Notice first differences are 4k + 3 (7, 11, 15, 19, 23, 27).","Correct. Survives elimination because 82 + 27 = 109.","Eliminated because repeating the difference 23 yields 105.","Eliminated because adding 30 yields 112.","Eliminated because arithmetic slip gives 107.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+"Determine the next term in the decelerating quadratic sequence where the second difference is -4:
 
-$$100, \quad 120, \quad 136, \quad 148, \quad 156, \quad 160, \quad \textbf{?}$$","160","164","156","158","A","Step-by-Step Solution:
+100, 120, 136, 148, 156, 160, ?","160","164","156","158","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $120 - 100 = 20$
-   - $136 - 120 = 16$
-   - $148 - 136 = 12$
-   - $156 - 148 = 8$
-   - $160 - 156 = 4$.
+ - 120 - 100 = 20
+ - 136 - 120 = 16
+ - 148 - 136 = 12
+ - 156 - 148 = 8
+ - 160 - 156 = 4.
 2. Calculate second-level differences:
-   - $16 - 20 = -4$
-   - $12 - 16 = -4$
-   - $8 - 12 = -4$
-   - $4 - 8 = -4$ (Constant second difference: $\Delta^2 = -4$).
+ - 16 - 20 = -4
+ - 12 - 16 = -4
+ - 8 - 12 = -4
+ - 4 - 8 = -4 (Constant second difference: Δ² = -4).
 3. Compute next first difference:
-   - $\Delta_6 = 4 + (-4) = 0$.
+ - Δ₆ = 4 + (-4) = 0.
 4. Compute the 7th term:
-   - $T_7 = 160 + 0 = 160$.
-   - (Note: The sequence reaches its peak vertex at $T_6 = T_7 = 160$ before decreasing).
+ - T₇ = 160 + 0 = 160.
+ - (Note: The sequence reaches its peak vertex at T₆ = T₇ = 160 before decreasing).
 
-Common Trap: Adding 4 again ($160 + 4 = 164$, Option B) or subtracting prematurely ($160 - 4 = 156$, Option C).
-Exam Tip: When first difference reaches 0, the next term equals the current term ($160 + 0 = 160$).","Correct. Survives elimination because the next first difference is 4 - 4 = 0, giving 160 + 0 = 160.","Eliminated because adding 4 gives 164, failing to apply the second difference.","Eliminated because subtracting 4 gives 156 (which is the 8th term).","Eliminated because arithmetic error gives 158.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Common Trap: Adding 4 again (160 + 4 = 164, Option B) or subtracting prematurely (160 - 4 = 156, Option C).
+Exam Tip: When first difference reaches 0, the next term equals the current term (160 + 0 = 160).","Correct. Survives elimination because the next first difference is 4 - 4 = 0, giving 160 + 0 = 160.","Eliminated because adding 4 gives 164, failing to apply the second difference.","Eliminated because subtracting 4 gives 156 (which is the 8th term).","Eliminated because arithmetic error gives 158.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
 "What is the 8th term in the sequence:
 
-$$2, \quad 9, \quad 22, \quad 41, \quad 66, \quad 97, \quad 134, \quad \textbf{?}$$","177","171","183","175","A","Step-by-Step Solution:
+2, 9, 22, 41, 66, 97, 134, ?","177","171","183","175","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $9 - 2 = 7$
-   - $22 - 9 = 13$
-   - $41 - 22 = 19$
-   - $66 - 41 = 25$
-   - $97 - 66 = 31$
-   - $134 - 97 = 37$.
+ - 9 - 2 = 7
+ - 22 - 9 = 13
+ - 41 - 22 = 19
+ - 66 - 41 = 25
+ - 97 - 66 = 31
+ - 134 - 97 = 37.
 2. Calculate second-level differences:
-   - $13 - 7 = 6$
-   - $19 - 13 = 6$
-   - $25 - 19 = 6$
-   - $31 - 25 = 6$
-   - $37 - 31 = 6$ (Constant second difference: $\Delta^2 = 6$).
+ - 13 - 7 = 6
+ - 19 - 13 = 6
+ - 25 - 19 = 6
+ - 31 - 25 = 6
+ - 37 - 31 = 6 (Constant second difference: Δ² = 6).
 3. Compute next first difference:
-   - $\Delta_7 = 37 + 6 = 43$.
-4. Compute the 8th term ($T_8$):
-   - $T_8 = 134 + 43 = 177$.
-   - (Verification: $T_n = 3n^2 - 2n + 1 \implies T_8 = 3(64) - 2(8) + 1 = 192 - 16 + 1 = 177$).
+ - Δ₇ = 37 + 6 = 43.
+4. Compute the 8th term (T₈):
+ - T₈ = 134 + 43 = 177.
+ - (Verification: Tₙ = 3n² - 2n + 1 implies T₈ = 3(64) - 2(8) + 1 = 192 - 16 + 1 = 177).
 
-Common Trap: Adding 37 again ($134 + 37 = 171$, Option B).
-Exam Tip: Compute $134 + (37 + 6) = 177$.","Correct. Survives elimination because the next first difference is 43, giving 134 + 43 = 177.","Eliminated because repeating the +37 difference yields 171.","Eliminated because adding 49 yields 183.","Eliminated because arithmetic slip gives 175.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Common Trap: Adding 37 again (134 + 37 = 171, Option B).
+Exam Tip: Compute 134 + (37 + 6) = 177.","Correct. Survives elimination because the next first difference is 43, giving 134 + 43 = 177.","Eliminated because repeating the +37 difference yields 171.","Eliminated because adding 49 yields 183.","Eliminated because arithmetic slip gives 175.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
 "Find the missing number in the decimal second-difference sequence:
 
-$$1.5, \quad 3.0, \quad 6.0, \quad 10.5, \quad 16.5, \quad 24.0, \quad \textbf{?}$$","33.0","31.5","34.5","32.0","A","Step-by-Step Solution:
+1.5, 3.0, 6.0, 10.5, 16.5, 24.0, ?","33.0","31.5","34.5","32.0","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $3.0 - 1.5 = 1.5$
-   - $6.0 - 3.0 = 3.0$
-   - $10.5 - 6.0 = 4.5$
-   - $16.5 - 10.5 = 6.0$
-   - $24.0 - 16.5 = 7.5$.
+ - 3.0 - 1.5 = 1.5
+ - 6.0 - 3.0 = 3.0
+ - 10.5 - 6.0 = 4.5
+ - 16.5 - 10.5 = 6.0
+ - 24.0 - 16.5 = 7.5.
 2. Calculate second-level differences:
-   - $3.0 - 1.5 = 1.5$
-   - $4.5 - 3.0 = 1.5$
-   - $6.0 - 4.5 = 1.5$
-   - $7.5 - 6.0 = 1.5$ (Constant second difference: $\Delta^2 = 1.5$).
+ - 3.0 - 1.5 = 1.5
+ - 4.5 - 3.0 = 1.5
+ - 6.0 - 4.5 = 1.5
+ - 7.5 - 6.0 = 1.5 (Constant second difference: Δ² = 1.5).
 3. Compute next first difference:
-   - $\Delta_6 = 7.5 + 1.5 = 9.0$.
+ - Δ₆ = 7.5 + 1.5 = 9.0.
 4. Compute the 7th term:
-   - $T_7 = 24.0 + 9.0 = 33.0$.
+ - T₇ = 24.0 + 9.0 = 33.0.
 
-Common Trap: Adding 7.5 again ($24.0 + 7.5 = 31.5$, Option B).
-Exam Tip: First differences form the arithmetic progression $1.5, 3.0, 4.5, 6.0, 7.5, 9.0$.","Correct. Survives elimination because the next first difference is 9.0, giving 24.0 + 9.0 = 33.0.","Eliminated because repeating the +7.5 difference gives 31.5.","Eliminated because adding 10.5 gives 34.5.","Eliminated because arithmetic slip gives 32.0.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Common Trap: Adding 7.5 again (24.0 + 7.5 = 31.5, Option B).
+Exam Tip: First differences form the arithmetic progression 1.5, 3.0, 4.5, 6.0, 7.5, 9.0.","Correct. Survives elimination because the next first difference is 9.0, giving 24.0 + 9.0 = 33.0.","Eliminated because repeating the +7.5 difference gives 31.5.","Eliminated because adding 10.5 gives 34.5.","Eliminated because arithmetic slip gives 32.0.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
 "Identify the next number in the projectile trajectory height sequence:
 
-$$0, \quad 45, \quad 80, \quad 105, \quad 120, \quad 125, \quad \textbf{?}$$","120","125","115","110","A","Step-by-Step Solution:
+0, 45, 80, 105, 120, 125, ?","120","125","115","110","A","Step-by-Step Solution:
 1. Calculate first differences (velocities):
-   - $45 - 0 = 45$
-   - $80 - 45 = 35$
-   - $105 - 80 = 25$
-   - $120 - 105 = 15$
-   - $125 - 120 = 5$.
+ - 45 - 0 = 45
+ - 80 - 45 = 35
+ - 105 - 80 = 25
+ - 120 - 105 = 15
+ - 125 - 120 = 5.
 2. Calculate second differences (acceleration due to gravity):
-   - $35 - 45 = -10$
-   - $25 - 35 = -10$
-   - $15 - 25 = -10$
-   - $5 - 15 = -10$ (Constant second difference: $\Delta^2 = -10$).
+ - 35 - 45 = -10
+ - 25 - 35 = -10
+ - 15 - 25 = -10
+ - 5 - 15 = -10 (Constant second difference: Δ² = -10).
 3. Compute next first difference:
-   - $\Delta_6 = 5 + (-10) = -5$.
+ - Δ₆ = 5 + (-10) = -5.
 4. Compute the 7th term:
-   - $T_7 = 125 + (-5) = 125 - 5 = 120$.
-   - (Verification: $H(t) = 50t - 5t^2 \implies H(6) = 300 - 180 = 120$).
+ - T₇ = 125 + (-5) = 125 - 5 = 120.
+ - (Verification: H(t) = 50t - 5t² implies H(6) = 300 - 180 = 120).
 
 Common Trap: Repeating 125 (Option B) or assuming the trajectory stays at the peak.
-Exam Tip: Parabolic trajectory is symmetrical about its peak at $t = 5$ ($H(5) = 125 \implies H(6) = H(4) = 120$).","Correct. Survives elimination because the trajectory descends by 5, giving 125 - 5 = 120.","Eliminated because 125 is the peak height, which does not repeat.","Eliminated because subtracting 10 yields 115.","Eliminated because subtracting 15 yields 110.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Exam Tip: Parabolic trajectory is symmetrical about its peak at t = 5 (H(5) = 125 implies H(6) = H(4) = 120).","Correct. Survives elimination because the trajectory descends by 5, giving 125 - 5 = 120.","Eliminated because 125 is the peak height, which does not repeat.","Eliminated because subtracting 10 yields 115.","Eliminated because subtracting 15 yields 110.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
 "Determine the next term in the sequence:
 
-$$11, \quad 18, \quad 31, \quad 50, \quad 75, \quad 106, \quad \textbf{?}$$","143","137","149","141","A","Step-by-Step Solution:
+11, 18, 31, 50, 75, 106, ?","143","137","149","141","A","Step-by-Step Solution:
 1. Calculate first-level differences:
-   - $18 - 11 = 7$
-   - $31 - 18 = 13$
-   - $50 - 31 = 19$
-   - $75 - 50 = 25$
-   - $106 - 75 = 31$.
+ - 18 - 11 = 7
+ - 31 - 18 = 13
+ - 50 - 31 = 19
+ - 75 - 50 = 25
+ - 106 - 75 = 31.
 2. Calculate second-level differences:
-   - $13 - 7 = 6$
-   - $19 - 13 = 6$
-   - $25 - 19 = 6$
-   - $31 - 25 = 6$ (Constant second difference: $\Delta^2 = 6$).
+ - 13 - 7 = 6
+ - 19 - 13 = 6
+ - 25 - 19 = 6
+ - 31 - 25 = 6 (Constant second difference: Δ² = 6).
 3. Compute next first difference:
-   - $\Delta_6 = 31 + 6 = 37$.
+ - Δ₆ = 31 + 6 = 37.
 4. Compute the 7th term:
-   - $T_7 = 106 + 37 = 143$.
-   - (Verification: $T_n = 3n^2 - 2n + 10 \implies T_7 = 3(49) - 2(7) + 10 = 147 - 14 + 10 = 143$).
+ - T₇ = 106 + 37 = 143.
+ - (Verification: Tₙ = 3n² - 2n + 10 implies T₇ = 3(49) - 2(7) + 10 = 147 - 14 + 10 = 143).
 
-Common Trap: Adding 31 again ($106 + 31 = 137$, Option B).
-Exam Tip: First differences form $6k + 1$ ($7, 13, 19, 25, 31, 37$).","Correct. Survives elimination because 106 + 37 = 143.","Eliminated because repeating the +31 difference yields 137.","Eliminated because adding 43 yields 149.","Eliminated because arithmetic slip gives 141.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
-"If the second difference of a sequence is constant at 8, the first term is 4, and the second term is 12, what is the exact value of the 10th term ($T_{10}$)?","364","360","368","356","A","Step-by-Step Solution:
+Common Trap: Adding 31 again (106 + 31 = 137, Option B).
+Exam Tip: First differences form 6k + 1 (7, 13, 19, 25, 31, 37).","Correct. Survives elimination because 106 + 37 = 143.","Eliminated because repeating the +31 difference yields 137.","Eliminated because adding 43 yields 149.","Eliminated because arithmetic slip gives 141.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+"If the second difference of a sequence is constant at 8, the first term is 4, and the second term is 12, what is the exact value of the 10th term (T₁₀)?","364","360","368","356","A","Step-by-Step Solution:
 1. Identify sequence properties:
-   - Initial term $T_1 = 4$.
-   - Second term $T_2 = 12$.
-   - Initial first difference $\Delta_1 = 12 - 4 = 8$.
-   - Constant second difference $\Delta^2 = 8$.
+ - Initial term T₁ = 4.
+ - Second term T₂ = 12.
+ - Initial first difference Δ₁ = 12 - 4 = 8.
+ - Constant second difference Δ² = 8.
 2. Formulate general first difference:
-   - $\Delta_k = \Delta_1 + (k - 1)\Delta^2 = 8 + 8(k - 1) = 8k$.
-3. Express $T_n$ as the sum of first differences:
-   - $T_n = T_1 + \sum_{k=1}^{n-1} 8k = 4 + 8 \times \frac{(n - 1)n}{2} = 4 + 4n(n - 1)$.
-4. Compute the 10th term ($n = 10$):
-   - $T_{10} = 4 + 4(10)(9) = 4 + 4(90) = 4 + 360 = 364$.
+ - Δₖ = Δ₁ + (k - 1)Δ² = 8 + 8(k - 1) = 8k.
+3. Express Tₙ as the Σ of first differences:
+ - Tₙ = T₁ + Σₖ₌₁ⁿ⁻¹ 8k = 4 + 8 × (n - 1)n/2 = 4 + 4n(n - 1).
+4. Compute the 10th term (n = 10):
+ - T₁₀ = 4 + 4(10)(9) = 4 + 4(90) = 4 + 360 = 364.
 
-Common Trap: Providing $4(90) = 360$ (Option B), forgetting to add the initial term $T_1 = 4$.
-Exam Tip: $T_n = 4n^2 - 4n + 4$. For $n = 10$: $4(100) - 4(10) + 4 = 400 - 40 + 4 = 364$.","Correct. Survives elimination because T10 = 4 + 4(10)(9) = 4 + 360 = 364.","Eliminated because 360 is the sum of differences without adding the initial term T1 = 4.","Eliminated because adding 8 gives 368.","Eliminated because subtraction error gives 356.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"
+Common Trap: Providing 4(90) = 360 (Option B), forgetting to add the initial term T₁ = 4.
+Exam Tip: Tₙ = 4n² - 4n + 4. For n = 10: 4(100) - 4(10) + 4 = 400 - 40 + 4 = 364.","Correct. Survives elimination because T10 = 4 + 4(10)(9) = 4 + 360 = 364.","Eliminated because 360 is the Σ of differences without adding the initial term T1 = 4.","Eliminated because adding 8 gives 368.","Eliminated because subtraction error gives 356.","Numerical Ability","Numerical Ability | Number Sequence | Higher-Order Patterns | Second-difference patterns | Very Difficult | Batch 029"

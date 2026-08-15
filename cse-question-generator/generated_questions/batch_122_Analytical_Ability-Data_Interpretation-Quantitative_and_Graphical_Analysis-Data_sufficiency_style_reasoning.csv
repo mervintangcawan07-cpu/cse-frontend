@@ -6,16 +6,16 @@ Statement (2): In 2023, Municipality Y's total annual budget was PHP 800 million
 Is the available data SUFFICIENT to answer the director's question?","BOTH statements TOGETHER are sufficient to answer the question, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient to answer the question.","A","Step-by-Step Solution:
 1. Question: Is Infrastructure Spend(X) > Infrastructure Spend(Y) in 2023?
 2. Evaluate Statement (1) alone:
-   - Spend(X) = 0.35 × Budget(X)
-   - Spend(Y) = 0.28 × Budget(Y)
-   - Since we do not know the absolute budget values of X and Y, 35% of a small budget could be less than 28% of a massive budget. Thus, Statement (1) alone is INSUFFICIENT.
+ - Spend(X) = 0.35 × Budget(X)
+ - Spend(Y) = 0.28 × Budget(Y)
+ - Since we do not know the absolute budget values of X and Y, 35% of a small budget could be less than 28% of a massive budget. Thus, Statement (1) alone is INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Budget(Y) = PHP 800M; Budget(X) = PHP 600M.
-   - Without knowing the infrastructure percentage or allocation breakdown, we cannot determine infrastructure spending. Thus, Statement (2) alone is INSUFFICIENT.
+ - Budget(Y) = PHP 800M; Budget(X) = PHP 600M.
+ - Without knowing the infrastructure percentage or allocation breakdown, we cannot determine infrastructure spending. Thus, Statement (2) alone is INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Spend(X) = 0.35 × PHP 600M = PHP 210 million.
-   - Spend(Y) = 0.28 × PHP 800M = PHP 224 million.
-   - We can definitively determine that Municipality X (PHP 210M) did NOT spend more than Municipality Y (PHP 224M). The question can be answered with a definitive 'No'.
+ - Spend(X) = 0.35 × PHP 600M = PHP 210 million.
+ - Spend(Y) = 0.28 × PHP 800M = PHP 224 million.
+ - We can definitively determine that Municipality X (PHP 210M) did NOT spend more than Municipality Y (PHP 224M). The question can be answered with a definitive 'No'.
 5. Therefore, Both statements together are sufficient, but neither alone is sufficient.
 
 Common Trap: Assuming Statement (1) alone is sufficient by assuming the two municipalities have identical budgets.
@@ -27,18 +27,18 @@ Statement (2): The overall passing rate for the examination was 25%, and the pas
 Is the data sufficient to calculate the EXACT NUMBER of female passers?","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Goal: Find exact number of Female Passers (FP).
 2. Evaluate Statement (1) alone:
-   - Total Examinees = 12,000.
-   - Female Examinees (FE) = 0.65 × 12,000 = 7,800.
-   - Male Examinees (ME) = 0.35 × 12,000 = 4,200.
-   - No passing rates are provided. INSUFFICIENT.
+ - Total Examinees = 12,000.
+ - Female Examinees (FE) = 0.65 × 12,000 = 7,800.
+ - Male Examinees (ME) = 0.35 × 12,000 = 4,200.
+ - No passing rates are provided. INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Overall pass rate = 25%; Male pass rate = 20%.
-   - No total counts or examinee population numbers are provided. INSUFFICIENT.
+ - Overall pass rate = 25%; Male pass rate = 20%.
+ - No total counts or examinee population numbers are provided. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Total Passers = 0.25 × 12,000 = 3,000 passers.
-   - Male Examinees = 4,200. Male Passers (MP) = 0.20 × 4,200 = 840 passers.
-   - Female Passers = Total Passers - Male Passers = 3,000 - 840 = 2,160 female passers.
-   - We get an exact, unique numerical solution (2,160).
+ - Total Passers = 0.25 × 12,000 = 3,000 passers.
+ - Male Examinees = 4,200. Male Passers (MP) = 0.20 × 4,200 = 840 passers.
+ - Female Passers = Total Passers - Male Passers = 3,000 - 840 = 2,160 female passers.
+ - We get an exact, unique numerical solution (2,160).
 5. Both statements together are sufficient.
 
 Common Trap: Thinking we need the female pass rate explicitly stated in Statement (2); since Total Passers = Male Passers + Female Passers, subtraction yields the exact female passer count.
@@ -50,17 +50,17 @@ Statement (2): In the second half of the year, the contractor completed the rema
 Is the data sufficient to determine whether the contractor met the 80% completion benchmark by mid-year?","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Target Question: Was Mid-Year Completion % >= 80%?
 2. Evaluate Statement (1) alone:
-   - Completed by mid-year = 24 km.
-   - We do not know the total project length. If total is 25 km, 24/25 = 96% (>=80%). If total is 50 km, 24/50 = 48% (<80%). Thus, Statement (1) alone is INSUFFICIENT.
+ - Completed by mid-year = 24 km.
+ - We do not know the total project length. If total is 25 km, 24/25 = 96% (>=80%). If total is 50 km, 24/50 = 48% (<80%). Thus, Statement (1) alone is INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Remaining in second half = 6 km.
-   - We do not know how much was done in the first half or total length. INSUFFICIENT.
+ - Remaining in second half = 6 km.
+ - We do not know how much was done in the first half or total length. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - First half completed = 24 km.
-   - Remaining in second half = 6 km.
-   - Total Project Length = 24 km + 6 km = 30 km.
-   - Mid-Year Completion % = 24 km / 30 km = 0.80 = 80.0%.
-   - The question 'Did the contractor complete at least 80%?' can be answered with a definitive 'Yes' (exactly 80%).
+ - First half completed = 24 km.
+ - Remaining in second half = 6 km.
+ - Total Project Length = 24 km + 6 km = 30 km.
+ - Mid-Year Completion % = 24 km / 30 km = 0.80 = 80.0%.
+ - The question 'Did the contractor complete at least 80%?' can be answered with a definitive 'Yes' (exactly 80%).
 5. Both statements together are sufficient.
 
 Common Trap: Assuming 24 km must be 80% without verifying total length, or overlooking that 24 + 6 gives the exact total project length.
@@ -72,22 +72,22 @@ Statement (2): The average daily consultation count for Wednesday, Thursday, and
 Is the data sufficient to calculate the 5-day weekly average?","Statements (1) and (2) TOGETHER are NOT sufficient to answer the question.","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","A","Step-by-Step Solution:
 1. Target: Weekly Average = (M + T + W + Th + F) / 5.
 2. Evaluate Statement (1) alone:
-   - (M + T + W) / 3 = 42 => M + T + W = 126.
-   - Tells us nothing about Thursday and Friday. INSUFFICIENT.
+ - (M + T + W) / 3 = 42 => M + T + W = 126.
+ - Tells us nothing about Thursday and Friday. INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - (W + Th + F) / 3 = 48 => W + Th + F = 144.
-   - Tells us nothing about Monday and Tuesday. INSUFFICIENT.
+ - (W + Th + F) / 3 = 48 => W + Th + F = 144.
+ - Tells us nothing about Monday and Tuesday. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Summing both: (M + T + W) + (W + Th + F) = 126 + 144 = 270.
-   - This equals: M + T + 2W + Th + F = 270.
-   - To get M + T + W + Th + F, we must subtract Wednesday's count (W).
-   - However, the individual value of Wednesday (W) is NOT provided and cannot be solved with 2 equations and 5 unknowns.
-   - If W = 30, Total = 240 (Avg = 48). If W = 50, Total = 220 (Avg = 44).
-   - Therefore, the 5-day weekly average CANNOT be uniquely determined.
+ - Summing both: (M + T + W) + (W + Th + F) = 126 + 144 = 270.
+ - This equals: M + T + 2W + Th + F = 270.
+ - To get M + T + W + Th + F, we must subtract Wednesday's count (W).
+ - However, the individual value of Wednesday (W) is NOT provided and cannot be solved with 2 equations and 5 unknowns.
+ - If W = 30, Total = 240 (Avg = 48). If W = 50, Total = 220 (Avg = 44).
+ - Therefore, the 5-day weekly average CANNOT be uniquely determined.
 5. Statements (1) and (2) together are NOT sufficient.
 
 Common Trap: Adding 126 + 144 = 270 and dividing by 6 or 5, forgetting that Wednesday is counted twice.
-Exam Tip: Check for overlapping variables; if an interior variable is counted twice and its value is unknown, the sum cannot be decoupled.","Correct. Survives elimination because summing both statements yields M + T + 2W + Th + F = 270; without knowing the isolated value of Wednesday (W), the true 5-day total (M + T + W + Th + F) cannot be calculated.","Eliminated because Wednesday is double-counted in the union of both statements, leaving the system underdetermined.","Eliminated because Statement (1) omits Thursday and Friday entirely.","Eliminated because Statement (2) omits Monday and Tuesday entirely.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Data sufficiency-style reasoning | Very Difficult | Batch 122"
+Exam Tip: Check for overlapping variables; if an interior variable is counted twice and its value is unknown, the Σ cannot be decoupled.","Correct. Survives elimination because summing both statements yields M + T + 2W + Th + F = 270; without knowing the isolated value of Wednesday (W), the true 5-day total (M + T + W + Th + F) cannot be calculated.","Eliminated because Wednesday is double-counted in the union of both statements, leaving the system underdetermined.","Eliminated because Statement (1) omits Thursday and Friday entirely.","Eliminated because Statement (2) omits Monday and Tuesday entirely.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Data sufficiency-style reasoning | Very Difficult | Batch 122"
 "Passage: A department of agriculture officer wants to determine which of two rice farming cooperatives, Coop Alpha or Coop Beta, achieved a HIGHER crop yield per hectare in the last harvest season.
 Given the following two statements:
 Statement (1): Coop Alpha harvested a total of 15,000 metric tons of palay, which was 25% more than Coop Beta's total harvest.
@@ -95,17 +95,17 @@ Statement (2): Coop Alpha cultivated 3,000 hectares of farmland, which was 50% m
 Is the data sufficient to determine which cooperative had the higher crop yield per hectare?","EACH statement ALONE is NOT sufficient, but BOTH statements TOGETHER are SUFFICIENT.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Target: Compare Yield(Alpha) = Harvest(Alpha) / Area(Alpha) vs Yield(Beta) = Harvest(Beta) / Area(Beta).
 2. Evaluate Statement (1) alone:
-   - Harvest(Alpha) = 15,000 MT.
-   - Harvest(Beta) = 15,000 / 1.25 = 12,000 MT.
-   - Without land area, yield per hectare cannot be computed. INSUFFICIENT.
+ - Harvest(Alpha) = 15,000 MT.
+ - Harvest(Beta) = 15,000 / 1.25 = 12,000 MT.
+ - Without land area, yield per hectare cannot be computed. INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Area(Alpha) = 3,000 ha.
-   - Area(Beta) = 3,000 / 1.50 = 2,000 ha.
-   - Without harvest volume, yield per hectare cannot be computed. INSUFFICIENT.
+ - Area(Alpha) = 3,000 ha.
+ - Area(Beta) = 3,000 / 1.50 = 2,000 ha.
+ - Without harvest volume, yield per hectare cannot be computed. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Yield(Alpha) = 15,000 MT / 3,000 ha = 5.0 MT/ha.
-   - Yield(Beta) = 12,000 MT / 2,000 ha = 6.0 MT/ha.
-   - We can definitively answer that Coop Beta achieved the higher yield per hectare (6.0 > 5.0).
+ - Yield(Alpha) = 15,000 MT / 3,000 ha = 5.0 MT/ha.
+ - Yield(Beta) = 12,000 MT / 2,000 ha = 6.0 MT/ha.
+ - We can definitively answer that Coop Beta achieved the higher yield per hectare (6.0 > 5.0).
 5. Both statements together are sufficient.
 
 Common Trap: Assuming Coop Alpha must have higher yield because its total harvest is 25% higher, forgetting that its land area was 50% larger.
@@ -115,16 +115,16 @@ Given the following two statements:
 Statement (1): In 2023, the utility's commercial sector revenue was PHP 450 million, representing exactly 30% of its total annual revenue.
 Statement (2): The utility's 2023 total revenue was 15% higher than its 2022 total revenue.
 Is the data sufficient to find the 2023 total revenue?","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
-1. Target: Find Total Revenue 2023 (TR_2023).
+1. Target: Find Total Revenue 2023 (TR₂023).
 2. Evaluate Statement (1) alone:
-   - Commercial Revenue = PHP 450M.
-   - Commercial Share = 30% of TR_2023.
-   - Equation: 0.30 × TR_2023 = PHP 450M.
-   - TR_2023 = PHP 450M / 0.30 = PHP 1,500 million (PHP 1.5 billion).
-   - Statement (1) ALONE provides a unique, exact solution. SUFFICIENT.
+ - Commercial Revenue = PHP 450M.
+ - Commercial Share = 30% of TR₂023.
+ - Equation: 0.30 × TR₂023 = PHP 450M.
+ - TR₂023 = PHP 450M / 0.30 = PHP 1,500 million (PHP 1.5 billion).
+ - Statement (1) ALONE provides a unique, exact solution. SUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - TR_2023 = 1.15 × TR_2022.
-   - Without knowing TR_2022, TR_2023 cannot be determined. INSUFFICIENT.
+ - TR₂023 = 1.15 × TR₂022.
+ - Without knowing TR₂022, TR₂023 cannot be determined. INSUFFICIENT.
 4. Conclusion: Statement (1) alone is sufficient, but Statement (2) alone is not sufficient.
 
 Common Trap: Combining both statements unnecessarily when Statement (1) already provides a single-equation closed solution.
@@ -136,17 +136,17 @@ Statement (2): In the second half of 2023 (Q3 and Q4), Factory Z's total SO2 emi
 Is the data sufficient to determine whether Factory Z stayed within the 50-ton statutory ceiling?","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Target Question: Total SO2 Emissions 2023 <= 50 tons?
 2. Evaluate Statement (1) alone:
-   - First half (6 months): Average = 4.2 tons/month.
-   - First Half Total = 6 × 4.2 = 25.2 tons.
-   - Second half emissions are unknown. If second half = 30 tons, Total = 55.2 (exceeds). If second half = 15 tons, Total = 40.2 (complies). INSUFFICIENT.
+ - First half (6 months): Average = 4.2 tons/month.
+ - First Half Total = 6 × 4.2 = 25.2 tons.
+ - Second half emissions are unknown. If second half = 30 tons, Total = 55.2 (exceeds). If second half = 15 tons, Total = 40.2 (complies). INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Second Half Total = 0.85 × First Half Total.
-   - Without absolute values, total tonnage cannot be computed. INSUFFICIENT.
+ - Second Half Total = 0.85 × First Half Total.
+ - Without absolute values, total tonnage cannot be computed. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - First Half Total = 25.2 tons.
-   - Second Half Total = 25.2 × 0.85 = 21.42 tons.
-   - Total Annual Emissions = 25.2 + 21.42 = 46.62 tons.
-   - Since 46.62 <= 50.0 tons, we can definitively answer 'Yes, Factory Z complied with the statutory limit.'
+ - First Half Total = 25.2 tons.
+ - Second Half Total = 25.2 × 0.85 = 21.42 tons.
+ - Total Annual Emissions = 25.2 + 21.42 = 46.62 tons.
+ - Since 46.62 <= 50.0 tons, we can definitively answer 'Yes, Factory Z complied with the statutory limit.'
 5. Both statements together are sufficient.
 
 Common Trap: Assuming Statement (1) is sufficient by multiplying 4.2 by 12 months (which assumes the second half had identical monthly emissions, an unstated assumption).
@@ -157,24 +157,24 @@ Statement (1): Municipality G activated more evacuation centers than Municipalit
 Statement (2): Municipality G activated fewer evacuation centers than Municipality E (x < 19).
 Is the data sufficient to determine the EXACT MEDIAN of the seven municipalities?","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Target: Find the median of 7 numbers: {6, 8, 10, 12, 15, 19, x}.
-   - Sort the 6 known numbers in ascending order: 6, 8, 10, 12, 15, 19.
-   - For 7 numbers, the median is the 4th value when arranged in ascending order.
+ - Sort the 6 known numbers in ascending order: 6, 8, 10, 12, 15, 19.
+ - For 7 numbers, the median is the 4th value when arranged in ascending order.
 2. Evaluate Statement (1) alone: x > 12.
-   - If x is any number greater than 12 (e.g., 13, 14, 15, 16, 100):
-   - The values smaller than 12 are strictly {6, 8, 10} (exactly 3 numbers).
-   - 12 is greater than exactly 3 numbers (6, 8, 10) and less than or equal to the remaining 3 numbers ({15, 19, x}).
-   - In any sorted arrangement where x > 12:
-     Position 1: 6
-     Position 2: 8
-     Position 3: 10
-     Position 4 (MEDIAN): 12
-     Positions 5-7: {15, 19, x} in some order.
-   - The 4th element is ALWAYS 12, regardless of whether x is 13, 15, 20, or 1,000!
-   - Thus, Statement (1) ALONE is SUFFICIENT to determine that the median is exactly 12.
+ - If x is any number greater than 12 (e.g., 13, 14, 15, 16, 100):
+ - The values smaller than 12 are strictly {6, 8, 10} (exactly 3 numbers).
+ - 12 is greater than exactly 3 numbers (6, 8, 10) and less than or equal to the remaining 3 numbers ({15, 19, x}).
+ - In any sorted arrangement where x > 12:
+ Position 1: 6
+ Position 2: 8
+ Position 3: 10
+ Position 4 (MEDIAN): 12
+ Positions 5-7: {15, 19, x} in some order.
+ - The 4th element is ALWAYS 12, regardless of whether x is 13, 15, 20, or 1,000!
+ - Thus, Statement (1) ALONE is SUFFICIENT to determine that the median is exactly 12.
 3. Evaluate Statement (2) alone: x < 19.
-   - If x = 4, sorted list = 4, 6, 8, 10, 12, 15, 19 -> Median = 10.
-   - If x = 14, sorted list = 6, 8, 10, 12, 14, 15, 19 -> Median = 12.
-   - Since median could be 10 or 12, Statement (2) alone is INSUFFICIENT.
+ - If x = 4, sorted list = 4, 6, 8, 10, 12, 15, 19 -> Median = 10.
+ - If x = 14, sorted list = 6, 8, 10, 12, 14, 15, 19 -> Median = 12.
+ - Since median could be 10 or 12, Statement (2) alone is INSUFFICIENT.
 4. Conclusion: Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.
 
 Common Trap: Thinking we need the exact value of x to find the median; in an odd-numbered list, any value of x that falls entirely to the right of the middle position fixes the median unconditionally.
@@ -184,25 +184,25 @@ Given the following two statements:
 Statement (1): The agency employs a total of 1,200 workers, consisting exclusively of permanent, casual, and contractual personnel.
 Statement (2): Casual employees make up exactly 20% of the total workforce, and permanent employees outnumber contractual employees by exactly 480 personnel.
 Is the data sufficient to find the ratio of permanent to contractual employees?","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
-1. Target: Find Ratio P : C (Permanent : Contractual).
+1. Target: Find Ratio P: C (Permanent: Contractual).
 2. Evaluate Statement (1) alone:
-   - P + Cas + C = 1,200.
-   - No individual proportions or relations between P, Cas, and C are given. INSUFFICIENT.
+ - P + Cas + C = 1,200.
+ - No individual proportions or relations between P, Cas, and C are given. INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Cas = 0.20 × Total.
-   - P - C = 480.
-   - Without knowing Total, we cannot find P and C. INSUFFICIENT.
+ - Cas = 0.20 × Total.
+ - P - C = 480.
+ - Without knowing Total, we cannot find P and C. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Total = 1,200.
-   - Cas = 0.20 × 1,200 = 240 employees.
-   - P + C = Total - Cas = 1,200 - 240 = 960 employees.
-   - We have two linear equations:
-     (1) P + C = 960
-     (2) P - C = 480
-   - Adding (1) and (2): 2P = 1,440 => P = 720 permanent employees.
-   - Subtracting: 2C = 480 => C = 240 contractual employees.
-   - Ratio P : C = 720 : 240 = 3 : 1.
-   - A unique, exact ratio is obtained.
+ - Total = 1,200.
+ - Cas = 0.20 × 1,200 = 240 employees.
+ - P + C = Total - Cas = 1,200 - 240 = 960 employees.
+ - We have two linear equations:
+ (1) P + C = 960
+ (2) P - C = 480
+ - Adding (1) and (2): 2P = 1,440 => P = 720 permanent employees.
+ - Subtracting: 2C = 480 => C = 240 contractual employees.
+ - Ratio P: C = 720: 240 = 3: 1.
+ - A unique, exact ratio is obtained.
 5. Both statements together are sufficient.
 
 Common Trap: Trying to find the ratio from Statement (2) alone by assuming P - C = 480 can be converted to a ratio without knowing the total.
@@ -214,17 +214,17 @@ Statement (2): In Q1 2024, Port Beta handled a total of 130,000 metric tons of c
 Is the data sufficient to determine which port handled more cargo in Q1 2024?","BOTH statements TOGETHER are sufficient, but NEITHER statement ALONE is sufficient.","Statement (1) ALONE is sufficient, but Statement (2) alone is not sufficient.","Statement (2) ALONE is sufficient, but Statement (1) alone is not sufficient.","Statements (1) and (2) TOGETHER are NOT sufficient.","A","Step-by-Step Solution:
 1. Target: Is Q1_Cargo(Alpha) > Q1_Cargo(Beta)?
 2. Evaluate Statement (1) alone:
-   - Q1 has exactly 3 months (January, February, March).
-   - Port Alpha Q1 Total = 3 months × 45,000 MT/month = 135,000 MT.
-   - Port Beta's tonnage is unknown. INSUFFICIENT.
+ - Q1 has exactly 3 months (January, February, March).
+ - Port Alpha Q1 Total = 3 months × 45,000 MT/month = 135,000 MT.
+ - Port Beta's tonnage is unknown. INSUFFICIENT.
 3. Evaluate Statement (2) alone:
-   - Port Beta Q1 Total = 130,000 MT.
-   - Port Alpha's tonnage is unknown. INSUFFICIENT.
+ - Port Beta Q1 Total = 130,000 MT.
+ - Port Alpha's tonnage is unknown. INSUFFICIENT.
 4. Evaluate Statements (1) and (2) TOGETHER:
-   - Port Alpha Q1 Total = 3 × 45,000 = 135,000 MT.
-   - Port Beta Q1 Total = 130,000 MT.
-   - Since 135,000 MT > 130,000 MT, Port Alpha handled more cargo than Port Beta.
-   - We can definitively answer 'Yes'.
+ - Port Alpha Q1 Total = 3 × 45,000 = 135,000 MT.
+ - Port Beta Q1 Total = 130,000 MT.
+ - Since 135,000 MT > 130,000 MT, Port Alpha handled more cargo than Port Beta.
+ - We can definitively answer 'Yes'.
 5. Both statements together are sufficient.
 
 Common Trap: Forgetting that a quarter consists of exactly 3 calendar months, making monthly average convertible to quarterly total.

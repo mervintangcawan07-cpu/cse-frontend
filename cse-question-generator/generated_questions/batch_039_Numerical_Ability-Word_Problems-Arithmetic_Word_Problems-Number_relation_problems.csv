@@ -1,187 +1,187 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"The sum of the digits of a two-digit positive integer is 11. If the digits are reversed, the resulting number is exactly 45 greater than the original number. What is the original two-digit integer?","38","29","47","83","A","Step-by-Step Solution:
+"The Σ of the digits of a two-digit positive integer is 11. If the digits are reversed, the resulting number is exactly 45 greater than the original number. What is the original two-digit integer?","38","29","47","83","A","Step-by-Step Solution:
 1. Define algebraic variables:
-   - Let tens digit $= t$ and units digit $= u$.
-   - Original Number $= 10t + u$.
-   - Reversed Number $= 10u + t$.
-2. Formulate the digit-sum equation:
-   - $t + u = 11$ (Equation 1).
+ - Let tens digit = t and units digit = u.
+ - Original Number = 10t + u.
+ - Reversed Number = 10u + t.
+2. Formulate the digit-Σ equation:
+ - t + u = 11 (Equation 1).
 3. Formulate the reversal difference equation:
-   - $(10u + t) - (10t + u) = 45$.
-   - $9u - 9t = 45 \implies 9(u - t) = 45 \implies u - t = 5$ (Equation 2).
+ - (10u + t) - (10t + u) = 45.
+ - 9u - 9t = 45 implies 9(u - t) = 45 implies u - t = 5 (Equation 2).
 4. Solve the linear system:
-   - Add Equation 1 and Equation 2:
-     - $(t + u) + (u - t) = 11 + 5 \implies 2u = 16 \implies u = 8$.
-   - Substitute $u = 8$ into Equation 1:
-     - $t + 8 = 11 \implies t = 3$.
+ - Add Equation 1 and Equation 2:
+ - (t + u) + (u - t) = 11 + 5 implies 2u = 16 implies u = 8.
+ - Substitute u = 8 into Equation 1:
+ - t + 8 = 11 implies t = 3.
 5. Construct the original number:
-   - $\text{Original Number} = 10(3) + 8 = 38$.
+ - Original Number = 10(3) + 8 = 38.
 6. Verify:
-   - $3 + 8 = 11$. Reversed $= 83$.
-   - $83 - 38 = 45$ (Confirmed!).
+ - 3 + 8 = 11. Reversed = 83.
+ - 83 - 38 = 45 (Confirmed!).
 
-Common Trap: Selecting the reversed number $83$ (Option D) instead of the original number $38$.
-Exam Tip: The difference between any two-digit number and its reversal is always $9 \times (u - t)$. Here, $\frac{45}{9} = 5 \implies u - t = 5$.","Correct. Survives elimination because 3 + 8 = 11, and reversing 38 gives 83, where 83 - 38 = 45.","Eliminated because 29 gives 92 - 29 = 63 != 45.","Eliminated because 47 gives 74 - 47 = 27 != 45.","Eliminated because 83 is the reversed number, not the original.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"The sum of two positive numbers is 25, and the sum of their squares is 325. What is the mathematical product of the two numbers?","150","144","160","125","A","Step-by-Step Solution:
+Common Trap: Selecting the reversed number 83 (Option D) instead of the original number 38.
+Exam Tip: The difference between any two-digit number and its reversal is always 9 × (u - t). Here, 45/9 = 5 implies u - t = 5.","Correct. Survives elimination because 3 + 8 = 11, and reversing 38 gives 83, where 83 - 38 = 45.","Eliminated because 29 gives 92 - 29 = 63!= 45.","Eliminated because 47 gives 74 - 47 = 27!= 45.","Eliminated because 83 is the reversed number, not the original.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"The Σ of two positive numbers is 25, and the Σ of their squares is 325. What is the mathematical product of the two numbers?","150","144","160","125","A","Step-by-Step Solution:
 1. Define variables:
-   - Let the two positive numbers be $x$ and $y$.
+ - Let the two positive numbers be x and y.
 2. Given equations:
-   - $x + y = 25$
-   - $x^2 + y^2 = 325$.
+ - x + y = 25
+ - x² + y² = 325.
 3. Apply the algebraic binomial expansion identity:
-   - $(x + y)^2 = x^2 + 2xy + y^2 = (x^2 + y^2) + 2xy$.
+ - (x + y)² = x² + 2xy + y² = (x² + y²) + 2xy.
 4. Substitute known values:
-   - $(25)^2 = 325 + 2xy$.
-   - $625 = 325 + 2xy$.
-5. Solve for the product $xy$:
-   - $2xy = 625 - 325 = 300$.
-   - $xy = \frac{300}{2} = 150$.
-6. (Verification: The numbers are $15$ and $10$; $15 + 10 = 25$, $15^2 + 10^2 = 225 + 100 = 325$, $15 \times 10 = 150$).
+ - (25)² = 325 + 2xy.
+ - 625 = 325 + 2xy.
+5. Solve for the product xy:
+ - 2xy = 625 - 325 = 300.
+ - xy = 300/2 = 150.
+6. (Verification: The numbers are 15 and 10; 15 + 10 = 25, 15² + 10² = 225 + 100 = 325, 15 × 10 = 150).
 
-Common Trap: Forgetting to divide by 2 ($2xy = 300 \to 300$).
-Exam Tip: Use identity $xy = \frac{(x+y)^2 - (x^2 + y^2)}{2} = \frac{625 - 325}{2} = 150$.","Correct. Survives elimination because (25^2 - 325) / 2 = (625 - 325) / 2 = 150.","Eliminated because 144 is 12^2.","Eliminated because 160 yields sum of squares 305 != 325.","Eliminated because 125 is 5^3.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"When a positive integer $N$ is divided by 18, the quotient is $q$ and the remainder is 11. When the identical integer $N$ is divided by 6, what is the remainder?","5","2","3","1","A","Step-by-Step Solution:
-1. Express $N$ using the Division Algorithm:
-   - $N = 18q + 11$, where $q$ is a non-negative integer.
-2. Decompose $N$ with respect to divisor 6:
-   - Note that $18q = 6(3q)$, which is an exact multiple of 6 (remainder 0).
-   - Decompose remainder 11: $11 = 6(1) + 5$.
+Common Trap: Forgetting to divide by 2 (2xy = 300 to 300).
+Exam Tip: Use identity xy = (x+y)² - (x² + y²)/2 = 625 - 325/2 = 150.","Correct. Survives elimination because (25² - 325) / 2 = (625 - 325) / 2 = 150.","Eliminated because 144 is 12².","Eliminated because 160 yields Σ of squares 305!= 325.","Eliminated because 125 is 5³.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"When a positive integer N is divided by 18, the quotient is q and the remainder is 11. When the identical integer N is divided by 6, what is the remainder?","5","2","3","1","A","Step-by-Step Solution:
+1. Express N using the Division Algorithm:
+ - N = 18q + 11, where q is a non-negative integer.
+2. Decompose N with respect to divisor 6:
+ - Note that 18q = 6(3q), which is an exact multiple of 6 (remainder 0).
+ - Decompose remainder 11: 11 = 6(1) + 5.
 3. Combine the terms:
-   - $N = 6(3q) + 6(1) + 5 = 6(3q + 1) + 5$.
+ - N = 6(3q) + 6(1) + 5 = 6(3q + 1) + 5.
 4. Identify remainder modulo 6:
-   - $\text{Remainder} = 11 \bmod 6 = 5$.
-5. (Verification: Let $q = 1 \implies N = 29$. $29 \div 6 = 4\text{ remainder } 5$).
+ - Remainder = 11 bmod 6 = 5.
+5. (Verification: Let q = 1 implies N = 29. 29 ÷ 6 = 4 remainder 5).
 
-Common Trap: Assuming the remainder cannot be known without knowing $N$, or guessing $\frac{11}{2}$.
-Exam Tip: Since 6 divides 18, the remainder of $N \div 6$ is simply the remainder of $11 \div 6$, which is 5.","Correct. Survives elimination because 18 is a multiple of 6, so N mod 6 = 11 mod 6 = 5.","Eliminated because 2 fails the modular arithmetic property.","Eliminated because 3 fails the modular arithmetic property.","Eliminated because 1 is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"The positive difference between two real numbers is 2.0, and the sum of their reciprocals is $\frac{5}{12}$. What is the product of the two numbers?","24.0","20.0","28.0","18.0","A","Step-by-Step Solution:
+Common Trap: Assuming the remainder cannot be known without knowing N, or guessing 11/2.
+Exam Tip: Since 6 divides 18, the remainder of N ÷ 6 is simply the remainder of 11 ÷ 6, which is 5.","Correct. Survives elimination because 18 is a multiple of 6, so N mod 6 = 11 mod 6 = 5.","Eliminated because 2 fails the modular arithmetic property.","Eliminated because 3 fails the modular arithmetic property.","Eliminated because 1 is an arithmetic slip.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"The positive difference between two real numbers is 2.0, and the Σ of their reciprocals is 5/12. What is the product of the two numbers?","24.0","20.0","28.0","18.0","A","Step-by-Step Solution:
 1. Define variables:
-   - Let the two numbers be $x$ and $y$, with $x - y = 2.0$.
-2. Formulate reciprocal sum equation:
-   - $\frac{1}{x} + \frac{1}{y} = \frac{x + y}{xy} = \frac{5}{12}$.
-   - $12(x + y) = 5xy \implies x + y = \frac{5}{12}xy$.
-3. Use algebraic difference-sum-product identity:
-   - $(x + y)^2 = (x - y)^2 + 4xy$.
-   - $\left(\frac{5}{12}xy\right)^2 = (2.0)^2 + 4xy$.
-4. Let $P = xy$:
-   - $\frac{25}{144} P^2 = 4 + 4P$.
-   - $25 P^2 - 576 P - 576 = 0$.
-5. Factor quadratic in $P$:
-   - $(P - 24)(25P + 24) = 0$.
-   - Since $P > 0$, $P = 24.0$.
-6. (Verification: The numbers are $x = 6.0$ and $y = 4.0$; $6 - 4 = 2$, $\frac{1}{6} + \frac{1}{4} = \frac{2 + 3}{12} = \frac{5}{12}$, $6 \times 4 = 24$).
+ - Let the two numbers be x and y, with x - y = 2.0.
+2. Formulate reciprocal Σ equation:
+ - 1/x + 1/y = x + y/xy = 5/12.
+ - 12(x + y) = 5xy implies x + y = 5/12xy.
+3. Use algebraic difference-Σ-product identity:
+ - (x + y)² = (x - y)² + 4xy.
+ - (5/12xy)² = (2.0)² + 4xy.
+4. Let P = xy:
+ - 25/144 P² = 4 + 4P.
+ - 25 P² - 576 P - 576 = 0.
+5. Factor quadratic in P:
+ - (P - 24)(25P + 24) = 0.
+ - Since P > 0, P = 24.0.
+6. (Verification: The numbers are x = 6.0 and y = 4.0; 6 - 4 = 2, 1/6 + 1/4 = 2 + 3/12 = 5/12, 6 × 4 = 24).
 
-Common Trap: Confusing reciprocal sum with sum of numbers.
-Exam Tip: Check integer factor pairs of options: for $P = 24$, factors with difference 2 are $(6, 4)$, giving $\frac{1}{6} + \frac{1}{4} = \frac{5}{12}$.","Correct. Survives elimination because numbers 6 and 4 have difference 2, product 24, and reciprocal sum 1/6 + 1/4 = 5/12.","Eliminated because product 20 gives factors (root-based) that fail the reciprocal sum.","Eliminated because product 28 fails the reciprocal sum.","Eliminated because product 18 gives factors failing the reciprocal sum.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"A three-digit number has a hundreds digit that is twice its units digit, and a tens digit that is equal to the sum of the hundreds and units digits. If the sum of all three digits is 18, what is the three-digit number?","693","462","884","639","A","Step-by-Step Solution:
+Common Trap: Confusing reciprocal Σ with Σ of numbers.
+Exam Tip: Check integer factor pairs of options: for P = 24, factors with difference 2 are (6, 4), giving 1/6 + 1/4 = 5/12.","Correct. Survives elimination because numbers 6 and 4 have difference 2, product 24, and reciprocal Σ 1/6 + 1/4 = 5/12.","Eliminated because product 20 gives factors (root-based) that fail the reciprocal Σ.","Eliminated because product 28 fails the reciprocal Σ.","Eliminated because product 18 gives factors failing the reciprocal Σ.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"A three-digit number has a hundreds digit that is twice its units digit, and a tens digit that is equal to the Σ of the hundreds and units digits. If the Σ of all three digits is 18, what is the three-digit number?","693","462","884","639","A","Step-by-Step Solution:
 1. Define algebraic variables:
-   - Let units digit $= u$.
-   - Hundreds digit $= h = 2u$.
-   - Tens digit $= t = h + u = 2u + u = 3u$.
-2. Formulate sum-of-digits equation:
-   - $h + t + u = 18$.
-   - $2u + 3u + u = 18$.
-   - $6u = 18 \implies u = 3$.
+ - Let units digit = u.
+ - Hundreds digit = h = 2u.
+ - Tens digit = t = h + u = 2u + u = 3u.
+2. Formulate Σ-of-digits equation:
+ - h + t + u = 18.
+ - 2u + 3u + u = 18.
+ - 6u = 18 implies u = 3.
 3. Compute each digit:
-   - Units digit: $u = 3$.
-   - Hundreds digit: $h = 2(3) = 6$.
-   - Tens digit: $t = 3(3) = 9$.
+ - Units digit: u = 3.
+ - Hundreds digit: h = 2(3) = 6.
+ - Tens digit: t = 3(3) = 9.
 4. Construct three-digit number:
-   - $\text{Number} = 100(6) + 10(9) + 3 = 693$.
+ - Number = 100(6) + 10(9) + 3 = 693.
 5. Verify:
-   - $h = 2u \implies 6 = 2(3)$ (Holds).
-   - $t = h + u \implies 9 = 6 + 3$ (Holds).
-   - Sum $= 6 + 9 + 3 = 18$ (Holds).
+ - h = 2u implies 6 = 2(3) (Holds).
+ - t = h + u implies 9 = 6 + 3 (Holds).
+ - Sum = 6 + 9 + 3 = 18 (Holds).
 
-Common Trap: Transposing the tens and units digits ($639$, Option D).
-Exam Tip: Structure: $H = 2u, T = 3u, U = u \implies 6u = 18 \implies u = 3 \implies 693$.","Correct. Survives elimination because in 693, 6 = 2(3), 9 = 6 + 3, and 6 + 9 + 3 = 18.","Eliminated because 462 has digit sum 4 + 6 + 2 = 12 != 18.","Eliminated because 884 has digit sum 20 != 18.","Eliminated because 639 transposes tens and units digits (tens is not 6 + 9).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"If 8 is added to the numerator of a fraction, its value becomes $\frac{2}{3}$. If 5 is subtracted from the denominator, its value becomes $\frac{1}{2}$. What is the original fraction?","\frac{14}{33}","\frac{12}{29}","\frac{16}{35}","\frac{10}{27}","A","Step-by-Step Solution:
-1. Let original fraction be $\frac{n}{d}$.
+Common Trap: Transposing the tens and units digits (639, Option D).
+Exam Tip: Structure: H = 2u, T = 3u, U = u implies 6u = 18 implies u = 3 implies 693.","Correct. Survives elimination because in 693, 6 = 2(3), 9 = 6 + 3, and 6 + 9 + 3 = 18.","Eliminated because 462 has digit Σ 4 + 6 + 2 = 12!= 18.","Eliminated because 884 has digit Σ 20!= 18.","Eliminated because 639 transposes tens and units digits (tens is not 6 + 9).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"If 8 is added to the numerator of a fraction, its value becomes 2/3. If 5 is subtracted from the denominator, its value becomes 1/2. What is the original fraction?","14/33","12/29","16/35","10/27","A","Step-by-Step Solution:
+1. Let original fraction be n/d.
 2. Condition 1 (Add 8 to numerator):
-   - $\frac{n + 8}{d} = \frac{2}{3} \implies 3(n + 8) = 2d \implies 3n + 24 = 2d$ (Equation 1).
+ - n + 8/d = 2/3 implies 3(n + 8) = 2d implies 3n + 24 = 2d (Equation 1).
 3. Condition 2 (Subtract 5 from denominator):
-   - $\frac{n}{d - 5} = \frac{1}{2} \implies 2n = d - 5 \implies d = 2n + 5$ (Equation 2).
+ - n/d - 5 = 1/2 implies 2n = d - 5 implies d = 2n + 5 (Equation 2).
 4. Substitute Equation 2 into Equation 1:
-   - $3n + 24 = 2(2n + 5)$.
-   - $3n + 24 = 4n + 10$.
-   - $4n - 3n = 24 - 10 \implies n = 14$.
-5. Compute denominator $d$:
-   - $d = 2(14) + 5 = 28 + 5 = 33$.
-6. Original fraction $= \frac{14}{33}$.
+ - 3n + 24 = 2(2n + 5).
+ - 3n + 24 = 4n + 10.
+ - 4n - 3n = 24 - 10 implies n = 14.
+5. Compute denominator d:
+ - d = 2(14) + 5 = 28 + 5 = 33.
+6. Original fraction = 14/33.
 7. Verify:
-   - $\frac{14 + 8}{33} = \frac{22}{33} = \frac{2}{3}$.
-   - $\frac{14}{33 - 5} = \frac{14}{28} = \frac{1}{2}$ (Confirmed!).
+ - 14 + 8/33 = 22/33 = 2/3.
+ - 14/33 - 5 = 14/28 = 1/2 (Confirmed!).
 
 Common Trap: Inverting numerator and denominator operations.
-Exam Tip: Cross-multiply carefully: $3(n+8) = 2d$ and $2n = d-5 \implies n=14, d=33$.","Correct. Survives elimination because (14 + 8)/33 = 22/33 = 2/3 and 14/(33 - 5) = 14/28 = 1/2.","Eliminated because (12 + 8)/29 = 20/29 != 2/3.","Eliminated because (16 + 8)/35 = 24/35 != 2/3.","Eliminated because (10 + 8)/27 = 18/27 = 2/3, but 10/(27 - 5) = 10/22 != 1/2.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"The mathematical product of two consecutive positive even integers is 288. What is the sum of these two integers?","34","32","36","30","A","Step-by-Step Solution:
+Exam Tip: Cross-multiply carefully: 3(n+8) = 2d and 2n = d-5 implies n=14, d=33.","Correct. Survives elimination because (14 + 8)/33 = 22/33 = 2/3 and 14/(33 - 5) = 14/28 = 1/2.","Eliminated because (12 + 8)/29 = 20/29!= 2/3.","Eliminated because (16 + 8)/35 = 24/35!= 2/3.","Eliminated because (10 + 8)/27 = 18/27 = 2/3, but 10/(27 - 5) = 10/22!= 1/2.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"The mathematical product of two consecutive positive even integers is 288. What is the Σ of these two integers?","34","32","36","30","A","Step-by-Step Solution:
 1. Define consecutive even integers:
-   - Let the integers be $x$ and $x + 2$.
+ - Let the integers be x and x + 2.
 2. Formulate quadratic equation:
-   - $x(x + 2) = 288$.
-   - $x^2 + 2x - 288 = 0$.
+ - x(x + 2) = 288.
+ - x² + 2x - 288 = 0.
 3. Factor the quadratic:
-   - Find two integers with product $-288$ and difference $2$:
-   - $\sqrt{288} \approx 16.97 \implies$ test $16 \times 18 = 288$.
-   - $(x + 18)(x - 16) = 0$.
-4. Since $x > 0$, $x = 16$.
-5. The two consecutive even integers are $16$ and $18$.
-6. Compute their sum:
-   - $\text{Sum} = 16 + 18 = 34$.
+ - Find two integers with product -288 and difference 2:
+ - √288 ≈ 16.97 implies test 16 × 18 = 288.
+ - (x + 18)(x - 16) = 0.
+4. Since x > 0, x = 16.
+5. The two consecutive even integers are 16 and 18.
+6. Compute their Σ:
+ - Sum = 16 + 18 = 34.
 
-Common Trap: Selecting $32$ ($16 \times 2$) or $36$ ($18 \times 2$).
-Exam Tip: Consecutive even integers around $\sqrt{288} \approx 17$ are 16 and 18. Sum $= 16 + 18 = 34$.","Correct. Survives elimination because 16 * 18 = 288, and their sum is 16 + 18 = 34.","Eliminated because 32 assumes two equal 16s.","Eliminated because 36 assumes two equal 18s.","Eliminated because 30 corresponds to 14 + 16 (product 224).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+Common Trap: Selecting 32 (16 × 2) or 36 (18 × 2).
+Exam Tip: Consecutive even integers around √288 ≈ 17 are 16 and 18. Sum = 16 + 18 = 34.","Correct. Survives elimination because 16 * 18 = 288, and their Σ is 16 + 18 = 34.","Eliminated because 32 assumes two equal 16s.","Eliminated because 36 assumes two equal 18s.","Eliminated because 30 corresponds to 14 + 16 (product 224).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
 "A number consists of two digits whose product is 24. If 18 is subtracted from the number, the digits reverse their order. What is the original number?","64","46","83","38","A","Step-by-Step Solution:
 1. Define variables:
-   - Let tens digit $= t$ and units digit $= u$.
-   - Original Number $= 10t + u$.
+ - Let tens digit = t and units digit = u.
+ - Original Number = 10t + u.
 2. Given conditions:
-   - $t \cdot u = 24$ (Equation 1).
-   - $(10t + u) - 18 = 10u + t \implies 9(t - u) = 18 \implies t - u = 2 \implies t = u + 2$ (Equation 2).
+ - t · u = 24 (Equation 1).
+ - (10t + u) - 18 = 10u + t implies 9(t - u) = 18 implies t - u = 2 implies t = u + 2 (Equation 2).
 3. Substitute Equation 2 into Equation 1:
-   - $(u + 2)u = 24$.
-   - $u^2 + 2u - 24 = 0$.
+ - (u + 2)u = 24.
+ - u² + 2u - 24 = 0.
 4. Factor the quadratic:
-   - $(u + 6)(u - 4) = 0 \implies u = 4$ (since $u > 0$).
+ - (u + 6)(u - 4) = 0 implies u = 4 (since u > 0).
 5. Determine tens digit:
-   - $t = 4 + 2 = 6$.
+ - t = 4 + 2 = 6.
 6. Construct original number:
-   - $\text{Number} = 64$.
+ - Number = 64.
 7. Verify:
-   - $6 \times 4 = 24$.
-   - $64 - 18 = 46$ (Reversal confirmed!).
+ - 6 × 4 = 24.
+ - 64 - 18 = 46 (Reversal confirmed!).
 
-Common Trap: Selecting the reversed number $46$ (Option B).
-Exam Tip: Since subtracting 18 decreases the number, the original number must be larger than the reversed number ($64 > 46$).","Correct. Survives elimination because 6 * 4 = 24, and 64 - 18 = 46 (reversed digits).","Eliminated because 46 is the reversed number (subtracting 18 from 46 gives 28, not 64).","Eliminated because 8 * 3 = 24, but 83 - 18 = 65 != 38.","Eliminated because 38 - 18 = 20 != 83.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
-"The sum of two positive integers is 48. When the larger integer is divided by the smaller integer, the quotient is 3 and the remainder is 4. What is the value of the larger integer?","37","35","39","33","A","Step-by-Step Solution:
+Common Trap: Selecting the reversed number 46 (Option B).
+Exam Tip: Since subtracting 18 decreases the number, the original number must be larger than the reversed number (64 > 46).","Correct. Survives elimination because 6 * 4 = 24, and 64 - 18 = 46 (reversed digits).","Eliminated because 46 is the reversed number (subtracting 18 from 46 gives 28, not 64).","Eliminated because 8 * 3 = 24, but 83 - 18 = 65!= 38.","Eliminated because 38 - 18 = 20!= 83.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+"The Σ of two positive integers is 48. When the larger integer is divided by the smaller integer, the quotient is 3 and the remainder is 4. What is the value of the larger integer?","37","35","39","33","A","Step-by-Step Solution:
 1. Define variables:
-   - Let the larger integer be $L$ and the smaller integer be $S$.
+ - Let the larger integer be L and the smaller integer be S.
 2. Formulate equations:
-   - $L + S = 48 \implies L = 48 - S$ (Equation 1).
-   - Using Division Algorithm: $L = 3S + 4$ (Equation 2).
-3. Equate expressions for $L$:
-   - $48 - S = 3S + 4$.
-   - $3S + S = 48 - 4$.
-   - $4S = 44 \implies S = 11$.
-4. Compute larger integer $L$:
-   - $L = 48 - 11 = 37$.
+ - L + S = 48 implies L = 48 - S (Equation 1).
+ - Using Division Algorithm: L = 3S + 4 (Equation 2).
+3. Equate expressions for L:
+ - 48 - S = 3S + 4.
+ - 3S + S = 48 - 4.
+ - 4S = 44 implies S = 11.
+4. Compute larger integer L:
+ - L = 48 - 11 = 37.
 5. Verify:
-   - $37 + 11 = 48$.
-   - $37 \div 11 = 3\text{ with remainder } 4$ ($3 \times 11 + 4 = 33 + 4 = 37$).
+ - 37 + 11 = 48.
+ - 37 ÷ 11 = 3 with remainder 4 (3 × 11 + 4 = 33 + 4 = 37).
 
-Common Trap: Selecting the smaller integer $11$ or miscalculating $48 - 11$.
-Exam Tip: $4S + 4 = 48 \implies 4S = 44 \implies S = 11 \implies L = 37$.","Correct. Survives elimination because 37 + 11 = 48, and 37 = 3(11) + 4.","Eliminated because 35 gives smaller integer 13 (35 = 2 * 13 + 9 != 3 * 13 + 4).","Eliminated because 39 gives smaller integer 9 (39 = 4 * 9 + 3).","Eliminated because 33 gives smaller integer 15 (33 = 2 * 15 + 3).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+Common Trap: Selecting the smaller integer 11 or miscalculating 48 - 11.
+Exam Tip: 4S + 4 = 48 implies 4S = 44 implies S = 11 implies L = 37.","Correct. Survives elimination because 37 + 11 = 48, and 37 = 3(11) + 4.","Eliminated because 35 gives smaller integer 13 (35 = 2 * 13 + 9!= 3 * 13 + 4).","Eliminated because 39 gives smaller integer 9 (39 = 4 * 9 + 3).","Eliminated because 33 gives smaller integer 15 (33 = 2 * 15 + 3).","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
 "The arithmetic mean of two positive numbers is 25.0, and their geometric mean is 20.0. What is the absolute difference between the two numbers?","30.0","25.0","35.0","20.0","A","Step-by-Step Solution:
 1. Translate given statistical means into algebraic equations:
-   - Arithmetic Mean: $\frac{a + b}{2} = 25.0 \implies a + b = 50.0$.
-   - Geometric Mean: $\sqrt{ab} = 20.0 \implies ab = (20.0)^2 = 400.0$.
-2. Apply the difference-sum identity:
-   - $(a - b)^2 = (a + b)^2 - 4ab$.
+ - Arithmetic Mean: a + b/2 = 25.0 implies a + b = 50.0.
+ - Geometric Mean: √ab = 20.0 implies ab = (20.0)² = 400.0.
+2. Apply the difference-Σ identity:
+ - (a - b)² = (a + b)² - 4ab.
 3. Substitute known values:
-   - $(a - b)^2 = (50.0)^2 - 4(400.0) = 2,500.0 - 1,600.0 = 900.0$.
+ - (a - b)² = (50.0)² - 4(400.0) = 2,500.0 - 1,600.0 = 900.0.
 4. Take the square root:
-   - $|a - b| = \sqrt{900.0} = 30.0$.
-5. (Verification: Roots of $t^2 - 50t + 400 = 0$ are $(t - 40)(t - 10) = 0 \implies a = 40.0, b = 10.0$. Difference $= 40.0 - 10.0 = 30.0$).
+ - |a - b| = √900.0 = 30.0.
+5. (Verification: Roots of t² - 50t + 400 = 0 are (t - 40)(t - 10) = 0 implies a = 40.0, b = 10.0. Difference = 40.0 - 10.0 = 30.0).
 
-Common Trap: Mistaking the arithmetic mean ($25.0$) for the difference between the numbers.
-Exam Tip: $(a - b)^2 = (a + b)^2 - 4(\text{GM})^2 = 2500 - 1600 = 900 \implies \Delta = 30.0$.","Correct. Survives elimination because numbers are 40 and 10 (AM = 25, GM = 20), and their difference is 40 - 10 = 30.0.","Eliminated because 25.0 is the arithmetic mean.","Eliminated because 35.0 is an overestimate.","Eliminated because 20.0 is the geometric mean.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"
+Common Trap: Mistaking the arithmetic mean (25.0) for the difference between the numbers.
+Exam Tip: (a - b)² = (a + b)² - 4(GM)² = 2500 - 1600 = 900 implies Δ = 30.0.","Correct. Survives elimination because numbers are 40 and 10 (AM = 25, GM = 20), and their difference is 40 - 10 = 30.0.","Eliminated because 25.0 is the arithmetic mean.","Eliminated because 35.0 is an overestimate.","Eliminated because 20.0 is the geometric mean.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Number relation problems | Very Difficult | Batch 039"

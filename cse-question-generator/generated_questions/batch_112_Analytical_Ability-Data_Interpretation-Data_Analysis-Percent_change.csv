@@ -1,26 +1,26 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Passage: The following data shows the annual budget of a government agency over five years: Year 1=PHP 84 million; Year 2=PHP 97.44 million; Year 3=PHP 112.93 million; Year 4=PHP 130.84 million; Year 5=PHP 151.61 million. Based on this data, what is the approximate COMPOUND ANNUAL GROWTH RATE (CAGR) of the agency's budget from Year 1 to Year 5?","Approximately 16%, calculated as (151.61/84)^(1/4) - 1 = (1.8049)^(0.25) - 1 ≈ 0.160 = 16.0%.","Approximately 7.5%, the simple average of the four year-over-year percentage changes.","Approximately 80%, calculated as (151.61-84)/84 × 100.","Approximately 22%, based on averaging the first and last percentage changes.","A","Step-by-Step Solution:
 1. CAGR formula: CAGR = (Ending Value / Beginning Value)^(1/n) - 1, where n = number of years.
-   - Ending = PHP 151.61M; Beginning = PHP 84M; n = 4 years (Y1 to Y5 = 4 intervals).
+ - Ending = PHP 151.61M; Beginning = PHP 84M; n = 4 years (Y1 to Y5 = 4 intervals).
 2. Calculate ratio: 151.61 / 84 = 1.8049.
 3. Apply exponent: (1.8049)^(1/4) = (1.8049)^(0.25).
-   - √1.8049 ≈ 1.3435; √1.3435 ≈ 1.1591. Wait: 1.16^4 = 1.16×1.16×1.16×1.16 = 1.3456×1.3456 = 1.8106 ≈ 1.80 ✓.
-   - CAGR ≈ 1.16 - 1 = 0.16 = 16%.
+ - √1.8049 ≈ 1.3435; √1.3435 ≈ 1.1591. Wait: 1.16⁴ = 1.16×1.16×1.16×1.16 = 1.3456×1.3456 = 1.8106 ≈ 1.80 ✓.
+ - CAGR ≈ 1.16 - 1 = 0.16 = 16%.
 4. Option A (16%) is correct.
 5. Evaluate incorrect alternatives:
-   - Option B: Simple average of annual % changes ≠ CAGR (they differ when changes vary by year).
-   - Option C: 80% is the TOTAL growth over 4 years, not the compound annual rate.
-   - Option D: 22% doesn't correspond to a standard CAGR calculation method.
+ - Option B: Simple average of annual % changes ≠ CAGR (they differ when changes vary by year).
+ - Option C: 80% is the TOTAL growth over 4 years, not the compound annual rate.
+ - Option D: 22% doesn't correspond to a standard CAGR calculation method.
 
 Common Trap: Calculating total percentage growth (80%) or simple average growth rather than compound annual growth; CAGR accounts for compounding effects.
 Exam Tip: CAGR = (End/Start)^(1/n) - 1; n = number of years between measurements (not the total number of data points).","Correct. Survives elimination because (151.61/84)^(1/4) - 1 ≈ 1.16 - 1 = 0.16 = approximately 16% annual compound growth rate.","Eliminated because simple average growth rates overestimate CAGR when individual years have varying growth rates; CAGR uses the geometric mean, not arithmetic mean.","Eliminated because 80% represents total cumulative growth over the entire 5-year period—not the annual compound rate which accounts for compounding effects year-by-year.","Eliminated because 22% does not correspond to any standard CAGR computation methodology for these values.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | CAGR | Very Difficult | Batch 112"
 "Passage: An audit report shows the following year-over-year changes in a department's budget: Year 2 vs Year 1: +8.4%. Year 3 vs Year 2: +12.6%. Year 4 vs Year 3: -4.2%. Year 5 vs Year 4: +15.3%. The Year 1 budget was PHP 120 million. Based on this data, what is the APPROXIMATE budget in Year 5?","Approximately PHP 169.8 million, calculated by applying successive percentage changes to the Year 1 base of PHP 120 million.","Approximately PHP 151.2 million, calculated by applying only the two positive percentage changes.","Approximately PHP 163.5 million, calculated by averaging all four percentage changes and applying once.","Approximately PHP 192.4 million, calculated by summing all percentage changes (8.4+12.6-4.2+15.3=32.1%) and applying to Year 1.","A","Step-by-Step Solution:
 1. Apply each annual percentage change successively:
-   - Year 1: PHP 120.000M.
-   - Year 2: 120 × 1.084 = PHP 130.080M.
-   - Year 3: 130.080 × 1.126 = PHP 146.470M.
-   - Year 4: 146.470 × 0.958 = PHP 140.314M.
-   - Year 5: 140.314 × 1.153 = PHP 161.782M ≈ PHP 161.8M.
+ - Year 1: PHP 120.000M.
+ - Year 2: 120 × 1.084 = PHP 130.080M.
+ - Year 3: 130.080 × 1.126 = PHP 146.470M.
+ - Year 4: 146.470 × 0.958 = PHP 140.314M.
+ - Year 5: 140.314 × 1.153 = PHP 161.782M ≈ PHP 161.8M.
 
 Wait—Option A says PHP 169.8M. Let me recompute:
 Year 2: 120 × 1.084 = 130.08.
@@ -30,37 +30,37 @@ Year 5: 140.314 × 1.153 = 161.782.
 
 The correct answer is approximately PHP 161.8 million. Updating the answer choice to reflect this.","Approximately PHP 161.8 million, calculated by successively applying each year's change: Year 2=PHP 130.1M, Year 3=PHP 146.5M, Year 4=PHP 140.3M, Year 5=PHP 161.8M.","Approximately PHP 151.2 million, calculated using only the two largest positive percentage changes and ignoring the Year 4 decline.","Approximately PHP 163.5 million, calculated by averaging all four percentage changes (8.4+12.6-4.2+15.3)/4=8.025%) and applying once to Year 1.","Approximately PHP 158.5 million, calculated by summing all four percentage changes (32.1%) and applying the total to Year 1 without compounding.","A","Step-by-Step Solution (Corrected):
 1. Apply each annual change in succession:
-   - Year 1: PHP 120.000M (base).
-   - Year 2: 120.000 × 1.084 = PHP 130.080M.
-   - Year 3: 130.080 × 1.126 = PHP 146.470M.
-   - Year 4: 146.470 × 0.958 = PHP 140.314M (reduced by 4.2%).
-   - Year 5: 140.314 × 1.153 = PHP 161.782M ≈ PHP 161.8M.
+ - Year 1: PHP 120.000M (base).
+ - Year 2: 120.000 × 1.084 = PHP 130.080M.
+ - Year 3: 130.080 × 1.126 = PHP 146.470M.
+ - Year 4: 146.470 × 0.958 = PHP 140.314M (reduced by 4.2%).
+ - Year 5: 140.314 × 1.153 = PHP 161.782M ≈ PHP 161.8M.
 2. Option A (PHP 161.8M) is the correct compound result.
 3. Evaluate incorrect alternatives:
-   - Option B: Ignoring the Year 4 decline overstates the result.
-   - Option C: Applying an averaged rate once ignores the order and compounding effect.
-   - Option D: Summing percentage changes (32.1%) and applying to base (120×1.321=158.5M) ignores compounding.
+ - Option B: Ignoring the Year 4 decline overstates the result.
+ - Option C: Applying an averaged rate once ignores the order and compounding effect.
+ - Option D: Summing percentage changes (32.1%) and applying to base (120×1.321=158.5M) ignores compounding.
 
 Common Trap: Summing all percentage changes and applying as a single total (Option D) rather than applying them successively; or ignoring the year with a negative change (Option B).
-Exam Tip: Successive percentage changes must be applied multiplicatively (compounding), not additively; each year's base changes before the next year's rate is applied.","Correct. Survives elimination because successive compounding of 8.4%, 12.6%, -4.2%, and 15.3% from a PHP 120M base yields PHP 161.8M in Year 5.","Eliminated because ignoring the Year 4 budget reduction (−4.2%) overstates the Year 5 budget by skipping a compounding reduction step.","Eliminated because averaging the four rates (8.025%) and applying once treats the changes as additive rather than multiplicative, ignoring compounding sequence effects.","Eliminated because summing percentage changes as 32.1% and applying directly to the Year 1 base (120×1.321=158.5M) ignores the compounding effect of each rate on the prior year's balance.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Successive Percentage Changes | Very Difficult | Batch 112"
+Exam Tip: Successive percentage changes must be applied multiplicatively (compounding), not additively; each year's base changes before the next year's rate is applied."
 "Passage: A hospital performance report shows the following patient satisfaction scores over three assessment periods: Period 1=72.4%; Period 2=79.6%; Period 3=84.3%. An administrator wants to know both the ABSOLUTE and PERCENTAGE CHANGE from Period 1 to Period 3. Which correctly states BOTH figures?","The absolute change is +11.9 percentage points (84.3%-72.4%), and the percentage change is +16.4% ((11.9/72.4)×100).","The absolute change is +11.9 percentage points, and the percentage change is also +11.9%.","The absolute change is 84.3%, and the percentage change is an increase of 72.4%.","The absolute change is +4.7 percentage points (Period 2 to 3 only), and the percentage change is 5.9%.","A","Step-by-Step Solution:
 1. Calculate absolute change from Period 1 to Period 3:
-   - 84.3% - 72.4% = +11.9 percentage points.
+ - 84.3% - 72.4% = +11.9 percentage points.
 2. Calculate percentage change:
-   - (11.9 / 72.4) × 100 = 16.436% ≈ 16.4%.
+ - (11.9 / 72.4) × 100 = 16.436% ≈ 16.4%.
 3. Option A correctly states both: +11.9 pp absolute; +16.4% relative change.
 4. Evaluate incorrect alternatives:
-   - Option B: The percentage change is 16.4%, NOT 11.9%; confuses absolute and relative change.
-   - Option C: 84.3% is the final score (not the absolute change), and 72.4% is the starting score (not the change).
-   - Option D: 4.7 pp and 5.9% are the Period 2→3 changes, not Period 1→3 as requested.
+ - Option B: The percentage change is 16.4%, NOT 11.9%; confuses absolute and relative change.
+ - Option C: 84.3% is the final score (not the absolute change), and 72.4% is the starting score (not the change).
+ - Option D: 4.7 pp and 5.9% are the Period 2→3 changes, not Period 1→3 as requested.
 
-Common Trap: Treating the percentage-point absolute change (11.9 pp) as identical to the percentage change; they are different—16.4% is what 11.9 represents relative to the baseline of 72.4%.
+Common Trap: Treating the percentage-po∫ absolute change (11.9 pp) as identical to the percentage change; they are different—16.4% is what 11.9 represents relative to the baseline of 72.4%.
 Exam Tip: Absolute change in percentages = end% minus start% (in percentage points); percentage change = (absolute change ÷ starting value) × 100 = tells you how much the rate itself changed relative to its original level.","Correct. Survives elimination because the absolute change from 72.4% to 84.3% is +11.9 percentage points, and the percentage change is (11.9÷72.4)×100 = 16.4%.","Eliminated because while the absolute change (11.9 pp) is correct, the percentage change is not 11.9%—it is 16.4% (the ratio of the 11.9 pp change to the 72.4% baseline).","Eliminated because 84.3% is the final satisfaction score and 72.4% is the initial score; neither represents 'change' on its own.","Eliminated because 4.7 pp and 5.9% describe the Period 2-to-Period 3 interval, not the full Period 1-to-Period 3 change requested.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Absolute vs Relative Change | Very Difficult | Batch 112"
 "Passage: The following table shows a government agency's procurement expenditures (PHP millions) over three years. Year 1: Goods=12.4, Services=8.7, Infrastructure=34.2. Total=55.3. Year 2: Goods=13.8, Services=9.4, Infrastructure=38.6. Total=61.8. Year 3: Goods=15.1, Services=11.2, Infrastructure=42.8. Total=69.1. Based on this data, which procurement category showed the LARGEST PERCENTAGE INCREASE from Year 1 to Year 3?","Services increased the most in percentage terms: (11.2-8.7)/8.7×100 = 2.5/8.7×100 = 28.7%.","Infrastructure had the largest absolute increase (PHP 8.6M) from Year 1 to Year 3.","Goods increased by (15.1-12.4)/12.4×100 = 21.8%.","Infrastructure increased by (42.8-34.2)/34.2×100 = 25.1%, the largest absolute but not the largest percentage increase.","A","Step-by-Step Solution:
 1. Calculate percentage change from Year 1 to Year 3 for each category:
-   - Goods: (15.1-12.4)/12.4 × 100 = 2.7/12.4 × 100 = 21.8%.
-   - Services: (11.2-8.7)/8.7 × 100 = 2.5/8.7 × 100 = 28.7%. ← LARGEST.
-   - Infrastructure: (42.8-34.2)/34.2 × 100 = 8.6/34.2 × 100 = 25.1%.
+ - Goods: (15.1-12.4)/12.4 × 100 = 2.7/12.4 × 100 = 21.8%.
+ - Services: (11.2-8.7)/8.7 × 100 = 2.5/8.7 × 100 = 28.7%. ← LARGEST.
+ - Infrastructure: (42.8-34.2)/34.2 × 100 = 8.6/34.2 × 100 = 25.1%.
 2. Ranking: Services(28.7%) > Infrastructure(25.1%) > Goods(21.8%).
 3. Services showed the largest percentage increase despite having the smallest absolute increase.
 
@@ -68,29 +68,29 @@ Common Trap: Selecting Infrastructure because it had the largest absolute increa
 Exam Tip: 'Largest percentage increase' depends on both the absolute change and the base amount; a smaller absolute change from a smaller base can yield a larger percentage than a bigger change from a bigger base.","Correct. Survives elimination because Services' percentage increase from Year 1 to Year 3 (2.5÷8.7×100 = 28.7%) is the highest among the three procurement categories.","Eliminated because PHP 8.6M is Infrastructure's ABSOLUTE increase—the largest in absolute terms—but Infrastructure's percentage change (25.1%) is lower than Services' 28.7%.","Eliminated because Goods' percentage increase of 21.8% is the lowest among all three categories, not the largest.","Eliminated because while correctly identifying Infrastructure's 25.1% growth rate, this option confirms it is NOT the largest percentage increase—which is Services' 28.7%.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Category Comparison | Very Difficult | Batch 112"
 "Passage: A news report states that the number of registered nurses in the Philippines grew from 487,000 in 2018 to 624,000 in 2023. The report claims this represents 'nearly a 30% increase.' Based on the data, is the claim accurate, and what is the PRECISE PERCENTAGE INCREASE?","The claim is slightly overstated; the precise increase is 28.1% ((624,000-487,000)/487,000×100=137,000/487,000×100=28.1%), not 'nearly 30%.'","The claim is accurate; a 28.1% increase is close enough to be described as 'nearly 30%.'","The claim is understated; the actual increase is 33.7%, significantly above 30%.","The claim cannot be verified because absolute numbers alone don't determine percentage growth.","B","Step-by-Step Solution:
 1. Calculate precise percentage increase:
-   - Absolute change: 624,000 - 487,000 = 137,000 nurses.
-   - Percentage increase: 137,000 / 487,000 × 100 = 28.13% ≈ 28.1%.
+ - Absolute change: 624,000 - 487,000 = 137,000 nurses.
+ - Percentage increase: 137,000 / 487,000 × 100 = 28.13% ≈ 28.1%.
 2. Is 28.1% 'nearly 30%'?
-   - 28.1% is 1.9 percentage points below 30%.
-   - Whether this qualifies as 'nearly 30%' is a matter of rounding convention, but it is generally acceptable to describe 28.1% as 'nearly 30%' (within 2 pp).
+ - 28.1% is 1.9 percentage points below 30%.
+ - Whether this qualifies as 'nearly 30%' is a matter of rounding convention, but it is generally acceptable to describe 28.1% as 'nearly 30%' (within 2 pp).
 3. The question asks whether the claim is accurate—both Options A and B provide the correct 28.1% figure. The distinction is whether 28.1% ≈ 'nearly 30%.'
-   - Option A says the claim is 'slightly overstated.'
-   - Option B says the claim is 'accurate' because 28.1% is close enough.
+ - Option A says the claim is 'slightly overstated.'
+ - Option B says the claim is 'accurate' because 28.1% is close enough.
 4. In strict data interpretation: 28.1% is approximately 28%, not 'nearly 30%' in precise statistical language. However, Option B accepts the approximation as reasonable. In exam context, both could be argued—but Option B is the intended correct answer, accepting that 28.1% is close enough to 'nearly 30%.'
 
 Actually, both A and B contain the correct calculation (28.1%). The question turns on whether 'nearly 30%' is an overstatement. In common usage, 28.1% is reasonably called 'nearly 30%' (within 2 pp). Option B (accurate) is more defensible.","Option A correctly calculates 28.1% but overly critiques 'nearly 30%' as an overstatement; 28.1% is within reasonable rounding distance of 30%.","Correct. Survives elimination because 28.1% is indeed 'nearly 30%'—within 2 percentage points, making the report's characterization a reasonable approximation rather than a material misstatement.","Eliminated because 33.7% is not the correct calculation; the precise percentage increase is (137,000/487,000)×100=28.1%.","Eliminated because absolute numbers (487,000 and 624,000) provide all the information needed to calculate percentage growth; the claim is entirely verifiable.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Claim Verification | Very Difficult | Batch 112"
-"Passage: A local government's tax collection report shows the following revenue figures for three quarters. Quarter 1=PHP 34.8 million; Quarter 2=PHP 38.4 million; Quarter 3=PHP 41.7 million. A finance officer projects Quarter 4 revenue using the average quarterly growth rate from the first three quarters. What is the PROJECTED Quarter 4 revenue?","Approximately PHP 45.2 million, based on applying the average quarterly percentage growth rate of approximately 8.4% to Quarter 3's PHP 41.7 million.","PHP 44.8 million, based on adding the average absolute quarterly increase to Quarter 3.","PHP 43.6 million, calculated as the midpoint between Quarter 2 and Quarter 3.","PHP 48.3 million, projected using the highest single-quarter growth rate observed.","B","Step-by-Step Solution:
+"Passage: A local government's tax collection report shows the following revenue figures for three quarters. Quarter 1=PHP 34.8 million; Quarter 2=PHP 38.4 million; Quarter 3=PHP 41.7 million. A finance officer projects Quarter 4 revenue using the average quarterly growth rate from the first three quarters. What is the PROJECTED Quarter 4 revenue?","Approximately PHP 45.2 million, based on applying the average quarterly percentage growth rate of approximately 8.4% to Quarter 3's PHP 41.7 million.","PHP 44.8 million, based on adding the average absolute quarterly increase to Quarter 3.","PHP 43.6 million, calculated as the midpo∫ between Quarter 2 and Quarter 3.","PHP 48.3 million, projected using the highest single-quarter growth rate observed.","B","Step-by-Step Solution:
 1. Calculate absolute quarterly increases:
-   - Q1→Q2: 38.4 - 34.8 = PHP 3.6M.
-   - Q2→Q3: 41.7 - 38.4 = PHP 3.3M.
-   - Average quarterly increase: (3.6 + 3.3) / 2 = PHP 3.45M.
+ - Q1→Q2: 38.4 - 34.8 = PHP 3.6M.
+ - Q2→Q3: 41.7 - 38.4 = PHP 3.3M.
+ - Average quarterly increase: (3.6 + 3.3) / 2 = PHP 3.45M.
 2. Apply average increase to Q3:
-   - Q4 projected = 41.7 + 3.45 = PHP 45.15M ≈ PHP 45.2M.
+ - Q4 projected = 41.7 + 3.45 = PHP 45.15M ≈ PHP 45.2M.
 3. Verify using percentage growth rate method:
-   - Q1→Q2: 3.6/34.8×100 = 10.3%.
-   - Q2→Q3: 3.3/38.4×100 = 8.6%.
-   - Average rate: (10.3+8.6)/2 = 9.45%.
-   - Q4 = 41.7 × 1.0945 = PHP 45.64M.
+ - Q1→Q2: 3.6/34.8×100 = 10.3%.
+ - Q2→Q3: 3.3/38.4×100 = 8.6%.
+ - Average rate: (10.3+8.6)/2 = 9.45%.
+ - Q4 = 41.7 × 1.0945 = PHP 45.64M.
 
 Both methods give approximately PHP 45.1-45.6M. The question states 'average quarterly growth rate' (percentage method) → Q4 ≈ PHP 45.6M. Option A says PHP 45.2M (close). Option B says PHP 44.8M (absolute method).
 
@@ -101,22 +101,22 @@ Option B says PHP 44.8M. This would be Q3(41.7) + 3.1 = 44.8. Where does 3.1 com
 
 If the question uses median instead of mean: median of {3.6, 3.3} = (3.6+3.3)/2 = 3.45. Same result.
 
-The question designates Option B as correct (PHP 44.8M) but neither my calculation of absolute average (45.15M) nor percentage method matches 44.8. There might be a question design intent with different calculation: if average = round down to 3.1M... Let me revise the question for internal consistency. The ABSOLUTE average increase method gives 45.15M ≈ Option A's PHP 45.2M. I'll make Option A the correct answer.","Approximately PHP 45.2 million, applying the average quarterly growth rate: average increase = (3.6M + 3.3M)/2 = PHP 3.45M; Q4 projection = 41.7 + 3.45 = PHP 45.15M ≈ PHP 45.2M.","PHP 44.8 million, calculated by applying an incorrect average of only the Q2→Q3 increase (3.3M) rather than both quarter-to-quarter increases.","PHP 43.6 million represents neither a midpoint nor a standard projection; this value is computed without a defined projection methodology.","PHP 48.3 million applies the Q1→Q2 growth rate (10.3%) to Q3's value (41.7×1.103=46.0M), using the highest rate rather than the average—this overstates the projection.","A","Step-by-Step Solution (Corrected):
+The question designates Option B as correct (PHP 44.8M) but neither my calculation of absolute average (45.15M) nor percentage method matches 44.8. There might be a question design intent with different calculation: if average = round down to 3.1M... Let me revise the question for internal consistency. The ABSOLUTE average increase method gives 45.15M ≈ Option A's PHP 45.2M. I'll make Option A the correct answer.","Approximately PHP 45.2 million, applying the average quarterly growth rate: average increase = (3.6M + 3.3M)/2 = PHP 3.45M; Q4 projection = 41.7 + 3.45 = PHP 45.15M ≈ PHP 45.2M.","PHP 44.8 million, calculated by applying an incorrect average of only the Q2→Q3 increase (3.3M) rather than both quarter-to-quarter increases.","PHP 43.6 million represents neither a midpo∫ nor a standard projection; this value is computed without a defined projection methodology.","PHP 48.3 million applies the Q1→Q2 growth rate (10.3%) to Q3's value (41.7×1.103=46.0M), using the highest rate rather than the average—this overstates the projection.","A","Step-by-Step Solution (Corrected):
 1. Calculate quarterly absolute increases:
-   - Q1→Q2: PHP 38.4M - PHP 34.8M = PHP 3.6M.
-   - Q2→Q3: PHP 41.7M - PHP 38.4M = PHP 3.3M.
+ - Q1→Q2: PHP 38.4M - PHP 34.8M = PHP 3.6M.
+ - Q2→Q3: PHP 41.7M - PHP 38.4M = PHP 3.3M.
 2. Average quarterly absolute increase: (3.6 + 3.3) / 2 = PHP 3.45M.
 3. Project Q4: PHP 41.7M + PHP 3.45M = PHP 45.15M ≈ PHP 45.2M.
 4. Option A is correct.
 
 Common Trap: Using only the most recent single quarter's change (3.3M → Q4=45.0M) instead of the average of both available period-to-period changes.
-Exam Tip: When projecting using 'average quarterly growth,' use all available inter-period changes; average them first, then apply to the most recent period.","Correct. Survives elimination because the average quarterly increase ((3.6M + 3.3M) / 2 = 3.45M) added to Q3's 41.7M yields a projected Q4 revenue of approximately PHP 45.15M ≈ PHP 45.2M.","Eliminated because PHP 44.8M uses only the Q2→Q3 increase (3.3M) rather than the average of both available quarterly increases; applying 3.3M gives 45.0M, not 44.8M anyway.","Eliminated because PHP 43.6M does not correspond to any standard projection method using the given data; it is not the midpoint or average of any meaningful values.","Eliminated because PHP 48.3M applies the highest single-quarter growth rate rather than the average—the finance officer's method specifies the average rate, not the maximum rate.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Projection | Very Difficult | Batch 112"
+Exam Tip: When projecting using 'average quarterly growth,' use all available inter-period changes; average them first, then apply to the most recent period."
 "Passage: A government agency's annual performance report shows target vs. actual achievements: Goal 1: Target=500 beneficiaries, Actual=543. Goal 2: Target=80% satisfaction, Actual=76.4%. Goal 3: Target=PHP 12M budget utilization, Actual=PHP 13.8M utilized. Goal 4: Target=120 projects completed, Actual=114. For each goal, the percent change between target and actual represents the variance. Which goal showed the LARGEST ABSOLUTE PERCENTAGE VARIANCE from its target?","Goal 3 (Budget Utilization) showed the largest absolute variance: |13.8-12|/12×100 = 1.8/12×100 = 15.0%.","Goal 1 showed the largest variance at (543-500)/500×100 = 8.6%.","Goal 2 showed the largest variance at |76.4-80|/80×100 = 3.6/80×100 = 4.5%.","Goal 4 showed the largest variance at |114-120|/120×100 = 6/120×100 = 5.0%.","A","Step-by-Step Solution:
 1. Calculate absolute percentage variance for each goal:
-   - Goal 1: |543-500|/500×100 = 43/500×100 = 8.6%.
-   - Goal 2: |76.4-80|/80×100 = 3.6/80×100 = 4.5%.
-   - Goal 3: |13.8-12|/12×100 = 1.8/12×100 = 15.0%. ← LARGEST.
-   - Goal 4: |114-120|/120×100 = 6/120×100 = 5.0%.
+ - Goal 1: |543-500|/500×100 = 43/500×100 = 8.6%.
+ - Goal 2: |76.4-80|/80×100 = 3.6/80×100 = 4.5%.
+ - Goal 3: |13.8-12|/12×100 = 1.8/12×100 = 15.0%. ← LARGEST.
+ - Goal 4: |114-120|/120×100 = 6/120×100 = 5.0%.
 2. Ranking: Goal 3(15.0%) > Goal 1(8.6%) > Goal 4(5.0%) > Goal 2(4.5%).
 3. Goal 3 has the largest absolute percentage variance.
 
@@ -124,43 +124,43 @@ Common Trap: Selecting Goal 1 because 43 beneficiaries above target seems signif
 Exam Tip: Percentage variance = |actual - target| ÷ target × 100; a small absolute overrun on a small budget creates a larger percentage variance than a larger absolute overrun on a larger target.","Correct. Survives elimination because Goal 3's budget variance of 15% (PHP 1.8M overrun on a PHP 12M target) is the largest percentage variance among all four goals.","Eliminated because Goal 1's variance of 8.6% (43 additional beneficiaries on a 500-person target) is the second-largest—significant but below Goal 3's 15.0%.","Eliminated because Goal 2's satisfaction rate variance of 4.5% (3.6 pp below target on an 80% target) is the smallest percentage variance among all four goals.","Eliminated because Goal 4's project completion variance of 5.0% (6 fewer projects on a 120-project target) ranks third—above Goal 2 but below Goal 1 and Goal 3.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Variance Analysis | Very Difficult | Batch 112"
 "Passage: A regional economic zone reported the following annual foreign direct investment (FDI) figures (PHP billions): Year 1=24.8; Year 2=28.3; Year 3=31.9; Year 4=36.4; Year 5=41.6. An analyst claims: 'FDI in Year 5 is approximately 67.7% higher than in Year 1.' Is this claim CORRECT, and what is the PRECISE PERCENTAGE INCREASE?","The claim is correct. The precise percentage increase is (41.6-24.8)/24.8×100 = 16.8/24.8×100 = 67.7%.","The claim is overstated; the precise increase is 57.4% because only four years of growth are counted.","The claim is understated; the actual percentage increase is 75.3%, accounting for compound interest effects.","The claim is unverifiable because investment figures are subject to revision.","A","Step-by-Step Solution:
 1. Calculate percentage increase from Year 1 to Year 5:
-   - Absolute increase: 41.6 - 24.8 = PHP 16.8 billion.
-   - Percentage increase: 16.8 / 24.8 × 100 = 67.74% ≈ 67.7%.
+ - Absolute increase: 41.6 - 24.8 = PHP 16.8 billion.
+ - Percentage increase: 16.8 / 24.8 × 100 = 67.74% ≈ 67.7%.
 2. The analyst's claim of 'approximately 67.7%' is precisely correct.
 3. Option A is correct.
 4. Evaluate incorrect alternatives:
-   - Option B: 57.4% does not correspond to any correct calculation; percentage increase is always relative to the starting value (Year 1), not the number of years.
-   - Option C: 75.3% is not the simple percentage change; compound interest principles don't apply to percentage change calculations from raw data.
-   - Option D: The data is given as precise figures; the calculation is entirely verifiable.
+ - Option B: 57.4% does not correspond to any correct calculation; percentage increase is always relative to the starting value (Year 1), not the number of years.
+ - Option C: 75.3% is not the simple percentage change; compound interest principles don't apply to percentage change calculations from raw data.
+ - Option D: The data is given as precise figures; the calculation is entirely verifiable.
 
 Common Trap: Confusing percentage change (total growth from start to end) with CAGR or compound effects.
 Exam Tip: Simple percentage change = (end - start) ÷ start × 100; this measures total growth relative to the starting level, regardless of intermediate compounding.","Correct. Survives elimination because (41.6 - 24.8) / 24.8 × 100 = 16.8 / 24.8 × 100 = 67.74%, confirming the analyst's claim of approximately 67.7% is precisely accurate.","Eliminated because 57.4% does not result from any standard calculation using these values; percentage increase is (end-start)/start, not based on the number of growth years.","Eliminated because compound interest doesn't apply when calculating simple percentage change between raw data values; 75.3% is not the correct percentage change.","Eliminated because all values are provided as definitive figures; the percentage calculation is straightforward and fully verifiable.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Claim Verification | Very Difficult | Batch 112"
 "Passage: A city collected the following quarterly tax revenues in a fiscal year: Q1=PHP 28.4M; Q2=PHP 32.1M; Q3=PHP 29.7M; Q4=PHP 38.6M. The city treasurer wants to calculate: (A) the quarter-over-quarter percentage changes, and (B) identify the quarter that showed the LARGEST ABSOLUTE DECLINE from the preceding quarter. Which answer is CORRECT for both (A) and (B)?","(A) Q1→Q2: +13.0%; Q2→Q3: -7.5%; Q3→Q4: +30.0%. (B) Q3 showed the only decline (−PHP 2.4M), making it the only and thus largest absolute decline.","(A) Q1→Q2: +8.6%; Q2→Q3: -3.7%; Q3→Q4: +12.4%. (B) Q2 showed the largest decline.","(A) All quarters showed positive growth with no declines. (B) Q4 showed the largest growth.","(A) Q1→Q2: +13.0%; Q2→Q3: -7.5%; Q3→Q4: +20.4%. (B) Q3 showed the largest percentage decline.","A","Step-by-Step Solution:
 1. Calculate quarter-over-quarter percentage changes:
-   - Q1→Q2: (32.1-28.4)/28.4×100 = 3.7/28.4×100 = 13.03% ≈ +13.0% ✓.
-   - Q2→Q3: (29.7-32.1)/32.1×100 = -2.4/32.1×100 = -7.48% ≈ -7.5% ✓.
-   - Q3→Q4: (38.6-29.7)/29.7×100 = 8.9/29.7×100 = 29.97% ≈ +30.0% ✓.
+ - Q1→Q2: (32.1-28.4)/28.4×100 = 3.7/28.4×100 = 13.03% ≈ +13.0% ✓.
+ - Q2→Q3: (29.7-32.1)/32.1×100 = -2.4/32.1×100 = -7.48% ≈ -7.5% ✓.
+ - Q3→Q4: (38.6-29.7)/29.7×100 = 8.9/29.7×100 = 29.97% ≈ +30.0% ✓.
 2. Identify the largest absolute decline:
-   - Only Q2→Q3 shows a decline (−PHP 2.4M). It is the only decline and therefore the largest.
+ - Only Q2→Q3 shows a decline (−PHP 2.4M). It is the only decline and therefore the largest.
 3. Option A correctly states both (A) rates and (B) Q3 as the only decline quarter.
 4. Evaluate incorrect alternatives:
-   - Option B: Incorrect percentage calculations.
-   - Option C: Q2→Q3 shows a clear decline (−7.5%); not all quarters showed positive growth.
-   - Option D: Q3→Q4 percentage = 30.0%, not 20.4%.
+ - Option B: Incorrect percentage calculations.
+ - Option C: Q2→Q3 shows a clear decline (−7.5%); not all quarters showed positive growth.
+ - Option D: Q3→Q4 percentage = 30.0%, not 20.4%.
 
 Common Trap: Selecting 'Q4 showed the largest growth' (true for absolute and percentage growth but not the question's focus on 'decline'), or miscalculating Q3→Q4 as 20% instead of 30%.
 Exam Tip: Quarter-over-quarter percentage change = (current quarter - prior quarter) ÷ prior quarter × 100; track sign (+ or −) carefully to identify growth vs. decline periods.","Correct. Survives elimination because Q1→Q2=+13.0%, Q2→Q3=-7.5%, and Q3→Q4=+30.0% are the precisely calculated quarter-over-quarter changes, and Q3 is the only and therefore largest absolute decline period (PHP 2.4M).","Eliminated because the stated percentage changes (8.6%, 3.7%, 12.4%) do not correspond to the correct computations from the given quarterly data values.","Eliminated because Q2→Q3 clearly shows a decline from PHP 32.1M to PHP 29.7M (−PHP 2.4M); the statement that 'all quarters showed positive growth' is factually incorrect.","Eliminated because Q3→Q4 growth was 8.9/29.7×100=30.0%, not 20.4%; the percentage change is incorrectly calculated in this option.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | Multi-Period Calculation | Very Difficult | Batch 112"
 "Passage: A national agency's annual report shows staff headcount data over four years: Year 1=1,240; Year 2=1,187; Year 3=1,143; Year 4=1,098. An HR officer calculates that the agency has been reducing its workforce and wants to know the OVERALL PERCENTAGE REDUCTION from Year 1 to Year 4, and the AVERAGE ANNUAL PERCENTAGE REDUCTION rate. Which of the following is CORRECT?","Overall reduction: (1,240-1,098)/1,240×100=11.5%; Average annual reduction rate: approximately 3.98% per year (CAGR approach: (1,098/1,240)^(1/3)-1=-0.0398≈-4.0% per year).","Overall reduction: 14.3%; Average annual reduction: 4.77% per year, using simple arithmetic.","Overall reduction: 11.5%; Average annual reduction: 11.5%/3=3.83% per year by simple division.","Overall reduction: 11.5%; Average annual reduction: 1.3% per year, misapplying the formula.","A","Step-by-Step Solution:
 1. Calculate overall percentage reduction from Y1 to Y4:
-   - (1,240-1,098)/1,240 × 100 = 142/1,240 × 100 = 11.45% ≈ 11.5%.
+ - (1,240-1,098)/1,240 × 100 = 142/1,240 × 100 = 11.45% ≈ 11.5%.
 2. Calculate compound annual reduction (CAGR approach, but negative):
-   - CAGR = (1,098/1,240)^(1/3) - 1 = (0.88548)^(0.3333) - 1.
-   - (0.88548)^(1/3): Cube root of 0.8855 ≈ 0.9602. So CAGR ≈ 0.9602-1 = -0.0398 ≈ -3.98% per year.
+ - CAGR = (1,098/1,240)^(1/3) - 1 = (0.88548)^(0.3333) - 1.
+ - (0.88548)^(1/3): Cube root of 0.8855 ≈ 0.9602. So CAGR ≈ 0.9602-1 = -0.0398 ≈ -3.98% per year.
 3. Option A: Overall=11.5% ✓; Average annual≈4.0% ✓.
 4. Evaluate incorrect alternatives:
-   - Option B: 14.3% overall is incorrect (correct is 11.5%).
-   - Option C: 11.5%/3 = 3.83% per year is a rough estimate (simple division) vs. CAGR's 3.98%—Option A uses the more precise CAGR method.
-   - Option D: 1.3% per year is significantly incorrect.
+ - Option B: 14.3% overall is incorrect (correct is 11.5%).
+ - Option C: 11.5%/3 = 3.83% per year is a rough estimate (simple division) vs. CAGR's 3.98%—Option A uses the more precise CAGR method.
+ - Option D: 1.3% per year is significantly incorrect.
 
 Common Trap: Dividing the total percentage reduction by the number of years (11.5%/3=3.83%) as the 'average annual rate,' which ignores compounding; the CAGR method (-3.98%/year) is more precise.
 Exam Tip: For compound annual reduction rates, use the CAGR formula: (End/Start)^(1/n) - 1; for simple arithmetic average annual change, divide total change by number of years—both are useful but CAGR is more accurate for compounding scenarios.","Correct. Survives elimination because (1,240-1,098)/1,240 = 11.5% overall reduction, and the CAGR calculation (1,098/1,240)^(1/3)-1 ≈ -3.98% ≈ -4.0% annual reduction rate.","Eliminated because 14.3% is not the correct overall reduction; the correct calculation is (142/1,240)×100=11.45%, not 14.3%.","Eliminated because while 11.5% overall reduction is correct, dividing by 3 years (3.83%/year) is the simple arithmetic method; the CAGR approach yields 3.98%, slightly more precise for compounding analysis.","Eliminated because 1.3% per year is far below the correct annual reduction rate of approximately 4.0%; this represents a significant calculation error.","Analytical Ability","Analytical Ability | Data Interpretation | Percent Change | CAGR and Reduction Rates | Very Difficult | Batch 112"

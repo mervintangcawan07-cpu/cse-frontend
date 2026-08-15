@@ -1,157 +1,157 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Identify the next number in the rapidly decelerating decreasing sequence:
 
-$$720, \quad 718, \quad 712, \quad 694, \quad 640, \quad 478, \quad \textbf{?}$$","-8","-6","0","-12","A","Step-by-Step Solution:
+720, 718, 712, 694, 640, 478, ?","-8","-6","0","-12","A","Step-by-Step Solution:
 1. Calculate the successive decrements (differences) between consecutive terms:
-   - $720 - 718 = 2 = 2 \times 3^0$
-   - $718 - 712 = 6 = 2 \times 3^1$
-   - $712 - 694 = 18 = 2 \times 3^2$
-   - $694 - 640 = 54 = 2 \times 3^3$
-   - $640 - 478 = 162 = 2 \times 3^4$.
-2. The subtracted differences form a geometric progression with first term 2 and common ratio 3 ($2, 6, 18, 54, 162$).
+ - 720 - 718 = 2 = 2 × 3⁰
+ - 718 - 712 = 6 = 2 × 3¹
+ - 712 - 694 = 18 = 2 × 3²
+ - 694 - 640 = 54 = 2 × 3³
+ - 640 - 478 = 162 = 2 × 3⁴.
+2. The subtracted differences form a geometric progression with first term 2 and common ratio 3 (2, 6, 18, 54, 162).
 3. Compute the next difference:
-   - $\text{Next Subtrahend} = 162 \times 3 = 486$.
+ - Next Subtrahend = 162 × 3 = 486.
 4. Compute the next term:
-   - $T_7 = 478 - 486 = -8$.
+ - T₇ = 478 - 486 = -8.
 
-Common Trap: Assuming the sequence stops at 0 or miscalculating the subtrahend as 324 ($478 - 324 = 154$).
-Exam Tip: When differences triple ($2, 6, 18, 54, 162, 486$), the sequence enters negative integers.","Correct. Survives elimination because the next difference is 162 * 3 = 486, giving 478 - 486 = -8.","Eliminated because arithmetic error yields -6.","Eliminated because assuming the sequence bottoms out at 0 is mathematically unfounded.","Eliminated because overestimating the decrement gives -12.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Assuming the sequence stops at 0 or miscalculating the subtrahend as 324 (478 - 324 = 154).
+Exam Tip: When differences triple (2, 6, 18, 54, 162, 486), the sequence enters negative integers.","Correct. Survives elimination because the next difference is 162 * 3 = 486, giving 478 - 486 = -8.","Eliminated because arithmetic error yields -6.","Eliminated because assuming the sequence bottoms out at 0 is mathematically unfounded.","Eliminated because overestimating the decrement gives -12.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Find the missing number in the descending factorial-division sequence:
 
-$$720, \quad 120, \quad 24, \quad 6, \quad 2, \quad \textbf{?}$$","1","0.5","2","0","A","Step-by-Step Solution:
+720, 120, 24, 6, 2, ?","1","0.5","2","0","A","Step-by-Step Solution:
 1. Examine the consecutive division quotients:
-   - $720 \div 6 = 120$
-   - $120 \div 5 = 24$
-   - $24 \div 4 = 6$
-   - $6 \div 3 = 2$.
-2. The consecutive divisors decrease by 1 at each step ($\div 6, \div 5, \div 4, \div 3$).
-3. Apply the next divisor ($\div 2$):
-   - $2 \div 2 = 1$.
-4. (Note: The sequence represents the ratio $T_n = \frac{720}{n!}$).
+ - 720 ÷ 6 = 120
+ - 120 ÷ 5 = 24
+ - 24 ÷ 4 = 6
+ - 6 ÷ 3 = 2.
+2. The consecutive divisors decrease by 1 at each step (÷ 6, ÷ 5, ÷ 4, ÷ 3).
+3. Apply the next divisor (÷ 2):
+ - 2 ÷ 2 = 1.
+4. (Note: The sequence represents the ratio Tₙ = 720/n!).
 
-Common Trap: Dividing by 1 instead of 2 ($2 \div 1 = 2$, Option C) or jumping to 0.5 (Option B).
-Exam Tip: Divisors decrement sequentially: $6 \to 5 \to 4 \to 3 \to 2$.","Correct. Survives elimination because 2 / 2 = 1.","Eliminated because dividing 1 / 2 gives 0.5 (which is the subsequent term).","Eliminated because repeating the divisor yields 2 / 1 = 2.","Eliminated because division by non-zero numbers never yields 0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Dividing by 1 instead of 2 (2 ÷ 1 = 2, Option C) or jumping to 0.5 (Option B).
+Exam Tip: Divisors decrement sequentially: 6 to 5 to 4 to 3 to 2.","Correct. Survives elimination because 2 / 2 = 1.","Eliminated because dividing 1 / 2 gives 0.5 (which is the subsequent term).","Eliminated because repeating the divisor yields 2 / 1 = 2.","Eliminated because division by non-zero numbers never yields 0.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Find the next term in the decreasing cubic polynomial sequence:
 
-$$1,003, \quad 732, \quad 515, \quad 346, \quad 219, \quad 128, \quad \textbf{?}$$","67","64","71","59","A","Step-by-Step Solution:
-1. Compare each term against descending perfect cubes ($n^3$ for $n = 10, 9, 8, \dots$):
-   - $10^3 + 3 = 1,000 + 3 = 1,003$.
-   - $9^3 + 3 = 729 + 3 = 732$.
-   - $8^3 + 3 = 512 + 3 = 515$.
-   - $7^3 + 3 = 343 + 3 = 346$.
-   - $6^3 + 3 = 216 + 3 = 219$.
-   - $5^3 + 3 = 125 + 3 = 128$.
-2. Formulate general term: $T_n = (11 - n)^3 + 3$.
-3. Compute the 7th term ($n = 7 \implies$ base $11 - 7 = 4$):
-   - $T_7 = 4^3 + 3 = 64 + 3 = 67$.
+1,003, 732, 515, 346, 219, 128, ?","67","64","71","59","A","Step-by-Step Solution:
+1. Compare each term against descending perfect cubes (n³ for n = 10, 9, 8,...):
+ - 10³ + 3 = 1,000 + 3 = 1,003.
+ - 9³ + 3 = 729 + 3 = 732.
+ - 8³ + 3 = 512 + 3 = 515.
+ - 7³ + 3 = 343 + 3 = 346.
+ - 6³ + 3 = 216 + 3 = 219.
+ - 5³ + 3 = 125 + 3 = 128.
+2. Formulate general term: Tₙ = (11 - n)³ + 3.
+3. Compute the 7th term (n = 7 implies base 11 - 7 = 4):
+ - T₇ = 4³ + 3 = 64 + 3 = 67.
 
-Common Trap: Answering $4^3 = 64$ (Option B) by forgetting to add the $+3$ constant offset.
-Exam Tip: Recognize that $1003, 732, 515$ are all 3 units greater than the landmark cubes $1000, 729, 512$.","Correct. Survives elimination because 4^3 + 3 = 64 + 3 = 67.","Eliminated because 64 is 4^3 without the +3 offset.","Eliminated because adding 7 gives 71.","Eliminated because subtracting 5 gives 59.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Answering 4³ = 64 (Option B) by forgetting to add the +3 constant offset.
+Exam Tip: Recognize that 1003, 732, 515 are all 3 units greater than the landmark cubes 1000, 729, 512.","Correct. Survives elimination because 4³ + 3 = 64 + 3 = 67.","Eliminated because 64 is 4³ without the +3 offset.","Eliminated because adding 7 gives 71.","Eliminated because subtracting 5 gives 59.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "What is the next number in the recursive halving-and-subtraction sequence:
 
-$$256, \quad 126, \quad 61, \quad 28.5, \quad 12.25, \quad \textbf{?}$$","4.125 \text{ (or } 4\frac{1}{8}\text{)}","4.25","3.875","5.125","A","Step-by-Step Solution:
+256, 126, 61, 28.5, 12.25, ?","4.125 (or 41/8)","4.25","3.875","5.125","A","Step-by-Step Solution:
 1. Examine recursive operation:
-   - $\frac{256}{2} - 2 = 128 - 2 = 126$
-   - $\frac{126}{2} - 2 = 63 - 2 = 61$
-   - $\frac{61}{2} - 2 = 30.5 - 2 = 28.5$
-   - $\frac{28.5}{2} - 2 = 14.25 - 2 = 12.25$.
-2. Apply the rule $T_{n+1} = \frac{T_n}{2} - 2$ to find the 6th term:
-   - $T_6 = \frac{12.25}{2} - 2$.
-   - $\frac{12.25}{2} = 6.125$.
-   - $6.125 - 2 = 4.125 = 4\frac{1}{8}$.
+ - 256/2 - 2 = 128 - 2 = 126
+ - 126/2 - 2 = 63 - 2 = 61
+ - 61/2 - 2 = 30.5 - 2 = 28.5
+ - 28.5/2 - 2 = 14.25 - 2 = 12.25.
+2. Apply the rule Tₙ₊₁ = Tₙ/2 - 2 to find the 6th term:
+ - T₆ = 12.25/2 - 2.
+ - 12.25/2 = 6.125.
+ - 6.125 - 2 = 4.125 = 41/8.
 
-Common Trap: Halving without subtracting 2 ($\frac{12.25}{2} = 6.125$) or arithmetic error in halving 12.25.
-Exam Tip: Convert decimal quarters to eighths: $\frac{12.25}{2} = 6.125 \implies 6.125 - 2 = 4.125$.","Correct. Survives elimination because (12.25 / 2) - 2 = 6.125 - 2 = 4.125 = 4 1/8.","Eliminated because arithmetic error yields 4.25.","Eliminated because subtracting 2.25 yields 3.875.","Eliminated because subtracting 1 instead of 2 yields 5.125.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Halving without subtracting 2 (12.25/2 = 6.125) or arithmetic error in halving 12.25.
+Exam Tip: Convert decimal quarters to eighths: 12.25/2 = 6.125 implies 6.125 - 2 = 4.125.","Correct. Survives elimination because (12.25 / 2) - 2 = 6.125 - 2 = 4.125 = 4 1/8.","Eliminated because arithmetic error yields 4.25.","Eliminated because subtracting 2.25 yields 3.875.","Eliminated because subtracting 1 instead of 2 yields 5.125.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Find the missing number in the accelerating subtraction sequence:
 
-$$999, \quad 983, \quad 951, \quad 887, \quad 759, \quad \textbf{?}$$","503","513","493","487","A","Step-by-Step Solution:
+999, 983, 951, 887, 759, ?","503","513","493","487","A","Step-by-Step Solution:
 1. Determine consecutive differences:
-   - $999 - 983 = 16 = 2^4$
-   - $983 - 951 = 32 = 2^5$
-   - $951 - 887 = 64 = 2^6$
-   - $887 - 759 = 128 = 2^7$.
-2. The subtracted amounts double at each step ($16, 32, 64, 128$).
-3. The next subtrahend is $2^8 = 256$.
+ - 999 - 983 = 16 = 2⁴
+ - 983 - 951 = 32 = 2⁵
+ - 951 - 887 = 64 = 2⁶
+ - 887 - 759 = 128 = 2⁷.
+2. The subtracted amounts double at each step (16, 32, 64, 128).
+3. The next subtrahend is 2⁸ = 256.
 4. Compute the next term:
-   - $T_6 = 759 - 256 = 503$.
+ - T₆ = 759 - 256 = 503.
 
-Common Trap: Subtracting $128 \times 1.5 = 192$ instead of doubling to 256 ($759 - 192 = 567$).
-Exam Tip: Subtracted powers of two ($2^n$) cause quadratic-like acceleration in decreasing sequences.","Correct. Survives elimination because 759 - 2^8 = 759 - 256 = 503.","Eliminated because subtraction error gives 513.","Eliminated because subtracting 266 gives 493.","Eliminated because subtracting 272 gives 487.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Subtracting 128 × 1.5 = 192 instead of doubling to 256 (759 - 192 = 567).
+Exam Tip: Subtracted powers of two (2ⁿ) cause quadratic-like acceleration in decreasing sequences.","Correct. Survives elimination because 759 - 2⁸ = 759 - 256 = 503.","Eliminated because subtraction error gives 513.","Eliminated because subtracting 266 gives 493.","Eliminated because subtracting 272 gives 487.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "What is the next number in the decaying difference sequence:
 
-$$500, \quad 485, \quad 455, \quad 410, \quad 350, \quad 275, \quad \textbf{?}$$","185","195","175","200","A","Step-by-Step Solution:
+500, 485, 455, 410, 350, 275, ?","185","195","175","200","A","Step-by-Step Solution:
 1. Examine differences between consecutive terms:
-   - $500 - 485 = 15 = 15 \times 1$
-   - $485 - 455 = 30 = 15 \times 2$
-   - $455 - 410 = 45 = 15 \times 3$
-   - $410 - 350 = 60 = 15 \times 4$
-   - $350 - 275 = 75 = 15 \times 5$.
+ - 500 - 485 = 15 = 15 × 1
+ - 485 - 455 = 30 = 15 × 2
+ - 455 - 410 = 45 = 15 × 3
+ - 410 - 350 = 60 = 15 × 4
+ - 350 - 275 = 75 = 15 × 5.
 2. The consecutive decrements increase by 15 each time (multiples of 15).
-3. The next decrement is $15 \times 6 = 90$.
+3. The next decrement is 15 × 6 = 90.
 4. Compute the next term:
-   - $T_7 = 275 - 90 = 185$.
+ - T₇ = 275 - 90 = 185.
 
-Common Trap: Subtracting 75 again ($275 - 75 = 200$, Option D), forgetting that the difference increments by 15.
-Exam Tip: Second difference is constant ($-15$), indicating a standard quadratic decay $T_n = 500 - \frac{15n(n-1)}{2}$.","Correct. Survives elimination because the next decrement is 90, making the term 275 - 90 = 185.","Eliminated because subtracting 80 yields 195.","Eliminated because subtracting 100 yields 175.","Eliminated because repeating the -75 decrement yields 200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Subtracting 75 again (275 - 75 = 200, Option D), forgetting that the difference increments by 15.
+Exam Tip: Second difference is constant (-15), indicating a standard quadratic decay Tₙ = 500 - 15n(n-1)/2.","Correct. Survives elimination because the next decrement is 90, making the term 275 - 90 = 185.","Eliminated because subtracting 80 yields 195.","Eliminated because subtracting 100 yields 175.","Eliminated because repeating the -75 decrement yields 200.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Find the next term in the geometric rational sequence:
 
-$$\frac{81}{64}, \quad \frac{27}{32}, \quad \frac{9}{16}, \quad \frac{3}{8}, \quad \frac{1}{4}, \quad \textbf{?}$$","\frac{1}{6}","\frac{1}{8}","\frac{1}{12}","\frac{2}{9}","A","Step-by-Step Solution:
-1. Find common ratio $r$:
-   - $r = \frac{27/32}{81/64} = \frac{27}{32} \times \frac{64}{81} = \frac{1}{1} \times \frac{2}{3} = \frac{2}{3}$.
+81/64, 27/32, 9/16, 3/8, 1/4, ?","1/6","1/8","1/12","2/9","A","Step-by-Step Solution:
+1. Find common ratio r:
+ - r = 27/32/81/64 = 27/32 × 64/81 = 1/1 × 2/3 = 2/3.
 2. Verify ratio across other terms:
-   - $\frac{27}{32} \times \frac{2}{3} = \frac{9}{16}$ (True).
-   - $\frac{9}{16} \times \frac{2}{3} = \frac{3}{8}$ (True).
-   - $\frac{3}{8} \times \frac{2}{3} = \frac{1}{4}$ (True).
-3. Multiply the 5th term by $\frac{2}{3}$ to get the 6th term:
-   - $T_6 = \frac{1}{4} \times \frac{2}{3} = \frac{2}{12} = \frac{1}{6}$.
+ - 27/32 × 2/3 = 9/16 (True).
+ - 9/16 × 2/3 = 3/8 (True).
+ - 3/8 × 2/3 = 1/4 (True).
+3. Multiply the 5th term by 2/3 to get the 6th term:
+ - T₆ = 1/4 × 2/3 = 2/12 = 1/6.
 
-Common Trap: Assuming the sequence halves each time ($\frac{1}{4} \times \frac{1}{2} = \frac{1}{8}$, Option B), ignoring the 2/3 ratio.
-Exam Tip: In fractional geometric sequences, compute $\frac{T_2}{T_1}$ by inverting and multiplying.","Correct. Survives elimination because the common ratio is 2/3, and (1/4) * (2/3) = 2/12 = 1/6.","Eliminated because halving 1/4 gives 1/8, which violates the 2/3 ratio.","Eliminated because dividing by 3 gives 1/12.","Eliminated because multiplying by 8/9 gives 2/9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Assuming the sequence halves each time (1/4 × 1/2 = 1/8, Option B), ignoring the 2/3 ratio.
+Exam Tip: In fractional geometric sequences, compute T₂/T₁ by inverting and multiplying.","Correct. Survives elimination because the common ratio is 2/3, and (1/4) * (2/3) = 2/12 = 1/6.","Eliminated because halving 1/4 gives 1/8, which violates the 2/3 ratio.","Eliminated because dividing by 3 gives 1/12.","Eliminated because multiplying by 8/9 gives 2/9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Identify the next number in the cubic-decrement sequence:
 
-$$1,000, \quad 999, \quad 991, \quad 964, \quad 900, \quad 775, \quad \textbf{?}$$","559","569","549","575","A","Step-by-Step Solution:
+1,000, 999, 991, 964, 900, 775, ?","559","569","549","575","A","Step-by-Step Solution:
 1. Calculate consecutive decrements:
-   - $1,000 - 999 = 1 = 1^3$
-   - $999 - 991 = 8 = 2^3$
-   - $991 - 964 = 27 = 3^3$
-   - $964 - 900 = 64 = 4^3$
-   - $900 - 775 = 125 = 5^3$.
-2. The subtrahends are consecutive cubes ($n^3$ for $n = 1, 2, 3, 4, 5$).
-3. The next subtrahend is $6^3 = 216$.
+ - 1,000 - 999 = 1 = 1³
+ - 999 - 991 = 8 = 2³
+ - 991 - 964 = 27 = 3³
+ - 964 - 900 = 64 = 4³
+ - 900 - 775 = 125 = 5³.
+2. The subtrahends are consecutive cubes (n³ for n = 1, 2, 3, 4, 5).
+3. The next subtrahend is 6³ = 216.
 4. Compute the 7th term:
-   - $T_7 = 775 - 216 = 559$.
+ - T₇ = 775 - 216 = 559.
 
-Common Trap: Subtracting $6^2 = 36$ ($775 - 36 = 739$) or $150$.
-Exam Tip: Cubic subtrahends ($1, 8, 27, 64, 125, 216$) accelerate rapidly.","Correct. Survives elimination because 775 - 6^3 = 775 - 216 = 559.","Eliminated because subtraction error gives 569.","Eliminated because subtracting 226 yields 549.","Eliminated because subtracting 200 yields 575.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Subtracting 6² = 36 (775 - 36 = 739) or 150.
+Exam Tip: Cubic subtrahends (1, 8, 27, 64, 125, 216) accelerate rapidly.","Correct. Survives elimination because 775 - 6³ = 775 - 216 = 559.","Eliminated because subtraction error gives 569.","Eliminated because subtracting 226 yields 549.","Eliminated because subtracting 200 yields 575.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
 "Find the missing number in the odd-square decrement sequence:
 
-$$450, \quad 425, \quad 376, \quad 295, \quad 174, \quad \textbf{?}$$","5","15","0","9","A","Step-by-Step Solution:
+450, 425, 376, 295, 174, ?","5","15","0","9","A","Step-by-Step Solution:
 1. Calculate consecutive differences:
-   - $450 - 425 = 25 = 5^2$
-   - $425 - 376 = 49 = 7^2$
-   - $376 - 295 = 81 = 9^2$
-   - $295 - 174 = 121 = 11^2$.
-2. The subtrahends are the squares of consecutive odd integers ($5, 7, 9, 11$).
-3. The next odd integer is 13, and its square is $13^2 = 169$.
+ - 450 - 425 = 25 = 5²
+ - 425 - 376 = 49 = 7²
+ - 376 - 295 = 81 = 9²
+ - 295 - 174 = 121 = 11².
+2. The subtrahends are the squares of consecutive odd integers (5, 7, 9, 11).
+3. The next odd integer is 13, and its square is 13² = 169.
 4. Compute the next term:
-   - $T_6 = 174 - 169 = 5$.
+ - T₆ = 174 - 169 = 5.
 
-Common Trap: Using $12^2 = 144$ ($174 - 144 = 30$) by forgetting that the sequence skips even integers.
-Exam Tip: Track the root base pattern: $5, 7, 9, 11, 13$.","Correct. Survives elimination because 174 - 13^2 = 174 - 169 = 5.","Eliminated because subtracting 159 gives 15.","Eliminated because assuming complete cancellation to 0 is false.","Eliminated because arithmetic error gives 9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
-"Determine the next term in the decaying unit-fraction factorial sequence:
+Common Trap: Using 12² = 144 (174 - 144 = 30) by forgetting that the sequence skips even integers.
+Exam Tip: Track the root base pattern: 5, 7, 9, 11, 13.","Correct. Survives elimination because 174 - 13² = 174 - 169 = 5.","Eliminated because subtracting 159 gives 15.","Eliminated because assuming complete cancellation to 0 is false.","Eliminated because arithmetic error gives 9.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+"Determine the next term in the decaying unit = fraction factorial sequence:
 
-$$\frac{1}{2}, \quad \frac{1}{6}, \quad \frac{1}{24}, \quad \frac{1}{120}, \quad \frac{1}{720}, \quad \textbf{?}$$","\frac{1}{5,040}","\frac{1}{4,320}","\frac{1}{5,760}","\frac{1}{3,600}","A","Step-by-Step Solution:
+1/2, 1/6, 1/24, 1/120, 1/720, ?","1/5,040","1/4,320","1/5,760","1/3,600","A","Step-by-Step Solution:
 1. Examine denominators:
-   - $2 = 2!$
-   - $6 = 3!$
-   - $24 = 4!$
-   - $120 = 5!$
-   - $720 = 6!$.
-2. General term: $T_n = \frac{1}{(n+1)!}$.
-3. The next denominator is $7!$:
-   - $7! = 720 \times 7 = 5,040$.
+ - 2 = 2!
+ - 6 = 3!
+ - 24 = 4!
+ - 120 = 5!
+ - 720 = 6!.
+2. General term: Tₙ = 1/(n+1)!.
+3. The next denominator is 7!:
+ - 7! = 720 × 7 = 5,040.
 4. Next term:
-   - $T_6 = \frac{1}{5,040}$.
+ - T₆ = 1/5,040.
 
-Common Trap: Multiplying $720 \times 6 = 4,320$ (Option B), forgetting that the multiplier increments to 7.
-Exam Tip: $7! = 5,040$ is a standard factorial constant frequently tested in civil service examinations.","Correct. Survives elimination because 6! * 7 = 7! = 5,040, giving 1/5,040.","Eliminated because 720 * 6 = 4,320 fails to increment the factorial index.","Eliminated because 720 * 8 = 5,760 overshoots the index.","Eliminated because 720 * 5 = 3,600.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"
+Common Trap: Multiplying 720 × 6 = 4,320 (Option B), forgetting that the multiplier increments to 7.
+Exam Tip: 7! = 5,040 is a standard factorial constant frequently tested in civil service examinations.","Correct. Survives elimination because 6! * 7 = 7! = 5,040, giving 1/5,040.","Eliminated because 720 * 6 = 4,320 fails to increment the factorial index.","Eliminated because 720 * 8 = 5,760 overshoots the index.","Eliminated because 720 * 5 = 3,600.","Numerical Ability","Numerical Ability | Number Sequence | Pattern Recognition | Decreasing sequences | Very Difficult | Batch 020"

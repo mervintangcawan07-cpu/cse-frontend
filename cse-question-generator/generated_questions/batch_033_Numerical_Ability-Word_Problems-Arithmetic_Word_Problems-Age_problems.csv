@@ -1,199 +1,199 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"A government bureau director is currently four times as old as his administrative assistant. In 14 years, the director will be exactly twice as old as his assistant will be then. What is the director's current age, and how old was the director when the assistant was born?","Current: 28 years; When assistant was born: 21 years","Current: 32 years; When assistant was born: 24 years","Current: 36 years; When assistant was born: 27 years","Current: 24 years; When assistant was born: 18 years","A","Step-by-Step Solution:
+"A government bureau director is currently four × as old as his administrative assistant. In 14 years, the director will be exactly twice as old as his assistant will be then. What is the director's current age, and how old was the director when the assistant was born?","Current: 28 years; When assistant was born: 21 years","Current: 32 years; When assistant was born: 24 years","Current: 36 years; When assistant was born: 27 years","Current: 24 years; When assistant was born: 18 years","A","Step-by-Step Solution:
 1. Define algebraic variables:
-   - Let assistant's current age $= A$.
-   - Director's current age $= D = 4A$.
+ - Let assistant's current age = A.
+ - Director's current age = D = 4A.
 2. Formulate equation for conditions in 14 years:
-   - $D + 14 = 2(A + 14)$.
-3. Substitute $D = 4A$:
-   - $4A + 14 = 2A + 28$.
-   - $4A - 2A = 28 - 14 \implies 2A = 14 \implies A = 7\text{ years}$.
+ - D + 14 = 2(A + 14).
+3. Substitute D = 4A:
+ - 4A + 14 = 2A + 28.
+ - 4A - 2A = 28 - 14 implies 2A = 14 implies A = 7 years.
 4. Compute Director's current age:
-   - $D = 4(7) = 28\text{ years}$.
-5. Compute Director's age when assistant was born ($D - A$):
-   - $28 - 7 = 21\text{ years}$.
+ - D = 4(7) = 28 years.
+5. Compute Director's age when assistant was born (D - A):
+ - 28 - 7 = 21 years.
 
-Common Trap: Providing only the current age ($28$) or failing to subtract the assistant's age to determine age at birth ($28 - 7 = 21$).
-Exam Tip: The age difference between two people remains constant across all time periods ($28 - 7 = 21$).","Correct. Survives elimination because 4(7) = 28, in 14 years 42 = 2(21), and age at birth was 28 - 7 = 21.","Eliminated because if D = 32, A = 8; in 14 years 46 != 2(22) = 44.","Eliminated because D = 36 gives in 14 years 50 != 2(23) = 46.","Eliminated because D = 24 gives in 14 years 38 != 2(20) = 40.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"Maria is currently twice as old as Juan was when Maria was as old as Juan is now. If the sum of their present ages is 63 years, what is Maria's current age?","36 years","42 years","32 years","28 years","A","Step-by-Step Solution:
+Common Trap: Providing only the current age (28) or failing to subtract the assistant's age to determine age at birth (28 - 7 = 21).
+Exam Tip: The age difference between two people remains constant across all time periods (28 - 7 = 21).","Correct. Survives elimination because 4(7) = 28, in 14 years 42 = 2(21), and age at birth was 28 - 7 = 21.","Eliminated because if D = 32, A = 8; in 14 years 46!= 2(22) = 44.","Eliminated because D = 36 gives in 14 years 50!= 2(23) = 46.","Eliminated because D = 24 gives in 14 years 38!= 2(20) = 40.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"Maria is currently twice as old as Juan was when Maria was as old as Juan is now. If the Σ of their present ages is 63 years, what is Maria's current age?","36 years","42 years","32 years","28 years","A","Step-by-Step Solution:
 1. Define variables:
-   - Let Maria's present age $= M$.
-   - Let Juan's present age $= J$.
-   - The age difference is $D = M - J$ (constant over time).
+ - Let Maria's present age = M.
+ - Let Juan's present age = J.
+ - The age difference is D = M - J (constant over time).
 2. Interpret the past timeframe:
-   - \"When Maria was as old as Juan is now\" refers to $(M - J)$ years ago.
-   - At that past time, Juan's age was $J - (M - J) = 2J - M$.
+ - \""When Maria was as old as Juan is now\"" refers to (M - J) years ago.
+ - At that past time, Juan's age was J - (M - J) = 2J - M.
 3. Set up the first equation:
-   - Maria is currently twice as old as Juan was then:
-   - $M = 2(2J - M) \implies M = 4J - 2M \implies 3M = 4J \implies J = \frac{3}{4}M$.
-4. Set up the sum equation:
-   - $M + J = 63$.
-   - $M + \frac{3}{4}M = 63 \implies \frac{7}{4}M = 63$.
-5. Solve for $M$:
-   - $M = \frac{63 \times 4}{7} = 9 \times 4 = 36\text{ years}$.
-   - (Juan's age is $J = \frac{3}{4}(36) = 27\text{ years}$).
+ - Maria is currently twice as old as Juan was then:
+ - M = 2(2J - M) implies M = 4J - 2M implies 3M = 4J implies J = 3/4M.
+4. Set up the Σ equation:
+ - M + J = 63.
+ - M + 3/4M = 63 implies 7/4M = 63.
+5. Solve for M:
+ - M = 63 × 4/7 = 9 × 4 = 36 years.
+ - (Juan's age is J = 3/4(36) = 27 years).
 6. Verify:
-   - Age difference $= 36 - 27 = 9\text{ years}$.
-   - 9 years ago, Maria was 27 and Juan was $27 - 9 = 18$.
-   - Maria's present age (36) is indeed twice 18 ($2 \times 18 = 36$).
+ - Age difference = 36 - 27 = 9 years.
+ - 9 years ago, Maria was 27 and Juan was 27 - 9 = 18.
+ - Maria's present age (36) is indeed twice 18 (2 × 18 = 36).
 
-Common Trap: Misinterpreting the past relative age condition as $M = 2J$, which yields $2J + J = 63 \implies J = 21, M = 42$ (Option B).
-Exam Tip: In \"as old as X was when Y was as old as X is now\" problems, the age difference $M - J$ is subtracted from both present ages.","Correct. Survives elimination because M = 36 and J = 27 satisfy both the 63 sum and the past relative age condition (36 = 2 * 18).","Eliminated because 42 assumes simple doubling (M = 2J), violating the relative past clause.","Eliminated because 32 yields non-integer ages failing the condition.","Eliminated because 28 is less than half the total sum.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"Five years ago, the ratio of the ages of a senior civil engineer and an architect was $7 : 5$. In ten years from now, the ratio of their ages will be $5 : 4$ (or $10 : 8$). What is the present age of the engineer?","40 years","45 years","35 years","50 years","A","Step-by-Step Solution:
-1. Define ages 5 years ago in terms of variable $x$:
-   - Engineer 5 years ago $= 7x$.
-   - Architect 5 years ago $= 5x$.
+Common Trap: Misinterpreting the past relative age condition as M = 2J, which yields 2J + J = 63 implies J = 21, M = 42 (Option B).
+Exam Tip: In \""as old as X was when Y was as old as X is now\"" problems, the age difference M - J is subtracted from both present ages.","Correct. Survives elimination because M = 36 and J = 27 satisfy both the 63 Σ and the past relative age condition (36 = 2 * 18).","Eliminated because 42 assumes simple doubling (M = 2J), violating the relative past clause.","Eliminated because 32 yields non-integer ages failing the condition.","Eliminated because 28 is less than half the total Σ.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"Five years ago, the ratio of the ages of a senior civil engineer and an architect was 7: 5. In ten years from now, the ratio of their ages will be 5: 4 (or 10: 8). What is the present age of the engineer?","40 years","45 years","35 years","50 years","A","Step-by-Step Solution:
+1. Define ages 5 years ago in terms of variable x:
+ - Engineer 5 years ago = 7x.
+ - Architect 5 years ago = 5x.
 2. Formulate present ages:
-   - Engineer present $= 7x + 5$.
-   - Architect present $= 5x + 5$.
+ - Engineer present = 7x + 5.
+ - Architect present = 5x + 5.
 3. Formulate ages 10 years from now:
-   - Engineer in 10 years $= (7x + 5) + 10 = 7x + 15$.
-   - Architect in 10 years $= (5x + 5) + 10 = 5x + 15$.
+ - Engineer in 10 years = (7x + 5) + 10 = 7x + 15.
+ - Architect in 10 years = (5x + 5) + 10 = 5x + 15.
 4. Set up the given future ratio:
-   - $\frac{7x + 15}{5x + 15} = \frac{5}{4}$.
-5. Cross-multiply and solve for $x$:
-   - $4(7x + 15) = 5(5x + 15)$.
-   - $28x + 60 = 25x + 75$.
-   - $28x - 25x = 75 - 60 \implies 3x = 15 \implies x = 5$.
+ - 7x + 15/5x + 15 = 5/4.
+5. Cross-multiply and solve for x:
+ - 4(7x + 15) = 5(5x + 15).
+ - 28x + 60 = 25x + 75.
+ - 28x - 25x = 75 - 60 implies 3x = 15 implies x = 5.
 6. Calculate Engineer's present age:
-   - $\text{Engineer's Present Age} = 7(5) + 5 = 35 + 5 = 40\text{ years}$.
+ - Engineer's Present Age = 7(5) + 5 = 35 + 5 = 40 years.
 
-Common Trap: Giving the age 5 years ago ($7 \times 5 = 35$, Option C) instead of the present age ($40$).
-Exam Tip: The elapsed time between \"5 years ago\" and \"10 years from now\" is $5 + 10 = 15\text{ years}$.","Correct. Survives elimination because x = 5 gives present ages 40 and 30 (5 years ago 35:25 = 7:5; in 10 years 50:40 = 5:4).","Eliminated because 45 gives age 5 years ago of 40 (not divisible by 7).","Eliminated because 35 is the engineer's age 5 years ago, not present.","Eliminated because 50 is the engineer's age 10 years in the future.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"The sum of the ages of three civil service employees—Ana, Bea, and Carla—is 78 years. Ana is 6 years older than Bea, and Carla's age is exactly twice the constant age difference between Ana and Bea. What is Ana's present age?","36 years","30 years","42 years","38 years","A","Step-by-Step Solution:
+Common Trap: Giving the age 5 years ago (7 × 5 = 35, Option C) instead of the present age (40).
+Exam Tip: The elapsed time between \""5 years ago\"" and \""10 years from now\"" is 5 + 10 = 15 years.","Correct. Survives elimination because x = 5 gives present ages 40 and 30 (5 years ago 35:25 = 7:5; in 10 years 50:40 = 5:4).","Eliminated because 45 gives age 5 years ago of 40 (not divisible by 7).","Eliminated because 35 is the engineer's age 5 years ago, not present.","Eliminated because 50 is the engineer's age 10 years in the future.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"The Σ of the ages of three civil service employees—Ana, Bea, and Carla—is 78 years. Ana is 6 years older than Bea, and Carla's age is exactly twice the constant age difference between Ana and Bea. What is Ana's present age?","36 years","30 years","42 years","38 years","A","Step-by-Step Solution:
 1. Define variables:
-   - Let Bea's age $= B$.
-   - Ana's age $= A = B + 6$.
+ - Let Bea's age = B.
+ - Ana's age = A = B + 6.
 2. Determine the age difference between Ana and Bea:
-   - $\text{Difference} = A - B = (B + 6) - B = 6\text{ years}$.
-3. Calculate Carla's age ($C$):
-   - $C = 2 \times \text{Difference} = 2 \times 6 = 12\text{ years}$.
-4. Formulate total sum equation:
-   - $A + B + C = 78$.
-   - $(B + 6) + B + 12 = 78$.
-   - $2B + 18 = 78 \implies 2B = 60 \implies B = 30\text{ years}$.
+ - Difference = A - B = (B + 6) - B = 6 years.
+3. Calculate Carla's age (C):
+ - C = 2 × Difference = 2 × 6 = 12 years.
+4. Formulate total Σ equation:
+ - A + B + C = 78.
+ - (B + 6) + B + 12 = 78.
+ - 2B + 18 = 78 implies 2B = 60 implies B = 30 years.
 5. Calculate Ana's age:
-   - $A = B + 6 = 30 + 6 = 36\text{ years}$.
+ - A = B + 6 = 30 + 6 = 36 years.
 
-Common Trap: Selecting Bea's age ($30$, Option B) instead of Ana's age ($36$).
-Exam Tip: Verify sum: $A + B + C = 36 + 30 + 12 = 78\text{ years}$.","Correct. Survives elimination because B = 30, A = 36, and C = 12 sum to 78, with A - B = 6 and C = 2(6) = 12.","Eliminated because 30 is Bea's age.","Eliminated because 42 assumes Bea is 36.","Eliminated because 38 fails the sum equation.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"Ten years ago, a mother was four times as old as her daughter. In twelve years from now, the mother will be exactly twice as old as her daughter. How old will the daughter be when the mother reaches 60 years of age?","27 years","25 years","30 years","28 years","A","Step-by-Step Solution:
+Common Trap: Selecting Bea's age (30, Option B) instead of Ana's age (36).
+Exam Tip: Verify Σ: A + B + C = 36 + 30 + 12 = 78 years.","Correct. Survives elimination because B = 30, A = 36, and C = 12 Σ to 78, with A - B = 6 and C = 2(6) = 12.","Eliminated because 30 is Bea's age.","Eliminated because 42 assumes Bea is 36.","Eliminated because 38 fails the Σ equation.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"Ten years ago, a mother was four × as old as her daughter. In twelve years from now, the mother will be exactly twice as old as her daughter. How old will the daughter be when the mother reaches 60 years of age?","27 years","25 years","30 years","28 years","A","Step-by-Step Solution:
 1. Define ages 10 years ago:
-   - Daughter 10 years ago $= d$.
-   - Mother 10 years ago $= 4d$.
+ - Daughter 10 years ago = d.
+ - Mother 10 years ago = 4d.
 2. Express present ages:
-   - Daughter present $= d + 10$.
-   - Mother present $= 4d + 10$.
-3. Express ages in 12 years ($10 + 12 = 22\text{ years}$ from the past point):
-   - Daughter in 12 years $= d + 22$.
-   - Mother in 12 years $= 4d + 22$.
+ - Daughter present = d + 10.
+ - Mother present = 4d + 10.
+3. Express ages in 12 years (10 + 12 = 22 years from the past po∫):
+ - Daughter in 12 years = d + 22.
+ - Mother in 12 years = 4d + 22.
 4. Set up the future age equation:
-   - $4d + 22 = 2(d + 22)$.
-   - $4d + 22 = 2d + 44 \implies 2d = 22 \implies d = 11$.
+ - 4d + 22 = 2(d + 22).
+ - 4d + 22 = 2d + 44 implies 2d = 22 implies d = 11.
 5. Compute present ages:
-   - Daughter present $= 11 + 10 = 21\text{ years}$.
-   - Mother present $= 4(11) + 10 = 54\text{ years}$.
+ - Daughter present = 11 + 10 = 21 years.
+ - Mother present = 4(11) + 10 = 54 years.
 6. Determine the constant age difference:
-   - $\text{Difference} = 54 - 21 = 33\text{ years}$.
+ - Difference = 54 - 21 = 33 years.
 7. Calculate daughter's age when mother is 60:
-   - $\text{Daughter's Age} = 60 - 33 = 27\text{ years}$.
+ - Daughter's Age = 60 - 33 = 27 years.
 
-Common Trap: Giving daughter's present age ($21$) or daughter's age in 12 years ($33$).
-Exam Tip: Since the age gap is always 33 years, when the mother is 60, the daughter is $60 - 33 = 27$.","Correct. Survives elimination because mother is currently 54 and daughter is 21 (gap of 33 years); when mother is 60, daughter is 60 - 33 = 27.","Eliminated because daughter would be 25 if mother were 58.","Eliminated because 30 implies an age gap of only 30 years.","Eliminated because calculation slip yields 28.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"A grandfather is currently 9 times as old as his grandson. The positive difference between their current ages is 56 years. In how many years will the grandfather be exactly 5 times as old as his grandson?","7 years","5 years","8 years","6 years","A","Step-by-Step Solution:
+Common Trap: Giving daughter's present age (21) or daughter's age in 12 years (33).
+Exam Tip: Since the age gap is always 33 years, when the mother is 60, the daughter is 60 - 33 = 27.","Correct. Survives elimination because mother is currently 54 and daughter is 21 (gap of 33 years); when mother is 60, daughter is 60 - 33 = 27.","Eliminated because daughter would be 25 if mother were 58.","Eliminated because 30 implies an age gap of only 30 years.","Eliminated because calculation slip yields 28.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"A grandfather is currently 9 × as old as his grandson. The positive difference between their current ages is 56 years. In how many years will the grandfather be exactly 5 × as old as his grandson?","7 years","5 years","8 years","6 years","A","Step-by-Step Solution:
 1. Define variables:
-   - Let grandson's current age $= g$.
-   - Grandfather's current age $= G = 9g$.
+ - Let grandson's current age = g.
+ - Grandfather's current age = G = 9g.
 2. Apply age difference condition:
-   - $G - g = 56 \implies 9g - g = 56 \implies 8g = 56 \implies g = 7\text{ years}$.
-   - Grandfather's current age $= 9(7) = 63\text{ years}$.
-3. Formulate equation for $Y$ years in the future:
-   - $G + Y = 5(g + Y)$.
-   - $63 + Y = 5(7 + Y)$.
-4. Solve for $Y$:
-   - $63 + Y = 35 + 5Y$.
-   - $5Y - Y = 63 - 35 \implies 4Y = 28 \implies Y = 7\text{ years}$.
+ - G - g = 56 implies 9g - g = 56 implies 8g = 56 implies g = 7 years.
+ - Grandfather's current age = 9(7) = 63 years.
+3. Formulate equation for Y years in the future:
+ - G + Y = 5(g + Y).
+ - 63 + Y = 5(7 + Y).
+4. Solve for Y:
+ - 63 + Y = 35 + 5Y.
+ - 5Y - Y = 63 - 35 implies 4Y = 28 implies Y = 7 years.
 5. Verify:
-   - In 7 years: Grandfather is $63 + 7 = 70$, Grandson is $7 + 7 = 14$.
-   - $70 = 5 \times 14$ (Confirmed!).
+ - In 7 years: Grandfather is 63 + 7 = 70, Grandson is 7 + 7 = 14.
+ - 70 = 5 × 14 (Confirmed!).
 
-Common Trap: Confusing the number of years $Y = 7$ with the grandson's present age $g = 7$, or miscalculating $5 \times 7$.
-Exam Tip: In $Y$ years, $63 + Y = 5(7 + Y) \implies 4Y = 28 \implies Y = 7$.","Correct. Survives elimination because in 7 years, grandfather will be 70 and grandson will be 14 (70 = 5 * 14).","Eliminated because in 5 years, grandfather is 68 and grandson is 12 (68 != 5 * 12 = 60).","Eliminated because in 8 years, grandfather is 71 and grandson is 15 (71 != 75).","Eliminated because in 6 years, 69 != 5 * 13 = 65.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+Common Trap: Confusing the number of years Y = 7 with the grandson's present age g = 7, or miscalculating 5 × 7.
+Exam Tip: In Y years, 63 + Y = 5(7 + Y) implies 4Y = 28 implies Y = 7.","Correct. Survives elimination because in 7 years, grandfather will be 70 and grandson will be 14 (70 = 5 * 14).","Eliminated because in 5 years, grandfather is 68 and grandson is 12 (68!= 5 * 12 = 60).","Eliminated because in 8 years, grandfather is 71 and grandson is 15 (71!= 75).","Eliminated because in 6 years, 69!= 5 * 13 = 65.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
 "The average age of a public audit committee of 8 members is 40.0 years. A member aged 55.0 years resigns and is replaced by two new younger members whose age difference is 7.0 years. If the new average age of the expanded 9-member committee is 38.0 years, what is the age of the younger new member?","35.0 years","42.0 years","32.0 years","38.0 years","A","Step-by-Step Solution:
-1. Calculate initial sum of ages of 8 members:
-   - $\text{Sum}_1 = 8 \times 40.0 = 320.0\text{ years}$.
+1. Calculate initial Σ of ages of 8 members:
+ - Sum₁ = 8 × 40.0 = 320.0 years.
 2. Subtract the outgoing 55.0-year-old member:
-   - $\text{Remaining Sum} = 320.0 - 55.0 = 265.0\text{ years}$.
-3. Calculate new total sum of ages of 9 members:
-   - $\text{Sum}_2 = 9 \times 38.0 = 342.0\text{ years}$.
+ - Remaining Sum = 320.0 - 55.0 = 265.0 years.
+3. Calculate new total Σ of ages of 9 members:
+ - Sum₂ = 9 × 38.0 = 342.0 years.
 4. Find the combined age of the two new incoming members:
-   - $\text{Combined Age} = \text{Sum}_2 - \text{Remaining Sum} = 342.0 - 265.0 = 77.0\text{ years}$.
+ - Combined Age = Sum₂ - Remaining Sum = 342.0 - 265.0 = 77.0 years.
 5. Set up equations for the two new members:
-   - Let younger member $= y$, older member $= y + 7.0$.
-   - $y + (y + 7.0) = 77.0 \implies 2y + 7.0 = 77.0 \implies 2y = 70.0 \implies y = 35.0\text{ years}$.
-   - (Older new member $= 35.0 + 7.0 = 42.0\text{ years}$).
+ - Let younger member = y, older member = y + 7.0.
+ - y + (y + 7.0) = 77.0 implies 2y + 7.0 = 77.0 implies 2y = 70.0 implies y = 35.0 years.
+ - (Older new member = 35.0 + 7.0 = 42.0 years).
 
-Common Trap: Selecting the older new member's age ($42.0$, Option B) instead of the younger member ($35.0$).
-Exam Tip: Combined age is $342 - 265 = 77$. Younger is $\frac{77 - 7}{2} = 35.0\text{ years}$.","Correct. Survives elimination because the combined age of the two new members is 77, and (77 - 7) / 2 = 35.0 years.","Eliminated because 42.0 years is the age of the older new member.","Eliminated because 32.0 gives combined age of 71.","Eliminated because 38.0 is the new average age.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+Common Trap: Selecting the older new member's age (42.0, Option B) instead of the younger member (35.0).
+Exam Tip: Combined age is 342 - 265 = 77. Younger is 77 - 7/2 = 35.0 years.","Correct. Survives elimination because the combined age of the two new members is 77, and (77 - 7) / 2 = 35.0 years.","Eliminated because 42.0 years is the age of the older new member.","Eliminated because 32.0 gives combined age of 71.","Eliminated because 38.0 is the new average age.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
 "A father is currently 24 years older than his son. In two years from now, the father's age will be exactly twice the age of his son. What is the present age of the son?","22 years","20 years","24 years","18 years","A","Step-by-Step Solution:
 1. Define variables:
-   - Let son's present age $= s$.
-   - Father's present age $= s + 24$.
+ - Let son's present age = s.
+ - Father's present age = s + 24.
 2. Formulate equation for ages in 2 years:
-   - Father in 2 years: $(s + 24) + 2 = s + 26$.
-   - Son in 2 years: $s + 2$.
+ - Father in 2 years: (s + 24) + 2 = s + 26.
+ - Son in 2 years: s + 2.
 3. Set up the doubling condition:
-   - $s + 26 = 2(s + 2)$.
-4. Solve for $s$:
-   - $s + 26 = 2s + 4$.
-   - $2s - s = 26 - 4 \implies s = 22\text{ years}$.
+ - s + 26 = 2(s + 2).
+4. Solve for s:
+ - s + 26 = 2s + 4.
+ - 2s - s = 26 - 4 implies s = 22 years.
 5. Verify:
-   - Father present $= 22 + 24 = 46$.
-   - In 2 years: Father is 48, Son is 24.
-   - $48 = 2 \times 24$ (Confirmed!).
+ - Father present = 22 + 24 = 46.
+ - In 2 years: Father is 48, Son is 24.
+ - 48 = 2 × 24 (Confirmed!).
 
-Common Trap: Forgetting to add 2 to the son's side ($s + 26 = 2s \implies s = 26$) or subtracting 2 ($20$, Option B).
-Exam Tip: Both father and son age by 2 years: $(s + 24 + 2) = 2(s + 2)$.","Correct. Survives elimination because son is currently 22 and father is 46; in 2 years 48 = 2(24).","Eliminated because if s = 20, in 2 years father is 46 != 2(22) = 44.","Eliminated because if s = 24, in 2 years father is 50 != 2(26) = 52.","Eliminated because if s = 18, in 2 years father is 44 != 2(20) = 40.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"The product of the integer ages of two brothers is 168, and the sum of their ages is 26 years. What is the present age of the older brother?","14 years","16 years","18 years","12 years","A","Step-by-Step Solution:
+Common Trap: Forgetting to add 2 to the son's side (s + 26 = 2s implies s = 26) or subtracting 2 (20, Option B).
+Exam Tip: Both father and son age by 2 years: (s + 24 + 2) = 2(s + 2).","Correct. Survives elimination because son is currently 22 and father is 46; in 2 years 48 = 2(24).","Eliminated because if s = 20, in 2 years father is 46!= 2(22) = 44.","Eliminated because if s = 24, in 2 years father is 50!= 2(26) = 52.","Eliminated because if s = 18, in 2 years father is 44!= 2(20) = 40.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"The product of the integer ages of two brothers is 168, and the Σ of their ages is 26 years. What is the present age of the older brother?","14 years","16 years","18 years","12 years","A","Step-by-Step Solution:
 1. Define variables:
-   - Let older brother's age $= x$, younger brother's age $= y$.
+ - Let older brother's age = x, younger brother's age = y.
 2. System of equations:
-   - $x + y = 26 \implies y = 26 - x$.
-   - $x \cdot y = 168$.
-3. Substitute $y$:
-   - $x(26 - x) = 168 \implies 26x - x^2 = 168$.
-   - $x^2 - 26x + 168 = 0$.
+ - x + y = 26 implies y = 26 - x.
+ - x · y = 168.
+3. Substitute y:
+ - x(26 - x) = 168 implies 26x - x² = 168.
+ - x² - 26x + 168 = 0.
 4. Factor the quadratic equation:
-   - Find two numbers that multiply to 168 and add to $-26$:
-   - Factor pairs of 168: $(1, 168), (2, 84), (3, 56), (4, 42), (6, 28), (7, 24), (8, 21), (12, 14)$.
-   - $12 + 14 = 26$ and $12 \times 14 = 168$.
-   - $(x - 14)(x - 12) = 0$.
+ - Find two numbers that multiply to 168 and add to -26:
+ - Factor pairs of 168: (1, 168), (2, 84), (3, 56), (4, 42), (6, 28), (7, 24), (8, 21), (12, 14).
+ - 12 + 14 = 26 and 12 × 14 = 168.
+ - (x - 14)(x - 12) = 0.
 5. The two ages are 14 and 12.
-   - Older brother is 14 years old.
+ - Older brother is 14 years old.
 
-Common Trap: Selecting the younger brother's age ($12$, Option D) instead of the older brother ($14$).
-Exam Tip: Factoring $x^2 - 26x + 168 = 0$ rapidly identifies the symmetric pair $(14, 12)$.","Correct. Survives elimination because 14 * 12 = 168 and 14 + 12 = 26, making the older brother 14.","Eliminated because 16 * 10 = 160 != 168.","Eliminated because 18 * 8 = 144 != 168.","Eliminated because 12 is the age of the younger brother.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
-"Four years ago, the ratio of the ages of Pedro and Ramon was $2 : 3$. Four years from now, the ratio of their ages will be $5 : 7$. What is the sum of their present ages?","88 years","80 years","92 years","84 years","A","Step-by-Step Solution:
+Common Trap: Selecting the younger brother's age (12, Option D) instead of the older brother (14).
+Exam Tip: Factoring x² - 26x + 168 = 0 rapidly identifies the symmetric pair (14, 12).","Correct. Survives elimination because 14 * 12 = 168 and 14 + 12 = 26, making the older brother 14.","Eliminated because 16 * 10 = 160!= 168.","Eliminated because 18 * 8 = 144!= 168.","Eliminated because 12 is the age of the younger brother.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+"Four years ago, the ratio of the ages of Pedro and Ramon was 2: 3. Four years from now, the ratio of their ages will be 5: 7. What is the Σ of their present ages?","88 years","80 years","92 years","84 years","A","Step-by-Step Solution:
 1. Define ages 4 years ago:
-   - Pedro 4 years ago $= 2x$.
-   - Ramon 4 years ago $= 3x$.
+ - Pedro 4 years ago = 2x.
+ - Ramon 4 years ago = 3x.
 2. Formulate present ages:
-   - Pedro present $= 2x + 4$.
-   - Ramon present $= 3x + 4$.
-3. Formulate ages 4 years from now (8 years from the past reference point):
-   - Pedro in 4 years $= 2x + 8$.
-   - Ramon in 4 years $= 3x + 8$.
+ - Pedro present = 2x + 4.
+ - Ramon present = 3x + 4.
+3. Formulate ages 4 years from now (8 years from the past reference po∫):
+ - Pedro in 4 years = 2x + 8.
+ - Ramon in 4 years = 3x + 8.
 4. Set up the future ratio:
-   - $\frac{2x + 8}{3x + 8} = \frac{5}{7}$.
-5. Cross-multiply and solve for $x$:
-   - $7(2x + 8) = 5(3x + 8)$.
-   - $14x + 56 = 15x + 40$.
-   - $15x - 14x = 56 - 40 \implies x = 16$.
+ - 2x + 8/3x + 8 = 5/7.
+5. Cross-multiply and solve for x:
+ - 7(2x + 8) = 5(3x + 8).
+ - 14x + 56 = 15x + 40.
+ - 15x - 14x = 56 - 40 implies x = 16.
 6. Calculate present ages:
-   - Pedro present $= 2(16) + 4 = 32 + 4 = 36\text{ years}$.
-   - Ramon present $= 3(16) + 4 = 48 + 4 = 52\text{ years}$.
-7. Compute sum of present ages:
-   - $\text{Sum} = 36 + 52 = 88\text{ years}$.
+ - Pedro present = 2(16) + 4 = 32 + 4 = 36 years.
+ - Ramon present = 3(16) + 4 = 48 + 4 = 52 years.
+7. Compute Σ of present ages:
+ - Sum = 36 + 52 = 88 years.
 
-Common Trap: Summing the ages from 4 years ago ($32 + 48 = 80$, Option B) rather than present ages ($88$).
-Exam Tip: Sum of present ages is $(2x + 4) + (3x + 4) = 5x + 8 = 5(16) + 8 = 80 + 8 = 88\text{ years}$.","Correct. Survives elimination because Pedro is 36 and Ramon is 52 (sum = 88); 4 years ago ratio was 32:48 = 2:3, in 4 years ratio will be 40:56 = 5:7.","Eliminated because 80 is the sum of their ages 4 years ago (32 + 48).","Eliminated because 92 is the sum of their ages 2 years in the future.","Eliminated because calculation slip gives 84.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"
+Common Trap: Summing the ages from 4 years ago (32 + 48 = 80, Option B) rather than present ages (88).
+Exam Tip: Sum of present ages is (2x + 4) + (3x + 4) = 5x + 8 = 5(16) + 8 = 80 + 8 = 88 years.","Correct. Survives elimination because Pedro is 36 and Ramon is 52 (Σ = 88); 4 years ago ratio was 32:48 = 2:3, in 4 years ratio will be 40:56 = 5:7.","Eliminated because 80 is the Σ of their ages 4 years ago (32 + 48).","Eliminated because 92 is the Σ of their ages 2 years in the future.","Eliminated because calculation slip gives 84.","Numerical Ability","Numerical Ability | Word Problems | Arithmetic Word Problems | Age problems | Very Difficult | Batch 033"

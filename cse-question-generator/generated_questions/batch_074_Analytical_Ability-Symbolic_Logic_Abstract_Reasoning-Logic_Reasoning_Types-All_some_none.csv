@@ -1,164 +1,161 @@
-"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"On the traditional Aristotelian Square of Opposition, what is the exact CONTRADICTORY proposition to the universal negative statement: \"No corrupt officials are public servants of integrity ($E$-proposition)\"?","Some corrupt officials are public servants of integrity ($I$-proposition).","All corrupt officials are public servants of integrity ($A$-proposition).","Some corrupt officials are not public servants of integrity ($O$-proposition).","No public servants of integrity are corrupt officials.","A","Step-by-Step Solution:
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation"
+"On the traditional Aristotelian Square of Opposition, what is the exact CONTRADICTORY proposition to the universal negative statement: \""No corrupt officials are public servants of integrity (E-proposition)\""?","Some corrupt officials are public servants of integrity (I-proposition).","All corrupt officials are public servants of integrity (A-proposition).","Some corrupt officials are not public servants of integrity (O-proposition).","No public servants of integrity are corrupt officials.","A","Step-by-Step Solution:
 1. Identify the categorical type of the given proposition:
-   - Statement: \"No corrupt officials are public servants of integrity.\"
-   - Categorical Type: Universal Negative ($E$-proposition).
-2. Recall the Diagonal Contradictory pairs on the Square of Opposition:
-   - $A$ (Universal Affirmative) is contradictory to $O$ (Particular Negative).
-   - $E$ (Universal Negative) is contradictory to $I$ (Particular Affirmative).
-3. Formulate the $I$-proposition:
-   - \"Some corrupt officials are public servants of integrity\" (Particular Affirmative).
-4. Verify the Contradictory relationship:
-   - Two propositions are contradictory if they cannot both be true and cannot both be false simultaneously (if $E$ is True, $I$ must be False; if $E$ is False, $I$ must be True).
-5. Evaluate incorrect alternatives:
-   - Option B ($A$-proposition): The \"CONTRARY\" of $E$ (both can be false, but cannot both be true).
-   - Option C ($O$-proposition): The \"SUBALTERN\" of $E$.
-   - Option D: The simple converse of $E$.
-
-Common Trap: Confusing the Contrary ($A$: \"All S are P\") with the Contradictory ($I$: \"Some S are P\").
-Exam Tip: Contradictory of \"NO S is P\" ($E$) is strictly \"SOME S is P\" ($I$).","Correct. Survives elimination because the exact contradictory of a Universal Negative (E) on the Square of Opposition is the Particular Affirmative (I).","Eliminated because All S are P is the Contrary of E.","Eliminated because Some S are not P is the Subaltern of E.","Eliminated because this is the simple converse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Given the two true premises: (1) All senior policy analysts are certified statisticians ($\text{All } A \text{ are } S$). (2) Some senior policy analysts are certified data engineers ($\text{Some } A \text{ are } D$). Which categorical deduction MUST be true?","Some certified statisticians are certified data engineers ($\text{Some } S \text{ are } D$).","All certified statisticians are certified data engineers ($\text{All } S \text{ are } D$).","All certified data engineers are senior policy analysts ($\text{All } D \text{ are } A$).","No certified data engineers are certified statisticians.","A","Step-by-Step Solution:
+ - Statement: \""No corrupt officials are public servants of integrity.\"
+"- Categorical Type: Universal Negative (E-proposition).","","","","","",""
+"2. Recall the Diagonal Contradictory pairs on the Square of Opposition:","","","","","",""
+"- A (Universal Affirmative) is contradictory to O (Particular Negative).","","","","","",""
+"- E (Universal Negative) is contradictory to I (Particular Affirmative).","","","","","",""
+"3. Formulate the I-proposition:","","","","","",""
+"- \""Some corrupt officials are public servants of integrity\"" (Particular Affirmative).","","","","","",""
+"4. Verify the Contradictory relationship:","","","","","",""
+"- Two propositions are contradictory if they cannot both be true and cannot both be false simultaneously (if E is True","I must be False; if E is False","I must be True).","","","",""
+"5. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (A-proposition): The \""CONTRARY\"" of E (both can be false","but cannot both be true).","","","","",""
+"- Option C (O-proposition): The \""SUBALTERN\"" of E.","","","","","",""
+"- Option D: The simple converse of E.","","","","","",""
+"Common Trap: Confusing the Contrary (A: \""All S are P\"") with the Contradictory (I: \""Some S are P\"").","","","","","",""
+"Exam Tip: Contradictory of \""NO S is P\"" (E) is strictly \""SOME S is P\"" (I).""","Correct. Survives elimination because the exact contradictory of a Universal Negative (E) on the Square of Opposition is the Particular Affirmative (I).","Eliminated because All S are P is the Contrary of E.","Eliminated because Some S are not P is the Subaltern of E.","Eliminated because this is the simple converse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
+"Given the two true premises: (1) All senior policy analysts are certified statisticians (All A are S). (2) Some senior policy analysts are certified data engineers (Some A are D). Which categorical deduction MUST be true?","Some certified statisticians are certified data engineers (Some S are D).","All certified statisticians are certified data engineers (All S are D).","All certified data engineers are senior policy analysts (All D are A).","No certified data engineers are certified statisticians.","A","Step-by-Step Solution:
 1. Express the premises in set-theoretic / predicate logic terms:
-   - Premise 1: $A \subseteq S$ (The entire set of Analysts is contained within Statisticians).
-   - Premise 2: $A \cap D \neq \emptyset$ (There exists an overlap between Analysts and Data Engineers).
+ - Premise 1: A subseteq S (The entire set of Analysts is contained within Statisticians).
+ - Premise 2: A cap D ≠ emptyset (There exists an overlap between Analysts and Data Engineers).
 2. Analyze the intersection:
-   - By Premise 2, there exists at least one element $x$ such that $x \in A$ and $x \in D$.
-   - By Premise 1, since $x \in A$, it must also be true that $x \in S$.
-   - Therefore, element $x$ belongs to both $S$ and $D$ ($x \in S \cap D$).
+ - By Premise 2, there exists at least one element x such that x in A and x in D.
+ - By Premise 1, since x in A, it must also be true that x in S.
+ - Therefore, element x belongs to both S and D (x in S cap D).
 3. Deduce the conclusion:
-   - Since $S \cap D \neq \emptyset$, it necessarily follows that \"Some certified statisticians are certified data engineers\" ($\text{Some } S \text{ are } D$).
+ - Since S cap D ≠ emptyset, it necessarily follows that \""Some certified statisticians are certified data engineers\"" (Some S are D).
 4. Evaluate incorrect alternatives:
-   - Option B: Universal claim overextends the particular overlap.
-   - Option C: Assumes all Data Engineers are Analysts (unsupported).
-   - Option D: Directly contradicts the proven non-empty intersection.
+ - Option B: Universal claim overextends the particular overlap.
+ - Option C: Assumes all Data Engineers are Analysts (unsupported).
+ - Option D: Directly contradicts the proven non-empty intersection.
 
 Common Trap: Assuming universal conclusions from a combination of universal and particular premises.
-Exam Tip: Universal + Particular premise yields ONLY a Particular conclusion ($A + I \implies I$).","Correct. Survives elimination because the element existing in the intersection of A and D is also in S by Premise 1, proving Some S are D.","Eliminated because universal All S are D is an unjustified overextension.","Eliminated because Premise 2 only establishes that Some D are A.","Eliminated because this directly contradicts the proven intersection of S and D.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"What is the exact logical negation of the universal affirmative quantified proposition: \"Every government employee submitted their asset disclosure on time ($\forall x (E(x) \implies S(x))$\"?","At least one government employee did NOT submit their asset disclosure on time ($\exists x (E(x) \land \neg S(x))$).","No government employee submitted their asset disclosure on time ($\forall x (E(x) \implies \neg S(x))$).","Every government employee failed to submit their asset disclosure on time.","Most government employees did not submit their asset disclosure on time.","A","Step-by-Step Solution:
+Exam Tip: Universal + Particular premise yields ONLY a Particular conclusion (A + I implies I)."
+"What is the exact logical negation of the universal affirmative quantified proposition: \""Every government employee submitted their asset disclosure on time (forall x (E(x) implies S(x))\""?","At least one government employee did NOT submit their asset disclosure on time (exists x (E(x) land neg S(x))).","No government employee submitted their asset disclosure on time (forall x (E(x) implies neg S(x))).","Every government employee failed to submit their asset disclosure on time.","Most government employees did not submit their asset disclosure on time.","A","Step-by-Step Solution:
 1. Express the given proposition in first-order predicate logic:
-   - Universal Affirmative: $\forall x (E(x) \implies S(x))$ (\"All employees are on-time submitters\").
+ - Universal Affirmative: forall x (E(x) implies S(x)) (\""All employees are on-time submitters\"").
 2. Apply Quantifier Negation Law:
-   - The negation of $\forall x P(x)$ is $\exists x \neg P(x)$.
-3. Negate the internal conditional $(E(x) \implies S(x))$:
-   - $\neg(E(x) \implies S(x)) \equiv E(x) \land \neg S(x)$.
+ - The negation of forall x P(x) is exists x neg P(x).
+3. Negate the internal conditional (E(x) implies S(x)):
+ - neg(E(x) implies S(x)) ≡ E(x) land neg S(x).
 4. Combine quantifiers:
-   - $\exists x (E(x) \land \neg S(x))$.
+ - exists x (E(x) land neg S(x)).
 5. Translate to natural language:
-   - \"There exists at least one government employee who did NOT submit their asset disclosure on time\" (i.e., \"Some government employees did not submit on time\").
+ - \""There exists at least one government employee who did NOT submit their asset disclosure on time\"" (i.e., \""Some government employees did not submit on time\"").
 6. Evaluate incorrect alternatives:
-   - Option B (\"No employee submitted\"): The contrary ($E$), not the minimal negation.
-   - Option C: Identical to the universal negative.
-   - Option D: Uses indefinite quantifier \"most\".
+ - Option B (\""No employee submitted\""): The contrary (E), not the minimal negation.
+ - Option C: Identical to the universal negative.
+ - Option D: Uses indefinite quantifier \""most\"".
 
-Common Trap: Thinking the opposite of \"All\" is \"None\". In formal logic, the exact negation of \"All\" is \"At least one is NOT\" (Some are not).
-Exam Tip: $\neg(\text{All S are P}) \equiv \text{Some S are NOT P}$.","Correct. Survives elimination because the formal negation of a universal affirmative (All) is the existential negative (Some are not / at least one did not).","Eliminated because \"No employee\" is the contrary, which is far stronger than the minimal logical negation.","Eliminated because this is synonymous with \"No employee\".","Eliminated because \"most\" is a non-standard fuzzy quantifier.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Given the categorical premises: (1) No provisional employees are eligible for the pension fund ($\text{No } P \text{ is } E$). (2) All research fellows are provisional employees ($\text{All } R \text{ is } P$). Which valid categorical conclusion follows by the classical Celarent syllogism?","No research fellows are eligible for the pension fund ($\text{No } R \text{ is } E$).","Some research fellows are eligible for the pension fund ($\text{Some } R \text{ is } E$).","All research fellows are eligible for the pension fund ($\text{All } R \text{ is } E$).","Some provisional employees are research fellows.","A","Step-by-Step Solution:
+Common Trap: Thinking the opposite of \""All\"" is \""None\"". In formal logic, the exact negation of \""All\"" is \""At least one is NOT\"" (Some are not).
+Exam Tip: neg(All S are P) ≡ Some S are NOT P."
+"Given the categorical premises: (1) No provisional employees are eligible for the pension fund (No P is E). (2) All research fellows are provisional employees (All R is P). Which valid categorical conclusion follows by the classical Celarent syllogism?","No research fellows are eligible for the pension fund (No R is E).","Some research fellows are eligible for the pension fund (Some R is E).","All research fellows are eligible for the pension fund (All R is E).","Some provisional employees are research fellows.","A","Step-by-Step Solution:
 1. Identify the formal syllogistic structure:
-   - Major Premise ($E$-type): No $P$ is $E$ (Provisional employees and Eligible members are disjoint sets: $P \cap E = \emptyset$).
-   - Minor Premise ($A$-type): All $R$ is $P$ (Research fellows are a subset of Provisional employees: $R \subseteq P$).
+ - Major Premise (E-type): No P is E (Provisional employees and Eligible members are disjo∫ sets: P cap E = emptyset).
+ - Minor Premise (A-type): All R is P (Research fellows are a subset of Provisional employees: R subseteq P).
 2. Analyze the set relations:
-   - Since $R$ is entirely contained within $P$ ($R \subseteq P$), and $P$ has zero overlap with $E$ ($P \cap E = \emptyset$), the subset $R$ can have NO overlap with $E$ ($R \cap E = \emptyset$).
+ - Since R is entirely contained within P (R subseteq P), and P has zero overlap with E (P cap E = emptyset), the subset R can have NO overlap with E (R cap E = emptyset).
 3. Formulate the valid syllogistic conclusion (Figure 1, Mood EAE - *Celarent*):
-   - \"No research fellows are eligible for the pension fund\" ($\text{No } R \text{ is } E$).
+ - \""No research fellows are eligible for the pension fund\"" (No R is E).
 4. Evaluate incorrect alternatives:
-   - Options B and C contradict the disjoint set relationship.
-   - Option D is an existential conversion of the minor premise rather than the syllogistic conclusion connecting major and minor terms.
+ - Options B and C contradict the disjo∫ set relationship.
+ - Option D is an existential conversion of the minor premise rather than the syllogistic conclusion connecting major and minor terms.
 
 Common Trap: Reversing terms or weakening the universal negative to a particular when a universal conclusion is sound.
-Exam Tip: EAE-1 (Celarent): $\text{No } M \text{ is } P + \text{All } S \text{ is } M \implies \text{No } S \text{ is } P$.","Correct. Survives elimination because Celarent (EAE-1) validly deduces the universal negative \"No R is E\" from \"No P is E\" and \"All R is P\".","Eliminated because Some R is E directly contradicts the disjoint set relationship.","Eliminated because All R is E contradicts the premise.","Eliminated because this is a conversion of a premise rather than the terminal syllogistic deduction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Consider the categorical statements: Premise 1: Some project managers are certified scrum masters ($\text{Some } M \text{ are } S$). Premise 2: Some certified scrum masters are enterprise architects ($\text{Some } S \text{ are } E$). Can we validly deduce that \"Some project managers are enterprise architects ($\text{Some } M \text{ are } E$)\"?","No, this is an INVALID deduction committing the Fallacy of Undistributed Middle.","Yes, because the term \"certified scrum masters\" bridges the two sets.","Yes, because \"some\" always guarantees at least one overlapping member.","No, because all project managers are enterprise architects.","A","Step-by-Step Solution:
+Exam Tip: EAE-1 (Celarent): No M is P + All S is M implies No S is P."
+"Consider the categorical statements: Premise 1: Some project managers are certified scrum masters (Some M are S). Premise 2: Some certified scrum masters are enterprise architects (Some S are E). Can we validly deduce that \""Some project managers are enterprise architects (Some M are E)\""?","No, this is an INVALID deduction committing the Fallacy of Undistributed Middle.","Yes, because the term \""certified scrum masters\"" bridges the two sets.","Yes, because \""some\"" always guarantees at least one overlapping member.","No, because all project managers are enterprise architects.","A","Step-by-Step Solution:
 1. Examine the terms and quantifier distribution:
-   - Premise 1: \"Some $M$ are $S$\" ($I$-proposition: both Subject $M$ and Predicate $S$ are UNDISTRIBUTED).
-   - Premise 2: \"Some $S$ are $E$\" ($I$-proposition: both Subject $S$ and Predicate $E$ are UNDISTRIBUTED).
-2. Check the Middle Term ($S$ = \"certified scrum masters\"):
-   - For a categorical syllogism to be valid, the middle term MUST be distributed in at least one premise.
-   - Here, middle term $S$ is undistributed in Premise 1 and undistributed in Premise 2.
+ - Premise 1: \""Some M are S\"" (I-proposition: both Subject M and Predicate S are UNDISTRIBUTED).
+ - Premise 2: \""Some S are E\"" (I-proposition: both Subject S and Predicate E are UNDISTRIBUTED).
+2. Check the Middle Term (S = \""certified scrum masters\""):
+ - For a categorical syllogism to be valid, the middle term MUST be distributed in at least one premise.
+ - Here, middle term S is undistributed in Premise 1 and undistributed in Premise 2.
 3. Identify the formal fallacy:
-   - The deduction commits the \"FALLACY OF UNDISTRIBUTED MIDDLE\".
-   - Furthermore, in classical logic: \"From two particular premises (I + I), NO valid conclusion can be drawn.\"
-4. Set-Theoretic Counterexample:
-   - The scrum masters who are project managers could be completely distinct from the scrum masters who are enterprise architects.
-
-Common Trap: Assuming that because both groups share scrum masters, they must overlap with each other.
-Exam Tip: Two \"SOME\" premises ($I + I$) NEVER yield a valid categorical deduction (Undistributed Middle).","Correct. Survives elimination because middle term S is undistributed in both particular premises, committing the textbook Fallacy of Undistributed Middle.","Eliminated because undistributed middle terms fail to bridge categorical sets.","Eliminated because the two subsets of S may be mutually disjoint.","Eliminated because the universal claim is unfounded.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Given the universal affirmative premise: \"All valid city ordinances are subject to judicial review ($\text{All } O \text{ are } J$).\" What is the valid OBVERSE of this categorical proposition?","No valid city ordinances are non-subject to judicial review ($\text{No } O \text{ is non-}J$).","Some valid city ordinances are subject to judicial review.","All things subject to judicial review are valid city ordinances.","No things subject to judicial review are valid city ordinances.","A","Step-by-Step Solution:
-1. Recall the formal operation of \"OBVERSION\":
-   - Obversion is an immediate inference valid for all four categorical proposition types ($A, E, I, O$).
-   - Rule 1: Change the quality of the proposition (Affirmative becomes Negative, or Negative becomes Affirmative).
-   - Rule 2: Replace the predicate term with its logical complement ($P \to \text{non-}P$).
-2. Apply Obversion to the given $A$-proposition:
-   - Given: \"All $O$ are $J$\" (Universal Affirmative).
-   - Step 1: Change quality from Universal Affirmative ($A$) to Universal Negative ($E$) $\implies$ \"No $O$ are...\".
-   - Step 2: Complement predicate $J \implies$ \"non-$J$\" (\"non-subject to judicial review\").
-   - Result: \"No valid city ordinances are non-subject to judicial review\" ($E$-type).
+ - The deduction commits the \""FALLACY OF UNDISTRIBUTED MIDDLE\"".
+ - Furthermore, in classical logic: \""From two particular premises (I + I), NO valid conclusion can be drawn.\"
+"4. Set-Theoretic Counterexample:","","","","","",""
+"- The scrum masters who are project managers could be completely distinct from the scrum masters who are enterprise architects.","","","","","",""
+"Common Trap: Assuming that because both groups share scrum masters","they must overlap with each other.","","","","",""
+"Exam Tip: Two \""SOME\"" premises (I + I) NEVER yield a valid categorical deduction (Undistributed Middle).""","Correct. Survives elimination because middle term S is undistributed in both particular premises, committing the textbook Fallacy of Undistributed Middle.","Eliminated because undistributed middle terms fail to bridge categorical sets.","Eliminated because the two subsets of S may be mutually disjo∫.","Eliminated because the universal claim is unfounded.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
+"Given the universal affirmative premise: \""All valid city ordinances are subject to judicial review (All O are J).\"" What is the valid OBVERSE of this categorical proposition?","No valid city ordinances are non-subject to judicial review (No O is non-J).","Some valid city ordinances are subject to judicial review.","All things subject to judicial review are valid city ordinances.","No things subject to judicial review are valid city ordinances.","A","Step-by-Step Solution:
+1. Recall the formal operation of \""OBVERSION\"":
+ - Obversion is an immediate inference valid for all four categorical proposition types (A, E, I, O).
+ - Rule 1: Change the quality of the proposition (Affirmative becomes Negative, or Negative becomes Affirmative).
+ - Rule 2: Replace the predicate term with its logical complement (P to non-P).
+2. Apply Obversion to the given A-proposition:
+ - Given: \""All O are J\"" (Universal Affirmative).
+ - Step 1: Change quality from Universal Affirmative (A) to Universal Negative (E) implies \""No O are...\"".
+ - Step 2: Complement predicate J implies \""non-J\"" (\""non-subject to judicial review\"").
+ - Result: \""No valid city ordinances are non-subject to judicial review\"" (E-type).
 3. Evaluate incorrect alternatives:
-   - Option B: Subalternation (not obversion).
-   - Option C: Simple Conversion of $A$ (invalid).
-   - Option D: Conversion of $E$.
+ - Option B: Subalternation (not obversion).
+ - Option C: Simple Conversion of A (invalid).
+ - Option D: Conversion of E.
 
 Common Trap: Confusing Obversion (quality change + predicate complement) with Conversion (term swap).
-Exam Tip: Obverse of \"All S is P\" is strictly \"No S is non-P\".","Correct. Survives elimination because obverting an A-proposition requires changing affirmative to negative and complementing the predicate: No O is non-J.","Eliminated because this is subalternation.","Eliminated because this is simple conversion, which is invalid for A-propositions.","Eliminated because this is an invalid converse.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Given the two categorical premises: (1) All environmental inspectors are civil service eligibles ($\text{All } I \text{ are } C$). (2) No civil service eligibles are convicted felons ($\text{No } C \text{ is } F$). What valid deduction necessarily follows?","No environmental inspectors are convicted felons ($\text{No } I \text{ is } F$).","Some environmental inspectors are convicted felons ($\text{Some } I \text{ are } F$).","All convicted felons are environmental inspectors ($\text{All } F \text{ are } I$).","Some civil service eligibles are environmental inspectors.","A","Step-by-Step Solution:
+Exam Tip: Obverse of \""All S is P\"" is strictly \""No S is non-P\""."
+"Given the two categorical premises: (1) All environmental inspectors are civil service eligibles (All I are C). (2) No civil service eligibles are convicted felons (No C is F). What valid deduction necessarily follows?","No environmental inspectors are convicted felons (No I is F).","Some environmental inspectors are convicted felons (Some I are F).","All convicted felons are environmental inspectors (All F are I).","Some civil service eligibles are environmental inspectors.","A","Step-by-Step Solution:
 1. Represent the premises set-theoretically:
-   - Premise 1 ($A$): $I \subseteq C$ (Inspectors are entirely contained in Eligibles).
-   - Premise 2 ($E$): $C \cap F = \emptyset$ (Eligibles and Felons have zero intersection).
-2. Derive set relationship between $I$ and $F$:
-   - Since $I$ is a subset of $C$, any element in $I$ is in $C$.
-   - Since no element in $C$ is in $F$, no element in $I$ can possibly be in $F$.
-   - Therefore: $I \cap F = \emptyset$.
+ - Premise 1 (A): I subseteq C (Inspectors are entirely contained in Eligibles).
+ - Premise 2 (E): C cap F = emptyset (Eligibles and Felons have zero intersection).
+2. Derive set relationship between I and F:
+ - Since I is a subset of C, any element in I is in C.
+ - Since no element in C is in F, no element in I can possibly be in F.
+ - Therefore: I cap F = emptyset.
 3. Express in categorical standard form:
-   - \"No environmental inspectors are convicted felons\" ($\text{No } I \text{ is } F$).
+ - \""No environmental inspectors are convicted felons\"" (No I is F).
 4. Evaluate incorrect alternatives:
-   - Options B and C contradict the mutually exclusive set boundary.
-   - Option D is an immediate subaltern conversion of Premise 1, not the syllogistic terminal conclusion.
+ - Options B and C contradict the mutually exclusive set boundary.
+ - Option D is an immediate subaltern conversion of Premise 1, not the syllogistic terminal conclusion.
 
-Common Trap: Weakening the conclusion to \"Some inspectors are not felons\" when the universal \"No inspectors are felons\" is fully proven.
-Exam Tip: $A \subseteq B$ and $B \cap C = \emptyset \implies A \cap C = \emptyset$ (\"No A is C\").","Correct. Survives elimination because set containment I subset of C combined with C and F being disjoint strictly proves No I is F.","Eliminated because Some I are F contradicts disjoint sets C and F.","Eliminated because All F are I contradicts disjoint sets.","Eliminated because this is a subaltern conversion of Premise 1 rather than the syllogism conclusion.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"In classical categorical logic, what is the formal DISTRIBUTION status of terms in the universal negative $E$-proposition: \"No administrative circulars ($S$) are unconstitutional mandates ($P$)\"?","Both the Subject ($S$) and the Predicate ($P$) are DISTRIBUTED.","The Subject ($S$) is distributed, but the Predicate ($P$) is undistributed.","The Subject ($S$) is undistributed, but the Predicate ($P$) is distributed.","Neither the Subject ($S$) nor the Predicate ($P$) is distributed.","A","Step-by-Step Solution:
-1. Recall the definition of \"Distribution\":
-   - A term is *distributed* if the proposition makes an assertion about EVERY member of the class represented by that term.
+Common Trap: Weakening the conclusion to \""Some inspectors are not felons\"" when the universal \""No inspectors are felons\"" is fully proven.
+Exam Tip: A subseteq B and B cap C = emptyset implies A cap C = emptyset (\""No A is C\"")."
+"In classical categorical logic, what is the formal DISTRIBUTION status of terms in the universal negative E-proposition: \""No administrative circulars (S) are unconstitutional mandates (P)\""?","Both the Subject (S) and the Predicate (P) are DISTRIBUTED.","The Subject (S) is distributed, but the Predicate (P) is undistributed.","The Subject (S) is undistributed, but the Predicate (P) is distributed.","Neither the Subject (S) nor the Predicate (P) is distributed.","A","Step-by-Step Solution:
+1. Recall the definition of \""Distribution\"":
+ - A term is *distributed* if the proposition makes an assertion about EVERY member of the class represented by that term.
 2. Analyze the four standard categorical proposition types:
-   - $A$ (\"All S is P\"): Subject $S$ is Distributed, Predicate $P$ is Undistributed.
-   - $E$ (\"No S is P\"): Subject $S$ is DISTRIBUTED, Predicate $P$ is DISTRIBUTED.
-   - $I$ (\"Some S is P\"): Subject $S$ is Undistributed, Predicate $P$ is Undistributed.
-   - $O$ (\"Some S is not P\"): Subject $S$ is Undistributed, Predicate $P$ is DISTRIBUTED.
-3. Apply to the $E$-proposition:
-   - In \"No $S$ is $P$\", the proposition asserts that EVERY member of $S$ is excluded from $P$, AND EVERY member of $P$ is excluded from $S$.
-   - Therefore, BOTH Subject ($S$) and Predicate ($P$) are DISTRIBUTED.
-4. Memory Aid (Univer-S-als distribute Subjects; Neg-A-tives distribute Predicates):
-   - $E$ is both Universal (distributes $S$) and Negative (distributes $P$).
-
-Common Trap: Thinking only the subject term is distributed in universal statements.
-Exam Tip: E-propositions distribute BOTH terms (Subject and Predicate).","Correct. Survives elimination because universal negative (E) propositions make claims about every member of both the subject and predicate classes.","Eliminated because this describes A-propositions (All S is P).","Eliminated because this describes O-propositions (Some S is not P).","Eliminated because this describes I-propositions (Some S is P).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"Given the categorical premises: (1) Some tax consultants are certified public accountants ($\text{Some } T \text{ are } C$). (2) All certified public accountants are bound by professional ethics ($\text{All } C \text{ are } E$). Which valid categorical conclusion necessarily follows?","Some tax consultants are bound by professional ethics ($\text{Some } T \text{ are } E$).","All tax consultants are bound by professional ethics ($\text{All } T \text{ are } E$).","All persons bound by professional ethics are tax consultants.","No tax consultants are bound by professional ethics.","A","Step-by-Step Solution:
+ - A (\""All S is P\""): Subject S is Distributed, Predicate P is Undistributed.
+ - E (\""No S is P\""): Subject S is DISTRIBUTED, Predicate P is DISTRIBUTED.
+ - I (\""Some S is P\""): Subject S is Undistributed, Predicate P is Undistributed.
+ - O (\""Some S is not P\""): Subject S is Undistributed, Predicate P is DISTRIBUTED.
+3. Apply to the E-proposition:
+ - In \""No S is P\"
+"- Therefore","BOTH Subject (S) and Predicate (P) are DISTRIBUTED.","","","","",""
+"4. Memory Aid (Univer-S-als distribute Subjects; Neg-A-tives distribute Predicates):","","","","","",""
+"- E is both Universal (distributes S) and Negative (distributes P).","","","","","",""
+"Common Trap: Thinking only the subject term is distributed in universal statements.","","","","","",""
+"Exam Tip: E-propositions distribute BOTH terms (Subject and Predicate).""","Correct. Survives elimination because universal negative (E) propositions make claims about every member of both the subject and predicate classes.","Eliminated because this describes A-propositions (All S is P).","Eliminated because this describes O-propositions (Some S is not P).","Eliminated because this describes I-propositions (Some S is P).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
+"Given the categorical premises: (1) Some tax consultants are certified public accountants (Some T are C). (2) All certified public accountants are bound by professional ethics (All C are E). Which valid categorical conclusion necessarily follows?","Some tax consultants are bound by professional ethics (Some T are E).","All tax consultants are bound by professional ethics (All T are E).","All persons bound by professional ethics are tax consultants.","No tax consultants are bound by professional ethics.","A","Step-by-Step Solution:
 1. Identify the syllogism form:
-   - Major Premise ($A$): All $C$ are $E$ ($C \subseteq E$).
-   - Minor Premise ($I$): Some $T$ are $C$ ($T \cap C \neq \emptyset$).
+ - Major Premise (A): All C are E (C subseteq E).
+ - Minor Premise (I): Some T are C (T cap C ≠ emptyset).
 2. Analyze the overlapping sets:
-   - By Minor Premise, there exist individuals who belong to the intersection $T \cap C$.
-   - Since all members of $C$ belong to $E$ (Major Premise), those individuals in $T \cap C$ must also belong to $E$.
-   - Therefore, there exist individuals who belong to $T \cap E$ ($T \cap E \neq \emptyset$).
+ - By Minor Premise, there exist individuals who belong to the intersection T cap C.
+ - Since all members of C belong to E (Major Premise), those individuals in T cap C must also belong to E.
+ - Therefore, there exist individuals who belong to T cap E (T cap E ≠ emptyset).
 3. Formulate conclusion (Figure 1, Mood AII - *Darii*):
-   - \"Some tax consultants are bound by professional ethics\" ($\text{Some } T \text{ are } E$).
+ - \""Some tax consultants are bound by professional ethics\"" (Some T are E).
 4. Evaluate incorrect alternatives:
-   - Option B: Overextends particular overlap to universal claim.
-   - Option C: Converts universal statement illegally.
-   - Option D: Contradicts the proven intersection.
+ - Option B: Overextends particular overlap to universal claim.
+ - Option C: Converts universal statement illegally.
+ - Option D: Contradicts the proven intersection.
 
-Common Trap: Overgeneralizing from \"Some\" to \"All\" in the conclusion.
-Exam Tip: AII-1 (Darii): $\text{All } M \text{ is } P + \text{Some } S \text{ is } M \implies \text{Some } S \text{ is } P$.","Correct. Survives elimination because Darii (AII-1) validly deduces the particular affirmative \"Some T are E\" from \"All C are E\" and \"Some T are C\".","Eliminated because universal All T are E is an overextension of a particular premise.","Eliminated because All E are T is an invalid converse.","Eliminated because No T are E directly contradicts the proven intersection.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
-"If empirical investigation proves that the proposition: \"Some municipal budgets are unallocated ($I$-proposition)\" is FALSE, what can be definitively deduced about the proposition: \"No municipal budgets are unallocated ($E$-proposition)\"?","The E-proposition must be definitively TRUE.","The E-proposition must be definitively FALSE.","The E-proposition is logically undetermined.","The E-proposition is self-contradictory.","A","Step-by-Step Solution:
-1. Locate $I$ and $E$ propositions on the Square of Opposition:
-   - $I$ = Particular Affirmative (\"Some S is P\").
-   - $E$ = Universal Negative (\"No S is P\").
+Common Trap: Overgeneralizing from \""Some\"" to \""All\"" in the conclusion.
+Exam Tip: AII-1 (Darii): All M is P + Some S is M implies Some S is P."
+"If empirical investigation proves that the proposition: \""Some municipal budgets are unallocated (I-proposition)\"" is FALSE, what can be definitively deduced about the proposition: \""No municipal budgets are unallocated (E-proposition)\""?","The E-proposition must be definitively TRUE.","The E-proposition must be definitively FALSE.","The E-proposition is logically undetermined.","The E-proposition is self-contradictory.","A","Step-by-Step Solution:
+1. Locate I and E propositions on the Square of Opposition:
+ - I = Particular Affirmative (\""Some S is P\"").
+ - E = Universal Negative (\""No S is P\"").
 2. Identify the logical relationship:
-   - $I$ and $E$ are connected by the diagonal relation of CONTRADICTION.
+ - I and E are connected by the diagonal relation of CONTRADICTION.
 3. Apply the Rule of Contradiction:
-   - Contradictory propositions MUST have OPPOSITE truth values in all possible interpretations.
-   - If $I$ is True $\implies E$ is False.
-   - If $I$ is False $\implies E$ MUST BE TRUE.
+ - Contradictory propositions MUST have OPPOSITE truth values in all possible interpretations.
+ - If I is True implies E is False.
+ - If I is False implies E MUST BE TRUE.
 4. Conclude:
-   - Given that $I$ is FALSE, the $E$-proposition (\"No municipal budgets are unallocated\") is deductively proven to be definitively TRUE.
+ - Given that I is FALSE, the E-proposition (\""No municipal budgets are unallocated\"") is deductively proven to be definitively TRUE.
 
-Common Trap: Thinking $E$ is undetermined when $I$ is false. (Subalterns can be undetermined, but Contradictories are always exact opposites).
-Exam Tip: Contradictories ($A \leftrightarrow O$ and $E \leftrightarrow I$) ALWAYS take opposite truth values: $\text{False} \implies \text{True}$.","Correct. Survives elimination because I and E are contradictories on the Square of Opposition, so when I is False, E is necessarily True.","Eliminated because contradictories cannot both be False simultaneously.","Eliminated because contradictory truth values are strictly determined.","Eliminated because E is a coherent true proposition.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | All/some/none | Very Difficult | Batch 074"
+Common Trap: Thinking E is undetermined when I is false. (Subalterns can be undetermined, but Contradictories are always exact opposites).
+Exam Tip: Contradictories (A leftrightarrow O and E leftrightarrow I) ALWAYS take opposite truth values: False implies True."

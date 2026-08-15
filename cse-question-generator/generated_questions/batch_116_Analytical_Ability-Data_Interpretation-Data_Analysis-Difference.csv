@@ -1,97 +1,97 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Passage: A provincial government's quarterly expenditure report shows the following data (PHP millions): Personnel Services: Q1=28.4, Q2=29.1, Q3=28.8, Q4=31.2. MOOE: Q1=12.6, Q2=14.3, Q3=16.7, Q4=18.9. Capital Outlay: Q1=4.2, Q2=8.6, Q3=15.3, Q4=22.8. Financial Expenses: Q1=0.8, Q2=0.9, Q3=0.7, Q4=0.6. What is the DIFFERENCE between the highest and lowest QUARTERLY TOTAL expenditure across all four quarters?","The difference between the highest quarterly total (Q4=73.5M) and the lowest quarterly total (Q1=46.0M) is PHP 27.5 million.","The difference between Q4 and Q3 totals is PHP 12.0M.","The highest quarterly total is Q4=73.5M and the lowest is Q2=52.9M, giving a difference of PHP 20.6M.","The difference between the largest and smallest individual line items is PHP 22.2M.","A","Step-by-Step Solution:
 1. Calculate quarterly totals:
-   - Q1: 28.4+12.6+4.2+0.8 = 46.0M.
-   - Q2: 29.1+14.3+8.6+0.9 = 52.9M.
-   - Q3: 28.8+16.7+15.3+0.7 = 61.5M.
-   - Q4: 31.2+18.9+22.8+0.6 = 73.5M.
+ - Q1: 28.4+12.6+4.2+0.8 = 46.0M.
+ - Q2: 29.1+14.3+8.6+0.9 = 52.9M.
+ - Q3: 28.8+16.7+15.3+0.7 = 61.5M.
+ - Q4: 31.2+18.9+22.8+0.6 = 73.5M.
 2. Highest quarterly total = Q4 = 73.5M.
 3. Lowest quarterly total = Q1 = 46.0M.
 4. Difference = 73.5 - 46.0 = PHP 27.5M.
 5. Option A is correct.
 6. Evaluate incorrect alternatives:
-   - Option B: Q4-Q3 = 73.5-61.5 = 12.0M—this is the Q3-Q4 difference, not max-min.
-   - Option C: Q2 (52.9M) is not the lowest total; Q1 (46.0M) is lower.
-   - Option D: The difference between individual line items (e.g., largest=Capital Outlay Q4=22.8M vs smallest=Financial Expenses Q4=0.6M) is irrelevant to the quarterly total question.
+ - Option B: Q4-Q3 = 73.5-61.5 = 12.0M—this is the Q3-Q4 difference, not max-min.
+ - Option C: Q2 (52.9M) is not the lowest total; Q1 (46.0M) is lower.
+ - Option D: The difference between individual line items (e.g., largest=Capital Outlay Q4=22.8M vs smallest=Financial Expenses Q4=0.6M) is irrelevant to the quarterly total question.
 
 Common Trap: Comparing only consecutive-quarter differences (Q3-Q4=12.0M) rather than the difference between the overall maximum and minimum quarterly totals.
 Exam Tip: 'Difference between highest and lowest' = compute the totals for all periods, identify max and min totals, then subtract min from max.","Correct. Survives elimination because Q4 has the highest total (73.5M) and Q1 has the lowest total (46.0M), and their difference is 73.5-46.0=PHP 27.5 million.","Eliminated because 12.0M is the Q3-to-Q4 difference (consecutive quarters), not the difference between the overall maximum and minimum quarterly totals.","Eliminated because Q2 (52.9M) is not the lowest quarterly total—Q1 (46.0M) is lower; the max-min difference should be 73.5-46.0=27.5M, not 73.5-52.9=20.6M.","Eliminated because the question asks for the difference between quarterly TOTALS, not the difference between individual expenditure line items within a quarter.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Max-Min Total | Very Difficult | Batch 116"
 "Passage: A five-year enrollment comparison shows the number of students at two competing universities: University Uno: Y1=18,420; Y2=19,140; Y3=20,870; Y4=21,320; Y5=22,480. University Dos: Y1=24,310; Y2=23,870; Y3=23,140; Y4=22,890; Y5=22,110. Based on the data, in which year was the enrollment DIFFERENCE BETWEEN THE TWO UNIVERSITIES the SMALLEST, and what was that difference?","Year 5, where University Uno=22,480 and University Dos=22,110, giving the smallest gap of only 370 students.","Year 4, where Uno=21,320 and Dos=22,890, giving a difference of 1,570 students.","Year 1, where Uno=18,420 and Dos=24,310, giving the largest difference of 5,890 students.","Year 3, where Uno=20,870 and Dos=23,140, giving a difference of 2,270 students.","A","Step-by-Step Solution:
 1. Calculate the absolute difference between the two universities for each year:
-   - Y1: |18,420-24,310| = 5,890.
-   - Y2: |19,140-23,870| = 4,730.
-   - Y3: |20,870-23,140| = 2,270.
-   - Y4: |21,320-22,890| = 1,570.
-   - Y5: |22,480-22,110| = 370. ← SMALLEST.
+ - Y1: |18,420-24,310| = 5,890.
+ - Y2: |19,140-23,870| = 4,730.
+ - Y3: |20,870-23,140| = 2,270.
+ - Y4: |21,320-22,890| = 1,570.
+ - Y5: |22,480-22,110| = 370. ← SMALLEST.
 2. Smallest difference = Y5 (370 students). Option A is correct.
 3. Evaluate incorrect alternatives:
-   - Option B: Y4 difference (1,570) is the second-smallest, not the smallest.
-   - Option C: Y1 difference (5,890) is the largest, not the smallest.
-   - Option D: Y3 difference (2,270) is the third-smallest.
+ - Option B: Y4 difference (1,570) is the second-smallest, not the smallest.
+ - Option C: Y1 difference (5,890) is the largest, not the smallest.
+ - Option D: Y3 difference (2,270) is the third-smallest.
 
 Common Trap: Selecting Y4 because it seems closest visually (21,320 vs. 22,890 = small gap), without computing Y5 which has an even smaller gap of only 370.
-Exam Tip: Compute absolute differences for ALL years before identifying the minimum gap; apparent convergence at one point may continue further in later periods.","Correct. Survives elimination because Year 5 produces the smallest enrollment difference (|22,480-22,110|=370 students), as University Uno nearly converged with (and actually slightly exceeded) University Dos.","Eliminated because Year 4's enrollment difference (1,570 students) is the second-smallest but does not match the actual minimum gap observed in Year 5.","Eliminated because Year 1's enrollment difference of 5,890 students is the LARGEST—not the smallest—gap in the five-year series.","Eliminated because Year 3's enrollment difference (2,270 students) is the third-smallest—substantially above Year 5's minimum of 370.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Convergence Analysis | Very Difficult | Batch 116"
+Exam Tip: Compute absolute differences for ALL years before identifying the minimum gap; apparent convergence at one po∫ may continue further in later periods.","Correct. Survives elimination because Year 5 produces the smallest enrollment difference (|22,480-22,110|=370 students), as University Uno nearly converged with (and actually slightly exceeded) University Dos.","Eliminated because Year 4's enrollment difference (1,570 students) is the second-smallest but does not match the actual minimum gap observed in Year 5.","Eliminated because Year 1's enrollment difference of 5,890 students is the LARGEST—not the smallest—gap in the five-year series.","Eliminated because Year 3's enrollment difference (2,270 students) is the third-smallest—substantially above Year 5's minimum of 370.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Convergence Analysis | Very Difficult | Batch 116"
 "Passage: A hospital compares the number of patients admitted across four wards over two months: Ward A: Month 1=214, Month 2=231. Ward B: Month 1=187, Month 2=169. Ward C: Month 1=342, Month 2=378. Ward D: Month 1=128, Month 2=145. Based on the data, what is the difference between the TOTAL admissions across all wards in Month 2 versus Month 1 (Month 2 total minus Month 1 total)?","Total Month 2 admissions = 923 (231+169+378+145). Total Month 1 admissions = 871 (214+187+342+128). Difference = 923-871 = +52 patients (increase).","Total Month 2 = 923, Month 1 = 871. Difference = -52 (decrease).","Difference = +66 patients, based on Ward C's increase of 36 and Ward D's increase of 17.","Difference = +37 patients, based on summing Ward A (+17) and Ward D (+17) increases only.","A","Step-by-Step Solution:
 1. Calculate Month 1 total: 214+187+342+128 = 871.
 2. Calculate Month 2 total: 231+169+378+145 = 923.
 3. Month 2 - Month 1 = 923-871 = +52 patients (Month 2 had more admissions).
 4. Option A is correct.
 5. Verification using ward-level changes:
-   - Ward A: +17; Ward B: -18; Ward C: +36; Ward D: +17.
-   - Net change = 17-18+36+17 = +52. ✓
+ - Ward A: +17; Ward B: -18; Ward C: +36; Ward D: +17.
+ - Net change = 17-18+36+17 = +52. ✓
 6. Evaluate incorrect alternatives:
-   - Option B: Incorrectly states the sign as negative (-52); Month 2 increased, not decreased.
-   - Option C: 66 doesn't match; Ward C's +36 plus Ward D's +17 = 53, not 66; also ignores other wards.
-   - Option D: Only adding Ward A and Ward D increases (17+17=34, not 37) ignores wards B and C.
+ - Option B: Incorrectly states the sign as negative (-52); Month 2 increased, not decreased.
+ - Option C: 66 doesn't match; Ward C's +36 plus Ward D's +17 = 53, not 66; also ignores other wards.
+ - Option D: Only adding Ward A and Ward D increases (17+17=34, not 37) ignores wards B and C.
 
 Common Trap: Adding only the positive-change wards while ignoring Ward B's decline (-18), overstating the total difference.
-Exam Tip: Total difference = Month 2 grand total minus Month 1 grand total; alternatively, sum all individual ward-level changes (including negatives) to get the net difference.","Correct. Survives elimination because Month 2 total (231+169+378+145=923) minus Month 1 total (214+187+342+128=871) = +52, confirmed by summing all ward-level changes: +17-18+36+17=+52.","Eliminated because the Month 2-Month 1 difference is POSITIVE (+52); Month 2 had more admissions, not fewer—the sign is reversed in Option B.","Eliminated because +66 overcounts; the net change considering all wards (including Ward B's decline of 18) is +52, not +66.","Eliminated because this only adds increases from Wards A and D (17+17=34) while ignoring Ward C's increase (+36) and Ward B's decrease (-18); the correct net is +52.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Net Change | Very Difficult | Batch 116"
-"Passage: A social welfare agency tracks monthly cash assistance releases (PHP millions) to beneficiaries over two semesters: Semester 1 (Jan-Jun): 42.8, 41.3, 44.7, 43.2, 45.6, 47.1. Semester 2 (Jul-Dec): 48.3, 51.2, 49.7, 52.4, 54.8, 61.3. Based on the data, what is the DIFFERENCE between the AVERAGE MONTHLY RELEASE in Semester 2 vs. Semester 1?","Average Semester 1 = 44.12M; Average Semester 2 = 52.95M. Difference = 52.95-44.12 = PHP 8.83M more per month in Semester 2.","Average Semester 1 = 44.12M; Average Semester 2 = 54.80M. Difference = PHP 10.68M.","The total semester amounts differ by PHP 53M; divided by 6 months = PHP 8.83M per month.","Semester 2 average exceeds Semester 1 by PHP 6.4M, based on the July-August jump alone.","A","Step-by-Step Solution:
+Exam Tip: Total difference = Month 2 grand total minus Month 1 grand total; alternatively, Σ all individual ward-level changes (including negatives) to get the net difference.","Correct. Survives elimination because Month 2 total (231+169+378+145=923) minus Month 1 total (214+187+342+128=871) = +52, confirmed by summing all ward-level changes: +17-18+36+17=+52.","Eliminated because the Month 2-Month 1 difference is POSITIVE (+52); Month 2 had more admissions, not fewer—the sign is reversed in Option B.","Eliminated because +66 overcounts; the net change considering all wards (including Ward B's decline of 18) is +52, not +66.","Eliminated because this only adds increases from Wards A and D (17+17=34) while ignoring Ward C's increase (+36) and Ward B's decrease (-18); the correct net is +52.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Net Change | Very Difficult | Batch 116"
+"Passage: A social welfare agency tracks monthly cash assistance releases (PHP millions) to beneficiaries over two semesters: Semester 1 (Jan-Jun): 42.8, 41.3, 44.7, 43.2, 45.6, 47.1. Semester 2 (Jul-Dec): 48.3, 51.2, 49.7, 52.4, 54.8, 61.3. Based on the data, what is the DIFFERENCE between the AVERAGE MONTHLY RELEASE in Semester 2 vs. Semester 1?","Average Semester 1 = 44.12M; Average Semester 2 = 52.95M. Difference = 52.95-44.12 = PHP 8.83M more per month in Semester 2.","Average Semester 1 = 44.12M; Average Semester 2 = 54.80M. Difference = PHP 10.68M.","The total semester amounts differ by PHP 53M; divided by 6 months = PHP 8.83M per month.","Semester 2 average exceeds Semester 1 by PHP 6.4M, based on the July-August ju∓ alone.","A","Step-by-Step Solution:
 1. Sum Semester 1: 42.8+41.3+44.7+43.2+45.6+47.1 = 264.7M.
-   Average S1: 264.7 ÷ 6 = 44.117 ≈ PHP 44.12M.
+ Average S1: 264.7 ÷ 6 = 44.117 ≈ PHP 44.12M.
 2. Sum Semester 2: 48.3+51.2+49.7+52.4+54.8+61.3 = 317.7M.
-   Average S2: 317.7 ÷ 6 = 52.95M.
+ Average S2: 317.7 ÷ 6 = 52.95M.
 3. Difference: 52.95 - 44.12 = PHP 8.83M more per month in Semester 2.
 4. Option A correctly computes both averages and their difference.
 5. Evaluate incorrect alternatives:
-   - Option B: 54.80 is November's monthly value (not S2 average).
-   - Option C: Total semester difference = 317.7-264.7=53.0M; 53.0÷6=8.83M—same as A but reversed reasoning; Option A is more direct.
-   - Option D: PHP 6.4M is not computed from the correct methodology.
+ - Option B: 54.80 is November's monthly value (not S2 average).
+ - Option C: Total semester difference = 317.7-264.7=53.0M; 53.0÷6=8.83M—same as A but reversed reasoning; Option A is more direct.
+ - Option D: PHP 6.4M is not computed from the correct methodology.
 
 Common Trap: Using a single month's value (e.g., 54.8M = November) as the 'average' for Semester 2 rather than computing the actual six-month average.
-Exam Tip: Semester average = sum of all months in semester ÷ number of months; always compute both fully before comparing the difference.","Correct. Survives elimination because Semester 1 average (264.7÷6=44.12M) and Semester 2 average (317.7÷6=52.95M) yield a PHP 8.83M per-month difference.","Eliminated because PHP 54.80M is November's individual release value—not the Semester 2 average; using a single monthly value as an average is incorrect.","Eliminated because while the total semester difference (53.0M÷6=8.83M/month) produces the same result, Option C's reasoning is circuitous; Option A's direct average computation is the standard method.","Eliminated because PHP 6.4M doesn't correspond to any standard computation; the difference should be based on both complete semester averages.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Semester Average Gap | Very Difficult | Batch 116"
-"Passage: An environmental monitoring report records the water quality index (WQI) at a river monitoring station over 8 consecutive measurement periods: 68, 72, 65, 74, 81, 77, 84, 79. A researcher wants to calculate the differences between each consecutive measurement to analyze WQI variability. Which of the following correctly states ALL consecutive differences (Period 2 minus Period 1, Period 3 minus Period 2, etc.)?","Consecutive differences: +4, -7, +9, +7, -4, +7, -5. (Total variability = sum of absolute differences = 4+7+9+7+4+7+5=43).","Consecutive differences: +4, -7, +9, +7, -4, +8, -5.","Consecutive differences: +4, -7, +9, +6, -4, +7, -5.","Consecutive differences: -4, +7, -9, -7, +4, -7, +5.","A","Step-by-Step Solution:
+Exam Tip: Semester average = Σ of all months in semester ÷ number of months; always compute both fully before comparing the difference.","Correct. Survives elimination because Semester 1 average (264.7÷6=44.12M) and Semester 2 average (317.7÷6=52.95M) yield a PHP 8.83M per-month difference.","Eliminated because PHP 54.80M is November's individual release value—not the Semester 2 average; using a single monthly value as an average is incorrect.","Eliminated because while the total semester difference (53.0M÷6=8.83M/month) produces the same result, Option C's reasoning is circuitous; Option A's direct average computation is the standard method.","Eliminated because PHP 6.4M doesn't correspond to any standard computation; the difference should be based on both complete semester averages.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Semester Average Gap | Very Difficult | Batch 116"
+"Passage: An environmental monitoring report records the water quality index (WQI) at a river monitoring station over 8 consecutive measurement periods: 68, 72, 65, 74, 81, 77, 84, 79. A researcher wants to calculate the differences between each consecutive measurement to analyze WQI variability. Which of the following correctly states ALL consecutive differences (Period 2 minus Period 1, Period 3 minus Period 2, etc.)?","Consecutive differences: +4, -7, +9, +7, -4, +7, -5. (Total variability = Σ of absolute differences = 4+7+9+7+4+7+5=43).","Consecutive differences: +4, -7, +9, +7, -4, +8, -5.","Consecutive differences: +4, -7, +9, +6, -4, +7, -5.","Consecutive differences: -4, +7, -9, -7, +4, -7, +5.","A","Step-by-Step Solution:
 1. Calculate consecutive differences (current - previous):
-   - P1→P2: 72-68 = +4.
-   - P2→P3: 65-72 = -7.
-   - P3→P4: 74-65 = +9.
-   - P4→P5: 81-74 = +7.
-   - P5→P6: 77-81 = -4.
-   - P6→P7: 84-77 = +7.
-   - P7→P8: 79-84 = -5.
+ - P1→P2: 72-68 = +4.
+ - P2→P3: 65-72 = -7.
+ - P3→P4: 74-65 = +9.
+ - P4→P5: 81-74 = +7.
+ - P5→P6: 77-81 = -4.
+ - P6→P7: 84-77 = +7.
+ - P7→P8: 79-84 = -5.
 2. Sequence: +4, -7, +9, +7, -4, +7, -5. ✓
 3. Option A is correct.
 4. Evaluate incorrect alternatives:
-   - Option B: P6→P7 is stated as +8; actual = 84-77 = +7.
-   - Option C: P4→P5 is stated as +6; actual = 81-74 = +7.
-   - Option D: All signs are reversed (negative where positive should be); this would be P previous minus P current (reversed subtraction).
+ - Option B: P6→P7 is stated as +8; actual = 84-77 = +7.
+ - Option C: P4→P5 is stated as +6; actual = 81-74 = +7.
+ - Option D: All signs are reversed (negative where positive should be); this would be P previous minus P current (reversed subtraction).
 
 Common Trap: Making a computational error in one of the seven differences, or reversing the subtraction direction.
 Exam Tip: Consecutive differences = (later period value) minus (earlier period value); a positive result means an increase, negative means a decrease.","Correct. Survives elimination because all seven consecutive WQI differences (+4, -7, +9, +7, -4, +7, -5) are correctly calculated as current period minus previous period.","Eliminated because the P6→P7 difference is incorrectly stated as +8; the actual calculation is 84-77=+7.","Eliminated because the P4→P5 difference is incorrectly stated as +6; the actual calculation is 81-74=+7.","Eliminated because all signs are reversed; this option computes previous period minus current period (opposite direction), producing the mirror image of the correct differences.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Consecutive Differences | Very Difficult | Batch 116"
 "Passage: A comparative audit of two departments shows the following budget vs. actual expenditure data (PHP millions): Department X: Budget=84.2, Actual=79.6. Department Y: Budget=67.4, Actual=71.8. The audit committee wants to know: (A) which department has the LARGER ABSOLUTE VARIANCE (actual minus budget), and (B) which department has the LARGER PERCENTAGE VARIANCE relative to its budget. Which is correct?","(A) Department Y has the larger absolute variance: 71.8-67.4=+4.4M (overspent). Department X variance: 79.6-84.2=-4.6M (underspent). Absolute values: Y=4.4M, X=4.6M. Department X actually has the larger absolute variance (4.6M vs. 4.4M). (B) Department Y: 4.4÷67.4=6.53%; Department X: 4.6÷84.2=5.46%. Department Y has the larger percentage variance.","(A) Department X has the larger absolute variance (PHP 4.6M underspent); (B) Department Y has the larger percentage variance (6.53%).","(A) Department Y has the larger absolute variance (PHP 4.4M overspent); (B) Department X has the larger percentage variance (5.46%).","(A) Both departments have identical absolute variances of PHP 4.5M; (B) Department Y has larger percentage variance.","B","Step-by-Step Solution:
 1. Calculate absolute variances:
-   - Department X: 79.6-84.2 = -4.6M (underspent by 4.6M). |Variance| = 4.6M.
-   - Department Y: 71.8-67.4 = +4.4M (overspent by 4.4M). |Variance| = 4.4M.
-   → Largest absolute variance: Department X (4.6M > 4.4M).
+ - Department X: 79.6-84.2 = -4.6M (underspent by 4.6M). |Variance| = 4.6M.
+ - Department Y: 71.8-67.4 = +4.4M (overspent by 4.4M). |Variance| = 4.4M.
+ → Largest absolute variance: Department X (4.6M > 4.4M).
 2. Calculate percentage variances:
-   - Department X: 4.6÷84.2×100 = 5.46%.
-   - Department Y: 4.4÷67.4×100 = 6.53%.
-   → Largest percentage variance: Department Y (6.53% > 5.46%).
+ - Department X: 4.6÷84.2×100 = 5.46%.
+ - Department Y: 4.4÷67.4×100 = 6.53%.
+ → Largest percentage variance: Department Y (6.53% > 5.46%).
 3. Option B correctly answers both: (A) Dept X larger absolute; (B) Dept Y larger percentage.
 4. Evaluate incorrect alternatives:
-   - Option A contains a self-correction mid-text; the correct answer is B.
-   - Option C: Reverses the answers for (A) and (B).
-   - Option D: Both variances are NOT identical; X=4.6M and Y=4.4M.
+ - Option A contains a self-correction mid-text; the correct answer is B.
+ - Option C: Reverses the answers for (A) and (B).
+ - Option D: Both variances are NOT identical; X=4.6M and Y=4.4M.
 
 Common Trap: Selecting Department Y for both because it has the more visible 'problem' of overspending, without computing that Department X's underexpenditure gap is slightly larger in absolute terms.
 Exam Tip: Absolute variance = |actual - budget|; percentage variance = |actual - budget| ÷ budget × 100; these can rank differently when budgets differ in size.","Eliminated because while the self-correction within Option A eventually reaches the correct conclusion, Option A's presentation is contradictory and internally inconsistent.","Correct. Survives elimination because Department X has the larger absolute variance (PHP 4.6M underspent vs. Department Y's PHP 4.4M overspent), and Department Y has the larger percentage variance (6.53% vs. 5.46%).","Eliminated because this reverses both answers: Department X (not Y) has the larger absolute variance, and Department Y (not X) has the larger percentage variance.","Eliminated because the absolute variances are different—Department X is 4.6M and Department Y is 4.4M; they are neither identical nor equal to PHP 4.5M.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Variance Comparison | Very Difficult | Batch 116"
@@ -110,40 +110,40 @@ Exam Tip: 'Range' = max minus min WITHIN each group; 'difference in ranges' = Gr
 1. Identify the largest positive difference: Region IV = +6.8 points ← LARGEST improvement. ✓
 2. Identify the declining region: Region V = -2.8 points ← ONLY decline. ✓
 3. Calculate the absolute difference between largest improvement (+6.8) and the decline (-2.8):
-   - Absolute difference = |6.8 - (-2.8)| = 6.8 + 2.8 = 9.6 points.
+ - Absolute difference = |6.8 - (-2.8)| = 6.8 + 2.8 = 9.6 points.
 4. Option A is correct.
 5. Evaluate incorrect alternatives:
-   - Option B: Region II (+4.9) is not the largest improvement; Region IV (+6.8) is larger.
-   - Option C: Correctly identifies Region IV and Region V, but incorrectly computes 6.8-2.8=4.0 instead of 6.8+2.8=9.6; the subtraction should account for the negative sign.
-   - Option D: NCR (+4.7) is not the largest improvement.
+ - Option B: Region II (+4.9) is not the largest improvement; Region IV (+6.8) is larger.
+ - Option C: Correctly identifies Region IV and Region V, but incorrectly computes 6.8-2.8=4.0 instead of 6.8+2.8=9.6; the subtraction should account for the negative sign.
+ - Option D: NCR (+4.7) is not the largest improvement.
 
 Common Trap: Computing 6.8-2.8=4.0 instead of 6.8-(-2.8)=9.6; the decline is -2.8, so subtracting a negative is adding.
 Exam Tip: When asked for the difference between a positive and a negative change, use |value1 - value2| = |6.8 - (-2.8)| = 6.8 + 2.8 = 9.6; never simply subtract magnitudes.","Correct. Survives elimination because Region IV has the largest improvement (+6.8), Region V has the only decline (-2.8), and the absolute difference between them is 6.8-(-2.8)=6.8+2.8=9.6 points.","Eliminated because Region II's improvement (+4.9 points) is the second-largest, not the largest; Region IV's +6.8 is bigger.","Eliminated because while correctly identifying Region IV (+6.8) and Region V (-2.8), the computation 6.8-2.8=4.0 ignores the sign of Region V's change; the correct calculation is 6.8-(-2.8)=9.6.","Eliminated because NCR's improvement (+4.7) is not the largest; Region IV's +6.8 exceeds it, making NCR the second-highest improver.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Signed Difference | Very Difficult | Batch 116"
 "Passage: A city health office monitors the dengue case count before and after a targeted vector control campaign: Before campaign: Barangay A=47, B=38, C=62, D=29, E=54. After campaign: A=31, B=24, C=41, D=19, E=38. Based on the data, what is the TOTAL REDUCTION in cases (before vs. after), and which barangay showed the LARGEST INDIVIDUAL REDUCTION?","Total reduction = (47-31)+(38-24)+(62-41)+(29-19)+(54-38) = 16+14+21+10+16 = 77 cases. Barangay C showed the largest individual reduction (21 cases).","Total reduction = 77 cases. Barangay E showed the largest reduction (16 cases).","Total reduction = 65 cases. Barangay C showed the largest reduction (21 cases).","Total reduction = 77 cases. Barangay A showed the largest reduction (16 cases).","A","Step-by-Step Solution:
 1. Calculate individual reductions:
-   - A: 47-31=16.
-   - B: 38-24=14.
-   - C: 62-41=21. ← LARGEST individual reduction.
-   - D: 29-19=10.
-   - E: 54-38=16.
+ - A: 47-31=16.
+ - B: 38-24=14.
+ - C: 62-41=21. ← LARGEST individual reduction.
+ - D: 29-19=10.
+ - E: 54-38=16.
 2. Total reduction: 16+14+21+10+16 = 77 cases.
 3. Option A (total=77, Barangay C largest=21) is correct.
 4. Evaluate incorrect alternatives:
-   - Option B: Barangay E reduction is 16—tied with Barangay A at 16, but LESS than Barangay C's 21.
-   - Option C: Total reduction=65 is incorrect (correct is 77).
-   - Option D: Barangay A reduction is 16—tied with E at 16, but less than Barangay C's 21.
+ - Option B: Barangay E reduction is 16—tied with Barangay A at 16, but LESS than Barangay C's 21.
+ - Option C: Total reduction=65 is incorrect (correct is 77).
+ - Option D: Barangay A reduction is 16—tied with E at 16, but less than Barangay C's 21.
 
 Common Trap: Selecting Barangay A or E (both at 16) as the largest reduction because they appear first, without calculating Barangay C's larger individual reduction (21).
 Exam Tip: Largest individual reduction = the before-after difference for a single entity; compare all individual differences before declaring the maximum.","Correct. Survives elimination because total reduction (16+14+21+10+16=77) and Barangay C's largest individual reduction (62-41=21 cases) are both correctly calculated.","Eliminated because Barangay E's reduction of 16 cases ties with Barangay A at 16 but is less than Barangay C's 21—Barangay C showed the largest individual reduction.","Eliminated because the total reduction is 77, not 65; all five barangay reductions must be summed: 16+14+21+10+16=77.","Eliminated because Barangay A's reduction of 16 cases is tied with E at 16 but less than Barangay C's 21—Barangay A did not show the largest individual reduction.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Aggregate and Individual | Very Difficult | Batch 116"
 "Passage: A national procurement office compares bid prices from two competing suppliers for a multi-item contract: | Item | Supplier Alpha (PHP) | Supplier Beta (PHP) | Difference (Alpha-Beta) | |---|---|---|---| | Item 1 | 1,240 | 1,180 | +60 | | Item 2 | 8,400 | 8,720 | -320 | | Item 3 | 342 | 318 | +24 | | Item 4 | 15,600 | 16,200 | -600 | | Item 5 | 2,870 | 2,690 | +180 | | TOTAL | 28,452 | 29,108 | -656 | The office verifies whether to purchase ALL items from a single supplier or mix suppliers per item. If purchasing each item from the LOWER bidder, what is the TOTAL SAVINGS compared to purchasing all items from Supplier ALPHA?","Purchasing each item from the lower bidder saves PHP 1,000 versus buying all from Alpha: Items where Beta is cheaper: Item 2 (save 320) + Item 4 (save 600) = 920. Total savings vs. Alpha = 920.","Total savings vs. Alpha = PHP 1,000 by mixing supplier selections.","Total savings vs. Alpha = PHP 656, equivalent to Alpha-minus-Beta total difference.","Total savings vs. Alpha = PHP 184, based only on items where Alpha is cheaper.","A","Step-by-Step Solution:
 1. Identify the lower bidder per item:
-   - Item 1: Alpha=1,240, Beta=1,180 → Beta cheaper (save 60 vs. Alpha).
-   Wait—'savings vs. Alpha' means how much cheaper the best-bid strategy is compared to buying ALL from Alpha.
-   - Item 1: Best bid=1,180 (Beta). Savings vs. Alpha = 1,240-1,180=60.
-   - Item 2: Best bid=8,400 (Alpha). Savings vs. Alpha = 0 (we'd still use Alpha).
-   - Item 3: Best bid=318 (Beta). Savings vs. Alpha = 342-318=24.
-   - Item 4: Best bid=15,600 (Alpha). Savings vs. Alpha = 0.
-   - Item 5: Best bid=2,690 (Beta). Savings vs. Alpha = 2,870-2,690=180.
+ - Item 1: Alpha=1,240, Beta=1,180 → Beta cheaper (save 60 vs. Alpha).
+ Wait—'savings vs. Alpha' means how much cheaper the best-bid strategy is compared to buying ALL from Alpha.
+ - Item 1: Best bid=1,180 (Beta). Savings vs. Alpha = 1,240-1,180=60.
+ - Item 2: Best bid=8,400 (Alpha). Savings vs. Alpha = 0 (we'd still use Alpha).
+ - Item 3: Best bid=318 (Beta). Savings vs. Alpha = 342-318=24.
+ - Item 4: Best bid=15,600 (Alpha). Savings vs. Alpha = 0.
+ - Item 5: Best bid=2,690 (Beta). Savings vs. Alpha = 2,870-2,690=180.
 2. Total savings vs. all-Alpha: 60+0+24+0+180=264.
 
 Hmm—none of the options show 264. Let me re-read the options.
@@ -163,12 +163,12 @@ None of the options say 264. The question seems to have an error in the options.
 
 Given the computational error, let me revise the answer to reflect the correct savings of PHP 264.","Purchasing each item from the lower bidder saves PHP 264 versus buying all from Alpha: Items where Beta is cheaper: Item 1 (-60) + Item 3 (-24) + Item 5 (-180) = 264 total savings; Items 2 and 4 already have Alpha as the lower bidder.","Total savings vs. Alpha = PHP 656, which is the net difference in ALL-Alpha vs. ALL-Beta total costs—not the mixed strategy savings.","Total savings vs. Alpha = PHP 920, summing only Items 2 and 4 differences—these are items where Alpha is cheaper, not where Beta is cheaper.","Total savings vs. Alpha = PHP 184, undercounting; only Item 5's difference (180) was included, omitting Items 1 (60) and 3 (24).","A","Step-by-Step Solution (Corrected):
 1. Identify lower bidder per item and compute savings vs. all-Alpha:
-   - Item 1: Beta=1,180 < Alpha=1,240 → Use Beta. Save 60.
-   - Item 2: Alpha=8,400 < Beta=8,720 → Use Alpha. Save 0 (already cheapest).
-   - Item 3: Beta=318 < Alpha=342 → Use Beta. Save 24.
-   - Item 4: Alpha=15,600 < Beta=16,200 → Use Alpha. Save 0.
-   - Item 5: Beta=2,690 < Alpha=2,870 → Use Beta. Save 180.
+ - Item 1: Beta=1,180 < Alpha=1,240 → Use Beta. Save 60.
+ - Item 2: Alpha=8,400 < Beta=8,720 → Use Alpha. Save 0 (already cheapest).
+ - Item 3: Beta=318 < Alpha=342 → Use Beta. Save 24.
+ - Item 4: Alpha=15,600 < Beta=16,200 → Use Alpha. Save 0.
+ - Item 5: Beta=2,690 < Alpha=2,870 → Use Beta. Save 180.
 2. Total savings vs. all-Alpha: 60+0+24+0+180 = PHP 264.
 
 Common Trap: Summing Items 2 and 4 differences (600+320=920) as 'savings'—but these are items where Alpha is ALREADY cheaper, so switching to Beta would increase cost; the mixed strategy selects Alpha for these items anyway.
-Exam Tip: Mixed-supplier savings = sum of (Alpha price minus Beta price) only for items where Beta is cheaper (positive saving); items where Alpha is already cheapest contribute zero savings to the vs.-Alpha comparison.","Correct. Survives elimination because the mixed-supplier strategy saves PHP 264 vs. all-Alpha: Items 1 (60), 3 (24), and 5 (180) switch to Beta; Items 2 and 4 remain with Alpha as the lower bidder.","Eliminated because PHP 656 is the difference between all-Alpha total (28,452) and all-Beta total (29,108)—not the savings from the best-bid mixed strategy versus all-Alpha.","Eliminated because 920 (Items 2+4 differences: 600+320) counts items where Alpha is CHEAPER, not items where Beta is cheaper; the mixed strategy would keep Alpha for these items anyway.","Eliminated because PHP 184 only includes Item 5's saving (180) and misses Items 1 (60) and 3 (24); the correct total is 60+24+180=264.","Analytical Ability","Analytical Ability | Data Interpretation | Difference | Procurement Savings | Very Difficult | Batch 116"
+Exam Tip: Mixed-supplier savings = Σ of (Alpha price minus Beta price) only for items where Beta is cheaper (positive saving); items where Alpha is already cheapest contribute zero savings to the vs.-Alpha comparison."

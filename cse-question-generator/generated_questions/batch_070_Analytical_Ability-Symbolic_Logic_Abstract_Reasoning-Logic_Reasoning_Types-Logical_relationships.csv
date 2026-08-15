@@ -1,175 +1,171 @@
-"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Given the true formal proposition: \"If an agency official is accountable ($A$), then the procurement process is transparent ($T$).\" Which of the following statements is LOGICALLY EQUIVALENT to the given proposition in formal symbolic logic?","If the procurement process is not transparent ($\neg T$), then the agency official is not accountable ($\neg A$).","If the procurement process is transparent ($T$), then the agency official is accountable ($A$).","If the agency official is not accountable ($\neg A$), then the procurement process is not transparent ($\neg T$).","The agency official is accountable ($A$) and the procurement process is not transparent ($\neg T$).","A","Step-by-Step Solution:
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation"
+"Given the true formal proposition: \""If an agency official is accountable (A), then the procurement process is transparent (T).\"" Which of the following statements is LOGICALLY EQUIVALENT to the given proposition in formal symbolic logic?","If the procurement process is not transparent (neg T), then the agency official is not accountable (neg A).","If the procurement process is transparent (T), then the agency official is accountable (A).","If the agency official is not accountable (neg A), then the procurement process is not transparent (neg T).","The agency official is accountable (A) and the procurement process is not transparent (neg T).","A","Step-by-Step Solution:
 1. Represent the given statement in formal propositional logic:
-   - Let $A$ = \"The agency official is accountable.\"
-   - Let $T$ = \"The procurement process is transparent.\"
-   - Given proposition: $A \implies T$ (Conditional Statement).
-2. Recall the fundamental Law of Contraposition:
-   - A conditional proposition $P \implies Q$ is strictly LOGICALLY EQUIVALENT to its contrapositive:
-   - $P \implies Q \equiv \neg Q \implies \neg P$.
-3. Formulate the contrapositive of $A \implies T$:
-   - $\neg T \implies \neg A$ (\"If the procurement process is not transparent, then the agency official is not accountable\").
-4. Evaluate incorrect alternatives:
-   - Option B ($T \implies A$): The Converse Fallacy (not logically equivalent).
-   - Option C ($\neg A \implies \neg T$): The Inverse Fallacy (not logically equivalent).
-   - Option D ($A \land \neg T$): The formal Logical Negation of $A \implies T$.
-
-Common Trap: Confusing the contrapositive ($\neg T \implies \neg A$) with the converse ($T \implies A$) or inverse ($\neg A \implies \neg T$).
-Exam Tip: A conditional statement ($P \implies Q$) is ONLY equivalent to its contrapositive ($\neg Q \implies \neg P$).","Correct. Survives elimination because the contrapositive (~T -> ~A) is always logically equivalent to the original conditional (A -> T).","Eliminated because T -> A is the converse fallacy.","Eliminated because ~A -> ~T is the inverse fallacy.","Eliminated because A and ~T is the logical negation of the conditional.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"According to De Morgan's Laws of formal symbolic logic, what is the exact logical negation of the conjunctive compound proposition: \"The financial report is certified ($C$) AND the disbursement is audited ($A$)\"?","The financial report is not certified ($\neg C$) OR the disbursement is not audited ($\neg A$).","The financial report is not certified ($\neg C$) AND the disbursement is not audited ($\neg A$).","If the financial report is not certified ($\neg C$), then the disbursement is not audited ($\neg A$).","The financial report is certified ($C$) OR the disbursement is audited ($A$).","A","Step-by-Step Solution:
+ - Let A = \""The agency official is accountable.\"
+"- Let T = \""The procurement process is transparent.\""","","","","","",""
+"- Given proposition: A implies T (Conditional Statement).","","","","","",""
+"2. Recall the fundamental Law of Contraposition:","","","","","",""
+"- A conditional proposition P implies Q is strictly LOGICALLY EQUIVALENT to its contrapositive:","","","","","",""
+"- P implies Q ≡ neg Q implies neg P.","","","","","",""
+"3. Formulate the contrapositive of A implies T:","","","","","",""
+"- neg T implies neg A (\""If the procurement process is not transparent","then the agency official is not accountable\"").","","","","",""
+"4. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (T implies A): The Converse Fallacy (not logically equivalent).","","","","","",""
+"- Option C (neg A implies neg T): The Inverse Fallacy (not logically equivalent).","","","","","",""
+"- Option D (A land neg T): The formal Logical Negation of A implies T.","","","","","",""
+"Common Trap: Confusing the contrapositive (neg T implies neg A) with the converse (T implies A) or inverse (neg A implies neg T).","","","","","",""
+"Exam Tip: A conditional statement (P implies Q) is ONLY equivalent to its contrapositive (neg Q implies neg P).""","Correct. Survives elimination because the contrapositive (~T -> ~A) is always logically equivalent to the original conditional (A -> T).","Eliminated because T -> A is the converse fallacy.","Eliminated because ~A -> ~T is the inverse fallacy.","Eliminated because A and ~T is the logical negation of the conditional.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
+"According to De Morgan's Laws of formal symbolic logic, what is the exact logical negation of the conjunctive compound proposition: \""The financial report is certified (C) AND the disbursement is audited (A)\""?","The financial report is not certified (neg C) OR the disbursement is not audited (neg A).","The financial report is not certified (neg C) AND the disbursement is not audited (neg A).","If the financial report is not certified (neg C), then the disbursement is not audited (neg A).","The financial report is certified (C) OR the disbursement is audited (A).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
-   - Compound statement: $C \land A$ (Conjunction).
+ - Compound statement: C land A (Conjunction).
 2. Apply De Morgan's First Law of Negation for Conjunctions:
-   - $\neg(P \land Q) \equiv \neg P \lor \neg Q$.
-3. Substitute variables $C$ and $A$:
-   - $\neg(C \land A) \equiv \neg C \lor \neg A$.
+ - neg(P land Q) ≡ neg P lor neg Q.
+3. Substitute variables C and A:
+ - neg(C land A) ≡ neg C lor neg A.
 4. Translate the symbolic equivalence into natural language:
-   - \"The financial report is not certified ($\neg C$) OR the disbursement is not audited ($\neg A$).\"
-5. Evaluate incorrect alternatives:
-   - Option B ($\neg C \land \neg A$): Common error of distributing negation without changing the operator from AND ($\land$) to OR ($\lor$).
-   - Option C ($\neg C \implies \neg A$): Conditional formulation equivalent to $C \lor \neg A$.
-   - Option D ($C \lor A$): Disjunction without negating the atomic propositions.
-
-Common Trap: Forgetting to flip the conjunction ($\land$) to a disjunction ($\lor$) when distributing negation.
-Exam Tip: Negation of (A AND B) is (~A OR ~B); Negation of (A OR B) is (~A AND ~B).","Correct. Survives elimination because by De Morgan's Law, ~(C and A) is strictly equivalent to (~C or ~A).","Eliminated because (~C and ~A) fails to flip the logical conjunction operator to a disjunction.","Eliminated because ~C -> ~A is a conditional statement.","Eliminated because C or A omits the negation of the atomic terms.","Analytical Ability","Analytical Ability | Word Analogy | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Consider the disjunctive proposition: \"Either the municipal charter is ratified ($R$) OR the public referendum is postponed ($P$).\" What is the logically equivalent conditional (If-Then) formulation of this disjunction?","If the municipal charter is not ratified ($\neg R$), then the public referendum is postponed ($P$).","If the municipal charter is ratified ($R$), then the public referendum is postponed ($P$).","If the public referendum is postponed ($P$), then the municipal charter is ratified ($R$).","If the municipal charter is not ratified ($\neg R$), then the public referendum is not postponed ($\neg P$).","A","Step-by-Step Solution:
+ - \""The financial report is not certified (neg C) OR the disbursement is not audited (neg A).\"
+"5. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (neg C land neg A): Common error of distributing negation without changing the operator from AND (land) to OR (lor).","","","","","",""
+"- Option C (neg C implies neg A): Conditional formulation equivalent to C lor neg A.","","","","","",""
+"- Option D (C lor A): Disjunction without negating the atomic propositions.","","","","","",""
+"Common Trap: Forgetting to flip the conjunction (land) to a disjunction (lor) when distributing negation.","","","","","",""
+"Exam Tip: Negation of (A AND B) is (~A OR ~B); Negation of (A OR B) is (~A AND ~B).""","Correct. Survives elimination because by De Morgan's Law, ~(C and A) is strictly equivalent to (~C or ~A).","Eliminated because (~C and ~A) fails to flip the logical conjunction operator to a disjunction.","Eliminated because ~C -> ~A is a conditional statement.","Eliminated because C or A omits the negation of the atomic terms.","Analytical Ability","Analytical Ability | Word Analogy | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
+"Consider the disjunctive proposition: \""Either the municipal charter is ratified (R) OR the public referendum is postponed (P).\"" What is the logically equivalent conditional (If-Then) formulation of this disjunction?","If the municipal charter is not ratified (neg R), then the public referendum is postponed (P).","If the municipal charter is ratified (R), then the public referendum is postponed (P).","If the public referendum is postponed (P), then the municipal charter is ratified (R).","If the municipal charter is not ratified (neg R), then the public referendum is not postponed (neg P).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
-   - Disjunctive statement: $R \lor P$.
+ - Disjunctive statement: R lor P.
 2. Recall the Rule of Material Implication / Disjunctive Equivalence:
-   - Any disjunction $P \lor Q$ is logically equivalent to a conditional statement with a negated antecedent:
-   - $P \lor Q \equiv \neg P \implies Q$ (and also $\neg Q \implies P$).
-3. Apply this rule to $R \lor P$:
-   - Let $P = R$ and $Q = P$.
-   - $R \lor P \equiv \neg R \implies P$.
+ - Any disjunction P lor Q is logically equivalent to a conditional statement with a negated antecedent:
+ - P lor Q ≡ neg P implies Q (and also neg Q implies P).
+3. Apply this rule to R lor P:
+ - Let P = R and Q = P.
+ - R lor P ≡ neg R implies P.
 4. Translate to natural language:
-   - \"If the municipal charter is not ratified ($\neg R$), then the public referendum is postponed ($P$).\"
-5. Evaluate incorrect alternatives:
-   - Option B ($R \implies P$): Equivalent to $\neg R \lor P$.
-   - Option C ($P \implies R$): Equivalent to $\neg P \lor R$.
-   - Option D ($\neg R \implies \neg P$): Equivalent to $R \lor \neg P$.
-
-Common Trap: Failing to negate the antecedent when transforming a disjunction into an implication.
-Exam Tip: (P or Q) is logically equivalent to (If NOT P, then Q).","Correct. Survives elimination because by material implication equivalence, (R or P) is strictly equivalent to (~R -> P).","Eliminated because R -> P is equivalent to ~R or P.","Eliminated because P -> R is equivalent to ~P or R.","Eliminated because ~R -> ~P is equivalent to R or ~P.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Given the following three true premises in formal logic: (1) If economic policy $X$ succeeds, then inflation rate $Y$ decreases ($X \implies \neg Y$). (2) If inflation rate $Y$ decreases, then public purchasing power $Z$ increases ($\neg Y \implies Z$). (3) Public purchasing power $Z$ did NOT increase ($\neg Z$). What valid deductive conclusion necessarily follows?","Economic policy X did not succeed ($\neg X$).","Economic policy X succeeded ($X$).","Inflation rate Y decreased ($\neg Y$).","No valid conclusion can be drawn.","A","Step-by-Step Solution:
+ - \""If the municipal charter is not ratified (neg R), then the public referendum is postponed (P).\"
+"5. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (R implies P): Equivalent to neg R lor P.","","","","","",""
+"- Option C (P implies R): Equivalent to neg P lor R.","","","","","",""
+"- Option D (neg R implies neg P): Equivalent to R lor neg P.","","","","","",""
+"Common Trap: Failing to negate the antecedent when transforming a disjunction into an implication.","","","","","",""
+"Exam Tip: (P or Q) is logically equivalent to (If NOT P","then Q).""","Correct. Survives elimination because by material implication equivalence, (R or P) is strictly equivalent to (~R -> P).","Eliminated because R -> P is equivalent to ~R or P.","Eliminated because P -> R is equivalent to ~P or R.","Eliminated because ~R -> ~P is equivalent to R or ~P.","Analytical Ability"
+"Given the following three true premises in formal logic: (1) If economic policy X succeeds, then inflation rate Y decreases (X implies neg Y). (2) If inflation rate Y decreases, then public purchasing power Z increases (neg Y implies Z). (3) Public purchasing power Z did NOT increase (neg Z). What valid deductive conclusion necessarily follows?","Economic policy X did not succeed (neg X).","Economic policy X succeeded (X).","Inflation rate Y decreased (neg Y).","No valid conclusion can be drawn.","A","Step-by-Step Solution:
 1. State the given premises symbolically:
-   - Premise 1: $X \implies \neg Y$.
-   - Premise 2: $\neg Y \implies Z$.
-   - Premise 3: $\neg Z$.
+ - Premise 1: X implies neg Y.
+ - Premise 2: neg Y implies Z.
+ - Premise 3: neg Z.
 2. Apply Hypothetical Syllogism to Premises 1 and 2:
-   - $(X \implies \neg Y) \land (\neg Y \implies Z) \vdash X \implies Z$ (Master Conditional).
-3. Combine Master Conditional ($X \implies Z$) with Premise 3 ($\neg Z$):
-   - Apply Modus Tollens ($P \implies Q, \neg Q \vdash \neg P$):
-   - Given $X \implies Z$ and $\neg Z$, it necessarily follows that $\neg X$.
+ - (X implies neg Y) land (neg Y implies Z) vdash X implies Z (Master Conditional).
+3. Combine Master Conditional (X implies Z) with Premise 3 (neg Z):
+ - Apply Modus Tollens (P implies Q, neg Q vdash neg P):
+ - Given X implies Z and neg Z, it necessarily follows that neg X.
 4. Translate conclusion:
-   - $\neg X$ = \"Economic policy $X$ did not succeed.\"
-5. Evaluate incorrect alternatives:
-   - Option B ($X$): Directly contradicts the valid Modus Tollens deduction.
-   - Option C ($\neg Y$): Contradicts Modus Tollens on Premise 2 ($\neg Y \implies Z, \neg Z \vdash \neg(\neg Y) \equiv Y$).
-   - Option D: Incorrect because $\neg X$ is a sound deductive necessity.
-
-Common Trap: Assuming no conclusion can be drawn because the premises contain negations.
-Exam Tip: Chain the implications: $X \implies \neg Y \implies Z \implies X \implies Z$. Modus Tollens with $\neg Z$ proves $\neg X$.","Correct. Survives elimination because chaining implications yields X -> Z, and applying Modus Tollens with ~Z proves ~X necessarily.","Eliminated because X is false by Modus Tollens.","Eliminated because ~Y is false (Y is true by Modus Tollens on Premise 2).","Eliminated because a definite valid deduction (~X) exists.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Which of the following compound propositions represents a TAUTOLOGY (a statement that evaluates to TRUE under every possible truth assignment in propositional logic)?","(P \implies Q) \lor (Q \implies P)","(P \land Q) \implies (P \land \neg Q)","(P \lor Q) \implies (P \land Q)","(P \implies Q) \land (P \land \neg Q)","A","Step-by-Step Solution:
+ - neg X = \""Economic policy X did not succeed.\"
+"5. Evaluate incorrect alternatives:","","","","","",""
+"- Option B (X): Directly contradicts the valid Modus Tollens deduction.","","","","","",""
+"- Option C (neg Y): Contradicts Modus Tollens on Premise 2 (neg Y implies Z","neg Z vdash neg(neg Y) ≡ Y).","","","","",""
+"- Option D: Incorrect because neg X is a sound deductive necessity.","","","","","",""
+"Common Trap: Assuming no conclusion can be drawn because the premises contain negations.","","","","","",""
+"Exam Tip: Chain the implications: X implies neg Y implies Z implies X implies Z. Modus Tollens with neg Z proves neg X.""","Correct. Survives elimination because chaining implications yields X -> Z, and applying Modus Tollens with ~Z proves ~X necessarily.","Eliminated because X is false by Modus Tollens.","Eliminated because ~Y is false (Y is true by Modus Tollens on Premise 2).","Eliminated because a definite valid deduction (~X) exists.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
+"Which of the following compound propositions represents a TAUTOLOGY (a statement that evaluates to TRUE under every possible truth assignment in propositional logic)?","(P implies Q) lor (Q implies P)","(P land Q) implies (P land neg Q)","(P lor Q) implies (P land Q)","(P implies Q) land (P land neg Q)","A","Step-by-Step Solution:
 1. Recall the definition of a Tautology:
-   - A formula that is true in every row of its truth table regardless of the truth values assigned to its atomic variables.
-2. Evaluate Option A: $(P \implies Q) \lor (Q \implies P)$:
-   - Rewrite using material implication ($\neg A \lor B$):
-   - $(\neg P \lor Q) \lor (\neg Q \lor P)$.
-   - Rearrange using associativity and commutativity:
-   - $(\neg P \lor P) \lor (Q \lor \neg Q)$.
-   - Since $(\neg P \lor P) \equiv \text{True}$ and $(Q \lor \neg Q) \equiv \text{True}$:
-   - $\text{True} \lor \text{True} \equiv \text{True}$ (Always true under all valuations!).
+ - A formula that is true in every row of its truth table regardless of the truth values assigned to its atomic variables.
+2. Evaluate Option A: (P implies Q) lor (Q implies P):
+ - Rewrite using material implication (neg A lor B):
+ - (neg P lor Q) lor (neg Q lor P).
+ - Rearrange using associativity and commutativity:
+ - (neg P lor P) lor (Q lor neg Q).
+ - Since (neg P lor P) ≡ True and (Q lor neg Q) ≡ True:
+ - True lor True ≡ True (Always true under all valuations!).
 3. Evaluate incorrect alternatives:
-   - Option B: If $P = \text{True}, Q = \text{True}$, then $\text{True} \implies \text{False}$ evaluates to False.
-   - Option C: If $P = \text{True}, Q = \text{False}$, then $\text{True} \implies \text{False}$ evaluates to False.
-   - Option D: A Contradiction ($(P \implies Q) \land \neg(P \implies Q) \equiv \text{False}$).
+ - Option B: If P = True, Q = True, then True implies False evaluates to False.
+ - Option C: If P = True, Q = False, then True implies False evaluates to False.
+ - Option D: A Contradiction ((P implies Q) land neg(P implies Q) ≡ False).
 
-Common Trap: Overlooking that $(P \implies Q) \lor (Q \implies P)$ simplifies to $(P \lor \neg P) \lor (Q \lor \neg Q) \equiv \text{True}$.
-Exam Tip: $(P \implies Q) \lor (Q \implies P)$ is a celebrated classical tautology in formal logic.","Correct. Survives elimination because (P -> Q) or (Q -> P) expands to (~P or P) or (~Q or Q) = True or True = True in all cases.","Eliminated because Option B is false when both P and Q are true.","Eliminated because Option C is false when P is true and Q is false.","Eliminated because Option D is a self-contradiction.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"In formal categorical logic, what is the exact relationship between Proposition 1: \"All certified accountants are eligible for promotion ($A$)\" and Proposition 2: \"Some certified accountants are not eligible for promotion ($O$)\"?","Contradictory (they cannot both be true, and cannot both be false simultaneously).","Subcontrary (they can both be true, but cannot both be false).","Subaltern (one necessarily implies the truth of the other).","Contrary (they can both be false, but cannot both be true).","A","Step-by-Step Solution:
+Common Trap: Overlooking that (P implies Q) lor (Q implies P) simplifies to (P lor neg P) lor (Q lor neg Q) ≡ True.
+Exam Tip: (P implies Q) lor (Q implies P) is a celebrated classical tautology in formal logic."
+"In formal categorical logic, what is the exact relationship between Proposition 1: \""All certified accountants are eligible for promotion (A)\"" and Proposition 2: \""Some certified accountants are not eligible for promotion (O)\""?","Contradictory (they cannot both be true, and cannot both be false simultaneously).","Subcontrary (they can both be true, but cannot both be false).","Subaltern (one necessarily implies the truth of the other).","Contrary (they can both be false, but cannot both be true).","A","Step-by-Step Solution:
 1. Identify the categorical propositions on the traditional Square of Opposition:
-   - Proposition 1: \"All S are P\" = Universal Affirmative ($A$-type proposition).
-   - Proposition 2: \"Some S are not P\" = Particular Negative ($O$-type proposition).
-2. Examine the geometric diagonal relation between $A$ and $O$:
-   - $A$ and $O$ propositions are exact logical negations of each other.
-   - Relationship: CONTRADICTORY.
+ - Proposition 1: \""All S are P\"" = Universal Affirmative (A-type proposition).
+ - Proposition 2: \""Some S are not P\"" = Particular Negative (O-type proposition).
+2. Examine the geometric diagonal relation between A and O:
+ - A and O propositions are exact logical negations of each other.
+ - Relationship: CONTRADICTORY.
 3. Define the formal truth conditions of Contradictory propositions:
-   - Two propositions are contradictory if and only if they CANNOT both be true AND CANNOT both be false at the same time (one must be True, and the other must be False).
+ - Two propositions are contradictory if and only if they CANNOT both be true AND CANNOT both be false at the same time (one must be True, and the other must be False).
 4. Evaluate incorrect alternatives:
-   - Option B (Subcontrary): The relation between $I$ (\"Some S are P\") and $O$ (\"Some S are not P\").
-   - Option C (Subaltern): The relation between universal ($A/E$) and particular ($I/O$).
-   - Option D (Contrary): The relation between $A$ (\"All S are P\") and $E$ (\"No S are P\").
+ - Option B (Subcontrary): The relation between I (\""Some S are P\"") and O (\""Some S are not P\"").
+ - Option C (Subaltern): The relation between universal (A/E) and particular (I/O).
+ - Option D (Contrary): The relation between A (\""All S are P\"") and E (\""No S are P\"").
 
-Common Trap: Confusing contrary ($A$ and $E$) with contradictory ($A$ and $O$).
-Exam Tip: \"All S are P\" ($A$) and \"Some S are not P\" ($O$) are CONTRADICTORIES.","Correct. Survives elimination because Universal Affirmative (A) and Particular Negative (O) are classic contradictories that must have opposite truth values.","Eliminated because subcontraries (I and O) can both be true.","Eliminated because subalternation is the vertical universal-to-particular relation.","Eliminated because contraries (A and E) can both be false.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Given that the compound statement: \"It is NOT the case that if candidate $M$ wins, tax rates will fall ($\neg(M \implies F)$)\" is TRUE. What must be the exact individual truth values of $M$ and $F$?","Candidate M wins ($M$ is TRUE), and tax rates will NOT fall ($F$ is FALSE).","Candidate M does not win ($M$ is FALSE), and tax rates will fall ($F$ is TRUE).","Both candidate M wins ($M$ is TRUE) and tax rates will fall ($F$ is TRUE).","Both candidate M does not win ($M$ is FALSE) and tax rates will not fall ($F$ is FALSE).","A","Step-by-Step Solution:
+Common Trap: Confusing contrary (A and E) with contradictory (A and O).
+Exam Tip: \""All S are P\"" (A) and \""Some S are not P\"" (O) are CONTRADICTORIES."
+"Given that the compound statement: \""It is NOT the case that if candidate M wins, tax rates will fall (neg(M implies F))\"" is TRUE. What must be the exact individual truth values of M and F?","Candidate M wins (M is TRUE), and tax rates will NOT fall (F is FALSE).","Candidate M does not win (M is FALSE), and tax rates will fall (F is TRUE).","Both candidate M wins (M is TRUE) and tax rates will fall (F is TRUE).","Both candidate M does not win (M is FALSE) and tax rates will not fall (F is FALSE).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
-   - Compound statement: $\neg(M \implies F) = \text{True}$.
-2. Recall the truth table definition of the material conditional $P \implies Q$:
-   - $P \implies Q$ is False IF AND ONLY IF the antecedent $P$ is True and the consequent $Q$ is False.
+ - Compound statement: neg(M implies F) = True.
+2. Recall the truth table definition of the material conditional P implies Q:
+ - P implies Q is False IF AND ONLY IF the antecedent P is True and the consequent Q is False.
 3. Apply the negation:
-   - For $\neg(M \implies F)$ to be True, the inner implication $(M \implies F)$ must be FALSE.
-4. Determine the unique condition where $(M \implies F)$ is False:
-   - Antecedent $M$ must be TRUE.
-   - Consequent $F$ must be FALSE.
+ - For neg(M implies F) to be True, the inner implication (M implies F) must be FALSE.
+4. Determine the unique condition where (M implies F) is False:
+ - Antecedent M must be TRUE.
+ - Consequent F must be FALSE.
 5. Translate truth values:
-   - $M$ is True (\"Candidate $M$ wins\").
-   - $F$ is False (\"Tax rates will not fall\").
+ - M is True (\""Candidate M wins\"").
+ - F is False (\""Tax rates will not fall\"").
 6. Verify:
-   - $M = \text{T}, F = \text{F} \implies (M \implies F) = \text{F} \implies \neg(\text{F}) = \text{True}$ (Confirmed!).
+ - M = T, F = F implies (M implies F) = F implies neg(F) = True (Confirmed!).
 
-Common Trap: Assuming $\neg(M \implies F)$ means $M$ is False and $F$ is False (in that case, False $\implies$ False is True, so negation would be False).
-Exam Tip: The ONLY way an If-Then statement is false is when the IF-part is TRUE and the THEN-part is FALSE.","Correct. Survives elimination because ~(M -> F) is true if and only if M is True and F is False.","Eliminated because if M is False, M -> F is True, making ~(M -> F) False.","Eliminated because if both are True, M -> F is True, making ~(M -> F) False.","Eliminated because if both are False, M -> F is True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"If the biconditional proposition $P \leftrightarrow Q$ (Logical Equivalence) is known to be FALSE, which of the following compound propositions must necessarily evaluate to TRUE?","P \oplus Q \text{ (Exclusive OR / XOR)}","P \land Q \text{ (Conjunction)}","\neg P \land \neg Q","(P \implies Q) \land (Q \implies P)","A","Step-by-Step Solution:
-1. Analyze the truth definition of the biconditional $P \leftrightarrow Q$:
-   - $P \leftrightarrow Q$ is True when $P$ and $Q$ have identical truth values (both True or both False).
-   - $P \leftrightarrow Q$ is False when $P$ and $Q$ have opposite truth values ($P = \text{T}, Q = \text{F}$ OR $P = \text{F}, Q = \text{T}$).
+Common Trap: Assuming neg(M implies F) means M is False and F is False (in that case, False implies False is True, so negation would be False).
+Exam Tip: The ONLY way an If-Then statement is false is when the IF-part is TRUE and the THEN-part is FALSE."
+"If the biconditional proposition P leftrightarrow Q (Logical Equivalence) is known to be FALSE, which of the following compound propositions must necessarily evaluate to TRUE?","P oplus Q (Exclusive OR / XOR)","P land Q (Conjunction)","neg P land neg Q","(P implies Q) land (Q implies P)","A","Step-by-Step Solution:
+1. Analyze the truth definition of the biconditional P leftrightarrow Q:
+ - P leftrightarrow Q is True when P and Q have identical truth values (both True or both False).
+ - P leftrightarrow Q is False when P and Q have opposite truth values (P = T, Q = F OR P = F, Q = T).
 2. Evaluate the given condition:
-   - $P \leftrightarrow Q = \text{False} \implies P$ and $Q$ have OPPOSITE truth values.
-3. Examine Option A ($P \oplus Q$, Exclusive OR):
-   - The XOR operator $P \oplus Q$ is defined to be True IF AND ONLY IF exactly one operand is True and the other is False (i.e., they have opposite truth values).
-   - Identity: $P \oplus Q \equiv \neg(P \leftrightarrow Q)$.
-   - Since $P \leftrightarrow Q = \text{False}$, $\neg(P \leftrightarrow Q) = \text{True} \implies P \oplus Q = \text{True}$.
+ - P leftrightarrow Q = False implies P and Q have OPPOSITE truth values.
+3. Examine Option A (P oplus Q, Exclusive OR):
+ - The XOR operator P oplus Q is defined to be True IF AND ONLY IF exactly one operand is True and the other is False (i.e., they have opposite truth values).
+ - Identity: P oplus Q ≡ neg(P leftrightarrow Q).
+ - Since P leftrightarrow Q = False, neg(P leftrightarrow Q) = True implies P oplus Q = True.
 4. Evaluate incorrect alternatives:
-   - Option B ($P \land Q$): False when either variable is False.
-   - Option C ($\neg P \land \neg Q$): False when either variable is True.
-   - Option D: Equivalent to $P \leftrightarrow Q$, so it must be False.
+ - Option B (P land Q): False when either variable is False.
+ - Option C (neg P land neg Q): False when either variable is True.
+ - Option D: Equivalent to P leftrightarrow Q, so it must be False.
 
-Common Trap: Confusing inclusive OR ($P \lor Q$) with exclusive OR ($P \oplus Q$).
-Exam Tip: The negation of a Biconditional ($\leftrightarrow$) is strictly the Exclusive OR ($\oplus$).","Correct. Survives elimination because P XOR Q is the exact negation of P <-> Q, so when P <-> Q is False, P XOR Q is necessarily True.","Eliminated because P and Q is False when variables have opposite truth values.","Eliminated because ~P and ~Q is False when one variable is True.","Eliminated because (P -> Q) and (Q -> P) is the definition of P <-> Q, hence False.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Consider the following deductive argument: Premise 1: Every civil servant who passes the comprehensive ethics exam is promoted ($E \implies P$). Premise 2: Officer Ramos was promoted ($P$). Conclusion: Therefore, Officer Ramos passed the comprehensive ethics exam ($E$). What formal logical fallacy is committed by this argument?","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","Fallacy of False Dilemma","Fallacy of Begging the Question","A","Step-by-Step Solution:
+Common Trap: Confusing inclusive OR (P lor Q) with exclusive OR (P oplus Q).
+Exam Tip: The negation of a Biconditional (leftrightarrow) is strictly the Exclusive OR (oplus)."
+"Consider the following deductive argument: Premise 1: Every civil servant who passes the comprehensive ethics exam is promoted (E implies P). Premise 2: Officer Ramos was promoted (P). Conclusion: Therefore, Officer Ramos passed the comprehensive ethics exam (E). What formal logical fallacy is committed by this argument?","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","Fallacy of False Dilemma","Fallacy of Begging the Question","A","Step-by-Step Solution:
 1. Map the argument into symbolic logic:
-   - Premise 1: $E \implies P$ (If Ethics Passed, then Promoted).
-   - Premise 2: $P$ (Promoted).
-   - Conclusion: Therefore, $E$ (Ethics Passed).
+ - Premise 1: E implies P (If Ethics Passed, then Promoted).
+ - Premise 2: P (Promoted).
+ - Conclusion: Therefore, E (Ethics Passed).
 2. Analyze the inferential structure:
-   - In a conditional $E \implies P$, $E$ is the antecedent, and $P$ is the consequent.
-   - Premise 2 affirms the consequent ($P$).
-   - Concluding the antecedent ($E$) from the truth of the consequent ($P$) is the classical formal fallacy of \"AFFIRMING THE CONSEQUENT\".
+ - In a conditional E implies P, E is the antecedent, and P is the consequent.
+ - Premise 2 affirms the consequent (P).
+ - Concluding the antecedent (E) from the truth of the consequent (P) is the classical formal fallacy of \""AFFIRMING THE CONSEQUENT\"".
 3. Explain the logical flaw:
-   - Promotion could have occurred through seniority, exceptional merit, or other administrative pathways without passing this specific exam. $E \implies P$ does not state that $E$ is the *only* cause of $P$.
+ - Promotion could have occurred through seniority, exceptional merit, or other administrative pathways without passing this specific exam. E implies P does not state that E is the *only* cause of P.
 4. Evaluate incorrect alternatives:
-   - Option B (Denying the Antecedent): Form $\neg E \vdash \neg P$.
-   - Option C (False Dilemma): Artificially limiting choices to two.
-   - Option D (Begging the Question): Circular reasoning.
+ - Option B (Denying the Antecedent): Form neg E vdash neg P.
+ - Option C (False Dilemma): Artificially limiting choices to two.
+ - Option D (Begging the Question): Circular reasoning.
 
-Common Trap: Assuming that because the premise is true, the arrow flows backward ($P \implies E$, which is invalid).
-Exam Tip: Modus Ponens ($P \implies Q, P \vdash Q$) is VALID. Affirming the Consequent ($P \implies Q, Q \vdash P$) is an INVALID FALLACY.","Correct. Survives elimination because concluding the antecedent from the consequent is the textbook definition of Affirming the Consequent.","Eliminated because Denying the Antecedent has the structure ~E therefore ~P.","Eliminated because False Dilemma is an informal fallacy of limited options.","Eliminated because Begging the Question is circular reasoning.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
-"Given the valid premises: (1) $P \lor Q$ (Either proposition $P$ is true OR proposition $Q$ is true). (2) $P \implies R$ (If $P$ is true, then $R$ is true). (3) $Q \implies S$ (If $Q$ is true, then $S$ is true). Which deductive conclusion necessarily follows by the formal rule of Constructive Dilemma?","R \lor S","R \land S","\neg R \implies \neg S","R \implies S","A","Step-by-Step Solution:
+Common Trap: Assuming that because the premise is true, the arrow flows backward (P implies E, which is invalid).
+Exam Tip: Modus Ponens (P implies Q, P vdash Q) is VALID. Affirming the Consequent (P implies Q, Q vdash P) is an INVALID FALLACY."
+"Given the valid premises: (1) P lor Q (Either proposition P is true OR proposition Q is true). (2) P implies R (If P is true, then R is true). (3) Q implies S (If Q is true, then S is true). Which deductive conclusion necessarily follows by the formal rule of Constructive Dilemma?","R lor S","R land S","neg R implies neg S","R implies S","A","Step-by-Step Solution:
 1. Identify the formal classical rule of inference:
-   - Premises:
-     - Disjunction of antecedents: $P \lor Q$.
-     - Conditional 1: $P \implies R$.
-     - Conditional 2: $Q \implies S$.
+ - Premises:
+ - Disjunction of antecedents: P lor Q.
+ - Conditional 1: P implies R.
+ - Conditional 2: Q implies S.
 2. Apply Constructive Dilemma:
-   - If $P$ is true, $R$ is true (by Premise 2).
-   - If $Q$ is true, $S$ is true (by Premise 3).
-   - Since at least one of $P$ or $Q$ MUST be true (by Premise 1), at least one of $R$ or $S$ must necessarily be true.
-   - Therefore: $R \lor S$.
+ - If P is true, R is true (by Premise 2).
+ - If Q is true, S is true (by Premise 3).
+ - Since at least one of P or Q MUST be true (by Premise 1), at least one of R or S must necessarily be true.
+ - Therefore: R lor S.
 3. Evaluate incorrect alternatives:
-   - Option B ($R \land S$): Would require both $P$ and $Q$ to be true simultaneously.
-   - Option C ($\neg R \implies \neg S$): Equivalent to $R \lor \neg S$, which is not guaranteed.
-   - Option D ($R \implies S$): Assumes an implication between $R$ and $S$ where none exists.
+ - Option B (R land S): Would require both P and Q to be true simultaneously.
+ - Option C (neg R implies neg S): Equivalent to R lor neg S, which is not guaranteed.
+ - Option D (R implies S): Assumes an implication between R and S where none exists.
 
-Common Trap: Concluding conjunction ($R \land S$) instead of disjunction ($R \lor S$).
-Exam Tip: Constructive Dilemma: $(P \lor Q), (P \implies R), (Q \implies S) \vdash R \lor S$.","Correct. Survives elimination because the formal inference rule of Constructive Dilemma validly concludes R or S from the given disjunctive premises.","Eliminated because R and S requires both antecedents to hold simultaneously.","Eliminated because ~R -> ~S is an unproven conditional.","Eliminated because R -> S asserts an unfounded causal link between R and S.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Logical relationships | Very Difficult | Batch 070"
+Common Trap: Concluding conjunction (R land S) instead of disjunction (R lor S).
+Exam Tip: Constructive Dilemma: (P lor Q), (P implies R), (Q implies S) vdash R lor S."

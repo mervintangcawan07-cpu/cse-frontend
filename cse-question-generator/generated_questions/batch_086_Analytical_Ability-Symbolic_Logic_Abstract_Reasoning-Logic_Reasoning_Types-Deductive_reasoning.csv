@@ -1,182 +1,176 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
 "Given premises: (1) Every licensed government auditor is a Certified Public Accountant. (2) No person who fails the background security clearance is allowed to audit confidential funds. (3) Elena is a licensed government auditor who audits confidential funds. Which conclusion MUST be deductively true?","Elena is a Certified Public Accountant who passed the background security clearance.","Elena is the only licensed government auditor in her agency.","All Certified Public Accountants are licensed government auditors.","Passing the security clearance automatically qualifies anyone to audit confidential funds.","A","Step-by-Step Solution:
 1. Formalize Premise 1:
-   - $\text{Auditor} \subseteq \text{CPA}$.
-   - Since Elena is a licensed auditor $\implies$ Elena is a Certified Public Accountant (CPA).
+ - Auditor subseteq CPA.
+ - Since Elena is a licensed auditor implies Elena is a Certified Public Accountant (CPA).
 2. Formalize Premise 2:
-   - $\neg\text{Clearance} \implies \neg\text{ConfidentialAudit}$.
-   - Contrapositive: $\text{ConfidentialAudit} \implies \text{Clearance}$.
+ - negClearance implies negConfidentialAudit.
+ - Contrapositive: ConfidentialAudit implies Clearance.
 3. Apply Premise 3:
-   - Elena audits confidential funds.
-   - By Modus Ponens on the contrapositive: Elena passed the background security clearance.
+ - Elena audits confidential funds.
+ - By Modus Ponens on the contrapositive: Elena passed the background security clearance.
 4. Combine the deduced propositions:
-   - Elena is a Certified Public Accountant AND Elena passed the background security clearance.
+ - Elena is a Certified Public Accountant AND Elena passed the background security clearance.
 5. Conclude:
-   - Option A is the necessary deductive conclusion.
+ - Option A is the necessary deductive conclusion.
 
-Common Trap: Illicitly converting Premise 1 to \"All CPAs are auditors\" or assuming security clearance is sufficient to audit.
+Common Trap: Illicitly converting Premise 1 to \""All CPAs are auditors\"" or assuming security clearance is sufficient to audit.
 Exam Tip: Apply universal instantiation and contrapositive inference to derive airtight deductive conclusions.","Correct. Survives elimination because Elena is an auditor (implying CPA) and audits confidential funds (implying passed security clearance via contrapositive).","Eliminated because the premises do not state Elena is unique.","Eliminated because universal affirmative statements cannot be universally converted without qualification.","Eliminated because clearance is a necessary condition, not a sufficient condition.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"On an island of truth-tellers (who always tell the truth) and liars (who always lie), you meet two officials, X and Y: Officer X states: \"At least one of us is a liar.\" What are the true identities of Officer X and Officer Y?","Officer X is a Truth-teller, and Officer Y is a Liar.","Both Officer X and Officer Y are Liars.","Both Officer X and Officer Y are Truth-tellers.","Officer X is a Liar, and Officer Y is a Truth-teller.","A","Step-by-Step Solution:
+"On an island of truth-tellers (who always tell the truth) and liars (who always lie), you meet two officials, X and Y: Officer X states: \""At least one of us is a liar.\"" What are the true identities of Officer X and Officer Y?","Officer X is a Truth-teller, and Officer Y is a Liar.","Both Officer X and Officer Y are Liars.","Both Officer X and Officer Y are Truth-tellers.","Officer X is a Liar, and Officer Y is a Truth-teller.","A","Step-by-Step Solution:
 1. Test Hypothesis 1: Suppose Officer X is a Liar.
-   - If X is a liar, X's statement must be FALSE.
-   - Statement: \"At least one of us is a liar.\"
-   - The logical negation of this statement is: \"Neither of us is a liar (both are truth-tellers).\"
-   - But this requires X to be a truth-teller, directly contradicting our assumption that X is a liar!
-   - Therefore, Hypothesis 1 is a logical impossibility $\implies$ Officer X CANNOT be a liar.
-2. Establish Officer X's identity:
-   - Officer X MUST be a Truth-teller.
-3. Determine Officer Y's identity:
-   - Since X is a truth-teller, X's statement is TRUE.
-   - Statement: \"At least one of us is a liar.\"
-   - Since X is a truth-teller, the liar referenced in the statement MUST be Officer Y!
-   - Therefore, Officer Y is a Liar.
-4. Conclude:
-   - Officer X is a Truth-teller, and Officer Y is a Liar.
-
-Common Trap: Assuming both can be liars, which generates an immediate liar paradox.
-Exam Tip: If assuming a speaker is a liar leads to a contradiction, the speaker is proven to be a truth-teller.","Correct. Survives elimination because X being a liar produces a contradiction, forcing X to be a truth-teller and Y to be a liar.","Eliminated because if both were liars, X's statement would be true, creating a paradox.","Eliminated because if both were truth-tellers, X's statement would be false, creating a paradox.","Eliminated because X cannot be a liar.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Consider the deductive premises: (1) If an administrative action violates due process, it is void ab initio ($V \implies Void$). (2) If an administrative action is void ab initio, the Civil Service Commission will nullify it ($Void \implies Nullify$). (3) The Civil Service Commission did NOT nullify the dismissal of Employee K ($\neg Nullify$). What is the valid deductive conclusion?","The dismissal of Employee K did not violate due process.","The dismissal of Employee K was void ab initio.","The dismissal violated due process but was upheld on other grounds.","The Civil Service Commission lacked jurisdiction over the dismissal.","A","Step-by-Step Solution:
+ - If X is a liar, X's statement must be FALSE.
+ - Statement: \""At least one of us is a liar.\","","","","","",""
+"- The logical negation of this statement is: \""Neither of us is a liar (both are truth-tellers).\""","","","","","","","","","","","",""
+"- But this requires X to be a truth-teller","directly contradicting our assumption that X is a liar!","","","","","","","","","","",""
+"- Therefore","Hypothesis 1 is a logical impossibility implies Officer X CANNOT be a liar.","","","","","","","","","","",""
+"2. Establish Officer X's identity:","","","","","","","","","","","",""
+"- Officer X MUST be a Truth-teller.","","","","","","","","","","","",""
+"3. Determine Officer Y's identity:","","","","","","","","","","","",""
+"- Since X is a truth-teller","X's statement is TRUE.","","","","","","","","","","",""
+"- Statement: \""At least one of us is a liar.\""","","","","","","","","","","","",""
+"- Since X is a truth-teller","the liar referenced in the statement MUST be Officer Y!","","","","","","","","","","",""
+"- Therefore","Officer Y is a Liar.","","","","","","","","","","",""
+"4. Conclude:","","","","","","","","","","","",""
+"- Officer X is a Truth-teller","and Officer Y is a Liar.","","","","","","","","","","",""
+"Common Trap: Assuming both can be liars","which generates an immediate liar paradox.","","","","","","","","","","",""
+"Exam Tip: If assuming a speaker is a liar leads to a contradiction","the speaker is proven to be a truth-teller.""","Correct. Survives elimination because X being a liar produces a contradiction, forcing X to be a truth-teller and Y to be a liar.","Eliminated because if both were liars, X's statement would be true, creating a paradox.","Eliminated because if both were truth-tellers, X's statement would be false, creating a paradox.","Eliminated because X cannot be a liar.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","","",""
+"Consider the deductive premises: (1) If an administrative action violates due process, it is void ab initio (V implies Void). (2) If an administrative action is void ab initio, the Civil Service Commission will nullify it (Void implies Nullify). (3) The Civil Service Commission did NOT nullify the dismissal of Employee K (neg Nullify). What is the valid deductive conclusion?","The dismissal of Employee K did not violate due process.","The dismissal of Employee K was void ab initio.","The dismissal violated due process but was upheld on other grounds.","The Civil Service Commission lacked jurisdiction over the dismissal.","A","Step-by-Step Solution:
 1. Construct the hypothetical syllogism chain:
-   - Premise 1: $V \implies Void$.
-   - Premise 2: $Void \implies Nullify$.
-   - Syllogistic Deduction: $V \implies Nullify$ (If it violates due process, it will be nullified).
+ - Premise 1: V implies Void.
+ - Premise 2: Void implies Nullify.
+ - Syllogistic Deduction: V implies Nullify (If it violates due process, it will be nullified).
 2. Formulate the Contrapositive:
-   - $\neg Nullify \implies \neg V$ (If it was not nullified, it did not violate due process).
+ - neg Nullify implies neg V (If it was not nullified, it did not violate due process).
 3. Apply Premise 3 by Modus Tollens:
-   - Given: $\neg Nullify$ (The Commission did not nullify the dismissal).
-   - Therefore: $\neg V$ (The dismissal did not violate due process).
+ - Given: neg Nullify (The Commission did not nullify the dismissal).
+ - Therefore: neg V (The dismissal did not violate due process).
 4. Conclude:
-   - The dismissal of Employee K did not violate due process.
+ - The dismissal of Employee K did not violate due process.
 
 Common Trap: Assuming the action could still violate due process without being nullified (violating Premise 1 and 2).
-Exam Tip: Modus Tollens across a transitive conditional chain: $P \implies Q \implies R$, $\neg R \implies \neg P$.","Correct. Survives elimination because the contrapositive chain (not nullified -> not void -> no due process violation) deductively guarantees that due process was not violated.","Eliminated because if it were void, it would have been nullified (violates Premise 2 and 3).","Eliminated because violating due process strictly forces nullification.","Eliminated because lack of jurisdiction is unstated and unnecessary.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Given premises: (1) All members of the procurement committee are department heads ($P \subseteq H$). (2) Some department heads are certified specialists ($H \cap S \neq \emptyset$). (3) No procurement committee member has an unresolved conflict of interest ($P \cap C = \emptyset$). Which statement is GUARANTEED to be true?","No person with an unresolved conflict of interest is a member of the procurement committee.","All certified specialists are members of the procurement committee.","All department heads are members of the procurement committee.","Some persons with an unresolved conflict of interest are department heads.","A","Step-by-Step Solution:
+Exam Tip: Modus Tollens across a transitive conditional chain: P implies Q implies R, neg R implies neg P.","Correct. Survives elimination because the contrapositive chain (not nullified -> not void -> no due process violation) deductively guarantees that due process was not violated.","Eliminated because if it were void, it would have been nullified (violates Premise 2 and 3).","Eliminated because violating due process strictly forces nullification.","Eliminated because lack of jurisdiction is unstated and unnecessary.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
+"Given premises: (1) All members of the procurement committee are department heads (P subseteq H). (2) Some department heads are certified specialists (H cap S ≠ emptyset). (3) No procurement committee member has an unresolved conflict of interest (P cap C = emptyset). Which statement is GUARANTEED to be true?","No person with an unresolved conflict of interest is a member of the procurement committee.","All certified specialists are members of the procurement committee.","All department heads are members of the procurement committee.","Some persons with an unresolved conflict of interest are department heads.","A","Step-by-Step Solution:
 1. Examine Premise 3:
-   - Premise 3 is a Universal Negative (E-proposition): \"No $P$ is $C$\" ($P \cap C = \emptyset$).
+ - Premise 3 is a Universal Negative (E-proposition): \""No P is C\"" (P cap C = emptyset).
 2. Apply the valid logical rule of Simple Conversion for E-propositions:
-   - An E-proposition (\"No $A$ is $B$\") converts validly and symmetrically to \"No $B$ is $A$\" ($B \cap A = \emptyset$).
-   - Therefore, \"No procurement committee member has a conflict of interest\" converts directly to:
-   - \"No person with an unresolved conflict of interest is a member of the procurement committee.\"
-3. Evaluate invalid alternatives:
-   - Option B: Illicit conversion of I-proposition (commits fallacy).
-   - Option C: Illicit conversion of A-proposition (commits fallacy of undistributed middle).
-   - Option D: Not guaranteed by premises.
-4. Conclude:
-   - Option A is logically necessary and guaranteed true.
-
-Common Trap: Falling for illicit conversion of universal affirmative premises (\"All P are H\" does not mean \"All H are P\").
-Exam Tip: Universal negative statements (\"No A is B\") convert symmetrically without any loss of truth: \"No B is A\".","Correct. Survives elimination because universal negative propositions convert symmetrically: No P is C <=> No C is P.","Eliminated due to illicit conversion.","Eliminated due to illicit conversion of universal affirmative premise.","Eliminated because this relation is not guaranteed by the premises.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Three suspects (Alpha, Bravo, Charlie) are questioned about an unauthorized data breach: (1) Exactly one of them committed the breach. (2) Alpha says: \"Charlie did it.\" (3) Bravo says: \"I did not do it.\" (4) Charlie says: \"Alpha is lying.\" If EXACTLY ONE of the three suspects is telling the truth, who committed the data breach?","Bravo","Alpha","Charlie","Cannot be determined","A","Step-by-Step Solution:
+ - An E-proposition (\""No A is B\"") converts validly and symmetrically to \""No B is A\"" (B cap A = emptyset).
+ - Therefore, \""No procurement committee member has a conflict of interest\"" converts directly to:
+ - \""No person with an unresolved conflict of interest is a member of the procurement committee.\","","","","","",""
+"3. Evaluate invalid alternatives:","","","","","","","","","","","",""
+"- Option B: Illicit conversion of I-proposition (commits fallacy).","","","","","","","","","","","",""
+"- Option C: Illicit conversion of A-proposition (commits fallacy of undistributed middle).","","","","","","","","","","","",""
+"- Option D: Not guaranteed by premises.","","","","","","","","","","","",""
+"4. Conclude:","","","","","","","","","","","",""
+"- Option A is logically necessary and guaranteed true.","","","","","","","","","","","",""
+"Common Trap: Falling for illicit conversion of universal affirmative premises (\""All P are H\"" does not mean \""All H are P\"").","","","","","","","","","","","",""
+"Exam Tip: Universal negative statements (\""No A is B\"") convert symmetrically without any loss of truth: \""No B is A\"".""","Correct. Survives elimination because universal negative propositions convert symmetrically: No P is C <=> No C is P.","Eliminated due to illicit conversion.","Eliminated due to illicit conversion of universal affirmative premise.","Eliminated because this relation is not guaranteed by the premises.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","","","",""
+"Three suspects (Alpha, Bravo, Charlie) are questioned about an unauthorized data breach: (1) Exactly one of them committed the breach. (2) Alpha says: \""Charlie did it.\"" (3) Bravo says: \""I did not do it.\"" (4) Charlie says: \""Alpha is lying.\"" If EXACTLY ONE of the three suspects is telling the truth, who committed the data breach?","Bravo","Alpha","Charlie","Cannot be determined","A","Step-by-Step Solution:
 1. Identify contradictory statements:
-   - Alpha asserts: Charlie is the culprit ($C$).
-   - Charlie asserts: Alpha is lying ($\neg C$).
-   - Because Alpha and Charlie make mutually contradictory statements, EXACTLY ONE of them MUST be telling the truth, and the other MUST be lying.
+ - Alpha asserts: Charlie is the culprit (C).
+ - Charlie asserts: Alpha is lying (neg C).
+ - Because Alpha and Charlie make mutually contradictory statements, EXACTLY ONE of them MUST be telling the truth, and the other MUST be lying.
 2. Deduce the truth value of Bravo's statement:
-   - The problem states that EXACTLY ONE suspect tells the truth overall.
-   - Since that single truth-teller is either Alpha or Charlie, Bravo MUST BE LYING!
+ - The problem states that EXACTLY ONE suspect tells the truth overall.
+ - Since that single truth-teller is either Alpha or Charlie, Bravo MUST BE LYING!
 3. Determine the culprit from Bravo's lie:
-   - Bravo's statement: \"I did not do it.\"
-   - Since Bravo is lying, the negation of Bravo's statement is TRUE:
-   - BRAVO COMMITTED THE BREACH!
-4. Verify consistency:
-   - If Bravo is the culprit:
-     - Alpha says Charlie did it $\to$ FALSE.
-     - Bravo says he didn't do it $\to$ FALSE.
-     - Charlie says Alpha is lying $\to$ TRUE.
-     - Exactly 1 truth-teller (Charlie) and exactly 1 culprit (Bravo). Perfect!
-5. Conclude:
-   - Bravo committed the data breach.
-
-Common Trap: Trying to guess between Alpha and Charlie instead of evaluating the isolated third statement (Bravo).
-Exam Tip: When two speakers contradict each other, they absorb the single truth-teller quota, forcing all other speakers to be liars.","Correct. Survives elimination because the contradictory pair (Alpha, Charlie) contains the lone true statement, forcing Bravo's denial to be false, meaning Bravo committed the breach.","Eliminated because Alpha did not commit the breach.","Eliminated because Charlie did not commit the breach.","Eliminated because the culprit is uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Premise 1: All high-performing civil servants are dedicated to public welfare ($H \subseteq D$). Premise 2: Some dedicated civil servants receive commendation medals ($D \cap M \neq \emptyset$). Premise 3: No corrupt official is dedicated to public welfare ($C \cap D = \emptyset$). Which statement CANNOT be true?","A corrupt official is a high-performing civil servant.","A dedicated civil servant does not receive an annual commendation medal.","A high-performing civil servant receives an annual commendation medal.","Some officials who receive commendation medals are not corrupt.","A","Step-by-Step Solution:
+ - Bravo's statement: \""I did not do it.\","","","","","",""
+"- Since Bravo is lying","the negation of Bravo's statement is TRUE:","","","","","","","","","","",""
+"- BRAVO COMMITTED THE BREACH!","","","","","","","","","","","",""
+"4. Verify consistency:","","","","","","","","","","","",""
+"- If Bravo is the culprit:","","","","","","","","","","","",""
+"- Alpha says Charlie did it to FALSE.","","","","","","","","","","","",""
+"- Bravo says he didn't do it to FALSE.","","","","","","","","","","","",""
+"- Charlie says Alpha is lying to TRUE.","","","","","","","","","","","",""
+"- Exactly 1 truth-teller (Charlie) and exactly 1 culprit (Bravo). Perfect!","","","","","","","","","","","",""
+"5. Conclude:","","","","","","","","","","","",""
+"- Bravo committed the data breach.","","","","","","","","","","","",""
+"Common Trap: Trying to guess between Alpha and Charlie instead of evaluating the isolated third statement (Bravo).","","","","","","","","","","","",""
+"Exam Tip: When two speakers contradict each other","they absorb the single truth-teller quota","forcing all other speakers to be liars.""","Correct. Survives elimination because the contradictory pair (Alpha, Charlie) contains the lone true statement, forcing Bravo's denial to be false, meaning Bravo committed the breach.","Eliminated because Alpha did not commit the breach.","Eliminated because Charlie did not commit the breach.","Eliminated because the culprit is uniquely determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","",""
+"Premise 1: All high-performing civil servants are dedicated to public welfare (H subseteq D). Premise 2: Some dedicated civil servants receive commendation medals (D cap M ≠ emptyset). Premise 3: No corrupt official is dedicated to public welfare (C cap D = emptyset). Which statement CANNOT be true?","A corrupt official is a high-performing civil servant.","A dedicated civil servant does not receive an annual commendation medal.","A high-performing civil servant receives an annual commendation medal.","Some officials who receive commendation medals are not corrupt.","A","Step-by-Step Solution:
 1. Analyze the set inclusion and exclusion:
-   - By Premise 1: The set of High-performing civil servants ($H$) is a subset of Dedicated civil servants ($D$): $H \subseteq D$.
-   - By Premise 3: The set of Corrupt officials ($C$) is completely disjoint from Dedicated civil servants ($D$): $C \cap D = \emptyset$.
-2. Derive deductive intersection between $C$ and $H$:
-   - Since $H \subseteq D$ and $D \cap C = \emptyset$, it follows necessarily that $H$ and $C$ are disjoint:
-   - $H \cap C = \emptyset$.
-   - No high-performing civil servant can be a corrupt official.
+ - By Premise 1: The set of High-performing civil servants (H) is a subset of Dedicated civil servants (D): H subseteq D.
+ - By Premise 3: The set of Corrupt officials (C) is completely disjo∫ from Dedicated civil servants (D): C cap D = emptyset.
+2. Derive deductive intersection between C and H:
+ - Since H subseteq D and D cap C = emptyset, it follows necessarily that H and C are disjo∫:
+ - H cap C = emptyset.
+ - No high-performing civil servant can be a corrupt official.
 3. Evaluate the choices:
-   - Option A asserts: \"A corrupt official is a high-performing civil servant\" ($C \cap H \neq \emptyset$).
-   - This directly contradicts the deductive necessity $H \cap C = \emptyset$.
-   - Therefore, Option A CANNOT BE TRUE.
+ - Option A asserts: \""A corrupt official is a high-performing civil servant\"" (C cap H ≠ emptyset).
+ - This directly contradicts the deductive necessity H cap C = emptyset.
+ - Therefore, Option A CANNOT BE TRUE.
 4. Conclude:
-   - Statement A is logically impossible.
+ - Statement A is logically impossible.
 
-Common Trap: Confusing \"Some D are M\" with \"All D are M\".
-Exam Tip: If Set A is inside Set B, and Set B is completely disjoint from Set C, Set A is completely disjoint from Set C ($A \cap C = \emptyset$).","Correct. Survives elimination because H is a subset of D, and D is disjoint from C, making it logically impossible for any member of C to be in H.","Eliminated because some dedicated servants might not receive medals (consistent with Premise 2).","Eliminated because this is possible and consistent.","Eliminated because this is possible and consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Given conditional logic rules: (1) If Budget A is approved, then neither Project X nor Project Y will be funded ($A \implies \neg X \land \neg Y$). (2) Project Y is funded ($Y$). What MUST follow deductively?","Budget A was not approved.","Project X was also funded.","Project X was not funded.","Budget A was approved with amendments.","A","Step-by-Step Solution:
+Common Trap: Confusing \""Some D are M\"" with \""All D are M\"".
+Exam Tip: If Set A is inside Set B, and Set B is completely disjo∫ from Set C, Set A is completely disjo∫ from Set C (A cap C = emptyset).","Correct. Survives elimination because H is a subset of D, and D is disjo∫ from C, making it logically impossible for any member of C to be in H.","Eliminated because some dedicated servants might not receive medals (consistent with Premise 2).","Eliminated because this is possible and consistent.","Eliminated because this is possible and consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
+"Given conditional logic rules: (1) If Budget A is approved, then neither Project X nor Project Y will be funded (A implies neg X land neg Y). (2) Project Y is funded (Y). What MUST follow deductively?","Budget A was not approved.","Project X was also funded.","Project X was not funded.","Budget A was approved with amendments.","A","Step-by-Step Solution:
 1. Formalize the conditional statement:
-   - $A \implies (\neg X \land \neg Y)$.
+ - A implies (neg X land neg Y).
 2. Take the Contrapositive using De Morgan's Law:
-   - $\neg(\neg X \land \neg Y) \implies \neg A$.
-   - $(X \lor Y) \implies \neg A$.
-   - Meaning: \"If either Project X is funded OR Project Y is funded, then Budget A was not approved.\"
-3. Apply Premise 2:
-   - Premise 2 states: Project Y is funded ($Y = \text{True}$).
-   - Therefore, the antecedent $(X \lor Y)$ evaluates to TRUE (since $Y$ is true).
-4. Apply Modus Ponens on the contrapositive:
-   - Since $(X \lor Y)$ is True $\implies \neg A$ MUST BE TRUE.
-   - Budget A was NOT approved.
+ - neg(neg X land neg Y) implies neg A.
+ - (X lor Y) implies neg A.
+ - Meaning: \""If either Project X is funded OR Project Y is funded, then Budget A was not approved.\","","","","","",""
+"3. Apply Premise 2:","","","","","","","","","","","",""
+"- Premise 2 states: Project Y is funded (Y = True).","","","","","","","","","","","",""
+"- Therefore","the antecedent (X lor Y) evaluates to TRUE (since Y is true).","","","","","","","","","","",""
+"4. Apply Modus Ponens on the contrapositive:","","","","","","","","","","","",""
+"- Since (X lor Y) is True implies neg A MUST BE TRUE.","","","","","","","","","","","",""
+"- Budget A was NOT approved.","","","","","","","","","","","",""
+"5. Conclude:","","","","","","","","","","","",""
+"- Budget A was not approved.","","","","","","","","","","","",""
+"Common Trap: Trying to infer whether Project X was funded (the premises leave X indeterminate).","","","","","","","","","","","",""
+"Exam Tip: A implies neg Y iff Y implies neg A. Funding Y unconditionally disproves the approval of Budget A.""","Correct. Survives elimination because funding Project Y directly triggers the contrapositive of Premise 1, proving that Budget A was not approved.","Eliminated because Project X's funding status is indeterminate.","Eliminated because Project X's funding status is indeterminate.","Eliminated because amended approval is unsupported speculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","","","",""
+"Consider the deductive rules regarding five committee members (P, Q, R, S, T): (1) If P attends, then Q attends (P implies Q). (2) If Q attends, then R does not attend (Q implies neg R). (3) If S attends, then R attends (S implies R). (4) Member P attends the meeting (P). What can be deductively inferred about Member S?","Member S does not attend the meeting.","Member S attends the meeting.","Member S and Member T attend together.","Nothing can be inferred about Member S.","A","Step-by-Step Solution:
+1. Trace the chain of inferences starting from the factual premise P:
+ - Premise 4: P = True (Member P attends).
+2. Apply Rule 1 (P implies Q):
+ - By Modus Ponens: Q = True (Member Q attends).
+3. Apply Rule 2 (Q implies neg R):
+ - By Modus Ponens: neg R = True (Member R does not attend).
+4. Apply Rule 3 (S implies R):
+ - Contrapositive: neg R implies neg S.
+ - By Modus Ponens on the contrapositive: Since neg R is true, neg S MUST BE TRUE.
+ - Member S does NOT attend the meeting.
 5. Conclude:
-   - Budget A was not approved.
-
-Common Trap: Trying to infer whether Project X was funded (the premises leave X indeterminate).
-Exam Tip: $A \implies \neg Y \iff Y \implies \neg A$. Funding Y unconditionally disproves the approval of Budget A.","Correct. Survives elimination because funding Project Y directly triggers the contrapositive of Premise 1, proving that Budget A was not approved.","Eliminated because Project X's funding status is indeterminate.","Eliminated because Project X's funding status is indeterminate.","Eliminated because amended approval is unsupported speculation.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Consider the deductive rules regarding five committee members (P, Q, R, S, T): (1) If P attends, then Q attends ($P \implies Q$). (2) If Q attends, then R does not attend ($Q \implies \neg R$). (3) If S attends, then R attends ($S \implies R$). (4) Member P attends the meeting ($P$). What can be deductively inferred about Member S?","Member S does not attend the meeting.","Member S attends the meeting.","Member S and Member T attend together.","Nothing can be inferred about Member S.","A","Step-by-Step Solution:
-1. Trace the chain of inferences starting from the factual premise $P$:
-   - Premise 4: $P = \text{True}$ (Member P attends).
-2. Apply Rule 1 ($P \implies Q$):
-   - By Modus Ponens: $Q = \text{True}$ (Member Q attends).
-3. Apply Rule 2 ($Q \implies \neg R$):
-   - By Modus Ponens: $\neg R = \text{True}$ (Member R does not attend).
-4. Apply Rule 3 ($S \implies R$):
-   - Contrapositive: $\neg R \implies \neg S$.
-   - By Modus Ponens on the contrapositive: Since $\neg R$ is true, $\neg S$ MUST BE TRUE.
-   - Member S does NOT attend the meeting.
-5. Conclude:
-   - Member S does not attend the meeting.
+ - Member S does not attend the meeting.
 
 Common Trap: Assuming no conclusion can be drawn about S because S is in the antecedent of Rule 3.
-Exam Tip: Always check the contrapositive of conditional premises ($\neg R \implies \neg S$).","Correct. Survives elimination because P forces Q, Q forces not-R, and not-R forces not-S via contrapositive, proving S does not attend.","Eliminated because S attending would force R to attend, contradicting not-R.","Eliminated because T is completely unmentioned in the rules.","Eliminated because S's absence is deductively proven.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"In an agency investigation involving three officers (K, L, M) who are each either a truth-teller or a liar: (1) Officer K says: \"Officer L is a liar.\" (2) Officer L says: \"Officer M is a liar.\" (3) Officer M says: \"Officer K and Officer L are both liars.\" Who is/are the truth-teller(s)?","Officer L is the only truth-teller.","Officer K and Officer M are both truth-tellers.","Officer K is the only truth-teller.","All three officers are liars.","A","Step-by-Step Solution:
+Exam Tip: Always check the contrapositive of conditional premises (neg R implies neg S).","Correct. Survives elimination because P forces Q, Q forces not-R, and not-R forces not-S via contrapositive, proving S does not attend.","Eliminated because S attending would force R to attend, contradicting not-R.","Eliminated because T is completely unmentioned in the rules.","Eliminated because S's absence is deductively proven.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
+"In an agency investigation involving three officers (K, L, M) who are each either a truth-teller or a liar: (1) Officer K says: \""Officer L is a liar.\"" (2) Officer L says: \""Officer M is a liar.\"" (3) Officer M says: \""Officer K and Officer L are both liars.\"" Who is/are the truth-teller(s)?","Officer L is the only truth-teller.","Officer K and Officer M are both truth-tellers.","Officer K is the only truth-teller.","All three officers are liars.","A","Step-by-Step Solution:
 1. Test Hypothesis 1: Suppose Officer M is a Truth-teller.
-   - If M is a truth-teller, M's statement is TRUE $\implies$ Both K and L are liars.
-   - If L is a liar, L's statement (\"M is a liar\") is False $\implies$ M is a truth-teller (consistent).
-   - If K is a liar, K's statement (\"L is a liar\") is False $\implies$ L is a truth-teller (Contradiction! L cannot be both a liar and a truth-teller).
-   - Therefore, M CANNOT be a truth-teller $\implies$ Officer M is a LIAR.
+ - If M is a truth-teller, M's statement is TRUE implies Both K and L are liars.
+ - If L is a liar, L's statement (\""M is a liar\"") is False implies M is a truth-teller (consistent).
+ - If K is a liar, K's statement (\""L is a liar\"") is False implies L is a truth-teller (Contradiction! L cannot be both a liar and a truth-teller).
+ - Therefore, M CANNOT be a truth-teller implies Officer M is a LIAR.
 2. Analyze Officer L:
-   - Officer L states: \"Officer M is a liar.\"
-   - Since M is indeed a liar (established in Step 1), L's statement is TRUE.
-   - Therefore, Officer L is a TRUTH-TELLER!
-3. Analyze Officer K:
-   - Officer K states: \"Officer L is a liar.\"
-   - Since L is a truth-teller, K's statement is FALSE.
-   - Therefore, Officer K is a LIAR.
-4. Summary of identities:
-   - K = Liar, L = Truth-teller, M = Liar.
-5. Conclude:
-   - Officer L is the only truth-teller.
-
-Common Trap: Assuming K and M can both be truth-tellers without testing for internal contradiction on L.
-Exam Tip: In truth-teller/liar puzzles with 3 circular claims, test the compound claim first to trigger an immediate decision tree.","Correct. Survives elimination because assuming M is a truth-teller creates a contradiction on L, proving M is a liar, which makes L a truth-teller and K a liar.","Eliminated because M is a liar.","Eliminated because K is a liar.","Eliminated because L tells the truth.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Consider the formal deductive argument: Premise 1: All authorized signatures require official biometric verification ($S \implies B$). Premise 2: Document D does not have official biometric verification ($\neg B$). Conclusion: Document D does not contain an authorized signature ($\neg S$). Which formal rule of deductive inference validates this conclusion?","Modus Tollens (Denying the Consequent)","Modus Ponens (Affirming the Antecedent)","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","A","Step-by-Step Solution:
+ - Officer L states: \""Officer M is a liar.\","","","","","",""
+"- Since M is indeed a liar (established in Step 1)","L's statement is TRUE.","","","","","","","","","","",""
+"- Therefore","Officer L is a TRUTH-TELLER!","","","","","","","","","","",""
+"3. Analyze Officer K:","","","","","","","","","","","",""
+"- Officer K states: \""Officer L is a liar.\""","","","","","","","","","","","",""
+"- Since L is a truth-teller","K's statement is FALSE.","","","","","","","","","","",""
+"- Therefore","Officer K is a LIAR.","","","","","","","","","","",""
+"4. Summary of identities:","","","","","","","","","","","",""
+"- K = Liar","L = Truth-teller","M = Liar.","","","","","","","","","",""
+"5. Conclude:","","","","","","","","","","","",""
+"- Officer L is the only truth-teller.","","","","","","","","","","","",""
+"Common Trap: Assuming K and M can both be truth-tellers without testing for internal contradiction on L.","","","","","","","","","","","",""
+"Exam Tip: In truth-teller/liar puzzles with 3 circular claims","test the compound claim first to trigger an immediate decision tree.""","Correct. Survives elimination because assuming M is a truth-teller creates a contradiction on L, proving M is a liar, which makes L a truth-teller and K a liar.","Eliminated because M is a liar.","Eliminated because K is a liar.","Eliminated because L tells the truth.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","","",""
+"Consider the formal deductive argument: Premise 1: All authorized signatures require official biometric verification (S implies B). Premise 2: Document D does not have official biometric verification (neg B). Conclusion: Document D does not contain an authorized signature (neg S). Which formal rule of deductive inference validates this conclusion?","Modus Tollens (Denying the Consequent)","Modus Ponens (Affirming the Antecedent)","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","A","Step-by-Step Solution:
 1. Analyze the symbolic structure of the argument:
-   - Major Premise: If $P$, then $Q$ ($P \implies Q$).
-     - Where $P = \text{Authorized signature}$, $Q = \text{Biometric verification}$.
-   - Minor Premise: Not $Q$ ($\neg Q$).
-     - Document D lacks biometric verification.
-   - Conclusion: Therefore, Not $P$ ($\neg P$).
-     - Document D does not contain an authorized signature.
+ - Major Premise: If P, then Q (P implies Q).
+ - Where P = Authorized signature, Q = Biometric verification.
+ - Minor Premise: Not Q (neg Q).
+ - Document D lacks biometric verification.
+ - Conclusion: Therefore, Not P (neg P).
+ - Document D does not contain an authorized signature.
 2. Identify the valid logical rule:
-   - The deduction $(P \implies Q, \neg Q \vdash \neg P)$ is the definition of MODUS TOLLENS (Latin for \"mode that by denying denies\", or Denying the Consequent).
-3. Evaluate incorrect alternatives:
-   - Modus Ponens: $(P \implies Q, P \vdash Q)$.
-   - Affirming the Consequent: $(P \implies Q, Q \vdash P)$ — formal fallacy.
-   - Denying the Antecedent: $(P \implies Q, \neg P \vdash \neg Q)$ — formal fallacy.
-4. Conclude:
-   - The argument is validated by Modus Tollens.
-
-Common Trap: Confusing Modus Tollens (denying the consequent) with Modus Ponens (affirming the antecedent).
-Exam Tip: $P \implies Q$ combined with $\neg Q$ yielding $\neg P$ is strictly MODUS TOLLENS.","Correct. Survives elimination because the formal inference rule (If P then Q; Not Q; Therefore Not P) is strictly Modus Tollens.","Eliminated because Modus Ponens affirms the antecedent (P -> Q; P; Therefore Q).","Eliminated because Affirming the Consequent is an invalid fallacy.","Eliminated because Denying the Antecedent is an invalid fallacy.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
+ - The deduction (P implies Q, neg Q vdash neg P) is the definition of MODUS TOLLENS (Latin for \""mode that by denying denies\","or Denying the Consequent).","","","","",""
+"3. Evaluate incorrect alternatives:","","","","","","","","","","","",""
+"- Modus Ponens: (P implies Q","P vdash Q).","","","","","","","","","","",""
+"- Affirming the Consequent: (P implies Q","Q vdash P) — formal fallacy.","","","","","","","","","","",""
+"- Denying the Antecedent: (P implies Q","neg P vdash neg Q) — formal fallacy.","","","","","","","","","","",""
+"4. Conclude:","","","","","","","","","","","",""
+"- The argument is validated by Modus Tollens.","","","","","","","","","","","",""
+"Common Trap: Confusing Modus Tollens (denying the consequent) with Modus Ponens (affirming the antecedent).","","","","","","","","","","","",""
+"Exam Tip: P implies Q combined with neg Q yielding neg P is strictly MODUS TOLLENS.""","Correct. Survives elimination because the formal inference rule (If P then Q; Not Q; Therefore Not P) is strictly Modus Tollens.","Eliminated because Modus Ponens affirms the antecedent (P -> Q; P; Therefore Q).","Eliminated because Affirming the Consequent is an invalid fallacy.","Eliminated because Denying the Antecedent is an invalid fallacy.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086","","","","","",""

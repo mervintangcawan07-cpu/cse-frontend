@@ -2,6 +2,7 @@
 
 import React from "react";
 import { OptionAnalysisItem } from "@/types/question";
+import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface OptionAnalysisProps {
   whyA?: string | null;
@@ -31,10 +32,11 @@ export default function OptionAnalysis({
 
   rawEntries.forEach(({ key, val, idx }) => {
     if (val && val.trim()) {
-      const optionLabel = options[idx] ? `${key} (${options[idx]})` : key;
+      const cleanOption = options[idx] ? cleanMathText(options[idx]) : "";
+      const optionLabel = cleanOption ? `${key} (${cleanOption})` : key;
       analysisItems.push({
         option: optionLabel,
-        text: val.trim(),
+        text: cleanMathText(val.trim()),
         isCorrect: correctIndex === idx,
       });
     }
@@ -53,14 +55,14 @@ export default function OptionAnalysis({
         {analysisItems.map((item, idx) => (
           <div
             key={idx}
-            className={`p-3 rounded-xl border text-xs sm:text-sm leading-relaxed transition ${
+            className={`p-3 rounded-xl border text-xs sm:text-sm leading-relaxed transition break-words min-w-0 ${
               item.isCorrect
                 ? "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60 text-slate-800 dark:text-slate-200"
                 : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
             }`}
           >
             <strong
-              className={`font-bold mr-1.5 ${
+              className={`font-bold mr-1.5 break-words ${
                 item.isCorrect
                   ? "text-emerald-700 dark:text-emerald-400"
                   : "text-slate-900 dark:text-white"
@@ -68,7 +70,7 @@ export default function OptionAnalysis({
             >
               {item.option}:
             </strong>
-            <span>{item.text}</span>
+            <span className="break-words">{item.text}</span>
           </div>
         ))}
       </div>

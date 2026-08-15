@@ -1,17 +1,15 @@
-// Relative Path: src/middleware.ts
+// Relative Path: src/proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Static files, Next internals, public assets, and webhooks bypass middleware
+  // 1. Static files, Next internals, public assets, API routes, and webhooks bypass proxy
   if (
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/api/webhooks") ||
-    pathname.startsWith("/api/paymongo/webhook") ||
-    pathname.startsWith("/api/cron") ||
+    pathname.startsWith("/api") ||
     pathname.includes(".") ||
     pathname === "/favicon.ico"
   ) {
