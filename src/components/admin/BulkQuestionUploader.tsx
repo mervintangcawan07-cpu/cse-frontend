@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Papa from "papaparse";
-import { downloadCSVTemplate, validateParsedQuestions } from "@/lib/csvParser";
+import { downloadCSVTemplate, downloadStandardCSVTemplate, validateParsedQuestions } from "@/lib/csvParser";
 import QuestionImportPreviewModal from "./QuestionImportPreviewModal";
 import { StructuredQuestion } from "@/types/question";
 
@@ -114,13 +114,24 @@ export default function BulkQuestionUploader({ onSuccess }: BulkUploaderProps) {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={downloadCSVTemplate}
-            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer"
-          >
-            📥 Download Full CSV Template
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={downloadStandardCSVTemplate}
+              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>📄</span>
+              <span>Standard CSV Template</span>
+            </button>
+            <button
+              type="button"
+              onClick={downloadCSVTemplate}
+              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded-xl text-xs font-bold transition shrink-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <span>⭐</span>
+              <span>Full Pro CSV Template</span>
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-4">

@@ -335,7 +335,68 @@ export function downloadCSVTemplate() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", "cse_premium_question_template.csv");
+  link.setAttribute("download", "cse_premium_question_template_full.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/**
+ * 📥 Generates a standard lightweight downloadable CSV template (Core Question + Options + Answer)
+ */
+export function downloadStandardCSVTemplate() {
+  const headers = [
+    "Category",
+    "Subtopic",
+    "Question",
+    "Option A",
+    "Option B",
+    "Option C",
+    "Option D",
+    "Correct Answer",
+    "Explanation",
+    "Difficulty",
+    "Tags",
+  ];
+
+  const sample1 = [
+    "Numerical Ability",
+    "Word Problems",
+    "If 6 administrative assistants can type 72 reports in 4 hours, how many reports can 9 administrative assistants type in 6 hours at the same rate?",
+    "162",
+    "144",
+    "108",
+    "126",
+    "A",
+    "Rate per assistant per hour = 72 / (6 * 4) = 72 / 24 = 3 reports/hour. For 9 assistants in 6 hours: 9 * 6 * 3 = 162 reports.",
+    "MEDIUM",
+    "Work Rate;Word Problems;Ratio and Proportion",
+  ];
+
+  const sample2 = [
+    "General Information",
+    "RA 6713 Code of Conduct",
+    "Under Republic Act No. 6713, public officials and employees shall respond to letters, telegrams, or other means of communications sent by the public within how many working days from receipt?",
+    "15 working days",
+    "30 working days",
+    "7 working days",
+    "5 working days",
+    "A",
+    "Section 5(a) of R.A. 6713 mandates that all public officials and employees shall, within fifteen (15) working days from receipt thereof, respond to letters, telegrams or other means of communications sent by the public.",
+    "EASY",
+    "RA 6713;Code of Conduct;Civil Service Ethics",
+  ];
+
+  const csvContent = Papa.unparse({
+    fields: headers,
+    data: [sample1, sample2],
+  });
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "cse_question_template_standard.csv");
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
