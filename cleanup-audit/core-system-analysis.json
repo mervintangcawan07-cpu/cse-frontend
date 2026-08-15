@@ -1,0 +1,20 @@
+{
+  "framework": "Next.js 16.2.10 (Turbopack, App Router)",
+  "react": "19.2.4",
+  "styling": "Tailwind CSS v4 (@tailwindcss/postcss)",
+  "database": "PostgreSQL with Prisma ORM 7.9.0 (@prisma/client, @prisma/adapter-pg)",
+  "auth": "Custom JWT (jose, bcryptjs, session cookies) + Next 16 Proxy (src/proxy.ts)",
+  "realtime": "LiveKit (@livekit/components-react, livekit-server-sdk, livekit-client)",
+  "payment": "PayMongo webhook & checkout integration (/api/paymongo/*, /api/webhooks/paymongo)",
+  "deployment": "Vercel (vercel.json)",
+  "protectedFilesCount": 820,
+  "protectedSubsystems": [
+    "src/app (162 routes and layouts)",
+    "src/proxy.ts (Core route & auth middleware proxy)",
+    "src/lib/auth.ts & src/lib/serverAuth.ts (Auth tokens and session verification)",
+    "prisma/schema.prisma & prisma migrations (Database schema & migration history)",
+    "src/services (questionBankService.ts)",
+    "src/components (UI and Question Bank / Social / Drill components)",
+    "cse-question-generator (Subsystem for offline CSE question generation & exclusions)"
+  ]
+}

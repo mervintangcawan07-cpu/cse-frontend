@@ -1,0 +1,240 @@
+{
+  "sessionId": "CLEANUP-2026-08-15-001",
+  "status": "QUARANTINED",
+  "count": 29,
+  "timestamp": "2026-08-15T05:51:38.899Z",
+  "quarantinedFiles": [
+    {
+      "relPath": "generate_verbal_all.js",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\generate_verbal_all.js",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\generate_verbal_all.js",
+      "sha256": "ae6c698b7ae08d5833f8e111e3776b3acfd34ea2b5e1a1d0f04534e4157c5869",
+      "size": 88293,
+      "quarantinedAt": "2026-08-15T05:51:38.835Z"
+    },
+    {
+      "relPath": "integrate-live-events.js",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\integrate-live-events.js",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\integrate-live-events.js",
+      "sha256": "07983c222d560e6578a169a7f6d69c804fa9c10a342ee5a81b29915c441823e2",
+      "size": 22654,
+      "quarantinedAt": "2026-08-15T05:51:38.837Z"
+    },
+    {
+      "relPath": "setup-clean-tables.js",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\setup-clean-tables.js",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\setup-clean-tables.js",
+      "sha256": "e4cfee6115f4428aeed722ea45e2d7b0be6f37b82a8fbda99c045dedcad1a37c",
+      "size": 6564,
+      "quarantinedAt": "2026-08-15T05:51:38.840Z"
+    },
+    {
+      "relPath": "temp_insert.sql",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\temp_insert.sql",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\temp_insert.sql",
+      "sha256": "2a75b9895cfbe7bdeeb9242f1ce6134adf88f2c0648b933e313b4c430d7d8201",
+      "size": 170,
+      "quarantinedAt": "2026-08-15T05:51:38.843Z"
+    },
+    {
+      "relPath": "gen-csv.py",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\gen-csv.py",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\gen-csv.py",
+      "sha256": "ad2e354b3c2b6a91c62be965b0bf950fe920d9e230b678f3cda3ada17de6dee0",
+      "size": 2080,
+      "quarantinedAt": "2026-08-15T05:51:38.845Z"
+    },
+    {
+      "relPath": "numerical_reasoning_data_interpretation_25_updated.csv",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\numerical_reasoning_data_interpretation_25_updated.csv",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\numerical_reasoning_data_interpretation_25_updated.csv",
+      "sha256": "49d1ea8e4f09cb94d35964c627c9507f68c50f408eb518a4f5e0a210345d50b9",
+      "size": 18802,
+      "quarantinedAt": "2026-08-15T05:51:38.846Z"
+    },
+    {
+      "relPath": "public/file.svg",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\file.svg",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\file.svg",
+      "sha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4",
+      "size": 391,
+      "quarantinedAt": "2026-08-15T05:51:38.848Z"
+    },
+    {
+      "relPath": "public/globe.svg",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\globe.svg",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\globe.svg",
+      "sha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf",
+      "size": 1035,
+      "quarantinedAt": "2026-08-15T05:51:38.849Z"
+    },
+    {
+      "relPath": "public/next.svg",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\next.svg",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\next.svg",
+      "sha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc",
+      "size": 1375,
+      "quarantinedAt": "2026-08-15T05:51:38.850Z"
+    },
+    {
+      "relPath": "public/vercel.svg",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\vercel.svg",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\vercel.svg",
+      "sha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4",
+      "size": 128,
+      "quarantinedAt": "2026-08-15T05:51:38.852Z"
+    },
+    {
+      "relPath": "public/window.svg",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\window.svg",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\window.svg",
+      "sha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1",
+      "size": 385,
+      "quarantinedAt": "2026-08-15T05:51:38.853Z"
+    },
+    {
+      "relPath": "public/templates/question_upload_template_full.csv",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\templates\\question_upload_template_full.csv",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\templates\\question_upload_template_full.csv",
+      "sha256": "b068989bd3f1273a6a68e94cea442fb41924e0ccfdd32241e9e6e5ca07eac0cc",
+      "size": 6345,
+      "quarantinedAt": "2026-08-15T05:51:38.873Z"
+    },
+    {
+      "relPath": "public/templates/question_upload_template_standard.csv",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\public\\templates\\question_upload_template_standard.csv",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\public\\templates\\question_upload_template_standard.csv",
+      "sha256": "aa3cfbc08b2cc95414ed018cbd4cfbf403cbcdc34e217f67c6fedbc63c746555",
+      "size": 2118,
+      "quarantinedAt": "2026-08-15T05:51:38.874Z"
+    },
+    {
+      "relPath": "scripts/audit-and-fix-questions.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-and-fix-questions.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\audit-and-fix-questions.ts",
+      "sha256": "027c9f7ba31e8cf8e0ef3df54458314fd29282ba9602245700b19979956e22cf",
+      "size": 1675,
+      "quarantinedAt": "2026-08-15T05:51:38.878Z"
+    },
+    {
+      "relPath": "scripts/audit-detailed.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-detailed.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\audit-detailed.ts",
+      "sha256": "7583164d4adf0389c958b32660c4f9cae08f992bc8aba17e1f3f1e244a4c1903",
+      "size": 7240,
+      "quarantinedAt": "2026-08-15T05:51:38.879Z"
+    },
+    {
+      "relPath": "scripts/audit-duplicates.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-duplicates.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\audit-duplicates.ts",
+      "sha256": "d06f2f0a3d03ebf308f22a35af6232207ca9438dc7650138133bc0eb1f31f220",
+      "size": 10066,
+      "quarantinedAt": "2026-08-15T05:51:38.880Z"
+    },
+    {
+      "relPath": "scripts/check-db-dupes.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\check-db-dupes.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\check-db-dupes.ts",
+      "sha256": "65d109e73f8f4affa1127f8b01f36dbde7dca91e19f5669da7facdedb01d4a0c",
+      "size": 2371,
+      "quarantinedAt": "2026-08-15T05:51:38.881Z"
+    },
+    {
+      "relPath": "scripts/clean-reingest.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\clean-reingest.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\clean-reingest.ts",
+      "sha256": "2f22ffbad34d7eafb44a24e96e33d97421786cddec3a97d15cf8c946b0ff4794",
+      "size": 8244,
+      "quarantinedAt": "2026-08-15T05:51:38.883Z"
+    },
+    {
+      "relPath": "scripts/deduplicate-and-purge.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\deduplicate-and-purge.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\deduplicate-and-purge.ts",
+      "sha256": "4f46ac2122a30256251a3681cd3f18969e62540c41e01efede12f888793a6324",
+      "size": 3210,
+      "quarantinedAt": "2026-08-15T05:51:38.884Z"
+    },
+    {
+      "relPath": "scripts/fix-schema-softdelete.js",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\fix-schema-softdelete.js",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\fix-schema-softdelete.js",
+      "sha256": "40c407cc4ecfc3ef7a9a96c9d5ae49d7cacc9668842877583f52d84f590ca1a4",
+      "size": 784,
+      "quarantinedAt": "2026-08-15T05:51:38.885Z"
+    },
+    {
+      "relPath": "scripts/import-all-generated-questions.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\import-all-generated-questions.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\import-all-generated-questions.ts",
+      "sha256": "6e6cee607706563ee6e5c02ec2a8f3661f7658dd8827855e3dec9fee693f249b",
+      "size": 9882,
+      "quarantinedAt": "2026-08-15T05:51:38.886Z"
+    },
+    {
+      "relPath": "scripts/inspect-everything.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\inspect-everything.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\inspect-everything.ts",
+      "sha256": "a18cb9ef87030f633bd54e2a7e6cb0c26b01ac637ac10878cecbc87e2bab5473",
+      "size": 4317,
+      "quarantinedAt": "2026-08-15T05:51:38.887Z"
+    },
+    {
+      "relPath": "scripts/inspect-softdeleted.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\inspect-softdeleted.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\inspect-softdeleted.ts",
+      "sha256": "25b805a34acaa2072fdac668d50370d20d6da452ed372c46c86caeab6f2e4ff3",
+      "size": 510,
+      "quarantinedAt": "2026-08-15T05:51:38.889Z"
+    },
+    {
+      "relPath": "scripts/sanitize-csvs.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\sanitize-csvs.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\sanitize-csvs.ts",
+      "sha256": "799546f31429c1ea1a4181c4d2ca8f21bf10dbc82975026c03c03e83598e7f1e",
+      "size": 4722,
+      "quarantinedAt": "2026-08-15T05:51:38.890Z"
+    },
+    {
+      "relPath": "scripts/test-backup-system.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-backup-system.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\test-backup-system.ts",
+      "sha256": "5347b240a38e7bcaacb52f3766bbb699787dfb992057b0c723c552dbe7a5e392",
+      "size": 3347,
+      "quarantinedAt": "2026-08-15T05:51:38.891Z"
+    },
+    {
+      "relPath": "scripts/test-mock-exam-generation.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-mock-exam-generation.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\test-mock-exam-generation.ts",
+      "sha256": "5ce69495b2dd0fe6302fc7d9de427297207bf3ca71c1eaf319187b457d5028b6",
+      "size": 4958,
+      "quarantinedAt": "2026-08-15T05:51:38.894Z"
+    },
+    {
+      "relPath": "scripts/test-resilience.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-resilience.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\test-resilience.ts",
+      "sha256": "fce4efcbeb9c40167f8358a7a51ef189f3659c7410a27066cce9477b6790ed02",
+      "size": 1862,
+      "quarantinedAt": "2026-08-15T05:51:38.895Z"
+    },
+    {
+      "relPath": "scripts/test-sudo.ts",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-sudo.ts",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\test-sudo.ts",
+      "sha256": "605c8ede5bf835a2a031130caceb1d2c88dbc14dd31e5b015aca8046069d48f2",
+      "size": 933,
+      "quarantinedAt": "2026-08-15T05:51:38.896Z"
+    },
+    {
+      "relPath": "scripts/update-schema-softdelete.js",
+      "originalPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\update-schema-softdelete.js",
+      "quarantinePath": "C:\\Users\\Administrator\\cse-frontend\\cleanup-quarantine\\CLEANUP-2026-08-15-001\\scripts\\update-schema-softdelete.js",
+      "sha256": "5852ec332af4c4190c61cce56b5dca5dbb9864245d1038f22738e77219686b77",
+      "size": 960,
+      "quarantinedAt": "2026-08-15T05:51:38.897Z"
+    }
+  ]
+}

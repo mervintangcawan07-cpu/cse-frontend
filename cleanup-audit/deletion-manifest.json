@@ -1,0 +1,921 @@
+{
+  "sessionId": "CLEANUP-2026-08-15-001",
+  "timestamp": "2026-08-15T13:46:00+08:00",
+  "preCleanupCommit": "e1aac327512f2016582585b16ee73f398b6c63ac",
+  "externalBackupPath": "C:\\Users\\Administrator\\cse-frontend-backup-before-cleanup-2026-08-15-001",
+  "backupIntegrity": "VERIFIED_SUCCESS",
+  "candidates": [
+    {
+      "id": "001",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\generate_verbal_all.js",
+      "relPath": "generate_verbal_all.js",
+      "size": 88293,
+      "sha256": "ae6c698b7ae08d5833f8e111e3776b3acfd34ea2b5e1a1d0f04534e4157c5869",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None (0 imports, 0 dynamic calls, 0 package.json scripts).",
+        "whySafe": "Standalone script completely decoupled from Next.js runtime and build."
+      }
+    },
+    {
+      "id": "002",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\integrate-live-events.js",
+      "relPath": "integrate-live-events.js",
+      "size": 22654,
+      "sha256": "07983c222d560e6578a169a7f6d69c804fa9c10a342ee5a81b29915c441823e2",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None (0 imports, 0 dynamic calls, 0 package.json scripts).",
+        "whySafe": "Completed one-off integration script no longer needed."
+      }
+    },
+    {
+      "id": "003",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\setup-clean-tables.js",
+      "relPath": "setup-clean-tables.js",
+      "size": 6564,
+      "sha256": "e4cfee6115f4428aeed722ea45e2d7b0be6f37b82a8fbda99c045dedcad1a37c",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Target file formatPrompt.ts exists and operates independently."
+      }
+    },
+    {
+      "id": "004",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\temp_insert.sql",
+      "relPath": "temp_insert.sql",
+      "size": 170,
+      "sha256": "2a75b9895cfbe7bdeeb9242f1ce6134adf88f2c0648b933e313b4c430d7d8201",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Prisma schema and migrations manage database state."
+      }
+    },
+    {
+      "id": "005",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\gen-csv.py",
+      "relPath": "gen-csv.py",
+      "size": 2080,
+      "sha256": "ad2e354b3c2b6a91c62be965b0bf950fe920d9e230b678f3cda3ada17de6dee0",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Development utility for one-off CSV cleaning."
+      }
+    },
+    {
+      "id": "006",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\numerical_reasoning_data_interpretation_25_updated.csv",
+      "relPath": "numerical_reasoning_data_interpretation_25_updated.csv",
+      "size": 18802,
+      "sha256": "49d1ea8e4f09cb94d35964c627c9507f68c50f408eb518a4f5e0a210345d50b9",
+      "group": "Group 1: Obsolete Root Scripts & Data Artifacts",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Zero runtime dependencies."
+      }
+    },
+    {
+      "id": "007",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\file.svg",
+      "relPath": "public/file.svg",
+      "size": 391,
+      "sha256": "2b67812c325c199a02536cdbeea0c593a72f707d323b72ee3e08dbab06753bd4",
+      "group": "Group 2: Default create-next-app Boilerplate SVGs",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Boilerplate asset not used by custom CSE Reviewer UI."
+      }
+    },
+    {
+      "id": "008",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\globe.svg",
+      "relPath": "public/globe.svg",
+      "size": 1035,
+      "sha256": "b614b9bf183925957661ac851498fe1d8029fd43a62fbfed86f9e2624a57e7cf",
+      "group": "Group 2: Default create-next-app Boilerplate SVGs",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Boilerplate asset."
+      }
+    },
+    {
+      "id": "009",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\next.svg",
+      "relPath": "public/next.svg",
+      "size": 1375,
+      "sha256": "55995dfad6ecb4945a1e856ddca03c5e16aa5bf13fd21b4df6a74ae79357bcfc",
+      "group": "Group 2: Default create-next-app Boilerplate SVGs",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Boilerplate asset."
+      }
+    },
+    {
+      "id": "010",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\vercel.svg",
+      "relPath": "public/vercel.svg",
+      "size": 128,
+      "sha256": "f081337b2fee635b455b63275406a3e7f39d6a014e25ad90dab5a67e62a12ac4",
+      "group": "Group 2: Default create-next-app Boilerplate SVGs",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Boilerplate asset."
+      }
+    },
+    {
+      "id": "011",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\window.svg",
+      "relPath": "public/window.svg",
+      "size": 385,
+      "sha256": "644768c4aaeb4767bce293344eeb0c125fb804a94d801440424072202d85e3a1",
+      "group": "Group 2: Default create-next-app Boilerplate SVGs",
+      "classification": "A — PROVEN UNUSED",
+      "risk": "LOW",
+      "recommendation": "QUARANTINE & DELETE",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Boilerplate asset."
+      }
+    },
+    {
+      "id": "012",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\templates\\question_upload_template_full.csv",
+      "relPath": "public/templates/question_upload_template_full.csv",
+      "size": 6345,
+      "sha256": "b068989bd3f1273a6a68e94cea442fb41924e0ccfdd32241e9e6e5ca07eac0cc",
+      "group": "Group 3: Public CSV Question Upload Templates",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (PUBLIC ASSET)",
+      "risk": "LOW",
+      "recommendation": "KEEP",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "Static download asset in public folder.",
+        "whySafe": "N/A - Useful template asset."
+      }
+    },
+    {
+      "id": "013",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\public\\templates\\question_upload_template_standard.csv",
+      "relPath": "public/templates/question_upload_template_standard.csv",
+      "size": 2118,
+      "sha256": "aa3cfbc08b2cc95414ed018cbd4cfbf403cbcdc34e217f67c6fedbc63c746555",
+      "group": "Group 3: Public CSV Question Upload Templates",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (PUBLIC ASSET)",
+      "risk": "LOW",
+      "recommendation": "KEEP",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "Static download asset in public folder.",
+        "whySafe": "N/A - Useful template asset."
+      }
+    },
+    {
+      "id": "014",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-and-fix-questions.ts",
+      "relPath": "scripts/audit-and-fix-questions.ts",
+      "size": 1675,
+      "sha256": "027c9f7ba31e8cf8e0ef3df54458314fd29282ba9602245700b19979956e22cf",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None (run via npx ts-node / npx tsx).",
+        "whySafe": "Next.js build and web app do not require it."
+      }
+    },
+    {
+      "id": "015",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-detailed.ts",
+      "relPath": "scripts/audit-detailed.ts",
+      "size": 7240,
+      "sha256": "7583164d4adf0389c958b32660c4f9cae08f992bc8aba17e1f3f1e244a4c1903",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Next.js web app does not require it."
+      }
+    },
+    {
+      "id": "016",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\audit-duplicates.ts",
+      "relPath": "scripts/audit-duplicates.ts",
+      "size": 10066,
+      "sha256": "d06f2f0a3d03ebf308f22a35af6232207ca9438dc7650138133bc0eb1f31f220",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Next.js web app does not require it."
+      }
+    },
+    {
+      "id": "017",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\check-db-dupes.ts",
+      "relPath": "scripts/check-db-dupes.ts",
+      "size": 2371,
+      "sha256": "65d109e73f8f4affa1127f8b01f36dbde7dca91e19f5669da7facdedb01d4a0c",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Next.js web app does not require it."
+      }
+    },
+    {
+      "id": "018",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\clean-reingest.ts",
+      "relPath": "scripts/clean-reingest.ts",
+      "size": 8244,
+      "sha256": "2f22ffbad34d7eafb44a24e96e33d97421786cddec3a97d15cf8c946b0ff4794",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Next.js web app does not require it."
+      }
+    },
+    {
+      "id": "019",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\deduplicate-and-purge.ts",
+      "relPath": "scripts/deduplicate-and-purge.ts",
+      "size": 3210,
+      "sha256": "4f46ac2122a30256251a3681cd3f18969e62540c41e01efede12f888793a6324",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Next.js web app does not require it."
+      }
+    },
+    {
+      "id": "020",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\fix-schema-softdelete.js",
+      "relPath": "scripts/fix-schema-softdelete.js",
+      "size": 784,
+      "sha256": "40c407cc4ecfc3ef7a9a96c9d5ae49d7cacc9668842877583f52d84f590ca1a4",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MIGRATION TOOL) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Historical migration."
+      }
+    },
+    {
+      "id": "021",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\import-all-generated-questions.ts",
+      "relPath": "scripts/import-all-generated-questions.ts",
+      "size": 9882,
+      "sha256": "6e6cee607706563ee6e5c02ec2a8f3661f7658dd8827855e3dec9fee693f249b",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (INGESTION TOOL) — REVIEW REQUIRED",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Important ingestion bridge tool; keep for future batch imports."
+      }
+    },
+    {
+      "id": "022",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\inspect-everything.ts",
+      "relPath": "scripts/inspect-everything.ts",
+      "size": 4317,
+      "sha256": "a18cb9ef87030f633bd54e2a7e6cb0c26b01ac637ac10878cecbc87e2bab5473",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (DIAGNOSTIC TOOL) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Diagnostic script."
+      }
+    },
+    {
+      "id": "023",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\inspect-softdeleted.ts",
+      "relPath": "scripts/inspect-softdeleted.ts",
+      "size": 510,
+      "sha256": "25b805a34acaa2072fdac668d50370d20d6da452ed372c46c86caeab6f2e4ff3",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (DIAGNOSTIC TOOL) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Diagnostic script."
+      }
+    },
+    {
+      "id": "024",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\sanitize-csvs.ts",
+      "relPath": "scripts/sanitize-csvs.ts",
+      "size": 4722,
+      "sha256": "799546f31429c1ea1a4181c4d2ca8f21bf10dbc82975026c03c03e83598e7f1e",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MAINTENANCE SCRIPT) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Maintenance tool."
+      }
+    },
+    {
+      "id": "025",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-backup-system.ts",
+      "relPath": "scripts/test-backup-system.ts",
+      "size": 3347,
+      "sha256": "5347b240a38e7bcaacb52f3766bbb699787dfb992057b0c723c552dbe7a5e392",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (TEST HARNESS) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Test script."
+      }
+    },
+    {
+      "id": "026",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-mock-exam-generation.ts",
+      "relPath": "scripts/test-mock-exam-generation.ts",
+      "size": 4958,
+      "sha256": "5ce69495b2dd0fe6302fc7d9de427297207bf3ca71c1eaf319187b457d5028b6",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (TEST HARNESS) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Test script."
+      }
+    },
+    {
+      "id": "027",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-resilience.ts",
+      "relPath": "scripts/test-resilience.ts",
+      "size": 1862,
+      "sha256": "fce4efcbeb9c40167f8358a7a51ef189f3659c7410a27066cce9477b6790ed02",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (TEST HARNESS) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Test script."
+      }
+    },
+    {
+      "id": "028",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\test-sudo.ts",
+      "relPath": "scripts/test-sudo.ts",
+      "size": 933,
+      "sha256": "605c8ede5bf835a2a031130caceb1d2c88dbc14dd31e5b015aca8046069d48f2",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (TEST HARNESS) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Test script."
+      }
+    },
+    {
+      "id": "029",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\scripts\\update-schema-softdelete.js",
+      "relPath": "scripts/update-schema-softdelete.js",
+      "size": 960,
+      "sha256": "5852ec332af4c4190c61cce56b5dca5dbb9864245d1038f22738e77219686b77",
+      "group": "Group 4: Standalone Maintenance / CLI Scripts in scripts/",
+      "classification": "B — PROBABLY UNUSED IN RUNTIME (MIGRATION TOOL) — REVIEW REQUIRED",
+      "risk": "LOW",
+      "recommendation": "KEEP AS DEV TOOL (OR QUARANTINE IF REQUESTED)",
+      "approvalStatus": "PERMANENTLY_DELETED",
+      "evidence": {
+        "directImports": [
+          "None."
+        ],
+        "whatReferencesIt": "None.",
+        "whySafe": "Historical migration helper."
+      }
+    },
+    {
+      "id": "030",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\proxy.ts",
+      "relPath": "src/proxy.ts",
+      "size": 2478,
+      "sha256": "fa4f3d6631ff15dfced5bbc8d2c00f2bd9470b0ef013a01c8ffb0cec4542548b",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "D — DEFINITELY USED (CRITICAL SYSTEM PROXY)",
+      "risk": "HIGH",
+      "recommendation": "KEEP (ABSOLUTELY PROTECTED)",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Next.js Framework Router / Middleware Engine."
+        ],
+        "whatReferencesIt": "Next.js 16 Framework runtime Proxy convention.",
+        "whySafe": "CANNOT BE DELETED. Deletion would break all authentication and route access controls."
+      }
+    },
+    {
+      "id": "031",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\admin\\DatabaseStorageWidget.tsx",
+      "relPath": "src/components/admin/DatabaseStorageWidget.tsx",
+      "size": 4064,
+      "sha256": "97e61abd5ef294aeb5ab58852d63b8eb9fb47379743e3899387265793a7f6ebc",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (ADMIN DASHBOARD FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Admin dashboard modules."
+        ],
+        "whatReferencesIt": "Admin dashboard subsystems.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "032",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\analytics\\CategoryBreakdown.tsx",
+      "relPath": "src/components/analytics/CategoryBreakdown.tsx",
+      "size": 3134,
+      "sha256": "40e963ad589e45cf719e174c348777b6d783a1451d2a5fc3cb5021fe69e19143",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (ANALYTICS FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Analytics overview."
+        ],
+        "whatReferencesIt": "Analytics and Readiness modules.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "033",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\cse\\GroupErrorReview.tsx",
+      "relPath": "src/components/cse/GroupErrorReview.tsx",
+      "size": 3756,
+      "sha256": "1b0d880b9d3aebac66e20ab573f2b42c6a98d6772edbddafccc328675caf01fa",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (CSE REVIEW FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Study Together event review."
+        ],
+        "whatReferencesIt": "Drill and Study Together features.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "034",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\cse\\LiveSpeedDrill.tsx",
+      "relPath": "src/components/cse/LiveSpeedDrill.tsx",
+      "size": 9345,
+      "sha256": "468f3afd547903760b3b033c268e55eed9b2e51c46a4cdbede4e523e95ed44ba",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (CSE DRILL FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Speed drill session manager."
+        ],
+        "whatReferencesIt": "Drill modules and Social rooms.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "035",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\cse\\NotificationSystem.tsx",
+      "relPath": "src/components/cse/NotificationSystem.tsx",
+      "size": 4258,
+      "sha256": "c8f7a51672664a1abee46c026fc80dd9d262ad41a0f47d901afc1cfd9ff7aa92",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (NOTIFICATION FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Study event alerts."
+        ],
+        "whatReferencesIt": "Social and event notifications.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "036",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\cse\\PostExamDashboard.tsx",
+      "relPath": "src/components/cse/PostExamDashboard.tsx",
+      "size": 6247,
+      "sha256": "b925522232661b352bbbe7a7fd8df11cc20e24e173c06bbb0aa065847b33da61",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (STUDY TOGETHER FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Live study event workflow."
+        ],
+        "whatReferencesIt": "Study Together event mode.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "037",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\cse\\StudyTogetherModal.tsx",
+      "relPath": "src/components/cse/StudyTogetherModal.tsx",
+      "size": 8690,
+      "sha256": "1cc0b456d6a24a90e8b87d2d06a1729ff60c67ca44f6d21fdd89d8ee352731b3",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (STUDY TOGETHER FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Event creation action."
+        ],
+        "whatReferencesIt": "Study Together event creation.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "038",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\dashboard\\AnalyticsOverview.tsx",
+      "relPath": "src/components/dashboard/AnalyticsOverview.tsx",
+      "size": 5939,
+      "sha256": "96c63b9911afaf819241fe851bdb1d7357a1e6cfcf732c1114e99c9dbfca75ff",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (DASHBOARD FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Dashboard layout."
+        ],
+        "whatReferencesIt": "User dashboard module.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "039",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\dashboard\\ReviewCenter.tsx",
+      "relPath": "src/components/dashboard/ReviewCenter.tsx",
+      "size": 2702,
+      "sha256": "d2d062b54ead0d073ed0ca11a4e669afff1a538a8dbe6405190422621e641f55",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (DASHBOARD FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Dashboard home."
+        ],
+        "whatReferencesIt": "Dashboard overview module.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "040",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\exam\\CancelExamModal.tsx",
+      "relPath": "src/components/exam/CancelExamModal.tsx",
+      "size": 4361,
+      "sha256": "2cc21c62c3fdee0f54c3d43fa88231284b92c7f561aaae506e90289e9e01c8fa",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (EXAM FLOW FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Mock exam flow."
+        ],
+        "whatReferencesIt": "Exam runner components.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "041",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\components\\social\\DeleteRoomModal.tsx",
+      "relPath": "src/components/social/DeleteRoomModal.tsx",
+      "size": 2850,
+      "sha256": "3f100dbc56f5808857a5c5bfbb1860bfa0daa40265a160998efc45d17cbb6a76",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (SOCIAL ROOM FEATURE)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "StudyRoomsSection."
+        ],
+        "whatReferencesIt": "Social room management.",
+        "whySafe": "N/A - Feature component."
+      }
+    },
+    {
+      "id": "042",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\hooks\\useSubmitLock.ts",
+      "relPath": "src/hooks/useSubmitLock.ts",
+      "size": 1033,
+      "sha256": "5f36a62f66807bdb57b1af7c3d18b35008c55086d892739af44a355d8454d85b",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (SECURITY HOOK)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "UI buttons and forms."
+        ],
+        "whatReferencesIt": "Form submission handlers.",
+        "whySafe": "N/A - Reusable hook."
+      }
+    },
+    {
+      "id": "043",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\lib\\error\\apiHandler.ts",
+      "relPath": "src/lib/error/apiHandler.ts",
+      "size": 1547,
+      "sha256": "c8ed7cf117ee4b07ffdfad47215cb578b68dc2e88a01a56e77b1b5446beeaeea",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (ERROR HANDLING UTILITY)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "API endpoints."
+        ],
+        "whatReferencesIt": "API Route Handlers.",
+        "whySafe": "N/A - Core server utility."
+      }
+    },
+    {
+      "id": "044",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\middleware\\requestLogger.ts",
+      "relPath": "src/middleware/requestLogger.ts",
+      "size": 1799,
+      "sha256": "f4bb7eb745f8bb8a5a846f3f54660a1311edf4787f040a75a288df1035136712",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (LOGGING UTILITY)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Server logging."
+        ],
+        "whatReferencesIt": "Server logger pipelines.",
+        "whySafe": "N/A - Logging utility."
+      }
+    },
+    {
+      "id": "045",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\middleware\\softDeleteFilter.ts",
+      "relPath": "src/middleware/softDeleteFilter.ts",
+      "size": 490,
+      "sha256": "3ae50dffcb9db098db3beefa046e6e23741c7926921feb602036867252228251",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (DB RECOVERY UTILITY)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Soft delete queries."
+        ],
+        "whatReferencesIt": "Soft delete query helpers.",
+        "whySafe": "N/A - Data protection utility."
+      }
+    },
+    {
+      "id": "046",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\middleware\\validate.ts",
+      "relPath": "src/middleware/validate.ts",
+      "size": 1815,
+      "sha256": "306f14e2ec5367482a0f7e40dfba734f57fbbb5ae454e4a9e9f500424e0119b3",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (VALIDATION UTILITY)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "API Route Handlers."
+        ],
+        "whatReferencesIt": "API Route validation pipelines.",
+        "whySafe": "N/A - Security validation utility."
+      }
+    },
+    {
+      "id": "047",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\scripts\\migrateEncryption.ts",
+      "relPath": "src/scripts/migrateEncryption.ts",
+      "size": 2196,
+      "sha256": "661b8472471532c41057c010744ff32f0420e852c84ecd8217e3dde21450d169",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (SECURITY MIGRATION TOOL)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Security pipelines."
+        ],
+        "whatReferencesIt": "Security migration utilities.",
+        "whySafe": "N/A - Security migration asset."
+      }
+    },
+    {
+      "id": "048",
+      "exactPath": "C:\\Users\\Administrator\\cse-frontend\\src\\scripts\\test-phase6b.ts",
+      "relPath": "src/scripts/test-phase6b.ts",
+      "size": 1773,
+      "sha256": "fc8003eb56b6be6a1deb4de031519720a03f9a5c51ad14837608a5b880ab48d2",
+      "group": "Group 5: Specialized Application Components & Subsystems",
+      "classification": "C — POSSIBLE HIDDEN DEPENDENCY (SECURITY TEST TOOL)",
+      "risk": "MEDIUM",
+      "recommendation": "KEEP",
+      "approvalStatus": "PENDING",
+      "evidence": {
+        "directImports": [
+          "Security verification."
+        ],
+        "whatReferencesIt": "Security test suites.",
+        "whySafe": "N/A - Security test asset."
+      }
+    }
+  ]
+}

@@ -1,0 +1,653 @@
+{
+  "duplicatesCount": 80,
+  "duplicatesSample": [
+    {
+      "sha": "ae3c03317b4ec557e0e1c0130e5673dbdb29c7bdb783d2a37d907222305758f1",
+      "files": [
+        ".agents/skills/prisma-cli/references/db-execute.md",
+        ".claude/skills/prisma-cli/references/db-execute.md",
+        ".windsurf/skills/prisma-cli/references/db-execute.md"
+      ]
+    },
+    {
+      "sha": "157ff62bb97d34311e9aab0ddfb922df0ceadf99bf35f65f7f405119e5dbfd1d",
+      "files": [
+        ".agents/skills/prisma-cli/references/db-pull.md",
+        ".claude/skills/prisma-cli/references/db-pull.md",
+        ".windsurf/skills/prisma-cli/references/db-pull.md"
+      ]
+    },
+    {
+      "sha": "cbedb4e443c5810ef769931bcf390c5a84f484cd2d85fb62f5d09012c9fd285e",
+      "files": [
+        ".agents/skills/prisma-cli/references/db-push.md",
+        ".claude/skills/prisma-cli/references/db-push.md",
+        ".windsurf/skills/prisma-cli/references/db-push.md"
+      ]
+    },
+    {
+      "sha": "e714190edfa3ab262c6e819b65d8fcb99330131e23f1b8b64d3a5d96904b5021",
+      "files": [
+        ".agents/skills/prisma-cli/references/db-seed.md",
+        ".claude/skills/prisma-cli/references/db-seed.md",
+        ".windsurf/skills/prisma-cli/references/db-seed.md"
+      ]
+    },
+    {
+      "sha": "b56a1ef65bef75a56dd118fd547e4effb727af23830c1047987b404345f40c9d",
+      "files": [
+        ".agents/skills/prisma-cli/references/debug.md",
+        ".claude/skills/prisma-cli/references/debug.md",
+        ".windsurf/skills/prisma-cli/references/debug.md"
+      ]
+    },
+    {
+      "sha": "c572e9a226995a91ba4c91a80cfebd46251ffeeaadeead426318861997a4b733",
+      "files": [
+        ".agents/skills/prisma-cli/references/dev.md",
+        ".claude/skills/prisma-cli/references/dev.md",
+        ".windsurf/skills/prisma-cli/references/dev.md"
+      ]
+    },
+    {
+      "sha": "479f19ad1206ec711574e264a03237db47efdf069086b667f9ace179613a7cc9",
+      "files": [
+        ".agents/skills/prisma-cli/references/format.md",
+        ".claude/skills/prisma-cli/references/format.md",
+        ".windsurf/skills/prisma-cli/references/format.md"
+      ]
+    },
+    {
+      "sha": "6d8f1a0f482d9287b8c38262662c91b9e69b7fc0bdced244679fe7e73eef9f95",
+      "files": [
+        ".agents/skills/prisma-cli/references/generate.md",
+        ".claude/skills/prisma-cli/references/generate.md",
+        ".windsurf/skills/prisma-cli/references/generate.md"
+      ]
+    },
+    {
+      "sha": "ea456f7c68d5ecfac1b439166cd52046cdfebbfa38ac6ec1487a7fe0e9619d1a",
+      "files": [
+        ".agents/skills/prisma-cli/references/init.md",
+        ".claude/skills/prisma-cli/references/init.md",
+        ".windsurf/skills/prisma-cli/references/init.md"
+      ]
+    },
+    {
+      "sha": "3fd19009a8a964b7b1b1966b235bab58c95c3cd3f245eaa8f39fb48abd8a73d8",
+      "files": [
+        ".agents/skills/prisma-cli/references/mcp.md",
+        ".claude/skills/prisma-cli/references/mcp.md",
+        ".windsurf/skills/prisma-cli/references/mcp.md"
+      ]
+    },
+    {
+      "sha": "2b74ef0d72f698b928d0ca86b375aefc8d477c7517ed367d2143418e8d8c8b8b",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-deploy.md",
+        ".claude/skills/prisma-cli/references/migrate-deploy.md",
+        ".windsurf/skills/prisma-cli/references/migrate-deploy.md"
+      ]
+    },
+    {
+      "sha": "8b2a06bac6459cec2a061fd4e5f9be64ff9445cac785fb5d6f0072fe2916fddc",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-dev.md",
+        ".claude/skills/prisma-cli/references/migrate-dev.md",
+        ".windsurf/skills/prisma-cli/references/migrate-dev.md"
+      ]
+    },
+    {
+      "sha": "df75c632dba0ccdb61cd748ee215356de78497241b177766f74de8ebcdddf0de",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-diff.md",
+        ".claude/skills/prisma-cli/references/migrate-diff.md",
+        ".windsurf/skills/prisma-cli/references/migrate-diff.md"
+      ]
+    },
+    {
+      "sha": "f2b103fce8a29fbc68218f9f8285163abe3be79e6b6c7bc39dde6d6ebe1fd293",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-reset.md",
+        ".claude/skills/prisma-cli/references/migrate-reset.md",
+        ".windsurf/skills/prisma-cli/references/migrate-reset.md"
+      ]
+    },
+    {
+      "sha": "c4d2ca9d305d456a72e0cf4a7f06d65d2e777cde45b3c8eb3c03a22514092f0f",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-resolve.md",
+        ".claude/skills/prisma-cli/references/migrate-resolve.md",
+        ".windsurf/skills/prisma-cli/references/migrate-resolve.md"
+      ]
+    },
+    {
+      "sha": "b5968d4abdd500c73d543b00851726b57989cd24491990a03d919e68b5a2fa36",
+      "files": [
+        ".agents/skills/prisma-cli/references/migrate-status.md",
+        ".claude/skills/prisma-cli/references/migrate-status.md",
+        ".windsurf/skills/prisma-cli/references/migrate-status.md"
+      ]
+    },
+    {
+      "sha": "4f7e2f7b319b256f84cc7965c25c700787ebe18f2eb3343dc40af6e6cc3e0be4",
+      "files": [
+        ".agents/skills/prisma-cli/references/studio.md",
+        ".claude/skills/prisma-cli/references/studio.md",
+        ".windsurf/skills/prisma-cli/references/studio.md"
+      ]
+    },
+    {
+      "sha": "5e73d1b769520e798d2de512680c9fa6feb53782afc93e4f46222703ea120c0b",
+      "files": [
+        ".agents/skills/prisma-cli/references/validate.md",
+        ".claude/skills/prisma-cli/references/validate.md",
+        ".windsurf/skills/prisma-cli/references/validate.md"
+      ]
+    },
+    {
+      "sha": "4b5f044cd93c4ab2ea1b71bd2ad65d69f31b4fc23bd838ac2760df319c16bf92",
+      "files": [
+        ".agents/skills/prisma-cli/SKILL.md",
+        ".claude/skills/prisma-cli/SKILL.md",
+        ".windsurf/skills/prisma-cli/SKILL.md"
+      ]
+    },
+    {
+      "sha": "eb672a297cb408f8a866502a7fcfcd2bef21eccaef28b3de274bc1519e100b4a",
+      "files": [
+        ".agents/skills/prisma-client-api/references/client-methods.md",
+        ".claude/skills/prisma-client-api/references/client-methods.md",
+        ".windsurf/skills/prisma-client-api/references/client-methods.md"
+      ]
+    },
+    {
+      "sha": "20a4d623df6f910e58db76b1cb8321210582064cf7377ebfc541d27a1272f10b",
+      "files": [
+        ".agents/skills/prisma-client-api/references/constructor.md",
+        ".claude/skills/prisma-client-api/references/constructor.md",
+        ".windsurf/skills/prisma-client-api/references/constructor.md"
+      ]
+    },
+    {
+      "sha": "78c2abd5dd47810bb849e6742776b50553a7dee796b368235d1a0b7e9cc442b9",
+      "files": [
+        ".agents/skills/prisma-client-api/references/filters.md",
+        ".claude/skills/prisma-client-api/references/filters.md",
+        ".windsurf/skills/prisma-client-api/references/filters.md"
+      ]
+    },
+    {
+      "sha": "c2186b4912f292108bd94c7bd4eef1d5ca0d7ee3542c575d717e7f85a02e43e1",
+      "files": [
+        ".agents/skills/prisma-client-api/references/model-queries.md",
+        ".claude/skills/prisma-client-api/references/model-queries.md",
+        ".windsurf/skills/prisma-client-api/references/model-queries.md"
+      ]
+    },
+    {
+      "sha": "28573915f8626eed65c3bc97293406f692ee8d3fceb9c95ae0793c561a08d254",
+      "files": [
+        ".agents/skills/prisma-client-api/references/query-options.md",
+        ".claude/skills/prisma-client-api/references/query-options.md",
+        ".windsurf/skills/prisma-client-api/references/query-options.md"
+      ]
+    },
+    {
+      "sha": "0244eb0e0e6f4f736e571574397c3ffc5f0ce1b3d6ef74497dbbe7a6b8d10a55",
+      "files": [
+        ".agents/skills/prisma-client-api/references/raw-queries.md",
+        ".claude/skills/prisma-client-api/references/raw-queries.md",
+        ".windsurf/skills/prisma-client-api/references/raw-queries.md"
+      ]
+    },
+    {
+      "sha": "efe4c5528b1a5ac6d77ba099edcd23d034b7f3f90c88ed6a0461ab24ef93f406",
+      "files": [
+        ".agents/skills/prisma-client-api/references/relations.md",
+        ".claude/skills/prisma-client-api/references/relations.md",
+        ".windsurf/skills/prisma-client-api/references/relations.md"
+      ]
+    },
+    {
+      "sha": "e636d2438ec81a0976f0756c0a68929f7fd152fc31a623b4993bd83f1a3757d3",
+      "files": [
+        ".agents/skills/prisma-client-api/references/transactions.md",
+        ".claude/skills/prisma-client-api/references/transactions.md",
+        ".windsurf/skills/prisma-client-api/references/transactions.md"
+      ]
+    },
+    {
+      "sha": "16c4d9267557708be05f258973f6c60a92f92f05a93c1cac3c343afa3afe2500",
+      "files": [
+        ".agents/skills/prisma-client-api/SKILL.md",
+        ".claude/skills/prisma-client-api/SKILL.md",
+        ".windsurf/skills/prisma-client-api/SKILL.md"
+      ]
+    },
+    {
+      "sha": "fc7f2b06e18cca0116dcaac0950eb7df52555e7a6eafb4b66258f491b3ac8a47",
+      "files": [
+        ".agents/skills/prisma-compute/references/app-deploy-cli.md",
+        ".claude/skills/prisma-compute/references/app-deploy-cli.md",
+        ".windsurf/skills/prisma-compute/references/app-deploy-cli.md"
+      ]
+    },
+    {
+      "sha": "482bb7c0dcea2cab9d01952312d261c49ed01f5182d6f7f1b09138af7a6290e5",
+      "files": [
+        ".agents/skills/prisma-compute/references/compute-config.md",
+        ".claude/skills/prisma-compute/references/compute-config.md",
+        ".windsurf/skills/prisma-compute/references/compute-config.md"
+      ]
+    },
+    {
+      "sha": "5d72b41ee00e4daf7780153e27207156aad33b758f968d45ca4c1323cde5d79f",
+      "files": [
+        ".agents/skills/prisma-compute/references/create-prisma.md",
+        ".claude/skills/prisma-compute/references/create-prisma.md",
+        ".windsurf/skills/prisma-compute/references/create-prisma.md"
+      ]
+    },
+    {
+      "sha": "87cc0e6c28cca991beb21fa4cf20d5a39f22f4034ee35d215556f37c2b75fecc",
+      "files": [
+        ".agents/skills/prisma-compute/references/frameworks.md",
+        ".claude/skills/prisma-compute/references/frameworks.md",
+        ".windsurf/skills/prisma-compute/references/frameworks.md"
+      ]
+    },
+    {
+      "sha": "7c69cac21c356aa7eb382d073eb420d0b1bedda1f95ef681669a1d8467af47f9",
+      "files": [
+        ".agents/skills/prisma-compute/references/sdk-api.md",
+        ".claude/skills/prisma-compute/references/sdk-api.md",
+        ".windsurf/skills/prisma-compute/references/sdk-api.md"
+      ]
+    },
+    {
+      "sha": "42e0061ee32d973a3b122c2d2a18d40f2afbc6e5d33b0134d2de35f01d19b4c2",
+      "files": [
+        ".agents/skills/prisma-compute/references/troubleshooting.md",
+        ".claude/skills/prisma-compute/references/troubleshooting.md",
+        ".windsurf/skills/prisma-compute/references/troubleshooting.md"
+      ]
+    },
+    {
+      "sha": "bc176c6264249e27181b8e8e71ff0c6a7c8a90e34ec40aae7e41dbba7f8ddb7d",
+      "files": [
+        ".agents/skills/prisma-compute/SKILL.md",
+        ".claude/skills/prisma-compute/SKILL.md",
+        ".windsurf/skills/prisma-compute/SKILL.md"
+      ]
+    },
+    {
+      "sha": "dd64733be36b2315fad55bd56888ff7a4857da7958ffae8a6398a1449f769aa6",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/cockroachdb.md",
+        ".claude/skills/prisma-database-setup/references/cockroachdb.md",
+        ".windsurf/skills/prisma-database-setup/references/cockroachdb.md"
+      ]
+    },
+    {
+      "sha": "7738ff0d4eaf1c1c772664e7a91ee3138318d812f79a8174b6f544b03264fe3e",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/mongodb.md",
+        ".claude/skills/prisma-database-setup/references/mongodb.md",
+        ".windsurf/skills/prisma-database-setup/references/mongodb.md"
+      ]
+    },
+    {
+      "sha": "ab21a4c983dba712593df4c7432f70097ee5ce49996c326c3ea75e4ba322904b",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/mysql.md",
+        ".claude/skills/prisma-database-setup/references/mysql.md",
+        ".windsurf/skills/prisma-database-setup/references/mysql.md"
+      ]
+    },
+    {
+      "sha": "9301d865fdff9931de5884034d3c15e8292588b98659eebf15d797444c1598b1",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/postgresql.md",
+        ".claude/skills/prisma-database-setup/references/postgresql.md",
+        ".windsurf/skills/prisma-database-setup/references/postgresql.md"
+      ]
+    },
+    {
+      "sha": "263d571642baf16d4f6b52e10f1c94ace7a5994713b1c61dea7afee55127cdb1",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/prisma-client-setup.md",
+        ".claude/skills/prisma-database-setup/references/prisma-client-setup.md",
+        ".windsurf/skills/prisma-database-setup/references/prisma-client-setup.md"
+      ]
+    },
+    {
+      "sha": "a81c1475ac7d5ac83e3cdf597c5ee9dba6aa4ae6aff888bb63f77c030e4603da",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/prisma-postgres.md",
+        ".claude/skills/prisma-database-setup/references/prisma-postgres.md",
+        ".windsurf/skills/prisma-database-setup/references/prisma-postgres.md"
+      ]
+    },
+    {
+      "sha": "db77a4ecdc511004a6f2d2cfd6e90e3220e55e43037eb00d304f41aa5de1b9ec",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/sqlite.md",
+        ".claude/skills/prisma-database-setup/references/sqlite.md",
+        ".windsurf/skills/prisma-database-setup/references/sqlite.md"
+      ]
+    },
+    {
+      "sha": "cb594e95981336dbd13fd265ac03298aa35a25bf3a051856294fd74046c21333",
+      "files": [
+        ".agents/skills/prisma-database-setup/references/sqlserver.md",
+        ".claude/skills/prisma-database-setup/references/sqlserver.md",
+        ".windsurf/skills/prisma-database-setup/references/sqlserver.md"
+      ]
+    },
+    {
+      "sha": "b0e9ee3e9da18c272a2a8e5c34630309548a49abd06875a84e574ae441826724",
+      "files": [
+        ".agents/skills/prisma-database-setup/SKILL.md",
+        ".claude/skills/prisma-database-setup/SKILL.md",
+        ".windsurf/skills/prisma-database-setup/SKILL.md"
+      ]
+    },
+    {
+      "sha": "e6be4176c4ddc3b2283c123e39ba743b404314237a91300f8c6f658254522db9",
+      "files": [
+        ".agents/skills/prisma-driver-adapter-implementation/SKILL.md",
+        ".claude/skills/prisma-driver-adapter-implementation/SKILL.md",
+        ".windsurf/skills/prisma-driver-adapter-implementation/SKILL.md"
+      ]
+    },
+    {
+      "sha": "9d23b44619762b8d904ee25df68ce08514b3b6aa6d60812184f90879594c69a0",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/references/client-api-mapping.md",
+        ".claude/skills/prisma-mongodb-upgrade/references/client-api-mapping.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/references/client-api-mapping.md"
+      ]
+    },
+    {
+      "sha": "cb6f3b4f6b2e4cd52319bc35516bd05cce99118a52822f20ccaa0bbda20ad406",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md",
+        ".claude/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/references/decision-stay-or-migrate.md"
+      ]
+    },
+    {
+      "sha": "bfcc750fc5880f220278ddfa4f30fe0115488679b81e314d577903627e392628",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/references/migrations-mapping.md",
+        ".claude/skills/prisma-mongodb-upgrade/references/migrations-mapping.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/references/migrations-mapping.md"
+      ]
+    },
+    {
+      "sha": "e6ad7a592954a48eb48b1c639cc3aabd51052d7d8ae4dc6c83620a337c5bc93b",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md",
+        ".claude/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/references/schema-contract-mapping.md"
+      ]
+    },
+    {
+      "sha": "9fe1d7550b3f9cd2fd3d6e4aecf34bd107238ced5097a454102a0b3d7b4d784e",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md",
+        ".claude/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/references/verify-cutover-checklist.md"
+      ]
+    },
+    {
+      "sha": "99933ca306b554f27432a35dc5e27ee81322bb148bbc90127c3a54e7f84e6c24",
+      "files": [
+        ".agents/skills/prisma-mongodb-upgrade/SKILL.md",
+        ".claude/skills/prisma-mongodb-upgrade/SKILL.md",
+        ".windsurf/skills/prisma-mongodb-upgrade/SKILL.md"
+      ]
+    },
+    {
+      "sha": "1fe4f545f58f443b07aa60af6c7075e1b834762466948f0bf4eca80595a83fe6",
+      "files": [
+        ".agents/skills/prisma-postgres/references/console-and-connections.md",
+        ".claude/skills/prisma-postgres/references/console-and-connections.md",
+        ".windsurf/skills/prisma-postgres/references/console-and-connections.md"
+      ]
+    },
+    {
+      "sha": "ae4a5a3344d455666878f2eb8b34719096cf3e791a0b40066416fd03f42d5e9c",
+      "files": [
+        ".agents/skills/prisma-postgres/references/create-db-cli.md",
+        ".claude/skills/prisma-postgres/references/create-db-cli.md",
+        ".windsurf/skills/prisma-postgres/references/create-db-cli.md"
+      ]
+    },
+    {
+      "sha": "84ecf5f15c1c2ae1b3c46b9590c2a591f55c219839b72c74893f685c7bd75add",
+      "files": [
+        ".agents/skills/prisma-postgres/references/management-api-sdk.md",
+        ".claude/skills/prisma-postgres/references/management-api-sdk.md",
+        ".windsurf/skills/prisma-postgres/references/management-api-sdk.md"
+      ]
+    },
+    {
+      "sha": "f51178bbd66a981a7dc9b3e942ec8afbe33a335ba4f2d87e46e710b70c0d667c",
+      "files": [
+        ".agents/skills/prisma-postgres/references/management-api.md",
+        ".claude/skills/prisma-postgres/references/management-api.md",
+        ".windsurf/skills/prisma-postgres/references/management-api.md"
+      ]
+    },
+    {
+      "sha": "bc0019401894b4fd76a7a8deeb427116c9a9c54f1a2fd9c82f7ba77b162860e2",
+      "files": [
+        ".agents/skills/prisma-postgres/SKILL.md",
+        ".claude/skills/prisma-postgres/SKILL.md",
+        ".windsurf/skills/prisma-postgres/SKILL.md"
+      ]
+    },
+    {
+      "sha": "903bce6890a55b0dcd9cec1fe5d37f525c16f13f101978427d81f2c946798d12",
+      "files": [
+        ".agents/skills/prisma-postgres-setup/references/api-basics.md",
+        ".claude/skills/prisma-postgres-setup/references/api-basics.md",
+        ".windsurf/skills/prisma-postgres-setup/references/api-basics.md"
+      ]
+    },
+    {
+      "sha": "30329d4ec0edc37346d84c9b801243ea8ca87fe4fa51ca3d8281c6da3383a39f",
+      "files": [
+        ".agents/skills/prisma-postgres-setup/references/auth.md",
+        ".claude/skills/prisma-postgres-setup/references/auth.md",
+        ".windsurf/skills/prisma-postgres-setup/references/auth.md"
+      ]
+    },
+    {
+      "sha": "7cdc36dedf50d6c54a3ed81b622c2e1a5c2a3e180554dbd120d53454d102aab9",
+      "files": [
+        ".agents/skills/prisma-postgres-setup/references/endpoints.md",
+        ".claude/skills/prisma-postgres-setup/references/endpoints.md",
+        ".windsurf/skills/prisma-postgres-setup/references/endpoints.md"
+      ]
+    },
+    {
+      "sha": "141a15876a2741e2b8bf6411e2f16a845f1d2ab8648a3581092a05599aebf7c0",
+      "files": [
+        ".agents/skills/prisma-postgres-setup/references/prisma7-client.md",
+        ".claude/skills/prisma-postgres-setup/references/prisma7-client.md",
+        ".windsurf/skills/prisma-postgres-setup/references/prisma7-client.md"
+      ]
+    },
+    {
+      "sha": "ea4f662fd76526fa3c07c5fc141dee76a79ac72038c0a069d3ea88caac4b4fd8",
+      "files": [
+        ".agents/skills/prisma-postgres-setup/SKILL.md",
+        ".claude/skills/prisma-postgres-setup/SKILL.md",
+        ".windsurf/skills/prisma-postgres-setup/SKILL.md"
+      ]
+    },
+    {
+      "sha": "8c984f09c5b69c1286b0445db9be8cacc8281b234f3a4fd02a8769bd67d5298f",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/accelerate-users.md",
+        ".claude/skills/prisma-upgrade-v7/references/accelerate-users.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/accelerate-users.md"
+      ]
+    },
+    {
+      "sha": "4dccea1e1f6195fe1168ee8ff338553419050b4fc7596f76e6390aa47666a737",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/driver-adapters.md",
+        ".claude/skills/prisma-upgrade-v7/references/driver-adapters.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/driver-adapters.md"
+      ]
+    },
+    {
+      "sha": "413d564c9067a7f026a7c4989e604c7c5eec7e664528ce93deeb9b589d775f1a",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/env-variables.md",
+        ".claude/skills/prisma-upgrade-v7/references/env-variables.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/env-variables.md"
+      ]
+    },
+    {
+      "sha": "e516430e7262076fda0b66b061f54a602ce621564edd2360d33dbbe07b98c57b",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/esm-support.md",
+        ".claude/skills/prisma-upgrade-v7/references/esm-support.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/esm-support.md"
+      ]
+    },
+    {
+      "sha": "aff4eb55e4d3f51531379d531e154904477d7cc16c3c31d705e91ed54871e8a5",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/prisma-config.md",
+        ".claude/skills/prisma-upgrade-v7/references/prisma-config.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/prisma-config.md"
+      ]
+    },
+    {
+      "sha": "f28ee12d7a626024c6e538c7c58f68d66d1b7b8e5f79ce09f13e22d6c2e15c37",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/removed-features.md",
+        ".claude/skills/prisma-upgrade-v7/references/removed-features.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/removed-features.md"
+      ]
+    },
+    {
+      "sha": "85206f1581cc61c4af966fe57ebddf7f7a451e8fbbdb73689d388d41cf1ea35f",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/references/schema-changes.md",
+        ".claude/skills/prisma-upgrade-v7/references/schema-changes.md",
+        ".windsurf/skills/prisma-upgrade-v7/references/schema-changes.md"
+      ]
+    },
+    {
+      "sha": "d353cb03faf74750a89f225b58eac0f70cea238621641973c5f4a3ce9acedc43",
+      "files": [
+        ".agents/skills/prisma-upgrade-v7/SKILL.md",
+        ".claude/skills/prisma-upgrade-v7/SKILL.md",
+        ".windsurf/skills/prisma-upgrade-v7/SKILL.md"
+      ]
+    },
+    {
+      "sha": "903d12341a150d6a5a0f5868fef984d15033d0246e6d51b372c940da247d9e5b",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-680Z_batch_999/exclusions/SYNTHETIC-TEST-SCOPE-A.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-708Z_model_limit_pause/exclusions/SYNTHETIC-TEST-SCOPE-A.json"
+      ]
+    },
+    {
+      "sha": "1cc08effd4998cee7d74150396f8f17637e527041f59485a5310aa352f69ba87",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-680Z_batch_999/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-708Z_model_limit_pause/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json"
+      ]
+    },
+    {
+      "sha": "589fd8674c21975bb493899e30159f126fa56b9719050f960f9f552772e7a466",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-680Z_batch_999/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-27-708Z_model_limit_pause/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-715Z_batch_999/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-744Z_model_limit_pause/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-264Z_batch_999/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-290Z_model_limit_pause/generation_profile.json"
+      ]
+    },
+    {
+      "sha": "a86121c9e618617d9575ab21850e400ac28149d64d641cee671293900037b134",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-715Z_batch_999/exclusions/SYNTHETIC-TEST-SCOPE-A.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-744Z_model_limit_pause/exclusions/SYNTHETIC-TEST-SCOPE-A.json"
+      ]
+    },
+    {
+      "sha": "f528b3c70ecf21c1e6988cd0390bd1f4e7fdeabe54922cecb40b290a3256104f",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-715Z_batch_999/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-41-57-744Z_model_limit_pause/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json"
+      ]
+    },
+    {
+      "sha": "f3da4a3c7c73a5d9beef57e8237ca28629aff26418de6889c766db553c469163",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-264Z_batch_999/exclusions/SYNTHETIC-TEST-SCOPE-A.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-290Z_model_limit_pause/exclusions/SYNTHETIC-TEST-SCOPE-A.json"
+      ]
+    },
+    {
+      "sha": "d63b33b6e96bfe18845ece4d30c042eab8914165ef713c0cdbf9744298a3f2e0",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-264Z_batch_999/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-42-06-290Z_model_limit_pause/exclusions/SYNTHETIC_VERBAL-SYNTHETIC_READING-SYNTHETIC_CAUSE-SYNTHETIC_EFFECT.json"
+      ]
+    },
+    {
+      "sha": "dbdc72727c1189a66f715e460ab9cd518190b83aa4890af7fe9a93f19fbf7870",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-43-47-944Z_batch_1/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-44-40-990Z_batch_2/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-45-33-046Z_batch_3/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.json",
+        "cse-question-generator/state/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Cause_and_Effect.json"
+      ]
+    },
+    {
+      "sha": "1d5e267ac76d50e4a63e3843d454a90e96d147c98908720d3f8dddc37c097b8b",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-43-47-944Z_batch_1/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-44-40-990Z_batch_2/generation_profile.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-45-33-046Z_batch_3/generation_profile.json",
+        "cse-question-generator/state/generation_profile.json"
+      ]
+    },
+    {
+      "sha": "df5e6ee2ba663c0dd64fc13d9c13629eb60cc203883f49caa27b43988082c714",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-44-40-990Z_batch_2/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Comparison.json",
+        "cse-question-generator/backups/backup_2026-08-14T14-45-33-046Z_batch_3/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Comparison.json",
+        "cse-question-generator/state/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Comparison.json"
+      ]
+    },
+    {
+      "sha": "c3949843603f5b4357722d4c302d8024d07d398958609921bf5e38061f3ad023",
+      "files": [
+        "cse-question-generator/backups/backup_2026-08-14T14-45-33-046Z_batch_3/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Sequence.json",
+        "cse-question-generator/state/exclusions/Verbal_Ability-Reading_Comprehension-Core_Reading_Skills-Sequence.json"
+      ]
+    }
+  ],
+  "unusedDependenciesInPackageJson": [
+    {
+      "dep": "livekit-client",
+      "type": "dependencies"
+    },
+    {
+      "dep": "react-dom",
+      "type": "dependencies"
+    }
+  ]
+}
