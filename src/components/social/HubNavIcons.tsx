@@ -93,9 +93,9 @@ export const HubNavIcons: React.FC<HubNavIconsProps> = ({
 
   return (
     <div className="w-full">
-      {/* MOBILE COMPACT ICON BAR (< md) */}
-      <div className="block md:hidden bg-slate-100/90 border border-slate-200/90 p-1.5 rounded-2xl shadow-sm">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5 px-0.5">
+      {/* MOBILE & TABLET COMPACT 7-COLUMN GRID (< lg) */}
+      <div className="block lg:hidden bg-slate-100/90 border border-slate-200/90 p-1 sm:p-1.5 rounded-2xl shadow-xs">
+        <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -103,19 +103,23 @@ export const HubNavIcons: React.FC<HubNavIconsProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => onSelectTab(tab.id)}
-                className={`relative shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`relative flex flex-col items-center justify-center py-2 px-0.5 sm:py-2.5 sm:px-1 rounded-xl transition-all cursor-pointer select-none ${
                   isActive
                     ? "bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-black scale-[1.02]"
                     : "bg-white/80 hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/60"
                 }`}
                 title={tab.label}
               >
-                <span className="text-sm">{tab.icon}</span>
-                <span className="text-[11px] whitespace-nowrap">{tab.shortLabel}</span>
+                <span className="text-base sm:text-lg leading-none">{tab.icon}</span>
+                <span className="text-[8.5px] sm:text-xs font-bold text-center truncate max-w-full leading-tight mt-1 tracking-tight">
+                  {tab.shortLabel}
+                </span>
                 {tab.badgeCount > 0 && (
                   <span
-                    className={`ml-0.5 px-1.5 py-0.2 text-[9px] font-black rounded-full leading-tight shrink-0 shadow-xs ${
-                      isActive ? "bg-white text-blue-700 font-extrabold" : tab.badgeBg
+                    className={`absolute -top-1 -right-1 px-1 py-0.2 min-w-[15px] sm:min-w-[18px] text-[8px] sm:text-[9px] font-black rounded-full leading-tight text-center shadow-xs ${
+                      isActive
+                        ? "bg-white text-blue-700 font-extrabold border border-blue-600/20"
+                        : tab.badgeBg
                     }`}
                   >
                     {tab.badgeCount > 99 ? "99+" : tab.badgeCount}
@@ -127,8 +131,8 @@ export const HubNavIcons: React.FC<HubNavIconsProps> = ({
         </div>
       </div>
 
-      {/* DESKTOP SLEEK PILL NAVIGATION (md+) */}
-      <div className="hidden md:flex items-center gap-1.5 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80 shadow-xs">
+      {/* DESKTOP SLEEK PILL NAVIGATION (lg+) */}
+      <div className="hidden lg:flex items-center gap-1.5 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80 shadow-xs">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -136,7 +140,7 @@ export const HubNavIcons: React.FC<HubNavIconsProps> = ({
               key={tab.id}
               type="button"
               onClick={() => onSelectTab(tab.id)}
-              className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`relative flex-1 flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isActive
                   ? "bg-white text-blue-600 shadow-sm border border-slate-200/80 font-black"
                   : "text-slate-600 hover:text-slate-900 hover:bg-white/60 border border-transparent"
