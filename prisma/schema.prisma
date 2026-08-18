@@ -51,39 +51,39 @@ enum ClubMemberRole {
 }
 
 model User {
-  id                       String        @id @default(cuid())
-  name                     String?
-  email                    String        @unique
-  password                 String
-  role                     Role          @default(USER)
-  isPaid                   Boolean       @default(false)
-  paidUntil                DateTime?
-  planType                 String?
+  id        String    @id @default(cuid())
+  name      String?
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  isPaid    Boolean   @default(false)
+  paidUntil DateTime?
+  planType  String?
 
-  isBanned                 Boolean       @default(false)
+  isBanned                 Boolean   @default(false)
   banReason                String?
-  isEmailVerified          Boolean       @default(false)
-  emailVerificationToken   String?       @unique
+  isEmailVerified          Boolean   @default(false)
+  emailVerificationToken   String?   @unique
   emailVerificationExpires DateTime?
-  passwordResetToken       String?       @unique
+  passwordResetToken       String?   @unique
   passwordResetExpires     DateTime?
   activeSessionId          String?
   lastActiveAt             DateTime?
 
-  createdAt                DateTime      @default(now())
-  updatedAt                DateTime      @updatedAt
-  deletedAt                DateTime?
-  deletedBy                String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  deletedBy String?
 
-  results                  ExamResult[]
-  streak                   UserStreak?
-  bookmarks                Bookmark[]
-  examDraft                ExamDraft?
-  transactions             Transaction[]
-  mistakes                 UserMistake[]
-  dailyQuestionAttempts    DailyQuestionAttempt[]
-  questionFlags            QuestionFlag[]
-  badges                   UserBadge[]
+  results               ExamResult[]
+  streak                UserStreak?
+  bookmarks             Bookmark[]
+  examDraft             ExamDraft?
+  transactions          Transaction[]
+  mistakes              UserMistake[]
+  dailyQuestionAttempts DailyQuestionAttempt[]
+  questionFlags         QuestionFlag[]
+  badges                UserBadge[]
 
   // Classmate Relations
   sentClassmateRequests     ClassmateRelation[] @relation("SentClassmateRequests")
@@ -94,18 +94,18 @@ model User {
   sentDirectMessages        DirectMessage[]
 
   // Study Room Relations
-  hostedRooms               StudyRoom[]            @relation("HostedStudyRooms")
-  roomParticipants          StudyRoomParticipant[]
-  roomMessages              StudyRoomMessage[]
+  hostedRooms      StudyRoom[]            @relation("HostedStudyRooms")
+  roomParticipants StudyRoomParticipant[]
+  roomMessages     StudyRoomMessage[]
 
   // Study Event & Club Relations
-  hostedEvents              StudyEvent[]           @relation("HostedEvents")
-  eventRSVPs                StudyEventRSVP[]
-  ownedClubs                StudyClub[]            @relation("OwnedClubs")
-  clubMemberships           StudyClubMember[]
+  hostedEvents    StudyEvent[]      @relation("HostedEvents")
+  eventRSVPs      StudyEventRSVP[]
+  ownedClubs      StudyClub[]       @relation("OwnedClubs")
+  clubMemberships StudyClubMember[]
 
   // Study Together Profile (Separate from main authentication/account)
-  studyProfile              StudyTogetherProfile?
+  studyProfile StudyTogetherProfile?
 
   @@index([email])
   @@index([role])
@@ -113,66 +113,66 @@ model User {
 }
 
 model StudyTogetherProfile {
-  id               String    @id @default(cuid())
-  userId           String    @unique
+  id               String   @id @default(cuid())
+  userId           String   @unique
   displayName      String
   avatar           String?
   ageRange         String?
   gender           String?
-  bio              String?   @db.VarChar(160)
+  bio              String?  @db.VarChar(160)
   studyGoal        String?
-  studyInterests   String[]  @default([])
+  studyInterests   String[] @default([])
   experienceLevel  String?
-  studyPreferences String[]  @default([])
-  availability     String[]  @default([])
-  language         String?   @default("English")
-  profileCompleted Boolean   @default(false)
+  studyPreferences String[] @default([])
+  availability     String[] @default([])
+  language         String?  @default("English")
+  profileCompleted Boolean  @default(false)
 
   // Privacy & Visibility Controls (User controls what other study partners can see)
-  showAgeRange     Boolean   @default(false)
-  showGender       Boolean   @default(false)
-  showBio          Boolean   @default(true)
-  showStudyGoal    Boolean   @default(true)
-  showInterests    Boolean   @default(true)
-  showPreferences  Boolean   @default(true)
-  showAvailability Boolean   @default(true)
-  showActivity     Boolean   @default(true)
+  showAgeRange     Boolean @default(false)
+  showGender       Boolean @default(false)
+  showBio          Boolean @default(true)
+  showStudyGoal    Boolean @default(true)
+  showInterests    Boolean @default(true)
+  showPreferences  Boolean @default(true)
+  showAvailability Boolean @default(true)
+  showActivity     Boolean @default(true)
 
   // Presence & Study Availability
-  presenceStatus   String?   @default("ONLINE") // "ONLINE" | "AWAY" | "BUSY" | "OFFLINE"
-  customStatusText String?   @db.VarChar(60)     // e.g. "Reviewing Math", "Open for Duels"
-  customStatusEmoji String?  @db.VarChar(10)     // e.g. "📖", "☕", "🎯"
+  presenceStatus    String? @default("ONLINE") // "ONLINE" | "AWAY" | "BUSY" | "OFFLINE"
+  customStatusText  String? @db.VarChar(60) // e.g. "Reviewing Math", "Open for Duels"
+  customStatusEmoji String? @db.VarChar(10) // e.g. "📖", "☕", "🎯"
 
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([profileCompleted])
 }
 
 model ClassmateRelation {
-  id          String          @id @default(cuid())
-  senderId    String
-  receiverId  String
-  status      ClassmateStatus @default(PENDING)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id         String          @id @default(cuid())
+  senderId   String
+  receiverId String
+  status     ClassmateStatus @default(PENDING)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
 
-  sender      User            @relation("SentClassmateRequests", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver    User            @relation("ReceivedClassmateRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender   User @relation("SentClassmateRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("ReceivedClassmateRequests", fields: [receiverId], references: [id], onDelete: Cascade)
 
   @@unique([senderId, receiverId])
-  @@index([senderId])
-  @@index([receiverId])
+  @@index([senderId, status])
+  @@index([receiverId, status])
   @@index([status])
 }
 
 model Conversation {
-  id           String                     @id @default(cuid())
-  createdAt    DateTime                   @default(now())
-  updatedAt    DateTime                   @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   participants DirectMessageParticipant[]
   messages     DirectMessage[]
@@ -181,68 +181,69 @@ model Conversation {
 }
 
 model DirectMessageParticipant {
-  id             String       @id @default(cuid())
+  id             String   @id @default(cuid())
   conversationId String
   userId         String
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime @default(now())
 
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([conversationId, userId])
   @@index([userId])
-  @@index([conversationId])
 }
 
 model DirectMessage {
-  id             String         @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
   senderId       String
-  content        String         @db.Text
-  state          MessageState   @default(SENT)
+  content        String       @db.Text
+  state          MessageState @default(SENT)
   replyToId      String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User           @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  replyTo        DirectMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
-  replies        DirectMessage[] @relation("MessageReplies")
+  conversation Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User            @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  replyTo      DirectMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies      DirectMessage[] @relation("MessageReplies")
 
-  @@index([conversationId])
+  @@index([conversationId, createdAt(sort: Asc)])
+  @@index([conversationId, state])
   @@index([senderId])
   @@index([createdAt])
+  @@index([replyToId])
 }
 
 model StudyRoom {
-  id                     String                 @id @default(cuid())
+  id                     String    @id @default(cuid())
   name                   String
-  description            String?                @db.Text
-  topic                  String                 @default("General Review")
-  isPublic               Boolean                @default(true)
-  maxParticipants        Int                    @default(10)
-  inviteCode             String                 @unique
+  description            String?   @db.Text
+  topic                  String    @default("General Review")
+  isPublic               Boolean   @default(true)
+  maxParticipants        Int       @default(10)
+  inviteCode             String    @unique
   scheduledFor           DateTime?
-  state                  RoomState              @default(ACTIVE)
+  state                  RoomState @default(ACTIVE)
   hostId                 String
   // Room Permissions & Policy Controls
-  allowMemberWhiteboard  Boolean                @default(true)
-  allowMemberScreenShare Boolean                @default(true)
-  allowMemberChat        Boolean                @default(true)
-  isLocked               Boolean                @default(false)
+  allowMemberWhiteboard  Boolean   @default(true)
+  allowMemberScreenShare Boolean   @default(true)
+  allowMemberChat        Boolean   @default(true)
+  isLocked               Boolean   @default(false)
   // Active Study Topic (Question Bank or Host Uploaded Image)
-  activeTopicType        String?                // "QUESTION" | "IMAGE" | null
+  activeTopicType        String? // "QUESTION" | "IMAGE" | null
   activeQuestionId       String?
-  activeTopicImage       String?                @db.Text
+  activeTopicImage       String?   @db.Text
   activeTopicMeta        Json?
 
-  createdAt              DateTime               @default(now())
-  updatedAt              DateTime               @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  host                   User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
-  activeQuestion         Question?              @relation(fields: [activeQuestionId], references: [id], onDelete: SetNull)
-  participants           StudyRoomParticipant[]
-  messages               StudyRoomMessage[]
+  host           User                   @relation("HostedStudyRooms", fields: [hostId], references: [id], onDelete: Cascade)
+  activeQuestion Question?              @relation(fields: [activeQuestionId], references: [id], onDelete: SetNull)
+  participants   StudyRoomParticipant[]
+  messages       StudyRoomMessage[]
 
   @@index([hostId])
   @@index([state])
@@ -252,54 +253,53 @@ model StudyRoom {
 }
 
 model StudyRoomParticipant {
-  id        String              @id @default(cuid())
-  roomId    String
-  userId    String
-  role      RoomParticipantRole @default(MEMBER)
-  isMuted   Boolean             @default(false)
-  canDraw   Boolean             @default(true)
-  canShare  Boolean             @default(true)
-  joinedAt  DateTime            @default(now())
+  id       String              @id @default(cuid())
+  roomId   String
+  userId   String
+  role     RoomParticipantRole @default(MEMBER)
+  isMuted  Boolean             @default(false)
+  canDraw  Boolean             @default(true)
+  canShare Boolean             @default(true)
+  joinedAt DateTime            @default(now())
 
-  room      StudyRoom           @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room StudyRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([roomId, userId])
-  @@index([roomId])
   @@index([userId])
 }
 
 model StudyRoomMessage {
-  id        String    @id @default(cuid())
+  id        String   @id @default(cuid())
   roomId    String
   senderId  String
-  content   String    @db.Text
-  isPinned  Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  content   String   @db.Text
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  room      StudyRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  sender    User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  room   StudyRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
 
-  @@index([roomId])
+  @@index([roomId, createdAt(sort: Asc)])
   @@index([senderId])
   @@index([createdAt])
 }
 
 model StudyEvent {
-  id          String           @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
-  description String?          @db.Text
-  topic       String           @default("General Review")
+  description String?  @db.Text
+  topic       String   @default("General Review")
   scheduledAt DateTime
-  durationMin Int              @default(60)
-  isPublic    Boolean          @default(true)
+  durationMin Int      @default(60)
+  isPublic    Boolean  @default(true)
   hostId      String
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  host        User             @relation("HostedEvents", fields: [hostId], references: [id], onDelete: Cascade)
-  rsvps       StudyEventRSVP[]
+  host  User             @relation("HostedEvents", fields: [hostId], references: [id], onDelete: Cascade)
+  rsvps StudyEventRSVP[]
 
   @@index([hostId])
   @@index([scheduledAt])
@@ -314,26 +314,25 @@ model StudyEventRSVP {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
 
-  event     StudyEvent      @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event StudyEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, userId])
-  @@index([eventId])
   @@index([userId])
 }
 
 model StudyClub {
-  id          String            @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  description String?           @db.Text
-  category    String            @default("General Study")
-  isPublic    Boolean           @default(true)
+  description String?  @db.Text
+  category    String   @default("General Study")
+  isPublic    Boolean  @default(true)
   ownerId     String
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  owner       User              @relation("OwnedClubs", fields: [ownerId], references: [id], onDelete: Cascade)
-  members     StudyClubMember[]
+  owner   User              @relation("OwnedClubs", fields: [ownerId], references: [id], onDelete: Cascade)
+  members StudyClubMember[]
 
   @@index([ownerId])
   @@index([category])
@@ -341,40 +340,38 @@ model StudyClub {
 }
 
 model StudyClubMember {
-  id        String         @id @default(cuid())
-  clubId    String
-  userId    String
-  role      ClubMemberRole @default(MEMBER)
-  joinedAt  DateTime       @default(now())
+  id       String         @id @default(cuid())
+  clubId   String
+  userId   String
+  role     ClubMemberRole @default(MEMBER)
+  joinedAt DateTime       @default(now())
 
-  club      StudyClub      @relation(fields: [clubId], references: [id], onDelete: Cascade)
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  club StudyClub @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([clubId, userId])
-  @@index([clubId])
   @@index([userId])
 }
 
 model ExamResult {
-  id                 String               @id @default(cuid())
-  userId             String
-  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  score              Float
-  totalItems         Int
-  correct            Int
-  incorrect          Int
-  skipped            Int
+  id         String @id @default(cuid())
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score      Float
+  totalItems Int
+  correct    Int
+  incorrect  Int
+  skipped    Int
 
-  timeSpentSec       Int                  @default(0)
-  examType           String               @default("FULL_MOCK")
-  passed             Boolean              @default(false)
+  timeSpentSec Int     @default(0)
+  examType     String  @default("FULL_MOCK")
+  passed       Boolean @default(false)
 
-  detailsJson        String?              @db.Text
-  createdAt          DateTime             @default(now())
+  detailsJson String?  @db.Text
+  createdAt   DateTime @default(now())
 
   categoryBreakdowns ExamCategoryResult[]
 
-  @@index([userId])
   @@index([userId, createdAt(sort: Desc)])
   @@index([createdAt])
   @@index([examType])
@@ -386,46 +383,45 @@ model ExamCategoryResult {
   examResult   ExamResult @relation(fields: [examResultId], references: [id], onDelete: Cascade)
 
   category     String
-  totalItems   Int        @default(0)
-  correct      Int        @default(0)
-  incorrect    Int        @default(0)
-  accuracy     Float      @default(0.0)
-  timeSpentSec Int        @default(0)
+  totalItems   Int    @default(0)
+  correct      Int    @default(0)
+  incorrect    Int    @default(0)
+  accuracy     Float  @default(0.0)
+  timeSpentSec Int    @default(0)
 
-  createdAt    DateTime   @default(now())
+  createdAt DateTime @default(now())
 
-  @@index([examResultId])
-  @@index([category])
   @@index([examResultId, category])
+  @@index([category])
 }
 
 model Question {
-  id                  String    @id @default(cuid())
-  category            String
-  subtopic            String    @default("General")
-  prompt              String    @db.Text
+  id       String @id @default(cuid())
+  category String
+  subtopic String @default("General")
+  prompt   String @db.Text
 
-  options             String[]
-  optionA             String?
-  optionB             String?
-  optionC             String?
-  optionD             String?
+  options String[]
+  optionA String?
+  optionB String?
+  optionC String?
+  optionD String?
 
-  answerIndex         Int
-  explanation         String?   @db.Text
-  imageUrl            String?
+  answerIndex Int
+  explanation String? @db.Text
+  imageUrl    String?
 
   // --- Premium Educational & Reasoning Fields ---
-  stepByStep          String?   @db.Text
-  whyA                String?   @db.Text
-  whyB                String?   @db.Text
-  whyC                String?   @db.Text
-  whyD                String?   @db.Text
-  eliminationStrategy String?   @db.Text
-  commonTrap          String?   @db.Text
-  examTip             String?   @db.Text
-  difficulty          String?   @default("MEDIUM")
-  tags                String[]  @default([])
+  stepByStep          String?  @db.Text
+  whyA                String?  @db.Text
+  whyB                String?  @db.Text
+  whyC                String?  @db.Text
+  whyD                String?  @db.Text
+  eliminationStrategy String?  @db.Text
+  commonTrap          String?  @db.Text
+  examTip             String?  @db.Text
+  difficulty          String?  @default("MEDIUM")
+  tags                String[] @default([])
   skillTested         String?
 
   userMistakes          UserMistake[]
@@ -433,14 +429,13 @@ model Question {
   flags                 QuestionFlag[]
   activeInStudyRooms    StudyRoom[]
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  deletedAt           DateTime?
-  deletedBy           String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  deletedBy String?
 
-  @@index([category])
-  @@index([subtopic])
   @@index([category, subtopic])
+  @@index([subtopic])
   @@index([difficulty])
   @@index([deletedAt])
 }
@@ -454,8 +449,8 @@ model DailyQuestionAttempt {
   isCorrect  Boolean
   createdAt  DateTime @default(now())
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, dateString])
   @@index([dateString])
@@ -472,8 +467,8 @@ model QuestionFlag {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, questionId])
   @@index([status])
@@ -486,7 +481,7 @@ model UserBadge {
   badgeId  String
   earnedAt DateTime @default(now())
 
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, badgeId])
   @@index([userId])
@@ -503,12 +498,13 @@ model UserMistake {
   isMastered     Boolean   @default(false)
   masteredAt     DateTime?
 
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  question       Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@unique([userId, questionId])
   @@index([userId, isMastered])
   @@index([userId, lastAttemptAt(sort: Desc)])
+  @@index([questionId])
 }
 
 model ReadingMaterial {
@@ -604,7 +600,8 @@ model Notification {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  @@index([userId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, isRead])
   @@index([isRead])
 }
 
@@ -654,7 +651,6 @@ model Flashcard {
   deletedBy   String?
 
   @@index([category, topic])
-  @@index([category])
   @@index([deletedAt])
 }
 
@@ -683,7 +679,8 @@ model DuelMatch {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  @@index([status])
+  @@index([status, createdAt(sort: Desc)])
+  @@index([player1Id])
   @@index([challengedUserId])
 }
 
@@ -799,6 +796,7 @@ model CSCDownload {
 
   @@index([category])
 }
+
 // ==========================================
 // DISASTER RECOVERY & BACKUP SYSTEM MODELS
 // ==========================================
@@ -854,7 +852,7 @@ model Backup {
   completedAt         DateTime?
   restoredAt          DateTime?
 
-  auditLogs           BackupAuditLog[]
+  auditLogs BackupAuditLog[]
 
   @@index([status])
   @@index([backupType])
