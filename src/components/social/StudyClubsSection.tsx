@@ -181,10 +181,10 @@ export default function StudyClubsSection() {
   return (
     <div className="space-y-6">
       {/* HEADER & SEARCH */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs">
         <div>
-          <h3 className="text-sm font-bold text-white">Study Communities & Clubs</h3>
-          <p className="text-xs text-slate-400">Join specialized examinee clubs based on exam level, subject, or study schedule.</p>
+          <h3 className="text-sm font-bold text-slate-900">Study Communities & Clubs</h3>
+          <p className="text-xs text-slate-500">Join specialized examinee clubs based on exam level, subject, or study schedule.</p>
         </div>
 
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
@@ -194,11 +194,11 @@ export default function StudyClubsSection() {
               placeholder="Search clubs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-44"
+              className="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-44"
             />
             <button
               type="submit"
-              className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+              className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer"
             >
               Search
             </button>
@@ -206,7 +206,7 @@ export default function StudyClubsSection() {
 
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 shadow-xs"
           >
             + Create Club
           </button>
@@ -214,11 +214,11 @@ export default function StudyClubsSection() {
       </div>
 
       {/* FILTER TABS */}
-      <div className="flex gap-2 border-b border-slate-800 pb-2">
+      <div className="flex gap-2 border-b border-slate-100 pb-2">
         <button
           onClick={() => setFilter("all")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-            filter === "all" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "all" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           All Public Clubs
@@ -226,7 +226,7 @@ export default function StudyClubsSection() {
         <button
           onClick={() => setFilter("mine")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-            filter === "mine" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "mine" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           My Joined Clubs
@@ -235,30 +235,30 @@ export default function StudyClubsSection() {
 
       {/* CLUBS DIRECTORY GRID */}
       {loading ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse shadow-xs">
           Loading study clubs...
         </div>
       ) : clubs.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center space-y-3 shadow-xs">
           <span className="text-4xl block">🏛️</span>
-          <h4 className="text-sm font-bold text-white">No Study Clubs Found</h4>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+          <h4 className="text-sm font-bold text-slate-900">No Study Clubs Found</h4>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
             Create a community club to gather examinees targeting the same civil service exam category.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {clubs.map((club) => (
-            <div key={club.id} className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-4 hover:border-slate-700 transition flex flex-col justify-between">
+            <div key={club.id} className="bg-white border border-slate-200/90 p-5 rounded-3xl space-y-4 hover:border-slate-300 shadow-xs transition flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
+                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-200">
                     {club.category}
                   </span>
                   <button
                     type="button"
                     onClick={() => setSelectedClubForMembers({ id: club.id, name: club.name })}
-                    className="text-[10px] font-bold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2 py-0.5 rounded-lg border border-blue-500/20 transition cursor-pointer flex items-center gap-1"
+                    className="text-[10px] font-bold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-lg border border-blue-200 transition cursor-pointer flex items-center gap-1"
                     title="View and Manage Club Members"
                   >
                     <span>👥</span>
@@ -267,27 +267,27 @@ export default function StudyClubsSection() {
                 </div>
 
                 <div>
-                  <h4 className="text-sm font-bold text-white truncate">{club.name}</h4>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2 min-h-[32px]">
+                  <h4 className="text-sm font-bold text-slate-900 truncate">{club.name}</h4>
+                  <p className="text-xs text-slate-600 mt-1 line-clamp-2 min-h-[32px]">
                     {club.description || "Dedicated study community sharing tips and exam strategies."}
                   </p>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                 <span className="text-[10px] text-slate-500 font-semibold truncate">
                   Founder: {club.owner?.name || "Examinee"}
                 </span>
 
                 {club.isOwner ? (
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <span className="text-[10px] font-extrabold text-amber-400 px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                    <span className="text-[10px] font-extrabold text-amber-700 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-xl">
                       👑 Owner
                     </span>
                     <button
                       type="button"
                       onClick={() => handleMembershipClick(club)}
-                      className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-[10px] font-bold rounded-xl transition cursor-pointer"
+                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-[10px] font-bold rounded-xl transition cursor-pointer"
                       title="Leave or transfer ownership of this club"
                     >
                       Leave
@@ -295,7 +295,7 @@ export default function StudyClubsSection() {
                     <button
                       type="button"
                       onClick={() => setClubToDelete({ id: club.id, name: club.name })}
-                      className="p-1.5 text-rose-400 hover:text-rose-300 hover:bg-rose-950/50 rounded-lg transition cursor-pointer text-xs"
+                      className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer text-xs"
                       title="Delete Study Club"
                     >
                       🗑️
@@ -307,8 +307,8 @@ export default function StudyClubsSection() {
                     onClick={() => handleMembershipClick(club)}
                     className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer ${
                       club.isMember
-                        ? "bg-slate-800 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-700 text-slate-300"
-                        : "bg-blue-600 hover:bg-blue-500 text-white font-extrabold shadow-md"
+                        ? "bg-slate-100 hover:bg-rose-50 hover:text-rose-700 border border-slate-200 text-slate-700"
+                        : "bg-blue-600 hover:bg-blue-500 text-white font-extrabold shadow-xs"
                     }`}
                   >
                     {club.isMember ? "Leave Club" : "Join Club"}
@@ -322,34 +322,34 @@ export default function StudyClubsSection() {
 
       {/* CREATE CLUB MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white">Create Study Club</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white text-xs cursor-pointer">
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full space-y-5 shadow-2xl">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <h3 className="text-sm font-bold text-slate-900">Create Study Club</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-900 text-xs cursor-pointer">
                 &times;
               </button>
             </div>
 
             <form onSubmit={createClub} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Club Name *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Club Name *</label>
                 <input
                   type="text"
                   placeholder="e.g., 2026 Civil Service Topnotchers"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Category</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Category</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-500"
                 >
                   {categories.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -358,27 +358,27 @@ export default function StudyClubsSection() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Club Objective & Description</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Club Objective & Description</label>
                 <textarea
                   placeholder="What is the goal of this study club?"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500 h-24"
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 h-24"
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-2">
+              <div className="pt-3 border-t border-slate-100 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating || !name.trim()}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   {creating ? "Creating..." : "Launch Club"}
                 </button>

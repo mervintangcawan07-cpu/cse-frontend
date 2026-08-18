@@ -187,7 +187,7 @@ export default function MessagesSection() {
 
   if (loadingConv) {
     return (
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse">
+      <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center text-slate-500 font-bold animate-pulse shadow-xs">
         Loading private messaging hub...
       </div>
     );
@@ -196,9 +196,9 @@ export default function MessagesSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-[520px]">
       {/* CONVERSATION SIDEBAR */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 flex flex-col justify-between space-y-4 shadow-xs">
         <div>
-          <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
+          <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
             Conversations ({conversations.length})
           </h3>
 
@@ -211,17 +211,17 @@ export default function MessagesSection() {
                   onClick={() => selectConversation(c.id)}
                   className={`w-full p-3 rounded-xl transition text-left flex items-center justify-between gap-3 cursor-pointer group ${
                     isActive
-                      ? "bg-blue-600/20 border border-blue-500/40 text-white"
-                      : "bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-slate-300"
+                      ? "bg-blue-50 border border-blue-200 text-blue-900 font-bold"
+                      : "bg-slate-50 hover:bg-slate-100/90 border border-slate-200/70 text-slate-700"
                   }`}
                 >
                   <div className="flex items-center gap-2.5 overflow-hidden flex-1">
-                    <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center font-bold text-blue-700 text-xs uppercase shrink-0">
                       {c.otherUser?.name ? c.otherUser.name[0] : "C"}
                     </div>
                     <div className="overflow-hidden flex-1">
-                      <p className="text-xs font-bold truncate">{c.otherUser?.name || "Classmate"}</p>
-                      <p className="text-[10px] text-slate-400 truncate">
+                      <p className="text-xs font-bold text-slate-900 truncate">{c.otherUser?.name || "Classmate"}</p>
+                      <p className="text-[10px] text-slate-500 truncate">
                         {c.lastMessage ? c.lastMessage.content : "Start chatting..."}
                       </p>
                     </div>
@@ -229,7 +229,7 @@ export default function MessagesSection() {
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     {c.unreadCount > 0 && (
-                      <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                      <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">
                         {c.unreadCount}
                       </span>
                     )}
@@ -239,7 +239,7 @@ export default function MessagesSection() {
                         e.stopPropagation();
                         setConvToDelete({ id: c.id, name: c.otherUser?.name || "Classmate" });
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 rounded transition cursor-pointer text-xs"
+                      className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded transition cursor-pointer text-xs"
                       title="Delete Conversation"
                     >
                       🗑️
@@ -253,8 +253,8 @@ export default function MessagesSection() {
 
         {/* CONNECTED CLASSMATES DIRECT LAUNCH */}
         {classmates.length > 0 && (
-          <div className="pt-3 border-t border-slate-800">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+          <div className="pt-3 border-t border-slate-100">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
               Start Chat with Classmate
             </span>
             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
@@ -262,9 +262,9 @@ export default function MessagesSection() {
                 <button
                   key={c.user.id}
                   onClick={() => startNewChat(c.user.id)}
-                  className="p-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl flex items-center gap-1.5 transition text-xs text-slate-300 shrink-0 cursor-pointer"
+                  className="p-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl flex items-center gap-1.5 transition text-xs text-slate-700 shrink-0 cursor-pointer"
                 >
-                  <span className="w-5 h-5 rounded-full bg-blue-600/30 flex items-center justify-center text-[10px] font-bold text-blue-400">
+                  <span className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-700">
                     {c.user.name ? c.user.name[0] : "U"}
                   </span>
                   <span className="truncate max-w-[80px]">{c.user.name || "User"}</span>
@@ -276,18 +276,18 @@ export default function MessagesSection() {
       </div>
 
       {/* ACTIVE CHAT AREA */}
-      <div className="md:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between overflow-hidden">
+      <div className="md:col-span-2 bg-white border border-slate-200/90 rounded-2xl flex flex-col justify-between overflow-hidden shadow-xs">
         {activeConvId && activeConversation ? (
           <>
             {/* CHAT HEADER */}
-            <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+            <div className="p-4 bg-slate-50/90 border-b border-slate-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase">
+                <div className="w-9 h-9 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center font-bold text-blue-700 text-xs uppercase">
                   {activeConversation.name ? activeConversation.name[0] : "C"}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white">{activeConversation.name}</h4>
-                  <span className="text-[10px] text-emerald-400 block font-semibold">● Online Classmate</span>
+                  <h4 className="text-xs font-bold text-slate-900">{activeConversation.name}</h4>
+                  <span className="text-[10px] text-emerald-600 block font-semibold">● Online Classmate</span>
                 </div>
               </div>
 
@@ -300,7 +300,7 @@ export default function MessagesSection() {
                       name: activeConversation.name || "Classmate",
                     })
                   }
-                  className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1"
+                  className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1"
                   title="Delete Conversation"
                 >
                   <span>🗑️</span>
@@ -308,7 +308,7 @@ export default function MessagesSection() {
                 </button>
                 <button
                   onClick={() => setActiveConvId(null)}
-                  className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+                  className="text-xs text-slate-500 hover:text-slate-900 px-2.5 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer"
                 >
                   ✕ Close
                 </button>
@@ -318,14 +318,14 @@ export default function MessagesSection() {
             {/* MESSAGES FEED */}
             <div className="p-4 flex-1 overflow-y-auto max-h-[360px] space-y-3">
               {loadingChat ? (
-                <div className="text-center py-12 text-xs text-slate-500 font-bold animate-pulse">
+                <div className="text-center py-12 text-xs text-slate-400 font-bold animate-pulse">
                   Loading conversation history...
                 </div>
               ) : messages.length === 0 ? (
                 <div className="text-center py-12 text-slate-500 space-y-2">
                   <span className="text-3xl block">👋</span>
-                  <p className="text-xs font-bold text-slate-400">No messages yet</p>
-                  <p className="text-[10px] text-slate-600">Send a greeting to start reviewing together!</p>
+                  <p className="text-xs font-bold text-slate-700">No messages yet</p>
+                  <p className="text-[10px] text-slate-500">Send a greeting to start reviewing together!</p>
                 </div>
               ) : (
                 messages.map((m) => {
@@ -336,7 +336,7 @@ export default function MessagesSection() {
                       className={`flex flex-col ${isMine ? "items-end" : "items-start"} group space-y-1`}
                     >
                       {m.replyTo && (
-                        <div className="text-[10px] bg-slate-950/80 px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400 max-w-xs truncate">
+                        <div className="text-[10px] bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 max-w-xs truncate">
                           ↩ Reply to: {m.replyTo.content}
                         </div>
                       )}
@@ -345,7 +345,7 @@ export default function MessagesSection() {
                         {isMine && (
                           <button
                             onClick={() => deleteMessage(m.id)}
-                            className="opacity-0 group-hover:opacity-100 text-[10px] text-slate-500 hover:text-rose-400 transition cursor-pointer"
+                            className="opacity-0 group-hover:opacity-100 text-[10px] text-slate-400 hover:text-rose-600 transition cursor-pointer"
                             title="Delete message"
                           >
                             🗑️
@@ -356,18 +356,18 @@ export default function MessagesSection() {
                           onClick={() => setReplyingTo(m)}
                           className={`p-3 rounded-2xl text-xs leading-relaxed cursor-pointer transition ${
                             isMine
-                              ? "bg-blue-600 text-white rounded-br-none shadow-md"
-                              : "bg-slate-800 text-slate-200 rounded-bl-none border border-slate-700"
+                              ? "bg-blue-600 text-white rounded-br-none shadow-xs"
+                              : "bg-slate-100 text-slate-900 rounded-bl-none border border-slate-200/80"
                           }`}
                         >
                           <p>{m.content}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 text-[9px] text-slate-500 px-1">
+                      <div className="flex items-center gap-2 text-[9px] text-slate-400 px-1">
                         <span>{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         {isMine && (
-                          <span className={m.state === "READ" ? "text-emerald-400 font-bold" : "text-slate-400"}>
+                          <span className={m.state === "READ" ? "text-emerald-600 font-bold" : "text-slate-400"}>
                             {m.state === "READ" ? "✓✓ Read" : m.state === "DELIVERED" ? "✓✓ Delivered" : "✓ Sent"}
                           </span>
                         )}
@@ -381,11 +381,11 @@ export default function MessagesSection() {
 
             {/* REPLY BANNER */}
             {replyingTo && (
-              <div className="px-4 py-2 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
+              <div className="px-4 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-700">
                 <span className="truncate">Replying to: <i>"{replyingTo.content}"</i></span>
                 <button
                   onClick={() => setReplyingTo(null)}
-                  className="text-slate-500 hover:text-white ml-2 text-xs cursor-pointer"
+                  className="text-slate-400 hover:text-slate-900 ml-2 text-xs cursor-pointer"
                 >
                   ✕
                 </button>
@@ -393,14 +393,14 @@ export default function MessagesSection() {
             )}
 
             {/* EMOJI BAR & INPUT AREA */}
-            <div className="p-3 bg-slate-950 border-t border-slate-800 space-y-2">
+            <div className="p-3 bg-slate-50/90 border-t border-slate-200 space-y-2">
               <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
                 {quickEmojis.map((emoji) => (
                   <button
                     key={emoji}
                     type="button"
                     onClick={() => addEmoji(emoji)}
-                    className="px-2 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-xs transition cursor-pointer shrink-0"
+                    className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200/80 rounded-lg text-xs transition cursor-pointer shrink-0"
                   >
                     {emoji}
                   </button>
@@ -413,12 +413,12 @@ export default function MessagesSection() {
                   placeholder="Type a message or explanation..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1"
+                  className="px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 flex-1"
                 />
                 <button
                   type="submit"
                   disabled={sending || !newMessage.trim()}
-                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0"
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0 shadow-xs"
                 >
                   {sending ? "Sending..." : "Send"}
                 </button>
@@ -428,8 +428,8 @@ export default function MessagesSection() {
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-3">
             <span className="text-4xl block">💬</span>
-            <h4 className="text-sm font-bold text-white">Select a Conversation</h4>
-            <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+            <h4 className="text-sm font-bold text-slate-900">Select a Conversation</h4>
+            <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
               Choose a connected classmate from the sidebar to discuss Civil Service exam questions and review notes.
             </p>
           </div>

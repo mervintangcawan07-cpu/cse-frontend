@@ -49,11 +49,11 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-sm p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-4 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+      <div className="w-full max-w-sm p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl space-y-4 relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-white text-xs px-2 py-1 rounded-lg hover:bg-slate-800 cursor-pointer"
+          className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-xs px-2 py-1 rounded-lg hover:bg-slate-100 cursor-pointer"
         >
           ✕
         </button>
@@ -68,27 +68,27 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
             {/* Identity Header */}
             <div className="flex items-center gap-3.5">
               <div className="relative shrink-0">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarInfo.bg} flex items-center justify-center text-2xl shadow-lg`}>
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${avatarInfo.bg} flex items-center justify-center text-2xl shadow-sm text-white`}>
                   {avatarInfo.emoji}
                 </div>
                 {profile.presence && (
-                  <span className="absolute -bottom-1 -right-1 border-2 border-slate-900 rounded-full">
+                  <span className="absolute -bottom-1 -right-1 border-2 border-white rounded-full">
                     <PresenceBadge presence={profile.presence} variant="dot-only" size="md" />
                   </span>
                 )}
               </div>
               <div className="overflow-hidden space-y-0.5">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base font-black text-white truncate">
+                  <h3 className="text-base font-black text-slate-900 truncate">
                     {profile.displayName}
                   </h3>
                   {profile.isPro && (
-                    <span className="px-1.5 py-0.2 bg-amber-500/20 border border-amber-500/30 text-amber-300 text-[9px] font-black rounded">
+                    <span className="px-1.5 py-0.2 bg-amber-50 border border-amber-200 text-amber-700 text-[9px] font-black rounded">
                       PRO
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] font-bold text-blue-400 truncate">
+                <p className="text-[11px] font-bold text-blue-700 truncate">
                   {profile.studyGoal || "Civil Service Exam Review"}
                 </p>
                 <div className="pt-0.5">
@@ -99,7 +99,7 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
 
             {/* Bio (Respects Privacy) */}
             {profile.bio && (
-              <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-xl text-xs text-slate-300 italic leading-relaxed">
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 italic leading-relaxed">
                 "{profile.bio}"
               </div>
             )}
@@ -107,14 +107,14 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
             {/* Focus Subjects (Respects Privacy) */}
             {profile.studyInterests && profile.studyInterests.length > 0 && (
               <div className="space-y-1.5">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                   Focus Topics
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {profile.studyInterests.map((interest: string) => (
                     <span
                       key={interest}
-                      className="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-bold rounded-lg"
+                      className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold rounded-lg"
                     >
                       {interest}
                     </span>
@@ -126,14 +126,14 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
             {/* Schedule Availability (Respects Privacy) */}
             {profile.availability && profile.availability.length > 0 && (
               <div className="space-y-1">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                   Study Schedule
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {profile.availability.map((time: string) => (
                     <span
                       key={time}
-                      className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold rounded-lg"
+                      className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded-lg"
                     >
                       {time}
                     </span>
@@ -144,7 +144,7 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
 
             {/* Optional Demographics (Respects Privacy) */}
             {(profile.ageRange || profile.gender) && (
-              <div className="flex items-center gap-2 text-[10px] text-slate-400 pt-1">
+              <div className="flex items-center gap-2 text-[10px] text-slate-500 pt-1">
                 {profile.ageRange && <span>Age: {profile.ageRange}</span>}
                 {profile.ageRange && profile.gender && <span>•</span>}
                 {profile.gender && <span>{profile.gender}</span>}
@@ -152,30 +152,30 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
             )}
 
             {/* General Meta */}
-            <div className="grid grid-cols-2 gap-2 text-[10px] pt-2 border-t border-slate-800 text-slate-400">
+            <div className="grid grid-cols-2 gap-2 text-[10px] pt-2 border-t border-slate-100 text-slate-500">
               <div>
-                <span className="text-slate-500 block">Level:</span>
-                <span className="font-semibold text-slate-300">
+                <span className="text-slate-400 block">Level:</span>
+                <span className="font-semibold text-slate-700">
                   {profile.experienceLevel?.split(" (")[0] || "Examinee"}
                 </span>
               </div>
               <div>
-                <span className="text-slate-500 block">Language:</span>
-                <span className="font-semibold text-slate-300">
+                <span className="text-slate-400 block">Language:</span>
+                <span className="font-semibold text-slate-700">
                   {profile.language || "English"}
                 </span>
               </div>
             </div>
 
             {onSendMessage && (
-              <div className="pt-2 border-t border-slate-800">
+              <div className="pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => {
                     onSendMessage(userId);
                     onClose();
                   }}
-                  className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer"
+                  className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer shadow-xs"
                 >
                   💬 Send Direct Message
                 </button>

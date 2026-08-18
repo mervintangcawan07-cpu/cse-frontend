@@ -153,10 +153,10 @@ export default function ClassmatesSection() {
   return (
     <div className="space-y-6">
       {/* HEADER & SEARCH BAR */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs">
         <div>
-          <h3 className="text-sm font-bold text-white">Find Classmates & Study Buddies</h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <h3 className="text-sm font-bold text-slate-900">Find Classmates & Study Buddies</h3>
+          <p className="text-xs text-slate-500 mt-0.5">
             Connect with other CSE examinees and find study partners. Examinees with the same target CSE date may appear first.
           </p>
         </div>
@@ -167,12 +167,12 @@ export default function ClassmatesSection() {
             placeholder="Search examinees or topics..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-64"
+            className="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 w-full sm:w-64"
           />
           <button
             type="submit"
             disabled={isSearching}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50 shadow-xs"
           >
             {isSearching ? "Searching..." : "Search"}
           </button>
@@ -183,7 +183,7 @@ export default function ClassmatesSection() {
       {searchResults.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Search Results ({searchResults.length})
             </h4>
             <button
@@ -191,7 +191,7 @@ export default function ClassmatesSection() {
                 setSearchResults([]);
                 setSearchQuery("");
               }}
-              className="text-xs text-slate-500 hover:text-white cursor-pointer"
+              className="text-xs text-slate-500 hover:text-slate-900 cursor-pointer"
             >
               Clear Search ✕
             </button>
@@ -201,7 +201,7 @@ export default function ClassmatesSection() {
             {searchResults.map((user) => {
               const displayName = user.studyProfile?.displayName || user.name || "Examinee";
               return (
-                <div key={user.id} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between gap-3 hover:border-slate-700 transition">
+                <div key={user.id} className="bg-white border border-slate-200/90 p-4 rounded-2xl flex flex-col justify-between gap-3 hover:border-slate-300 shadow-xs transition">
                   <div className="flex items-start gap-3">
                     <div onClick={() => setSelectedUserId(user.id)} className="cursor-pointer">
                       {renderAvatar(user)}
@@ -210,19 +210,19 @@ export default function ClassmatesSection() {
                       <div className="flex items-center justify-between gap-1">
                         <p
                           onClick={() => setSelectedUserId(user.id)}
-                          className="text-xs font-bold text-white truncate hover:text-blue-400 transition cursor-pointer"
+                          className="text-xs font-bold text-slate-900 truncate hover:text-blue-600 transition cursor-pointer"
                         >
                           {displayName}
                         </p>
                         {user.hasSameGoal && (
-                          <span className="text-[9px] font-black text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 shrink-0">
+                          <span className="text-[9px] font-black text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 shrink-0">
                             ✓ Same Target
                           </span>
                         )}
                       </div>
 
                       {user.targetExamGoal && (
-                        <span className="text-[10px] text-slate-400 line-clamp-1 block">
+                        <span className="text-[10px] text-slate-500 line-clamp-1 block">
                           🎯 {user.targetExamGoal}
                         </span>
                       )}
@@ -232,29 +232,29 @@ export default function ClassmatesSection() {
                   </div>
 
                   {/* Card Bottom Actions */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={() => setSelectedUserId(user.id)}
-                      className="text-[10px] font-bold text-slate-400 hover:text-white cursor-pointer"
+                      className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
                     >
                       View Profile
                     </button>
 
                     <div>
                       {user.relationStatus === "ACCEPTED" ? (
-                        <span className="text-[10px] font-bold text-emerald-400 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                        <span className="text-[10px] font-bold text-emerald-700 px-2 py-1 bg-emerald-50 rounded-lg border border-emerald-200">
                           Classmate
                         </span>
                       ) : user.relationStatus === "PENDING" ? (
-                        <span className="text-[10px] font-bold text-amber-400 px-2 py-1 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                        <span className="text-[10px] font-bold text-amber-700 px-2 py-1 bg-amber-50 rounded-lg border border-amber-200">
                           {user.isSender ? "Sent" : "Pending"}
                         </span>
                       ) : (
                         <button
                           onClick={() => sendRequest(user.id)}
                           disabled={actionLoadingId === user.id}
-                          className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+                          className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50 shadow-xs"
                         >
                           + Add Classmate
                         </button>
@@ -271,15 +271,15 @@ export default function ClassmatesSection() {
       {/* PENDING INCOMING INVITATIONS */}
       {pendingIncoming.length > 0 && (
         <div className="space-y-3">
-          <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+          <h4 className="text-xs font-bold text-amber-700 uppercase tracking-wider flex items-center gap-2">
             <span>📩 Pending Invitations</span>
-            <span className="px-2 py-0.5 bg-amber-500/20 rounded-full text-[10px] font-black">{pendingIncoming.length}</span>
+            <span className="px-2 py-0.5 bg-amber-100 rounded-full text-[10px] font-black">{pendingIncoming.length}</span>
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {pendingIncoming.map((req) => {
               const displayName = req.sender?.studyProfile?.displayName || req.sender?.name || "Examinee";
               return (
-                <div key={req.relationId} className="bg-slate-900 border border-amber-500/30 p-4 rounded-2xl flex flex-col justify-between gap-3 shadow-lg shadow-amber-500/5">
+                <div key={req.relationId} className="bg-white border border-amber-300 p-4 rounded-2xl flex flex-col justify-between gap-3 shadow-xs">
                   <div className="flex items-start gap-3">
                     <div onClick={() => setSelectedUserId(req.sender.id)} className="cursor-pointer">
                       {renderAvatar(req.sender)}
@@ -287,12 +287,12 @@ export default function ClassmatesSection() {
                     <div className="flex-1 overflow-hidden space-y-1">
                       <p
                         onClick={() => setSelectedUserId(req.sender.id)}
-                        className="text-xs font-bold text-white truncate hover:text-blue-400 transition cursor-pointer"
+                        className="text-xs font-bold text-slate-900 truncate hover:text-blue-600 transition cursor-pointer"
                       >
                         {displayName}
                       </p>
                       {req.sender?.targetExamGoal && (
-                        <span className="text-[10px] text-slate-400 line-clamp-1 block">
+                        <span className="text-[10px] text-slate-500 line-clamp-1 block">
                           🎯 {req.sender.targetExamGoal}
                         </span>
                       )}
@@ -300,11 +300,11 @@ export default function ClassmatesSection() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={() => setSelectedUserId(req.sender.id)}
-                      className="text-[10px] font-bold text-slate-400 hover:text-white cursor-pointer"
+                      className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
                     >
                       View Profile
                     </button>
@@ -312,14 +312,14 @@ export default function ClassmatesSection() {
                       <button
                         onClick={() => respondRelation(req.relationId, "ACCEPT")}
                         disabled={actionLoadingId === req.relationId}
-                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-extrabold rounded-lg transition cursor-pointer"
+                        className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-extrabold rounded-lg transition cursor-pointer shadow-xs"
                       >
                         Accept
                       </button>
                       <button
                         onClick={() => respondRelation(req.relationId, "REJECT")}
                         disabled={actionLoadingId === req.relationId}
-                        className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-extrabold rounded-lg transition cursor-pointer"
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-lg transition cursor-pointer"
                       >
                         Decline
                       </button>
@@ -334,15 +334,15 @@ export default function ClassmatesSection() {
 
       {/* MY CONNECTED CLASSMATES */}
       <div className="space-y-3">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+        <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
           My Connected Classmates ({classmates.length})
         </h4>
 
         {classmates.length === 0 ? (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-2">
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-8 text-center space-y-2 shadow-xs">
             <span className="text-3xl block">🧑‍🎓</span>
-            <h4 className="text-sm font-bold text-white">No Connected Classmates Yet</h4>
-            <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+            <h4 className="text-sm font-bold text-slate-900">No Connected Classmates Yet</h4>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
               Connect with examinees in the suggestions below or search for study partners.
             </p>
           </div>
@@ -351,7 +351,7 @@ export default function ClassmatesSection() {
             {classmates.map((c) => {
               const displayName = c.user?.studyProfile?.displayName || c.user?.name || "Classmate";
               return (
-                <div key={c.relationId} className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between gap-3">
+                <div key={c.relationId} className="bg-white border border-slate-200/90 p-4 rounded-2xl flex flex-col justify-between gap-3 shadow-xs">
                   <div className="flex items-start gap-3">
                     <div onClick={() => setSelectedUserId(c.user.id)} className="cursor-pointer">
                       {renderAvatar(c.user)}
@@ -359,12 +359,12 @@ export default function ClassmatesSection() {
                     <div className="flex-1 overflow-hidden space-y-1">
                       <p
                         onClick={() => setSelectedUserId(c.user.id)}
-                        className="text-xs font-bold text-white truncate hover:text-blue-400 transition cursor-pointer"
+                        className="text-xs font-bold text-slate-900 truncate hover:text-blue-600 transition cursor-pointer"
                       >
                         {displayName}
                       </p>
                       {c.user?.targetExamGoal && (
-                        <span className="text-[10px] text-slate-400 line-clamp-1 block">
+                        <span className="text-[10px] text-slate-500 line-clamp-1 block">
                           🎯 {c.user.targetExamGoal}
                         </span>
                       )}
@@ -372,11 +372,11 @@ export default function ClassmatesSection() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={() => setSelectedUserId(c.user.id)}
-                      className="text-[10px] font-bold text-slate-400 hover:text-white cursor-pointer"
+                      className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
                     >
                       View Profile
                     </button>
@@ -400,14 +400,14 @@ export default function ClassmatesSection() {
                             alert("Failed to send challenge.");
                           }
                         }}
-                        className="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 border border-amber-500/30 text-[10px] font-black rounded-lg transition cursor-pointer"
+                        className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black rounded-lg transition cursor-pointer"
                       >
                         ⚔️ Duel
                       </button>
                       <button
                         onClick={() => respondRelation(c.relationId, "REMOVE")}
                         disabled={actionLoadingId === c.relationId}
-                        className="px-2.5 py-1 bg-slate-950 hover:bg-rose-950/40 hover:text-rose-300 border border-slate-800 text-slate-400 text-[10px] font-bold rounded-lg transition cursor-pointer"
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-rose-50 hover:text-rose-700 border border-slate-200 text-slate-600 text-[10px] font-bold rounded-lg transition cursor-pointer"
                       >
                         Remove
                       </button>
@@ -424,7 +424,7 @@ export default function ClassmatesSection() {
       <div className="space-y-4 pt-2">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
               <span>✨ Discover Study Partners</span>
               <span className="text-slate-500 text-[11px] lowercase font-normal">
                 ({suggested.length} available)
@@ -438,8 +438,8 @@ export default function ClassmatesSection() {
               onClick={() => setSuggestionFilter("ALL")}
               className={`px-3 py-1 text-[11px] font-bold rounded-xl transition cursor-pointer ${
                 suggestionFilter === "ALL"
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 font-black"
-                  : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-blue-50 text-blue-700 border border-blue-200 font-black"
+                  : "bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
               }`}
             >
               All Classmates
@@ -448,8 +448,8 @@ export default function ClassmatesSection() {
               onClick={() => setSuggestionFilter("SAME_DATE")}
               className={`px-3 py-1 text-[11px] font-bold rounded-xl transition cursor-pointer ${
                 suggestionFilter === "SAME_DATE"
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 font-black"
-                  : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-blue-50 text-blue-700 border border-blue-200 font-black"
+                  : "bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
               }`}
             >
               🎯 Same Exam Target
@@ -458,8 +458,8 @@ export default function ClassmatesSection() {
               onClick={() => setSuggestionFilter("OTHER_DATES")}
               className={`px-3 py-1 text-[11px] font-bold rounded-xl transition cursor-pointer ${
                 suggestionFilter === "OTHER_DATES"
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 font-black"
-                  : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-blue-50 text-blue-700 border border-blue-200 font-black"
+                  : "bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
               }`}
             >
               📅 Other Target Dates
@@ -468,8 +468,8 @@ export default function ClassmatesSection() {
               onClick={() => setSuggestionFilter("NO_DATE")}
               className={`px-3 py-1 text-[11px] font-bold rounded-xl transition cursor-pointer ${
                 suggestionFilter === "NO_DATE"
-                  ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 font-black"
-                  : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-blue-50 text-blue-700 border border-blue-200 font-black"
+                  : "bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
               }`}
             >
               Exploring / No Target
@@ -478,7 +478,7 @@ export default function ClassmatesSection() {
         </div>
 
         {suggested.length === 0 ? (
-          <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 text-center text-xs text-slate-400">
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-8 text-center text-xs text-slate-500 shadow-xs">
             No examinees matching this filter category. Try selecting "All Classmates" to see all available study partners.
           </div>
         ) : (
@@ -488,7 +488,7 @@ export default function ClassmatesSection() {
               return (
                 <div
                   key={s.id}
-                  className="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex flex-col justify-between gap-3 hover:border-slate-700 transition"
+                  className="bg-white border border-slate-200/90 p-4 rounded-2xl flex flex-col justify-between gap-3 hover:border-slate-300 shadow-xs transition"
                 >
                   <div className="flex items-start gap-3">
                     <div onClick={() => setSelectedUserId(s.id)} className="cursor-pointer">
@@ -498,23 +498,23 @@ export default function ClassmatesSection() {
                       <div className="flex items-center justify-between gap-1">
                         <p
                           onClick={() => setSelectedUserId(s.id)}
-                          className="text-xs font-bold text-white truncate hover:text-blue-400 transition cursor-pointer"
+                          className="text-xs font-bold text-slate-900 truncate hover:text-blue-600 transition cursor-pointer"
                         >
                           {displayName}
                         </p>
                         {s.hasSameGoal && (
-                          <span className="text-[9px] font-black text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 shrink-0">
+                          <span className="text-[9px] font-black text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 shrink-0">
                             ✓ Same Target
                           </span>
                         )}
                       </div>
 
                       {s.targetExamGoal ? (
-                        <span className="text-[10px] text-slate-400 line-clamp-1 block">
+                        <span className="text-[10px] text-slate-500 line-clamp-1 block">
                           🎯 {s.targetExamGoal}
                         </span>
                       ) : (
-                        <span className="text-[10px] text-slate-500 italic block">
+                        <span className="text-[10px] text-slate-400 italic block">
                           General Reviewer
                         </span>
                       )}
@@ -525,7 +525,7 @@ export default function ClassmatesSection() {
                           {s.sharedInterests.slice(0, 2).map((interest: string) => (
                             <span
                               key={interest}
-                              className="text-[9px] font-semibold text-blue-300 bg-blue-500/10 px-1.5 py-0.2 rounded border border-blue-500/20"
+                              className="text-[9px] font-semibold text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200"
                             >
                               {interest}
                             </span>
@@ -538,11 +538,11 @@ export default function ClassmatesSection() {
                   </div>
 
                   {/* Card Bottom Actions */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={() => setSelectedUserId(s.id)}
-                      className="text-[10px] font-bold text-slate-400 hover:text-white cursor-pointer"
+                      className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
                     >
                       View Profile
                     </button>
@@ -550,7 +550,7 @@ export default function ClassmatesSection() {
                     <button
                       onClick={() => sendRequest(s.id)}
                       disabled={actionLoadingId === s.id}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0 disabled:opacity-50 shadow-xs"
                     >
                       + Add Classmate
                     </button>

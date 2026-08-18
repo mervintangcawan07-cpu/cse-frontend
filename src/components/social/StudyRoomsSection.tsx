@@ -293,31 +293,31 @@ export default function StudyRoomsSection() {
     return (
       <div className="space-y-6 animate-fade-in">
         {/* ROOM TOP BAR */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 border border-slate-800 p-5 rounded-3xl shadow-xl">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200/90 p-5 rounded-3xl shadow-xs">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 px-2.5 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-700 px-2.5 py-0.5 bg-blue-50 rounded-full border border-blue-200">
                 {activeRoom.topic}
               </span>
               <RoomRoleBadge role={currentUserRole} size="sm" />
               {activeRoom.isLocked && (
-                <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-black text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
                   🔒 Locked
                 </span>
               )}
             </div>
-            <h3 className="text-lg font-black text-white flex items-center gap-2">
+            <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
               <span>{activeRoom.name}</span>
             </h3>
             {activeRoom.description && (
-              <p className="text-xs text-slate-400 max-w-xl">{activeRoom.description}</p>
+              <p className="text-xs text-slate-500 max-w-xl">{activeRoom.description}</p>
             )}
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-mono text-slate-300 flex items-center gap-1.5">
-              <span className="text-slate-500 text-[10px]">Invite Code:</span>
-              <span className="font-bold text-white">{activeRoom.inviteCode}</span>
+            <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-700 flex items-center gap-1.5">
+              <span className="text-slate-400 text-[10px]">Invite Code:</span>
+              <span className="font-bold text-slate-900">{activeRoom.inviteCode}</span>
             </div>
 
             {/* Room Host Settings Button */}
@@ -325,7 +325,7 @@ export default function StudyRoomsSection() {
               <button
                 type="button"
                 onClick={() => setShowSettingsModal(true)}
-                className="px-3.5 py-2 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
+                className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold rounded-xl transition cursor-pointer flex items-center gap-1.5"
                 title="Room Settings & Policies"
               >
                 <span>👑</span>
@@ -338,7 +338,7 @@ export default function StudyRoomsSection() {
               <button
                 type="button"
                 onClick={() => setRoomToDelete({ id: activeRoom.id, name: activeRoom.name })}
-                className="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-500/30 text-xs font-bold rounded-xl transition cursor-pointer"
+                className="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold rounded-xl transition cursor-pointer"
                 title="Permanently Delete Study Room"
               >
                 Delete Room
@@ -348,7 +348,7 @@ export default function StudyRoomsSection() {
             <button
               type="button"
               onClick={() => leaveRoom(activeRoom.id)}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer"
+              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold rounded-xl transition border border-slate-200 cursor-pointer"
             >
               Leave Room
             </button>
@@ -377,14 +377,14 @@ export default function StudyRoomsSection() {
         {/* TWO COLUMN: LIVE CHAT & PARTICIPANTS */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* ROOM LIVE CHAT */}
-          <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4 flex flex-col h-[480px]">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <div className="lg:col-span-2 bg-white border border-slate-200/90 rounded-3xl p-5 space-y-4 flex flex-col h-[480px] shadow-xs">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                 <span>💬 Live Study Chat</span>
                 <span className="text-[10px] text-slate-500 font-normal">({chatMessages.length} msgs)</span>
               </h4>
               {activeRoom.allowMemberChat === false && (
-                <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                   🔒 Chat Restricted to Host/Mods
                 </span>
               )}
@@ -392,7 +392,7 @@ export default function StudyRoomsSection() {
 
             {/* PINNED MESSAGE BANNER */}
             {pinnedMessage && (
-              <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-between gap-2 text-xs text-amber-300">
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-between gap-2 text-xs text-amber-800">
                 <div className="flex items-center gap-2 overflow-hidden">
                   <span className="text-sm">📌</span>
                   <div className="truncate">
@@ -403,7 +403,7 @@ export default function StudyRoomsSection() {
                 {isHostOrMod && (
                   <button
                     onClick={() => togglePinMessage(pinnedMessage.id)}
-                    className="text-[10px] font-bold text-amber-400 hover:text-white cursor-pointer px-2 py-0.5 rounded"
+                    className="text-[10px] font-bold text-amber-700 hover:text-amber-900 cursor-pointer px-2 py-0.5 rounded"
                   >
                     Unpin
                   </button>
@@ -414,7 +414,7 @@ export default function StudyRoomsSection() {
             {/* MESSAGE STREAM */}
             <div className="flex-1 overflow-y-auto space-y-3 pr-1">
               {chatMessages.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-xs text-slate-500 italic">
+                <div className="h-full flex items-center justify-center text-xs text-slate-400 italic">
                   No messages yet. Start collaborating by saying hi!
                 </div>
               ) : (
@@ -425,12 +425,12 @@ export default function StudyRoomsSection() {
                       key={msg.id}
                       className={`group p-3 rounded-2xl border text-xs flex flex-col space-y-1 relative ${
                         isMine
-                          ? "bg-blue-600/15 border-blue-500/30 ml-8"
-                          : "bg-slate-950 border-slate-800/80 mr-8"
+                          ? "bg-blue-50 border-blue-200 ml-8"
+                          : "bg-slate-50 border-slate-200/80 mr-8"
                       }`}
                     >
                       <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-slate-300 flex items-center gap-1.5">
+                        <span className="font-extrabold text-slate-800 flex items-center gap-1.5">
                           <span>{msg.senderName}</span>
                           {msg.isPinned && <span className="text-[10px]">📌</span>}
                         </span>
@@ -438,7 +438,7 @@ export default function StudyRoomsSection() {
                           {isHostOrMod && (
                             <button
                               onClick={() => togglePinMessage(msg.id)}
-                              className="text-[10px] text-amber-400 hover:text-amber-300 cursor-pointer"
+                              className="text-[10px] text-amber-600 hover:text-amber-800 cursor-pointer"
                               title={msg.isPinned ? "Unpin" : "Pin message"}
                             >
                               📌
@@ -447,7 +447,7 @@ export default function StudyRoomsSection() {
                           {(isMine || isHostOrMod) && (
                             <button
                               onClick={() => deleteRoomMessage(msg.id)}
-                              className="text-[10px] text-rose-400 hover:text-rose-300 cursor-pointer"
+                              className="text-[10px] text-rose-500 hover:text-rose-700 cursor-pointer"
                               title="Delete message"
                             >
                               🗑️
@@ -455,7 +455,7 @@ export default function StudyRoomsSection() {
                           )}
                         </div>
                       </div>
-                      <p className="text-slate-200 leading-relaxed break-words">{msg.content}</p>
+                      <p className="text-slate-700 leading-relaxed break-words">{msg.content}</p>
                     </div>
                   );
                 })
@@ -463,14 +463,14 @@ export default function StudyRoomsSection() {
             </div>
 
             {/* CHAT INPUT */}
-            <div className="space-y-2 pt-2 border-t border-slate-800">
+            <div className="space-y-2 pt-2 border-t border-slate-100">
               <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none">
                 {["👍 Got it", "❓ Need help with Q12", "💡 Good explanation!", "🎯 Let's review Math"].map((e) => (
                   <button
                     key={e}
                     type="button"
                     onClick={() => setNewChatMessage((prev) => prev + (prev ? " " : "") + e)}
-                    className="px-2 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[10px] text-slate-300 transition cursor-pointer shrink-0 border border-slate-800"
+                    className="px-2 py-1 bg-slate-50 hover:bg-slate-100 rounded-lg text-[10px] text-slate-700 transition cursor-pointer shrink-0 border border-slate-200"
                   >
                     {e}
                   </button>
@@ -478,7 +478,7 @@ export default function StudyRoomsSection() {
               </div>
 
               {activeRoom.allowMemberChat === false && !isHostOrMod ? (
-                <div className="p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-center text-xs text-slate-400">
+                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center text-xs text-slate-500">
                   🔒 Chat is locked to Host and Moderators.
                 </div>
               ) : (
@@ -488,12 +488,12 @@ export default function StudyRoomsSection() {
                     placeholder="Ask a question or explain a solution..."
                     value={newChatMessage}
                     onChange={(e) => setNewChatMessage(e.target.value)}
-                    className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 flex-1"
+                    className="px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 flex-1"
                   />
                   <button
                     type="submit"
                     disabled={sendingChat || !newChatMessage.trim()}
-                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0"
+                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-50 shrink-0 shadow-xs"
                   >
                     {sendingChat ? "..." : "Send"}
                   </button>
@@ -503,28 +503,28 @@ export default function StudyRoomsSection() {
           </div>
 
           {/* PARTICIPANTS PANEL */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider flex justify-between items-center">
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-5 space-y-4 shadow-xs">
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex justify-between items-center">
               <span>Participants ({activeRoom.participants.length}/{activeRoom.maxParticipants})</span>
-              <span className="text-[10px] text-emerald-400 font-semibold">&bull; Active Room</span>
+              <span className="text-[10px] text-emerald-600 font-semibold">&bull; Active Room</span>
             </h4>
 
             <div className="space-y-2 max-h-[380px] overflow-y-auto">
               {activeRoom.participants.map((p: any) => (
-                <div key={p.id} className="bg-slate-950 p-3 rounded-2xl border border-slate-800/80 flex items-center justify-between gap-2">
+                <div key={p.id} className="bg-slate-50 p-3 rounded-2xl border border-slate-200 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 overflow-hidden">
-                    <div className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400 text-xs uppercase shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center font-bold text-blue-700 text-xs uppercase shrink-0">
                       {p.displayName ? p.displayName[0] : p.name ? p.name[0] : "U"}
                     </div>
                     <div className="overflow-hidden space-y-0.5">
                       <div className="flex items-center gap-1.5">
-                        <p className="text-xs font-bold text-white truncate">{p.displayName || p.name || "Examinee"}</p>
+                        <p className="text-xs font-bold text-slate-900 truncate">{p.displayName || p.name || "Examinee"}</p>
                         <RoomRoleBadge role={p.role} size="sm" showLabel={false} />
                       </div>
-                      <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                      <div className="flex items-center gap-1 text-[10px] text-slate-500">
                         <span>{p.role === "HOST" ? "Host" : p.role === "MODERATOR" ? "Moderator" : "Member"}</span>
-                        {p.isMuted && <span className="text-rose-400">• Muted</span>}
-                        {p.canDraw === false && <span className="text-amber-400">• No Draw</span>}
+                        {p.isMuted && <span className="text-rose-600 font-semibold">• Muted</span>}
+                        {p.canDraw === false && <span className="text-amber-600 font-semibold">• No Draw</span>}
                       </div>
                     </div>
                   </div>
@@ -578,10 +578,10 @@ export default function StudyRoomsSection() {
   return (
     <div className="space-y-6">
       {/* HEADER BAR & CONTROLS */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs">
         <div>
-          <h3 className="text-sm font-bold text-white">Active Study Rooms</h3>
-          <p className="text-xs text-slate-400">Join virtual group review rooms or create your own session.</p>
+          <h3 className="text-sm font-bold text-slate-900">Active Study Rooms</h3>
+          <p className="text-xs text-slate-500">Join virtual group review rooms or create your own session.</p>
         </div>
 
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
@@ -590,18 +590,18 @@ export default function StudyRoomsSection() {
             placeholder="Invite Code (e.g., A8K2L9)"
             value={inviteCodeInput}
             onChange={(e) => setInviteCodeInput(e.target.value.toUpperCase())}
-            className="px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white uppercase font-mono placeholder-slate-500 focus:outline-none focus:border-blue-500 w-36"
+            className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 uppercase font-mono placeholder-slate-400 focus:outline-none focus:border-blue-500 w-36"
           />
           <button
             onClick={() => joinRoom(undefined, inviteCodeInput)}
             disabled={joiningCode || !inviteCodeInput.trim()}
-            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
           >
             Join
           </button>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs"
           >
             + Create Room
           </button>
@@ -609,11 +609,11 @@ export default function StudyRoomsSection() {
       </div>
 
       {/* FILTER TABS */}
-      <div className="flex gap-2 border-b border-slate-800 pb-2">
+      <div className="flex gap-2 border-b border-slate-100 pb-2">
         <button
           onClick={() => setFilter("all")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-            filter === "all" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "all" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           All Public Rooms
@@ -621,7 +621,7 @@ export default function StudyRoomsSection() {
         <button
           onClick={() => setFilter("mine")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-            filter === "mine" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "mine" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           My Active Rooms
@@ -630,46 +630,46 @@ export default function StudyRoomsSection() {
 
       {/* ROOM DIRECTORY GRID */}
       {loading ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse shadow-xs">
           Loading study room directory...
         </div>
       ) : rooms.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center space-y-3 shadow-xs">
           <span className="text-4xl block">🎧</span>
-          <h4 className="text-sm font-bold text-white">No Active Study Rooms Found</h4>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+          <h4 className="text-sm font-bold text-slate-900">No Active Study Rooms Found</h4>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
             Be the first to create a study room and invite classmates to review Civil Service Exam topics together.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {rooms.map((room) => (
-            <div key={room.id} className="bg-slate-900 border border-slate-800 p-5 rounded-3xl space-y-4 hover:border-slate-700 transition">
+            <div key={room.id} className="bg-white border border-slate-200/90 p-5 rounded-3xl space-y-4 hover:border-slate-300 shadow-xs transition">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-500/10 text-blue-400 rounded-full border border-blue-500/20">
+                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-200">
                     {room.topic}
                   </span>
                   {room.isLocked && (
-                    <span className="text-[10px] font-black text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                    <span className="text-[10px] font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                       🔒 Locked
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-xs font-bold text-slate-500">
                   👥 {room.participantCount}/{room.maxParticipants}
                 </span>
               </div>
 
               <div>
-                <h4 className="text-base font-bold text-white truncate">{room.name}</h4>
-                <p className="text-xs text-slate-400 line-clamp-2 mt-1 min-h-[32px]">
+                <h4 className="text-base font-bold text-slate-900 truncate">{room.name}</h4>
+                <p className="text-xs text-slate-600 line-clamp-2 mt-1 min-h-[32px]">
                   {room.description || "Interactive group review room for Civil Service Exam preparation."}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-1.5 text-slate-400">
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5 text-slate-500">
                   <span>👑</span>
                   <span className="truncate max-w-[100px]">{room.host?.name || "Host"}</span>
                 </div>
@@ -678,7 +678,7 @@ export default function StudyRoomsSection() {
                   {room.isHost && (
                     <button
                       onClick={() => setRoomToDelete({ id: room.id, name: room.name })}
-                      className="px-2.5 py-1 text-[11px] font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 rounded-lg transition cursor-pointer"
+                      className="px-2.5 py-1 text-[11px] font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition cursor-pointer"
                       title="Permanently Delete Room"
                     >
                       Delete
@@ -688,7 +688,7 @@ export default function StudyRoomsSection() {
                   {room.isMember ? (
                     <button
                       onClick={() => openRoomView(room.id)}
-                      className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer shadow-md"
+                      className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer shadow-xs"
                     >
                       Enter Room &rarr;
                     </button>
@@ -696,7 +696,7 @@ export default function StudyRoomsSection() {
                     <button
                       onClick={() => joinRoom(room.id)}
                       disabled={room.isLocked}
-                      className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-40"
+                      className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs rounded-xl transition cursor-pointer disabled:opacity-40 shadow-xs"
                     >
                       {room.isLocked ? "🔒 Locked" : "Join Room"}
                     </button>
@@ -710,15 +710,15 @@ export default function StudyRoomsSection() {
 
       {/* CREATE ROOM MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-md p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                 <span>🎧</span> Create Study Room
               </h3>
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="text-slate-400 hover:text-white text-xs px-2 py-1 rounded-lg hover:bg-slate-800 cursor-pointer"
+                className="text-slate-400 hover:text-slate-900 text-xs px-2 py-1 rounded-lg hover:bg-slate-100 cursor-pointer"
               >
                 ✕
               </button>
@@ -726,34 +726,34 @@ export default function StudyRoomsSection() {
 
             <form onSubmit={createRoom} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-300 font-bold block mb-1">Room Name *</label>
+                <label className="text-slate-700 font-bold block mb-1">Room Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g., Numerical Reasoning Sprint"
                   value={roomName}
                   onChange={(e) => setRoomName(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-slate-300 font-bold block mb-1">Description (Optional)</label>
+                <label className="text-slate-700 font-bold block mb-1">Description (Optional)</label>
                 <textarea
                   placeholder="Briefly describe what you'll review together..."
                   value={roomDesc}
                   onChange={(e) => setRoomDesc(e.target.value)}
-                  className="w-full px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500 h-20"
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 h-20"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-slate-300 font-bold block mb-1">Topic</label>
+                  <label className="text-slate-700 font-bold block mb-1">Topic</label>
                   <select
                     value={roomTopic}
                     onChange={(e) => setRoomTopic(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500"
                   >
                     <option value="General Review">General Review</option>
                     <option value="Numerical Reasoning">Numerical Reasoning</option>
@@ -764,11 +764,11 @@ export default function StudyRoomsSection() {
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-bold block mb-1">Max Capacity</label>
+                  <label className="text-slate-700 font-bold block mb-1">Max Capacity</label>
                   <select
                     value={maxMembers}
                     onChange={(e) => setMaxMembers(Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-blue-500"
                   >
                     <option value={5}>5 Participants</option>
                     <option value={10}>10 Participants</option>
@@ -786,22 +786,22 @@ export default function StudyRoomsSection() {
                     onChange={(e) => setIsPublic(e.target.checked)}
                     className="rounded text-blue-600 focus:ring-0"
                   />
-                  <span className="text-slate-300">Make room public (Listed in Study Together Hub)</span>
+                  <span className="text-slate-700">Make room public (Listed in Study Together Hub)</span>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-xl font-bold cursor-pointer"
+                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-bold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating || !roomName.trim()}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold rounded-xl transition cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-extrabold rounded-xl transition cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   {creating ? "Creating..." : "Create Room"}
                 </button>
@@ -813,26 +813,26 @@ export default function StudyRoomsSection() {
 
       {/* CONFIRM DELETE STUDY ROOM MODAL */}
       {roomToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-sm p-6 rounded-3xl bg-slate-900 border border-rose-500/30 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-sm p-6 rounded-3xl bg-white border border-rose-200 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
-              <span className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-2xl text-xl">⚠️</span>
+              <span className="p-2.5 bg-rose-50 border border-rose-200 rounded-2xl text-xl">⚠️</span>
               <div>
-                <h3 className="text-sm font-bold text-white">Delete Study Room?</h3>
-                <p className="text-xs text-slate-400">This action cannot be undone.</p>
+                <h3 className="text-sm font-bold text-slate-900">Delete Study Room?</h3>
+                <p className="text-xs text-slate-500">This action cannot be undone.</p>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+            <p className="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200">
               Are you sure you want to permanently delete <strong>{roomToDelete.name}</strong>?
             </p>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setRoomToDelete(null)}
                 disabled={deletingRoom}
-                className="px-3.5 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 rounded-xl transition cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -840,7 +840,7 @@ export default function StudyRoomsSection() {
                 type="button"
                 onClick={confirmDeleteRoom}
                 disabled={deletingRoom}
-                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-rose-600/20 transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                className="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs rounded-xl shadow-xs transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
               >
                 {deletingRoom ? "Deleting..." : "Delete Room"}
               </button>

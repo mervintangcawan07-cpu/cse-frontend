@@ -207,24 +207,24 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
   return (
     <div className="space-y-6">
       {/* HEADER & TOP CONTROLS */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/80 p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-white">Notifications & Activity Feed</h3>
+            <h3 className="text-sm font-bold text-slate-900">Notifications & Activity Feed</h3>
             {unreadCount > 0 && (
-              <span className="px-2.5 py-0.5 bg-rose-600 text-white font-black text-[10px] rounded-full animate-pulse">
+              <span className="px-2.5 py-0.5 bg-rose-500 text-white font-black text-[10px] rounded-full animate-pulse">
                 {unreadCount} New
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-400">Classmate invitations, private messages, room alerts, and club activities.</p>
+          <p className="text-xs text-slate-500">Classmate invitations, private messages, room alerts, and club activities.</p>
         </div>
 
         <div className="flex items-center gap-2">
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer"
+              className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-xl transition border border-blue-200 cursor-pointer shadow-xs"
             >
               ✓ Mark All Read
             </button>
@@ -232,7 +232,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
           <button
             onClick={clearAllRead}
             disabled={isClearingRead}
-            className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-xs font-bold rounded-xl transition border border-slate-700 cursor-pointer disabled:opacity-50"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs font-bold rounded-xl transition border border-slate-200 cursor-pointer disabled:opacity-50"
             title="Remove all read notifications from feed"
           >
             {isClearingRead ? "Clearing..." : "Clear Read"}
@@ -241,11 +241,11 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
       </div>
 
       {/* FILTER TABS */}
-      <div className="flex gap-2 border-b border-slate-800 pb-2 overflow-x-auto scrollbar-none">
+      <div className="flex gap-2 border-b border-slate-100 pb-2 overflow-x-auto scrollbar-none">
         <button
           onClick={() => setFilter("ALL")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "ALL" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "ALL" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           All Activity
@@ -253,7 +253,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
         <button
           onClick={() => setFilter("UNREAD")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "UNREAD" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "UNREAD" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           Unread Only {unreadCount > 0 ? `(${unreadCount})` : ""}
@@ -261,7 +261,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
         <button
           onClick={() => setFilter("CLASSMATES")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "CLASSMATES" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "CLASSMATES" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           🧑‍🎓 Classmates
@@ -269,7 +269,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
         <button
           onClick={() => setFilter("MESSAGES")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "MESSAGES" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "MESSAGES" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           💬 Messages
@@ -277,7 +277,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
         <button
           onClick={() => setFilter("ROOMS_CLUBS")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "ROOMS_CLUBS" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "ROOMS_CLUBS" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           🎧 Rooms & Clubs
@@ -285,7 +285,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
         <button
           onClick={() => setFilter("EVENTS")}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
-            filter === "EVENTS" ? "bg-blue-600/20 text-blue-400 border border-blue-500/30" : "text-slate-400 hover:text-slate-200"
+            filter === "EVENTS" ? "bg-blue-50 text-blue-700 border border-blue-200 font-black" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           📅 Events
@@ -294,14 +294,14 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
 
       {/* NOTIFICATIONS LIST */}
       {loading ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center text-slate-400 font-bold animate-pulse shadow-xs">
           Loading alerts...
         </div>
       ) : notifications.length === 0 ? (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center space-y-3 shadow-xs">
           <span className="text-4xl block">🔔</span>
-          <h4 className="text-sm font-bold text-white">You're All Caught Up!</h4>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+          <h4 className="text-sm font-bold text-slate-900">You're All Caught Up!</h4>
+          <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
             Classmate requests, private messages, study room invites, and scheduled event reminders will appear here in real time.
           </p>
         </div>
@@ -315,12 +315,12 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
                 key={notif.id}
                 className={`p-4 rounded-2xl border transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
                   !notif.isRead
-                    ? "bg-slate-900/90 border-blue-500/40 shadow-lg shadow-blue-500/5 ring-1 ring-blue-500/20"
-                    : "bg-slate-900/50 border-slate-800/80 opacity-85"
+                    ? "bg-blue-50/40 border-blue-200 shadow-xs"
+                    : "bg-white border-slate-200/80"
                 }`}
               >
                 <div className="flex items-start gap-3.5 overflow-hidden w-full sm:w-auto">
-                  <span className="p-2.5 bg-slate-950 border border-slate-800 rounded-2xl text-xl shrink-0">
+                  <span className="p-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xl shrink-0">
                     {config.icon}
                   </span>
                   <div className="overflow-hidden space-y-1">
@@ -328,12 +328,12 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
                       <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-md border ${config.color}`}>
                         {config.badge}
                       </span>
-                      <h4 className="text-xs font-bold text-white truncate">{notif.title}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 truncate">{notif.title}</h4>
                       {!notif.isRead && (
                         <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{notif.message}</p>
+                    <p className="text-xs text-slate-700 leading-relaxed">{notif.message}</p>
                     <span className="text-[10px] text-slate-500 block">
                       {new Date(notif.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })} at{" "}
                       {new Date(notif.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -347,7 +347,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
                     <button
                       type="button"
                       onClick={() => handleActionClick(notif, config.tab)}
-                      className="px-3 py-1.5 text-xs font-black bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-md transition cursor-pointer flex items-center gap-1.5"
+                      className="px-3 py-1.5 text-xs font-black bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-xs transition cursor-pointer flex items-center gap-1.5"
                     >
                       <span>{config.actionLabel}</span>
                       <span>&rarr;</span>
@@ -358,7 +358,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
                     <button
                       type="button"
                       onClick={() => markAsRead(notif.id)}
-                      className="p-1.5 text-[11px] font-bold text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition cursor-pointer"
+                      className="p-1.5 text-[11px] font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer border border-slate-200"
                       title="Mark as read"
                     >
                       ✓
@@ -368,7 +368,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
                   <button
                     type="button"
                     onClick={() => deleteNotification(notif.id)}
-                    className="p-1.5 text-[11px] font-bold text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 rounded-lg transition cursor-pointer"
+                    className="p-1.5 text-[11px] font-bold text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition cursor-pointer"
                     title="Delete notification"
                   >
                     🗑️
