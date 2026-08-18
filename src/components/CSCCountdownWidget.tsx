@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface Schedule {
   title: string;
@@ -18,9 +19,11 @@ export default function CSCCountdownWidget() {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch("/api/csc/public-info");
-        const data = await res.json();
-        if (res.ok && data.nextSchedule) {
+        const data = await fetchWithClientCache<{ nextSchedule?: Schedule }>(
+          "/api/csc/public-info",
+          60 * 60 * 1000 // 1-hour cache with SWR background refresh
+        );
+        if (data?.nextSchedule) {
           setSchedule(data.nextSchedule);
         }
       } catch (e) {

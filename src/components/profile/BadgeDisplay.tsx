@@ -1,8 +1,8 @@
-// Relative Path: src/components/profile/BadgeDisplay.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface BadgeEntry {
   id: string;
@@ -49,10 +49,12 @@ export default function BadgeDisplay({ compact = false }: BadgeDisplayProps) {
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetch("/api/user/badges")
-      .then((r) => r.json())
+    fetchWithClientCache<{ success?: boolean; all?: BadgeEntry[]; totalEarned: number; totalAvailable: number }>(
+      "/api/user/badges",
+      5 * 60 * 1000 // 5-minute cache with SWR background refresh
+    )
       .then((data) => {
-        if (data.success) {
+        if (data?.success) {
           setBadges(data.all || []);
           setTotalEarned(data.totalEarned);
           setTotalAvailable(data.totalAvailable);
