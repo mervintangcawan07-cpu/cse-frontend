@@ -4,12 +4,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<{ name?: string; role?: string; isPaid?: boolean } | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isOnline, pendingCount, isSyncing, syncNow } = useOfflineSync();
 
   useEffect(() => {
     async function fetchMe() {
@@ -88,6 +90,46 @@ export default function Navbar() {
 
         {/* DESKTOP ACTIONS */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Offline / Sync Indicator */}
+          {(!isOnline || pendingCount > 0) && (
+            <button
+              type="button"
+              onClick={() => void syncNow()}
+              disabled={isSyncing || !isOnline}
+              title={
+                !isOnline
+                  ? "You are offline"
+                  : isSyncing
+                  ? "Syncing pending submissions…"
+                  : `${pendingCount} pending submission${pendingCount > 1 ? "s" : ""} — click to sync`
+              }
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer disabled:cursor-not-allowed ${
+                !isOnline
+                  ? "bg-slate-900 border-slate-700 text-slate-400"
+                  : isSyncing
+                  ? "bg-blue-950/50 border-blue-700/50 text-blue-400 animate-pulse"
+                  : "bg-amber-950/40 border-amber-600/40 text-amber-400 hover:bg-amber-950/60"
+              }`}
+            >
+              {!isOnline ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-500 inline-block" />
+                  <span>Offline</span>
+                </>
+              ) : isSyncing ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block animate-pulse" />
+                  <span>Syncing…</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+                  <span>{pendingCount} Pending</span>
+                </>
+              )}
+            </button>
+          )}
+
           {user ? (
             <div className="flex items-center gap-3">
               <Link

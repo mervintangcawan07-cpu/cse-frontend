@@ -4,6 +4,7 @@ import { formatPromptHTML } from "@/lib/formatPrompt";
 import { cleanMathText } from "@/lib/sanitizeMath";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getOfflineDrillById } from "@/lib/offline-storage";
 
 interface DrillQuestion {
   id: string;
@@ -134,8 +135,36 @@ export default function EliminationTrainerPage() {
         setQuestions(SAMPLE_QUESTIONS);
       }
     } catch (err) {
-      console.error("Failed to load drill questions from API, using fallback:", err);
-      setQuestions(SAMPLE_QUESTIONS);
+      console.error("Failed to load drill questions from API, trying offline cache:", err);
+      // 🔌 Offline Fallback: load from IndexedDB if available
+      try {
+        const offlineDrill = await getOfflineDrillById("elimination_trainer");
+        if (offlineDrill && Array.isArray(offlineDrill.questions) && offlineDrill.questions.length > 0) {
+          const offlineQuestions: DrillQuestion[] = offlineDrill.questions.map((item: any, idx: number) => {
+            const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
+            const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
+              const prefix = `${String.fromCharCode(65 + oIdx)}. `;
+              return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
+                ? opt
+                : `${prefix}${opt}`;
+            });
+            return {
+              id: item.id || String(idx + 1),
+              category: item.category || "General Ability",
+              prompt: item.prompt,
+              options: formattedOptions,
+              answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
+              explanation: item.explanation || "No detailed explanation provided.",
+              eliminationNotes: item.eliminationNotes || {},
+            };
+          });
+          setQuestions(offlineQuestions);
+        } else {
+          setQuestions(SAMPLE_QUESTIONS);
+        }
+      } catch {
+        setQuestions(SAMPLE_QUESTIONS);
+      }
     } finally {
       setLoading(false);
     }

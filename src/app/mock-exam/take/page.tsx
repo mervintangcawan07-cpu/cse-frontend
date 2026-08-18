@@ -7,6 +7,8 @@ import Link from "next/link";
 import FlagQuestionButton from "@/components/exam/FlagQuestionButton";
 import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 import ExamSubmissionLoader from "@/components/exam/ExamSubmissionLoader";
+import { queueOfflineSubmission } from "@/lib/offline-storage";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
 
 interface Question {
   id: string;
@@ -31,6 +33,7 @@ const DEFAULT_CATEGORIES = [
 function TakeExamPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isOnline } = useOfflineSync();
 
   // Data States
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -44,6 +47,7 @@ function TakeExamPageInner() {
   const [submitting, setSubmitting] = useState(false);
   const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
   const [savedSessionData, setSavedSessionData] = useState<any | null>(null);
+  const [offlineBanner, setOfflineBanner] = useState(false);
 
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -194,17 +198,35 @@ function TakeExamPageInner() {
       };
     });
 
-    try {
-      await fetch("/api/exam/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          totalItems,
-          answers: formattedAnswers,
-        }),
-      });
-    } catch (err) {
-      console.error("Error submitting result:", err);
+    const submissionPayload = { totalItems, answers: formattedAnswers };
+
+    // 🔌 Offline-Aware Submission: queue if offline or if network request fails
+    let submittedOnline = false;
+    if (isOnline) {
+      try {
+        const res = await fetch("/api/exam/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(submissionPayload),
+        });
+        if (res.ok) {
+          submittedOnline = true;
+        } else {
+          console.warn(`[EXAM_SUBMIT] Server responded with ${res.status}. Queueing for offline sync.`);
+        }
+      } catch (err) {
+        console.error("Network error submitting exam. Queueing for offline sync:", err);
+      }
+    }
+
+    if (!submittedOnline) {
+      // Queue for automatic retry when back online
+      try {
+        await queueOfflineSubmission(submissionPayload);
+        setOfflineBanner(true);
+      } catch (queueErr) {
+        console.error("Failed to queue offline submission:", queueErr);
+      }
     }
 
     const reviewData = {
@@ -221,7 +243,7 @@ function TakeExamPageInner() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
 
     router.push("/mock-exam/results");
-  }, [examQuestions, selectedAnswers, submitting, router]);
+  }, [examQuestions, selectedAnswers, submitting, router, isOnline]);
 
   // Timer Logic
   useEffect(() => {
@@ -529,6 +551,28 @@ function TakeExamPageInner() {
     <div className="w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6">
       {/* EXAM SUBMISSION & GRADING FULLSCREEN OVERLAY */}
       <ExamSubmissionLoader isSubmitting={submitting} totalQuestions={examQuestions.length || 170} />
+
+      {/* OFFLINE SUBMISSION SAVED BANNER */}
+      {offlineBanner && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 max-w-md w-full mx-auto px-4">
+          <div className="bg-slate-900 border border-emerald-500/40 rounded-2xl px-4 py-3 flex items-start gap-3 shadow-2xl">
+            <span className="text-emerald-400 text-base mt-0.5">📶</span>
+            <div>
+              <p className="text-xs font-extrabold text-emerald-300">Saved offline!</p>
+              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                Your score will sync automatically once you are back online.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOfflineBanner(false)}
+              className="ml-auto text-slate-500 hover:text-slate-300 transition text-xs font-bold cursor-pointer shrink-0"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* TOP HEADER */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 md:p-5 rounded-3xl shadow-lg shadow-blue-600/15 flex justify-between items-center gap-4">
