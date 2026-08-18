@@ -11,15 +11,19 @@ import CSCDailyQuestionWidget from "@/components/cse/CSCDailyQuestionWidget";
 import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 import PaymentConfirmationLoader from "@/components/common/PaymentConfirmationLoader";
 import WidgetErrorBoundary from "@/components/common/WidgetErrorBoundary";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import dynamic from "next/dynamic";
+
+const ScoreAnalyticsChart = dynamic(
+  () => import("@/components/dashboard/ScoreAnalyticsChart"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-56 sm:h-64 w-full bg-slate-50 dark:bg-slate-800/40 rounded-2xl animate-pulse flex items-center justify-center border border-slate-100 dark:border-slate-800">
+        <span className="text-xs text-slate-400 font-semibold">Loading chart metrics...</span>
+      </div>
+    ),
+  }
+);
 
 interface UserProfile {
   name: string;
@@ -531,36 +535,7 @@ function DashboardContent() {
 
               <div className="h-56 sm:h-64 w-full pt-2 sm:pt-4">
                 {chartMounted && (
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={analytics.scoreHistory} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                      <defs>
-                        <linearGradient id="scoreColor" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#2563eb" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
-                      <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "#0f172a",
-                          borderRadius: "16px",
-                          border: "none",
-                          color: "#fff",
-                          fontSize: "12px",
-                        }}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="score"
-                        stroke="#2563eb"
-                        strokeWidth={3}
-                        fillOpacity={1}
-                        fill="url(#scoreColor)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                  <ScoreAnalyticsChart scoreHistory={analytics.scoreHistory} />
                 )}
               </div>
             </div>

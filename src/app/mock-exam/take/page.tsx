@@ -607,6 +607,8 @@ function TakeExamPageInner() {
             <img
               src={currentQ.imageUrl}
               alt="Question Diagram or Chart"
+              loading="lazy"
+              decoding="async"
               className="max-h-64 object-contain rounded-xl shadow-sm"
             />
           </div>

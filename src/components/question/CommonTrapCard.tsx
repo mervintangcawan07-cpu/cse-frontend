@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { cleanMathText } from "@/lib/sanitizeMath";
 

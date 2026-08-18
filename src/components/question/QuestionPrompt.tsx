@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { formatPromptHTML } from "@/lib/formatPrompt";
 
@@ -25,6 +23,8 @@ export default function QuestionPrompt({ prompt, imageUrl }: QuestionPromptProps
           <img
             src={imageUrl}
             alt="Question Diagram"
+            loading="lazy"
+            decoding="async"
             className="max-h-72 object-contain rounded-xl shadow-xs"
           />
         </div>
