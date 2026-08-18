@@ -4,6 +4,11 @@ import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
 import { evaluateAndAwardBadges } from "@/lib/badges";
+import {
+  EXAM_SUBMIT_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 interface SubmittedAnswer {
   questionId: string;
@@ -26,6 +31,13 @@ export async function POST(request: Request) {
     }
 
     const userId = String(session.userId);
+
+    // 🔒 Limit: 10 exam submissions per minute per user
+    const rateResult = await checkRateLimit(EXAM_SUBMIT_LIMITER, `exam_submit:${userId}`);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "Too many exam submission requests. Please wait a moment.");
+    }
+
     const body = await request.json();
 
     const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;

@@ -3,7 +3,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/lib/auth";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 import {
   checkAccountLockout,
   recordFailedAttempt,
@@ -16,19 +21,10 @@ export async function POST(request: Request) {
     const clientIp = getClientIp(request);
     const rateLimitKey = `login:${clientIp}`;
 
-    // 🔒 Limit: 3 login attempts per minute per IP
-    const { allowed, resetSeconds } = checkRateLimit(rateLimitKey, 3, 60000);
-
-    if (!allowed) {
-      return NextResponse.json(
-        {
-          error: `Too many login attempts. Please wait ${resetSeconds} seconds before trying again.`,
-        },
-        {
-          status: 429,
-          headers: { "Retry-After": String(resetSeconds) },
-        }
-      );
+    // 🔒 Limit: 5 login requests per 10 seconds per IP via Upstash distributed rate limiter
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "Too many login attempts. Please wait a moment before trying again.");
     }
 
     const { email, password } = await request.json();

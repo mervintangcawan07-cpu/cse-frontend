@@ -1,26 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(req: Request) {
   try {
     const clientIp = getClientIp(req);
     const rateLimitKey = `register:${clientIp}`;
 
-    // 🔒 Limit: 3 registration attempts per minute per IP
-    const { allowed, resetSeconds } = checkRateLimit(rateLimitKey, 3, 60000);
-
-    if (!allowed) {
-      return NextResponse.json(
-        {
-          error: `Too many registration attempts. Please wait ${resetSeconds} seconds before trying again.`,
-        },
-        {
-          status: 429,
-          headers: { "Retry-After": String(resetSeconds) },
-        }
-      );
+    // 🔒 Limit: 5 registration requests per 10 seconds per IP via Upstash distributed rate limiter
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "Too many registration attempts. Please wait a moment before trying again.");
     }
 
     const { name, email, password } = await req.json();

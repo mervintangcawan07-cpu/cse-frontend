@@ -4,6 +4,11 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
+import {
+  MESSAGING_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function GET(
   request: Request,
@@ -138,6 +143,12 @@ export async function POST(
 
     if (!participant) {
       return NextResponse.json({ error: "Access denied to conversation" }, { status: 403 });
+    }
+
+    // 🔒 Limit: 20 messages per minute per user via Upstash distributed rate limiter
+    const rateResult = await checkRateLimit(MESSAGING_LIMITER, `msg:${userId}`);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "You are sending messages too quickly. Please wait a moment.");
     }
 
     const body = await request.json();

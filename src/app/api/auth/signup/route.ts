@@ -3,26 +3,22 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { sendVerificationEmail } from "@/lib/email";
-import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
     const clientIp = getClientIp(request);
     const rateLimitKey = `signup:${clientIp}`;
 
-    // 🔒 Limit: 3 signup attempts per minute per IP
-    const { allowed, resetSeconds } = checkRateLimit(rateLimitKey, 3, 60000);
-
-    if (!allowed) {
-      return NextResponse.json(
-        {
-          error: `Too many signup attempts. Please wait ${resetSeconds} seconds before trying again.`,
-        },
-        {
-          status: 429,
-          headers: { "Retry-After": String(resetSeconds) },
-        }
-      );
+    // 🔒 Limit: 5 signup requests per 10 seconds per IP via Upstash distributed rate limiter
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "Too many signup attempts. Please wait a moment before trying again.");
     }
 
     const body = await request.json();
