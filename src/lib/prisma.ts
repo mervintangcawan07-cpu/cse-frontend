@@ -10,13 +10,16 @@ const globalForPrisma = globalThis as unknown as {
   pool: Pool | undefined;
 };
 
+// ⚡ NEON + VERCEL SERVERLESS OPTIMIZATION:
+// In Vercel serverless environments, each ephemeral lambda instance is single-threaded.
+// Setting max to 1 (or PG_POOL_MAX) and shortening timeouts avoids connection multiplication and UI hangs.
 const pool =
   globalForPrisma.pool ??
   new Pool({
     connectionString,
-    max: process.env.PG_POOL_MAX ? parseInt(process.env.PG_POOL_MAX, 10) : 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 10000,
+    max: process.env.PG_POOL_MAX ? parseInt(process.env.PG_POOL_MAX, 10) : 1,
+    idleTimeoutMillis: 10000, // Return idle connections quickly to Neon PgBouncer
+    connectionTimeoutMillis: 5000, // 5s fast timeout to prevent UI hanging during cold starts
   });
 
 const adapter = new PrismaPg(pool);
