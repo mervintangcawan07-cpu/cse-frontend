@@ -1,8 +1,16 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  return NextResponse.json({
-    maintenanceMode: false,
-    allowedRoles: ["ADMIN"],
-  });
+  try {
+    return NextResponse.json({
+      maintenanceMode: false,
+      allowedRoles: ["ADMIN"],
+    });
+  } catch (error) {
+    console.error("[ADMIN_MAINTENANCE_ERROR]", error);
+    return NextResponse.json(
+      { maintenanceMode: false, allowedRoles: ["ADMIN"], error: "Failed to read maintenance configuration." },
+      { status: 500 }
+    );
+  }
 }
