@@ -13,10 +13,12 @@
     "@livekit/components-react": "^2.9.23",
     "@prisma/adapter-pg": "^7.9.0",
     "@prisma/client": "^7.9.0",
+    "@serwist/next": "^9.5.12",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.2",
     "bcryptjs": "^3.0.3",
     "cheerio": "^1.2.0",
+    "idb-keyval": "^6.3.0",
     "jose": "^6.2.4",
     "livekit-client": "^2.21.0",
     "livekit-server-sdk": "^2.17.0",
@@ -27,7 +29,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.10.0",
-    "resend": "^6.18.0"
+    "resend": "^6.18.0",
+    "serwist": "^9.5.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
