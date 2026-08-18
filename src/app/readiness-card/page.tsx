@@ -198,35 +198,37 @@ export default function ReadinessCardPage() {
   if (!metrics) return null;
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-6 text-slate-100 font-sans">
-      {/* HEADER BANNER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
-            Viral Progress Flex
-          </span>
-          <h1 className="text-2xl font-black text-white mt-2">
-            Eligibility Readiness Card
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Customize and export your official study status card to share on Facebook, Instagram, or Messenger.
-          </p>
+    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 text-slate-100 font-sans">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+        {/* HEADER BANNER - Seamlessly integrated */}
+        <div className="bg-slate-900 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
+              Viral Progress Flex
+            </span>
+            <h1 className="text-2xl font-black text-white mt-2">
+              Eligibility Readiness Card
+            </h1>
+            <p className="text-xs text-slate-400 mt-1">
+              Customize and export your official study status card to share on Facebook, Instagram, or Messenger.
+            </p>
+          </div>
+
+          <Link
+            href="/dashboard"
+            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 shrink-0"
+          >
+            ← Dashboard
+          </Link>
         </div>
 
-        <Link
-          href="/dashboard"
-          className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 shrink-0"
-        >
-          ← Dashboard
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* CUSTOMIZATION PANEL */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-5 h-fit">
-          <h2 className="text-sm font-black text-white uppercase tracking-wider">
-            🎨 Card Customizer
-          </h2>
+        {/* UNIFIED CONTENT BODY */}
+        <div className="p-3.5 sm:p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* CUSTOMIZATION PANEL */}
+          <div className="bg-slate-950/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 space-y-5 h-fit">
+            <h2 className="text-sm font-black text-white uppercase tracking-wider">
+              🎨 Card Customizer
+            </h2>
 
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-300">Display Name</label>
@@ -373,5 +375,6 @@ export default function ReadinessCardPage() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

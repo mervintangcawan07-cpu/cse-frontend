@@ -19,23 +19,24 @@ export default function PracticeAndPrepPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
-      {/* Top Banner Header */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl shadow-blue-600/15 space-y-3 overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-        <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">
-          🎯 Assessment Hub
-        </span>
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-          Practice & Prep Center
-        </h1>
-        <p className="text-xs md:text-sm text-blue-100 max-w-xl leading-relaxed font-medium">
-          Engage in timed mock exam simulations, practice specialized technique drills, or compete in multiplayer 1v1 duels.
-        </p>
-      </div>
+    <div className="w-full max-w-7xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
+        {/* Top Banner Header - Seamlessly integrated */}
+        <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-6 md:p-8 space-y-3 overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+          <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">
+            🎯 Assessment Hub
+          </span>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
+            Practice & Prep Center
+          </h1>
+          <p className="text-xs md:text-sm text-blue-100 max-w-xl leading-relaxed font-medium">
+            Engage in timed mock exam simulations, practice specialized technique drills, or compete in multiplayer 1v1 duels.
+          </p>
+        </div>
 
-      {/* Futuristic Launcher Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Futuristic Launcher Cards Grid */}
+        <div className="p-3.5 sm:p-6 md:p-8 bg-slate-50/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* CARD 1: PRACTICE MOCK EXAM */}
         <div className="bg-white text-slate-900 p-6 rounded-3xl border border-slate-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-blue-500/50 hover:shadow-lg transition-all duration-300">
           <div className="relative z-10">
@@ -197,5 +198,6 @@ export default function PracticeAndPrepPage() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

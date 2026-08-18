@@ -80,26 +80,27 @@ export default function CustomQuizBuilderPage() {
   const allCatsSelected = selectedCategories.length === CATEGORIES.length;
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
-      {/* Header */}
-      <div className="relative bg-slate-900 text-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-violet-500/30 shadow-2xl space-y-3 overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-        <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-violet-500/20 text-violet-400 rounded-full border border-violet-500/30">
-          🎛️ Custom Quiz Builder
-        </span>
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
-          Build Your Practice Quiz
-        </h1>
-        <p className="text-xs md:text-sm text-slate-300 max-w-xl leading-relaxed">
-          Configure your ideal study session — choose topics, item count, question pool, and exam mode. Every detail tailored to your preparation goals.
-        </p>
-      </div>
+    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
+      <div className="bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
+        {/* Header - Seamlessly integrated */}
+        <div className="relative bg-slate-900 text-white p-4 sm:p-8 space-y-3 overflow-hidden border-b border-slate-800">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
+          <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-violet-500/20 text-violet-400 rounded-full border border-violet-500/30">
+            🎛️ Custom Quiz Builder
+          </span>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white">
+            Build Your Practice Quiz
+          </h1>
+          <p className="text-xs md:text-sm text-slate-300 max-w-xl leading-relaxed">
+            Configure your ideal study session — choose topics, item count, question pool, and exam mode. Every detail tailored to your preparation goals.
+          </p>
+        </div>
 
-      {/* Configuration Sections */}
-      <div className="space-y-6">
+        {/* Configuration Sections */}
+        <div className="p-3.5 sm:p-6 md:p-8 space-y-6">
 
-        {/* SECTION 1: Categories */}
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+          {/* SECTION 1: Categories */}
+          <div className="bg-slate-950/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
               <h2 className="text-base font-black text-white">Subject Categories</h2>
@@ -304,5 +305,6 @@ export default function CustomQuizBuilderPage() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
