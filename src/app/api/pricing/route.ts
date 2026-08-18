@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 const DEFAULT_PLANS = [
   { planType: "1_MONTH", name: "1-Month Pass", price: 199, durationDays: 30 },
@@ -26,17 +27,15 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json(
+    return cachedJsonResponse(
       { success: true, plans },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-        },
-      }
+      "STATIC_METADATA"
     );
   } catch (error) {
-    console.error("Fetch pricing error:", error);
-    return NextResponse.json({ error: "Failed to load pricing" }, { status: 500 });
+    console.error("[PRICING_FETCH_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to load pricing" },
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
+    );
   }
 }

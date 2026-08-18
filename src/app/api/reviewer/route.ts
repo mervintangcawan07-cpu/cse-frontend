@@ -1,22 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 // GET: Fetch all study notes
 export async function GET() {
   try {
     const notes = await prisma.studyNote.findMany({ orderBy: { createdAt: "desc" } });
-    return NextResponse.json(
+    return cachedJsonResponse(
       { notes },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-        },
-      }
+      "STATIC_METADATA"
     );
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch study notes" }, { status: 500 });
+    console.error("[REVIEWER_NOTES_GET_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to fetch study notes" },
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
+    );
   }
 }
 

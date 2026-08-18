@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 export async function GET() {
   try {
@@ -13,12 +14,18 @@ export async function GET() {
       where: { key: "MAINTENANCE_MESSAGE" },
     });
 
-    return NextResponse.json({
-      isMaintenance,
-      message: messageSetting?.value || "System is undergoing scheduled updates.",
-    });
+    return cachedJsonResponse(
+      {
+        isMaintenance,
+        message: messageSetting?.value || "System is undergoing scheduled updates.",
+      },
+      "PUBLIC_FEED"
+    );
   } catch (error) {
     console.error("[MAINTENANCE_STATUS_ERROR]", error);
-    return NextResponse.json({ isMaintenance: false });
+    return NextResponse.json(
+      { isMaintenance: false },
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
+    );
   }
 }

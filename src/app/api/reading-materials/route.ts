@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 // GET: Fetch all handbooks metadata
 export async function GET() {
@@ -17,17 +18,16 @@ export async function GET() {
         createdAt: true,
       },
     });
-    return NextResponse.json(
+    return cachedJsonResponse(
       { handbooks },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-        },
-      }
+      "STATIC_METADATA"
     );
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch handbooks" }, { status: 500 });
+    console.error("[READING_MATERIALS_GET_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to fetch handbooks" },
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
+    );
   }
 }
 

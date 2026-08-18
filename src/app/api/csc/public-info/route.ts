@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 export async function GET() {
   try {
@@ -17,21 +18,20 @@ export async function GET() {
       }),
     ]);
 
-    return NextResponse.json(
+    return cachedJsonResponse(
       {
         success: true,
         nextSchedule,
         announcements,
         downloads,
       },
-      {
-        status: 200,
-        headers: {
-          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-        },
-      }
+      "STATIC_METADATA"
     );
   } catch (error: any) {
-    return NextResponse.json({ error: "Failed to fetch CSC public info" }, { status: 500 });
+    console.error("[CSC_PUBLIC_INFO_GET_ERROR]", error);
+    return NextResponse.json(
+      { error: "Failed to fetch CSC public info" },
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
+    );
   }
 }
