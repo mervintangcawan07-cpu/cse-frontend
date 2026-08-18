@@ -171,8 +171,8 @@ function DuelsArenaInner() {
     const challengeMatch = match;
 
     return (
-      <div className="max-w-xl mx-auto py-16 px-4 text-center font-sans space-y-8">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl space-y-6">
+      <div className="w-full max-w-xl mx-auto py-8 sm:py-16 px-2 sm:px-4 text-center font-sans space-y-6 sm:space-y-8">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-12 shadow-2xl space-y-6">
           <span className="text-4xl block animate-bounce">⚔️</span>
           <div>
             <span className="text-xs font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -290,44 +290,47 @@ function DuelsArenaInner() {
     const isDraw = myScore === oppScore;
 
     return (
-      <div className="max-w-xl mx-auto py-16 px-4 text-center font-sans space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+      <div className="w-full max-w-xl mx-auto py-8 sm:py-16 px-2 sm:px-4 text-center font-sans space-y-6">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl space-y-6">
           <span className="text-5xl block">
             {isWinner ? "🏆" : isDraw ? "🤝" : "💀"}
           </span>
 
           <div>
             <h1 className="text-3xl font-black text-white">
-              {isWinner ? "VICTORY!" : isDraw ? "DRAW MATCH!" : "DEFEAT"}
+              {isWinner ? "Victory!" : isDraw ? "It's a Draw!" : "Defeat"}
             </h1>
             <p className="text-xs text-slate-400 mt-1">
-              {isWinner
-                ? "Awesome speed and accuracy! You earned +50 XP and 1 Streak Shield!"
-                : "Good effort! Keep practicing to climb the leaderboard."}
+              {isWinner ? "Outstanding speed and accuracy!" : "Great match! Keep training."}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 bg-slate-950 p-6 rounded-2xl border border-slate-800">
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-blue-400">{myName}</span>
-              <p className="text-3xl font-black text-white">{myScore} pts</p>
+          <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 flex justify-around items-center">
+            <div className="text-center">
+              <span className="text-xs font-bold text-slate-400 block">{myName}</span>
+              <span className="text-3xl font-black text-blue-400">{myScore}</span>
             </div>
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-rose-400">{oppName}</span>
-              <p className="text-3xl font-black text-white">{oppScore} pts</p>
+            <span className="text-xl font-black text-slate-600">VS</span>
+            <div className="text-center">
+              <span className="text-xs font-bold text-slate-400 block">{oppName}</span>
+              <span className="text-3xl font-black text-rose-400">{oppScore}</span>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <button
-              onClick={() => setMatch(null)}
-              className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition"
+            <Link
+              href="/duels"
+              onClick={() => {
+                setMatch(null);
+                setSearching(false);
+              }}
+              className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition"
             >
-              ⚔️ Play Again
-            </button>
+              Play Again ⚔️
+            </Link>
             <Link
               href="/dashboard"
-              className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition border border-slate-700"
+              className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl transition"
             >
               Dashboard
             </Link>
@@ -337,7 +340,7 @@ function DuelsArenaInner() {
     );
   }
 
-  // UI STATE 3: LIVE BATTLE ARENA
+  // UI STATE 3: LIVE ACTIVE 1V1 DUEL ARENA
   const currentQ = match.questions[currentIndex];
   const isP1 = playerRole === "P1";
   const myScore = isP1 ? match.p1Score : match.p2Score;
@@ -346,9 +349,9 @@ function DuelsArenaInner() {
   const oppName = isP1 ? match.player2Name || "Waiting..." : match.player1Name;
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-4 font-sans space-y-6 text-slate-100">
+    <div className="w-full max-w-2xl mx-auto py-4 sm:py-8 px-2 sm:px-4 font-sans space-y-4 sm:space-y-6 text-slate-100">
       {/* ARENA SCOREBOARD HEADER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
         <div className="flex justify-between items-center text-xs font-bold">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-blue-500 animate-pulse" />

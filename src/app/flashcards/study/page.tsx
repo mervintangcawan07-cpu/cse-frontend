@@ -49,8 +49,8 @@ export default function StudyFlashcardsPage() {
   const currentCard = cards[currentIndex];
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 flex flex-col justify-between">
-      <div className="max-w-3xl mx-auto w-full space-y-8">
+    <div className="min-h-screen bg-slate-50 py-6 sm:py-12 px-2 sm:px-4 flex flex-col justify-between">
+      <div className="w-full max-w-3xl mx-auto space-y-6 sm:space-y-8">
         
         <div className="flex justify-between items-center">
           <Link href="/flashcards" className="text-blue-600 font-semibold hover:underline">

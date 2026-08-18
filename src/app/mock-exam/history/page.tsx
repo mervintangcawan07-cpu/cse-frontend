@@ -40,7 +40,7 @@ export default function ExamHistoryPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-12 px-4 space-y-6">
+      <div className="w-full max-w-6xl mx-auto py-6 sm:py-12 px-2 sm:px-4 space-y-6">
         <DatabaseLoadingIndicator
           title="Loading Exam History & Diagnostics..."
           subtitle="Querying your past mock exam attempts, scores, and review keys from the database."
@@ -63,9 +63,9 @@ export default function ExamHistoryPage() {
   const recent3Attempts = attempts.slice(0, 3);
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6 text-slate-100">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-6 text-slate-100">
       {/* HEADER BANNER WITH OVERALL STATS */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
             Performance Log ({totalExamsTaken} Total Exams)

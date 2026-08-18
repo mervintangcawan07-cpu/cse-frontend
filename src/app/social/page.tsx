@@ -224,9 +224,9 @@ export default function SocialDashboardPage() {
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="max-w-6xl mx-auto py-6 sm:py-8 px-3 sm:px-6 space-y-6 sm:space-y-8 text-slate-900">
+    <div className="w-full max-w-7xl mx-auto py-3 sm:py-8 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-8 text-slate-900">
       {/* HEADER BANNER WITH USER STUDY IDENTITY & STATUS CONTROLS */}
-      <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 sm:gap-6 shadow-xl shadow-purple-600/15 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6 shadow-xl shadow-purple-600/15 relative overflow-hidden">
         {/* Subtle decorative background glow */}
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 

@@ -111,7 +111,7 @@ export default function CSCDailyQuestionWidget() {
   const isCorrect = userAttempt?.isCorrect;
 
   return (
-    <div className="bg-white border border-blue-200/80 rounded-3xl p-5 sm:p-6 md:p-8 space-y-5 sm:space-y-6 shadow-md relative overflow-hidden">
+    <div className="bg-white border border-blue-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-md relative overflow-hidden">
       {/* Glow Effects */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -149,7 +149,7 @@ export default function CSCDailyQuestionWidget() {
       </div>
 
       {/* Options Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 pt-1">
         {question.options.map((opt, idx) => {
           const letter = ["A", "B", "C", "D", "E"][idx] || `${idx + 1}`;
           let style = "bg-slate-50 border-slate-200/90 text-slate-800 hover:border-blue-300 hover:bg-blue-50/40";
@@ -177,7 +177,7 @@ export default function CSCDailyQuestionWidget() {
               type="button"
               disabled={hasAnswered || submitting}
               onClick={() => setSelectedOption(idx)}
-              className={`p-3.5 sm:p-4 rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer flex flex-col justify-between gap-2 ${style}`}
+              className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border text-left text-xs sm:text-sm font-medium transition cursor-pointer flex flex-col justify-between gap-2 ${style}`}
             >
               <div className="flex items-start gap-2.5 sm:gap-3 w-full">
                 <span className="w-6 h-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 text-slate-700 shadow-xs">

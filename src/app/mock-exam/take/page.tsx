@@ -386,7 +386,7 @@ function TakeExamPageInner() {
   // PHASE 1: SETUP SCREEN
   if (isSetupPhase) {
     return (
-      <div className="max-w-xl mx-auto py-10 px-4 space-y-6">
+      <div className="w-full max-w-2xl mx-auto py-6 sm:py-10 px-2 sm:px-4 space-y-4 sm:space-y-6">
         <div className="flex justify-between items-center">
           <Link
             href="/practice"
@@ -526,7 +526,7 @@ function TakeExamPageInner() {
   const progressPercent = Math.round((answeredCount / examQuestions.length) * 100);
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 space-y-6">
+    <div className="w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6">
       {/* EXAM SUBMISSION & GRADING FULLSCREEN OVERLAY */}
       <ExamSubmissionLoader isSubmitting={submitting} totalQuestions={examQuestions.length || 170} />
 

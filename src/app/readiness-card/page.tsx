@@ -198,9 +198,9 @@ export default function ReadinessCardPage() {
   if (!metrics) return null;
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6 text-slate-100 font-sans">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-6 text-slate-100 font-sans">
       {/* HEADER BANNER */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
             Viral Progress Flex

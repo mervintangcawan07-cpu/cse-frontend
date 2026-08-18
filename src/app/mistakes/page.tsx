@@ -7,9 +7,9 @@ import MistakeNotebookSection from "@/components/exam/MistakeNotebookSection";
 
 export default function MistakesPage() {
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8 animate-fade-in">
+    <div className="w-full max-w-7xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8 animate-fade-in">
       {/* Hero Header */}
-      <div className="relative bg-gradient-to-r from-rose-600 via-pink-600 to-orange-600 text-white p-6 sm:p-8 rounded-3xl shadow-xl shadow-rose-600/15 space-y-3 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-rose-600 via-pink-600 to-orange-600 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl shadow-rose-600/15 space-y-3 overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">

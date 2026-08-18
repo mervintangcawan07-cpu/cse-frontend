@@ -51,7 +51,7 @@ export default function ResumeExamBanner() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 rounded-3xl p-5 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-amber-500/10 border border-amber-500/30 rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div className="space-y-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs font-black uppercase tracking-wider text-amber-600 bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">

@@ -80,9 +80,9 @@ export default function CustomQuizBuilderPage() {
   const allCatsSelected = selectedCategories.length === CATEGORIES.length;
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
       {/* Header */}
-      <div className="relative bg-slate-900 text-white p-8 rounded-3xl border border-violet-500/30 shadow-2xl space-y-3 overflow-hidden">
+      <div className="relative bg-slate-900 text-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-violet-500/30 shadow-2xl space-y-3 overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
         <span className="text-[11px] font-black uppercase tracking-widest px-3 py-1 bg-violet-500/20 text-violet-400 rounded-full border border-violet-500/30">
           🎛️ Custom Quiz Builder

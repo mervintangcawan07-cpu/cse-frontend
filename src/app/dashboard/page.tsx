@@ -207,7 +207,7 @@ function DashboardContent() {
 
   if (loading || verifyingPayment) {
     return (
-      <div className="max-w-6xl mx-auto py-12 px-4 space-y-6">
+      <div className="w-full max-w-7xl mx-auto py-6 sm:py-12 px-2 sm:px-4 space-y-6">
         <PaymentConfirmationLoader isOpen={verifyingPayment} />
         <DatabaseLoadingIndicator
           title="Loading Reviewee Dashboard & Analytics..."
@@ -231,7 +231,7 @@ function DashboardContent() {
     plans.find((p) => p.planType === selectedPlan)?.price || 199;
 
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8">
+    <div className="w-full max-w-7xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
       {/* PAYMENT CONFIRMATION MODAL OVERLAY */}
       <PaymentConfirmationLoader isOpen={verifyingPayment} />
 
@@ -262,7 +262,7 @@ function DashboardContent() {
       <ResumeExamBanner />
 
       {/* WELCOME HERO HEADER */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-5 sm:p-6 md:p-8 rounded-3xl shadow-xl shadow-blue-600/15 space-y-4 z-30 overflow-hidden">
+      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl shadow-blue-600/15 space-y-4 z-30 overflow-hidden">
         <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl"></div>
@@ -358,7 +358,7 @@ function DashboardContent() {
 
       {/* DYNAMIC PLAN SELECTOR BANNER */}
       {!isPaid && (
-        <div className="bg-slate-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl border border-amber-500/40 space-y-6 relative overflow-hidden">
+        <div className="bg-slate-900 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-amber-500/40 space-y-4 sm:space-y-6 relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl"></div>
           <div>
             <span className="text-[10px] font-black uppercase px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
@@ -375,7 +375,7 @@ function DashboardContent() {
               <button
                 key={p.planType}
                 onClick={() => setSelectedPlan(p.planType)}
-                className={`p-4 sm:p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
+                className={`p-3.5 sm:p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
                   selectedPlan === p.planType
                     ? "bg-amber-500/10 border-amber-500 text-white shadow-lg shadow-amber-500/10"
                     : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:border-slate-500"
@@ -408,8 +408,8 @@ function DashboardContent() {
       )}
 
       {/* PERFORMANCE METRICS & OVERVIEW CARDS (SYMMETRICAL 2X2 GRID ON MOBILE, 4-ACROSS ON DESKTOP) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-5">
+        <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
           <div className="flex justify-between items-center">
             <span className="text-[10px] sm:text-xs text-slate-500 font-extrabold uppercase tracking-wider">Study Streak</span>
             <span className="text-lg sm:text-2xl p-1.5 sm:p-2 bg-amber-50 rounded-2xl border border-amber-100">🔥</span>
@@ -422,7 +422,7 @@ function DashboardContent() {
           </div>
         </div>
 
-        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
+        <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center">
               <span className="text-[10px] sm:text-xs text-slate-500 font-extrabold uppercase tracking-wider">Pass Readiness</span>
@@ -441,7 +441,7 @@ function DashboardContent() {
           </Link>
         </div>
 
-        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
+        <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
           <div className="flex justify-between items-center">
             <span className="text-[10px] sm:text-xs text-slate-500 font-extrabold uppercase tracking-wider">Mock Exams</span>
             <span className="text-lg sm:text-2xl p-1.5 sm:p-2 bg-blue-50 rounded-2xl border border-blue-100">📝</span>
@@ -456,7 +456,7 @@ function DashboardContent() {
           </div>
         </div>
 
-        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
+        <div className="bg-white p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-2 sm:space-y-3 flex flex-col justify-between">
           <div className="flex justify-between items-center">
             <span className="text-[10px] sm:text-xs text-slate-500 font-extrabold uppercase tracking-wider">Bookmarks</span>
             <span className="text-lg sm:text-2xl p-1.5 sm:p-2 bg-purple-50 rounded-2xl border border-purple-100">🔖</span>
@@ -472,7 +472,7 @@ function DashboardContent() {
 
       {/* AI STUDY RECOMMENDATION CARD */}
       {dashAnalytics?.recommendation && (
-        <div className="bg-amber-50 border border-amber-200/90 p-4 sm:p-5 rounded-3xl flex items-start gap-3 shadow-sm">
+        <div className="bg-amber-50 border border-amber-200/90 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex items-start gap-3 shadow-sm">
           <span className="text-xl sm:text-2xl shrink-0 mt-0.5 p-1.5 sm:p-2 bg-amber-100 rounded-2xl text-amber-700">💡</span>
           <div>
             <h3 className="text-[10px] sm:text-xs font-black uppercase text-amber-900 tracking-wider">
@@ -491,12 +491,12 @@ function DashboardContent() {
         onRetry={fetchAnalyticsOnly}
       >
         {analyticsLoading ? (
-          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-md text-center space-y-2">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md text-center space-y-2">
             <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
             <p className="text-xs font-bold text-slate-500">Refreshing exam performance statistics...</p>
           </div>
         ) : analyticsError || !analytics ? (
-          <div className="bg-slate-900 text-white p-5 sm:p-6 rounded-3xl border border-slate-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-slate-900 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="text-2xl p-2.5 bg-amber-500/20 text-amber-400 rounded-2xl border border-amber-500/30 shrink-0">
                 📊
@@ -517,8 +517,8 @@ function DashboardContent() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div className="md:col-span-2 bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-6">
+            <div className="md:col-span-2 bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-4">
               <div className="flex justify-between items-center">
                 <div>
                   <h2 className="text-base sm:text-lg font-black text-slate-900">Score Progression</h2>
@@ -565,7 +565,7 @@ function DashboardContent() {
               </div>
             </div>
 
-            <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-md space-y-4">
+            <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-200/80 shadow-md space-y-4">
               <div>
                 <h2 className="text-base sm:text-lg font-black text-slate-900">Subject Mastery</h2>
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium">Accuracy rate by core subject</p>

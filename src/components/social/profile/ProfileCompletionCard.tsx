@@ -17,7 +17,7 @@ export const ProfileCompletionCard: React.FC<ProfileCompletionCardProps> = ({
   const { percentage, isFullyComplete, statusLabel, missingRecommended, completedItems } = completion;
 
   return (
-    <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm relative overflow-hidden space-y-4">
+    <div className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm relative overflow-hidden space-y-4">
       {/* Background Accent Gradient */}
       <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
 

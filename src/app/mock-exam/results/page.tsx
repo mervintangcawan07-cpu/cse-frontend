@@ -156,9 +156,9 @@ function ExamResultContent() {
     });
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 space-y-8">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
       {/* 🏆 Score Summary Card */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl text-center space-y-6">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl text-center space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <span
             className={`text-xs font-black uppercase px-3 py-1 rounded-full border inline-block ${

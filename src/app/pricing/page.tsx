@@ -25,8 +25,8 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-slate-50 py-8 sm:py-16 px-2 sm:px-4">
+      <div className="w-full max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <Link href="/dashboard" className="text-blue-600 font-semibold hover:underline mb-6 inline-block">
             &larr; Back to Dashboard

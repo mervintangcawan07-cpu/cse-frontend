@@ -76,7 +76,7 @@ export default function CSCCountdownWidget() {
   }
 
   return (
-    <div className="bg-white border border-slate-200/80 text-slate-900 p-5 sm:p-6 md:p-8 rounded-3xl shadow-md space-y-4 sm:space-y-5 relative">
+    <div className="bg-white border border-slate-200/80 text-slate-900 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md space-y-4 sm:space-y-5 relative">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div>
           <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-200/80">

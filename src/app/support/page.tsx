@@ -70,9 +70,9 @@ export default function StudentSupportPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4 space-y-6">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-6">
       {/* Header Banner */}
-      <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-slate-900 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <Link href="/dashboard" className="text-xs font-bold text-amber-400 hover:underline">
             &larr; Back to Student Dashboard

@@ -33,7 +33,7 @@ export default function RootLayout({
         <Navbar />
         
         {/* Main page content wrapped in a subtle background */}
-        <main className="flex-grow">
+        <main className="w-full flex-grow">
           {children}
         </main>
       </body>

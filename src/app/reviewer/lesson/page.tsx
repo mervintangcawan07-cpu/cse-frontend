@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LessonPage() {
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 space-y-8">
+    <div className="w-full max-w-4xl mx-auto py-4 sm:py-12 px-2 sm:px-4 space-y-4 sm:space-y-8">
       {/* Breadcrumb Navigation */}
       <div className="text-sm font-bold text-slate-500 space-x-2">
         <Link href="/reviewer" className="hover:text-blue-600 transition">Reviewer</Link>
@@ -11,7 +11,7 @@ export default function LessonPage() {
       </div>
 
       {/* Lesson Header */}
-      <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+      <div className="bg-white p-4 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-4">
         <h1 className="text-3xl font-extrabold text-slate-800">
           Fractions, Decimals, and Percentages
         </h1>
@@ -31,7 +31,7 @@ export default function LessonPage() {
       </div>
 
       {/* Lesson Content */}
-      <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm space-y-10">
+      <div className="bg-white p-4 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-8 sm:space-y-10">
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-800">1. Converting Fractions to Decimals</h2>
           <p className="text-slate-600 leading-relaxed">

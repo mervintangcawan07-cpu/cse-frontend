@@ -88,8 +88,8 @@ export default function ReviewerPage() {
       : studyNotes.filter((note) => note.category === selectedCategory);
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4 space-y-8">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-8 rounded-3xl shadow-md">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md">
         <div>
           <h1 className="text-3xl font-extrabold">Study Notes & Reviewer</h1>
           <p className="text-slate-400 text-sm mt-1">Read core principles and formulas.</p>

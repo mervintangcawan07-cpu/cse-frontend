@@ -5,9 +5,9 @@ import Link from "next/link";
 
 export default function DrillsPage() {
   return (
-    <div className="max-w-6xl mx-auto py-8 px-4 space-y-8">
+    <div className="w-full max-w-7xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
       {/* Top Hero Banner */}
-      <div className="bg-slate-900 text-white p-8 md:p-10 rounded-3xl border border-slate-800 shadow-xl space-y-3">
+      <div className="bg-slate-900 text-white p-4 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-xl space-y-3">
         <span className="text-xs font-black uppercase tracking-widest px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
           ⚡ 5-Minute Challenge Center
         </span>

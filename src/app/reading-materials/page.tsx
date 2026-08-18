@@ -49,8 +49,8 @@ export default function ReadingMaterialsPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 space-y-6 select-none" onContextMenu={(e) => e.preventDefault()}>
-      <div className="bg-slate-900 text-white p-6 md:p-8 rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="w-full max-w-7xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-6 select-none" onContextMenu={(e) => e.preventDefault()}>
+      <div className="bg-slate-900 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
             Read-Only Repository • Fast Scanner Active
