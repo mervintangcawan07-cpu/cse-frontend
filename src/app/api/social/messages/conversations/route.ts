@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/messages/conversations/route.ts
+// Relative Path: src/app/api/social/messages/conversations/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -44,38 +44,43 @@ export async function GET() {
       orderBy: { updatedAt: "desc" },
     });
 
-    const formatted = await Promise.all(
-      conversations.map(async (conv) => {
-        const otherParticipant = conv.participants.find((p) => p.userId !== userId)?.user || null;
+    // ⚡ Batch query unread counts for all conversations in a single SQL operation
+    const unreadGroups = await prisma.directMessage.groupBy({
+      by: ["conversationId"],
+      where: {
+        conversationId: { in: conversationIds },
+        senderId: { not: userId },
+        state: { not: "READ" },
+      },
+      _count: { id: true },
+    });
 
-        const unreadCount = await prisma.directMessage.count({
-          where: {
-            conversationId: conv.id,
-            senderId: { not: userId },
-            state: { not: "READ" },
-          },
-        });
-
-        const lastMessage = conv.messages[0] || null;
-
-        return {
-          id: conv.id,
-          otherUser: otherParticipant,
-          lastMessage: lastMessage
-            ? {
-                id: lastMessage.id,
-                content: lastMessage.content,
-                senderId: lastMessage.senderId,
-                senderName: lastMessage.sender.name,
-                state: lastMessage.state,
-                createdAt: lastMessage.createdAt,
-              }
-            : null,
-          unreadCount,
-          updatedAt: conv.updatedAt,
-        };
-      })
+    const unreadMap = new Map<string, number>(
+      unreadGroups.map((g) => [g.conversationId, g._count.id])
     );
+
+    const formatted = conversations.map((conv) => {
+      const otherParticipant = conv.participants.find((p) => p.userId !== userId)?.user || null;
+      const unreadCount = unreadMap.get(conv.id) || 0;
+      const lastMessage = conv.messages[0] || null;
+
+      return {
+        id: conv.id,
+        otherUser: otherParticipant,
+        lastMessage: lastMessage
+          ? {
+              id: lastMessage.id,
+              content: lastMessage.content,
+              senderId: lastMessage.senderId,
+              senderName: lastMessage.sender.name,
+              state: lastMessage.state,
+              createdAt: lastMessage.createdAt,
+            }
+          : null,
+        unreadCount,
+        updatedAt: conv.updatedAt,
+      };
+    });
 
     return NextResponse.json({ success: true, conversations: formatted });
   } catch (error: any) {

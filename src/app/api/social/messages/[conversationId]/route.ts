@@ -60,6 +60,7 @@ export async function GET(
         replyTo: { select: { id: true, content: true, senderId: true } },
       },
       orderBy: { createdAt: "asc" },
+      take: 100,
     });
 
     const conversation = await prisma.conversation.findUnique({

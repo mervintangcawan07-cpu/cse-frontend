@@ -19,9 +19,15 @@ export async function GET() {
 
     const userId = String(session.userId);
 
-    // Fetch real exam attempt results for this user from Neon DB
+    // Fetch real exam attempt results for this user from Neon DB (excluding heavy detailsJson)
     const results = await prisma.examResult.findMany({
       where: { userId },
+      select: {
+        id: true,
+        score: true,
+        totalItems: true,
+        createdAt: true,
+      },
       orderBy: { createdAt: "asc" }, // Ascending for chronological history chart
     });
 

@@ -21,16 +21,34 @@ export async function GET() {
 
     let attempts: any[] = [];
 
-    // Fetch ALL completed exams (No 'take: 3' restriction)
+    // Fetch ALL completed exams with lightweight projection (excluding heavy detailsJson)
     try {
       attempts = await prisma.examResult.findMany({
         where: { userId },
+        select: {
+          id: true,
+          score: true,
+          totalItems: true,
+          correct: true,
+          incorrect: true,
+          skipped: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: "desc" },
       });
     } catch (e) {
       if ((prisma as any).examAttempt) {
         attempts = await (prisma as any).examAttempt.findMany({
           where: { userId },
+          select: {
+            id: true,
+            score: true,
+            totalItems: true,
+            correct: true,
+            incorrect: true,
+            skipped: true,
+            createdAt: true,
+          },
           orderBy: { createdAt: "desc" },
         });
       }

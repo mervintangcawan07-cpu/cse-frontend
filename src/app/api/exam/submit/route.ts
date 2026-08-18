@@ -153,42 +153,42 @@ export async function POST(request: Request) {
       },
     });
 
-    // 4. Ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral)
+    // 4. Ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral) in a single transactional batch
     const incorrectItems = detailsSnapshot.filter(
       (item) => item.selectedIndex !== null && item.selectedIndex !== item.answerIndex
     );
 
     if (incorrectItems.length > 0) {
-      await Promise.all(
-        incorrectItems.map(async (item) => {
-          try {
-            await prisma.userMistake.upsert({
-              where: {
-                userId_questionId: {
-                  userId,
-                  questionId: item.id,
-                },
-              },
-              create: {
+      try {
+        const now = new Date();
+        const upsertOperations = incorrectItems.map((item) =>
+          prisma.userMistake.upsert({
+            where: {
+              userId_questionId: {
                 userId,
                 questionId: item.id,
-                userAnswer: item.selectedIndex,
-                incorrectCount: 1,
-                isMastered: false,
-                lastAttemptAt: new Date(),
               },
-              update: {
-                userAnswer: item.selectedIndex,
-                incorrectCount: { increment: 1 },
-                isMastered: false,
-                lastAttemptAt: new Date(),
-              },
-            });
-          } catch (e) {
-            console.error("Failed to record mistake for question", item.id, e);
-          }
-        })
-      );
+            },
+            create: {
+              userId,
+              questionId: item.id,
+              userAnswer: item.selectedIndex,
+              incorrectCount: 1,
+              isMastered: false,
+              lastAttemptAt: now,
+            },
+            update: {
+              userAnswer: item.selectedIndex,
+              incorrectCount: { increment: 1 },
+              isMastered: false,
+              lastAttemptAt: now,
+            },
+          })
+        );
+        await prisma.$transaction(upsertOperations);
+      } catch (e) {
+        console.error("[MISTAKE_BATCH_UPSERT_ERROR]", e);
+      }
     }
 
     // Record active study streak

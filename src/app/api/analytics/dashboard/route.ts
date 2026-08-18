@@ -19,10 +19,17 @@ export async function GET() {
 
     const userId = String(session.userId);
 
-    // Fetch user results, streak, and bookmarks concurrently
+    // Fetch user results, streak, and bookmarks concurrently (excluding heavy detailsJson)
     const [results, streakData, bookmarksCount] = await Promise.all([
       prisma.examResult.findMany({
         where: { userId },
+        select: {
+          id: true,
+          score: true,
+          correct: true,
+          totalItems: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: "desc" },
       }),
       prisma.userStreak.findUnique({
