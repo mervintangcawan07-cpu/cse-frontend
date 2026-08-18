@@ -1,8 +1,12 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { user, errorResponse } = await requireAdminAuth(request);
+    if (errorResponse) return errorResponse;
+
     const [totalUsers, paidUsers, totalQuestions, totalExams] = await Promise.all([
       prisma.user.count().catch(() => 0),
       prisma.user.count({ where: { isPaid: true } }).catch(() => 0),
@@ -12,9 +16,10 @@ export async function GET() {
 
     return NextResponse.json({ totalUsers, paidUsers, totalQuestions, totalExams });
   } catch (error) {
+    console.error("[ADMIN_STATS_GET_ERROR]", error);
     return NextResponse.json(
-      { totalUsers: 0, paidUsers: 0, totalQuestions: 0, totalExams: 0 },
-      { status: 200 }
+      { error: "Failed to fetch administrative statistics." },
+      { status: 500 }
     );
   }
 }
