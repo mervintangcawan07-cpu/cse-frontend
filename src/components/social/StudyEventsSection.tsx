@@ -21,7 +21,7 @@ const SAMPLE_DRILL_QUESTIONS: Question[] = [
     id: "drill-2",
     category: "Verbal Ability",
     subtopic: "Grammar Errors",
-    prompt: "(A) The regional director\n(B) along with several field officers\n(C) are planning to inspect\n(D) the disaster relief centers tomorrow.\n\nWhich part of the sentence contains the grammatical error?",
+    prompt: 'Which part of the following sentence contains a grammatical error: "(A) The regional director (B) along with several field officers (C) are planning to inspect (D) the disaster relief centers tomorrow."?',
     options: ["A", "B", "C", "D"],
     correctAnswer: 2,
     explanation: "Subject is 'regional director' (singular). Verb should be 'is planning', not 'are planning'."

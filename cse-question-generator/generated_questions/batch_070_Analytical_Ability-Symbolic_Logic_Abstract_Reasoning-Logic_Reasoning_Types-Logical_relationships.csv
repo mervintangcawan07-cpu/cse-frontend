@@ -1,7 +1,9 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Given the true formal proposition: \""If an agency official is accountable (A), then the procurement process is transparent (T).\"" Which of the following statements is LOGICALLY EQUIVALENT to the given proposition in formal symbolic logic?","If the procurement process is not transparent (neg T), then the agency official is not accountable (neg A).","If the procurement process is transparent (T), then the agency official is accountable (A).","If the agency official is not accountable (neg A), then the procurement process is not transparent (neg T).","The agency official is accountable (A) and the procurement process is not transparent (neg T).","A","Step-by-Step Solution:
+"Given the true formal proposition: \""If an agency official is accountable (A), then the procurement process is transparent (T).\""
+
+Which of the following statements is LOGICALLY EQUIVALENT to the given proposition in formal symbolic logic?","If the procurement process is not transparent (neg T), then the agency official is not accountable (neg A).","If the procurement process is transparent (T), then the agency official is accountable (A).","If the agency official is not accountable (neg A), then the procurement process is not transparent (neg T).","The agency official is accountable (A) and the procurement process is not transparent (neg T).","A","Step-by-Step Solution:
 1. Represent the given statement in formal propositional logic:
- - Let A = \""The agency official is accountable.\","","","","","",""
+ - Let A = \""The agency official is accountable.\","","","","","Analytical Ability","Analytical Ability"
 "According to De Morgan's Laws of formal symbolic logic, what is the exact logical negation of the conjunctive compound proposition: \""The financial report is certified (C) AND the disbursement is audited (A)\""?","The financial report is not certified (neg C) OR the disbursement is not audited (neg A).","The financial report is not certified (neg C) AND the disbursement is not audited (neg A).","If the financial report is not certified (neg C), then the disbursement is not audited (neg A).","The financial report is certified (C) OR the disbursement is audited (A).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
  - Compound statement: C land A (Conjunction).
@@ -10,7 +12,7 @@
 3. Substitute variables C and A:
  - neg(C land A) ≡ neg C lor neg A.
 4. Translate the symbolic equivalence into natural language:
- - \""The financial report is not certified (neg C) OR the disbursement is not audited (neg A).\","","","","","",""
+ - \""The financial report is not certified (neg C) OR the disbursement is not audited (neg A).\","","","","","Analytical Ability","Analytical Ability"
 "Consider the disjunctive proposition: \""Either the municipal charter is ratified (R) OR the public referendum is postponed (P).\"" What is the logically equivalent conditional (If-Then) formulation of this disjunction?","If the municipal charter is not ratified (neg R), then the public referendum is postponed (P).","If the municipal charter is ratified (R), then the public referendum is postponed (P).","If the public referendum is postponed (P), then the municipal charter is ratified (R).","If the municipal charter is not ratified (neg R), then the public referendum is not postponed (neg P).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
  - Disjunctive statement: R lor P.
@@ -21,7 +23,7 @@
  - Let P = R and Q = P.
  - R lor P ≡ neg R implies P.
 4. Translate to natural language:
- - \""If the municipal charter is not ratified (neg R), then the public referendum is postponed (P).\","","","","","",""
+ - \""If the municipal charter is not ratified (neg R), then the public referendum is postponed (P).\","","","","","Analytical Ability","Analytical Ability"
 "Given the following three true premises in formal logic: (1) If economic policy X succeeds, then inflation rate Y decreases (X implies neg Y). (2) If inflation rate Y decreases, then public purchasing power Z increases (neg Y implies Z). (3) Public purchasing power Z did NOT increase (neg Z). What valid deductive conclusion necessarily follows?","Economic policy X did not succeed (neg X).","Economic policy X succeeded (X).","Inflation rate Y decreased (neg Y).","No valid conclusion can be drawn.","A","Step-by-Step Solution:
 1. State the given premises symbolically:
  - Premise 1: X implies neg Y.
@@ -33,7 +35,7 @@
  - Apply Modus Tollens (P implies Q, neg Q vdash neg P):
  - Given X implies Z and neg Z, it necessarily follows that neg X.
 4. Translate conclusion:
- - neg X = \""Economic policy X did not succeed.\","","","","","",""
+ - neg X = \""Economic policy X did not succeed.\","","","","","Analytical Ability","Analytical Ability"
 "Which of the following compound propositions represents a TAUTOLOGY (a statement that evaluates to TRUE under every possible truth assignment in propositional logic)?","(P implies Q) lor (Q implies P)","(P land Q) implies (P land neg Q)","(P lor Q) implies (P land Q)","(P implies Q) land (P land neg Q)","A","Step-by-Step Solution:
 1. Recall the definition of a Tautology:
  - A formula that is true in every row of its truth table regardless of the truth values assigned to its atomic variables.
@@ -50,7 +52,7 @@
  - Option D: A Contradiction ((P implies Q) land neg(P implies Q) ≡ False).
 
 Common Trap: Overlooking that (P implies Q) lor (Q implies P) simplifies to (P lor neg P) lor (Q lor neg Q) ≡ True.
-Exam Tip: (P implies Q) lor (Q implies P) is a celebrated classical tautology in formal logic.","","","","","",""
+Exam Tip: (P implies Q) lor (Q implies P) is a celebrated classical tautology in formal logic.","","","","","Analytical Ability","Analytical Ability"
 "In formal categorical logic, what is the exact relationship between Proposition 1: \""All certified accountants are eligible for promotion (A)\"" and Proposition 2: \""Some certified accountants are not eligible for promotion (O)\""?","Contradictory (they cannot both be true, and cannot both be false simultaneously).","Subcontrary (they can both be true, but cannot both be false).","Subaltern (one necessarily implies the truth of the other).","Contrary (they can both be false, but cannot both be true).","A","Step-by-Step Solution:
 1. Identify the categorical propositions on the traditional Square of Opposition:
  - Proposition 1: \""All S are P\"" = Universal Affirmative (A-type proposition).
@@ -66,7 +68,7 @@ Exam Tip: (P implies Q) lor (Q implies P) is a celebrated classical tautology in
  - Option D (Contrary): The relation between A (\""All S are P\"") and E (\""No S are P\"").
 
 Common Trap: Confusing contrary (A and E) with contradictory (A and O).
-Exam Tip: \""All S are P\"" (A) and \""Some S are not P\"" (O) are CONTRADICTORIES.","","","","","",""
+Exam Tip: \""All S are P\"" (A) and \""Some S are not P\"" (O) are CONTRADICTORIES.","","","","","Analytical Ability","Analytical Ability"
 "Given that the compound statement: \""It is NOT the case that if candidate M wins, tax rates will fall (neg(M implies F))\"" is TRUE. What must be the exact individual truth values of M and F?","Candidate M wins (M is TRUE), and tax rates will NOT fall (F is FALSE).","Candidate M does not win (M is FALSE), and tax rates will fall (F is TRUE).","Both candidate M wins (M is TRUE) and tax rates will fall (F is TRUE).","Both candidate M does not win (M is FALSE) and tax rates will not fall (F is FALSE).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
  - Compound statement: neg(M implies F) = True.
@@ -84,7 +86,7 @@ Exam Tip: \""All S are P\"" (A) and \""Some S are not P\"" (O) are CONTRADICTORI
  - M = T, F = F implies (M implies F) = F implies neg(F) = True (Confirmed!).
 
 Common Trap: Assuming neg(M implies F) means M is False and F is False (in that case, False implies False is True, so negation would be False).
-Exam Tip: The ONLY way an If-Then statement is false is when the IF-part is TRUE and the THEN-part is FALSE.","","","","","",""
+Exam Tip: The ONLY way an If-Then statement is false is when the IF-part is TRUE and the THEN-part is FALSE.","","","","","Analytical Ability","Analytical Ability"
 "If the biconditional proposition P leftrightarrow Q (Logical Equivalence) is known to be FALSE, which of the following compound propositions must necessarily evaluate to TRUE?","P oplus Q (Exclusive OR / XOR)","P land Q (Conjunction)","neg P land neg Q","(P implies Q) land (Q implies P)","A","Step-by-Step Solution:
 1. Analyze the truth definition of the biconditional P leftrightarrow Q:
  - P leftrightarrow Q is True when P and Q have identical truth values (both True or both False).
@@ -101,7 +103,7 @@ Exam Tip: The ONLY way an If-Then statement is false is when the IF-part is TRUE
  - Option D: Equivalent to P leftrightarrow Q, so it must be False.
 
 Common Trap: Confusing inclusive OR (P lor Q) with exclusive OR (P oplus Q).
-Exam Tip: The negation of a Biconditional (leftrightarrow) is strictly the Exclusive OR (oplus).","","","","","",""
+Exam Tip: The negation of a Biconditional (leftrightarrow) is strictly the Exclusive OR (oplus).","","","","","Analytical Ability","Analytical Ability"
 "Consider the following deductive argument: Premise 1: Every civil servant who passes the comprehensive ethics exam is promoted (E implies P). Premise 2: Officer Ramos was promoted (P). Conclusion: Therefore, Officer Ramos passed the comprehensive ethics exam (E). What formal logical fallacy is committed by this argument?","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","Fallacy of False Dilemma","Fallacy of Begging the Question","A","Step-by-Step Solution:
 1. Map the argument into symbolic logic:
  - Premise 1: E implies P (If Ethics Passed, then Promoted).
@@ -119,7 +121,7 @@ Exam Tip: The negation of a Biconditional (leftrightarrow) is strictly the Exclu
  - Option D (Begging the Question): Circular reasoning.
 
 Common Trap: Assuming that because the premise is true, the arrow flows backward (P implies E, which is invalid).
-Exam Tip: Modus Ponens (P implies Q, P vdash Q) is VALID. Affirming the Consequent (P implies Q, Q vdash P) is an INVALID FALLACY.","","","","","",""
+Exam Tip: Modus Ponens (P implies Q, P vdash Q) is VALID. Affirming the Consequent (P implies Q, Q vdash P) is an INVALID FALLACY.","","","","","Analytical Ability","Analytical Ability"
 "Given the valid premises: (1) P lor Q (Either proposition P is true OR proposition Q is true). (2) P implies R (If P is true, then R is true). (3) Q implies S (If Q is true, then S is true). Which deductive conclusion necessarily follows by the formal rule of Constructive Dilemma?","R lor S","R land S","neg R implies neg S","R implies S","A","Step-by-Step Solution:
 1. Identify the formal classical rule of inference:
  - Premises:
@@ -137,4 +139,4 @@ Exam Tip: Modus Ponens (P implies Q, P vdash Q) is VALID. Affirming the Conseque
  - Option D (R implies S): Assumes an implication between R and S where none exists.
 
 Common Trap: Concluding conjunction (R land S) instead of disjunction (R lor S).
-Exam Tip: Constructive Dilemma: (P lor Q), (P implies R), (Q implies S) vdash R lor S.","","","","","",""
+Exam Tip: Constructive Dilemma: (P lor Q), (P implies R), (Q implies S) vdash R lor S.","","","","","Analytical Ability","Analytical Ability"

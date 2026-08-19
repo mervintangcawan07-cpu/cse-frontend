@@ -34,7 +34,7 @@ Exam Tip: Camestres = Major A, Minor E, Conclusion E in Figure 2 (P-M, S-M).","C
  - A term that is UNDISTRIBUTED in the premises CANNOT be DISTRIBUTED in the conclusion.
  - Since the minor term C is undistributed in the premise but distributed in the conclusion, this commits the formal \""FALLACY OF ILLICIT MINOR\"".
 4. Set-Theoretic Counterexample:
- - All auditors may be career officers, but there are thousands of career officers who are engineers, teachers, or administrators and not forensic accountants. The valid conclusion in Figure 3 (Darapti) is only the particular: \""Some career officers are forensic accountants.\","","","","","",""
+ - All auditors may be career officers, but there are thousands of career officers who are engineers, teachers, or administrators and not forensic accountants. The valid conclusion in Figure 3 (Darapti) is only the particular: \""Some career officers are forensic accountants.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
 "Consider the syllogism: Major Premise: No classified state secrets are public records (No S is P). Minor Premise: All agency audit reports are public records (All A is P). Conclusion: Therefore, no agency audit reports are classified state secrets (No A is S). Which valid syllogistic mood and figure is this?","Figure 2, Mood EAE (Cesare)","Figure 1, Mood EAE (Celarent)","Figure 2, Mood AEE (Camestres)","Figure 4, Mood AEE (Camenes)","A","Step-by-Step Solution:
 1. Identify the three terms:
  - Major Term (S): \""classified state secrets\"".
@@ -74,7 +74,9 @@ Exam Tip: Cesare = EAE-2 (Middle term is predicate in both premises).","Correct.
 
 Common Trap: Failing to notice that the predicate of an O-proposition (\""Some S are not P\"") is DISTRIBUTED.
 Exam Tip: When the conclusion is negative (E or O), always check if the Major Term was distributed in the Major Premise!","Correct. Survives elimination because major term E is undistributed as the predicate of an A-premise but distributed as the predicate of the negative O-conclusion (Illicit Major).","Eliminated because the minor term O is undistributed in both minor premise and conclusion.","Eliminated because the middle term S is distributed as the subject of the A-premise.","Eliminated because exactly three terms are used.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
-"Given the premises: Major Premise: All cabinet secretaries are presidential appointees (All C is P). Minor Premise: Some constitutional commissioners are cabinet secretaries (Some K is C). Which conclusion validly completes this Figure 1, Mood AII (Darii) syllogism?","Some constitutional commissioners are presidential appointees (Some K is P).","All constitutional commissioners are presidential appointees (All K is P).","No constitutional commissioners are presidential appointees.","Some presidential appointees are not constitutional commissioners.","A","Step-by-Step Solution:
+"Given the premises: Major Premise: All cabinet secretaries are presidential appointees (All C is P). Minor Premise: Some constitutional commissioners are cabinet secretaries (Some K is C).
+
+Which conclusion validly completes this Figure 1, Mood AII (Darii) syllogism?","Some constitutional commissioners are presidential appointees (Some K is P).","All constitutional commissioners are presidential appointees (All K is P).","No constitutional commissioners are presidential appointees.","Some presidential appointees are not constitutional commissioners.","A","Step-by-Step Solution:
 1. Identify the formal structure:
  - Major Premise (A): All C is P (M - P, Middle term C is Subject).
  - Minor Premise (I): Some K is C (S - M, Middle term C is Predicate).
@@ -99,8 +101,8 @@ Exam Tip: AII-1 (Darii): All M is P + Some S is M implies Some S is P.","Correct
  - Premise 1: No U is E (Negative proposition, E-type).
  - Premise 2: No E is C (Negative proposition, E-type).
 2. Recall the fundamental Aristotelian Syllogistic Rule regarding Negative Premises:
- - \""No valid conclusion can be drawn from two negative premises.\","","","","","",""
-"- When both premises are negative (E or O)","the middle term is separated from both the major term and the minor term","providing ZERO logical bridge between them.","","","A","","","","","","",""
+ - \""No valid conclusion can be drawn from two negative premises.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
+"- When both premises are negative (E or O)","the middle term is separated from both the major term and the minor term","providing ZERO logical bridge between them.","","","A","","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
 "Consider the syllogism: Major Premise: All sworn public officers are bound by RA 6713 (All O is B). Minor Premise: Some sworn public officers are barangay captains (Some O is K). Conclusion: Therefore, some barangay captains are bound by RA 6713 (Some K is B). Which valid syllogistic mood and figure is represented?","Figure 3, Mood AII (Datisi)","Figure 1, Mood AII (Darii)","Figure 3, Mood IAI (Disamis)","Figure 4, Mood IAI (Dimaris)","A","Step-by-Step Solution:
 1. Identify the terms:
  - Major Term (B): \""bound by RA 6713\"" (Predicate of conclusion).
@@ -130,7 +132,7 @@ Exam Tip: Datisi = AII-3 (M-P, M-S).","Correct. Survives elimination because the
  - Minor Premise: \""Some S is R\"" (Affirmative proposition, I-type).
  - Conclusion: \""No S is P\"" (Negative proposition, E-type).
 2. Recall the fundamental Syllogistic Rule of Quality:
- - \""If both premises are affirmative, the conclusion MUST be affirmative.\","","","","","",""
+ - \""If both premises are affirmative, the conclusion MUST be affirmative.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Syllogisms | Very Difficult | Batch 076"
 "Consider the syllogism: Major Premise: All judicial decisions forming part of jurisprudence are sources of law (All J are S). Minor Premise: No executive department orders are judicial decisions forming part of jurisprudence (No E are J). Conclusion: Therefore, no executive department orders are sources of law (No E are S). What formal syllogistic fallacy is committed?","Fallacy of Illicit Major","Fallacy of Illicit Minor","Fallacy of Undistributed Middle","Fallacy of Four Terms","A","Step-by-Step Solution:
 1. Identify terms and distribution:
  - Major Term (S): \""sources of law\"" (Predicate of conclusion).

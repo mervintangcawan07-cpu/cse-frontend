@@ -1,5 +1,5 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Passage: The table below displays the operational metrics of four regional government hospitals for the past calendar year:
+"The table below displays the operational metrics of four regional government hospitals for the past calendar year:
 | Hospital | Total Inpatients | Number of Beds | Total Doctors | Total Nurses | Annual Operating Budget (PHP M) |
 | Hospital A | 18,250 | 250 | 45 | 180 | 125.0 |
 | Hospital B | 24,090 | 300 | 60 | 240 | 180.0 |
@@ -22,7 +22,7 @@ Which hospital demonstrated the LOWEST average operating cost per inpatient, and
 
 Common Trap: Confusing beds-per-doctor with doctor-to-bed ratio; a higher number of beds per doctor means fewer doctors per bed (lower staffing ratio).
 Exam Tip: Compute both normalized per-unit indicators carefully across multiple tabular columns.","Correct. Survives elimination because Hospital C had the lowest unit operating cost (PHP 98M / 14,600 = PHP 6,712.33 per patient), and Hospital D had the lowest doctor-to-bed staffing ratio (75 / 450 = 0.167 doctors per bed).","Eliminated because Hospital A's cost per patient (PHP 6,849) is higher than Hospital C's (PHP 6,712).","Eliminated because Hospital D (0.167 doctors/bed) has a lower doctor staffing ratio than Hospital A (0.180 doctors/bed).","Eliminated because Hospital B has the highest operating cost per inpatient (PHP 7,472), not the lowest.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
-"Passage: A civil service research institute analyzes performance data across five administrative units:
+"A civil service research institute analyzes performance data across five administrative units:
 | Unit | Staff Count | Cases Processed | On-Time Completion Rate (%) | Error Rate (%) | Budget Utilized (PHP M) |
 | Unit V | 30 | 1,800 | 92.0% | 1.5% | 4.5 |
 | Unit W | 45 | 3,150 | 88.0% | 2.0% | 7.2 |
@@ -48,7 +48,7 @@ Which unit achieved the HIGHEST case throughput per staff member, and which unit
 
 Common Trap: Overlooking that Unit Z and Unit X tie for lowest unit processing cost, or picking Unit W due to its high absolute case volume.
 Exam Tip: Systematically compute cross-variable quotients for every row in multi-variable comparison tables.","Eliminated because it fails to mention that Unit Z also achieved the lowest cost per case (tied with Unit X).","Eliminated because Unit W's throughput (70 cases/staff) is lower than Unit Z's (75 cases/staff).","Correct. Survives elimination because Unit Z achieved 75 cases/staff (1,500/20), and both Unit Z (3.0M/1,500 = PHP 2,000) and Unit X (3.5M/1,750 = PHP 2,000) tied for the most cost-efficient processing rate.","Eliminated because Unit X's throughput is 70 cases/staff (below Unit Z's 75), and Unit V's cost of PHP 2,500 is higher than Unit X and Z (PHP 2,000).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
-"Passage: A department of agriculture evaluates four irrigation development projects:
+"A department of agriculture evaluates four irrigation development projects:
 | Project | Irrigated Area (ha) | Construction Cost (PHP M) | Annual Crop Yield (MT) | Farmer Beneficiaries | Water Efficiency (%) |
 | Proj Alpha | 1,200 | 48.0 | 6,000 | 800 | 82% |
 | Proj Beta | 1,800 | 63.0 | 9,900 | 1,200 | 88% |
@@ -71,7 +71,7 @@ Which project achieved the LOWEST construction cost per hectare irrigated, and w
 
 Common Trap: Evaluating only single projects and missing dual-project ties across multiple derived indicators.
 Exam Tip: Check derived rates across all options to identify dual tied winners.","Correct. Survives elimination because both Proj Beta (63M/1,800 = PHP 35,000/ha) and Proj Gamma (31.5M/900 = PHP 35,000/ha) tied for lowest cost, and both also tied for highest yield (9,900/1,800 = 5.5 MT/ha; 4,950/900 = 5.5 MT/ha).","Eliminated because Alpha's cost is PHP 40,000/ha, higher than Beta and Gamma (PHP 35,000/ha).","Eliminated because Δ's cost of PHP 40,000/ha is above Beta and Gamma, and Alpha's yield (5.0 MT/ha) is below Beta and Gamma (5.5 MT/ha).","Eliminated because Proj Gamma also shares the lowest cost (PHP 35,000/ha), and Δ's yield (5.0 MT/ha) is inferior to Beta and Gamma (5.5 MT/ha).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
-"Passage: A local governance office rates five municipalities on four governance pillars (each scored out of 100) and lists their population (in thousands):
+"A local governance office rates five municipalities on four governance pillars (each scored out of 100) and lists their population (in thousands):
 | Municipality | Fiscal Transparency (25%) | Disaster Preparedness (25%) | Social Services (30%) | Environmental Management (20%) | Population (k) |
 | Mun 1 | 88 | 76 | 90 | 82 | 65 |
 | Mun 2 | 92 | 84 | 85 | 90 | 120 |
@@ -91,7 +91,7 @@ Which municipality achieved the HIGHEST overall weighted governance score?","Mun
 
 Common Trap: Calculating simple arithmetic means rather than applying the pillar weights (25%, 25%, 30%, 20%).
 Exam Tip: Multiply each pillar score by its decimal weight and Σ across all four columns for each row.","Correct. Survives elimination because Municipality 4's weighted composite score is (96×0.25)+(88×0.25)+(92×0.30)+(85×0.20) = 24.0 + 22.0 + 27.6 + 17.0 = 90.6, the highest among all five municipalities.","Eliminated because Municipality 2's weighted score is 87.5, which is 3.1 points below Municipality 4.","Eliminated because Municipality 1's weighted score of 84.4 ranks third.","Eliminated because Municipality 5's weighted score of 82.4 is the lowest overall.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
-"Passage: An audit report compiles data on five provincial road maintenance districts:
+"An audit report compiles data on five provincial road maintenance districts:
 | District | Total Road Length (km) | Annual Maintenance Budget (PHP M) | Personnel Assigned | Heavy Equipment Units | Surface Quality Rating (1-10) |
 | Dist A | 180 | 14.4 | 45 | 12 | 8.2 |
 | Dist B | 250 | 22.5 | 50 | 15 | 7.9 |
@@ -118,7 +118,7 @@ Which district had the HIGHEST budget allocation per kilometer, and which had th
  Let's adjust Dist A equipment to 14 units: 14/180 = 0.0778 = 7.78 units/100 km (unique highest).
  Let's rewrite Dist A in passage: Heavy Equipment Units = 14.
  Then Dist A equipment density = (14/180)×100 = 7.78 units/100 km.
- Let's update option A text accordingly: Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist E (PHP 85,000/km); Highest Equipment Density: Dist D (6.25 units/100 km).","Highest Budget/km: Dist B (PHP 90,000/km); Highest Equipment Density: Dist C (6.67 units/100 km).","Highest Budget/km: Dist A (PHP 80,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","A","Step-by-Step Solution:
+ Let's update option A text accordingly: Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist B and Dist C tied (PHP 90,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Highest Budget/km: Dist E (PHP 85,000/km); Highest Equipment Density: Dist D (6.25 units/100 km).","Highest Budget/km: Dist B (PHP 90,000/km); Highest Equipment Density: Dist C (6.67 units/100 km).","Highest Budget/km: Dist A (PHP 80,000/km); Highest Equipment Density: Dist A (7.78 units/100 km).","Analytical Ability","Step-by-Step Solution:
 1. Re-evaluate with Dist A equipment = 14 units:
  - Budget per km:
  - Dist A: 14.4M / 180 = PHP 80,000/km.
@@ -136,7 +136,7 @@ Which district had the HIGHEST budget allocation per kilometer, and which had th
 
 Common Trap: Forgetting to normalize budget by road length, picking Dist D because its absolute budget (PHP 24M) is the highest.
 Exam Tip: Divide total resources by operational length to find true resource density."
-"Passage: A national science agency compiles commercialization and patent metrics for five research universities over a three-year evaluation cycle:
+"A national science agency compiles commercialization and patent metrics for five research universities over a three-year evaluation cycle:
 | University | Faculty Researchers | R&D Budget (PHP M) | Patents Filed | Spin-off Companies Created | Royalty Revenue (PHP M) |
 | Univ 1 | 150 | 120.0 | 45 | 6 | 18.0 |
 | Univ 2 | 200 | 180.0 | 60 | 8 | 24.0 |
@@ -163,7 +163,7 @@ Which university generated the HIGHEST number of patents filed per 10 researcher
  Then Univ 3's 16.67% (12.5/75) is the highest royalty return.
  Let's update Univ 5 Royalty Revenue in the passage table to PHP 9.6M.
  Then Univ 5 = 9.6/60 = 16.00% < Univ 3 (16.67%).
- Then Option A is completely consistent.","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Highest Patents/10 researchers: Univ 3 (3.5 patents); Highest Royalty Return: Univ 1 (15.00%).","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 5 (16.00%).","Highest Patents/10 researchers: Univ 1 (3.0 patents); Highest Royalty Return: Univ 3 (16.67%).","A","Step-by-Step Solution:
+ Then Option A is completely consistent.","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Highest Patents/10 researchers: Univ 3 (3.5 patents); Highest Royalty Return: Univ 1 (15.00%).","Highest Patents/10 researchers: Univ 5 (4.0 patents); Highest Royalty Return: Univ 5 (16.00%).","Highest Patents/10 researchers: Univ 1 (3.0 patents); Highest Royalty Return: Univ 3 (16.67%).","Analytical Ability","Step-by-Step Solution:
 1. Re-evaluate with Univ 5 Royalty = PHP 9.6M:
  - Patents per 10 Researchers:
  - Univ 1: (45/150)×10 = 3.0.
@@ -181,7 +181,7 @@ Which university generated the HIGHEST number of patents filed per 10 researcher
 
 Common Trap: Selecting Univ 4 because of its largest raw patent count (70) and largest royalty revenue (PHP 27.0M), ignoring its massive base of 250 faculty and PHP 225M budget.
 Exam Tip: Efficiency metrics normalize output by resource inputs to reveal true underlying productivity."
-"Passage: A public school division audits resource distribution across four district high schools:
+"A public school division audits resource distribution across four district high schools:
 | School | Student Enrollment | Total Classrooms | Regular Teachers | Lab Facilities | Annual Operating Fund (PHP M) |
 | High School A | 2,400 | 50 | 60 | 4 | 7.2 |
 | High School B | 3,600 | 75 | 80 | 6 | 11.7 |
@@ -204,7 +204,7 @@ Which school had the BEST student-to-teacher ratio (fewest students per teacher)
 
 Common Trap: Picking School D because it has the largest raw number of teachers (100) and classrooms (84), without computing the per-student density ratios.
 Exam Tip: 'Best ratio' in education metrics means lowest number of students per staff member or facility.","Correct. Survives elimination because Schools A and C both achieved the lowest student-to-teacher ratio of 40:1 (2,400/60 and 1,800/45), while School C had the lowest classroom congestion at 45 students per room (1,800/40).","Eliminated because School D's student-teacher ratio of 42:1 is inferior to Schools A and C (40:1).","Eliminated because School A also tied School C for the best student-to-teacher ratio, and School A's classroom occupancy is 48, not 45.","Eliminated because School B has the worst student-to-teacher ratio (45:1), and School D has the highest classroom density (50:1).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-variable tables | Very Difficult | Batch 119"
-"Passage: A regional environmental agency compiles air quality and industrial emissions data across five industrial zones:
+"A regional environmental agency compiles air quality and industrial emissions data across five industrial zones:
 | Zone | Manufacturing Plants | Total PM2.5 Emitted (tons/yr) | SO2 Emitted (tons/yr) | Environmental Inspectors Assigned | Compliance Rate (%) |
 | Zone North | 40 | 320 | 160 | 8 | 85% |
 | Zone South | 65 | 585 | 260 | 13 | 78% |
@@ -229,7 +229,7 @@ Which zone had the LOWEST PM2.5 emissions per manufacturing plant, and which zon
  If we adjust Zone West SO2 to 210 tons: 210 / 50 = 4.2 tons/plant.
  Then Zone Central (360/80 = 4.5 tons/plant) is the unique highest.
  Let's update Zone West SO2 in passage table to 210 tons/yr.
- Then Zone Central is uniquely highest at 4.5 tons/plant, and Zone East is lowest PM2.5 at 7.0 tons/plant.","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone Central (4.5 tons/plant).","Lowest PM2.5 per plant: Zone North (8.0 tons/plant); Highest SO2 per plant: Zone South (4.0 tons/plant).","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone West (4.2 tons/plant).","Lowest PM2.5 per plant: Zone Central (8.0 tons/plant); Highest SO2 per plant: Zone North (4.0 tons/plant).","A","Step-by-Step Solution:
+ Then Zone Central is uniquely highest at 4.5 tons/plant, and Zone East is lowest PM2.5 at 7.0 tons/plant.","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone Central (4.5 tons/plant).","Lowest PM2.5 per plant: Zone North (8.0 tons/plant); Highest SO2 per plant: Zone South (4.0 tons/plant).","Lowest PM2.5 per plant: Zone East (7.0 tons/plant); Highest SO2 per plant: Zone West (4.2 tons/plant).","Lowest PM2.5 per plant: Zone Central (8.0 tons/plant); Highest SO2 per plant: Zone North (4.0 tons/plant).","Analytical Ability","Step-by-Step Solution:
 1. Re-evaluate with Zone West SO2 = 210 tons:
  - PM2.5 per plant:
  - North: 320/40 = 8.0 tons.
@@ -247,7 +247,7 @@ Which zone had the LOWEST PM2.5 emissions per manufacturing plant, and which zon
 
 Common Trap: Relying on gross total emissions rather than per-facility rates, which misleads because Zone Central has twice as many plants as North.
 Exam Tip: Divide pollutant volume by number of sources to determine unit environmental intensity."
-"Passage: A regional maritime authority monitors four seaports:
+"A regional maritime authority monitors four seaports:
 | Port | Cargo Handled (k MT) | Ship Calls | Berthing Capacity | Port Revenue (PHP M) | Operational Expenses (PHP M) |
 | Port Pier 1 | 4,500 | 900 | 12 | 180.0 | 108.0 |
 | Port Pier 2 | 6,400 | 1,600 | 16 | 240.0 | 168.0 |
@@ -270,7 +270,7 @@ Which port generated the HIGHEST revenue per metric ton of cargo handled, and wh
 3. Summary:
  - Highest Revenue per MT: Pier 1 and Pier 4 tied at PHP 40.00/MT.
  - Highest Operating Profit Margin: Pier 1 and Pier 4 tied at 40.0%.
- Let's adjust Option A wording to reflect Pier 1 and Pier 4 tie.","Highest Revenue/MT: Port Pier 1 and Port Pier 4 tied (PHP 40.00/MT); Highest Operating Margin: Port Pier 1 and Port Pier 4 tied (40.0%).","Highest Revenue/MT: Port Pier 2 (PHP 37.50/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Highest Revenue/MT: Port Pier 3 (PHP 37.50/MT); Highest Operating Margin: Port Pier 3 (30.0%).","Highest Revenue/MT: Port Pier 4 (PHP 40.00/MT); Highest Operating Margin: Port Pier 2 (30.0%).","A","Step-by-Step Solution:
+ Let's adjust Option A wording to reflect Pier 1 and Pier 4 tie.","Highest Revenue/MT: Port Pier 1 and Port Pier 4 tied (PHP 40.00/MT); Highest Operating Margin: Port Pier 1 and Port Pier 4 tied (40.0%).","Highest Revenue/MT: Port Pier 2 (PHP 37.50/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Highest Revenue/MT: Port Pier 3 (PHP 37.50/MT); Highest Operating Margin: Port Pier 3 (30.0%).","Highest Revenue/MT: Port Pier 4 (PHP 40.00/MT); Highest Operating Margin: Port Pier 2 (30.0%).","Analytical Ability","Step-by-Step Solution:
 1. Cross-verification of derived quotients:
  - Revenue per MT:
  - Pier 1: 180M / 4.5k kMT = PHP 40.00/MT.

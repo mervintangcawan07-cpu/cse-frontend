@@ -1,5 +1,7 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Given the following conditional protocol rules: (1) If the disaster alert reaches Level 3 (A), then emergency operations centers are activated (E). (2) If emergency operations centers are activated (E), then relief funds are released (R) and quick response teams are deployed (Q). (3) If quick response teams are deployed (Q), then coastal evacuations are enforced (C). Coastal evacuations were NOT enforced (neg C). Which conclusion is guaranteed to be TRUE?","The disaster alert did not reach Level 3 (neg A), and emergency operations centers were not activated (neg E).","Relief funds were released (R), and disaster alert reached Level 3 (A).","Emergency operations centers were activated (E), but coastal evacuations were omitted.","Quick response teams were deployed (Q), but coastal evacuations failed.","A","Step-by-Step Solution:
+"Given the following conditional protocol rules: (1) If the disaster alert reaches Level 3 (A), then emergency operations centers are activated (E). (2) If emergency operations centers are activated (E), then relief funds are released (R) and quick response teams are deployed (Q). (3) If quick response teams are deployed (Q), then coastal evacuations are enforced (C). Coastal evacuations were NOT enforced (neg C).
+
+Which conclusion is guaranteed to be TRUE?","The disaster alert did not reach Level 3 (neg A), and emergency operations centers were not activated (neg E).","Relief funds were released (R), and disaster alert reached Level 3 (A).","Emergency operations centers were activated (E), but coastal evacuations were omitted.","Quick response teams were deployed (Q), but coastal evacuations failed.","A","Step-by-Step Solution:
 1. Formulate the premises symbolically:
  - Premise 1: A implies E.
  - Premise 2: E implies (R land Q).
@@ -19,7 +21,9 @@
 
 Common Trap: Assuming relief funds could still be released even when operations centers were not activated.
 Exam Tip: Propagate Modus Tollens backwards through the chain: neg C implies neg Q implies neg E implies neg A.","Correct. Survives elimination because Modus Tollens propagates backwards from ~C to prove ~Q, then ~E, then ~A necessarily.","Eliminated because A is proven False by Modus Tollens.","Eliminated because E is proven False by Modus Tollens.","Eliminated because Q is proven False by Modus Tollens.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Consider the organizational conditional rules: (1) If Project Alpha is approved (A), then either Budget Beta is allocated (B) or Campaign Gamma is cancelled (C). (2) If Budget Beta is allocated (B), then Hiring Plan Δ is frozen (D). (3) If Campaign Gamma is cancelled (C), then Hiring Plan Δ is frozen (D). Project Alpha was approved (A). What conclusion is guaranteed to be TRUE?","Hiring Plan Δ is frozen (D).","Budget Beta was allocated (B).","Campaign Gamma was cancelled (C).","Both Budget Beta was allocated and Campaign Gamma was cancelled.","A","Step-by-Step Solution:
+"Consider the organizational conditional rules: (1) If Project Alpha is approved (A), then either Budget Beta is allocated (B) or Campaign Gamma is cancelled (C). (2) If Budget Beta is allocated (B), then Hiring Plan Δ is frozen (D). (3) If Campaign Gamma is cancelled (C), then Hiring Plan Δ is frozen (D). Project Alpha was approved (A).
+
+What conclusion is guaranteed to be TRUE?","Hiring Plan Δ is frozen (D).","Budget Beta was allocated (B).","Campaign Gamma was cancelled (C).","Both Budget Beta was allocated and Campaign Gamma was cancelled.","A","Step-by-Step Solution:
 1. Translate the premises into symbolic logic:
  - Premise 1: A implies (B lor C).
  - Premise 2: B implies D.
@@ -90,7 +94,9 @@ Exam Tip: Modus Tollens on the first branch (neg P implies neg C implies neg T) 
 
 Common Trap: Believing U is indeterminate because we do not know whether S or T is the active disjunct.
 Exam Tip: Both S and T lead to neg U; thus, S lor T unconditionally guarantees neg U.","Correct. Survives elimination because P implies R, which implies (S or T); since both S and T independently imply ~U, U is conclusively False.","Eliminated because U cannot be True without contradicting both conditional branches.","Eliminated because U is definitively determined to be False.","Eliminated because the deductive system is completely consistent.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the following municipal traffic rules: (1) If the congestion index exceeds 80 (T), then the alternate coding scheme is enforced (C). (2) If the alternate coding scheme is enforced (C), then public bus ridership increases (B). (3) If public bus ridership increases (B), then urban carbon emissions decrease (E). Urban carbon emissions did NOT decrease (neg E). Which conclusion is a valid deduction?","Traffic congestion index did not exceed 80 (neg T).","Alternate coding scheme was enforced (C).","Public bus ridership increased (B).","Both congestion index exceeded 80 and alternate coding was enforced.","A","Step-by-Step Solution:
+"Given the following municipal traffic rules: (1) If the congestion index exceeds 80 (T), then the alternate coding scheme is enforced (C). (2) If the alternate coding scheme is enforced (C), then public bus ridership increases (B). (3) If public bus ridership increases (B), then urban carbon emissions decrease (E). Urban carbon emissions did NOT decrease (neg E).
+
+Which conclusion is a valid deduction?","Traffic congestion index did not exceed 80 (neg T).","Alternate coding scheme was enforced (C).","Public bus ridership increased (B).","Both congestion index exceeded 80 and alternate coding was enforced.","A","Step-by-Step Solution:
 1. Express the premises symbolically:
  - T implies C.
  - C implies B.
@@ -105,8 +111,10 @@ Exam Tip: Both S and T lead to neg U; thus, S lor T unconditionally guarantees n
  - C implies B and neg B vdash neg C.
  - T implies C and neg C vdash neg T.
 5. Translate conclusion:
- - neg T = \""Traffic congestion index did not exceed 80.\","","","","","",""
-"Given the administrative accounting rules: (1) If an invoice is digitally signed (D), then either payment voucher V is generated (V) OR payment voucher V is archived (A) [D implies (V lor A)]. (2) If payment voucher V is generated (V), then treasury check K is issued (K). (3) If payment voucher V is archived (A), then audit clearance C is required (C). An invoice was digitally signed (D), but audit clearance C was NOT required (neg C). What conclusion is certain?","Treasury check K was issued (K).","Payment voucher V was archived (A).","Invoice was not digitally signed (neg D).","Treasury check K was not issued (neg K).","A","Step-by-Step Solution:
+ - neg T = \""Traffic congestion index did not exceed 80.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Given the administrative accounting rules: (1) If an invoice is digitally signed (D), then either payment voucher V is generated (V) OR payment voucher V is archived (A) [D implies (V lor A)]. (2) If payment voucher V is generated (V), then treasury check K is issued (K). (3) If payment voucher V is archived (A), then audit clearance C is required (C). An invoice was digitally signed (D), but audit clearance C was NOT required (neg C).
+
+What conclusion is certain?","Treasury check K was issued (K).","Payment voucher V was archived (A).","Invoice was not digitally signed (neg D).","Treasury check K was not issued (neg K).","A","Step-by-Step Solution:
 1. Translate to symbolic logic:
  - Premise 1: D implies (V lor A).
  - Premise 2: V implies K.
@@ -135,8 +143,10 @@ Exam Tip: D implies V lor A; neg C implies neg A; (V lor A) land neg A implies V
 3. Apply Modus Tollens to Master Chain:
  - A implies D and neg D vdash neg A.
 4. Conclude:
- - neg A = \""Candidate A did NOT qualify.\","","","","","",""
-"Consider the server monitoring rules: (1) If server X fails (X), then backup system Y starts (Y). (2) If backup system Y starts (Y), then notification Z is sent (Z). (3) If notification Z is sent (Z), then incident report W is logged (W). Fact: Incident report W was NOT logged (neg W). Which of the following statements lists all propositions that are definitely FALSE?","Server X failed (X), Backup system Y started (Y), and Notification Z was sent (Z).","Only Server X failed (X).","Only Notification Z was sent (Z).","None of the propositions can be determined.","A","Step-by-Step Solution:
+ - neg A = \""Candidate A did NOT qualify.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
+"Consider the server monitoring rules: (1) If server X fails (X), then backup system Y starts (Y). (2) If backup system Y starts (Y), then notification Z is sent (Z). (3) If notification Z is sent (Z), then incident report W is logged (W). Fact: Incident report W was NOT logged (neg W).
+
+Which of the following statements lists all propositions that are definitely FALSE?","Server X failed (X), Backup system Y started (Y), and Notification Z was sent (Z).","Only Server X failed (X).","Only Notification Z was sent (Z).","None of the propositions can be determined.","A","Step-by-Step Solution:
 1. State the propositional chain:
  - X implies Y.
  - Y implies Z.
@@ -151,7 +161,9 @@ Exam Tip: D implies V lor A; neg C implies neg A; (V lor A) land neg A implies V
 
 Common Trap: Concluding only the immediately preceding proposition (Z) is False while missing the chain back to Y and X.
 Exam Tip: In a linear conditional chain X implies Y implies Z implies W, if W is False, every preceding node (X, Y, Z) is False.","Correct. Survives elimination because cascading Modus Tollens backwards from ~W proves X, Y, and Z are all conclusively False.","Eliminated because Y and Z are also False, not only X.","Eliminated because X and Y are also False, not only Z.","Eliminated because all three variables are definitively determined.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | If-then reasoning | Very Difficult | Batch 072"
-"Given the statutory reform rules: (1) If rule R₁ is implemented, then either rule R₂ is modified (M) OR rule R₃ is repealed (P) [R₁ implies (M lor P)]. (2) If rule R₂ is modified (M), then stakeholder consultation S is held (M implies S). (3) If rule R₃ is repealed (P), then legal review L is conducted (P implies L). Rule R₁ was implemented, but stakeholder consultation S was NOT held (neg S). Which conclusion necessarily follows?","Legal review L was conducted (L).","Rule R2 was modified (M).","Rule R3 was not repealed (neg P).","Rule R1 was not implemented.","A","Step-by-Step Solution:
+"Given the statutory reform rules: (1) If rule R₁ is implemented, then either rule R₂ is modified (M) OR rule R₃ is repealed (P) [R₁ implies (M lor P)]. (2) If rule R₂ is modified (M), then stakeholder consultation S is held (M implies S). (3) If rule R₃ is repealed (P), then legal review L is conducted (P implies L). Rule R₁ was implemented, but stakeholder consultation S was NOT held (neg S).
+
+Which conclusion necessarily follows?","Legal review L was conducted (L).","Rule R2 was modified (M).","Rule R3 was not repealed (neg P).","Rule R1 was not implemented.","A","Step-by-Step Solution:
 1. Translate given rules symbolically:
  - Premise 1: R₁ implies (M lor P).
  - Premise 2: M implies S.

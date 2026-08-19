@@ -9,7 +9,7 @@
 4. Apply De Morgan's Law and Double Negation:
  - neg(neg D) land neg C ≡ D land neg C.
 5. Translate into natural language:
- - \""The agency director approves the procurement (D) AND the contractor does NOT deliver the equipment (neg C).\","","","","","",""
+ - \""The agency director approves the procurement (D) AND the contractor does NOT deliver the equipment (neg C).\","","","","","Analytical Ability","Analytical Ability"
 "According to generalized De Morgan's Laws, what is the exact logical negation of the compound statement: \""Neither officer Santos was reassigned (S) NOR officer Reyes was promoted (R)\"" [neg S land neg R]?","Officer Santos was reassigned (S) OR officer Reyes was promoted (R) [S lor R].","Officer Santos was reassigned (S) AND officer Reyes was promoted (R) [S land R].","If officer Santos was reassigned (S), then officer Reyes was promoted (R).","Officer Santos was not reassigned (neg S), and officer Reyes was not promoted (neg R).","A","Step-by-Step Solution:
 1. Represent the given statement symbolically:
  - \""Neither S nor R\"" ≡ neg S land neg R ≡ neg(S lor R).
@@ -18,7 +18,7 @@
 3. Apply the Law of Double Negation Elimination (neg neg P ≡ P):
  - neg[neg(S lor R)] ≡ S lor R.
 4. Translate into natural language:
- - \""Officer Santos was reassigned (S) OR officer Reyes was promoted (R).\","","","","","",""
+ - \""Officer Santos was reassigned (S) OR officer Reyes was promoted (R).\","","","","","Analytical Ability","Analytical Ability"
 "What is the exact logical negation of the universally quantified conditional proposition: \""All civil servants who pass the comprehensive examination (P) receive a merit promotion (M)\"" [forall x (P(x) implies M(x))]?","There is at least one civil servant who passes the comprehensive examination (P) but does NOT receive a merit promotion (neg M).","No civil servant who passes the comprehensive examination receives a merit promotion.","All civil servants who do not pass the comprehensive examination do not receive a merit promotion.","There is at least one civil servant who does not pass the examination and does not receive a promotion.","A","Step-by-Step Solution:
 1. Express the proposition in first-order predicate logic:
  - Universal Affirmative: forall x (P(x) implies M(x)).
@@ -29,8 +29,8 @@
 4. Combine into final quantified negation:
  - exists x (P(x) land neg M(x)).
 5. Translate into natural language:
- - \""There exists at least one civil servant who passes the comprehensive examination (P) AND does NOT receive a merit promotion (neg M).\","","","","","",""
-"- Option B: Universal Negative (forall x (P(x) implies neg M(x)))","which is the contrary","not the contradictory.","","","A","","","","","","",""
+ - \""There exists at least one civil servant who passes the comprehensive examination (P) AND does NOT receive a merit promotion (neg M).\","","","","","Analytical Ability","Analytical Ability"
+"- Option B: Universal Negative (forall x (P(x) implies neg M(x)))","which is the contrary","not the contradictory.","","","A","","","","","","Analytical Ability","Analytical Ability"
 "What is the exact logical negation of the compound logical formula: \""P land (Q lor R)\""?","neg P lor (neg Q land neg R)","neg P land (neg Q lor neg R)","neg P lor (neg Q lor neg R)","neg P land (neg Q land neg R)","A","Step-by-Step Solution:
 1. Write the full formula under negation:
  - neg[P land (Q lor R)].
@@ -46,7 +46,7 @@
  - Option D: Incorrectly uses AND for both connectives.
 
 Common Trap: Forgetting that negating a nested formula requires flipping ALL conjunctions to disjunctions and all disjunctions to conjunctions at each hierarchical level.
-Exam Tip: neg[P land (Q lor R)] ≡ neg P lor (neg Q land neg R).","","","","","",""
+Exam Tip: neg[P land (Q lor R)] ≡ neg P lor (neg Q land neg R).","","","","","Analytical Ability","Analytical Ability"
 "What is the exact logical negation of the existential negative proposition: \""Some government agencies do NOT have an active public portal (exists x (A(x) land neg W(x)))\""?","Every government agency has an active public portal (forall x (A(x) implies W(x))).","No government agency has an active public portal.","Some government agencies have an active public portal.","Every government agency does not have an active public portal.","A","Step-by-Step Solution:
 1. Identify the categorical type of the proposition:
  - Statement: \""Some A are not W\"" (O-proposition: Particular Negative).
@@ -62,7 +62,7 @@ Exam Tip: neg[P land (Q lor R)] ≡ neg P lor (neg Q land neg R).","","","","","
  - Option D: Universal Negative restated.
 
 Common Trap: Confusing the Subcontrary (I: \""Some do\"") with the exact logical Contradictory/Negation (A: \""All do\"").
-Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","",""
+Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","Analytical Ability","Analytical Ability"
 "What is the exact logical negation of the biconditional proposition: \""A legislative bill becomes law (L) if and only if the President signs it (S)\"" [L leftrightarrow S]?","Either the bill becomes law without presidential signature, OR the President signs it but it does not become law (L oplus S).","The bill does not become law, and the President does not sign it.","If the President does not sign the bill, it does not become law.","The bill becomes law, and the President signs it.","A","Step-by-Step Solution:
 1. Represent the biconditional symbolically:
  - L leftrightarrow S ≡ (L implies S) land (S implies L) ≡ (L land S) lor (neg L land neg S).
@@ -73,7 +73,7 @@ Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","",""
 4. Recognize the Exclusive OR (L oplus S):
  - (L lor S) land (neg L lor neg S) ≡ (L land neg S) lor (neg L land S) ≡ L oplus S.
 5. Translate into natural language:
- - \""Either the bill becomes law without presidential signature (L land neg S) OR the President signs it but it does not become law (neg L land S).\","","","","","",""
+ - \""Either the bill becomes law without presidential signature (L land neg S) OR the President signs it but it does not become law (neg L land S).\","","","","","Analytical Ability","Analytical Ability"
 "What is the logical negation of the Exclusive OR statement: \""Either applicant X is hired (X) OR applicant Y is hired (Y), but not both\"" [X oplus Y]?","Either both applicants X and Y are hired, OR neither applicant is hired [(X land Y) lor (neg X land neg Y) ≡ X leftrightarrow Y].","Neither applicant X nor applicant Y is hired.","Both applicant X and applicant Y are hired.","Applicant X is hired and applicant Y is not hired.","A","Step-by-Step Solution:
 1. State the formula for Exclusive OR (X oplus Y):
  - X oplus Y ≡ (X land neg Y) lor (neg X land Y).
@@ -84,7 +84,7 @@ Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","",""
 4. Expand the Biconditional into truth-functional disjunction:
  - X leftrightarrow Y ≡ (X land Y) lor (neg X land neg Y).
 5. Translate into natural language:
- - \""Either both applicants X and Y are hired, OR neither applicant is hired.\","","","","","",""
+ - \""Either both applicants X and Y are hired, OR neither applicant is hired.\","","","","","Analytical Ability","Analytical Ability"
 "Consider the quantified proposition: \""Every employee in Division 1 passed the safety inspection (S) OR passed the ethics evaluation (E)\"" [forall x (S(x) lor E(x))]. What is its exact logical negation?","There is at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation (exists x (neg S(x) land neg E(x))).","No employee in Division 1 passed the safety inspection or ethics evaluation.","There is at least one employee who did not pass the safety inspection OR did not pass the ethics evaluation.","Every employee in Division 1 failed both evaluations.","A","Step-by-Step Solution:
 1. Write the quantified formula:
  - forall x (S(x) lor E(x)).
@@ -95,7 +95,7 @@ Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","",""
 4. Combine into final expression:
  - exists x (neg S(x) land neg E(x)).
 5. Translate into natural language:
- - \""There exists at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation.\","","","","","",""
+ - \""There exists at least one employee in Division 1 who did NOT pass the safety inspection AND did NOT pass the ethics evaluation.\","","","","","Analytical Ability","Analytical Ability"
 "What is the exact logical negation of the conjunction of two conditional statements: \""(P implies Q) land (Q implies R)\""?","(P land neg Q) lor (Q land neg R)","(neg P lor Q) land (neg Q lor R)","(P land neg Q) land (Q land neg R)","(neg P land Q) lor (neg Q land R)","A","Step-by-Step Solution:
 1. State the formula under negation:
  - neg[(P implies Q) land (Q implies R)].
@@ -112,7 +112,7 @@ Exam Tip: neg(Some S are NOT P) ≡ ALL S are P.","","","","","",""
  - Option D: Negates antecedent instead of consequent.
 
 Common Trap: Using AND (land) between the negated conditionals instead of OR (lor).
-Exam Tip: neg(A land B) ≡ neg A lor neg B; neg(P implies Q) ≡ P land neg Q.","","","","","",""
+Exam Tip: neg(A land B) ≡ neg A lor neg B; neg(P implies Q) ≡ P land neg Q.","","","","","Analytical Ability","Analytical Ability"
 "By the fundamental Laws of Propositional Logic, which of the following expressions is strictly logically equivalent to the negated disjunction of negations: \""neg(neg P lor neg Q)\""?","P land Q","P lor Q","neg P land neg Q","neg(P land Q)","A","Step-by-Step Solution:
 1. State the initial formula:
  - neg(neg P lor neg Q).
@@ -132,4 +132,4 @@ Exam Tip: neg(A land B) ≡ neg A lor neg B; neg(P implies Q) ≡ P land neg Q."
  - Option D (neg(P land Q)): Equivalent to neg P lor neg Q.
 
 Common Trap: Confusing neg(neg P lor neg Q) ≡ P land Q with neg(P lor Q) ≡ neg P land neg Q.
-Exam Tip: Negating a disjunction of negations produces a conjunction of positives: neg(neg P lor neg Q) ≡ P land Q.","","","","","",""
+Exam Tip: Negating a disjunction of negations produces a conjunction of positives: neg(neg P lor neg Q) ≡ P land Q.","","","","","Analytical Ability","Analytical Ability"

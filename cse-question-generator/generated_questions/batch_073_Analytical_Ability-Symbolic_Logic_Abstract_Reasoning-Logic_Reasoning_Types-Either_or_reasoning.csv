@@ -82,7 +82,7 @@ Exam Tip: neg F implies neg N; (M lor N) land neg N implies M implies R.","Corre
 3. Substitute variables A and F:
  - neg(A lor F) ≡ neg A land neg F.
 4. Translate into natural language:
- - \""The petitioner does not file an appeal (neg A) AND the judgment does not become final and executory (neg F).\","","","","","",""
+ - \""The petitioner does not file an appeal (neg A) AND the judgment does not become final and executory (neg F).\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
 "Given the Exclusive OR condition: \""An administrative officer is assigned to either Regional Office East (E) OR Regional Office West (W), but not both (E oplus W).\"" If personnel records confirm that the officer was assigned to Regional Office East (E), what is the exact status of the assignment to Regional Office West?","The officer is definitively NOT assigned to Regional Office West (neg W).","The officer is also assigned to Regional Office West (W).","The officer's assignment to Regional Office West is optional.","The assignment to Regional Office West is indeterminate.","A","Step-by-Step Solution:
 1. Analyze the Exclusive OR premise (E oplus W):
  - E oplus W means: (E lor W) land neg(E land W).
@@ -90,7 +90,7 @@ Exam Tip: neg F implies neg N; (M lor N) land neg N implies M implies R.","Corre
 2. Apply the given fact (E = True):
  - Since E is True, for neg(E land W) to remain True, W MUST be FALSE.
 3. Conclude:
- - neg W = \""The officer is definitively NOT assigned to Regional Office West.\","","","","","",""
+ - neg W = \""The officer is definitively NOT assigned to Regional Office West.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
 "Given the three premises: (1) A lor B lor C (At least one of A, B, or C is true). (2) If A is true, then D is true (A implies D). (3) If B is true, then D is true (B implies D). (4) Condition C is known to be FALSE (neg C). What conclusion necessarily follows?","Condition D is TRUE (D).","Condition D is FALSE (neg D).","Condition A is FALSE (neg A).","Condition B is FALSE (neg B).","A","Step-by-Step Solution:
 1. State the premises symbolically:
  - Premise 1: A lor B lor C.
@@ -145,7 +145,9 @@ Exam Tip: Affirming a Disjunct (P lor Q, P vdash neg Q) is an INVALID FALLACY un
 
 Common Trap: Trying to solve Premise 1 first before using Premise 3 to eliminate terms in Premise 2.
 Exam Tip: Start with the unit literal (neg R), propagate to (neg P lor R) to find neg P, then propagate to (P lor Q) to find Q.","Correct. Survives elimination because ~R combined with (~P or R) proves ~P, and ~P combined with (P or Q) proves Q is True.","Eliminated because P is proven False (~P is True).","Eliminated because R is given as False (~R).","Eliminated because Q is proven True.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Either/or reasoning | Very Difficult | Batch 073"
-"Given the complex disjunctive system rule: \""Either system anomaly A is active (A) OR both components B and C are offline [(B land C)]\"" [A lor (B land C)]. Automated diagnostics confirm that component B is ONLINE (neg B). What conclusion is mathematically and logically CERTAIN?","System anomaly A is active (A).","Component C is offline (C).","System anomaly A is inactive (neg A).","Both components B and C are offline.","A","Step-by-Step Solution:
+"Given the complex disjunctive system rule: \""Either system anomaly A is active (A) OR both components B and C are offline [(B land C)]\"" [A lor (B land C)]. Automated diagnostics confirm that component B is ONLINE (neg B).
+
+What conclusion is mathematically and logically CERTAIN?","System anomaly A is active (A).","Component C is offline (C).","System anomaly A is inactive (neg A).","Both components B and C are offline.","A","Step-by-Step Solution:
 1. Formulate the premises:
  - Premise 1: A lor (B land C) (Master Disjunction).
  - Fact: neg B (Component B is not offline, i.e., B is False).

@@ -20,7 +20,9 @@
 
 Common Trap: Placing T after S or placing P before R.
 Exam Tip: Chain the inequalities transitively and insert immediate neighbors into their exact contiguous slots.","Correct. Survives elimination because R < P < Q < T < S < U satisfies all 5 procedural ordering constraints in exact sequence.","Eliminated because P is placed before R (violates Rule 2).","Eliminated because T is placed before Q (violates Rule 4).","Eliminated because Q is placed before P (violates Rule 1).","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Ordering | Very Difficult | Batch 082"
-"Five public infrastructure projects (A, B, C, D, E) are scheduled for sequential completion: (1) Project C is completed after Project A. (2) Project B is completed before Project A. (3) Project D is completed before Project B. (4) Project E is completed after Project C. Which project is the 3rd project completed in this chronological sequence?","Project A","Project B","Project C","Project D","A","Step-by-Step Solution:
+"Five public infrastructure projects (A, B, C, D, E) are scheduled for sequential completion: (1) Project C is completed after Project A. (2) Project B is completed before Project A. (3) Project D is completed before Project B. (4) Project E is completed after Project C.
+
+Which project is the 3rd project completed in this chronological sequence?","Project A","Project B","Project C","Project D","A","Step-by-Step Solution:
 1. Express completion constraints as timeline inequalities:
  - Rule 1: A < C.
  - Rule 2: B < A implies B < A < C.

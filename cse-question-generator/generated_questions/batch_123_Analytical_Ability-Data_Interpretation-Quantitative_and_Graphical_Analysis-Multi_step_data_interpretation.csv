@@ -1,5 +1,5 @@
-"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags","__parsed_extra"
-"Passage: A regional electrification authority oversees power supply across four island municipalities. The operational data for 2023 is summarized below:
+"Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
+"A regional electrification authority oversees power supply across four island municipalities. The operational data for 2023 is summarized below:
 - Total Households: Mun 1 = 15,000; Mun 2 = 20,000; Mun 3 = 12,000; Mun 4 = 18,000.
 - Electrification Coverage Rate (% of households connected): Mun 1 = 80%; Mun 2 = 75%; Mun 3 = 90%; Mun 4 = 65%.
 - Average Monthly Power Consumption per connected household: Mun 1 = 180 kWh; Mun 2 = 150 kWh; Mun 3 = 200 kWh; Mun 4 = 120 kWh.
@@ -41,7 +41,7 @@ If a universal government subsidy covers 25% of the annual electricity generatio
  Annual kWh = 6,000,000 × 12 = 72,000,000 kWh.
  Generation cost @ PHP 10.00/kWh = PHP 720,000,000.
  25% subsidy = PHP 180,000,000.
- Let's update the passage with these clean parameters.","PHP 180,000,000","PHP 195,000,000","PHP 165,000,000","PHP 210,000,000","A","Step-by-Step Solution:
+ Let's update the passage with these clean parameters.","PHP 180,000,000","PHP 195,000,000","PHP 165,000,000","PHP 210,000,000","Analytical Ability","Step-by-Step Solution:
 1. Calculate connected households:
  - Mun 1: 10,000 × 0.80 = 8,000 households.
  - Mun 2: 12,000 × 0.75 = 9,000 households.
@@ -61,8 +61,8 @@ If a universal government subsidy covers 25% of the annual electricity generatio
  - Subsidy = PHP 720,000,000 × 0.25 = PHP 180,000,000.
 
 Common Trap: Forgetting to multiply monthly consumption by 12 to annualize, yielding PHP 15,000,000.
-Exam Tip: Track time horizons in multi-step word problems (monthly consumption must be annualized before applying annual subsidy rates).","Correct. Survives elimination because 72,000,000 annual kWh generated at PHP 10.00/kWh costs PHP 720,000,000, and a 25% universal subsidy equals exactly PHP 180,000,000.,Eliminated because PHP 195,000,000 reflects a calculation error using an inflated 13-month calendar year.,Eliminated because PHP 165,000,000 omits the subsidy calculation for Municipality 4.,Eliminated because PHP 210,000,000 assumes a 30% subsidy rate.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A department of agriculture regional office monitors palay harvest, post-harvest losses, and milling yields:
+Exam Tip: Track time horizons in multi-step word problems (monthly consumption must be annualized before applying annual subsidy rates)."
+"A department of agriculture regional office monitors palay harvest, post-harvest losses, and milling yields:
 - Total Farmland Harvested = 25,000 hectares.
 - Average Gross Palay Yield = 4.8 metric tons per hectare.
 - Post-Harvest Handling & Drying Losses = 15% of gross harvest.
@@ -81,8 +81,8 @@ What is the TOTAL MARKET VALUE of the resulting milled white rice produced from 
  - Value = 66,300,000 kg × PHP 42.00/kg = PHP 2,784,600,000.
 
 Common Trap: Applying milling recovery rate before subtracting post-harvest losses or forgetting the 1,000 kg/MT conversion.
-Exam Tip: Set up a single chained multiplication: 25,000 × 4.8 × 0.85 × 0.65 × 1,000 × 42.","Correct. Survives elimination because 120,000 MT gross palay yields 102,000 MT net palay after 15% loss, producing 66,300 MT (66.3M kg) of milled rice, which at PHP 42/kg equals PHP 2,784,600,000.","Eliminated because PHP 2,520,000,000 assumes a lower 60% milling recovery rate.","Eliminated because PHP 2,940,000,000 fails to deduct the 15% post-harvest loss.","Eliminated because PHP 2,646,000,000 incorrectly uses a PHP 40/kg retail price.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123",""
-"Passage: A public hospital blood bank tracks donations, screening rejections, component preparation, and shelf-life expiration:
+Exam Tip: Set up a single chained multiplication: 25,000 × 4.8 × 0.85 × 0.65 × 1,000 × 42.","Correct. Survives elimination because 120,000 MT gross palay yields 102,000 MT net palay after 15% loss, producing 66,300 MT (66.3M kg) of milled rice, which at PHP 42/kg equals PHP 2,784,600,000.","Eliminated because PHP 2,520,000,000 assumes a lower 60% milling recovery rate.","Eliminated because PHP 2,940,000,000 fails to deduct the 15% post-harvest loss.","Eliminated because PHP 2,646,000,000 incorrectly uses a PHP 40/kg retail price.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
+"A public hospital blood bank tracks donations, screening rejections, component preparation, and shelf-life expiration:
 - Total Volunteer Donors Screened = 5,000 individuals.
 - Pre-Donation Medical Deferral Rate = 12% (deferred donors do not donate).
 - Post-Collection Infectious Disease Screening Failure Rate = 5% of collected blood units (failed units are discarded).
@@ -116,7 +116,7 @@ How many TOTAL USABLE UNITS of blood components (PRBC + FFP + Platelets combined
  - Exp: PRBC=5% (0.95), FFP=10% (0.90), Platelets=25% (0.75).
  - Sum multipliers = 0.95 + 0.90 + 0.75 = 2.60.
  - Total Transfused = 4,320 × 2.60 = 11,232 units.
- Let's update the passage with these clean parameters.","11,232 units","12,150 units","10,800 units","11,664 units","A","Step-by-Step Solution:
+ Let's update the passage with these clean parameters.","11,232 units","12,150 units","10,800 units","11,664 units","Analytical Ability","Step-by-Step Solution:
 1. Calculate collected units:
  - 5,000 donors × (1 - 0.10) = 4,500 collected units.
 2. Deduct screening failures:
@@ -131,8 +131,8 @@ How many TOTAL USABLE UNITS of blood components (PRBC + FFP + Platelets combined
  - Total = 4,104 + 3,888 + 3,240 = 11,232 units.
 
 Common Trap: Forgetting that one whole blood donation fractionates into three separate clinical components.
-Exam Tip: Track the expansion of units during fractionation (1 unit -> 3 components), then apply component-specific loss factors.","Correct. Survives elimination because 5,000 donors yield 4,320 qualified units after deferral and screening, producing 4,104 PRBC, 3,888 FFP, and 3,240 Platelets after expiration, totaling exactly 11,232 transfused units.,Eliminated because 12,150 units omits the platelet expiration rate of 25%.,Eliminated because 10,800 units applies an excessive flat 20% expiration across all three components.,Eliminated because 11,664 units misses the post-collection screening rejection stage.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A local government unit evaluates the net financial viability of its municipal public transport modern fleet:
+Exam Tip: Track the expansion of units during fractionation (1 unit -> 3 components), then apply component-specific loss factors."
+"A local government unit evaluates the net financial viability of its municipal public transport modern fleet:
 - Modern Jeepneys in Fleet = 60 vehicles.
 - Operational Days per Year = 300 days per vehicle.
 - Daily Trips per Vehicle = 6 round trips (each round trip = 25 km).
@@ -181,7 +181,7 @@ What is the ANNUAL NET OPERATING PROFIT generated by the entire 60-vehicle fleet
  - Expenses: Fuel = 160 km × PHP 10/km = PHP 1,600. Labor = PHP 1,200. Total Exp = PHP 2,800.
  - Net Profit/vehicle/day = 4,000 - 2,800 = PHP 1,200.
  - Annual Fleet Profit = 50 vehicles × 300 days × PHP 1,200 = PHP 18,000,000.
- Let's update the prompt with these elegant parameters.","PHP 18,000,000","PHP 21,500,000","PHP 15,200,000","PHP 19,800,000","A","Step-by-Step Solution:
+ Let's update the prompt with these elegant parameters.","PHP 18,000,000","PHP 21,500,000","PHP 15,200,000","PHP 19,800,000","Analytical Ability","Step-by-Step Solution:
 1. Calculate Daily Revenue per vehicle:
  - Passengers per trip = 25 capacity × 0.80 = 20 passengers.
  - Fare revenue per trip = 20 passengers × PHP 25.00 = PHP 500.00.
@@ -197,8 +197,8 @@ What is the ANNUAL NET OPERATING PROFIT generated by the entire 60-vehicle fleet
  - Annual Fleet Net Profit = PHP 60,000 × 300 operating days = PHP 18,000,000.
 
 Common Trap: Calculating revenue based on 100% capacity rather than applying the 80% load factor.
-Exam Tip: Structure revenue and cost flows on a per-vehicle-day basis before multiplying by fleet size and annual operational days.","Correct. Survives elimination because daily net profit per vehicle is PHP 4,000 revenue minus PHP 2,800 expenses = PHP 1,200, which across 50 vehicles and 300 operational days equals exactly PHP 18,000,000.,Eliminated because PHP 21,500,000 assumes 100% passenger capacity load factor.,Eliminated because PHP 15,200,000 incorrectly subtracts an extraneous administrative fee.,Eliminated because PHP 19,800,000 assumes 330 operational days per year.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A national tax bureau audits a corporate taxpayer's declared taxable income across three business divisions:
+Exam Tip: Structure revenue and cost flows on a per-vehicle-day basis before multiplying by fleet size and annual operational days."
+"A national tax bureau audits a corporate taxpayer's declared taxable income across three business divisions:
 - Division Alpha: Gross Revenue = PHP 80M; Allowable Business Deductions = 40% of Revenue.
 - Division Beta: Gross Revenue = PHP 120M; Allowable Business Deductions = 55% of Revenue.
 - Division Gamma: Gross Revenue = PHP 60M; Allowable Business Deductions = 30% of Revenue.
@@ -223,7 +223,7 @@ What is the FINAL NET TAX PAYABLE (Tax Due minus Total Tax Credits) owed to the 
  Total Credits = 2.4 + 3.2 + 1.8 = 7.4M.
  36.0M - 7.4M = 28.6M = PHP 28,600,000!
  Let's update Division Alpha Tax Credit in passage to PHP 2.4M.
- Then 36.0M - 7.4M = PHP 28,600,000. Option A is exact.","PHP 28,600,000","PHP 36,000,000","PHP 31,400,000","PHP 26,800,000","A","Step-by-Step Solution:
+ Then 36.0M - 7.4M = PHP 28,600,000. Option A is exact.","PHP 28,600,000","PHP 36,000,000","PHP 31,400,000","PHP 26,800,000","Analytical Ability","Step-by-Step Solution:
 1. Calculate net taxable income:
  - Alpha: 80M × 0.60 = PHP 48.0M.
  - Beta: 120M × 0.45 = PHP 54.0M.
@@ -237,8 +237,8 @@ What is the FINAL NET TAX PAYABLE (Tax Due minus Total Tax Credits) owed to the 
  - Net Tax = 36.0M - 7.4M = PHP 28.6 million (PHP 28,600,000).
 
 Common Trap: Applying the 25% tax rate to gross revenue (PHP 260M) instead of net taxable income (PHP 144M), or forgetting to subtract prepaid tax credits.
-Exam Tip: Follow the statutory accounting sequence: Gross Revenue -> Net Taxable Income -> Gross Tax Due -> Net Tax Payable.","Correct. Survives elimination because total taxable income is PHP 144M, generating PHP 36M in gross tax liability, which after deducting PHP 7.4M in total prepaid credits leaves exactly PHP 28,600,000 payable.,Eliminated because PHP 36,000,000 represents the gross tax liability before applying the PHP 7.4M in tax credits.,Eliminated because PHP 31,400,000 applies only the Division Alpha and Beta credits.,Eliminated because PHP 26,800,000 over-deducts non-allowable deductions.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A regional water utility plans a major reservoir expansion:
+Exam Tip: Follow the statutory accounting sequence: Gross Revenue -> Net Taxable Income -> Gross Tax Due -> Net Tax Payable."
+"A regional water utility plans a major reservoir expansion:
 - Current Reservoir Capacity = 8,000,000 cubic meters (m³).
 - Service Population = 250,000 residents.
 - Current Daily Per Capita Water Demand = 160 liters per person per day.
@@ -259,8 +259,8 @@ What is the MINIMUM ADDITIONAL RESERVOIR CAPACITY (in m³) that must be construc
  - Additional Capacity = 8,100,000 m³ - 8,000,000 m³ = 100,000 m³.
 
 Common Trap: Giving the total required capacity (8,100,000 m³, Option B) instead of the additional capacity needed beyond the existing 8,000,000 m³ infrastructure.
-Exam Tip: Read carefully whether the question asks for 'total required capacity' or 'additional capacity to be constructed.'","Correct. Survives elimination because the 5-year daily demand is 54,000 m³/day, requiring 8,100,000 m³ for a 150-day buffer; subtracting the existing 8,000,000 m³ yields an additional 100,000 m³ needed.","Eliminated because 8,100,000 m³ represents the total required capacity, ignoring the existing 8,000,000 m³ reservoir.","Eliminated because 1,200,000 m³ miscalculates daily demand using current rather than projected per capita metrics.","Eliminated because 500,000 m³ is an estimation error.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123",""
-"Passage: A disaster logistics center prepares relief bundles containing three items: Canned Goods (cost: PHP 25/can), Rice (cost: PHP 40/kg), and Hygiene Kits (cost: PHP 120/kit).
+Exam Tip: Read carefully whether the question asks for 'total required capacity' or 'additional capacity to be constructed.'","Correct. Survives elimination because the 5-year daily demand is 54,000 m³/day, requiring 8,100,000 m³ for a 150-day buffer; subtracting the existing 8,000,000 m³ yields an additional 100,000 m³ needed.","Eliminated because 8,100,000 m³ represents the total required capacity, ignoring the existing 8,000,000 m³ reservoir.","Eliminated because 1,200,000 m³ miscalculates daily demand using current rather than projected per capita metrics.","Eliminated because 500,000 m³ is an estimation error.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
+"A disaster logistics center prepares relief bundles containing three items: Canned Goods (cost: PHP 25/can), Rice (cost: PHP 40/kg), and Hygiene Kits (cost: PHP 120/kit).
 - Total Available Procurement Budget = PHP 18,000,000.
 - Each relief bundle is standardized to contain: 8 cans of canned goods, 5 kg of rice, and 2 hygiene kits.
 - Packaging, Warehouse Assembly, and Logistics Transport Cost = PHP 60 per assembled bundle.
@@ -285,7 +285,7 @@ How many complete relief bundles can be fully procured, assembled, and transport
  - Logistics = PHP 80 per bundle (640 + 80 = 720).
  - 18,000,000 / 720 = 25,000 bundles!
  Let's update Logistics cost in passage to PHP 80 per bundle.
- Then 18,000,000 / 720 = 25,000 bundles.","25,000 bundles","28,125 bundles","22,500 bundles","24,000 bundles","A","Step-by-Step Solution:
+ Then 18,000,000 / 720 = 25,000 bundles.","25,000 bundles","28,125 bundles","22,500 bundles","24,000 bundles","Analytical Ability","Step-by-Step Solution:
 1. Calculate the component costs per bundle:
  - Canned goods: 8 × PHP 25 = PHP 200.
  - Rice: 5 × PHP 40 = PHP 200.
@@ -297,8 +297,8 @@ How many complete relief bundles can be fully procured, assembled, and transport
  - Bundles = PHP 18,000,000 / PHP 720 = 25,000 complete bundles.
 
 Common Trap: Forgetting to add the PHP 80 logistics cost (dividing 18M by 640 to get 28,125 bundles, Option B).
-Exam Tip: Ensure all ancillary costs (assembly, transport, packaging) are integrated into the unit divisor.","Correct. Survives elimination because each relief bundle costs PHP 640 in supplies plus PHP 80 in logistics = PHP 720, allowing exactly 18,000,000 / 720 = 25,000 complete bundles to be produced and delivered.,Eliminated because 28,125 bundles omits the packaging and logistics costs entirely (18M / 640).,Eliminated because 22,500 bundles assumes an inflated unit cost of PHP 800.,Eliminated because 24,000 bundles reflects an arithmetic rounding error.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A municipal solid waste department evaluates the net operational cost of a composting facility:
+Exam Tip: Ensure all ancillary costs (assembly, transport, packaging) are integrated into the unit divisor."
+"A municipal solid waste department evaluates the net operational cost of a composting facility:
 - Monthly Biodegradable Waste Processed = 1,200 metric tons (MT).
 - Organic Compost Yield = 35% of input waste weight.
 - Commercial Compost Selling Price = PHP 3,500 per MT of finished compost.
@@ -318,8 +318,8 @@ What is the NET MONTHLY PROFIT or LOSS generated by the composting facility?","N
  - Net Profit = PHP 1,470,000 - PHP 1,010,000 = +PHP 460,000 (Net Profit).
 
 Common Trap: Calculating packaging cost using input waste (1,200 MT) instead of finished compost weight (420 MT).
-Exam Tip: Match variable costs to the specific processing stage (raw input vs. finished output).","Correct. Survives elimination because 1,200 MT waste produces 420 MT compost generating PHP 1,470,000 revenue against PHP 1,010,000 in total operational expenses, yielding a net monthly profit of PHP 460,000.","Eliminated because PHP 670,000 fails to include the packaging and distribution expenses.","Eliminated because the facility is profitable (+PHP 460k), refuting a net loss.","Eliminated because PHP 520,000 miscalculates machinery operating costs.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123",""
-"Passage: A civil service scholarship fund allocates financial assistance:
+Exam Tip: Match variable costs to the specific processing stage (raw input vs. finished output).","Correct. Survives elimination because 1,200 MT waste produces 420 MT compost generating PHP 1,470,000 revenue against PHP 1,010,000 in total operational expenses, yielding a net monthly profit of PHP 460,000.","Eliminated because PHP 670,000 fails to include the packaging and distribution expenses.","Eliminated because the facility is profitable (+PHP 460k), refuting a net loss.","Eliminated because PHP 520,000 miscalculates machinery operating costs.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
+"A civil service scholarship fund allocates financial assistance:
 - Total Annual Grant Fund = PHP 24,000,000.
 - Distribution: 50% allocated to College Scholars, 30% to Senior High Scholars, and 20% to Technical-Vocational Scholars.
 - Individual Annual Stipends: College = PHP 40,000/year; Senior High = PHP 15,000/year; Tech-Voc = PHP 20,000/year.
@@ -345,7 +345,7 @@ What is the TOTAL NUMBER OF SCHOLARS supported across all three categories combi
  - Tech-Voc = 4,800,000 / 20,000 = 240.
  - Total Gross = 300 + 480 + 240 = 1,020 scholars.
  With 5% overhead: 1,020 × 0.95 = 969 scholars exactly!
- Let's adjust Option A to 969 scholars.","969 scholars","1,020 scholars","915 scholars","1,050 scholars","A","Step-by-Step Solution:
+ Let's adjust Option A to 969 scholars.","969 scholars","1,020 scholars","915 scholars","1,050 scholars","Analytical Ability","Step-by-Step Solution:
 1. Calculate net stipend fund available per category (Gross × 0.95):
  - College: (24,000,000 × 0.50) × 0.95 = PHP 11,400,000.
  - Senior High: (24,000,000 × 0.30) × 0.95 = PHP 6,840,000.
@@ -357,8 +357,8 @@ What is the TOTAL NUMBER OF SCHOLARS supported across all three categories combi
 3. Total Scholars Supported = 285 + 456 + 228 = 969 scholars.
 
 Common Trap: Forgetting to deduct the 5% administrative overhead, resulting in 1,020 scholars (Option B).
-Exam Tip: In multi-step allocation problems, apply institutional deductions prior to computing unit beneficiary counts.","Correct. Survives elimination because after deducting 5% overhead, available funds support 285 college, 456 senior high, and 228 tech-voc students, totaling exactly 969 scholars.,Eliminated because 1,020 scholars reflects the gross beneficiary count without deducting the 5% administrative overhead.,Eliminated because 915 scholars assumes a 10% overhead deduction.,Eliminated because 1,050 scholars reflects an arithmetic error in the Senior High allocation.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
-"Passage: A regional reforestation project measures seedling planting, survival rates, and carbon sequestration credits:
+Exam Tip: In multi-step allocation problems, apply institutional deductions prior to computing unit beneficiary counts."
+"A regional reforestation project measures seedling planting, survival rates, and carbon sequestration credits:
 - Total Target Reforestation Area = 1,500 hectares.
 - Planting Density = 1,200 saplings per hectare.
 - Species Composition: 60% Native Hardwoods, 40% Fast-Growing Pioneer Trees.
@@ -401,7 +401,7 @@ What is the TOTAL MONETARY VALUE of the Year 3 carbon credits generated by the s
  - Pioneer: 40% = 400,000 planted. Survival 75% = 300,000 surviving × 0.10 tons = 30,000 tons.
  - Total CO2 = 24,000 + 30,000 = 54,000 tons.
  - Value @ PHP 1,500/ton = 54,000 × 1,500 = PHP 81,000,000.
- Let's update the prompt with these clean parameters.","PHP 81,000,000","PHP 90,000,000","PHP 75,600,000","PHP 86,400,000","A","Step-by-Step Solution:
+ Let's update the prompt with these clean parameters.","PHP 81,000,000","PHP 90,000,000","PHP 75,600,000","PHP 86,400,000","Analytical Ability","Step-by-Step Solution:
 1. Calculate total trees planted:
  - 1,000 ha × 1,000 trees/ha = 1,000,000 saplings.
 2. Breakdown by species and calculate survival:
@@ -417,4 +417,4 @@ What is the TOTAL MONETARY VALUE of the Year 3 carbon credits generated by the s
  - Total Value = 54,000 tons × PHP 1,500/ton = PHP 81,000,000.
 
 Common Trap: Computing carbon yield on all 1,000,000 planted trees without applying species-specific survival rates.
-Exam Tip: Chain the survival rate and sequestration rate sequentially for each species before applying the market value.","Correct. Survives elimination because 480,000 surviving hardwoods (24,000 tons CO2) and 300,000 surviving pioneer trees (30,000 tons CO2) yield 54,000 tons of carbon credits, which at PHP 1,500/ton equals PHP 81,000,000.,Eliminated because PHP 90,000,000 assumes 100% sapling survival across both species.,Eliminated because PHP 75,600,000 miscalculates pioneer tree survival as 65%.,Eliminated because PHP 86,400,000 applies a uniform 0.08 tons sequestration across all trees.,Analytical Ability,Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Multi-step data interpretation | Very Difficult | Batch 123"
+Exam Tip: Chain the survival rate and sequestration rate sequentially for each species before applying the market value."

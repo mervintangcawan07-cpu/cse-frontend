@@ -1,11 +1,12 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Passage: A time-series graph plots the municipal budget deficit (Expenditures minus Revenues, in PHP millions) of a city alongside its local economic growth rate (%) over six fiscal years:
+"A time-series graph plots the municipal budget deficit (Expenditures minus Revenues, in PHP millions) of a city alongside its local economic growth rate (%) over six fiscal years:
 - Year 1: Deficit = PHP 45M; Growth = +1.2%
 - Year 2: Deficit = PHP 62M; Growth = +0.8%
 - Year 3: Deficit = PHP 85M; Growth = -0.5%
 - Year 4: Deficit = PHP 50M; Growth = +2.4%
 - Year 5: Deficit = PHP 30M; Growth = +4.1%
 - Year 6: Deficit = PHP 15M; Growth = +5.5%
+
 Which of the following inferences is STRONGLY SUPPORTED by the graphical relationship between local economic growth and the municipal budget deficit?","Periods of accelerating economic growth are strongly associated with a narrowing municipal budget deficit, while economic contraction coincided with the peak deficit.","The municipal budget deficit is entirely independent of broader economic growth conditions.","Economic growth causes the deficit to expand because infrastructure spending rises during growth phases.","The municipal budget achieved a budget surplus by Year 6 due to strong local economic performance.","A","Step-by-Step Solution:
 1. Examine the correlation between the two time series:
  - Years 1-3: Economic growth slows down (1.2% -> 0.8% -> -0.5%), while the deficit widens significantly (45M -> 62M -> 85M). Peak deficit (PHP 85M) occurs in Year 3 during the only year of economic contraction (-0.5%).
@@ -21,7 +22,9 @@ Which of the following inferences is STRONGLY SUPPORTED by the graphical relatio
 
 Common Trap: Concluding that a low deficit (PHP 15M) means a budget surplus was achieved.
 Exam Tip: A declining positive deficit is still a deficit; a surplus only occurs when the deficit becomes negative (Revenues > Expenditures).","Correct. Survives elimination because the data demonstrates an inverse relationship: the deficit peaked at PHP 85M during the economic contraction (-0.5% in Year 3) and shrank continuously to PHP 15M as economic growth accelerated to +5.5% in Year 6.","Eliminated because the two variables show a clear inverse co-movement across all six years, refuting independence.","Eliminated because the deficit decreased (from 85M down to 15M) during the growth acceleration phase (Years 4-6), contradicting the claim that growth expands deficits.","Eliminated because in Year 6 there was still a deficit of PHP 15M; a surplus requires revenues to exceed expenditures (deficit < 0).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A scatter plot analyzes the relationship between Average Daily Class Size (x-axis, ranging from 25 to 60 students) and National Achievement Test (NAT) Passing Rate (y-axis, ranging from 40% to 95%) across 50 public high schools in a division. The trendline exhibits a downward slope with an R-squared value of 0.78. Schools with class sizes between 25 and 35 average an 88% passing rate, while schools with class sizes above 50 average a 52% passing rate. Which conclusion can be MOST VALIDLY inferred from this graph?","There is a strong negative association between class size and NAT passing rates, indicating that larger class sizes are systematically linked with lower institutional pass rates.","Reducing class sizes to below 25 students is guaranteed to produce a 100% NAT passing rate in every school.","Teacher quality and instructional materials have no influence on NAT passing rates because class size explains all variation.","Class size has a negligible effect on NAT outcomes because schools with 50 students still managed to pass the test.","A","Step-by-Step Solution:
+"A scatter plot analyzes the relationship between Average Daily Class Size (x-axis, ranging from 25 to 60 students) and National Achievement Test (NAT) Passing Rate (y-axis, ranging from 40% to 95%) across 50 public high schools in a division. The trendline exhibits a downward slope with an R-squared value of 0.78. Schools with class sizes between 25 and 35 average an 88% passing rate, while schools with class sizes above 50 average a 52% passing rate.
+
+Which conclusion can be MOST VALIDLY inferred from this graph?","There is a strong negative association between class size and NAT passing rates, indicating that larger class sizes are systematically linked with lower institutional pass rates.","Reducing class sizes to below 25 students is guaranteed to produce a 100% NAT passing rate in every school.","Teacher quality and instructional materials have no influence on NAT passing rates because class size explains all variation.","Class size has a negligible effect on NAT outcomes because schools with 50 students still managed to pass the test.","A","Step-by-Step Solution:
 1. Analyze the scatter plot properties:
  - Downward slope = Negative correlation (as class size increases, passing rate decreases).
  - R-squared = 0.78 = Strong explanatory power / strong correlation.
@@ -37,7 +40,7 @@ Exam Tip: A declining positive deficit is still a deficit; a surplus only occurs
 
 Common Trap: Confusing strong statistical correlation with an absolute deterministic guarantee of 100% success (Option B).
 Exam Tip: Valid graphical inferences stick strictly to observable trends and avoid making unproven absolute causal or out-of-range claims.","Correct. Survives elimination because the downward trendline and high R-squared (0.78) provide strong empirical evidence of an inverse relationship between class size and student passing performance.","Eliminated because claiming a guaranteed 100% passing rate makes an ungrounded deterministic assertion and extrapolates beyond the observed 25-60 data range.","Eliminated because an R-squared of 0.78 leaves 22% unexplained variance, and scatter plot correlations do not disprove the impact of unplotted educational factors.","Eliminated because an 88% vs 52% disparity is substantial and statistically robust, refuting the claim of a negligible effect.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A line graph tracks the infant mortality rate (deaths per 1,000 live births) in a province over a ten-year period following the rollout of a Community Maternal Care Program in Year 3:
+"A line graph tracks the infant mortality rate (deaths per 1,000 live births) in a province over a ten-year period following the rollout of a Community Maternal Care Program in Year 3:
 - Years 1-2 (Pre-program): Year 1=28.5, Year 2=28.2 (Average = 28.35)
 - Year 3 (Rollout): 27.8
 - Years 4-7 (Phase 1 Expansion): Year 4=24.1, Year 5=21.0, Year 6=18.4, Year 7=16.2
@@ -58,7 +61,7 @@ Which inference is BEST SUPPORTED by the trajectory shown in the line graph?","T
 
 Common Trap: Asserting that the program eliminated all infant mortality (Option C) when the graph clearly shows a positive rate of 13.5 in Year 10.
 Exam Tip: Identify the inflection po∫ in the time series and examine differences in slope across distinct intervention phases.","Correct. Survives elimination because the data shows a plateau prior to Year 3 (28.5 to 28.2), followed by a sharp drop during expansion (dropping from 27.8 in Year 3 to 16.2 in Year 7) and continued gradual reduction through Year 10 (13.5).","Eliminated because the pre-program baseline was virtually flat (28.5 to 28.2), refuting the assertion of a pre-existing rapid decline.","Eliminated because the mortality rate in Year 10 was 13.5 per 1,000 live births, not zero.","Eliminated because the mortality rate continued to drop during Years 8-10 (from 14.5 down to 13.5), with no rebound.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A comparative bar chart shows annual municipal solid waste generation (tons/year) versus waste diversion/recycling rates (%) across five cities:
+"A comparative bar chart shows annual municipal solid waste generation (tons/year) versus waste diversion/recycling rates (%) across five cities:
 - City Alpha: Generation = 120,000 tons; Diversion Rate = 65%
 - City Beta: Generation = 250,000 tons; Diversion Rate = 30%
 - City Gamma: Generation = 80,000 tons; Diversion Rate = 70%
@@ -78,7 +81,7 @@ Which inference regarding RESIDUAL WASTE SENT TO LANDFILLS (Generation × [1 - D
 
 Common Trap: Relying solely on diversion percentage without multiplying by gross generation.
 Exam Tip: In dual-variable comparisons, compute the derived composite quantity across all entities before drawing conclusions.","Correct. Survives elimination because City Δ disposes of 225,000 tons of landfill waste (300k × 0.75), the highest volume, while City Gamma disposes of 24,000 tons (80k × 0.30), the lowest.","Eliminated because City Beta dumps 175,000 tons, which is less than City Δ's 225,000 tons.","Eliminated because City Alpha sends 42,000 tons to landfills, which is less than City Epsilon's 60,000 tons.","Eliminated because landfill tonnage varies widely from 24,000 tons (Gamma) to 225,000 tons (Δ).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A multi-line graph plots quarterly business registrations (Line 1) and commercial loan interest rates (Line 2) in a metropolitan region over eight quarters:
+"A multi-line graph plots quarterly business registrations (Line 1) and commercial loan interest rates (Line 2) in a metropolitan region over eight quarters:
 - Q1: Registrations = 4,200; Interest Rate = 4.5%
 - Q2: Registrations = 4,500; Interest Rate = 4.2%
 - Q3: Registrations = 4,800; Interest Rate = 3.8%
@@ -100,7 +103,7 @@ What logical inference is STRONGLY SUPPORTED by the co-movement of these two tim
 
 Common Trap: Missing the turning po∫ in Q4 where both lines reversed direction.
 Exam Tip: Check the coincidence of peaks and troughs across dual time-series lines to deduce the nature of their relationship.","Correct. Survives elimination because registrations reached their maximum (5,400) when interest rates hit their minimum (3.5% in Q4), and steadily declined as borrowing rates escalated to 6.2% by Q8.","Eliminated because business registrations declined consistently from Q5 (5,100) through Q8 (3,600).","Eliminated because rising interest rates in Q5-Q8 coincided with declining registrations (from 5,100 down to 3,600), refuting the claim that higher rates stimulate business formation.","Eliminated because interest rates fluctuated significantly between 3.5% and 6.2%, refuting stability.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A regional climate graph displays monthly average rainfall (bars, in mm) and dengue fever incidence (line, cases per month) over a 12-month calendar cycle:
+"A regional climate graph displays monthly average rainfall (bars, in mm) and dengue fever incidence (line, cases per month) over a 12-month calendar cycle:
 - Jan-Mar (Dry Season): Rainfall = 25-40 mm/month; Dengue = 120-150 cases/month
 - Apr-May (Transition): Rainfall = 85-140 mm/month; Dengue = 180-260 cases/month
 - Jun-Aug (Peak Wet): Rainfall = 320-380 mm/month; Dengue = 650-820 cases/month
@@ -121,7 +124,7 @@ Which inference regarding the EPIDEMIOLOGICAL PATTERN is MOST JUSTIFIED by the d
 
 Common Trap: Assuming peak cases must occur in the exact same month as peak rainfall, ignoring standard environmental lag effects.
 Exam Tip: When comparing environmental and epidemiological curves, look for delayed peak alignments (lagged correlation).","Correct. Survives elimination because peak rainfall occurred in Jun-Aug (320-380 mm), followed 1-2 months later by peak dengue cases in Sep-Oct (890-950 cases), demonstrating a clear lagged epidemiological dynamic.","Eliminated because dengue cases were at their lowest (120-150) during dry months (<50 mm), and highest (up to 950) following heavy rainfall.","Eliminated because Sep-Oct recorded the highest dengue cases of the entire year (890-950 cases), not the minimum.","Eliminated because heavy rainfall was followed by soaring infection counts, contradicting any immediate eradication claim.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A demographic chart shows the age pyramid and labor force participation rate (LFPR) of a province across three censuses (2000, 2010, 2020):
+"A demographic chart shows the age pyramid and labor force participation rate (LFPR) of a province across three censuses (2000, 2010, 2020):
 - 2000: Youth (0-14) = 38%; Working Age (15-64) = 57%; Elderly (65+) = 5%; LFPR = 61%
 - 2010: Youth (0-14) = 32%; Working Age (15-64) = 62%; Elderly (65+) = 6%; LFPR = 65%
 - 2020: Youth (0-14) = 26%; Working Age (15-64) = 66%; Elderly (65+) = 8%; LFPR = 69%
@@ -145,7 +148,7 @@ Which demographic trend and economic implication can be MOST REASONABLY inferred
 
 Common Trap: Assuming an aging population (Elderly 5% to 8%) automatically means total dependency increased, ignoring the much larger drop in youth dependency (38% to 26%).
 Exam Tip: Compute the total dependency ratio explicitly: (Youth % + Elderly %) / Working-Age %.","Correct. Survives elimination because the working-age cohort expanded to 66%, total dependency dropped from 75.4% to 51.5%, and LFPR rose to 69%, classic indicators of a demographic dividend window.","Eliminated because the working-age population expanded from 57% to 66%, refuting any labor collapse.","Eliminated because the total dependency ratio actually declined sharply from 75.4% (43/57) in 2000 to 51.5% (34/66) in 2020.","Eliminated because youth (26%) remained more than three × larger than the elderly population (8%) in 2020.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A line chart plots the Customer Satisfaction Index (CSI, scale 1-100) of a frontline government licensing agency before and after implementing a fully digital online application portal in Month 6:
+"A line chart plots the Customer Satisfaction Index (CSI, scale 1-100) of a frontline government licensing agency before and after implementing a fully digital online application portal in Month 6:
 - Months 1-5 (Manual In-Person System): M1=62.0, M2=60.5, M3=61.8, M4=59.0, M5=60.2 (Avg ≈ 60.7)
 - Month 6 (Digital Launch & System Transition): M6=52.4 (sharp dip)
 - Months 7-12 (Post-Digital Stabilization): M7=68.0, M8=76.5, M9=84.2, M10=88.6, M11=91.0, M12=92.5
@@ -163,12 +166,13 @@ Which inference regarding the DIGITAL TRANSFORMATION IMPACT is MOST ACCURATE?","
 
 Common Trap: Overemphasizing the Month 6 dip to label the project a failure, or ignoring the Month 6 dip to claim immediate perfection.
 Exam Tip: Good data interpretation captures both temporary transitional shocks and permanent structural shifts.","Correct. Survives elimination because the data clearly demonstrates a short-lived transition dip in Month 6 (52.4), followed by a dramatic structural rise from 68.0 to 92.5, significantly exceeding the baseline of ~60.7.","Eliminated because CSI climbed to 92.5 by Month 12, well above the pre-launch baseline of ~60.7, disproving permanent impairment.","Eliminated because CSI shifted by more than 30 points between Month 6 and Month 12, showing profound impact.","Eliminated because Month 6 saw a sharp decline to 52.4, demonstrating transitional friction.","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A bubble chart maps five state universities across three dimensions: (1) Total Annual Budget (x-axis, PHP 100M to PHP 800M); (2) Licensure Examination Overall Passing Rate (y-axis, 40% to 95%); and (3) Graduate Tracer Employment Rate within 6 months (Bubble Size, larger bubble = higher employment rate):
+"A bubble chart maps five state universities across three dimensions: (1) Total Annual Budget (x-axis, PHP 100M to PHP 800M); (2) Licensure Examination Overall Passing Rate (y-axis, 40% to 95%); and (3) Graduate Tracer Employment Rate within 6 months (Bubble Size, larger bubble = higher employment rate):
 - SUC 1: Budget = PHP 200M; Pass Rate = 85%; Employment Rate = 88% (Large Bubble)
 - SUC 2: Budget = PHP 750M; Pass Rate = 88%; Employment Rate = 90% (Large Bubble)
 - SUC 3: Budget = PHP 600M; Pass Rate = 55%; Employment Rate = 60% (Small Bubble)
 - SUC 4: Budget = PHP 180M; Pass Rate = 50%; Employment Rate = 58% (Small Bubble)
 - SUC 5: Budget = PHP 350M; Pass Rate = 82%; Employment Rate = 85% (Large Bubble)
+
 Which conclusion regarding INSTITUTIONAL EFFICIENCY is STRONGLY SUPPORTED by the bubble chart?","SUC 1 achieves top-tier licensure and graduate employment outcomes while operating on one of the lowest annual budgets, demonstrating high resource efficiency.","A higher budget is strictly necessary to achieve high licensure passing rates and strong graduate employment.","SUC 3 is the most efficient institution because it utilizes a large budget to serve students.","SUC 4 outperforms SUC 1 across all academic and employment metrics.","A","Step-by-Step Solution:
 1. Compare SUC 1 vs other institutions:
  - SUC 1 operates on a modest budget of PHP 200M (second lowest).
@@ -185,7 +189,7 @@ Which conclusion regarding INSTITUTIONAL EFFICIENCY is STRONGLY SUPPORTED by the
 
 Common Trap: Assuming budget scale directly correlates with institutional quality without examining low-budget high-performing outliers.
 Exam Tip: Efficiency is output per unit of input; look for entities in the top-left quadrant (high outcomes, low input) with large bubble size.","Correct. Survives elimination because SUC 1 achieves an 85% pass rate and 88% employment rate on just PHP 200M, matching the outcomes of SUC 2 (PHP 750M) with less than a third of the funding.","Eliminated because SUC 1 (PHP 200M) and SUC 5 (PHP 350M) both achieve top-tier passing (>80%) and employment (>85%) rates without mega-budgets.","Eliminated because SUC 3 yields poor outcomes (55% pass rate, 60% employment) despite absorbing a huge PHP 600M budget, making it inefficient.","Eliminated because SUC 4's outcomes (50% pass rate, 58% employment) are far below SUC 1's (85% pass rate, 88% employment).","Analytical Ability","Analytical Ability | Data Interpretation | Quantitative & Graphical Analysis | Graph inference | Very Difficult | Batch 121"
-"Passage: A dual-axis line graph tracks the inflation rate (left axis, %) and the poverty incidence rate (right axis, %) of a developing region over six years:
+"A dual-axis line graph tracks the inflation rate (left axis, %) and the poverty incidence rate (right axis, %) of a developing region over six years:
 - Year 1: Inflation = 2.5%; Poverty = 24.0%
 - Year 2: Inflation = 3.0%; Poverty = 23.2%
 - Year 3: Inflation = 6.8%; Poverty = 25.8% (Inflation spike)

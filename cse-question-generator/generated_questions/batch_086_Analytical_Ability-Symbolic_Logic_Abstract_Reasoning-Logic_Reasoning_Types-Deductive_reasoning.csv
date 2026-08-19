@@ -1,5 +1,7 @@
 "Question","Option A","Option B","Option C","Option D","Correct Answer","Explanation","Elimination A","Elimination B","Elimination C","Elimination D","Category","Tags"
-"Given premises: (1) Every licensed government auditor is a Certified Public Accountant. (2) No person who fails the background security clearance is allowed to audit confidential funds. (3) Elena is a licensed government auditor who audits confidential funds. Which conclusion MUST be deductively true?","Elena is a Certified Public Accountant who passed the background security clearance.","Elena is the only licensed government auditor in her agency.","All Certified Public Accountants are licensed government auditors.","Passing the security clearance automatically qualifies anyone to audit confidential funds.","A","Step-by-Step Solution:
+"Given premises: (1) Every licensed government auditor is a Certified Public Accountant. (2) No person who fails the background security clearance is allowed to audit confidential funds. (3) Elena is a licensed government auditor who audits confidential funds.
+
+Which conclusion MUST be deductively true?","Elena is a Certified Public Accountant who passed the background security clearance.","Elena is the only licensed government auditor in her agency.","All Certified Public Accountants are licensed government auditors.","Passing the security clearance automatically qualifies anyone to audit confidential funds.","A","Step-by-Step Solution:
 1. Formalize Premise 1:
  - Auditor subseteq CPA.
  - Since Elena is a licensed auditor implies Elena is a Certified Public Accountant (CPA).
@@ -19,7 +21,7 @@ Exam Tip: Apply universal instantiation and contrapositive inference to derive a
 "On an island of truth-tellers (who always tell the truth) and liars (who always lie), you meet two officials, X and Y: Officer X states: \""At least one of us is a liar.\"" What are the true identities of Officer X and Officer Y?","Officer X is a Truth-teller, and Officer Y is a Liar.","Both Officer X and Officer Y are Liars.","Both Officer X and Officer Y are Truth-tellers.","Officer X is a Liar, and Officer Y is a Truth-teller.","A","Step-by-Step Solution:
 1. Test Hypothesis 1: Suppose Officer X is a Liar.
  - If X is a liar, X's statement must be FALSE.
- - Statement: \""At least one of us is a liar.\","","","","","",""
+ - Statement: \""At least one of us is a liar.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
 "Consider the deductive premises: (1) If an administrative action violates due process, it is void ab initio (V implies Void). (2) If an administrative action is void ab initio, the Civil Service Commission will nullify it (Void implies Nullify). (3) The Civil Service Commission did NOT nullify the dismissal of Employee K (neg Nullify). What is the valid deductive conclusion?","The dismissal of Employee K did not violate due process.","The dismissal of Employee K was void ab initio.","The dismissal violated due process but was upheld on other grounds.","The Civil Service Commission lacked jurisdiction over the dismissal.","A","Step-by-Step Solution:
 1. Construct the hypothetical syllogism chain:
  - Premise 1: V implies Void.
@@ -35,13 +37,15 @@ Exam Tip: Apply universal instantiation and contrapositive inference to derive a
 
 Common Trap: Assuming the action could still violate due process without being nullified (violating Premise 1 and 2).
 Exam Tip: Modus Tollens across a transitive conditional chain: P implies Q implies R, neg R implies neg P.","Correct. Survives elimination because the contrapositive chain (not nullified -> not void -> no due process violation) deductively guarantees that due process was not violated.","Eliminated because if it were void, it would have been nullified (violates Premise 2 and 3).","Eliminated because violating due process strictly forces nullification.","Eliminated because lack of jurisdiction is unstated and unnecessary.","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
-"Given premises: (1) All members of the procurement committee are department heads (P subseteq H). (2) Some department heads are certified specialists (H cap S ≠ emptyset). (3) No procurement committee member has an unresolved conflict of interest (P cap C = emptyset). Which statement is GUARANTEED to be true?","No person with an unresolved conflict of interest is a member of the procurement committee.","All certified specialists are members of the procurement committee.","All department heads are members of the procurement committee.","Some persons with an unresolved conflict of interest are department heads.","A","Step-by-Step Solution:
+"Given premises: (1) All members of the procurement committee are department heads (P subseteq H). (2) Some department heads are certified specialists (H cap S ≠ emptyset). (3) No procurement committee member has an unresolved conflict of interest (P cap C = emptyset).
+
+Which statement is GUARANTEED to be true?","No person with an unresolved conflict of interest is a member of the procurement committee.","All certified specialists are members of the procurement committee.","All department heads are members of the procurement committee.","Some persons with an unresolved conflict of interest are department heads.","A","Step-by-Step Solution:
 1. Examine Premise 3:
  - Premise 3 is a Universal Negative (E-proposition): \""No P is C\"" (P cap C = emptyset).
 2. Apply the valid logical rule of Simple Conversion for E-propositions:
  - An E-proposition (\""No A is B\"") converts validly and symmetrically to \""No B is A\"" (B cap A = emptyset).
  - Therefore, \""No procurement committee member has a conflict of interest\"" converts directly to:
- - \""No person with an unresolved conflict of interest is a member of the procurement committee.\","","","","","",""
+ - \""No person with an unresolved conflict of interest is a member of the procurement committee.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
 "Three suspects (Alpha, Bravo, Charlie) are questioned about an unauthorized data breach: (1) Exactly one of them committed the breach. (2) Alpha says: \""Charlie did it.\"" (3) Bravo says: \""I did not do it.\"" (4) Charlie says: \""Alpha is lying.\"" If EXACTLY ONE of the three suspects is telling the truth, who committed the data breach?","Bravo","Alpha","Charlie","Cannot be determined","A","Step-by-Step Solution:
 1. Identify contradictory statements:
  - Alpha asserts: Charlie is the culprit (C).
@@ -51,7 +55,7 @@ Exam Tip: Modus Tollens across a transitive conditional chain: P implies Q impli
  - The problem states that EXACTLY ONE suspect tells the truth overall.
  - Since that single truth-teller is either Alpha or Charlie, Bravo MUST BE LYING!
 3. Determine the culprit from Bravo's lie:
- - Bravo's statement: \""I did not do it.\","","","","","",""
+ - Bravo's statement: \""I did not do it.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
 "Premise 1: All high-performing civil servants are dedicated to public welfare (H subseteq D). Premise 2: Some dedicated civil servants receive commendation medals (D cap M ≠ emptyset). Premise 3: No corrupt official is dedicated to public welfare (C cap D = emptyset). Which statement CANNOT be true?","A corrupt official is a high-performing civil servant.","A dedicated civil servant does not receive an annual commendation medal.","A high-performing civil servant receives an annual commendation medal.","Some officials who receive commendation medals are not corrupt.","A","Step-by-Step Solution:
 1. Analyze the set inclusion and exclusion:
  - By Premise 1: The set of High-performing civil servants (H) is a subset of Dedicated civil servants (D): H subseteq D.
@@ -75,7 +79,7 @@ Exam Tip: If Set A is inside Set B, and Set B is completely disjo∫ from Set C,
 2. Take the Contrapositive using De Morgan's Law:
  - neg(neg X land neg Y) implies neg A.
  - (X lor Y) implies neg A.
- - Meaning: \""If either Project X is funded OR Project Y is funded, then Budget A was not approved.\","","","","","",""
+ - Meaning: \""If either Project X is funded OR Project Y is funded, then Budget A was not approved.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
 "Consider the deductive rules regarding five committee members (P, Q, R, S, T): (1) If P attends, then Q attends (P implies Q). (2) If Q attends, then R does not attend (Q implies neg R). (3) If S attends, then R attends (S implies R). (4) Member P attends the meeting (P). What can be deductively inferred about Member S?","Member S does not attend the meeting.","Member S attends the meeting.","Member S and Member T attend together.","Nothing can be inferred about Member S.","A","Step-by-Step Solution:
 1. Trace the chain of inferences starting from the factual premise P:
  - Premise 4: P = True (Member P attends).
@@ -99,7 +103,7 @@ Exam Tip: Always check the contrapositive of conditional premises (neg R implies
  - If K is a liar, K's statement (\""L is a liar\"") is False implies L is a truth-teller (Contradiction! L cannot be both a liar and a truth-teller).
  - Therefore, M CANNOT be a truth-teller implies Officer M is a LIAR.
 2. Analyze Officer L:
- - Officer L states: \""Officer M is a liar.\","","","","","",""
+ - Officer L states: \""Officer M is a liar.\","","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
 "Consider the formal deductive argument: Premise 1: All authorized signatures require official biometric verification (S implies B). Premise 2: Document D does not have official biometric verification (neg B). Conclusion: Document D does not contain an authorized signature (neg S). Which formal rule of deductive inference validates this conclusion?","Modus Tollens (Denying the Consequent)","Modus Ponens (Affirming the Antecedent)","Fallacy of Affirming the Consequent","Fallacy of Denying the Antecedent","A","Step-by-Step Solution:
 1. Analyze the symbolic structure of the argument:
  - Major Premise: If P, then Q (P implies Q).
@@ -109,4 +113,4 @@ Exam Tip: Always check the contrapositive of conditional premises (neg R implies
  - Conclusion: Therefore, Not P (neg P).
  - Document D does not contain an authorized signature.
 2. Identify the valid logical rule:
- - The deduction (P implies Q, neg Q vdash neg P) is the definition of MODUS TOLLENS (Latin for \""mode that by denying denies\","or Denying the Consequent).","","","","",""
+ - The deduction (P implies Q, neg Q vdash neg P) is the definition of MODUS TOLLENS (Latin for \""mode that by denying denies\","or Denying the Consequent).","","","","Analytical Ability","Analytical Ability | Symbolic Logic / Abstract Reasoning | Logic & Reasoning Types | Deductive reasoning | Very Difficult | Batch 086"
