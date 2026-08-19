@@ -191,7 +191,7 @@ export default function AdminReadingMaterialsPage() {
               placeholder="e.g. R.A. 6713 Ethical Standards"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
 
@@ -200,12 +200,12 @@ export default function AdminReadingMaterialsPage() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             >
-              <option value="Constitutional Basis">Constitutional Basis</option>
-              <option value="Ethical Standards">Ethical Standards</option>
-              <option value="Civil Service Rules">Civil Service Rules</option>
-              <option value="General Knowledge">General Knowledge</option>
+              <option value="Constitutional Basis" className="text-slate-900 bg-white">Constitutional Basis</option>
+              <option value="Ethical Standards" className="text-slate-900 bg-white">Ethical Standards</option>
+              <option value="Civil Service Rules" className="text-slate-900 bg-white">Civil Service Rules</option>
+              <option value="General Knowledge" className="text-slate-900 bg-white">General Knowledge</option>
             </select>
           </div>
 
@@ -216,7 +216,7 @@ export default function AdminReadingMaterialsPage() {
               placeholder="Summary of document contents..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
 
@@ -227,7 +227,7 @@ export default function AdminReadingMaterialsPage() {
               placeholder="e.g. 18 Pages"
               value={pages}
               onChange={(e) => setPages(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
 

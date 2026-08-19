@@ -133,7 +133,7 @@ export default function AdminReadingPage() {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Verb Tense Rules & Examples"
                   required
-                  className="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-blue-500"
+                  className="w-full border border-slate-300 rounded-xl p-3 text-sm text-slate-900 placeholder:text-slate-400 bg-white outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition"
                 />
               </div>
 
@@ -142,10 +142,10 @@ export default function AdminReadingPage() {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white outline-none focus:border-blue-500"
+                  className="w-full border border-slate-300 rounded-xl p-3 text-sm text-slate-900 bg-white outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition"
                 >
                   {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
+                    <option key={cat} value={cat} className="text-slate-900 bg-white">
                       {cat}
                     </option>
                   ))}
@@ -161,7 +161,7 @@ export default function AdminReadingPage() {
                 placeholder="Write study guide material, notes, or cheat sheets..."
                 rows={6}
                 required
-                className="w-full border border-slate-300 rounded-xl p-3 text-sm outline-none focus:border-blue-500"
+                className="w-full border border-slate-300 rounded-xl p-3 text-sm text-slate-900 placeholder:text-slate-400 bg-white outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition"
               />
             </div>
 
