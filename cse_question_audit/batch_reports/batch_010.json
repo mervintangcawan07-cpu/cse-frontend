@@ -1,0 +1,706 @@
+{
+  "batchNumber": 10,
+  "range": "Q#901 to Q#1000",
+  "processed": 100,
+  "verified": 3,
+  "corrected": 97,
+  "manualReview": 0,
+  "duplicates": 0,
+  "criticalErrors": 0,
+  "items": [
+    {
+      "id": "cmstkgdw100rq20u169sidjm9",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rr20u1yur7c9qw",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rp20u1t5f3cy0c",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000px20u1hr07zym0",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rd20u1j8ja6gat",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rk20u1f1evqin0",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100r920u1v9bzrbty",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qw20u1h9ji5kx6",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qj20u112xp1yfj",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000pv20u1cg9j3xeq",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000pl20u1hy5r0hpe",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000p920u1w2ilj880",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstkgdw100rg20u15horlfm9",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100r420u1nb20kx27",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qt20u1r5jdrkup",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qk20u1ppwvful8",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000qg20u17yp3xrgf",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000q520u1tgpm9mdg",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000pn20u194gfuh0v",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000pb20u1rdzlo826",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100ra20u1o81tbwpy",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qz20u1ssg3ysk0",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100ro20u1605dmn3l",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100re20u1qfwfqbmy",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100r320u1ru82jb9h",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qr20u1pml294ec",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000q120u1tgheuo7b",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000pd20u1twf6oyy3",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000p520u1esjfe3pr",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstkgdw000p120u1pdhznfd8",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstkgdw000pj20u1imcbck4b",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw000qc20u1479sd82w",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qn20u16jgdk8jt",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100qo20u1b3avyru5",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100r120u12gy9eixh",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rc20u1jeirv8ph",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkgdw100rn20u15qalicro",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tj20u11945ie02",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sc20u1jurvlzm2",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00s220u1t87ytc7c",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00rs20u1zp5fwkku",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tx20u1ra05fgij",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00u520u1bnnn5oxt",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00ui20u1rxrva4x8",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sw20u1fsgb5sun",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00si20u1weeuugfv",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00s820u14zydcj3y",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00s620u10g80268h",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00rw20u1vx9406ss",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00rv20u1wiiua5j5",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tw20u1dgkvz7ez",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tg20u158ejtjcm",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sj20u1xn49cgne",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00s420u1inetl3ad",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sa20u1tvajylde",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sk20u14t35are0",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00td20u1jc8w7lwc",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tt20u1etv4gjle",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00s020u1x70xgyef",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00rx20u1805ngn5h",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00u920u15pmoh40l",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00uj20u1sut6qyw7",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tp20u1lec6rljn",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00ud20u1nwf7wjqy",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tz20u19jgtm5qk",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00uh20u1wkqr3kji",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tl20u1hea1hber",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00tc20u1vl5i1e6m",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sh20u1izvdf4et",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00rz20u1n1z86ld4",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00u820u18ozwu4u5",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00th20u13huaa8v2",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tf20u153b92x9e",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t920u1fxn903ai",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00se20u1q0yq2wug",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t520u1s4hsx9v1",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t120u1xhyy0sxh",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00ss20u1wql7pwmn",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3a00s120u1m8qy1e0k",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00u120u11u08yvux",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00sq20u15nfaj6hx",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00ty20u1jzgalsea",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tv20u1rk76y7oc",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tu20u18o181auq",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00ts20u16tscdfuc",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tr20u1wwymy53r",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tq20u1bqq9k7cz",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00to20u1hqzzv3a4",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tn20u1wcehbj9p",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tm20u1l522lq28",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00tk20u13lvwt8q0",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00ti20u1hx1ofqth",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3c00te20u12rl8dfxq",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00tb20u141y18uhn",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00ta20u1pnm3suqt",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t820u1264b32bv",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t720u1n4hes4ha",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t620u1q8zudjq9",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t420u1zztm9g4m",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    },
+    {
+      "id": "cmstkge3b00t320u1cmm20liz",
+      "status": "CORRECTED — VERIFIED",
+      "issues": [
+        "STRIPPED_PASSAGE_PREFIX"
+      ]
+    }
+  ]
+}

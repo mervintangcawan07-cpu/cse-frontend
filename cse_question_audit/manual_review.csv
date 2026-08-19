@@ -1,0 +1,254 @@
+QuestionID,Category,Subtopic,QuestionPrompt,Problem,WhyUnsafeToAutoFix,RecommendedManualReview,AuditedAt
+cmstkgbyo001o20u1cykndfqt,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the following mathematical expression following the strict order of operations (GEMDAS):
+
+(-4² + 3 × |5 - 17| - (-2)³)/(√144 - [2³ - (5 × -2 + 3)])","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.782Z
+cmstkgbyo001v20u169okcsz7,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the rational expression:
+
+|-3² + 5| - 2³ ÷ 4 × 3/[(-1)⁴ × 6 - 8 ÷ 2] × (-2)","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.786Z
+cmstkgbyo001q20u1hrttcm8w,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the rational expression:
+
+(2⁻³ × (4² - 2⁴) + | -7 × 3 + 6 |)/(3 - 5)² × 2 - [4² ÷ 8 × 2]","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.804Z
+cmstkgbyp002720u1h23l70dy,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Simplify the rational algebraic fraction and evaluate at a = 2/3 and b = 3/4:
+
+F = a/b - b/a/1/a + 1/b","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.818Z
+cmstkgbyo001x20u10lw1skbr,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the following fraction:
+
+( -2 )⁴ - 2⁴ + [ 3 × (-4) - (-2)² ]/2 - 3 × | 1 - 2 × 3 |","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.822Z
+cmstkgbyo001t20u120wbs1ba,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the following fraction containing nested powers and absolute values:
+
+3 × [4 - (2 - 5)²] + |-18 ÷ 2|/2³ - 3 × (5 - 2²)","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.823Z
+cmstkgbyo001r20u1b041nki2,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Simplify the numerical expression:
+
+-5² - (-3)³ + 6 × (-2)² - 12 ÷ 3 × 2/| -4 |² - 2⁴ + 1","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.825Z
+cmstkgbyo001p20u1tz0mbh2u,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Determine the exact value of the following complex nested expression:
+
+18 - 2 · [ 3² - { 4 - (6 - 2 · 5) } ] ÷ (-1)⁵","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:02.826Z
+cmstkgcbq003f20u1lpizrn8r,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the following fraction containing absolute values, radicals, and negative powers:
+
+S = (| -3.6 × 2.5 + 4 | + √1.44 × 5)/(0.5)⁻³ - 3²","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.065Z
+cmstkgcbq003i20u10hzob83f,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Compute the exact value of the difference of squared brackets:
+
+[ (√0.04 + 0.8)/0.25 ]² - [ 11/2 × 4 - 2²/0.5 ]²","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.069Z
+cmstkgcbq003l20u1wb4f742q,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Find the value of Z:
+
+Z = (25% of 80 + ( 1/4 )⁻² - √400)/(0.16̅ × 72 - 2³)","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.073Z
+cmstkgcbq003n20u1c0mhje3w,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the exact Σ of the following finite alternating integer series:
+
+S = 1 - 2 + 3 - 4 + 5 - 6 +... + 99 - 100","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.076Z
+cmstkgcbq003s20u1fzporict,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the product of signs:
+
+(-1)¹ × (-1)² × (-1)³ ×... × (-1)²⁰","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.083Z
+cmstkgcbq003q20u1b8cc7qmj,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","If p = -2, q = 3, and r = -4, evaluate the rational expression:
+
+p³ - q² + r²/p · q · r - |p · r|","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.085Z
+cmstkgcbq003u20u12uif0i4x,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","The ambient temperature in Baguio City at 6:00 AM was recorded at -2^circC. By 1:00 PM, solar heating caused the temperature to rise by 14^circC. By 10:00 PM, an intense cold front caused the temperature to drop by 19^circC. What was the official temperature reading at 10:00 PM?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.088Z
+cmstkgcbr004e20u1df5fe9as,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Estimate the relative percentage error introduced when Archimedes' rational fraction 22/7 is used as an approximation for the mathematical constant π (3.14159265...):","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.116Z
+cmstkgcbr004520u16k2uddha,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","The fractional part function is defined as {x} = x - ⌊ x ⌋. If x = -4.35, what is the exact numerical value of {x}?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.179Z
+cmstkgcbq003o20u1fss1py4u,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","If x is a strictly negative real number (x < 0), simplify the expression:
+
+f(x) = (|x| + |-x| - √x²)/x","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.186Z
+cmstkgcbq003c20u1gjqb87rg,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Evaluate the mixed operational expression containing decimals, fractions, factorials, and negative exponents:
+
+M = (0.75 × √256 - 31/2 ÷ 0.25 + 4! ÷ 6)/( 2/3 )⁻² - 1.25 × ³√64","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.191Z
+cmstkgcbq003t20u1j4fdndb9,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Find the Σ of all valid real solutions to the absolute value equation:
+
+|2x - 1| = x + 4","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.240Z
+cmstkgcbr004820u1f71i4m3s,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","A disaster risk reduction logistics officer estimates the order of magnitude of potable water (in liters) required for an evacuation ca∓ sheltering 12,000 displaced families for 14 days, assuming each family consumes approximately 18.5 liters daily. Which power of ten (10ⁿ) best represents this total humanitarian demand?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.243Z
+cmstkgcbs004x20u1ne9z0r6f,"Numerical Reasoning","Number Sequence - Arithmetic   Geometric Sequences","In an arithmetic progression, the p-th term is q and the q-th term is p (where p ≠ q). What is the exact mathematical value of the (p + q)-th term?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.274Z
+cmstkgcbr004320u106dqxvnt,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","Determine the exact interval of real values for x that satisfies the floor inequality:
+
+⌊ 2x - 1 ⌋ = 5","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.302Z
+cmstkgcbp003720u19i4q6sdm,"Numerical Reasoning","Basic Operations - Arithmetic   Number Properties","If four quantities a, b, c, and d satisfy the proportion a/b = c/d, which of the following algebraic transformations is strictly valid under the classic Componendo and Dividendo rule of proportions?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.324Z
+cmstkgcjj005q20u1cok5y0f5,"Numerical Reasoning","Number Sequence - Pattern Recognition","Find the missing term in the oscillating signed geometric progression:
+
+1.5, -3.0, 6.0, -12.0, 24.0, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.559Z
+cmstkgcjj005m20u189hod2rt,"Numerical Reasoning","Number Sequence - Pattern Recognition","Find the 10th term in the alternating signed square sequence:
+
+1, -4, 9, -16, 25, -36, 49, -64, 81, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.572Z
+cmstkgcjj005t20u1doh29l1l,"Numerical Reasoning","Number Sequence - Pattern Recognition","Find the 15th term of the alternating sign Fibonacci sequence:
+
+1, -1, 2, -3, 5, -8, 13, -21, 34,...","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.585Z
+cmstkgcjj006120u1udkjn6sh,"Numerical Reasoning","Number Sequence - Pattern Recognition","Identify the next term in the geometric sequence with a negative rational common ratio:
+
+162, -54, 18, -6, 2, -2/3, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.596Z
+cmstkgcjj006320u1xby4gn3k,"Numerical Reasoning","Number Sequence - Pattern Recognition","In a geometric sequence with first term a₁ = 3 and common ratio r = 2, what is the exact mathematical product of the first 6 terms (T₁ × T₂ × T₃ × T₄ × T₅ × T₆)?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.605Z
+cmstkgcjj006720u11xmqyqm7,"Numerical Reasoning","Number Sequence - Pattern Recognition","Find the next number in the successive square root extraction sequence:
+
+65,536, 256, 16, 4, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.615Z
+cmstkgcjk007g20u1d3zisxfi,"Numerical Reasoning","Number Sequence - Special Sequences","What is the exact numerical value of Cassini's identity expression Fₙ₊₁ Fₙ₋₁ - Fₙ² for the 9th Fibonacci number (n = 9)?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.690Z
+cmstkgcjj005p20u10089v97l,"Numerical Reasoning","Number Sequence - Pattern Recognition","Identify the next number in the sequence with alternating and expanding operations:
+
+2, 4, 1, 5, 0, 6, -1, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.701Z
+cmstkgcjl008420u1r707eins,"Numerical Reasoning","Number Sequence - Higher","What is the 9th term in the alternating signed polynomial sequence:
+
+0, -3, 8, -15, 24, -35, 48, -63, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.751Z
+cmstkgcqu008k20u1baoy1l6m,"Numerical Reasoning","Number Sequence - Higher","Find the missing number in the alternating sign arithmetic progression:
+
+10, -8, 6, -4, 2, 0, -2, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:03.867Z
+cmstkgcqu008h20u1iimv3rmk,"Numerical Reasoning","Number Sequence - Higher","What is the next number in the alternating signed rational geometric sequence:
+
+1, -1/2, 1/4, -1/8, 1/16, -1/32, ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:04.063Z
+cmstkgcqw00b020u1c4lc9xrw,"Numerical Reasoning","Word Problems - Arithmetic Word Problems","If the Σ of 9 consecutive integers is 0, what is the mathematical product of all 9 integers in the set?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:04.067Z
+cmstkgdia00m320u1da9g1p7s,"Analytical Reasoning","Symbolic Logic Abstract Reasoning - Logic Reasoning Types","Consider the 3x3 symbolic set-logic matrix where operations follow a strict row-wise set intersection rule: Row 1: [{α, β, γ}, {β, γ, δ}, {β, γ}] Row 2: [{δ, epsilon, zeta}, {epsilon, zeta, eta}, {epsilon, zeta}] Row 3: [{θ, iota, kappa}, {iota, kappa, λ}, ?] What set completes the pattern in Row 3?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:06.550Z
+cmstkgdi700jr20u1gfxf0652,"Analytical Reasoning","Symbolic Logic Abstract Reasoning - Logic Reasoning Types","Consider the nested conditional proposition: \""If the national budget is approved (B), then if the infrastructure project is certified (C), funding will be disbursed (D)\"" [B implies (C implies D)]. By the logical Law of Exportation, this statement is strictly equivalent to:","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:06.590Z
+cmstkgdia00m220u1hf1qx3fs,"Analytical Reasoning","Symbolic Logic Abstract Reasoning - Logic Reasoning Types","In a symbolic logic matrix, each term undergoes a dual transformation rule based on row (R) and column (C): Row 1: [Δ₂, Phi₄, Ω₈] Row 2: [Δ₄, Phi₈, Ω₁₆] Row 3: [Δ₈, Phi₁₆, ?] What is the missing term that logically completes the matrix?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:06.705Z
+cmstkgdp800mb20u1asc1kd9n,"Analytical Reasoning","Symbolic Logic Abstract Reasoning - Logic Reasoning Types","Consider a symbolic parity function operating on 3-bit binary inputs: Y = (X₁ oplus X₂) oplus X₃ (where oplus is Exclusive OR). Given training samples: [1, 0, 0] to 1, [1, 1, 0] to 0, [1, 1, 1] to 1, [0, 1, 0] to 1. What is the deterministic output for the input vector [0, 1, 1]?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:07.174Z
+cmstkgeie00yk20u1u2ziml95,"Analytical Reasoning","Data Interpretation - Quantitative and Graphical Analysis","Calculation: 2","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:28:44.288Z
+cmstwd59v005a04l5hchrgfeu,"Analytical Reasoning","Coding and Decoding - Alphanumeric & Cipher Patterns","In a digital text compressor, word syllables are replaced by unique symbol codes:
+'CON' = #1
+'TRACT' = *2
+'TRACTOR' = *2%
+'ACT' = &3
+What is the compressed code for the word 'CONTRACTOR'?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:01.767Z
+cmstwd59v005f04l519etlat0,"Analytical Reasoning","Coding and Decoding - Alphanumeric & Cipher Patterns","In a symbol substitution language, 'PASS' is written as '@#' and 'PORT' is written as '@%&!'. How is the word 'ROAST' written in this symbol language?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:02.010Z
+cmstwd59w007v04l5qarbxnu9,"Analytical Reasoning","Logical Sequencing - Chronological & Logical Progression","A document routing workflow requires the following rules to be satisfied:
+1. Intake is the first step.
+2. Review must occur before Supervisor Sign-off.
+3. Payment Verification must occur after Review but before Supervisor Sign-off.
+4. Final Archiving must be the last step.
+Which of the following sequences VIOLATES the routing rules?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:07.244Z
+cmstwd59w008104l51wdhc4d0,"Analytical Reasoning","Logical Sequencing - Chronological & Logical Progression","A municipal project schedule consists of five phases: Concept (C), Budgeting (B), Engineering Design (E), Procurement (P), and Construction (K).
+The rules state:
+- Concept must be first.
+- Construction must be fifth.
+- Budgeting must occur before Engineering Design.
+- Procurement must occur after Engineering Design.
+Which of the following sequences VIOLATES the project schedule rules?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:07.414Z
+cmstwd59w008c04l5j53bw8yr,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A state college campus experiences frequent motorcycle accidents near its main entrance gate during morning rush hours.
+
+Proposed Courses of Action:
+I. Construct speed humps, install clear warning signage, and deploy campus traffic enforcers near the gate during peak hours.
+II. Confiscate all motorcycles driven by students and faculty members permanently.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:07.875Z
+cmstwd59w008d04l5q9fr33ju,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A municipal library notices a declining number of youth visitors over the past three years as digital media usage has grown.
+
+Proposed Courses of Action:
+I. Modernize library facilities by adding high-speed internet access, digital e-book archives, and youth study spaces.
+II. Impose financial fines on local students who do not visit the library at least once a month.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:07.947Z
+cmstwd59w008e04l5uavhgu1t,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A municipal seaport experiences severe traffic congestion on access roads caused by delivery trucks queuing on two-lane streets waiting for cargo clearance.
+
+Proposed Courses of Action:
+I. Establish an off-site truck staging area with a digital appointment reservation system for cargo drop-offs.
+II. Ban all cargo delivery trucks from entering the seaport municipality permanently.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:07.981Z
+cmstwd59w008f04l5arlboy8y,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A government regional office faces severe paper shortages due to excessive printing of internal administrative drafts.
+
+Proposed Courses of Action:
+I. Transition to a paperless digital document approval system for internal memos and draft reviews.
+II. Prohibit employees from taking notes during official administrative meetings.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.010Z
+cmstwd59w008g04l5c2046r97,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: An LGU public market experiences recurring electrical fires caused by illegal octopus wiring and overloaded electrical outlets among stalls.
+
+Proposed Courses of Action:
+I. Conduct a comprehensive electrical safety inspection, disconnect illegal wiring, and upgrade the market's central electrical distribution infrastructure.
+II. Require market vendors to operate without any electrical lighting or appliances.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.040Z
+cmstwd59w008h04l5wlcu8p4a,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A rural health unit notices an increase in waterborne intestinal illnesses in Barangay Riverside during the rainy season.
+
+Proposed Courses of Action:
+I. Conduct immediate water quality testing of community drinking wells and distribute water purification tablets to affected households.
+II. Advise residents to stop drinking water entirely during the rainy season.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.069Z
+cmstwd59w008i04l5ekixn5d3,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A public elementary school notices that pupils are consuming excessive amounts of sugary snacks sold by unauthorized vendors right outside the school gate.
+
+Proposed Courses of Action:
+I. Coordinate with local barangay officials to enforce zoning rules against unauthorized street vendors near school premises.
+II. Offer healthy, affordable meal and snack options inside the school cafeteria while promoting nutrition awareness.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.100Z
+cmstwd59w008j04l5sn8s283w,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A government department discovers that confidential draft policy documents were leaked to social media platforms prior to official publication.
+
+Proposed Courses of Action:
+I. Conduct an administrative security investigation to identify the source of the leak and restrict access to confidential draft files using digital access controls.
+II. Discontinue all policy development and revoke all existing department policies immediately.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.130Z
+cmstwd59w008k04l5q8idnzkl,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A municipal disaster management officer observes that local residents in flood-prone coastal areas ignore typhoon evacuation warnings until water levels are dangerously high.
+
+Proposed Courses of Action:
+I. Conduct community disaster risk awareness sessions and establish early warning siren protocols in coordination with barangay leaders.
+II. Pre-identify safe evacuation centers and organize local transport assets for immediate community deployment during weather alerts.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.161Z
+cmstwd59w008l04l58h21hq6b,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: An audit of a municipal health clinic reveals that temperature-sensitive vaccines are routinely exposed to heat spoilage due to frequent unscheduled local power outages on weekends.
+
+Proposed Courses of Action:
+I. Dispose of all vaccines on Monday mornings regardless of temperature monitoring records.
+II. Install an automatic solar-powered backup generator and temperature logging alert system at the clinic.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.201Z
+cmstwd59w008m04l5futuggc7,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A district hospital notes a high incidence of post-surgical site infections over the past two months.
+
+Proposed Courses of Action:
+I. Audit and strictly enforce sterilization protocols in operating rooms and mandate infection control retraining for surgical staff.
+II. Suspend all surgical operations indefinitely and refer all medical patients to private clinics.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.245Z
+cmstwd59w008n04l5hv23pgn4,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: An urban barangay experiences frequent waterlogging on major residential streets after brief rainfall due to garbage clogging storm drainage grates.
+
+Proposed Courses of Action:
+I. Conduct regular community drainage clean-up drives and strictly enforce anti-littering ordinances with community penalties.
+II. Increase municipal water consumption tariffs for all barangay households.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.277Z
+cmstwd59w008o04l5j42lwl6y,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A government agency receives numerous public complaints about slow responses to email inquiries sent to its official public information inbox.
+
+Proposed Courses of Action:
+I. Set up an automated ticketing system to track, assign, and monitor inquiry response times against target service standards.
+II. Conduct staff training on customer communication standards and assign dedicated personnel to monitor public inquiries daily.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.309Z
+cmstwd59w008p04l5tnhnhl98,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A state university experiences frequent power surges that damage sensitive laboratory equipment during rainy seasons.
+
+Proposed Courses of Action:
+I. Install industrial surge protectors and uninterruptible power supply (UPS) units for all sensitive laboratory devices.
+II. Conduct routine electrical grid inspections and transformer maintenance in coordination with the local power utility company.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.339Z
+cmstwd59w008q04l5fzrsvuh1,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A municipal treasury office discovers an accounting discrepancy between daily cash receipts collected and bank deposit slips submitted over the last quarter.
+
+Proposed Courses of Action:
+I. Initiate an immediate internal financial audit and temporarily assign cash collection duties to an independent officer pending investigation.
+II. Cover the cash deficit using the municipal employee emergency welfare fund.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.370Z
+cmstwd59w008r04l5lqdhbo6q,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: Residents of Barangay San Rafael report that stray dogs are roaming public market aisles, creating health and safety concerns for shoppers.
+
+Proposed Courses of Action:
+I. Conduct humane animal impounding in coordination with the municipal veterinary office and enforce local pet ownership ordinances.
+II. Ban all residents from bringing food or groceries into the public market area.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.402Z
+cmstwd59w008s04l5dqxkv3vx,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A regional government agency experiences high staff turnover among junior IT specialists, who leave after six months citing lack of career progression and inadequate technical training.
+
+Proposed Courses of Action:
+I. Require junior IT specialists to sign a mandatory ten-year employment bond upon joining the agency.
+II. Establish structured technical certification pathways and clear performance-based career promotion tracks for junior technical personnel.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.433Z
+cmstwd59w008t04l5xqn6tm52,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A public library's online archiving system experiences frequent cyber-attacks that temporarily disable public access to digitized historical documents.
+
+Proposed Courses of Action:
+I. Implement multi-tier firewall protection, routine vulnerability patch updates, and encrypted off-site data backups.
+II. Restrict digital archive access strictly to library staff members during office hours.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.463Z
+cmstwd59w008u04l59qpwfe29,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: Heavy monsoon rains cause recurring soil erosion that repeatedly blocks a main provincial road connecting agricultural towns to the port city.
+
+Proposed Courses of Action:
+I. Construct permanent concrete retaining walls and bio-engineering slope stabilization along the eroded hillside.
+II. Permanently close the provincial road and reroute all farm produce vehicles onto an unpaved mountain trail.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.494Z
+cmstwd59w008v04l5niuxt05l,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A frontline government office experiences a sudden 200% influx of citizens requesting birth certificate authentication due to an upcoming passport renewal deadline, causing severe queue congestion and citizen frustration.
+
+Proposed Courses of Action:
+I. Deploy additional cross-trained administrative staff from non-peak back-office divisions to open temporary express service counters.
+II. Suspend all birth certificate authentication processing for two weeks until crowd numbers return to normal.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.526Z
+cmstwd59w008w04l5h98l85t8,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A public vocational school observes that graduates struggle to secure employment because their technical equipment training is outdated compared to current industry standards.
+
+Proposed Courses of Action:
+I. Update curriculum frameworks and partner with local industry leaders to upgrade laboratory machinery and training facilities.
+II. Guarantee employment for all graduates by creating administrative positions within the vocational school.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.557Z
+cmstwd59w008x04l5bklgdtgx,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: An urban city experiences frequent street light failures along a major boulevard due to copper wire theft from underground conduits.
+
+Proposed Courses of Action:
+I. Replace copper wiring with theft-resistant aluminum alloy wiring and secure conduit access covers with tamper-proof locks.
+II. Turn off all street lights permanently along the boulevard to prevent future wire theft.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.589Z
+cmstwd59w008y04l5in2pfag9,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A municipal agricultural office notes that local vegetable farmers suffer heavy income losses due to post-harvest decay during transport to distant urban markets.
+
+Proposed Courses of Action:
+I. Establish local cold-storage collection hubs and facilitate direct market linkages with local grocery buyers.
+II. Instruct farmers to stop harvesting vegetables during warm weather months.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.620Z
+cmstwd59w008z04l571790ddi,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A government agency finds that frontline service counters are frequently left unattended during lunch hours, causing long wait times for citizens.
+
+Proposed Courses of Action:
+I. Implement a staggered lunch break schedule for frontline personnel to ensure continuous service counter coverage throughout the day.
+II. Close the office completely during lunch hours and lock the main gates.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.651Z
+cmstwd59w009004l5tlnvgdv3,"Analytical Reasoning","Course of Action - Practical Administrative Solutions","Problem: A public high school reports an increasing number of students dropping out due to long daily walking distances from remote mountain barangays.
+
+Proposed Courses of Action:
+I. Coordinate with the local government unit to provide subsidized student shuttle transportation and modular learning options for far-flung pupils.
+II. Lower the academic passing grade for students who live far away from the school campus.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:08.682Z
+cmstwdq0t00k704l5cwgfjles,"Verbal Ability","Paragraph Organization - Coherence & Structural Flow","A. First, local authorities issued storm surge warnings to coastal communities early in the morning.
+B. By mid-afternoon, rescue teams deployed boats to evacuate stranded residents from flooded lowlands.
+C. Subsequently, emergency management teams established evacuation centers in high-ground schools.
+D. Finally, late that evening, the relief agency distributed hot meals and emergency medical kits to evacuees.
+
+Choose the most logical sequence of the sentences above.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:16.470Z
+cmstwjl0x007104l2i7gqrf7o,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","What is the solution set for the inequality: 5 - 3x ≤ 17 ?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:56.803Z
+cmstwjl0w006004l228t05od7,"Numerical Reasoning","Geometry - Geometric Theorems, Shapes & Solids","A linear highway segment on a survey map connects Town X at (-6, 8) and Town Y at (4, -2). A new emergency response post is to be placed at the exact midpoint of this highway segment. What are the coordinates of the emergency post?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:57.407Z
+cmstwjl0w006f04l21t9vli2e,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","Simplify the algebraic expression: 4(3x - 5y) - 3(2x - 7y)","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:57.973Z
+cmstwjl0w006g04l2hhk4e3qu,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","Simplify the expression: (12x⁴ y³) / (3x² y) + 5x² y²","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:57.997Z
+cmstwjl0x006t04l2qcvpkp8l,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","The total surface area S of a closed right circular cylinder is given by the formula S = 2πr² + 2πrh, where r is the base radius and h is the height. Solve for the height h in terms of S, r, and π.","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:58.453Z
+cmstwjl0x006u04l2sycsx4s8,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","The formula for calculating the total future amount in a simple interest account is A = P(1 + rt), where P is principal, r is annual interest rate, and t is time in years. Which formula correctly expresses the principal P in terms of A, r, and t?","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:58.492Z
+cmstwjl0x007004l2drkqv6r4,"Numerical Reasoning","Algebra - Equations, Polynomials & Expressions","Solve the inequality: 2(4 - x) > 3x - 7","Question contains duplicate or identical option choices.","Distractor duplication requires pedagogical adjustment of distractors.","Replace duplicated choice with a valid plausible distractor.",2026-08-19T09:29:58.691Z

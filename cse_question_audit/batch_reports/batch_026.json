@@ -1,0 +1,512 @@
+{
+  "batchNumber": 26,
+  "range": "Q#2501 to Q#2600",
+  "processed": 100,
+  "verified": 100,
+  "corrected": 0,
+  "manualReview": 0,
+  "duplicates": 0,
+  "criticalErrors": 0,
+  "items": [
+    {
+      "id": "cmstwdq0v00nf04l5j1t2bwcz",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ng04l53vf8g32x",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nh04l508gockbw",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ni04l5x0mdi3q4",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nj04l5fxdcr5sq",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nk04l59nr9i7w8",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nl04l5i8gb8978",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nm04l5do85236o",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nn04l5gp644loi",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00no04l56cf49b4g",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00np04l5zjsp5p7s",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nq04l5mokjwohb",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nr04l5k74j8wta",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ns04l507t15nje",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nt04l5865msbsh",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nu04l5qaprun6j",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nv04l588gp039z",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nw04l51quuged8",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nx04l5ifrq8rcq",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ny04l5d18vgk0o",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00nz04l5wasi6k8l",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o004l5jk75jtxo",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o104l5v0gmxulp",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o204l5rgpj6f10",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o304l5bupras5x",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o404l5vzqi3lre",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o504l5n5lcc0e9",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o604l58pb1ly48",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o704l5jqz56p99",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o804l5okqsvfdq",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00o904l5nyfy0grr",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oa04l5qqa9x10c",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ob04l5zgdd2lq2",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oc04l5ku1bj5mn",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00od04l59x5u3vet",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oe04l5kn8cdrie",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00of04l5zcb7gbvu",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00og04l5k31awz77",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oh04l5qx7m09wt",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oi04l5jwybhs6v",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oj04l5p83a0fzf",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ok04l58zatg3k4",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ol04l51nfhmtzy",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00om04l5b7fqmojl",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00on04l5w1hxh5gi",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oo04l5hifaczhr",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00op04l53l3tid6d",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oq04l5lfkkb0h4",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00or04l5cubnhxjz",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00os04l5v8w8cbr9",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ot04l54iifx4tq",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ou04l5kwaqusuy",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ov04l5jipq3vnt",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ow04l53e7hgtz2",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00ox04l5su4klr2f",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oy04l5tuuu24qk",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00oz04l5l4vnwu0d",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0v00p004l55aft5zxc",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00d804l53t1tmvcs",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00d904l5oyrwu8g3",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00da04l51m8cae13",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00db04l5m91gr06e",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00dc04l51tym38al",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00dd04l5ysv12xtv",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00de04l51rn6flr8",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0q00df04l5454mw6ng",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dg04l5or9c6a9o",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dh04l59us5mkai",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00di04l55g1ldziq",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dj04l5965apupd",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dk04l53rgrxyja",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dl04l5hn95aspv",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dm04l529cdqwy9",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dn04l5sv8ivqq6",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00do04l54y3dx1cr",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dp04l5g211w4uo",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dq04l50vnyxjir",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dr04l57w5w0p75",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00ds04l591x3j812",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dt04l54hr6ridz",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00du04l5amhl68oa",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dv04l5s8jvt0ph",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dw04l5ae9c6wq7",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dx04l5osgwwc0u",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dy04l57zx9pug4",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00dz04l511rftvts",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e004l5se3gfc3z",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e104l5mcxqh4op",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e204l581sellh9",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e304l530chipeu",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e404l55yy5sz5o",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e504l5k7hufbdl",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e604l5jr4l66ab",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e704l5tsn241on",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e804l5j9asuy39",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00e904l5v4qzaj5y",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00ea04l567jnuq2k",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00eb04l524vq3qi8",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00ec04l50l2wyqv4",
+      "status": "VERIFIED",
+      "issues": []
+    },
+    {
+      "id": "cmstwdq0r00ed04l5hom0qs6f",
+      "status": "VERIFIED",
+      "issues": []
+    }
+  ]
+}
