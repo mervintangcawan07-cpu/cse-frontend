@@ -290,70 +290,66 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
       )}
 
       {/* 🎯 Exam-Centric Reactions & Comments Action Bar */}
-      <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+      <div className="pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* 💡 Got It */}
           <button
             type="button"
             onClick={() => handleToggleReaction("GOT_IT")}
-            className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl text-xs font-black border transition flex items-center gap-1 cursor-pointer ${
               userReactions.includes("GOT_IT")
-                ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                ? "bg-blue-600 text-white border-blue-600 shadow-xs scale-105"
                 : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700"
             }`}
-            title="Mark as understood"
+            title="Got It (Understood concept)"
           >
-            <span>💡</span>
-            <span>Got It</span>
-            {reactions.GOT_IT > 0 && <span className="font-mono text-[11px]">({reactions.GOT_IT})</span>}
+            <span className="text-sm">💡</span>
+            {reactions.GOT_IT > 0 && <span className="font-mono text-[11px] font-extrabold">{reactions.GOT_IT}</span>}
           </button>
 
           {/* 🤝 Same Struggle */}
           <button
             type="button"
             onClick={() => handleToggleReaction("SAME_STRUGGLE")}
-            className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl text-xs font-black border transition flex items-center gap-1 cursor-pointer ${
               userReactions.includes("SAME_STRUGGLE")
-                ? "bg-purple-600 text-white border-purple-600 shadow-xs"
+                ? "bg-purple-600 text-white border-purple-600 shadow-xs scale-105"
                 : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700"
             }`}
-            title="I struggle with this too"
+            title="Same Struggle (Relatable difficulty)"
           >
-            <span>🤝</span>
-            <span>Same Struggle</span>
-            {reactions.SAME_STRUGGLE > 0 && <span className="font-mono text-[11px]">({reactions.SAME_STRUGGLE})</span>}
+            <span className="text-sm">🤝</span>
+            {reactions.SAME_STRUGGLE > 0 && <span className="font-mono text-[11px] font-extrabold">{reactions.SAME_STRUGGLE}</span>}
           </button>
 
           {/* 🎯 High Yield */}
           <button
             type="button"
             onClick={() => handleToggleReaction("HIGH_YIELD")}
-            className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl text-xs font-black border transition flex items-center gap-1 cursor-pointer ${
               userReactions.includes("HIGH_YIELD")
-                ? "bg-amber-500 text-slate-950 border-amber-500 shadow-xs font-extrabold"
+                ? "bg-amber-500 text-slate-950 border-amber-500 shadow-xs font-extrabold scale-105"
                 : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-800"
             }`}
-            title="Important exam concept"
+            title="High Yield (Likely to appear in CSE)"
           >
-            <span>🎯</span>
-            <span>High Yield</span>
-            {reactions.HIGH_YIELD > 0 && <span className="font-mono text-[11px]">({reactions.HIGH_YIELD})</span>}
+            <span className="text-sm">🎯</span>
+            {reactions.HIGH_YIELD > 0 && <span className="font-mono text-[11px] font-extrabold">{reactions.HIGH_YIELD}</span>}
           </button>
 
           {/* ☕ Keep Pushing */}
           <button
             type="button"
             onClick={() => handleToggleReaction("KEEP_PUSHING")}
-            className={`px-2.5 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+            className={`px-2.5 py-1 rounded-xl text-xs font-black border transition flex items-center gap-1 cursor-pointer ${
               userReactions.includes("KEEP_PUSHING")
-                ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                ? "bg-emerald-600 text-white border-emerald-600 shadow-xs scale-105"
                 : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-800"
             }`}
-            title="Peer encouragement"
+            title="Keep Pushing (Study encouragement)"
           >
-            <span>☕</span>
-            <span>Keep Pushing</span>
-            {reactions.KEEP_PUSHING > 0 && <span className="font-mono text-[11px]">({reactions.KEEP_PUSHING})</span>}
+            <span className="text-sm">☕</span>
+            {reactions.KEEP_PUSHING > 0 && <span className="font-mono text-[11px] font-extrabold">{reactions.KEEP_PUSHING}</span>}
           </button>
         </div>
 
@@ -361,38 +357,75 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
         <button
           type="button"
           onClick={handleToggleComments}
-          className="px-3 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 cursor-pointer"
+          className={`px-3 py-1 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+            showComments
+              ? "bg-indigo-600 text-white border-indigo-600 shadow-xs"
+              : "bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-700"
+          }`}
         >
           <span>💬</span>
-          <span>{commentsCount > 0 ? `${commentsCount} Solutions & Notes` : "Add Solution / Reply"}</span>
+          <span>{commentsCount > 0 ? `Comments & Solutions (${commentsCount})` : "Comments & Solutions"}</span>
         </button>
       </div>
 
-      {/* 💬 Expandable Comments Section */}
+      {/* 💬 DISTINCT NESTED COMMENTS & SOLUTIONS THREAD */}
       {showComments && (
-        <div className="pt-3 border-t border-slate-100 space-y-3 animate-in fade-in duration-150">
+        <div className="mt-3 p-3.5 sm:p-4 bg-slate-50/95 rounded-2xl border border-slate-200/90 space-y-3.5 animate-in fade-in duration-150">
+          <div className="flex items-center justify-between border-b border-slate-200/70 pb-2">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-black text-slate-800">
+                💬 Comments & Solutions
+              </span>
+              <span className="text-[10px] font-bold px-2 py-0.2 bg-indigo-100 text-indigo-700 rounded-full">
+                {commentsCount} {commentsCount === 1 ? "entry" : "entries"}
+              </span>
+            </div>
+            <span className="text-[10px] text-slate-400 font-medium">
+              Peer Discussion & Explanations
+            </span>
+          </div>
+
           {loadingComments ? (
-            <p className="text-xs text-slate-400 py-2">Loading solutions and comments...</p>
+            <div className="py-4 text-center space-y-1">
+              <div className="w-5 h-5 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className="text-xs text-slate-400">Loading discussion thread...</p>
+            </div>
           ) : comments.length === 0 ? (
-            <p className="text-xs text-slate-400 py-2">No solutions or replies yet. Be the first to help out!</p>
+            <div className="py-4 text-center space-y-1">
+              <p className="text-xs font-bold text-slate-600">No comments or solutions yet.</p>
+              <p className="text-[11px] text-slate-400">Be the first examinee to share an explanation or answer!</p>
+            </div>
           ) : (
-            <div className="space-y-2.5 max-h-80 overflow-y-auto pr-1">
+            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
               {comments.map((c) => (
-                <div key={c.id} className="p-3 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-1">
+                <div
+                  key={c.id}
+                  className="p-3 bg-white rounded-r-xl rounded-l-xs border-l-4 border-indigo-500 border-y border-r border-slate-200/80 shadow-xs space-y-1.5"
+                >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-xs shrink-0">
                         {c.isAnonymous ? "🎭" : AVATAR_MAP[c.author.avatar]?.emoji || "🧑‍🎓"}
                       </span>
-                      <span className="font-extrabold text-xs text-slate-900">
-                        {c.author.displayName}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black text-xs text-slate-900">
+                          {c.author.displayName}
+                        </span>
+                        {c.author.role === "ADMIN" && (
+                          <span className="text-[8px] font-black uppercase px-1 py-0.2 bg-blue-100 text-blue-800 rounded">
+                            Admin
+                          </span>
+                        )}
+                        <span className="text-[9px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.2 rounded-md">
+                          Peer Note
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-[10px] text-slate-400">
+                    <span className="text-[10px] text-slate-400 font-medium">
                       {formatTimeAgo(new Date(c.createdAt))}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-700 leading-relaxed font-medium whitespace-pre-line pl-5">
+                  <p className="text-xs text-slate-800 leading-relaxed font-normal whitespace-pre-line pl-8">
                     {c.content}
                   </p>
                 </div>
@@ -401,22 +434,22 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
           )}
 
           {/* Add Solution / Reply Input */}
-          <form onSubmit={handleAddComment} className="pt-2 space-y-2">
+          <form onSubmit={handleAddComment} className="pt-2 border-t border-slate-200/70 space-y-2">
             <textarea
               rows={2}
-              placeholder="Write your step-by-step solution, answer, or supportive reply..."
+              placeholder="Write your step-by-step solution, answer, or supportive comment..."
               value={newCommentText}
               onChange={(e) => setNewCommentText(e.target.value)}
-              className="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
+              className="w-full p-2.5 bg-white border border-indigo-200/80 rounded-xl text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 shadow-xs transition"
               required
             />
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-1.5 cursor-pointer text-[11px] text-slate-600 font-semibold">
+              <label className="flex items-center gap-1.5 cursor-pointer text-[11px] text-slate-600 font-bold">
                 <input
                   type="checkbox"
                   checked={commentAnonymous}
                   onChange={(e) => setCommentAnonymous(e.target.checked)}
-                  className="w-3.5 h-3.5 rounded text-purple-600"
+                  className="w-3.5 h-3.5 rounded text-purple-600 focus:ring-purple-500"
                 />
                 <span>🎭 Post anonymously</span>
               </label>
@@ -424,9 +457,9 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
               <button
                 type="submit"
                 disabled={submittingComment || !newCommentText.trim()}
-                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-xs transition disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-xs rounded-xl shadow-xs transition disabled:opacity-50 cursor-pointer"
               >
-                {submittingComment ? "Posting..." : "Post Solution 🚀"}
+                {submittingComment ? "Posting..." : "Post Solution / Comment 🚀"}
               </button>
             </div>
           </form>
