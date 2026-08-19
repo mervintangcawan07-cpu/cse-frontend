@@ -45,7 +45,7 @@ export default function SocialDashboardPage() {
   const [profileCompleted, setProfileCompleted] = useState<boolean | null>(null);
   const [completionData, setCompletionData] = useState<ProfileCompletionResult | null>(null);
   const [presence, setPresence] = useState<ResolvedPresence | null>(null);
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<SocialTab>("OVERVIEW");
@@ -79,7 +79,7 @@ export default function SocialDashboardPage() {
   };
 
   const updatePresenceStatus = async (newStatus: string) => {
-    setShowStatusDropdown(false);
+    setShowProfileMenu(false);
     try {
       const res = await fetch("/api/social/presence", {
         method: "POST",
@@ -224,101 +224,169 @@ export default function SocialDashboardPage() {
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-3 sm:py-8 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-8 text-slate-900">
-      {/* HEADER BANNER WITH USER STUDY IDENTITY & STATUS CONTROLS */}
-      <div className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sm:gap-6 shadow-xl shadow-purple-600/15 relative overflow-hidden">
-        {/* Subtle decorative background glow */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="space-y-2 relative z-10 w-full md:w-auto">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 sm:px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 backdrop-blur-md">
-              Collaborative Study System
-            </span>
-
-            {/* Study Profile Identity Chip */}
-            {studyProfile && (
-              <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 bg-black/20 border border-white/20 rounded-full text-xs relative backdrop-blur-md">
-                <span className="text-sm sm:text-base">{currentAvatarInfo.emoji}</span>
-                <span className="font-extrabold text-white truncate max-w-[110px] sm:max-w-[140px]">
-                  {studyProfile.displayName}
-                </span>
-
-                {completionData && (
-                  <span className={`text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-full ${
-                    completionData.isFullyComplete
-                      ? "bg-emerald-400 text-slate-950 font-bold"
-                      : "bg-white/30 text-white font-bold"
-                  }`}>
-                    {completionData.percentage}%
-                  </span>
-                )}
-
-                {/* Interactive Status Selector Pill */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                    className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 rounded-full bg-white/15 border border-white/20 hover:bg-white/25 text-[10px] font-bold cursor-pointer transition text-white"
-                    title="Change Availability Status"
-                  >
-                    <span className={`w-2 h-2 rounded-full ${presence?.dotColor || "bg-emerald-400"}`} />
-                    <span>{presence?.label || "Online"}</span>
-                    <span className="text-[8px] text-white/70">▼</span>
-                  </button>
-
-                  {/* Status Dropdown Menu */}
-                  {showStatusDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-1.5 z-50 space-y-1 animate-fade-in text-slate-100">
-                      <div className="px-2.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        Set Availability
-                      </div>
-                      {PRESENCE_CHOICES.map((choice) => (
-                        <button
-                          key={choice.id}
-                          type="button"
-                          onClick={() => updatePresenceStatus(choice.id)}
-                          className="w-full px-2.5 py-1.5 rounded-xl hover:bg-slate-800 flex items-center justify-between text-xs text-left cursor-pointer transition"
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className={`w-2 h-2 rounded-full ${choice.dot}`} />
-                            <span className="font-bold text-slate-200">{choice.label}</span>
-                          </div>
-                          <span className="text-[10px] text-slate-400">{choice.desc}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+    <div className="w-full max-w-7xl mx-auto py-3 sm:py-6 px-2 sm:px-4 md:px-6 space-y-3 sm:space-y-6 text-slate-900">
+      {/* MINIMIZED SLEEK TOP PROFILE & BRAND BAR */}
+      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-lg shadow-purple-600/10 relative">
+        <div className="flex items-center justify-between gap-2">
+          {/* Left: Brand & Hub Identity */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveTab("OVERVIEW")}
+              className="flex items-center gap-2 group cursor-pointer text-left"
+            >
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center text-base sm:text-lg backdrop-blur-md group-hover:scale-105 transition shrink-0">
+                👥
               </div>
-            )}
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm sm:text-base font-black text-white tracking-tight">
+                    Study Together
+                  </span>
+                  <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-white/20 rounded-full border border-white/30 text-purple-100">
+                    HUB
+                  </span>
+                </div>
+                <p className="text-[10px] text-purple-200 hidden sm:block font-medium">
+                  Collaborative Study & Practice Rooms
+                </p>
+              </div>
+            </button>
           </div>
 
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white mt-1">
-            Study Together Hub
-          </h1>
-          <p className="text-xs sm:text-sm text-purple-100 max-w-xl leading-relaxed font-medium">
-            Review Civil Service topics alongside fellow examinees and classmates. Form study rooms, share practice questions, and track group progress.
-          </p>
-        </div>
+          {/* Right: User Profile Menu Pill & Dropdown */}
+          <div className="flex items-center gap-2 relative">
+            {studyProfile && (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-2 pl-2 pr-2.5 sm:pr-3 py-1.5 rounded-full bg-black/20 hover:bg-black/30 border border-white/25 text-xs font-bold text-white transition backdrop-blur-md cursor-pointer shadow-sm"
+                  title="Open Study Profile & Availability Menu"
+                >
+                  <span className="text-base sm:text-lg leading-none">{currentAvatarInfo.emoji}</span>
+                  <div className="flex flex-col items-start text-left">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-extrabold text-white text-xs max-w-[90px] sm:max-w-[130px] truncate leading-tight">
+                        {studyProfile.displayName}
+                      </span>
+                      {completionData && (
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full leading-none ${
+                          completionData.isFullyComplete
+                            ? "bg-emerald-400 text-slate-950"
+                            : "bg-white/30 text-white"
+                        }`}>
+                          {completionData.percentage}%
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-purple-200 leading-tight mt-0.5">
+                      <span className={`w-1.5 h-1.5 rounded-full ${presence?.dotColor || "bg-emerald-400"}`} />
+                      <span>{presence?.label || "Online"}</span>
+                      <span className="text-[7px] text-white/60">▼</span>
+                    </div>
+                  </div>
+                </button>
 
-        <div className="flex items-center gap-2 sm:gap-2.5 w-full md:w-auto relative z-10">
-          <button
-            type="button"
-            onClick={() => setShowEditProfileModal(true)}
-            className="flex-1 md:flex-initial px-3 sm:px-3.5 py-2.5 bg-white/15 hover:bg-white/25 text-white text-xs font-bold rounded-xl transition border border-white/20 cursor-pointer flex items-center justify-center gap-1.5 text-center backdrop-blur-md"
-            title="Edit Study Together Profile & Status"
-          >
-            <span>✏️</span>
-            <span>Edit Profile</span>
-          </button>
+                {/* Interactive Profile Dropdown Menu */}
+                {showProfileMenu && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowProfileMenu(false)}
+                    />
+                    <div className="absolute top-full right-0 mt-2 w-72 bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-4 z-50 space-y-4 animate-in fade-in zoom-in-95 duration-150 text-slate-100">
+                      {/* User Header Details */}
+                      <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+                        <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-2xl shadow-inner shrink-0">
+                          {currentAvatarInfo.emoji}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-black text-sm text-white truncate">
+                            {studyProfile.displayName}
+                          </h3>
+                          <p className="text-[11px] text-slate-400 truncate">
+                            {studyProfile.targetExam || "Civil Service Exam"}
+                          </p>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-emerald-500 rounded-full"
+                                style={{ width: `${completionData?.percentage || 0}%` }}
+                              />
+                            </div>
+                            <span className="text-[10px] font-bold text-emerald-400">
+                              {completionData?.percentage || 0}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
 
-          <Link
-            href="/dashboard"
-            className="flex-1 md:flex-initial px-3 sm:px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition border border-slate-700 text-center"
-          >
-            &larr; Dashboard
-          </Link>
+                      {/* Presence Availability Selector */}
+                      <div className="space-y-1.5">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block px-1">
+                          My Availability Status
+                        </span>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          {PRESENCE_CHOICES.map((choice) => (
+                            <button
+                              key={choice.id}
+                              type="button"
+                              onClick={() => {
+                                updatePresenceStatus(choice.id);
+                                setShowProfileMenu(false);
+                              }}
+                              className={`p-2 rounded-xl text-left border text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+                                presence?.status === choice.id
+                                  ? "bg-purple-600/30 border-purple-500 text-white"
+                                  : "bg-slate-800/60 border-slate-700/60 text-slate-300 hover:bg-slate-800 hover:text-white"
+                              }`}
+                            >
+                              <span className={`w-2 h-2 rounded-full ${choice.dot}`} />
+                              <span>{choice.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Action Links */}
+                      <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowProfileMenu(false);
+                            setShowEditProfileModal(true);
+                          }}
+                          className="w-full py-2.5 px-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                        >
+                          <span>✏️</span>
+                          <span>Edit Study Profile</span>
+                        </button>
+
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setShowProfileMenu(false)}
+                          className="w-full py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-bold rounded-xl transition text-center border border-slate-700"
+                        >
+                          &larr; Back to Dashboard
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Direct Dashboard link on desktop for quick escape */}
+            <Link
+              href="/dashboard"
+              className="hidden sm:inline-flex items-center gap-1 px-3 py-2 bg-black/20 hover:bg-black/30 border border-white/20 rounded-xl text-xs font-bold text-white transition backdrop-blur-md"
+              title="Return to Main Dashboard"
+            >
+              <span>←</span>
+              <span>Dashboard</span>
+            </Link>
+          </div>
         </div>
       </div>
 
