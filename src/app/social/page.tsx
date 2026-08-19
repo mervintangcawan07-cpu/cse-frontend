@@ -17,7 +17,6 @@ import { ProfileCompletionResult } from "@/lib/social/profileCompletion";
 import { ResolvedPresence } from "@/lib/social/presence";
 import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 import { HubNavIcons, SocialTab } from "@/components/social/HubNavIcons";
-import { HubModuleCards } from "@/components/social/HubModuleCards";
 import { StudyCommonsSection } from "@/components/social/commons/StudyCommonsSection";
 
 
@@ -425,41 +424,6 @@ export default function SocialDashboardPage() {
 
           {/* 🏛️ CSE STUDY COMMONS FEED (COMMUNITY PEER BULLETIN & Q&A) */}
           <StudyCommonsSection />
-
-          {/* STATS SUMMARY GRID */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl space-y-1 shadow-xs">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">Classmates Online</span>
-              <span className="text-xl sm:text-2xl font-black text-emerald-600">0</span>
-              <span className="text-[10px] text-slate-500 block">0 total classmates</span>
-            </div>
-
-            <div className="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl space-y-1 shadow-xs">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">Active Rooms</span>
-              <span className="text-xl sm:text-2xl font-black text-blue-600">{counts.activeRooms}</span>
-              <span className="text-[10px] text-slate-500 block">Available now</span>
-            </div>
-
-            <div className="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl space-y-1 shadow-xs">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">Pending Invites</span>
-              <span className="text-xl sm:text-2xl font-black text-amber-600">{counts.pendingClassmates}</span>
-              <span className="text-[10px] text-slate-500 block">Requests pending</span>
-            </div>
-
-            <div className="bg-white border border-slate-200/90 p-4 sm:p-5 rounded-2xl space-y-1 shadow-xs">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">Next Event</span>
-              <span className="text-xs sm:text-sm font-black text-slate-800 block truncate">
-                {counts.upcomingEvents > 0 ? `${counts.upcomingEvents} Scheduled` : "None Scheduled"}
-              </span>
-              <span className="text-[10px] text-slate-500 block">Check calendar</span>
-            </div>
-          </div>
-
-          {/* ALL-IN-ONE HUB DASHBOARD SECTIONS (COMPACT DISCOVERABLE MODULE TILES) */}
-          <HubModuleCards
-            counts={counts}
-            onSelectTab={(tab) => setActiveTab(tab)}
-          />
         </div>
       )}
 
