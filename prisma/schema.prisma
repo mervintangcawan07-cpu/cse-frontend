@@ -107,6 +107,11 @@ model User {
   // Study Together Profile (Separate from main authentication/account)
   studyProfile StudyTogetherProfile?
 
+  // Study Commons Relations
+  studyPosts         StudyPost[]         @relation("UserStudyPosts")
+  studyPostComments  StudyPostComment[]  @relation("UserStudyPostComments")
+  studyPostReactions StudyPostReaction[] @relation("UserStudyPostReactions")
+
   @@index([email])
   @@index([role])
   @@index([deletedAt])
@@ -881,4 +886,81 @@ model BackupPayload {
   filename  String   @id
   payload   String   @db.Text
   createdAt DateTime @default(now())
+}
+
+enum StudyPostTopic {
+  QUESTION_HELP
+  EXAM_INTEL
+  MINDSET_VENT
+  STUDY_HACKS
+}
+
+enum StudyReactionType {
+  GOT_IT
+  SAME_STRUGGLE
+  HIGH_YIELD
+  KEEP_PUSHING
+}
+
+model StudyPost {
+  id             String         @id @default(cuid())
+  authorId       String
+  topic          StudyPostTopic @default(QUESTION_HELP)
+  title          String?
+  content        String         @db.Text
+  hasSpoiler     Boolean        @default(false)
+  spoilerContent String?        @db.Text
+  isAnonymous    Boolean        @default(false)
+  isPinned       Boolean        @default(false)
+  pinnedAt       DateTime?
+  
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  author         User                 @relation("UserStudyPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  comments       StudyPostComment[]
+  reactions      StudyPostReaction[]
+
+  @@index([authorId])
+  @@index([topic])
+  @@index([isPinned])
+  @@index([createdAt(sort: Desc)])
+  @@index([deletedAt])
+}
+
+model StudyPostComment {
+  id          String    @id @default(cuid())
+  postId      String
+  authorId    String
+  content     String    @db.Text
+  isAnonymous Boolean   @default(false)
+  isAccepted  Boolean   @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  post        StudyPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author      User      @relation("UserStudyPostComments", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt(sort: Asc)])
+  @@index([authorId])
+  @@index([deletedAt])
+}
+
+model StudyPostReaction {
+  id           String            @id @default(cuid())
+  postId       String
+  userId       String
+  reactionType StudyReactionType
+
+  createdAt    DateTime          @default(now())
+
+  post         StudyPost         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user         User              @relation("UserStudyPostReactions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId, reactionType])
+  @@index([postId])
+  @@index([userId])
 }

@@ -18,6 +18,7 @@ import { ResolvedPresence } from "@/lib/social/presence";
 import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 import { HubNavIcons, SocialTab } from "@/components/social/HubNavIcons";
 import { HubModuleCards } from "@/components/social/HubModuleCards";
+import { StudyCommonsSection } from "@/components/social/commons/StudyCommonsSection";
 
 
 const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
@@ -306,7 +307,7 @@ export default function SocialDashboardPage() {
                             {studyProfile.displayName}
                           </h3>
                           <p className="text-[11px] text-slate-400 truncate">
-                            {studyProfile.targetExam || "Civil Service Exam"}
+                            {studyProfile.studyGoal || "Civil Service Exam"}
                           </p>
                           <div className="flex items-center gap-1.5 mt-1">
                             <div className="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -421,6 +422,9 @@ export default function SocialDashboardPage() {
             completion={completionData}
             onOpenEditModal={() => setShowEditProfileModal(true)}
           />
+
+          {/* 🏛️ CSE STUDY COMMONS FEED (COMMUNITY PEER BULLETIN & Q&A) */}
+          <StudyCommonsSection />
 
           {/* STATS SUMMARY GRID */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
