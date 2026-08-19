@@ -382,10 +382,10 @@ export default function LandingPage() {
       <nav className="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-xs">
         <Link href="/" className="flex items-center gap-2 font-black text-lg text-slate-900 tracking-tight">
           <span className="px-2 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg text-xs font-black shadow-xs">
-            CSC
+            GS
           </span>
           <span className="font-extrabold text-slate-900">
-            Review <span className="text-blue-600">PRO</span>
+            GovStudy<span className="text-blue-600">X</span>
           </span>
         </Link>
 
@@ -890,16 +890,6 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-
-      {/* FOOTER */}
-      <footer className="bg-white border-t border-slate-200/80 text-slate-500 py-8 px-4 sm:px-8 text-xs">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
-          <Link href="/" className="font-extrabold text-slate-900">
-            CSC <span className="text-blue-600">Review PRO</span>
-          </Link>
-          <p>© 2026 Civil Service Exam Reviewer Philippines. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }

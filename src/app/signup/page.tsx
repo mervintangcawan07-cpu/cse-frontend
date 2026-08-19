@@ -131,10 +131,22 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Creating Account..." : "Register & Send Verification Link"}
           </button>
+
+          <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+            By creating an account, you agree to our{" "}
+            <Link href="/terms" className="text-blue-400 underline font-semibold hover:text-blue-300">
+              Terms &amp; Conditions
+            </Link>{" "}
+            and acknowledge our{" "}
+            <Link href="/privacy" className="text-blue-400 underline font-semibold hover:text-blue-300">
+              Privacy Policy
+            </Link>
+            .
+          </p>
         </form>
 
         <div className="text-center pt-2 border-t border-slate-800">

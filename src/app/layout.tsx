@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import CookieConsent from "@/components/common/CookieConsent";
+import { siteConfig } from "@/lib/config/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,9 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Civil Service Exam Reviewer",
-  description: "A comprehensive tool to pass your CSE.",
+  title: {
+    default: `${siteConfig.name} - ${siteConfig.tagline}`,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
   manifest: "/manifest.json",
+  metadataBase: new URL(siteConfig.url),
 };
 
 export const viewport: Viewport = {
@@ -41,6 +48,12 @@ export default function RootLayout({
         <main className="w-full flex-grow">
           {children}
         </main>
+
+        {/* Global Footer */}
+        <Footer />
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </body>
     </html>
   );

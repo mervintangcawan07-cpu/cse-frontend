@@ -165,13 +165,26 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="text-center pt-2 border-t border-slate-800">
+        <div className="text-center pt-2 border-t border-slate-800 space-y-2">
           <p className="text-xs text-slate-400">
             {"Don't have an account? "}
             <Link href="/signup" className="text-blue-400 font-bold hover:underline">
               Register here
             </Link>
           </p>
+          <div className="flex justify-center items-center gap-3 text-[11px] text-slate-500">
+            <Link href="/terms" className="hover:text-slate-300 transition">
+              Terms
+            </Link>
+            <span>&bull;</span>
+            <Link href="/privacy" className="hover:text-slate-300 transition">
+              Privacy
+            </Link>
+            <span>&bull;</span>
+            <Link href="/contact" className="hover:text-slate-300 transition">
+              Help
+            </Link>
+          </div>
         </div>
       </div>
     </div>
