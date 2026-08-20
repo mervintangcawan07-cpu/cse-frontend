@@ -283,6 +283,24 @@ export default function Navbar() {
               </Link>
             )}
           </div>
+
+          {/* 1-TAP LEGAL & COMPLIANCE ACCESS */}
+          <div className="pt-3 border-t border-slate-900 space-y-1.5">
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-semibold text-slate-400">
+              <Link href="/privacy" className="hover:text-blue-400 transition">Privacy</Link>
+              <span>&bull;</span>
+              <Link href="/terms" className="hover:text-blue-400 transition">Terms</Link>
+              <span>&bull;</span>
+              <Link href="/refund" className="hover:text-blue-400 transition">Refunds</Link>
+              <span>&bull;</span>
+              <Link href="/cookies" className="hover:text-blue-400 transition">Cookies</Link>
+              <span>&bull;</span>
+              <Link href="/support" className="hover:text-blue-400 transition">Support</Link>
+            </div>
+            <p className="text-[10px] text-slate-500 leading-tight">
+              GovStudyX is an independent educational platform not affiliated with the Civil Service Commission (CSC).
+            </p>
+          </div>
         </div>
       )}
     </header>

@@ -1,8 +1,62 @@
 // Relative Path: src/components/Footer.tsx
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
 
+const FOOTER_VISIBLE_EXACT_ROUTES = new Set([
+  "/",
+  "/dashboard",
+  "/pricing",
+  "/upgrade",
+  "/about",
+  "/contact",
+  "/support",
+  "/privacy",
+  "/privacy-policy",
+  "/terms",
+  "/terms-and-conditions",
+  "/refund",
+  "/refund-policy",
+  "/cookies",
+  "/cookie-policy",
+  "/login",
+  "/signup",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+  "/maintenance",
+]);
+
+function shouldShowFooter(pathname: string | null): boolean {
+  if (!pathname) return true;
+  if (FOOTER_VISIBLE_EXACT_ROUTES.has(pathname)) return true;
+
+  // Render on legal, support, or about sub-routes if any exist
+  if (
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/terms") ||
+    pathname.startsWith("/refund") ||
+    pathname.startsWith("/cookies") ||
+    pathname.startsWith("/about") ||
+    pathname.startsWith("/contact") ||
+    pathname.startsWith("/support")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (!shouldShowFooter(pathname)) {
+    return null;
+  }
+
   return (
     <footer className="w-full bg-slate-950 border-t border-slate-800 text-slate-400 text-xs mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-10">
@@ -145,3 +199,4 @@ export default function Footer() {
     </footer>
   );
 }
+
