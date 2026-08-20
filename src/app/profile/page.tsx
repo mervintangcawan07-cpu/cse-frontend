@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BadgeDisplay from "@/components/profile/BadgeDisplay";
+import { siteConfig } from "@/lib/config/site";
 
 interface UserProfile {
   name: string;
@@ -110,8 +111,8 @@ export default function ProfilePage() {
 
   const faqs = [
     {
-      q: "How does the Civil Service Exam Reviewer PRO Access work?",
-      a: "PRO Access unlocks all practice mock exams, category speed drills, official PDF handbooks, and live study notes created specifically for Philippine Civil Service Exam examinees.",
+      q: `How does the ${siteConfig.name} PRO Access work?`,
+      a: "PRO Access unlocks full 170-item timed mock exams, category speed drills, active recall flashcards, smart elimination drills, and the Balik-Aral mistake notebook.",
     },
     {
       q: "Will my subscription automatically renew?",
@@ -123,7 +124,7 @@ export default function ProfilePage() {
     },
     {
       q: "Who do I contact for payment issues or account support?",
-      a: "You can reach our official customer service team directly via email at support@cseonlinereview.com.",
+      a: `You can reach our official customer service team directly via email at ${siteConfig.emails.support} or submit a ticket through our Student Support desk.`,
     },
   ];
 
@@ -222,41 +223,43 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* ALERT MESSAGE */}
-      {message && (
-        <div
-          className={`p-4 rounded-2xl text-xs font-bold border ${
-            message.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-              : "bg-red-500/10 border-red-500/30 text-red-400"
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
-
-      {/* TAB 1: ACCOUNT SETTINGS (NAME & PASSWORD) */}
+      {/* TAB 1: ACCOUNT SETTINGS */}
       {activeTab === "account" && (
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-          <h2 className="text-lg font-black text-white">Profile & Security Settings</h2>
+          <div>
+            <h2 className="text-lg font-black text-white">Profile Details</h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Update your display name and examinee preferences.
+            </p>
+          </div>
 
-          <form onSubmit={handleProfileSubmit} className="space-y-6 max-w-2xl">
-            {/* Change Profile Name */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-300 block">Full Name</label>
+          {message && (
+            <div
+              className={`p-4 rounded-xl text-xs font-bold ${
+                message.type === "success"
+                  ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
+                  : "bg-rose-500/10 border border-rose-500/30 text-rose-300"
+              }`}
+            >
+              {message.text}
+            </div>
+          )}
+
+          <form onSubmit={handleProfileSubmit} className="space-y-4 max-w-lg">
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-300">Display Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
-                placeholder="Your full name"
+                placeholder="Your Full Name"
                 required
               />
             </div>
 
-            {/* Email (Read-Only) */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-400 block">Email Address (Read-Only)</label>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-300">Email Address (Read-only)</label>
               <input
                 type="email"
                 value={user?.email || ""}
@@ -265,38 +268,34 @@ export default function ProfilePage() {
               />
             </div>
 
-            <hr className="border-slate-800" />
-
-            {/* Change Password */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-wider text-amber-400">
-                Change Account Password
+            <div className="pt-4 border-t border-slate-800 space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">
+                Change Password (Optional)
               </h3>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-300 block">Current Password</label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
+                    placeholder="Enter current password to change"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-300 block">Current Password</label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
-                  placeholder="Enter current password to authorize changes"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-300 block">New Password</label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
-                    placeholder="At least 6 characters"
+                    placeholder="Enter new password"
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-300 block">Confirm New Password</label>
                   <input
                     type="password"
@@ -331,7 +330,7 @@ export default function ProfilePage() {
               </p>
             </div>
             <Link
-              href="/dashboard"
+              href="/pricing"
               className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition"
             >
               ➕ Add or Extend Subscription
@@ -388,23 +387,36 @@ export default function ProfilePage() {
           <div>
             <h2 className="text-lg font-black text-white">Frequently Asked Questions</h2>
             <p className="text-xs text-slate-400 mt-1">
-              Find answers to common questions regarding review materials and payments.
+              Find answers to common questions regarding review materials, passes, and payments.
             </p>
           </div>
 
           {/* Customer Service Banner */}
-          <div className="p-5 bg-blue-600/10 border border-blue-500/30 rounded-2xl flex items-center justify-between flex-wrap gap-4">
+          <div className="p-5 bg-blue-600/10 border border-blue-500/30 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[10px] font-black uppercase text-blue-400 block">Customer Service Support</span>
-              <span className="text-sm font-extrabold text-white">Need help or extended support?</span>
-              <p className="text-xs text-slate-400 mt-0.5">Email us anytime at: <span className="text-blue-400 font-bold">support@cseonlinereview.com</span></p>
+              <span className="text-[10px] font-black uppercase text-blue-400 block tracking-wider">Customer Service Support</span>
+              <span className="text-sm font-extrabold text-white">Need help or account assistance?</span>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Official Support Email:{" "}
+                <a href={`mailto:${siteConfig.emails.support}`} className="text-blue-400 font-bold hover:underline">
+                  {siteConfig.emails.support}
+                </a>
+              </p>
             </div>
-            <a
-              href="mailto:support@cseonlinereview.com"
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition"
-            >
-              ✉️ Contact Customer Service
-            </a>
+            <div className="flex items-center gap-2 flex-wrap">
+              <a
+                href={`mailto:${siteConfig.emails.support}`}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition shadow-md"
+              >
+                ✉️ Email Support
+              </a>
+              <Link
+                href="/support"
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl border border-slate-700 transition"
+              >
+                🎫 Student Ticket Desk
+              </Link>
+            </div>
           </div>
 
           {/* Accordion List */}
@@ -416,7 +428,7 @@ export default function ProfilePage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full text-left p-4 flex justify-between items-center text-xs font-bold text-white hover:text-blue-400 transition"
+                  className="w-full text-left p-4 flex justify-between items-center text-xs font-bold text-white hover:text-blue-400 transition cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <span className="text-slate-400 text-base">{openFaq === idx ? "−" : "+"}</span>
@@ -434,56 +446,129 @@ export default function ProfilePage() {
 
       {/* TAB 4: ABOUT PLATFORM */}
       {activeTab === "about" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-4">
-          <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-            About CSE Reviewer
-          </span>
-          <h2 className="text-xl font-black text-white">Comprehensive Philippine Civil Service Review Platform</h2>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            CSE Reviewer is an interactive web-based exam prep platform designed to help examinees pass both the Professional and Sub-Professional Philippine Civil Service Examinations (CSC).
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
+          <div className="space-y-2">
+            <span className="text-[10px] font-black uppercase text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              About {siteConfig.name}
+            </span>
+            <h2 className="text-xl font-black text-white">
+              Comprehensive Philippine Civil Service Review Platform
+            </h2>
+            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+              {siteConfig.description}
+            </p>
+          </div>
+
+          {/* Official Disclaimer Box */}
+          <div className="p-4 bg-slate-950/90 rounded-2xl border border-slate-800 text-xs text-slate-400 leading-relaxed font-medium space-y-1">
+            <strong className="text-slate-200">Official Non-Affiliation Disclaimer:</strong>
+            <p className="text-[11px] text-slate-400">
+              {siteConfig.disclaimer.short}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800">
               <h4 className="text-xs font-bold text-blue-400">⚡ Timed Mock Exams</h4>
               <p className="text-[11px] text-slate-400 mt-1">Full-length timed examinations simulating actual Civil Service Commission standards.</p>
             </div>
             <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800">
               <h4 className="text-xs font-bold text-emerald-400">🎯 Category Speed Drills</h4>
-              <p className="text-[11px] text-slate-400 mt-1">5-minute rapid drills to master Verbal Ability, Numerical Reasoning, and General Info.</p>
+              <p className="text-[11px] text-slate-400 mt-1">Smart elimination drills to master Verbal Ability, Numerical Reasoning, and General Info.</p>
             </div>
+            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800">
+              <h4 className="text-xs font-bold text-purple-400">👥 Study Together Hub</h4>
+              <p className="text-[11px] text-slate-400 mt-1">Collaborative study rooms, classmate feeds, active recall flashcards, and 1v1 duels.</p>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition shadow-md"
+            >
+              <span>Explore More About GovStudyX</span>
+              <span>➔</span>
+            </Link>
           </div>
         </div>
       )}
 
       {/* TAB 5: TERMS & PRIVACY POLICY */}
       {activeTab === "terms" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-4">
-          <h2 className="text-lg font-black text-white">Terms of Service & Privacy Policy</h2>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            By creating an account and utilizing CSE Reviewer services, you agree to the following terms and guidelines:
-          </p>
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-lg font-black text-white">Terms of Service &amp; Legal Compliance Center</h2>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              By creating an account and utilizing {siteConfig.name} services, you agree to our terms of service, privacy practices, and academic integrity policies.
+            </p>
+          </div>
 
-          <div className="space-y-3 pt-2 text-xs text-slate-300 leading-relaxed">
-            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
-              <h4 className="font-bold text-white">1. Account Security & Usage</h4>
-              <p className="text-slate-400 text-[11px]">
-                Accounts are registered to individual reviewees. Sharing accounts across multiple devices simultaneously may result in session invalidation.
-              </p>
-            </div>
+          {/* Quick Legal Policy Links Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <Link
+              href="/terms"
+              className="p-4 bg-slate-950/80 hover:bg-slate-950 border border-slate-800 hover:border-indigo-500/40 rounded-2xl transition group flex items-center justify-between"
+            >
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-white group-hover:text-indigo-400 transition flex items-center gap-1.5">
+                  <span>📜</span>
+                  <span>Terms &amp; Conditions</span>
+                </span>
+                <p className="text-[11px] text-slate-400">Account usage, single-user licenses &amp; intellectual property.</p>
+              </div>
+              <span className="text-xs text-slate-500 group-hover:text-indigo-400 transition ml-2">➔</span>
+            </Link>
 
-            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
-              <h4 className="font-bold text-white">2. Payments & Access Duration</h4>
-              <p className="text-slate-400 text-[11px]">
-                All subscription passes (1-Month, 6-Month, 1-Year) grant non-transferable access for the specified duration from the payment confirmation date.
-              </p>
-            </div>
+            <Link
+              href="/privacy"
+              className="p-4 bg-slate-950/80 hover:bg-slate-950 border border-slate-800 hover:border-blue-500/40 rounded-2xl transition group flex items-center justify-between"
+            >
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-white group-hover:text-blue-400 transition flex items-center gap-1.5">
+                  <span>🔒</span>
+                  <span>Privacy Policy</span>
+                </span>
+                <p className="text-[11px] text-slate-400">Data Privacy Act (RA 10173) compliance &amp; personal security.</p>
+              </div>
+              <span className="text-xs text-slate-500 group-hover:text-blue-400 transition ml-2">➔</span>
+            </Link>
 
-            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 space-y-1">
-              <h4 className="font-bold text-white">3. Privacy & Data Protection</h4>
-              <p className="text-slate-400 text-[11px]">
-                We respect your personal privacy. User credentials and study progress metrics are stored securely and never shared with third parties.
-              </p>
-            </div>
+            <Link
+              href="/refund"
+              className="p-4 bg-slate-950/80 hover:bg-slate-950 border border-slate-800 hover:border-emerald-500/40 rounded-2xl transition group flex items-center justify-between"
+            >
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-white group-hover:text-emerald-400 transition flex items-center gap-1.5">
+                  <span>💳</span>
+                  <span>Refund &amp; Cancellation Policy</span>
+                </span>
+                <p className="text-[11px] text-slate-400">Transparent payment rules, digital access &amp; dispute procedures.</p>
+              </div>
+              <span className="text-xs text-slate-500 group-hover:text-emerald-400 transition ml-2">➔</span>
+            </Link>
+
+            <Link
+              href="/cookies"
+              className="p-4 bg-slate-950/80 hover:bg-slate-950 border border-slate-800 hover:border-amber-500/40 rounded-2xl transition group flex items-center justify-between"
+            >
+              <div className="space-y-1">
+                <span className="text-xs font-bold text-white group-hover:text-amber-400 transition flex items-center gap-1.5">
+                  <span>🍪</span>
+                  <span>Cookie &amp; Consent Policy</span>
+                </span>
+                <p className="text-[11px] text-slate-400">Session security, preference storage &amp; consent settings.</p>
+              </div>
+              <span className="text-xs text-slate-500 group-hover:text-amber-400 transition ml-2">➔</span>
+            </Link>
+          </div>
+
+          {/* Official Disclaimer Box */}
+          <div className="p-4 bg-slate-950/90 rounded-2xl border border-slate-800 text-xs text-slate-400 leading-relaxed font-medium space-y-1">
+            <strong className="text-slate-200">Official Disclaimer:</strong>
+            <p className="text-[11px] text-slate-400">
+              {siteConfig.disclaimer.full}
+            </p>
           </div>
         </div>
       )}
