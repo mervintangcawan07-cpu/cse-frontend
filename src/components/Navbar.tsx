@@ -14,18 +14,56 @@ export default function Navbar() {
   const { isOnline, pendingCount, isSyncing, syncNow } = useOfflineSync();
 
   useEffect(() => {
+    let isMounted = true;
+
     async function fetchMe() {
       try {
         const res = await fetch("/api/auth/me");
         if (res.ok) {
           const data = await res.json();
-          setUser(data.user || null);
+          if (isMounted) {
+            if (data.kicked) {
+              setUser(null);
+              if (
+                pathname !== "/login" &&
+                pathname !== "/" &&
+                !pathname.startsWith("/privacy") &&
+                !pathname.startsWith("/terms") &&
+                !pathname.startsWith("/refund") &&
+                !pathname.startsWith("/cookies")
+              ) {
+                window.location.href = "/login?kicked=true";
+                return;
+              }
+            } else {
+              setUser(data.user || null);
+            }
+          }
         }
       } catch (err) {
         // Silently fail if unauthenticated
       }
     }
+
     fetchMe();
+
+    // 🔒 Lightweight periodic session heartbeat & window focus check (every 30s)
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchMe();
+      }
+    }, 30000);
+
+    const onFocus = () => {
+      fetchMe();
+    };
+    window.addEventListener("focus", onFocus);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+    };
   }, [pathname]);
 
   // Close mobile navigation drawer on route change

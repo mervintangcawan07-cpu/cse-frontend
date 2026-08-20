@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/auth/me/route.ts
+// Relative Path: src/app/api/auth/me/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -38,14 +38,20 @@ export async function GET() {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    // 🔒 SINGLE ACTIVE SESSION GUARD
+    // 🔒 SINGLE ACTIVE SESSION GUARD (Concurrent Device Invalidation)
+    const sessionActiveId = String(session.activeSessionId || session.sessionId || "");
     if (
-      session.activeSessionId &&
+      sessionActiveId &&
       user.activeSessionId &&
-      user.activeSessionId !== session.activeSessionId
+      user.activeSessionId !== sessionActiveId
     ) {
       cookieStore.delete("cse_session");
-      return NextResponse.json({ user: null }, { status: 200 });
+      return NextResponse.json({
+        user: null,
+        kicked: true,
+        reason: "CONCURRENT_LOGIN",
+        message: "Your account was logged in from another device.",
+      }, { status: 200 });
     }
 
     const now = new Date();

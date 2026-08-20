@@ -5,6 +5,8 @@ export interface JWTPayload {
   email: string;
   role: "USER" | "ADMIN";
   isPaid: boolean;
+  activeSessionId?: string;
+  sessionId?: string;
   [key: string]: unknown;
 }
 

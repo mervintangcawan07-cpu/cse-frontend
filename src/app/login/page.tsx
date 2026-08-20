@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
+function LoginFormInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isKicked = searchParams.get("kicked") === "true" || searchParams.get("kicked") === "1";
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -13,8 +17,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [resendMessage, setResendMessage] = useState<string | null>(null);
-
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,30 +85,42 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md w-full space-y-6 shadow-2xl text-white">
-        <div>
-          <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-            Welcome Back
-          </span>
-          <h1 className="text-2xl font-black mt-2">Sign In to Your Account</h1>
-          <p className="text-xs text-slate-400 mt-1">Access your mock exams and study analytics.</p>
-        </div>
+    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md w-full space-y-6 shadow-2xl text-white">
+      <div>
+        <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+          Welcome Back
+        </span>
+        <h1 className="text-2xl font-black mt-2">Sign In to Your Account</h1>
+        <p className="text-xs text-slate-400 mt-1">Access your mock exams and study analytics.</p>
+      </div>
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              required
-              placeholder="juan@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3.5 bg-slate-800 border border-slate-700 rounded-xl text-sm outline-none focus:border-blue-500 text-white font-medium"
-            />
+      {/* ⚠️ Kicked by another device alert */}
+      {isKicked && (
+        <div className="p-4 bg-amber-500/10 border border-amber-500/40 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+          <span className="text-amber-400 text-lg leading-none mt-0.5">⚠️</span>
+          <div className="text-xs space-y-1">
+            <p className="font-extrabold text-amber-300">Signed out on this device</p>
+            <p className="text-slate-300 leading-relaxed font-medium">
+              Your account was logged in from another device. To protect account security and prevent unauthorized access, your previous session was ended.
+            </p>
           </div>
+        </div>
+      )}
+
+      <form onSubmit={handleLogin} className="space-y-4">
+        <div>
+          <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
+            Email Address
+          </label>
+          <input
+            type="email"
+            required
+            placeholder="juan@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3.5 bg-slate-800 border border-slate-700 rounded-xl text-sm outline-none focus:border-blue-500 text-white font-medium"
+          />
+        </div>
 
           <div>
             <div className="flex justify-between items-center mb-1">
@@ -187,6 +201,23 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 max-w-md w-full text-center text-slate-400 text-sm font-bold animate-pulse">
+            Loading secure sign-in...
+          </div>
+        </div>
+      }
+    >
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <LoginFormInner />
+      </div>
+    </Suspense>
   );
 }

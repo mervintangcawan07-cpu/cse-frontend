@@ -112,6 +112,7 @@ export async function POST(request: Request) {
       email: user.email,
       role: user.role,
       isPaid: user.isPaid,
+      activeSessionId,
       sessionId: activeSessionId,
     });
 
