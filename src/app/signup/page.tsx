@@ -15,11 +15,15 @@ function SignupForm() {
   const [error, setError] = useState<string | null>(null);
   const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
 
-  // Capture referral code from URL search param e.g. ?ref=GSX-ABC123
+  // Capture referral code from URL search param e.g. ?ref=GSX-ABC123 or localStorage fallback
   useEffect(() => {
-    const refParam = searchParams.get("ref");
-    if (refParam) {
-      const cleanCode = refParam.trim().toUpperCase();
+    let effectiveCode = searchParams.get("ref")?.trim();
+    if (!effectiveCode && typeof window !== "undefined" && window.localStorage) {
+      effectiveCode = localStorage.getItem("cse_ref") || localStorage.getItem("cse_partner_ref") || "";
+    }
+
+    if (effectiveCode) {
+      const cleanCode = effectiveCode.trim();
       setReferralCode(cleanCode);
 
       // Validate referral code

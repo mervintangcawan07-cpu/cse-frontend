@@ -42,3 +42,32 @@ export const siteConfig = {
 };
 
 export type SiteConfig = typeof siteConfig;
+
+/**
+ * Resolves the canonical public site URL.
+ * Priority:
+ * 1. SITE_URL (Server-side canonical override)
+ * 2. NEXT_PUBLIC_SITE_URL (Public build/runtime site URL)
+ * 3. NEXT_PUBLIC_APP_URL
+ * 4. In production: Always defaults to "https://govstudyx.com"
+ * 5. In development: Defaults to "http://localhost:3000"
+ */
+export function getSiteUrl(): string {
+  const envUrl =
+    process.env.SITE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL;
+
+  if (envUrl && envUrl.trim().length > 0) {
+    const cleaned = envUrl.replace(/\[.*?\]|\(|\)|['"]/g, "").trim();
+    if (cleaned.length > 0) {
+      return cleaned.replace(/\/+$/, "");
+    }
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    return "https://govstudyx.com";
+  }
+
+  return "http://localhost:3000";
+}

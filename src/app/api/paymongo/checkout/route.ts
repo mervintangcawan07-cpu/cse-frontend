@@ -4,8 +4,14 @@ import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { acquireLock, releaseLock, getClientIp } from "@/lib/rate-limit";
+import { getSiteUrl } from "@/lib/config/site";
 
 function getOriginUrl(request: Request): string {
+  // If in production, always resolve to canonical public site URL
+  if (process.env.NODE_ENV === "production") {
+    return getSiteUrl();
+  }
+
   const host =
     request.headers.get("x-forwarded-host") ||
     request.headers.get("host") ||

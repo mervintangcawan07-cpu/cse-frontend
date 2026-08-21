@@ -21,6 +21,7 @@ import {
   sendPartnerSetupEmail,
 } from "@/lib/email";
 import { PartnerAuditService } from "./partnerAuditService";
+import { getSiteUrl } from "@/lib/config/site";
 
 export interface CreatePartnerInput {
   name: string;
@@ -538,7 +539,7 @@ export class PartnerService {
         purchasePesos: formatCentavosToPesos(params.customerPaymentCentavos),
         planType: txn?.planType || "Premium",
         campaignSource: effectiveSource,
-        dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/partner-portal/dashboard`,
+        dashboardUrl: `${getSiteUrl()}/partner-portal/dashboard`,
       }).catch((err) =>
         console.error("[PARTNER_COMMISSION_EMAIL_ERROR]", err)
       );
@@ -819,7 +820,7 @@ export class PartnerService {
         canRequestPayout: netAvailableCentavos >= (partner.minPayoutCentavos || 15000),
       },
       channelBreakdown,
-      referralLink: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/p/${partner.slug || displayPartnerId}`,
+      referralLink: `${getSiteUrl()}/p/${partner.slug || displayPartnerId}`,
     };
   }
 

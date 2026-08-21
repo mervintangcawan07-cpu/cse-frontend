@@ -21,7 +21,7 @@ import { calculateReferralReward, formatCentavosToPesos, sanitizeRewardPercentag
 import { evaluateReferralFraud } from "./fraudEngine";
 import { createNotification } from "@/lib/notifications";
 import { encrypt, decrypt } from "@/lib/crypto/encryption";
-import { siteConfig } from "@/lib/config/site";
+import { siteConfig, getSiteUrl } from "@/lib/config/site";
 
 export class ReferralService {
   /**
@@ -891,7 +891,7 @@ export class ReferralService {
 
     // 2. Fetch Code
     const code = await this.getOrCreateReferralCode(userId);
-    const origin = siteConfig.url || "https://govstudyx.com";
+    const origin = getSiteUrl();
     const referralLink = `${origin}/signup?ref=${code}`;
 
     // 3. Config

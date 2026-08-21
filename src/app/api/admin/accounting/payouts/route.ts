@@ -8,6 +8,7 @@ import { LedgerService } from "@/lib/accounting/ledgerService";
 import { sendPartnerPayoutProcessedEmail } from "@/lib/email";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 import { PartnerService } from "@/lib/accounting/partnerService";
+import { getSiteUrl } from "@/lib/config/site";
 
 export async function GET(request: Request) {
   try {
@@ -203,7 +204,7 @@ export async function PATCH(request: Request) {
             amountPesos: formatCentavosToPesos(partnerPayout.amountCentavos),
             payoutMethod: String(partnerPayout.method),
             transactionRef: transactionRef || undefined,
-            dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/partner-portal/payouts`,
+            dashboardUrl: `${getSiteUrl()}/partner-portal/payouts`,
           }).catch((err) => console.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));
         }
       }

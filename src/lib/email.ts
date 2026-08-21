@@ -1,11 +1,11 @@
 import { Resend } from "resend";
+import { getSiteUrl } from "@/lib/config/site";
 
 /**
- * Cleans the base URL to strip any accidental Markdown formatting or quotes
+ * Returns the canonical base URL for all system email links
  */
-function getBaseUrl() {
-  const rawUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  return rawUrl.replace(/\[.*?\]|\(|\)|['"]/g, "").trim() || "http://localhost:3000";
+function getBaseUrl(): string {
+  return getSiteUrl();
 }
 
 /**

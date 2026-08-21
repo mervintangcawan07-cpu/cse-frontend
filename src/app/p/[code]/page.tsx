@@ -2,8 +2,8 @@ import React from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getSiteUrl } from "@/lib/config/site";
 import {
   ShieldCheck,
   Award,
@@ -17,7 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import LiveSocialProofToast from "@/components/marketing/LiveSocialProofToast";
-
+import PartnerAttributionTracker from "@/components/partner/PartnerAttributionTracker";
 
 interface PartnerLandingProps {
   params: Promise<{ code: string }>;
@@ -30,6 +30,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { code } = await params;
   const cleanCode = decodeURIComponent(code).trim();
+  const siteUrl = getSiteUrl();
 
   const partner = await prisma.partner.findFirst({
     where: {
@@ -66,7 +67,7 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
-      url: `https://govstudyx.com/p/${cleanCode}`,
+      url: `${siteUrl}/p/${cleanCode}`,
       siteName: "GovStudyX",
       type: "website",
       locale: "en_PH",
@@ -121,32 +122,11 @@ export default async function PartnerLandingPage({ params, searchParams }: Partn
     notFound();
   }
 
-  // Set Attribution Cookies (30 days)
-  const cookieStore = await cookies();
-  cookieStore.set("cse_partner_ref", partner.code, {
-    httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/",
-  });
-  cookieStore.set("cse_ref", partner.code, {
-    httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/",
-  });
-  cookieStore.set("cse_campaign_source", campaignSource, {
-    httpOnly: false,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/",
-  });
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-slate-950">
+      {/* Client-Side Safe Attribution Tracker (30-day cookie + localStorage) */}
+      <PartnerAttributionTracker partnerCode={partner.code} campaignSource={campaignSource} />
+
       {/* Top Verified Security Bar */}
       <div className="bg-emerald-950/80 border-b border-emerald-800/60 py-2.5 px-4 text-center">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-emerald-300">
