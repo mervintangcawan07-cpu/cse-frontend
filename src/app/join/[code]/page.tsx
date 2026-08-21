@@ -1,4 +1,4 @@
-// Relative Path: src/app/join/[code]/page.tsx
-import PartnerLandingPage from "@/app/p/[code]/page";
+import PartnerLandingPage, { generateMetadata } from "@/app/p/[code]/page";
 
+export { generateMetadata };
 export default PartnerLandingPage;

@@ -1,5 +1,5 @@
-// Relative Path: src/app/p/[code]/page.tsx
 import React from "react";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
@@ -19,6 +19,70 @@ import {
 
 interface PartnerLandingProps {
   params: Promise<{ code: string }>;
+}
+
+export async function generateMetadata(
+  { params }: PartnerLandingProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { code } = await params;
+  const cleanCode = decodeURIComponent(code).trim();
+
+  const partner = await prisma.partner.findFirst({
+    where: {
+      OR: [
+        { slug: { equals: cleanCode, mode: "insensitive" } },
+        { code: { equals: cleanCode, mode: "insensitive" } },
+      ],
+      status: "ACTIVE",
+    },
+    select: {
+      name: true,
+      tagline: true,
+      badgeText: true,
+      description: true,
+    },
+  });
+
+  if (!partner) {
+    return {
+      title: "Civil Service Exam Reviewer 2026 | GovStudyX",
+      description: "Official online practice exam simulator and reviewer for Philippine Civil Service Exam aspirants.",
+    };
+  }
+
+  const title = `Special Invitation from ${partner.name} — GovStudyX Civil Service Review 2026`;
+  const description =
+    partner.tagline ||
+    partner.description ||
+    "Prepare and pass the Philippine Civil Service Exam with 2,500+ updated practice questions, timed mock exams, and item rationalizations.";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://govstudyx.com/p/${cleanCode}`,
+      siteName: "GovStudyX",
+      type: "website",
+      locale: "en_PH",
+      images: [
+        {
+          url: "/icons/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: `GovStudyX Partner: ${partner.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/icons/og-image.png"],
+    },
+  };
 }
 
 export default async function PartnerLandingPage({ params }: PartnerLandingProps) {
