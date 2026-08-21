@@ -26,7 +26,7 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
       const permission = await Notification.requestPermission();
       setPushPermission(permission);
       if (permission === "granted") {
-        new Notification("CSC Reviewer Pro Alerts Enabled", {
+        new Notification("GovStudyX Alerts Enabled", {
           body: "You will receive reminders 15m and 5m before live events begin.",
           icon: "/favicon.ico",
         });

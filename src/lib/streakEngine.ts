@@ -38,7 +38,7 @@ export async function recordUserActivityStreak(userId: string) {
           data: {
             userId,
             title: "🔥 Streak Milestone Reached!",
-            message: `Awesome dedication! You have maintained a ${newCurrent}-day study streak on CSE Reviewer!`,
+            message: `Awesome dedication! You have maintained a ${newCurrent}-day study streak on GovStudyX!`,
             type: "STREAK",
           },
         });

@@ -229,7 +229,7 @@ export const LiveWaitingRoom: React.FC<LiveWaitingRoomProps> = ({
             </div>
 
             <p className="text-xs text-gray-500 mt-6">
-              Civil Service Reviewer Pro � Stay synced. Keep focused.
+              GovStudyX Study Room • Stay synced. Keep focused.
             </p>
           </div>
         </main>

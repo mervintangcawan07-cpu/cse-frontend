@@ -136,7 +136,7 @@ export async function POST(request: Request) {
             send_email_receipt: true,
             show_description: true,
             show_line_items: true,
-            description: `Civil Service Exam Reviewer PRO - ${plan.name}${appliedDiscountNote}`,
+            description: `GovStudyX PRO - ${plan.name}${appliedDiscountNote}`,
             line_items: [
               {
                 currency: "PHP",

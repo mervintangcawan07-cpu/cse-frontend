@@ -10,10 +10,20 @@ function getBaseUrl(): string {
 
 /**
  * Gets a clean, sanitized 'from' address without quotes
+ * Defaults to "GovStudyX <noreply@govstudyx.com>" (never onboarding@resend.dev)
  */
-function getFromEmail() {
+export function getFromEmail(): string {
   const envFrom = process.env.EMAIL_FROM?.replace(/['"]/g, "").trim();
-  return envFrom || "onboarding@resend.dev";
+  return envFrom || "GovStudyX <noreply@govstudyx.com>";
+}
+
+/**
+ * Gets a clean, sanitized 'reply-to' address without quotes
+ * Defaults to "govstudyx@gmail.com"
+ */
+export function getReplyToEmail(): string {
+  const envReplyTo = process.env.EMAIL_REPLY_TO?.replace(/['"]/g, "").trim();
+  return envReplyTo || "govstudyx@gmail.com";
 }
 
 /**
@@ -23,6 +33,32 @@ function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return null;
   return new Resend(apiKey);
+}
+
+/**
+ * Standardized Light-Theme Email Footer for GovStudyX Student & User Emails
+ */
+function getLightEmailFooter(): string {
+  const siteUrl = getBaseUrl();
+  return `
+    <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; text-align: center;">
+      <p style="margin: 0 0 4px; font-weight: bold; color: #64748b;">GovStudyX</p>
+      <p style="margin: 0; line-height: 1.4;">Independent Philippine Civil Service Exam Preparation Platform • <a href="${siteUrl}" style="color: #64748b; text-decoration: none;">govstudyx.com</a></p>
+    </div>
+  `;
+}
+
+/**
+ * Standardized Dark-Theme Email Footer for GovStudyX Partner & Accounting Emails
+ */
+function getDarkEmailFooter(): string {
+  const siteUrl = getBaseUrl();
+  return `
+    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #334155; font-size: 11px; color: #64748b; text-align: center;">
+      <p style="margin: 0 0 4px; font-weight: bold; color: #94a3b8;">GovStudyX Partner Ecosystem</p>
+      <p style="margin: 0; line-height: 1.4;">Independent Philippine Civil Service Exam Preparation Platform • <a href="${siteUrl}" style="color: #94a3b8; text-decoration: none;">govstudyx.com</a></p>
+    </div>
+  `;
 }
 
 /**
@@ -43,12 +79,13 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
   try {
     const { data, error } = await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: toEmail,
-      subject: "Verify Your Email Address - CSE Reviewer",
+      subject: "Verify Your Email Address — GovStudyX",
       html: `
-        <div style="font-family: sans-serif; padding: 24px; background-color: #f8fafc; color: #0f172a; border-radius: 16px;">
+        <div style="font-family: sans-serif; padding: 24px; background-color: #f8fafc; color: #0f172a; border-radius: 16px; max-width: 560px;">
           <h2 style="color: #2563eb; margin-top: 0;">Verify Your Email Address</h2>
-          <p style="font-size: 14px; color: #334155;">Thank you for registering for the Civil Service Exam Reviewer! Please click the button below to verify your email address and activate your account:</p>
+          <p style="font-size: 14px; color: #334155;">Thank you for registering with GovStudyX! Please click the button below to verify your email address and activate your account:</p>
           <div style="margin: 24px 0;">
             <a href="${verifyLink}" style="display: inline-block; padding: 14px 28px; background-color: #2563eb; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 12px; font-size: 14px;">Verify Email Address</a>
           </div>
@@ -56,6 +93,7 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
             If the button above doesn't work, copy and paste this link into your browser:<br/>
             <a href="${verifyLink}" style="color: #2563eb;">${verifyLink}</a>
           </p>
+          ${getLightEmailFooter()}
         </div>
       `,
     });
@@ -88,12 +126,13 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
   try {
     const { data, error } = await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: toEmail,
-      subject: "Password Reset Request - CSE Reviewer",
+      subject: "Password Reset Request — GovStudyX",
       html: `
-        <div style="font-family: sans-serif; padding: 24px; background-color: #f8fafc; color: #0f172a; border-radius: 16px;">
+        <div style="font-family: sans-serif; padding: 24px; background-color: #f8fafc; color: #0f172a; border-radius: 16px; max-width: 560px;">
           <h2 style="color: #2563eb; margin-top: 0;">Password Reset Request</h2>
-          <p style="font-size: 14px; color: #334155;">You requested a password reset for your Civil Service Exam Reviewer account. Click the button below to set a new password:</p>
+          <p style="font-size: 14px; color: #334155;">You requested a password reset for your GovStudyX account. Click the button below to set a new password:</p>
           <div style="margin: 24px 0;">
             <a href="${resetLink}" style="display: inline-block; padding: 14px 28px; background-color: #0f172a; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 12px; font-size: 14px;">Reset Password</a>
           </div>
@@ -101,6 +140,10 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
             If the button above doesn't work, copy and paste this link into your browser:<br/>
             <a href="${resetLink}" style="color: #2563eb;">${resetLink}</a>
           </p>
+          <p style="font-size: 11px; color: #94a3b8; margin-top: 24px;">
+            This link will expire in 1 hour. If you didn't request this reset, you can safely ignore this email.
+          </p>
+          ${getLightEmailFooter()}
         </div>
       `,
     });
@@ -128,7 +171,7 @@ export async function sendPartnerCommissionAlertEmail(params: {
   dashboardUrl?: string;
 }) {
   const resend = getResendClient();
-  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner/dashboard`;
+  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/dashboard`;
   const cleanCommission = params.commissionPesos.replace(/^₱\s*/, "");
   const cleanPurchase = params.purchasePesos.replace(/^₱\s*/, "");
   const channelLabel =
@@ -176,6 +219,7 @@ export async function sendPartnerCommissionAlertEmail(params: {
         <a href="${dashboardUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">View Your Earnings Dashboard</a>
       </div>
       <p style="font-size: 11px; color: #475569;">Commissions are held for your configured holding period before becoming eligible for withdrawal. Minimum payout threshold applies.</p>
+      ${getDarkEmailFooter()}
     </div>
   `;
 
@@ -196,6 +240,7 @@ export async function sendPartnerCommissionAlertEmail(params: {
   try {
     await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `💰 You earned ₱${cleanCommission} commission — GovStudyX Partner`,
       html,
@@ -218,14 +263,14 @@ export async function sendPartnerApplicationApprovedEmail(params: {
   initialPassword: string;
 }) {
   const resend = getResendClient();
-  const loginUrl = params.loginUrl || `${getBaseUrl()}/partner/login`;
+  const loginUrl = params.loginUrl || `${getBaseUrl()}/partner-portal/login`;
   const referralLink = `${getBaseUrl()}/p/${params.partnerSlug || params.partnerCode}`;
 
   const html = `
     <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
       <div style="background: linear-gradient(135deg, #7c3aed, #4f46e5); padding: 20px 24px; border-radius: 12px; margin-bottom: 20px;">
         <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🎉 Welcome to the GovStudyX Partner Program!</h2>
-        <p style="margin: 6px 0 0; color: #e0e7ff; font-size: 13px;">Official Educational Partner — Philippines Civil Service Exam</p>
+        <p style="margin: 6px 0 0; color: #e0e7ff; font-size: 13px;">Official Educational Partner — Philippine Civil Service Exam Preparation</p>
       </div>
       <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.applicantName}</strong>,</p>
       <p style="font-size: 14px; color: #94a3b8;">Congratulations! Your application for <strong style="color: #a78bfa;">${params.organizationName}</strong> has been reviewed and officially approved.</p>
@@ -256,6 +301,7 @@ export async function sendPartnerApplicationApprovedEmail(params: {
         <a href="${loginUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Access Your Partner Dashboard</a>
       </div>
       <p style="font-size: 11px; color: #475569;">Please change your password immediately after your first login. Your partner referral link is already active and tracked automatically.</p>
+      ${getDarkEmailFooter()}
     </div>
   `;
 
@@ -267,6 +313,7 @@ export async function sendPartnerApplicationApprovedEmail(params: {
   try {
     await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `🎉 You're Approved! Welcome to GovStudyX Partner Program — ${params.organizationName}`,
       html,
@@ -288,7 +335,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
   dashboardUrl?: string;
 }) {
   const resend = getResendClient();
-  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner/dashboard`;
+  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/payouts`;
   const cleanAmount = params.amountPesos.replace(/^₱\s*/, "");
   const methodLabel =
     params.payoutMethod === "GCASH"
@@ -322,6 +369,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
         <a href="${dashboardUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #0891b2, #0284c7); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">View Payout History</a>
       </div>
       <p style="font-size: 11px; color: #475569;">Allow 1–3 business days for the amount to fully reflect on your ${methodLabel} account. Contact us if you have not received it within 5 business days.</p>
+      ${getDarkEmailFooter()}
     </div>
   `;
 
@@ -333,6 +381,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
   try {
     await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `💸 Your ₱${cleanAmount} commission payout has been sent — GovStudyX`,
       html,
@@ -371,6 +420,7 @@ export async function sendPartnerSetupEmail(params: {
         <a href="${setupUrl}" style="color: #34d399;">${setupUrl}</a>
       </p>
       <p style="font-size: 11px; color: #475569;">This setup link is valid for 7 days. If you did not expect this email, please ignore it.</p>
+      ${getDarkEmailFooter()}
     </div>
   `;
 
@@ -385,6 +435,7 @@ export async function sendPartnerSetupEmail(params: {
   try {
     await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `🎓 GovStudyX Partner Account Activation — ${params.partnerId}`,
       html,
@@ -422,6 +473,7 @@ export async function sendPartnerPasswordResetEmail(params: {
         <a href="${resetUrl}" style="color: #34d399;">${resetUrl}</a>
       </p>
       <p style="font-size: 11px; color: #475569;">This link will expire in 1 hour. If you did not request this, please contact security immediately.</p>
+      ${getDarkEmailFooter()}
     </div>
   `;
 
@@ -436,6 +488,7 @@ export async function sendPartnerPasswordResetEmail(params: {
   try {
     await resend.emails.send({
       from: getFromEmail(),
+      replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `🔒 Password Reset Request — GovStudyX Partner Portal`,
       html,

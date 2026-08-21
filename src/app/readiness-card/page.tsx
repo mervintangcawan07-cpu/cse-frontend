@@ -145,7 +145,7 @@ export default function ReadinessCardPage() {
     // Footer Branding
     ctx.fillStyle = "#64748b";
     ctx.font = "bold 24px sans-serif";
-    ctx.fillText("Verified Progress • CSE Reviewer Platform", 540, 970);
+    ctx.fillText("Verified Progress • GovStudyX Platform", 540, 970);
 
     return canvas.toDataURL("image/png");
   };
@@ -369,7 +369,7 @@ export default function ReadinessCardPage() {
             </div>
 
             <span className="text-[10px] text-center text-slate-500 font-bold block">
-              Verified Progress • CSE Reviewer Platform
+              Verified Progress • GovStudyX Platform
             </span>
           </div>
         </div>
