@@ -29,6 +29,7 @@ import {
   Layers,
   Calendar,
   Lock,
+  ExternalLink,
 } from "lucide-react";
 import {
   WaterfallSummary,
@@ -44,6 +45,7 @@ export default function AdminAccountingPage() {
     | "ledger"
     | "transactions"
     | "partners"
+    | "applications"
     | "taxes_deductions"
     | "payouts"
     | "reconciliation"
@@ -95,6 +97,36 @@ export default function AdminAccountingPage() {
   const [settings, setSettings] = useState<FinancialSettingsConfig | null>(null);
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsMsg, setSettingsMsg] = useState<string | null>(null);
+
+  // Partner Applications State
+  const [applications, setApplications] = useState<any[]>([]);
+  const [pendingAppsCount, setPendingAppsCount] = useState(0);
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
+  const [appStatusFilter, setAppStatusFilter] = useState("ALL");
+  const [selectedAppForAction, setSelectedAppForAction] = useState<any | null>(null);
+  const [appActionType, setAppActionType] = useState<"APPROVE" | "REJECT">("APPROVE");
+  const [appRateInput, setAppRateInput] = useState("10.0");
+  const [appSlugInput, setAppSlugInput] = useState("");
+  const [appPasswordInput, setAppPasswordInput] = useState("GovStudyX2026!");
+  const [appAdminNotes, setAppAdminNotes] = useState("");
+  const [processingAppAction, setProcessingAppAction] = useState(false);
+
+  // Fetch Applications
+  const fetchApplications = useCallback(async () => {
+    setApplicationsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/accounting/applications?status=${appStatusFilter}`);
+      if (res.ok) {
+        const json = await res.json();
+        setApplications(json.applications || []);
+        setPendingAppsCount(json.pendingCount || 0);
+      }
+    } catch (err) {
+      console.error("Failed to load applications:", err);
+    } finally {
+      setApplicationsLoading(false);
+    }
+  }, [appStatusFilter]);
 
   // Fetch Overview Waterfall
   const fetchOverview = useCallback(async () => {
@@ -220,7 +252,53 @@ export default function AdminAccountingPage() {
     fetchPayouts();
     fetchTaxesAndDeductions();
     fetchSettings();
-  }, [fetchOverview, fetchLedger, fetchPartners, fetchPayouts, fetchTaxesAndDeductions, fetchSettings]);
+    fetchApplications();
+  }, [
+    fetchOverview,
+    fetchLedger,
+    fetchPartners,
+    fetchPayouts,
+    fetchTaxesAndDeductions,
+    fetchSettings,
+    fetchApplications,
+  ]);
+
+  // Handle Partner Application Action (Approve / Reject)
+  const handleProcessApplicationAction = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedAppForAction) return;
+    setProcessingAppAction(true);
+    try {
+      const res = await fetch(
+        `/api/admin/accounting/applications/${selectedAppForAction.id}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: appActionType,
+            commissionRate: appRateInput,
+            customSlug: appSlugInput || undefined,
+            initialPassword: appPasswordInput,
+            adminNotes: appAdminNotes,
+          }),
+        }
+      );
+      const json = await res.json();
+      if (res.ok && json.success) {
+        alert(json.message);
+        setSelectedAppForAction(null);
+        setAppAdminNotes("");
+        await fetchApplications();
+        await fetchPartners();
+      } else {
+        alert(json.error || "Failed to process application.");
+      }
+    } catch (err) {
+      alert("Network error.");
+    } finally {
+      setProcessingAppAction(false);
+    }
+  };
 
   // Handle Payout Fulfillment Submit
   const handleProcessPayoutSubmit = async (e: React.FormEvent) => {
@@ -318,11 +396,9 @@ export default function AdminAccountingPage() {
             >
               <option value="all" className="bg-slate-900">All Time</option>
               <option value="today" className="bg-slate-900">Today</option>
-              <option value="yesterday" className="bg-slate-900">Yesterday</option>
-              <option value="this_week" className="bg-slate-900">This Week</option>
+              <option value="7d" className="bg-slate-900">Last 7 Days</option>
+              <option value="30d" className="bg-slate-900">Last 30 Days</option>
               <option value="this_month" className="bg-slate-900">This Month</option>
-              <option value="last_month" className="bg-slate-900">Last Month</option>
-              <option value="this_year" className="bg-slate-900">This Year</option>
             </select>
           </div>
 
@@ -342,6 +418,10 @@ export default function AdminAccountingPage() {
           { id: "overview", label: "Waterfall Overview" },
           { id: "ledger", label: "General Ledger" },
           { id: "partners", label: `Partners (${partners.length})` },
+          {
+            id: "applications",
+            label: `Applications (${pendingAppsCount} Pending)`,
+          },
           { id: "taxes_deductions", label: "Taxes & Deductions" },
           { id: "payouts", label: `Payouts Queue (${payouts.length})` },
           { id: "reconciliation", label: "Reconciliation" },
@@ -350,13 +430,16 @@ export default function AdminAccountingPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`px-4 py-2 rounded-xl transition cursor-pointer ${
+            className={`px-4 py-2 rounded-xl transition cursor-pointer flex items-center gap-1.5 ${
               activeTab === tab.id
                 ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20"
                 : "text-slate-400 hover:text-white"
             }`}
           >
-            {tab.label}
+            {tab.id === "applications" && pendingAppsCount > 0 && (
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            )}
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>
@@ -814,6 +897,161 @@ export default function AdminAccountingPage() {
                     <Eye className="w-3.5 h-3.5" />
                     <span>View Financial Statement ➔</span>
                   </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB: PARTNER APPLICATIONS QUEUE */}
+      {/* ========================================================================= */}
+      {activeTab === "applications" && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-base font-black text-white">Partner &amp; Creator Applications</h3>
+              <p className="text-xs text-slate-400">
+                Incoming public applications from content creators, review centers, and educational page admins.
+              </p>
+            </div>
+
+            {/* Status Filter */}
+            <div className="flex items-center gap-2">
+              {(["ALL", "PENDING", "APPROVED", "REJECTED"] as const).map((st) => (
+                <button
+                  key={st}
+                  onClick={() => setAppStatusFilter(st)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                    appStatusFilter === st
+                      ? "bg-emerald-600 text-white shadow-lg"
+                      : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {applicationsLoading ? (
+            <div className="py-20 text-center text-xs text-slate-400">Loading applications...</div>
+          ) : !applications.length ? (
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-12 text-center space-y-3">
+              <div className="text-3xl">📝</div>
+              <h4 className="text-base font-black text-white">No applications found</h4>
+              <p className="text-xs text-slate-400 max-w-md mx-auto">
+                Applications submitted via <code>/partner/apply</code> will appear here for instant review and 1-click onboarding.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {applications.map((app) => (
+                <div
+                  key={app.id}
+                  className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-xl flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                        {app.type.replace("_", " ")}
+                      </span>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
+                          app.status === "APPROVED"
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                            : app.status === "PENDING"
+                            ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                            : "bg-rose-500/10 text-rose-400 border-rose-500/30"
+                        }`}
+                      >
+                        {app.status}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="text-base font-black text-white">{app.organizationName}</h4>
+                      <p className="text-xs text-slate-400">
+                        Applicant: <strong className="text-slate-200">{app.applicantName}</strong> ({app.email})
+                      </p>
+                      {app.phone && (
+                        <p className="text-[11px] text-slate-400 font-mono">Phone: {app.phone}</p>
+                      )}
+                    </div>
+
+                    <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800 text-xs space-y-2 font-mono">
+                      <div className="flex justify-between items-center text-slate-400">
+                        <span>Social Channel:</span>
+                        <a
+                          href={app.socialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:underline flex items-center gap-1 max-w-[180px] truncate"
+                        >
+                          <span className="truncate">{app.socialUrl}</span>
+                          <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                        </a>
+                      </div>
+                      <div className="flex justify-between text-slate-400">
+                        <span>Audience Size:</span>
+                        <span className="font-bold text-white">{app.audienceSize || "Not specified"}</span>
+                      </div>
+                      <div className="flex justify-between text-slate-400">
+                        <span>Desired Slug:</span>
+                        <span className="font-bold text-emerald-400">
+                          {app.proposedSlug ? `/p/${app.proposedSlug}` : "Auto-generated"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {app.pitchReason && (
+                      <div className="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-xs text-slate-300">
+                        <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">
+                          Promotion Plan / Pitch:
+                        </span>
+                        <p className="text-slate-400 leading-relaxed italic">"{app.pitchReason}"</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                    <span className="text-[10px] text-slate-500 font-mono">
+                      Applied {new Date(app.createdAt).toLocaleDateString()}
+                    </span>
+
+                    {app.status === "PENDING" ? (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedAppForAction(app);
+                            setAppActionType("REJECT");
+                            setAppAdminNotes("");
+                          }}
+                          className="px-3 py-1.5 bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 rounded-xl text-xs font-bold transition cursor-pointer"
+                        >
+                          Reject
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedAppForAction(app);
+                            setAppActionType("APPROVE");
+                            setAppSlugInput(app.proposedSlug || "");
+                            setAppRateInput("10.0");
+                            setAppPasswordInput("GovStudyX2026!");
+                            setAppAdminNotes("");
+                          }}
+                          className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer shadow-lg shadow-emerald-500/20"
+                        >
+                          1-Click Approve
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-slate-400 font-medium">
+                        {app.status === "APPROVED" ? "✓ Partner Active" : "✕ Application Closed"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -1548,6 +1786,140 @@ export default function AdminAccountingPage() {
                   className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer shadow-lg disabled:opacity-50"
                 >
                   {processingPayout ? "Processing..." : "Confirm & Post to Ledger"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* PARTNER APPLICATION ACTION MODAL (APPROVE / REJECT) */}
+      {/* ========================================================================= */}
+      {selectedAppForAction && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full space-y-6 shadow-2xl text-white">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div>
+                <h3 className="text-lg font-black">
+                  {appActionType === "APPROVE" ? "1-Click Approve Partner" : "Reject Application"}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  Applicant: <strong className="text-white">{selectedAppForAction.organizationName}</strong>
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedAppForAction(null)}
+                className="text-slate-400 hover:text-white font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleProcessApplicationAction} className="space-y-4 text-xs">
+              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 font-mono">
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Applicant:</span>
+                  <span className="text-white font-bold">{selectedAppForAction.applicantName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Email:</span>
+                  <span className="text-white">{selectedAppForAction.email}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Audience:</span>
+                  <span className="text-emerald-400 font-bold">{selectedAppForAction.audienceSize || "N/A"}</span>
+                </div>
+              </div>
+
+              {appActionType === "APPROVE" ? (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold uppercase text-slate-400 mb-1">
+                        Commission Rate (%)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        required
+                        value={appRateInput}
+                        onChange={(e) => setAppRateInput(e.target.value)}
+                        className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl font-mono text-white outline-none focus:border-emerald-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold uppercase text-slate-400 mb-1">
+                        Custom URL Slug
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. prof-juan"
+                        value={appSlugInput}
+                        onChange={(e) => setAppSlugInput(e.target.value)}
+                        className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl font-mono text-emerald-300 outline-none focus:border-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                      Initial Portal Password
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={appPasswordInput}
+                      onChange={(e) => setAppPasswordInput(e.target.value)}
+                      className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl font-mono text-white outline-none focus:border-emerald-500"
+                    />
+                    <p className="text-[10px] text-slate-500 mt-1">
+                      Provide this password to the creator so they can log in at <code>/partner/login</code>.
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-300 text-xs">
+                  Are you sure you want to reject this application? You can provide rejection notes below.
+                </div>
+              )}
+
+              <div>
+                <label className="block font-bold uppercase text-slate-400 mb-1">
+                  Internal Admin Notes
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Optional review notes..."
+                  value={appAdminNotes}
+                  onChange={(e) => setAppAdminNotes(e.target.value)}
+                  className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedAppForAction(null)}
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={processingAppAction}
+                  className={`px-6 py-2.5 rounded-xl font-black uppercase tracking-wider transition cursor-pointer shadow-lg disabled:opacity-50 ${
+                    appActionType === "APPROVE"
+                      ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-emerald-500/20"
+                      : "bg-rose-600 hover:bg-rose-500 text-white shadow-rose-600/20"
+                  }`}
+                >
+                  {processingAppAction
+                    ? "Processing..."
+                    : appActionType === "APPROVE"
+                    ? "Confirm & Create Partner Account"
+                    : "Confirm Rejection"}
                 </button>
               </div>
             </form>

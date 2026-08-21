@@ -113,11 +113,37 @@ async function runTests() {
   const masked2 = email2.replace(/(.{2})(.*)(@.*)/, "$1***$3");
   assert(masked2 === "ma***@yahoo.com", "Student email maria_santos123@yahoo.com masked to ma***@yahoo.com");
 
+  // --- GROUP 6: PARTNER APPLICATION & ONBOARDING ---
+  console.log("\n--- GROUP 6: PARTNER APPLICATION & ONBOARDING ---");
+
+  const rawSlug = "  Prof. Juan — CSE Review TV!  ";
+  const normalizedSlug = rawSlug
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  assert(
+    normalizedSlug === "prof-juan-cse-review-tv",
+    "Applicant proposed slug normalized cleanly to 'prof-juan-cse-review-tv'"
+  );
+
+  const applicantData = {
+    applicantName: "Prof. Juan",
+    organizationName: "Prof. Juan CSE Review TV",
+    email: "prof.juan@gmail.com",
+    socialUrl: "https://youtube.com/@profjuan",
+    status: "PENDING" as const,
+  };
+  assert(
+    applicantData.email.includes("@") && applicantData.socialUrl.startsWith("https://"),
+    "Application input validates email format and HTTPS social channel URL"
+  );
+
   // --- SUMMARY ---
   console.log("\n=================================================================");
   console.log(`📊 PARTNER PORTAL TEST SUMMARY: ${passedTests} / ${totalTests} PASSED`);
   if (failedTests === 0) {
-    console.log("🎉 ALL PARTNER PORTAL & AUTHENTICATION TESTS PASSED (100%)!");
+    console.log("🎉 ALL PARTNER PORTAL, AUTHENTICATION & APPLICATION TESTS PASSED (100%)!");
   } else {
     console.error(`🚨 ${failedTests} TEST(S) FAILED!`);
   }

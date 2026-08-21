@@ -1618,4 +1618,34 @@ model FinancialSetting {
   updatedAt   DateTime @updatedAt
 }
 
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model PartnerApplication {
+  id               String            @id @default(cuid())
+  applicantName    String
+  organizationName String
+  email            String
+  phone            String?
+  type             PartnerType       @default(CONTENT_CREATOR)
+  socialUrl        String            // Facebook Page, YouTube, TikTok channel URL
+  audienceSize     String?           // e.g. "10,000 - 50,000 followers"
+  proposedSlug     String?           // e.g. "prof-juan"
+  pitchReason      String?           @db.Text
+  status           ApplicationStatus @default(PENDING)
+  adminNotes       String?           @db.Text
+  reviewedBy       String?
+  reviewedAt       DateTime?
+  createdPartnerId String?           // Populated upon approval
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt(sort: Desc)])
+}
+
 
