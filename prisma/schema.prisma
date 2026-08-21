@@ -1652,4 +1652,61 @@ model PartnerApplication {
   @@index([createdAt(sort: Desc)])
 }
 
+// ─── Institutional / B2B Bulk Voucher Engine ──────────────────────────────────
 
+enum VoucherStatus {
+  ACTIVE
+  FULLY_REDEEMED
+  EXPIRED
+  REVOKED
+}
+
+enum VoucherCodeStatus {
+  UNUSED
+  REDEEMED
+  REVOKED
+}
+
+/// A batch of pre-generated one-time access voucher codes sold to a school or institution.
+model InstitutionalVoucherBatch {
+  id               String        @id @default(cuid())
+  batchRef         String        @unique // e.g. "BATCH-PNP-2026-001"
+  institutionName  String        // e.g. "PNP Regional Training Center – Davao"
+  contactName      String?
+  contactEmail     String?
+  planType         String        @default("ANNUAL") // matches Transaction.planType values
+  durationDays     Int           @default(365)      // access duration per code
+  totalCodes       Int
+  redeemedCount    Int           @default(0)
+  pricePerCodeCentavos Int       @default(0) // 0 = sponsored / free batch
+  status           VoucherStatus @default(ACTIVE)
+  notes            String?       @db.Text
+  expiresAt        DateTime?     // batch-level expiry; individual codes inherit this
+  createdBy        String?       // admin user id
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  codes InstitutionalVoucherCode[]
+
+  @@index([status])
+  @@index([institutionName])
+  @@index([createdAt(sort: Desc)])
+}
+
+/// A single one-time-use voucher code within an InstitutionalVoucherBatch.
+model InstitutionalVoucherCode {
+  id           String            @id @default(cuid())
+  batchId      String
+  code         String            @unique // e.g. "PNP-XKJZ-9192"
+  status       VoucherCodeStatus @default(UNUSED)
+  redeemedBy   String?           // User.id who redeemed
+  redeemedAt   DateTime?
+  accessUntil  DateTime?         // computed on redemption: now() + batch.durationDays
+  createdAt    DateTime          @default(now())
+
+  batch InstitutionalVoucherBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId, status])
+  @@index([redeemedBy])
+  @@index([code])
+}

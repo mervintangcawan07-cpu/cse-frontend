@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { decrypt } from "@/lib/crypto/encryption";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 import { LedgerService } from "@/lib/accounting/ledgerService";
+import { sendPartnerPayoutProcessedEmail } from "@/lib/email";
+
 
 export async function GET(request: Request) {
   try {
@@ -152,6 +154,22 @@ export async function PATCH(request: Request) {
           referenceNumber: transactionRef,
           adminUserId: user.id,
         });
+
+        // Fire payout notification email (non-blocking)
+        const partnerRecord = await prisma.partner.findUnique({
+          where: { id: partnerPayout.partnerId },
+          select: { name: true, contactEmail: true },
+        }).catch(() => null);
+
+        if (partnerRecord?.contactEmail) {
+          sendPartnerPayoutProcessedEmail({
+            toEmail: partnerRecord.contactEmail,
+            partnerName: partnerRecord.name,
+            amountPesos: formatCentavosToPesos(partnerPayout.amountCentavos),
+            payoutMethod: String(partnerPayout.method),
+            transactionRef: transactionRef || undefined,
+          }).catch((err) => console.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));
+        }
       }
     }
 

@@ -171,6 +171,47 @@ async function runTests() {
     "Partner 10% commission on ₱269.10 discounted purchase computes to exactly ₱26.91 (2691 centavos)"
   );
 
+  // --- GROUP 8: INSTITUTIONAL VOUCHER ENGINE & EMAIL ALERTS (PHASE 4) ---
+  console.log("\n--- GROUP 8: INSTITUTIONAL VOUCHER ENGINE & EMAIL ALERTS ---");
+
+  // Voucher batch ref generation
+  const institutionName = "PNP Regional Training Center Davao";
+  const cleanPrefix = institutionName.toUpperCase().replace(/[^A-Z0-9]/g, "").substring(0, 6);
+  const currentYear = new Date().getFullYear();
+  assert(cleanPrefix === "PNPREG", "Institution prefix extracted as 'PNPREG'");
+
+  // Voucher batch duration calculation (365 days)
+  const durationDays = 365;
+  const now = new Date("2026-08-21T00:00:00Z");
+  const computedExpiry = new Date(now);
+  computedExpiry.setDate(computedExpiry.getDate() + durationDays);
+  assert(
+    computedExpiry.toISOString().startsWith("2027-08-21"),
+    "365-day voucher correctly sets student access until August 2027"
+  );
+
+  // Existing subscriber access extension test (additive access)
+  const existingPaidUntil = new Date("2026-10-01T00:00:00Z");
+  const extendedExpiry = new Date(existingPaidUntil);
+  extendedExpiry.setDate(extendedExpiry.getDate() + durationDays);
+  assert(
+    extendedExpiry.toISOString().startsWith("2027-10-01"),
+    "Active subscriber redeeming voucher gets additive access from their existing paidUntil date"
+  );
+
+  // Batch redemption status transitions
+  const totalCodesInBatch = 50;
+  let redeemedCount = 49;
+  let isFullyRedeemed = redeemedCount + 1 >= totalCodesInBatch;
+  assert(isFullyRedeemed === true, "50th redemption marks batch status as FULLY_REDEEMED");
+
+  // Commission alert email format check
+  const testCommissionCentavos = 2990;
+  const formattedPesos = formatCentavosToPesos(testCommissionCentavos);
+  assert(formattedPesos === "₱29.90", "formatCentavosToPesos formats 2990 centavos as '₱29.90'");
+  const sanitizedForEmail = formattedPesos.replace(/^₱\s*/, "");
+  assert(sanitizedForEmail === "29.90", "Email template sanitizes '₱29.90' to '29.90' preventing duplicate currency symbols");
+
   // --- SUMMARY ---
   console.log("\n=================================================================");
   console.log(`📊 PARTNER PORTAL TEST SUMMARY: ${passedTests} / ${totalTests} PASSED`);

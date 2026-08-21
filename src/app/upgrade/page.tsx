@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/upgrade/page.tsx
+// Relative Path: src/app/upgrade/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -94,6 +94,13 @@ export default function UpgradePage() {
         >
           Pay ₱499 via PayMongo
         </LoadingButton>
+
+        <a
+          href="/redeem"
+          className="block w-full text-center text-xs font-semibold text-violet-500 hover:text-violet-400 transition py-1"
+        >
+          🎟️ Have a school or institutional voucher? Redeem it here
+        </a>
 
         <button
           type="button"

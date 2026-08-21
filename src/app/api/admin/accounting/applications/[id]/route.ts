@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { PartnerService } from "@/lib/accounting/partnerService";
+import { sendPartnerApplicationApprovedEmail } from "@/lib/email";
+
 
 export async function POST(
   request: Request,
@@ -79,6 +81,16 @@ export async function POST(
       });
 
       const partnerLandingUrl = `https://govstudyx.com/p/${partner.slug || partner.code}`;
+
+      // Fire welcome onboarding email (non-blocking)
+      sendPartnerApplicationApprovedEmail({
+        toEmail: application.email,
+        applicantName: application.applicantName,
+        organizationName: application.organizationName,
+        partnerCode: partner.code,
+        partnerSlug: partner.slug,
+        initialPassword: effectivePassword,
+      }).catch((err) => console.error("[PARTNER_APPROVAL_EMAIL_ERROR]", err));
 
       return NextResponse.json({
         success: true,

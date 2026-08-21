@@ -13,6 +13,8 @@ import {
 } from "./money";
 import { LedgerService } from "./ledgerService";
 import { encrypt, decrypt } from "@/lib/crypto/encryption";
+import { sendPartnerCommissionAlertEmail } from "@/lib/email";
+
 
 import bcrypt from "bcryptjs";
 
@@ -315,6 +317,26 @@ export class PartnerService {
       partnerId: partner.id,
       amountCentavos: calc.commissionAmountCentavos,
     });
+
+    // Fire real-time commission alert email (non-blocking)
+    if (partner.contactEmail) {
+      // Look up transaction plan type for context
+      const txn = await prisma.transaction.findUnique({
+        where: { id: params.transactionId },
+        select: { planType: true },
+      }).catch(() => null);
+
+      sendPartnerCommissionAlertEmail({
+        toEmail: partner.contactEmail,
+        partnerName: partner.name,
+        commissionPesos: formatCentavosToPesos(calc.commissionAmountCentavos),
+        purchasePesos: formatCentavosToPesos(params.customerPaymentCentavos),
+        planType: txn?.planType || "Premium",
+        campaignSource: effectiveSource,
+      }).catch((err) =>
+        console.error("[PARTNER_COMMISSION_EMAIL_ERROR]", err)
+      );
+    }
 
     return commission;
   }
