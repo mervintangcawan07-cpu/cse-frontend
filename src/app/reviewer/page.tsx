@@ -1,9 +1,12 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Printer } from "lucide-react";
 import ProTipBullets from "@/components/notes/ProTipBullets";
+import AudioSpeechButton from "@/components/common/AudioSpeechButton";
 import { fetchWithClientCache } from "@/lib/clientCache";
+
 
 interface StudyNote {
   id: string;
@@ -91,22 +94,32 @@ export default function ReviewerPage() {
     <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
       <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
         {/* Header - Seamlessly integrated */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-4 sm:p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-4 sm:p-6 md:p-8 print:hidden">
           <div>
-            <h1 className="text-3xl font-extrabold">Study Notes & Reviewer</h1>
-            <p className="text-slate-400 text-sm mt-1">Read core principles and formulas.</p>
+            <h1 className="text-3xl font-extrabold">Study Notes &amp; Reviewer</h1>
+            <p className="text-slate-400 text-sm mt-1">Read core principles, formulas, and law summaries.</p>
           </div>
-          <Link
-            href="/dashboard"
-            className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm rounded-xl transition border border-slate-700"
-          >
-            &larr; Dashboard
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => window.print()}
+              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer"
+              title="Print or Save as Clean PDF Cheat Sheet"
+            >
+              <Printer className="w-4 h-4" />
+              <span>Print Cheat Sheet (PDF)</span>
+            </button>
+            <Link
+              href="/dashboard"
+              className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition border border-slate-700"
+            >
+              &larr; Dashboard
+            </Link>
+          </div>
         </div>
 
         {/* Content Inside Unified Frame */}
         <div className="p-3.5 sm:p-6 md:p-8 bg-slate-50/60 space-y-6">
-          <div className="flex flex-wrap gap-2 pb-2">
+          <div className="flex flex-wrap gap-2 pb-2 print:hidden">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -134,27 +147,31 @@ export default function ReviewerPage() {
             <div className="space-y-6">
               {filteredNotes.map((note) => {
                 const isBookmarked = bookmarkedIds.has(note.id);
+                const noteSpeechText = `${note.title}. ${note.summary}. ${note.content.join(" ")}. ${note.tips || ""}`;
 
                 return (
                   <div
                     key={note.id}
-                    className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4"
+                    className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 print:border-slate-300 print:shadow-none print:break-inside-avoid"
                   >
                     <div className="flex justify-between items-start gap-2">
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md print:bg-slate-100 print:text-slate-800">
                         {note.category}
                       </span>
 
-                      <button
-                        onClick={() => toggleBookmark(note.id)}
-                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 ${
-                          isBookmarked
-                            ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
-                            : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
-                      </button>
+                      <div className="flex items-center gap-2 print:hidden">
+                        <AudioSpeechButton textToSpeak={noteSpeechText} label="Listen" />
+                        <button
+                          onClick={() => toggleBookmark(note.id)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition border flex items-center gap-1.5 ${
+                            isBookmarked
+                              ? "bg-amber-500/10 border-amber-500/40 text-amber-600"
+                              : "bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-800"
+                          }`}
+                        >
+                          <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
+                        </button>
+                      </div>
                     </div>
 
                     <div>

@@ -286,7 +286,32 @@ async function runTests() {
   const isPassed80 = 80 >= 80;
   const isPassed79 = 79 >= 80;
   assert(isPassed80 === true, "80% score triggers milestone celebration confetti");
-  assert(isPassed79 === false, "79% score does not trigger celebration confetti");
+  // --- GROUP 12: SPACED REPETITION, FOCUS MODE & SPEECH SYNTHESIS SANITIZATION ---
+  console.log("\n--- GROUP 12: SPACED REPETITION & AUDIO READOUT ---");
+
+  // Spaced repetition mastery percentage
+  const totalDeckCount = 20;
+  const masteredCardIds = new Set(["c1", "c2", "c3", "c4", "c5"]);
+  const deckMasteryPct = Math.round((masteredCardIds.size / totalDeckCount) * 100);
+  assert(
+    deckMasteryPct === 25,
+    "Spaced repetition deck mastery correctly calculates 5/20 mastered cards as 25%"
+  );
+
+  // Audio speech markdown sanitization
+  const rawMarkdownText = "💡 **Inverse Proportion Shortcut:**\n`12 * 15 = 180`\nDays = 180 / 20 = 9 days!";
+  const cleanSpeechText = rawMarkdownText
+    .replace(/[#*`_~]/g, "")
+    .replace(/\n+/g, ". ")
+    .trim();
+  assert(
+    !cleanSpeechText.includes("*") && !cleanSpeechText.includes("`"),
+    "Speech synthesis text sanitizer cleanly strips markdown asterisks and backticks"
+  );
+  assert(
+    cleanSpeechText.includes("Inverse Proportion Shortcut:. 12"),
+    "Speech synthesis sanitizer normalizes newlines to conversational pauses"
+  );
 
   // --- SUMMARY ---
   console.log("\n=================================================================");

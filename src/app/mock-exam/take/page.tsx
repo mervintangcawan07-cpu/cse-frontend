@@ -61,6 +61,8 @@ function TakeExamPageInner() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
   const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md");
+  const [isFocusMode, setIsFocusMode] = useState(false);
+
 
   // Load saved font size preference
   useEffect(() => {
@@ -605,7 +607,13 @@ function TakeExamPageInner() {
   const progressPercent = Math.round((answeredCount / examQuestions.length) * 100);
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6">
+    <div
+      className={
+        isFocusMode
+          ? "fixed inset-0 z-50 bg-slate-950 p-3 sm:p-6 md:p-8 overflow-y-auto w-full flex flex-col justify-start max-w-5xl mx-auto space-y-4"
+          : "w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6"
+      }
+    >
       {/* EXAM SUBMISSION & GRADING FULLSCREEN OVERLAY */}
       <ExamSubmissionLoader isSubmitting={submitting} totalQuestions={examQuestions.length || 170} />
 
@@ -643,6 +651,19 @@ function TakeExamPageInner() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Focus Mode Toggle */}
+          <button
+            onClick={() => setIsFocusMode((prev) => !prev)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 cursor-pointer ${
+              isFocusMode
+                ? "bg-amber-400 text-slate-950 shadow-md"
+                : "bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/20"
+            }`}
+            title="Toggle Distraction-Free Exam Mode"
+          >
+            <span>{isFocusMode ? "🧘 Exit Focus" : "🧘 Focus Mode"}</span>
+          </button>
+
           {/* Font Size Stepper */}
           <div className="hidden sm:flex items-center bg-black/20 backdrop-blur-md rounded-xl p-0.5 border border-white/20 text-xs font-bold">
             <button

@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import AudioSpeechButton from "@/components/common/AudioSpeechButton";
+
 interface ExplainMistakeButtonProps {
   prompt: string;
   userChoice: string;
@@ -64,9 +66,10 @@ export default function ExplainMistakeButton({
           <span>{loading ? "AI Analyzing..." : "Why was my choice wrong?"}</span>
         </button>
       ) : (
-        <div className="p-4 rounded-2xl bg-purple-900 text-purple-100 border border-purple-700 text-xs space-y-1.5 animate-in fade-in duration-200">
-          <div className="flex items-center gap-1.5 font-black text-purple-300">
-            <span>✨ AI Tutor Breakdown:</span>
+        <div className="p-4 rounded-2xl bg-purple-900 text-purple-100 border border-purple-700 text-xs space-y-2 animate-in fade-in duration-200">
+          <div className="flex items-center justify-between font-black text-purple-300 border-b border-purple-800 pb-1.5">
+            <span className="flex items-center gap-1.5">✨ AI Tutor Breakdown:</span>
+            <AudioSpeechButton textToSpeak={explanation} label="Listen to AI" />
           </div>
           <p className="leading-relaxed">{explanation}</p>
         </div>

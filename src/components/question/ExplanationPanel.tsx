@@ -7,7 +7,9 @@ import EliminationStrategyCard from "./EliminationStrategyCard";
 import CommonTrapCard from "./CommonTrapCard";
 import ExamDayTipCard from "./ExamDayTipCard";
 import FormattedExplanation from "@/components/exam/FormattedExplanation";
+import AudioSpeechButton from "@/components/common/AudioSpeechButton";
 import { StepSolutionItem } from "@/types/question";
+
 
 interface ExplanationPanelProps {
   explanation?: string | null;
@@ -67,8 +69,25 @@ export default function ExplanationPanel({
     );
   }
 
+  const fullSpeechText = [
+    explanation,
+    hasStrategy ? `Strategy: ${eliminationStrategy}` : "",
+    hasTrap ? `Common Trap: ${commonTrap}` : "",
+    hasTip ? `Exam Tip: ${examTip}` : "",
+  ]
+    .filter(Boolean)
+    .join(". ");
+
   return (
     <div className="bg-slate-50 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-5 text-xs text-slate-800 dark:text-slate-200">
+      {/* Top Explanation Action Bar */}
+      <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800">
+        <span className="font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+          <span>💡 Rationalization &amp; Shortcuts</span>
+        </span>
+        {fullSpeechText && <AudioSpeechButton textToSpeak={fullSpeechText} label="Listen (Audio)" />}
+      </div>
+
       {/* 1. Step-by-Step Solution Derivation */}
       {hasStepByStep && <StepByStepSolution stepByStep={stepByStep} />}
 
