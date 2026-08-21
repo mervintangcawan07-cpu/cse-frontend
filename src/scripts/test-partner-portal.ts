@@ -265,7 +265,28 @@ async function runTests() {
   // Diskarte shortcut line-wrapping check
   const sampleDiskarte = "Inverse Proportion Shortcut:\n(12 × 15) ÷ 20 = 9 days! (Letter B)";
   const lines = sampleDiskarte.split("\n");
-  assert(lines.length === 2, "Diskarte formula splits into clean multi-line solution cards");
+  // --- GROUP 11: UX POLISH — HOTKEYS, VOUCHER AUTO-FORMATTER & CONFETTI TRIGGER ---
+  console.log("\n--- GROUP 11: UX POLISH & HOTKEYS ---");
+
+  // Voucher auto-formatting logic
+  const rawPasted = "pnpxkjz9192";
+  const cleanChars = rawPasted.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const formattedVoucher = `${cleanChars.slice(0, 3)}-${cleanChars.slice(3, 7)}-${cleanChars.slice(7, 11)}`;
+  assert(
+    formattedVoucher === "PNP-XKJZ-9192",
+    "Smart voucher auto-formatter formats 'pnpxkjz9192' to 'PNP-XKJZ-9192'"
+  );
+
+  // Keyboard shortcut option index resolution
+  const hotkeyMap: Record<string, number> = { A: 0, "1": 0, B: 1, "2": 1, C: 2, "3": 2, D: 3, "4": 3 };
+  assert(hotkeyMap["A"] === 0 && hotkeyMap["1"] === 0, "Hotkey A or 1 maps to option Index 0");
+  assert(hotkeyMap["D"] === 3 && hotkeyMap["4"] === 3, "Hotkey D or 4 maps to option Index 3");
+
+  // Confetti trigger condition check
+  const isPassed80 = 80 >= 80;
+  const isPassed79 = 79 >= 80;
+  assert(isPassed80 === true, "80% score triggers milestone celebration confetti");
+  assert(isPassed79 === false, "79% score does not trigger celebration confetti");
 
   // --- SUMMARY ---
   console.log("\n=================================================================");

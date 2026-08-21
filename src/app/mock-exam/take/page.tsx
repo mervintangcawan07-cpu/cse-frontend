@@ -60,6 +60,63 @@ function TakeExamPageInner() {
   // Exam States
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
+  const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md");
+
+  // Load saved font size preference
+  useEffect(() => {
+    const saved = localStorage.getItem("cse_exam_font_size");
+    if (saved === "sm" || saved === "md" || saved === "lg") {
+      setFontSize(saved);
+    }
+  }, []);
+
+  const handleFontSizeChange = (size: "sm" | "md" | "lg") => {
+    setFontSize(size);
+    localStorage.setItem("cse_exam_font_size", size);
+  };
+
+  // Keyboard Shortcuts (A/B/C/D, 1/2/3/4, ArrowRight, ArrowLeft, F/B)
+  useEffect(() => {
+    if (isSetupPhase || isPauseModalOpen || submitting) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger if user is typing in an input or textarea
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+        return;
+      }
+
+      const key = e.key.toUpperCase();
+
+      // Option selection
+      if (key === "A" || key === "1") {
+        e.preventDefault();
+        handleSelectOption(0);
+      } else if (key === "B" || key === "2") {
+        e.preventDefault();
+        handleSelectOption(1);
+      } else if (key === "C" || key === "3") {
+        e.preventDefault();
+        handleSelectOption(2);
+      } else if (key === "D" || key === "4") {
+        e.preventDefault();
+        handleSelectOption(3);
+      } else if (e.key === "ArrowRight" || e.key === "Enter") {
+        e.preventDefault();
+        setCurrentIndex((prev) => Math.min(examQuestions.length - 1, prev + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentIndex((prev) => Math.max(0, prev - 1));
+      } else if (key === "F") {
+        e.preventDefault();
+        const currentQ = examQuestions[currentIndex];
+        if (currentQ) toggleBookmark(currentQ.id);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex]);
 
   // 1. Load Initial Categories, Bookmarks & Check for In-Progress Session
   useEffect(() => {
@@ -585,7 +642,32 @@ function TakeExamPageInner() {
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Font Size Stepper */}
+          <div className="hidden sm:flex items-center bg-black/20 backdrop-blur-md rounded-xl p-0.5 border border-white/20 text-xs font-bold">
+            <button
+              onClick={() => handleFontSizeChange("sm")}
+              className={`px-2 py-1 rounded-lg transition ${fontSize === "sm" ? "bg-white text-blue-900 shadow-xs" : "text-white/80 hover:text-white"}`}
+              title="Small Text"
+            >
+              A-
+            </button>
+            <button
+              onClick={() => handleFontSizeChange("md")}
+              className={`px-2 py-1 rounded-lg transition ${fontSize === "md" ? "bg-white text-blue-900 shadow-xs" : "text-white/80 hover:text-white"}`}
+              title="Normal Text"
+            >
+              A
+            </button>
+            <button
+              onClick={() => handleFontSizeChange("lg")}
+              className={`px-2 py-1 rounded-lg transition ${fontSize === "lg" ? "bg-white text-blue-900 shadow-xs" : "text-white/80 hover:text-white"}`}
+              title="Large Text"
+            >
+              A+
+            </button>
+          </div>
+
           {timerMinutes > 0 && (
             <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border font-mono font-bold text-xs ${
@@ -618,11 +700,16 @@ function TakeExamPageInner() {
       </div>
 
       {/* EXAM QUESTION CARD */}
-      <div className="bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500">
+      <div className="bg-white dark:bg-slate-900 shadow-xl shadow-blue-900/5 dark:shadow-none border border-slate-200/90 dark:border-slate-800 rounded-2xl border-t-4 border-t-blue-600 dark:border-t-indigo-500 p-6 space-y-5">
         <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-            Question #{currentIndex + 1} • {currentQ?.category}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Question #{currentIndex + 1} • {currentQ?.category}
+            </span>
+            <span className="hidden md:inline-flex items-center text-[10px] text-slate-400 font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
+              ⌨️ Hotkeys: [A-D] Select, [→/Enter] Next, [←] Prev
+            </span>
+          </div>
 
           <div className="flex items-center gap-2">
             {currentQ && <FlagQuestionButton questionId={currentQ.id} compact />}
@@ -634,14 +721,16 @@ function TakeExamPageInner() {
                   : "bg-slate-50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100"
               }`}
             >
-              <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark"}</span>
+              <span>{isBookmarked ? "🔖 Bookmarked" : "🔖 Bookmark [F]"}</span>
             </button>
           </div>
         </div>
 
         {/* PROMPT RENDERING WITH HTML TABLE SUPPORT */}
         <div
-          className="text-lg font-bold text-slate-800 dark:text-slate-100 leading-relaxed overflow-x-auto"
+          className={`font-bold text-slate-800 dark:text-slate-100 leading-relaxed overflow-x-auto ${
+            fontSize === "sm" ? "text-base" : fontSize === "lg" ? "text-xl" : "text-lg"
+          }`}
           dangerouslySetInnerHTML={{ __html: formatPromptHTML(currentQ?.prompt || "") }}
         />
 
@@ -661,19 +750,27 @@ function TakeExamPageInner() {
         <div className="space-y-3">
           {currentQ?.options.map((opt, idx) => {
             const isSelected = selectedAnswers[currentIndex] === idx;
+            const letterLabel = ["A", "B", "C", "D"][idx] || String(idx + 1);
             return (
               <button
                 key={idx}
                 onClick={() => handleSelectOption(idx)}
-                className={`w-full text-left p-4 rounded-2xl border text-sm font-medium transition flex items-center justify-between cursor-pointer ${
+                className={`w-full text-left p-4 rounded-2xl border transition flex items-center justify-between cursor-pointer ${
+                  fontSize === "sm" ? "text-xs sm:text-sm" : fontSize === "lg" ? "text-base sm:text-lg" : "text-sm"
+                } ${
                   isSelected
                     ? "border-blue-600 bg-blue-50/50 text-blue-900 font-bold"
                     : "border-slate-200 dark:border-slate-800 hover:border-slate-300 text-slate-700 bg-slate-50/50"
                 }`}
               >
-                <span>{cleanMathText(opt)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="hidden md:inline-flex items-center justify-center w-6 h-6 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono text-xs font-bold">
+                    {letterLabel}
+                  </span>
+                  <span>{cleanMathText(opt)}</span>
+                </div>
                 <div
-                  className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                  className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
                     isSelected ? "border-blue-600 bg-blue-600 text-white" : "border-slate-300"
                   }`}
                 >

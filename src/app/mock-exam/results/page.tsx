@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ExplainMistakeButton from "@/components/ExplainMistakeButton";
 import QuestionReview from "@/components/question/QuestionReview";
 import DiagnosticScoreCard from "@/components/exam/DiagnosticScoreCard";
+import ConfettiCelebration from "@/components/common/ConfettiCelebration";
 import { StructuredQuestion } from "@/types/question";
+
 
 
 interface ReviewData {
@@ -158,18 +160,21 @@ function ExamResultContent() {
     });
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8">
+    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8 relative">
+      {/* 🎉 Milestone Celebration Confetti on Passing Score (≥80%) */}
+      {isPassed && <ConfettiCelebration />}
+
       {/* 🏆 Score Summary Card */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-xl text-center space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <span
             className={`text-xs font-black uppercase px-3 py-1 rounded-full border inline-block ${
               isPassed
-                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 animate-bounce"
                 : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30"
             }`}
           >
-            {isPassed ? "🎉 Official CSE Passing Grade Achieved" : "⚠️ Needs Improvement (Passing is 80%)"}
+            {isPassed ? "🎉 Official CSE Passing Grade Achieved!" : "⚠️ Needs Improvement (Passing is 80%)"}
           </span>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
             Diagnostic Exam Results
@@ -227,11 +232,19 @@ function ExamResultContent() {
           >
             Retake Exam 🔄
           </button>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("https://govstudyx.com/practice")}&quote=${encodeURIComponent(`Naka-${score}% ako sa Civil Service Mock Exam sa GovStudyX! Subukan niyo rin mag-practice dito:`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20"
+          >
+            <span>Challenge a Study Buddy 🔥</span>
+          </a>
           <Link
             href="/mock-exam/history"
             className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-black text-xs rounded-xl transition"
           >
-            View Full Exam History 📜
+            View History 📜
           </Link>
           <Link
             href="/dashboard"

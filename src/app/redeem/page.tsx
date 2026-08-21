@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ConfettiCelebration from "@/components/common/ConfettiCelebration";
 
 interface UserSession {
   id: string;
@@ -29,6 +30,17 @@ export default function RedeemVoucherPage() {
       .catch(() => {})
       .finally(() => setAuthLoading(false));
   }, []);
+
+  // Smart auto-formatter for voucher codes (e.g. converts "pnp xkjz 9192" or "pnpxkjz9192" to "PNP-XKJZ-9192")
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, "");
+    // If user pasted raw without hyphens, auto-format to 3-4-4
+    const cleanChars = raw.replace(/-/g, "");
+    if (cleanChars.length > 7 && !raw.includes("-")) {
+      raw = `${cleanChars.slice(0, 3)}-${cleanChars.slice(3, 7)}-${cleanChars.slice(7, 11)}`;
+    }
+    setCode(raw);
+  };
 
   const handleRedeem = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +102,8 @@ export default function RedeemVoucherPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-12 relative">
+      {result?.success && <ConfettiCelebration />}
       <div className="max-w-md w-full space-y-6">
         {/* Header card */}
         <div className="bg-gradient-to-br from-violet-900/40 to-indigo-900/40 border border-violet-500/30 rounded-2xl p-6 text-center">
@@ -112,7 +125,7 @@ export default function RedeemVoucherPage() {
               <input
                 type="text"
                 value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
+                onChange={handleCodeChange}
                 placeholder="e.g. PNP-XKJZ-9192"
                 className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white font-mono text-lg tracking-widest placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all text-center"
                 disabled={loading || result?.success}
