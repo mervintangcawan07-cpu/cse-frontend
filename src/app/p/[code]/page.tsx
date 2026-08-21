@@ -16,6 +16,8 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import LiveSocialProofToast from "@/components/marketing/LiveSocialProofToast";
+
 
 interface PartnerLandingProps {
   params: Promise<{ code: string }>;
@@ -329,6 +331,9 @@ export default async function PartnerLandingPage({ params, searchParams }: Partn
       <footer className="py-8 border-t border-slate-900 text-center text-xs text-slate-500">
         <p>&copy; {new Date().getFullYear()} GovStudyX. All rights reserved. Co-branded educational partner page for {partner.name}.</p>
       </footer>
+
+      {/* Live Activity Social Proof */}
+      <LiveSocialProofToast />
     </div>
   );
 }

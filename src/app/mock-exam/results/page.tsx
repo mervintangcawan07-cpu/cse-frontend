@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import ExplainMistakeButton from "@/components/ExplainMistakeButton";
 import QuestionReview from "@/components/question/QuestionReview";
+import DiagnosticScoreCard from "@/components/exam/DiagnosticScoreCard";
 import { StructuredQuestion } from "@/types/question";
+
 
 interface ReviewData {
   questions: StructuredQuestion[];
@@ -239,6 +241,17 @@ function ExamResultContent() {
           </Link>
         </div>
       </div>
+
+      {/* 📊 Visual Performance Diagnostic Card (Shareable & Downloadable) */}
+      <DiagnosticScoreCard
+        score={score}
+        totalItems={questions.length}
+        correct={correct}
+        incorrect={incorrect}
+        skipped={skipped}
+        questions={questions}
+        selectedAnswers={selectedAnswers}
+      />
 
       {/* 📚 Question-by-Question Deep Review */}
       <div className="space-y-6">
