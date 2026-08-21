@@ -82,6 +82,7 @@ export class PartnerService {
   static async recordPartnerAttributionOnSignup(params: {
     referredUserId: string;
     codeOrSlug: string;
+    campaignSource?: string;
   }): Promise<{ success: boolean; partnerId?: string; reason?: string }> {
     const partner = await this.resolvePartnerByCodeOrSlug(params.codeOrSlug);
     if (!partner) {
@@ -102,6 +103,7 @@ export class PartnerService {
       data: {
         referredUserId: params.referredUserId,
         partnerId: partner.id,
+        campaignSource: params.campaignSource?.toLowerCase().trim() || "direct",
         expiresAt,
         isLocked: true,
       },
@@ -258,6 +260,7 @@ export class PartnerService {
     transactionId: string;
     customerPaymentCentavos: number;
     grossAmountCentavos?: number;
+    campaignSource?: string;
   }) {
     const attribution = await prisma.partnerAttribution.findUnique({
       where: { referredUserId: params.userId },
@@ -288,6 +291,8 @@ export class PartnerService {
     const holdingUntil = new Date();
     holdingUntil.setDate(holdingUntil.getDate() + (partner.holdingPeriodDays || 7));
 
+    const effectiveSource = params.campaignSource || attribution.campaignSource || "direct";
+
     const commission = await prisma.partnerCommission.create({
       data: {
         partnerId: partner.id,
@@ -298,6 +303,7 @@ export class PartnerService {
         commissionAmountCentavos: calc.commissionAmountCentavos,
         currency: "PHP",
         status: "PENDING",
+        campaignSource: effectiveSource,
         holdingUntil,
       },
     });
@@ -344,10 +350,24 @@ export class PartnerService {
     let paidCommissionsCentavos = 0;
     let reversedCommissionsCentavos = 0;
 
+    const channelMap: Record<
+      string,
+      { count: number; revenueCentavos: number; commissionCentavos: number }
+    > = {};
+
     const now = new Date();
 
     partner.commissions.forEach((c) => {
       totalRevenueCentavos += c.purchaseAmountCentavos;
+
+      const src = c.campaignSource || "direct";
+      if (!channelMap[src]) {
+        channelMap[src] = { count: 0, revenueCentavos: 0, commissionCentavos: 0 };
+      }
+      channelMap[src].count += 1;
+      channelMap[src].revenueCentavos += c.purchaseAmountCentavos;
+      channelMap[src].commissionCentavos += c.commissionAmountCentavos;
+
       if (c.status === "PAID") {
         totalCommissionsCentavos += c.commissionAmountCentavos;
         paidCommissionsCentavos += c.commissionAmountCentavos;
@@ -371,10 +391,20 @@ export class PartnerService {
 
     const outstandingBalanceCentavos = availableCommissionsCentavos;
 
+    const channelBreakdown = Object.entries(channelMap).map(([channel, data]) => ({
+      channel,
+      count: data.count,
+      revenueCentavos: data.revenueCentavos,
+      commissionCentavos: data.commissionCentavos,
+      formattedRevenue: formatCentavosToPesos(data.revenueCentavos),
+      formattedCommission: formatCentavosToPesos(data.commissionCentavos),
+    }));
+
     return {
       partner: {
         id: partner.id,
         code: partner.code,
+        slug: partner.slug,
         name: partner.name,
         type: partner.type,
         status: partner.status,
@@ -393,6 +423,7 @@ export class PartnerService {
         reversedCommissionsCentavos,
         totalPayoutsDisbursedCentavos,
         outstandingBalanceCentavos,
+        channelBreakdown,
         formattedRevenue: formatCentavosToPesos(totalRevenueCentavos),
         formattedCommissions: formatCentavosToPesos(totalCommissionsCentavos),
         formattedAvailable: formatCentavosToPesos(availableCommissionsCentavos),
@@ -402,6 +433,7 @@ export class PartnerService {
         id: c.id,
         date: c.createdAt.toISOString(),
         transactionId: c.transactionId,
+        campaignSource: c.campaignSource || "direct",
         customerName: c.transaction?.user?.name || "Student",
         customerEmailMasked: c.transaction?.user?.email
           ? c.transaction.user.email.replace(/(.{2})(.*)(@.*)/, "$1***$3")

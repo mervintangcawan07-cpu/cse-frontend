@@ -1405,6 +1405,7 @@ model PartnerAttribution {
   id             String   @id @default(cuid())
   referredUserId String   @unique
   partnerId      String
+  campaignSource String?  // e.g. "youtube", "tiktok", "fbgroup", "direct"
   attributedAt   DateTime @default(now())
   expiresAt      DateTime
   isLocked       Boolean  @default(true)
@@ -1414,6 +1415,7 @@ model PartnerAttribution {
 
   @@index([referredUserId])
   @@index([partnerId])
+  @@index([campaignSource])
   @@index([expiresAt])
 }
 
@@ -1427,6 +1429,7 @@ model PartnerCommission {
   commissionAmountCentavos Int
   currency                 String                 @default("PHP")
   status                   RewardLedgerStatus     @default(PENDING)
+  campaignSource           String?                // Sub-channel attribution (e.g. "youtube")
   holdingUntil             DateTime?
   availableAt              DateTime?
   reversedAt               DateTime?
@@ -1439,6 +1442,7 @@ model PartnerCommission {
 
   @@index([partnerId, status])
   @@index([status])
+  @@index([campaignSource])
   @@index([holdingUntil])
   @@index([createdAt(sort: Desc)])
 }

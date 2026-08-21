@@ -148,11 +148,23 @@ export async function POST(request: Request) {
         // 🤝 3. Qualify Partner Commission
         try {
           const { PartnerService } = await import("@/lib/accounting/partnerService");
+          const partnerCode = metadata?.partnerCode;
+          const campaignSource = metadata?.campaignSource || "direct";
+
+          if (partnerCode) {
+            await PartnerService.recordPartnerAttributionOnSignup({
+              referredUserId: String(userId),
+              codeOrSlug: partnerCode,
+              campaignSource,
+            }).catch(() => null);
+          }
+
           await PartnerService.qualifyPartnerPayment({
             userId: String(userId),
             transactionId: transaction.id,
             customerPaymentCentavos: actualPaidCentavos,
             grossAmountCentavos: actualPaidCentavos,
+            campaignSource,
           });
         } catch (partnerErr) {
           console.error("[Partner Webhook Qualification Warning]:", partnerErr);

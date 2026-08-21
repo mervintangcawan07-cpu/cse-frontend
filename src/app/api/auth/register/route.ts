@@ -19,7 +19,8 @@ export async function POST(req: Request) {
       return createRateLimitResponse(rateResult, "Too many registration attempts. Please wait a moment before trying again.");
     }
 
-    const { name, email, password, referralCode } = await req.json();
+    const body = await req.json();
+    const { name, email, password, referralCode } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -65,7 +66,11 @@ export async function POST(req: Request) {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
 
-      await ReferralService.getOrCreateReferralCode(user.id).catch(() => null);
+      const campaignSource =
+        body.campaignSource ||
+        body.src ||
+        cookieStore.get("cse_campaign_source")?.value ||
+        "direct";
 
       const effectiveCode =
         referralCode ||
@@ -78,6 +83,7 @@ export async function POST(req: Request) {
           await PartnerService.recordPartnerAttributionOnSignup({
             referredUserId: user.id,
             codeOrSlug: effectiveCode,
+            campaignSource,
           });
         } else {
           await ReferralService.recordAttributionOnSignup({

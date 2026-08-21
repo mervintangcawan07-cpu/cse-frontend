@@ -124,11 +124,23 @@ export async function POST() {
       // 🤝 3. Qualify Partner Commission (Idempotent)
       try {
         const { PartnerService } = await import("@/lib/accounting/partnerService");
+        const partnerCode = checkoutData?.attributes?.metadata?.partnerCode;
+        const campaignSource = checkoutData?.attributes?.metadata?.campaignSource || "direct";
+
+        if (partnerCode) {
+          await PartnerService.recordPartnerAttributionOnSignup({
+            referredUserId: userId,
+            codeOrSlug: partnerCode,
+            campaignSource,
+          }).catch(() => null);
+        }
+
         await PartnerService.qualifyPartnerPayment({
           userId,
           transactionId: transaction.id,
           customerPaymentCentavos: actualPaidCentavos,
           grossAmountCentavos: actualPaidCentavos,
+          campaignSource,
         });
       } catch (partnerErr) {
         console.error("[Partner Verify Qualification Warning]:", partnerErr);

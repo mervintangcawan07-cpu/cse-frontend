@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/paymongo/checkout/route.ts
+// Relative Path: src/app/api/paymongo/checkout/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -71,7 +71,36 @@ export async function POST(request: Request) {
       };
     }
 
-    const amountInCentavos = plan.price * 100;
+    let amountInCentavos = plan.price * 100;
+
+    // 🎁 Resolve Promo Code / Partner Code & Campaign Source
+    const { PartnerService } = await import("@/lib/accounting/partnerService");
+    const rawPromo = body.promoCode || body.refCode || cookieStore.get("cse_partner_ref")?.value || cookieStore.get("cse_ref")?.value;
+    const campaignSource = body.campaignSource || body.src || cookieStore.get("cse_campaign_source")?.value || "direct";
+
+    let matchedPartnerCode: string | null = null;
+    let appliedDiscountNote = "";
+
+    if (rawPromo) {
+      const partner = await PartnerService.resolvePartnerByCodeOrSlug(rawPromo);
+      if (partner) {
+        matchedPartnerCode = partner.code;
+
+        // Ensure attribution is registered for this user
+        await PartnerService.recordPartnerAttributionOnSignup({
+          referredUserId: String(session.userId),
+          codeOrSlug: partner.code,
+          campaignSource,
+        }).catch(() => null);
+
+        // Apply partner discount if configured
+        if (partner.discountPercent && partner.discountPercent > 0) {
+          const discountMultiplier = (100 - partner.discountPercent) / 100;
+          amountInCentavos = Math.max(100, Math.round(amountInCentavos * discountMultiplier));
+          appliedDiscountNote = ` (${partner.discountPercent}% Off via ${partner.name})`;
+        }
+      }
+    }
 
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
     if (!secretKey) {
@@ -101,13 +130,13 @@ export async function POST(request: Request) {
             send_email_receipt: true,
             show_description: true,
             show_line_items: true,
-            description: `Civil Service Exam Reviewer PRO - ${plan.name}`,
+            description: `Civil Service Exam Reviewer PRO - ${plan.name}${appliedDiscountNote}`,
             line_items: [
               {
                 currency: "PHP",
                 amount: amountInCentavos,
-                description: `Full access to mock exams, speed drills, and study notes.`,
-                name: plan.name,
+                description: `Full access to mock exams, speed drills, and study notes.${appliedDiscountNote}`,
+                name: `${plan.name}${appliedDiscountNote}`,
                 quantity: 1,
               },
             ],
@@ -117,6 +146,8 @@ export async function POST(request: Request) {
             metadata: {
               userId: String(session.userId),
               planType,
+              partnerCode: matchedPartnerCode || "",
+              campaignSource,
             },
           },
         },

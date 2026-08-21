@@ -19,6 +19,7 @@ import {
 
 interface PartnerLandingProps {
   params: Promise<{ code: string }>;
+  searchParams?: Promise<{ src?: string; source?: string }>;
 }
 
 export async function generateMetadata(
@@ -85,9 +86,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function PartnerLandingPage({ params }: PartnerLandingProps) {
+export default async function PartnerLandingPage({ params, searchParams }: PartnerLandingProps) {
   const { code } = await params;
   const cleanCode = decodeURIComponent(code).trim();
+
+  const sp = searchParams ? await searchParams : {};
+  const campaignSource = (sp.src || sp.source || "direct").toLowerCase().trim();
 
   // Find partner by slug or uppercase code
   const partner = await prisma.partner.findFirst({
@@ -118,13 +122,20 @@ export default async function PartnerLandingPage({ params }: PartnerLandingProps
   // Set Attribution Cookies (30 days)
   const cookieStore = await cookies();
   cookieStore.set("cse_partner_ref", partner.code, {
-    httpOnly: false, // Accessible to client-side checkout scripts if needed
+    httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 30 * 24 * 60 * 60,
     path: "/",
   });
   cookieStore.set("cse_ref", partner.code, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  });
+  cookieStore.set("cse_campaign_source", campaignSource, {
     httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -170,13 +181,13 @@ export default async function PartnerLandingPage({ params }: PartnerLandingProps
 
           <div className="flex items-center gap-3">
             <Link
-              href={`/login?ref=${partner.code}`}
+              href={`/login?ref=${partner.code}&src=${campaignSource}`}
               className="text-xs font-bold text-slate-300 hover:text-white px-3 py-2 transition"
             >
               Sign In
             </Link>
             <Link
-              href={`/signup?ref=${partner.code}`}
+              href={`/signup?ref=${partner.code}&src=${campaignSource}`}
               className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black uppercase tracking-wider rounded-xl transition shadow-lg shadow-emerald-500/20"
             >
               Start Practice Free
@@ -250,7 +261,7 @@ export default async function PartnerLandingPage({ params }: PartnerLandingProps
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
-              href={`/signup?ref=${partner.code}`}
+              href={`/signup?ref=${partner.code}&src=${campaignSource}`}
               className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm uppercase tracking-wider rounded-2xl transition shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-2 group"
             >
               <span>Create Free Account &amp; Practice</span>
@@ -258,7 +269,7 @@ export default async function PartnerLandingPage({ params }: PartnerLandingProps
             </Link>
 
             <Link
-              href={`/pricing?ref=${partner.code}`}
+              href={`/pricing?ref=${partner.code}&src=${campaignSource}`}
               className="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm rounded-2xl border border-slate-700 transition flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4 text-amber-400" />

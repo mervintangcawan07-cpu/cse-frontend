@@ -68,6 +68,12 @@ export async function POST(request: Request) {
       // Auto-generate this new user's personal student referral code
       await ReferralService.getOrCreateReferralCode(newUser.id).catch(() => null);
 
+      const campaignSource =
+        body.campaignSource ||
+        body.src ||
+        cookieStore.get("cse_campaign_source")?.value ||
+        "direct";
+
       const effectiveCode =
         referralCode ||
         cookieStore.get("cse_partner_ref")?.value ||
@@ -80,6 +86,7 @@ export async function POST(request: Request) {
           await PartnerService.recordPartnerAttributionOnSignup({
             referredUserId: newUser.id,
             codeOrSlug: effectiveCode,
+            campaignSource,
           });
         } else {
           // Otherwise record Student Referral attribution

@@ -28,6 +28,8 @@ export default function PartnerDashboardPage() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "media-kit">("overview");
   const [copiedScriptIndex, setCopiedScriptIndex] = useState<number | null>(null);
+  const [copiedChannel, setCopiedChannel] = useState<string | null>(null);
+  const [copiedPromo, setCopiedPromo] = useState(false);
 
   // Payout Modal State
   const [showPayoutModal, setShowPayoutModal] = useState(false);
@@ -87,6 +89,22 @@ export default function PartnerDashboardPage() {
     navigator.clipboard.writeText(text);
     setCopiedScriptIndex(index);
     setTimeout(() => setCopiedScriptIndex(null), 2500);
+  };
+
+  // Copy Channel-Specific Campaign Link
+  const handleCopyChannelLink = (src: string) => {
+    const base = partnerData?.referralDetails?.link || `https://govstudyx.com/p/${partnerData?.partner?.slug || partnerData?.partner?.code || ""}`;
+    const fullUrl = `${base}?src=${src}`;
+    navigator.clipboard.writeText(fullUrl);
+    setCopiedChannel(src);
+    setTimeout(() => setCopiedChannel(null), 2500);
+  };
+
+  // Copy Checkout Promo Code
+  const handleCopyPromo = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopiedPromo(true);
+    setTimeout(() => setCopiedPromo(false), 2500);
   };
 
   // Logout Handler
@@ -303,8 +321,8 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
                 </div>
               </div>
 
-              {/* High-Trust Referral Link Copy Box */}
-              <div className="p-4 sm:p-6 bg-slate-950/80 border border-slate-800 rounded-2xl space-y-4">
+              {/* High-Trust Referral Link & Promo Code Copy Box */}
+              <div className="p-4 sm:p-6 bg-slate-950/80 border border-slate-800 rounded-2xl space-y-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <span className="text-xs font-bold uppercase text-slate-400 flex items-center gap-1.5">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -324,57 +342,64 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
                     className="w-full sm:w-auto px-5 py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition cursor-pointer flex-shrink-0 shadow-lg shadow-emerald-500/20"
                   >
                     <Copy className="w-4 h-4" />
-                    <span>{copySuccess ? "Copied to Clipboard!" : "Copy Official Link"}</span>
+                    <span>{copySuccess ? "Copied!" : "Copy Official Link"}</span>
                   </button>
                 </div>
 
-                {/* 1-Click Social Share Buttons */}
-                <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="text-slate-400 text-[11px] font-bold">1-Click Share:</span>
+                {/* Checkout Promo Code Card */}
+                <div className="p-4 bg-slate-900/80 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <div className="text-[10px] font-black uppercase text-purple-400 tracking-wider">
+                      Checkout Promo Code (For Videos &amp; Live Streams)
+                    </div>
+                    <p className="text-xs text-slate-300">
+                      Students can enter this code manually on the PayMongo checkout page to credit your commission.
+                    </p>
+                  </div>
 
-                  {/* Facebook */}
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(partnerLink)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-600/40 rounded-lg text-xs font-bold flex items-center gap-1 transition"
-                  >
-                    <span>Facebook</span>
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3.5 py-2 bg-slate-950 border border-purple-500/30 rounded-xl font-mono text-xs font-black text-purple-300 tracking-wider">
+                      {partner?.slug || partner?.code}
+                    </span>
+                    <button
+                      onClick={() => handleCopyPromo(partner?.slug || partner?.code || "")}
+                      className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-md shadow-purple-600/20"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>{copiedPromo ? "Copied!" : "Copy Code"}</span>
+                    </button>
+                  </div>
+                </div>
 
-                  {/* Messenger */}
-                  <a
-                    href={`fb-messenger://share/?link=${encodeURIComponent(partnerLink)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-sky-600/20 hover:bg-sky-600/30 text-sky-300 border border-sky-600/40 rounded-lg text-xs font-bold flex items-center gap-1 transition"
-                  >
-                    <span>Messenger</span>
-                  </a>
-
-                  {/* Viber */}
-                  <a
-                    href={`viber://forward?text=${encodeURIComponent(
-                      `Study and pass the 2026 Civil Service Exam with GovStudyX: ${partnerLink}`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-600/40 rounded-lg text-xs font-bold flex items-center gap-1 transition"
-                  >
-                    <span>Viber</span>
-                  </a>
-
-                  {/* Telegram */}
-                  <a
-                    href={`https://t.me/share/url?url=${encodeURIComponent(
-                      partnerLink
-                    )}&text=${encodeURIComponent("Join me on GovStudyX for Civil Service Exam review!")}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-600/40 rounded-lg text-xs font-bold flex items-center gap-1 transition"
-                  >
-                    <span>Telegram</span>
-                  </a>
+                {/* Multi-Channel Sub-Tracking Links Generator */}
+                <div className="space-y-2 pt-2 border-t border-slate-800">
+                  <span className="text-[11px] font-bold uppercase text-slate-400 block">
+                    1-Click Channel-Specific Sub-Tracking Links:
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+                    {[
+                      { id: "youtube", label: "📹 YouTube", desc: "For Video Descriptions" },
+                      { id: "tiktok", label: "📱 TikTok / Reels", desc: "For Bio Links" },
+                      { id: "fbgroup", label: "👥 FB Group", desc: "For Community Posts" },
+                      { id: "messenger", label: "💬 Messenger", desc: "For Direct Chats" },
+                      { id: "email", label: "📧 Email / SMS", desc: "For Newsletters" },
+                    ].map((ch) => (
+                      <button
+                        key={ch.id}
+                        onClick={() => handleCopyChannelLink(ch.id)}
+                        className={`p-2.5 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between ${
+                          copiedChannel === ch.id
+                            ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300"
+                            : "bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-700"
+                        }`}
+                      >
+                        <span className="font-bold">{ch.label}</span>
+                        <span className="text-[10px] text-slate-500 font-mono mt-1">
+                          {copiedChannel === ch.id ? "✓ Copied Link" : "Copy Link"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -434,6 +459,59 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
               </div>
             </div>
 
+            {/* Multi-Channel Traffic & Commission Breakdown */}
+            {accounting?.channelBreakdown && accounting.channelBreakdown.length > 0 && (
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 shadow-xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div>
+                    <h3 className="text-base font-black text-white">Traffic Channel Analytics</h3>
+                    <p className="text-xs text-slate-400">
+                      Conversions and accrued commissions by referral campaign source.
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-lg text-xs font-bold">
+                    Sub-Tracking Active
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                  {accounting.channelBreakdown.map((ch: any) => (
+                    <div
+                      key={ch.channel}
+                      className="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold uppercase text-slate-300 font-mono text-[11px]">
+                          {ch.channel === "youtube"
+                            ? "📹 YouTube"
+                            : ch.channel === "tiktok"
+                            ? "📱 TikTok"
+                            : ch.channel === "fbgroup"
+                            ? "👥 FB Group"
+                            : ch.channel === "messenger"
+                            ? "💬 Messenger"
+                            : ch.channel === "email"
+                            ? "📧 Email"
+                            : "🌐 Direct"}
+                        </span>
+                        <span className="font-mono text-xs font-bold text-white">
+                          {ch.count} {ch.count === 1 ? "sale" : "sales"}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-400 font-mono flex justify-between">
+                        <span>Revenue:</span>
+                        <span className="text-slate-200 font-bold">{ch.formattedRevenue}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-400 font-mono flex justify-between">
+                        <span>Earned:</span>
+                        <span className="text-emerald-400 font-bold">{ch.formattedCommission}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Calculation Formula & Transparency Widget */}
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-3 shadow-xl">
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase">
@@ -478,6 +556,7 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
                         <th className="py-3 px-4">Date</th>
                         <th className="py-3 px-4">Student</th>
                         <th className="py-3 px-4">Plan Type</th>
+                        <th className="py-3 px-4">Channel</th>
                         <th className="py-3 px-4 text-right">Purchase Amount</th>
                         <th className="py-3 px-4">Rate</th>
                         <th className="py-3 px-4 text-right">Your Commission</th>
@@ -499,6 +578,21 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
                             <div className="text-[10px] text-slate-400 font-mono">{t.studentEmailMasked}</div>
                           </td>
                           <td className="py-3.5 px-4 font-mono font-bold text-slate-200">{t.planType}</td>
+                          <td className="py-3.5 px-4 font-mono text-[11px] text-slate-300">
+                            <span className="px-2 py-0.5 rounded-md bg-slate-950 border border-slate-800 text-[10px] font-bold uppercase">
+                              {t.campaignSource === "youtube"
+                                ? "📹 YouTube"
+                                : t.campaignSource === "tiktok"
+                                ? "📱 TikTok"
+                                : t.campaignSource === "fbgroup"
+                                ? "👥 FB Group"
+                                : t.campaignSource === "messenger"
+                                ? "💬 Messenger"
+                                : t.campaignSource === "email"
+                                ? "📧 Email"
+                                : "🌐 Direct"}
+                            </span>
+                          </td>
                           <td className="py-3.5 px-4 text-right font-mono font-bold text-white">
                             {t.formattedPurchaseAmount}
                           </td>

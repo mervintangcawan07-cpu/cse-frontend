@@ -58,6 +58,7 @@ export async function GET(request: Request) {
         commissionAmountCentavos: c.commissionAmountCentavos,
         formattedCommissionAmount: formatCentavosToPesos(c.commissionAmountCentavos),
         status: displayStatus,
+        campaignSource: c.campaignSource || "direct",
         holdingUntil: c.holdingUntil?.toISOString() || null,
       };
     });

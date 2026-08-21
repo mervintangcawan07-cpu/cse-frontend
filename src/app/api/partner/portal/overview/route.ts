@@ -79,6 +79,30 @@ export async function GET(request: Request) {
     let totalPayoutsDisbursedCentavos = 0;
     let pendingPayoutRequestsCentavos = 0;
 
+    const channelMap: Record<
+      string,
+      { count: number; revenueCentavos: number; commissionCentavos: number }
+    > = {};
+
+    commissions.forEach((c) => {
+      const src = c.campaignSource || "direct";
+      if (!channelMap[src]) {
+        channelMap[src] = { count: 0, revenueCentavos: 0, commissionCentavos: 0 };
+      }
+      channelMap[src].count += 1;
+      channelMap[src].revenueCentavos += c.purchaseAmountCentavos;
+      channelMap[src].commissionCentavos += c.commissionAmountCentavos;
+    });
+
+    const channelBreakdown = Object.entries(channelMap).map(([channel, data]) => ({
+      channel,
+      count: data.count,
+      revenueCentavos: data.revenueCentavos,
+      commissionCentavos: data.commissionCentavos,
+      formattedRevenue: formatCentavosToPesos(data.revenueCentavos),
+      formattedCommission: formatCentavosToPesos(data.commissionCentavos),
+    }));
+
     payouts.forEach((p) => {
       if (p.status === "PAID") {
         totalPayoutsDisbursedCentavos += p.amountCentavos;
@@ -123,6 +147,7 @@ export async function GET(request: Request) {
         holdingPeriodDays: dbPartner.holdingPeriodDays,
         minPayoutCentavos: dbPartner.minPayoutCentavos,
         formattedMinPayout: formatCentavosToPesos(dbPartner.minPayoutCentavos),
+        channelBreakdown,
       },
       referralDetails: {
         code: dbPartner.code,

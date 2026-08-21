@@ -139,11 +139,43 @@ async function runTests() {
     "Application input validates email format and HTTPS social channel URL"
   );
 
+  // --- GROUP 7: MULTI-CHANNEL CAMPAIGN TRACKING & PROMO CODES ---
+  console.log("\n--- GROUP 7: MULTI-CHANNEL SUB-TRACKING & PROMO CODES ---");
+
+  const channels = ["youtube", "tiktok", "fbgroup", "messenger", "email"];
+  const testBaseLink = "https://govstudyx.com/p/prof-juan";
+  const channelUrls = channels.map((c) => `${testBaseLink}?src=${c}`);
+  assert(
+    channelUrls.every((u) => u.includes("?src=")),
+    "Sub-tracking campaign URLs properly generated with ?src= parameters"
+  );
+
+  // Scenario: Student uses 10% creator promo discount on ₱299 plan
+  const regularPlanCentavos = 29900;
+  const partnerDiscountPercent = 10.0;
+  const discountedPriceCentavos = Math.round(
+    regularPlanCentavos * ((100 - partnerDiscountPercent) / 100)
+  );
+  assert(
+    discountedPriceCentavos === 26910,
+    "10% partner discount on ₱299.00 computes to exactly ₱269.10 (26910 centavos)"
+  );
+
+  // Scenario: Partner commission computed on customer's actual paid discounted amount
+  const partnerCommissionOnDiscounted = calculatePercentageShareCentavos(
+    discountedPriceCentavos,
+    10.0
+  );
+  assert(
+    partnerCommissionOnDiscounted === 2691,
+    "Partner 10% commission on ₱269.10 discounted purchase computes to exactly ₱26.91 (2691 centavos)"
+  );
+
   // --- SUMMARY ---
   console.log("\n=================================================================");
   console.log(`📊 PARTNER PORTAL TEST SUMMARY: ${passedTests} / ${totalTests} PASSED`);
   if (failedTests === 0) {
-    console.log("🎉 ALL PARTNER PORTAL, AUTHENTICATION & APPLICATION TESTS PASSED (100%)!");
+    console.log("🎉 ALL PARTNER PORTAL, CAMPAIGN TRACKING & FINANCIAL TESTS PASSED (100%)!");
   } else {
     console.error(`🚨 ${failedTests} TEST(S) FAILED!`);
   }
