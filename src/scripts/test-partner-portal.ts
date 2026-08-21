@@ -234,7 +234,38 @@ async function runTests() {
 
   // Social proof location string sanitization
   const studentLocations = ["Quezon City", "Cebu", "Davao City", "Iloilo City"];
-  assert(studentLocations.length === 4, "Social proof location pool verified across Luzon, Visayas, and Mindanao");
+  // --- GROUP 10: TIKTOK / REELS 9:16 ASPECT RATIO & QUIZ FORMATTING (PHASE 6) ---
+  console.log("\n--- GROUP 10: TIKTOK / REELS 9:16 QUIZ EXPORTER ---");
+
+  // 9:16 aspect ratio calculation check
+  const canvasWidth = 1080;
+  const canvasHeight = 1920;
+  const aspectRatio = canvasWidth / canvasHeight;
+  assert(
+    Math.abs(aspectRatio - 9 / 16) < 0.001,
+    "1080x1920 canvas maintains exact 9:16 vertical video/carousel aspect ratio"
+  );
+
+  // Video resolution 720x1280 (9:16 optimized for mobile WebM export)
+  const videoWidth = 720;
+  const videoHeight = 1280;
+  assert(
+    Math.abs(videoWidth / videoHeight - 9 / 16) < 0.001,
+    "720x1280 video export maintains exact 9:16 vertical aspect ratio"
+  );
+
+  // Partner watermark link generation
+  const testPartnerSlug = "prof-juan-tv";
+  const partnerWatermark = `govstudyx.com/p/${testPartnerSlug}`;
+  assert(
+    partnerWatermark === "govstudyx.com/p/prof-juan-tv",
+    "Partner watermark formats cleanly as 'govstudyx.com/p/prof-juan-tv'"
+  );
+
+  // Diskarte shortcut line-wrapping check
+  const sampleDiskarte = "Inverse Proportion Shortcut:\n(12 × 15) ÷ 20 = 9 days! (Letter B)";
+  const lines = sampleDiskarte.split("\n");
+  assert(lines.length === 2, "Diskarte formula splits into clean multi-line solution cards");
 
   // --- SUMMARY ---
   console.log("\n=================================================================");

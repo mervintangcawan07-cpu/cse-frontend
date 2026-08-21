@@ -19,6 +19,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
+import SocialQuizCardExporter from "@/components/partner/SocialQuizCardExporter";
+
 
 export default function PartnerDashboardPage() {
   const router = useRouter();
@@ -626,6 +628,13 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
         {/* TAB 2: MEDIA KIT */}
         {activeTab === "media-kit" && (
           <div className="space-y-6">
+            {/* Interactive 9:16 Quiz Card & Video Exporter */}
+            <SocialQuizCardExporter
+              partnerName={partner?.name || "GovStudyX Partner"}
+              partnerCode={partner?.code || "PTR"}
+              partnerSlug={partner?.slug}
+            />
+
             <div className="bg-gradient-to-r from-purple-950/40 via-slate-900 to-slate-900 border border-purple-500/30 p-6 rounded-3xl space-y-2">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-purple-400" />
