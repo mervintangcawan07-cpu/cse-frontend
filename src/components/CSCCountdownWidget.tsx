@@ -20,12 +20,13 @@ export default function CSCCountdownWidget() {
   useEffect(() => {
     async function loadData() {
       try {
-        const data = await fetchWithClientCache<{ nextSchedule?: Schedule }>(
-          "/api/csc/public-info",
-          60 * 60 * 1000 // 1-hour cache with SWR background refresh
-        );
-        if (data?.nextSchedule) {
-          setSchedule(data.nextSchedule);
+        // Fetch public info (bypassing stale null cache if necessary)
+        const res = await fetch(`/api/csc/public-info?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.nextSchedule) {
+            setSchedule(data.nextSchedule);
+          }
         }
       } catch (e) {
         console.error(e);

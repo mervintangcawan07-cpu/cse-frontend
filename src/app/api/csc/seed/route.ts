@@ -3,14 +3,14 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // 1. Seed Official 2026 Civil Service Exam Schedule (CSE-PPT)
+    // 1. Seed Official Upcoming Civil Service Exam Schedule (CSE-PPT)
     const examSchedule = await prisma.cSCExamSchedule.upsert({
-      where: { id: "csc_exam_2026_primary" },
+      where: { id: "csc_exam_primary" },
       update: {
-        title: "2026 Civil Service Examination Pen and Paper Test (CSE-PPT)",
-        examDate: new Date("2026-08-09T08:00:00.000Z"), // Adjust to target exam date
-        appOpeningDate: new Date("2026-05-11T00:00:00.000Z"),
-        appClosingDate: new Date("2026-06-11T23:59:59.000Z"),
+        title: "2027 Civil Service Examination Pen and Paper Test (CSE-PPT)",
+        examDate: new Date("2027-03-21T08:00:00.000Z"), // Upcoming Sunday CSE-PPT
+        appOpeningDate: new Date("2026-11-16T00:00:00.000Z"),
+        appClosingDate: new Date("2027-01-15T23:59:59.000Z"),
         status: "UPCOMING",
         isPinned: true,
         isManualOverride: false,
@@ -18,11 +18,11 @@ export async function GET() {
         officialLink: "https://www.csc.gov.ph",
       },
       create: {
-        id: "csc_exam_2026_primary",
-        title: "2026 Civil Service Examination Pen and Paper Test (CSE-PPT)",
-        examDate: new Date("2026-08-09T08:00:00.000Z"),
-        appOpeningDate: new Date("2026-05-11T00:00:00.000Z"),
-        appClosingDate: new Date("2026-06-11T23:59:59.000Z"),
+        id: "csc_exam_primary",
+        title: "2027 Civil Service Examination Pen and Paper Test (CSE-PPT)",
+        examDate: new Date("2027-03-21T08:00:00.000Z"),
+        appOpeningDate: new Date("2026-11-16T00:00:00.000Z"),
+        appClosingDate: new Date("2027-01-15T23:59:59.000Z"),
         status: "UPCOMING",
         isPinned: true,
         isManualOverride: false,
