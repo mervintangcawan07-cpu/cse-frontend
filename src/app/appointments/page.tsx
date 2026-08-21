@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -130,19 +130,71 @@ export default function AppointmentsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+              {/* OCSEAS Main Portal */}
+              <div className="bg-slate-900/90 border border-slate-700/80 p-5 rounded-2xl flex flex-col justify-between space-y-3">
+                <div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black text-blue-400">CSC OCSEAS</span>
+                    <span className="text-[10px] font-bold text-slate-400">National System</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-white mt-2">
+                    Online Civil Service Exam Application System
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    National online application portal used by CSC Central &amp; designated Regional Offices.
+                  </p>
+                </div>
+
+                <a
+                  href="https://ocseas.csc.gov.ph"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>Open OCSEAS</span>
+                  <span>↗</span>
+                </a>
+              </div>
+
+              {/* CSC Services Portal */}
+              <div className="bg-slate-900/90 border border-slate-700/80 p-5 rounded-2xl flex flex-col justify-between space-y-3">
+                <div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-black text-indigo-400">CSC Services</span>
+                    <span className="text-[10px] font-bold text-slate-400">Regional Slots</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-white mt-2">
+                    CSC Online Services Portal
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Regional slot reservation, appointment booking, and exam application services.
+                  </p>
+                </div>
+
+                <a
+                  href="https://services.csc.gov.ph"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>Open Services</span>
+                  <span>↗</span>
+                </a>
+              </div>
+
               {/* ORAS Main Portal */}
               <div className="bg-slate-900/90 border border-slate-700/80 p-5 rounded-2xl flex flex-col justify-between space-y-3">
                 <div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-black text-amber-400">CSC ORAS</span>
-                    <span className="text-[10px] font-bold text-slate-400">Official Slot Booking</span>
+                    <span className="text-[10px] font-bold text-slate-400">Field Office Slots</span>
                   </div>
                   <h3 className="text-sm font-bold text-white mt-2">
-                    Online Registration & Appointment System (ORAS)
+                    Online Registration &amp; Appointment System
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Official slot appointment scheduling system for CSE application filing at CSC Field Offices.
+                    Slot appointment scheduling for in-person application filing at CSC Field Offices.
                   </p>
                 </div>
 
@@ -152,33 +204,33 @@ export default function AppointmentsPage() {
                   rel="noopener noreferrer"
                   className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <span>Open CSC ORAS Portal</span>
+                  <span>Open ORAS</span>
                   <span>↗</span>
                 </a>
               </div>
 
-              {/* CSC RO Portal & Updates */}
+              {/* ERPO ONSERGS Portal */}
               <div className="bg-slate-900/90 border border-slate-700/80 p-5 rounded-2xl flex flex-col justify-between space-y-3">
                 <div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-black text-blue-400">CSC Regional Hub</span>
-                    <span className="text-[10px] font-bold text-slate-400">Directory & Advisories</span>
+                    <span className="text-xs font-black text-emerald-400">CSC ERPO</span>
+                    <span className="text-[10px] font-bold text-slate-400">Room &amp; Results</span>
                   </div>
                   <h3 className="text-sm font-bold text-white mt-2">
-                    CSC Regional Offices Direct Directory
+                    ONSA &amp; OCSERGS Portal
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-1">
-                    Direct access to CSC Regional Office specific filing advisories, walk-in guidelines, and test centers.
+                    Online School Assignment (ONSA) and Certificate of Eligibility / Rating system.
                   </p>
                 </div>
 
                 <a
-                  href="https://csc.gov.ph"
+                  href="https://erpo.csc.gov.ph"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition text-center shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <span>Visit CSC Main Website</span>
+                  <span>Open ERPO</span>
                   <span>↗</span>
                 </a>
               </div>

@@ -41,6 +41,25 @@ export default function AdminCSCSyncPage() {
     }
   };
 
+  const handleSeedSchedule = async () => {
+    setSyncing(true);
+    setMessage("");
+    try {
+      const res = await fetch("/api/csc/seed");
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setMessage(`✅ 2026 Civil Service Exam timetable seeded successfully!`);
+        loadSyncData();
+      } else {
+        setMessage(`❌ Seed error: ${data.error || "Failed to seed schedule."}`);
+      }
+    } catch (err: any) {
+      setMessage("❌ Connection error.");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6 text-slate-100">
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
@@ -54,13 +73,23 @@ export default function AdminCSCSyncPage() {
           </p>
         </div>
 
-        <button
-          onClick={handleManualSync}
-          disabled={syncing}
-          className="px-5 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-extrabold text-xs rounded-2xl shadow-lg transition cursor-pointer shrink-0"
-        >
-          {syncing ? "Syncing with CSC..." : "⚡ Sync Now"}
-        </button>
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <button
+            onClick={handleSeedSchedule}
+            disabled={syncing}
+            className="px-4 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-extrabold text-xs rounded-2xl shadow-lg transition cursor-pointer"
+          >
+            🌱 Seed 2026 Timetable
+          </button>
+
+          <button
+            onClick={handleManualSync}
+            disabled={syncing}
+            className="px-5 py-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-extrabold text-xs rounded-2xl shadow-lg transition cursor-pointer"
+          >
+            {syncing ? "Syncing with CSC..." : "⚡ Sync Now"}
+          </button>
+        </div>
       </div>
 
       {message && (
