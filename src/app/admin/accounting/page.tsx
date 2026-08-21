@@ -856,7 +856,9 @@ export default function AdminAccountingPage() {
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                         {p.type.replace("_", " ")}
                       </span>
-                      <span className="font-mono text-xs font-bold text-slate-400">{p.code}</span>
+                      <span className="font-mono text-xs font-bold text-emerald-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                        {p.partnerId || p.code}
+                      </span>
                     </div>
 
                     <div>
@@ -886,7 +888,7 @@ export default function AdminAccountingPage() {
 
                   <button
                     onClick={async () => {
-                      const res = await fetch(`/api/admin/accounting/partners/${p.id}`);
+                      const res = await fetch(`/api/admin/accounting/partners/${p.id}/statement`);
                       if (res.ok) {
                         const json = await res.json();
                         setSelectedPartnerStatement(json.data);
@@ -1408,38 +1410,64 @@ export default function AdminAccountingPage() {
       {/* ========================================================================= */}
       {selectedPartnerStatement && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-3xl w-full max-h-[85vh] flex flex-col space-y-6 shadow-2xl text-white">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-4xl w-full max-h-[85vh] flex flex-col space-y-6 shadow-2xl text-white">
             <div className="flex items-center justify-between border-b border-slate-800 pb-4">
               <div>
-                <h3 className="text-xl font-black">{selectedPartnerStatement.partner.name}</h3>
-                <p className="text-xs text-slate-400 font-mono">Code: {selectedPartnerStatement.partner.code}</p>
+                <h3 className="text-xl font-black">{selectedPartnerStatement.partner?.name}</h3>
+                <p className="text-xs text-slate-400 font-mono">
+                  Partner ID: <strong className="text-emerald-400">{selectedPartnerStatement.partner?.partnerId || selectedPartnerStatement.partner?.code}</strong> &bull; {selectedPartnerStatement.statementReference}
+                </p>
               </div>
-              <button
-                onClick={() => setSelectedPartnerStatement(null)}
-                className="text-slate-400 hover:text-white text-lg font-bold p-1 cursor-pointer"
-              >
-                ✕
-              </button>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`/api/admin/accounting/partners/${selectedPartnerStatement.partner?.id}/statement?format=xlsx`}
+                  download
+                  className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-black rounded-xl transition flex items-center gap-1 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>XLSX</span>
+                </a>
+                <a
+                  href={`/api/admin/accounting/partners/${selectedPartnerStatement.partner?.id}/statement?format=csv`}
+                  download
+                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1 border border-slate-700 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>CSV</span>
+                </a>
+                <button
+                  onClick={() => setSelectedPartnerStatement(null)}
+                  className="text-slate-400 hover:text-white text-lg font-bold p-1 cursor-pointer ml-2"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             {/* Statement Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                <div className="text-[10px] font-bold uppercase text-slate-400">Total Qualifying Revenue</div>
-                <div className="text-lg font-black text-white font-mono mt-1">
-                  {selectedPartnerStatement.statement.formattedRevenue}
+            <div className="grid grid-cols-4 gap-3 text-xs">
+              <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Qualifying Revenue</div>
+                <div className="text-base font-black text-white font-mono mt-1">
+                  {selectedPartnerStatement.summary?.formattedQualifyingPayments || selectedPartnerStatement.statement?.formattedRevenue || "₱0.00"}
                 </div>
               </div>
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                <div className="text-[10px] font-bold uppercase text-slate-400">Total Earned Commissions</div>
-                <div className="text-lg font-black text-purple-400 font-mono mt-1">
-                  {selectedPartnerStatement.statement.formattedCommissions}
+              <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Gross Commission</div>
+                <div className="text-base font-black text-purple-400 font-mono mt-1">
+                  {selectedPartnerStatement.summary?.formattedGrossCommission || selectedPartnerStatement.statement?.formattedCommissions || "₱0.00"}
                 </div>
               </div>
-              <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                <div className="text-[10px] font-bold uppercase text-slate-400">Outstanding Payable</div>
-                <div className="text-lg font-black text-emerald-400 font-mono mt-1">
-                  {selectedPartnerStatement.statement.formattedOutstanding}
+              <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Paid Out</div>
+                <div className="text-base font-black text-teal-400 font-mono mt-1">
+                  {selectedPartnerStatement.summary?.formattedPaid || "₱0.00"}
+                </div>
+              </div>
+              <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-800">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Outstanding Available</div>
+                <div className="text-base font-black text-emerald-400 font-mono mt-1">
+                  {selectedPartnerStatement.summary?.formattedOutstanding || selectedPartnerStatement.statement?.formattedOutstanding || "₱0.00"}
                 </div>
               </div>
             </div>
@@ -1447,33 +1475,35 @@ export default function AdminAccountingPage() {
             {/* Commission Transactions Table */}
             <div className="flex-1 overflow-y-auto space-y-3">
               <div className="text-xs font-bold uppercase text-slate-400">
-                Commission Records ({selectedPartnerStatement.commissions.length})
+                Transactions Ledger ({selectedPartnerStatement.transactions?.length || selectedPartnerStatement.commissions?.length || 0})
               </div>
 
-              {!selectedPartnerStatement.commissions.length ? (
-                <div className="py-10 text-center text-xs text-slate-400">No commissions recorded yet.</div>
+              {!(selectedPartnerStatement.transactions?.length || selectedPartnerStatement.commissions?.length) ? (
+                <div className="py-10 text-center text-xs text-slate-400">No transactions recorded yet.</div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
                       <tr>
                         <th className="py-2.5 px-3">Date</th>
-                        <th className="py-2.5 px-3">Student</th>
-                        <th className="py-2.5 px-3">Purchase Amount</th>
+                        <th className="py-2.5 px-3">Customer</th>
+                        <th className="py-2.5 px-3">Plan</th>
+                        <th className="py-2.5 px-3 text-right">Payment</th>
                         <th className="py-2.5 px-3">Rate</th>
-                        <th className="py-2.5 px-3">Commission</th>
+                        <th className="py-2.5 px-3 text-right">Commission</th>
                         <th className="py-2.5 px-3">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800">
-                      {selectedPartnerStatement.commissions.map((c: any) => (
+                      {(selectedPartnerStatement.transactions || selectedPartnerStatement.commissions || []).map((c: any) => (
                         <tr key={c.id} className="hover:bg-slate-800/40 transition">
-                          <td className="py-2.5 px-3 text-slate-400">{new Date(c.date).toLocaleDateString()}</td>
-                          <td className="py-2.5 px-3 font-medium text-white">{c.customerName}</td>
-                          <td className="py-2.5 px-3 font-mono">{formatCentavosToPesos(c.purchaseAmountCentavos)}</td>
+                          <td className="py-2.5 px-3 text-slate-400 whitespace-nowrap">{new Date(c.date).toLocaleDateString()}</td>
+                          <td className="py-2.5 px-3 font-medium text-white">{c.customerMasked || c.customerName || "Student"}</td>
+                          <td className="py-2.5 px-3 text-slate-300">{c.planType || "PREMIUM"}</td>
+                          <td className="py-2.5 px-3 font-mono text-right">{c.formattedPurchase || formatCentavosToPesos(c.purchaseAmountCentavos)}</td>
                           <td className="py-2.5 px-3 font-mono text-purple-400">{c.effectiveRate}%</td>
-                          <td className="py-2.5 px-3 font-mono font-bold text-emerald-400">
-                            {formatCentavosToPesos(c.commissionAmountCentavos)}
+                          <td className="py-2.5 px-3 font-mono font-bold text-emerald-400 text-right">
+                            {c.formattedCommission || formatCentavosToPesos(c.commissionAmountCentavos)}
                           </td>
                           <td className="py-2.5 px-3">
                             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-300">

@@ -10,17 +10,22 @@ export interface JWTPayload {
   [key: string]: unknown;
 }
 
-// 💡 Fallback key guarantees Edge (middleware) & Node (login route) match 100%
-const SECRET_STRING = process.env.JWT_SECRET || "cse_reviewer_permanent_jwt_secret_key_2026";
-const SECRET_KEY = new TextEncoder().encode(SECRET_STRING);
+function getJwtSecretKey(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.trim().length === 0) {
+    throw new Error("Critical Configuration Error: Required environment variable JWT_SECRET is not configured.");
+  }
+  return new TextEncoder().encode(secret.trim());
+}
 
 export async function signJWT(payload: Record<string, any>): Promise<string> {
   try {
+    const secretKey = getJwtSecretKey();
     return await new SignJWT(payload)
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
       .setExpirationTime("7d")
-      .sign(SECRET_KEY);
+      .sign(secretKey);
   } catch (error) {
     console.error("[signJWT Error]:", error);
     throw error;
@@ -29,7 +34,8 @@ export async function signJWT(payload: Record<string, any>): Promise<string> {
 
 export async function verifyJWT(token: string): Promise<JWTPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY);
+    const secretKey = getJwtSecretKey();
+    const { payload } = await jwtVerify(token, secretKey);
     return payload as JWTPayload;
   } catch (error) {
     console.error("[verifyJWT Error]:", error);

@@ -6,7 +6,8 @@ import { decrypt } from "@/lib/crypto/encryption";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 import { LedgerService } from "@/lib/accounting/ledgerService";
 import { sendPartnerPayoutProcessedEmail } from "@/lib/email";
-
+import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
+import { PartnerService } from "@/lib/accounting/partnerService";
 
 export async function GET(request: Request) {
   try {
@@ -21,16 +22,20 @@ export async function GET(request: Request) {
     if (status && status !== "ALL") where.status = status;
 
     const [referralPayouts, partnerPayouts] = await Promise.all([
-      type === "PARTNER" ? [] : prisma.referralPayout.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        include: { user: { select: { name: true, email: true } } },
-      }),
-      type === "REFERRAL" ? [] : prisma.partnerPayout.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        include: { partner: { select: { name: true, code: true, type: true } } },
-      }),
+      type === "PARTNER"
+        ? []
+        : prisma.referralPayout.findMany({
+            where,
+            orderBy: { createdAt: "desc" },
+            include: { user: { select: { name: true, email: true } } },
+          }),
+      type === "REFERRAL"
+        ? []
+        : prisma.partnerPayout.findMany({
+            where,
+            orderBy: { createdAt: "desc" },
+            include: { partner: { select: { name: true, partnerId: true, code: true, type: true } } },
+          }),
     ]);
 
     const formattedReferral = referralPayouts.map((p) => {
@@ -49,7 +54,7 @@ export async function GET(request: Request) {
         formattedAmount: formatCentavosToPesos(p.amountCentavos),
         method: p.method,
         accountName: p.accountName,
-        accountNumber: rawAcc,
+        accountNumber: PartnerService.maskAccountNumber(rawAcc, p.method),
         bankName: p.bankName,
         status: p.status,
         adminNotes: p.adminNotes,
@@ -69,12 +74,13 @@ export async function GET(request: Request) {
         id: p.id,
         payoutType: "PARTNER",
         recipientName: p.partner?.name || "Partner",
-        recipientEmailMasked: p.partner?.code || "PTR",
+        recipientEmailMasked: p.partner?.partnerId || p.partner?.code || "PTR",
+        partnerId: p.partner?.partnerId || p.partner?.code,
         amountCentavos: p.amountCentavos,
         formattedAmount: formatCentavosToPesos(p.amountCentavos),
         method: p.method,
         accountName: p.accountName,
-        accountNumber: rawAcc,
+        accountNumber: PartnerService.maskAccountNumber(rawAcc, p.method),
         bankName: p.bankName,
         status: p.status,
         adminNotes: p.adminNotes,
@@ -129,9 +135,27 @@ export async function PATCH(request: Request) {
       if (!partnerPayout) return NextResponse.json({ error: "Partner payout not found" }, { status: 404 });
 
       let newStatus: any = "REQUESTED";
-      if (action === "APPROVE") newStatus = "APPROVED";
-      else if (action === "REJECT") newStatus = "REJECTED";
-      else if (action === "MARK_PAID") newStatus = "PAID";
+      let auditAction: any = "PARTNER_PAYOUT_APPROVED";
+
+      if (action === "APPROVE") {
+        newStatus = "APPROVED";
+        auditAction = "PARTNER_PAYOUT_APPROVED";
+      } else if (action === "PROCESSING") {
+        newStatus = "PROCESSING";
+        auditAction = "PARTNER_PAYOUT_PROCESSING";
+      } else if (action === "REJECT") {
+        newStatus = "REJECTED";
+        auditAction = "PARTNER_PAYOUT_REJECTED";
+      } else if (action === "FAIL") {
+        newStatus = "FAILED";
+        auditAction = "PARTNER_PAYOUT_FAILED";
+      } else if (action === "REVERSE") {
+        newStatus = "REVERSED";
+        auditAction = "PARTNER_PAYOUT_REVERSED";
+      } else if (action === "MARK_PAID") {
+        newStatus = "PAID";
+        auditAction = "PARTNER_PAYOUT_PAID";
+      }
 
       await prisma.partnerPayout.update({
         where: { id: payoutId },
@@ -142,6 +166,17 @@ export async function PATCH(request: Request) {
           processedBy: user.id,
           processedAt: new Date(),
         },
+      });
+
+      // Audit Log
+      await PartnerAuditService.logEvent({
+        action: auditAction,
+        partnerId: partnerPayout.partnerId,
+        actorId: user.id,
+        actorRole: "ADMIN",
+        amountCentavos: partnerPayout.amountCentavos,
+        reason: adminNotes,
+        metadata: { payoutId, action, transactionRef },
       });
 
       if (action === "MARK_PAID") {
@@ -168,6 +203,7 @@ export async function PATCH(request: Request) {
             amountPesos: formatCentavosToPesos(partnerPayout.amountCentavos),
             payoutMethod: String(partnerPayout.method),
             transactionRef: transactionRef || undefined,
+            dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/partner-portal/payouts`,
           }).catch((err) => console.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));
         }
       }

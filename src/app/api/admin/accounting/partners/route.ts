@@ -54,6 +54,7 @@ export async function GET(request: Request) {
 
       return {
         id: p.id,
+        partnerId: p.partnerId || p.code,
         code: p.code,
         name: p.name,
         type: p.type,

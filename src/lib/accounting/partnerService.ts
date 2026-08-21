@@ -1,9 +1,12 @@
 // Relative Path: src/lib/accounting/partnerService.ts
+import crypto from "crypto";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import {
   PartnerCommissionModel,
   PartnerStatus,
   PartnerType,
+  PayoutMethod,
 } from "./types";
 import {
   calculatePercentageShareCentavos,
@@ -13,13 +16,15 @@ import {
 } from "./money";
 import { LedgerService } from "./ledgerService";
 import { encrypt, decrypt } from "@/lib/crypto/encryption";
-import { sendPartnerCommissionAlertEmail } from "@/lib/email";
-
-
-import bcrypt from "bcryptjs";
+import {
+  sendPartnerCommissionAlertEmail,
+  sendPartnerSetupEmail,
+} from "@/lib/email";
+import { PartnerAuditService } from "./partnerAuditService";
 
 export interface CreatePartnerInput {
   name: string;
+  partnerId?: string; // Optional manual override, otherwise server-generated PT-XXXXXX
   code?: string;
   slug?: string;
   password?: string;
@@ -37,6 +42,7 @@ export interface CreatePartnerInput {
   minPayoutCentavos?: number;
   notes?: string;
   adminUserId?: string;
+  sendInviteEmail?: boolean;
 }
 
 export interface UpdatePartnerRateInput {
@@ -48,9 +54,68 @@ export interface UpdatePartnerRateInput {
   adminUserId?: string;
 }
 
+export interface AddPayoutProfileInput {
+  partnerId: string;
+  method: PayoutMethod;
+  accountHolderName: string;
+  accountNumber: string;
+  bankName?: string | null;
+  accountType?: string | null;
+  isDefault?: boolean;
+}
+
 export class PartnerService {
   /**
-   * Generates a unique, collision-resistant Partner tracking code.
+   * Normalizes any partner ID input (e.g. "pt-000123", "Pt-123", "PT-000123") into canonical "PT-XXXXXX".
+   */
+  static normalizePartnerId(input: string): string {
+    if (!input) return "";
+    const clean = input.trim();
+    const ptMatch = clean.match(/^pt[-_]?(\d{1,6})$/i);
+    if (ptMatch) {
+      const numStr = ptMatch[1].padStart(6, "0");
+      return `PT-${numStr}`;
+    }
+    return clean;
+  }
+
+  /**
+   * Concurrency-safe atomic generation of the next sequential Partner ID: PT-XXXXXX.
+   * Utilizes database atomic sequence/counter inside transaction to prevent collisions.
+   */
+  static async generateNextPartnerId(): Promise<string> {
+    return prisma.$transaction(async (tx) => {
+      // Upsert sequence counter atomically
+      const seq = await tx.partnerSequence.upsert({
+        where: { id: "PARTNER_SEQ" },
+        update: { currentVal: { increment: 1 } },
+        create: { id: "PARTNER_SEQ", currentVal: 1 },
+      });
+
+      let nextVal = seq.currentVal;
+      let candidate = `PT-${String(nextVal).padStart(6, "0")}`;
+
+      // Ensure candidate does not already exist (protection against manual inserts)
+      let exists = await tx.partner.findUnique({
+        where: { partnerId: candidate },
+        select: { id: true },
+      });
+
+      while (exists) {
+        nextVal++;
+        candidate = `PT-${String(nextVal).padStart(6, "0")}`;
+        exists = await tx.partner.findUnique({
+          where: { partnerId: candidate },
+          select: { id: true },
+        });
+      }
+
+      return candidate;
+    }, { timeout: 25000, maxWait: 15000 });
+  }
+
+  /**
+   * Generates a unique fallback partner tracking code for URLs.
    */
   static generatePartnerCode(name: string): string {
     const clean = name
@@ -62,20 +127,64 @@ export class PartnerService {
   }
 
   /**
-   * Resolves a partner by code or custom slug.
+   * Resolves a partner by registered Email OR Partner ID (PT-XXXXXX) OR code OR custom slug.
+   */
+  static async resolvePartnerByIdentifier(identifier: string) {
+    if (!identifier) return null;
+    const clean = identifier.trim();
+    const normalizedPT = this.normalizePartnerId(clean);
+
+    return prisma.partner.findFirst({
+      where: {
+        OR: [
+          { partnerId: { equals: normalizedPT, mode: "insensitive" } },
+          { partnerId: { equals: clean, mode: "insensitive" } },
+          { contactEmail: { equals: clean.toLowerCase(), mode: "insensitive" } },
+          { code: { equals: clean, mode: "insensitive" } },
+          { slug: { equals: clean, mode: "insensitive" } },
+        ],
+      },
+      include: {
+        payoutProfiles: { orderBy: { createdAt: "desc" } },
+      },
+    });
+  }
+
+  /**
+   * Resolves an active partner by code or custom slug for student referrals.
    */
   static async resolvePartnerByCodeOrSlug(codeOrSlug: string) {
     if (!codeOrSlug) return null;
     const clean = codeOrSlug.trim();
+    const normalizedPT = this.normalizePartnerId(clean);
+
     return prisma.partner.findFirst({
       where: {
         OR: [
+          { partnerId: { equals: normalizedPT, mode: "insensitive" } },
           { code: { equals: clean, mode: "insensitive" } },
           { slug: { equals: clean, mode: "insensitive" } },
         ],
         status: "ACTIVE",
       },
     });
+  }
+
+  /**
+   * Masks sensitive account numbers for safe display throughout UI and logs.
+   * e.g., GCash: "09******123", Maya: "09******456", Bank: "******1234"
+   */
+  static maskAccountNumber(accountNumber: string, method?: string): string {
+    if (!accountNumber) return "—";
+    const clean = String(accountNumber).trim();
+    if (clean.length <= 4) return "******";
+
+    if (method === "GCASH" || method === "MAYA" || clean.startsWith("09")) {
+      if (clean.length >= 11) {
+        return `${clean.slice(0, 2)}******${clean.slice(-3)}`;
+      }
+    }
+    return `******${clean.slice(-4)}`;
   }
 
   /**
@@ -115,12 +224,16 @@ export class PartnerService {
   }
 
   /**
-   * Registers a new Partner organization or collaborator.
+   * Registers a new Partner organization with PT-XXXXXX generation and secure one-time onboarding setup token.
    */
   static async createPartner(input: CreatePartnerInput) {
+    const partnerId = input.partnerId
+      ? this.normalizePartnerId(input.partnerId)
+      : await this.generateNextPartnerId();
+
     const code = input.code
       ? input.code.toUpperCase().trim()
-      : this.generatePartnerCode(input.name);
+      : partnerId; // default tracking code to PT-XXXXXX
 
     let cleanSlug: string | null = null;
     if (input.slug) {
@@ -136,20 +249,29 @@ export class PartnerService {
       passwordHash = await bcrypt.hash(input.password, 10);
     }
 
+    // Generate secure one-time setup token for email invitation
+    const setupToken = crypto.randomBytes(32).toString("hex");
+    const setupTokenExpires = new Date();
+    setupTokenExpires.setDate(setupTokenExpires.getDate() + 7); // 7 days expiration
+
     const safeRate = sanitizePercentage(input.commissionRate ?? 10.0, 10.0);
 
     const partner = await prisma.partner.create({
       data: {
+        partnerId,
         code,
         slug: cleanSlug,
         passwordHash,
+        setupToken: passwordHash ? null : setupToken,
+        setupTokenExpires: passwordHash ? null : setupTokenExpires,
+        mustChangePassword: !passwordHash,
         name: input.name.trim(),
         tagline: input.tagline?.trim(),
         badgeText: input.badgeText?.trim() || "Official Partner",
         description: input.description?.trim(),
         type: input.type,
         contactName: input.contactName?.trim(),
-        contactEmail: input.contactEmail?.trim(),
+        contactEmail: input.contactEmail?.trim().toLowerCase(),
         contactPhone: input.contactPhone?.trim(),
         commissionModel: input.commissionModel ?? "PERCENTAGE_OF_CUSTOMER_PAYMENT",
         commissionRate: safeRate,
@@ -171,11 +293,95 @@ export class PartnerService {
       include: { rateHistory: true },
     });
 
+    // Log audit event
+    await PartnerAuditService.logEvent({
+      action: "PARTNER_ACCOUNT_CREATED",
+      partnerId: partner.id,
+      actorId: input.adminUserId,
+      actorRole: "ADMIN",
+      metadata: { partnerId: partner.partnerId, name: partner.name, email: partner.contactEmail },
+    });
+
+    // Dispatch invitation email if requested or if setupToken is active
+    if (input.sendInviteEmail !== false && partner.contactEmail && partner.setupToken) {
+      await sendPartnerSetupEmail({
+        toEmail: partner.contactEmail,
+        partnerName: partner.name,
+        partnerId: partner.partnerId || partner.code,
+        setupToken: partner.setupToken,
+      });
+
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_INVITED",
+        partnerId: partner.id,
+        actorId: input.adminUserId,
+        actorRole: "ADMIN",
+        metadata: { partnerId: partner.partnerId, email: partner.contactEmail },
+      });
+    }
+
     return partner;
   }
 
   /**
-   * Updates partner commission rates with historical versioning.
+   * Activates partner account via secure one-time setup token.
+   */
+  static async activatePartnerWithSetupToken(params: {
+    token: string;
+    password: string;
+    ipAddress?: string;
+  }): Promise<{ success: boolean; partner?: any; error?: string }> {
+    const { token, password, ipAddress } = params;
+    if (!token || !password) {
+      return { success: false, error: "Setup token and password are required." };
+    }
+
+    if (password.length < 8) {
+      return { success: false, error: "Password must be at least 8 characters long." };
+    }
+
+    const partner = await prisma.partner.findFirst({
+      where: {
+        setupToken: token,
+        setupTokenExpires: { gt: new Date() },
+      },
+    });
+
+    if (!partner) {
+      return {
+        success: false,
+        error: "This setup link is invalid or has expired. Please contact GovStudyX Admin.",
+      };
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const updated = await prisma.partner.update({
+      where: { id: partner.id },
+      data: {
+        passwordHash,
+        setupToken: null,
+        setupTokenExpires: null,
+        tempPasswordHash: null,
+        mustChangePassword: false,
+        status: "ACTIVE",
+      },
+    });
+
+    await PartnerAuditService.logEvent({
+      action: "PARTNER_ACTIVATED",
+      partnerId: updated.id,
+      actorId: updated.id,
+      actorRole: "PARTNER",
+      ipAddress,
+      metadata: { partnerId: updated.partnerId },
+    });
+
+    return { success: true, partner: updated };
+  }
+
+  /**
+   * Updates partner commission rates with historical versioning (preserving past rates).
    */
   static async updatePartnerRate(input: UpdatePartnerRateInput) {
     const safeRate = sanitizePercentage(input.commissionRate, 10.0);
@@ -320,7 +526,6 @@ export class PartnerService {
 
     // Fire real-time commission alert email (non-blocking)
     if (partner.contactEmail) {
-      // Look up transaction plan type for context
       const txn = await prisma.transaction.findUnique({
         where: { id: params.transactionId },
         select: { planType: true },
@@ -333,12 +538,458 @@ export class PartnerService {
         purchasePesos: formatCentavosToPesos(params.customerPaymentCentavos),
         planType: txn?.planType || "Premium",
         campaignSource: effectiveSource,
+        dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/partner-portal/dashboard`,
       }).catch((err) =>
         console.error("[PARTNER_COMMISSION_EMAIL_ERROR]", err)
       );
     }
 
     return commission;
+  }
+
+  /**
+   * Adds or updates a payout method profile for a partner.
+   */
+  static async addPayoutProfile(input: AddPayoutProfileInput) {
+    const partner = await prisma.partner.findUnique({
+      where: { id: input.partnerId },
+    });
+    if (!partner) throw new Error("Partner not found");
+
+    let encryptedAcc = input.accountNumber.trim();
+    try {
+      const enc = encrypt(encryptedAcc);
+      if (enc) encryptedAcc = enc;
+    } catch {
+      // Fallback in test/dev
+    }
+
+    return prisma.$transaction(async (tx) => {
+      if (input.isDefault) {
+        await tx.partnerPayoutProfile.updateMany({
+          where: { partnerId: input.partnerId },
+          data: { isDefault: false },
+        });
+      }
+
+      const existingProfilesCount = await tx.partnerPayoutProfile.count({
+        where: { partnerId: input.partnerId },
+      });
+
+      const profile = await tx.partnerPayoutProfile.create({
+        data: {
+          partnerId: input.partnerId,
+          method: input.method,
+          accountHolderName: input.accountHolderName.trim(),
+          accountNumberEncrypted: encryptedAcc,
+          bankName: input.bankName ? input.bankName.trim() : null,
+          accountType: input.accountType ? input.accountType.trim() : null,
+          isDefault: input.isDefault ?? existingProfilesCount === 0,
+          status: "VERIFIED",
+        },
+      });
+
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_PAYOUT_METHOD_ADDED",
+        partnerId: input.partnerId,
+        metadata: {
+          method: input.method,
+          accountHolderName: input.accountHolderName,
+          maskedAccount: this.maskAccountNumber(input.accountNumber, input.method),
+          isDefault: profile.isDefault,
+        },
+      }, tx);
+
+      return profile;
+    }, { timeout: 25000, maxWait: 15000 });
+  }
+
+  /**
+   * Sets a verified payout profile as the partner's default payout method.
+   */
+  static async setDefaultPayoutProfile(partnerId: string, profileId: string) {
+    return prisma.$transaction(async (tx) => {
+      const profile = await tx.partnerPayoutProfile.findFirst({
+        where: { id: profileId, partnerId },
+      });
+      if (!profile) throw new Error("Payout profile not found or does not belong to partner.");
+
+      await tx.partnerPayoutProfile.updateMany({
+        where: { partnerId },
+        data: { isDefault: false },
+      });
+
+      const updated = await tx.partnerPayoutProfile.update({
+        where: { id: profileId },
+        data: { isDefault: true },
+      });
+
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_DEFAULT_PAYOUT_METHOD_CHANGED",
+        partnerId,
+        metadata: { method: updated.method, profileId },
+      }, tx);
+
+      return updated;
+    }, { timeout: 25000, maxWait: 15000 });
+  }
+
+  /**
+   * Retrieves decrypted and masked payout profiles for a partner.
+   */
+  static async listPayoutProfiles(partnerId: string) {
+    const profiles = await prisma.partnerPayoutProfile.findMany({
+      where: { partnerId },
+      orderBy: [{ isDefault: "desc" }, { createdAt: "desc" }],
+    });
+
+    return profiles.map((p) => {
+      let rawAcc = "";
+      try {
+        rawAcc = decrypt(p.accountNumberEncrypted) || p.accountNumberEncrypted;
+      } catch {
+        rawAcc = p.accountNumberEncrypted;
+      }
+
+      return {
+        id: p.id,
+        method: p.method,
+        accountHolderName: p.accountHolderName,
+        accountNumberMasked: this.maskAccountNumber(rawAcc, p.method),
+        bankName: p.bankName,
+        accountType: p.accountType,
+        isDefault: p.isDefault,
+        status: p.status,
+        createdAt: p.createdAt.toISOString(),
+      };
+    });
+  }
+
+  /**
+   * Generates partner financial overview metrics with authoritative server-side calculation.
+   */
+  static async getPartnerFinancialOverview(partnerId: string) {
+    const partner = await prisma.partner.findUnique({
+      where: { id: partnerId },
+      include: {
+        payoutProfiles: { orderBy: { isDefault: "desc" } },
+      },
+    });
+
+    if (!partner) throw new Error("Partner not found");
+
+    const now = new Date();
+
+    const [commissions, payouts, totalAttributionsCount] = await Promise.all([
+      prisma.partnerCommission.findMany({
+        where: { partnerId: partner.id },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.partnerPayout.findMany({
+        where: { partnerId: partner.id },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.partnerAttribution.count({
+        where: { partnerId: partner.id },
+      }),
+    ]);
+
+    let qualifyingSalesCentavos = 0;
+    let totalCommissionCentavos = 0;
+    let availableCommissionCentavos = 0;
+    let pendingCommissionCentavos = 0;
+    let paidCommissionCentavos = 0;
+    let reversedCommissionCentavos = 0;
+
+    const channelMap: Record<
+      string,
+      { count: number; revenueCentavos: number; commissionCentavos: number }
+    > = {};
+
+    commissions.forEach((c) => {
+      qualifyingSalesCentavos += c.purchaseAmountCentavos;
+
+      const src = c.campaignSource || "direct";
+      if (!channelMap[src]) {
+        channelMap[src] = { count: 0, revenueCentavos: 0, commissionCentavos: 0 };
+      }
+      channelMap[src].count += 1;
+      channelMap[src].revenueCentavos += c.purchaseAmountCentavos;
+      channelMap[src].commissionCentavos += c.commissionAmountCentavos;
+
+      if (c.status === "PAID") {
+        totalCommissionCentavos += c.commissionAmountCentavos;
+        paidCommissionCentavos += c.commissionAmountCentavos;
+      } else if (
+        c.status === "AVAILABLE" ||
+        (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
+      ) {
+        totalCommissionCentavos += c.commissionAmountCentavos;
+        availableCommissionCentavos += c.commissionAmountCentavos;
+      } else if (c.status === "PENDING") {
+        totalCommissionCentavos += c.commissionAmountCentavos;
+        pendingCommissionCentavos += c.commissionAmountCentavos;
+      } else if (c.status === "REVERSED" || c.status === "CANCELLED") {
+        reversedCommissionCentavos += c.commissionAmountCentavos;
+      }
+    });
+
+    let reservedForPayoutCentavos = 0;
+    let totalPaidPayoutsCentavos = 0;
+
+    payouts.forEach((p) => {
+      if (p.status === "PAID") {
+        totalPaidPayoutsCentavos += p.amountCentavos;
+      } else if (
+        p.status === "REQUESTED" ||
+        p.status === "RESERVED" ||
+        p.status === "UNDER_REVIEW" ||
+        p.status === "APPROVED" ||
+        p.status === "PROCESSING"
+      ) {
+        reservedForPayoutCentavos += p.amountCentavos;
+      }
+    });
+
+    const netAvailableCentavos = Math.max(
+      0,
+      availableCommissionCentavos - reservedForPayoutCentavos
+    );
+
+    const outstandingBalanceCentavos = netAvailableCentavos;
+
+    const channelBreakdown = Object.entries(channelMap).map(([channel, data]) => ({
+      channel,
+      count: data.count,
+      revenueCentavos: data.revenueCentavos,
+      commissionCentavos: data.commissionCentavos,
+      formattedRevenue: formatCentavosToPesos(data.revenueCentavos),
+      formattedCommission: formatCentavosToPesos(data.commissionCentavos),
+    }));
+
+    const displayPartnerId = partner.partnerId || partner.code;
+
+    return {
+      partner: {
+        id: partner.id,
+        partnerId: displayPartnerId,
+        code: partner.code,
+        slug: partner.slug,
+        name: partner.name,
+        type: partner.type,
+        status: partner.status,
+        contactEmail: partner.contactEmail,
+        contactName: partner.contactName,
+        contactPhone: partner.contactPhone,
+        tagline: partner.tagline,
+        badgeText: partner.badgeText,
+        commissionModel: partner.commissionModel,
+        commissionRate: partner.commissionRate,
+        holdingPeriodDays: partner.holdingPeriodDays,
+        minPayoutCentavos: partner.minPayoutCentavos,
+        agreementStart: partner.agreementStart.toISOString(),
+        agreementEnd: partner.agreementEnd ? partner.agreementEnd.toISOString() : null,
+      },
+      metrics: {
+        qualifyingSalesCentavos,
+        formattedQualifyingSales: formatCentavosToPesos(qualifyingSalesCentavos),
+        totalSalesCount: commissions.length,
+        totalAttributionsCount,
+
+        totalCommissionCentavos,
+        formattedTotalCommission: formatCentavosToPesos(totalCommissionCentavos),
+
+        pendingCommissionCentavos,
+        formattedPendingCommission: formatCentavosToPesos(pendingCommissionCentavos),
+
+        availableCommissionCentavos: netAvailableCentavos,
+        formattedAvailableCommission: formatCentavosToPesos(netAvailableCentavos),
+
+        reservedForPayoutCentavos,
+        formattedReservedForPayout: formatCentavosToPesos(reservedForPayoutCentavos),
+
+        totalPaidCentavos: totalPaidPayoutsCentavos,
+        formattedTotalPaid: formatCentavosToPesos(totalPaidPayoutsCentavos),
+
+        outstandingBalanceCentavos,
+        formattedOutstandingBalance: formatCentavosToPesos(outstandingBalanceCentavos),
+
+        minPayoutCentavos: partner.minPayoutCentavos,
+        formattedMinPayout: formatCentavosToPesos(partner.minPayoutCentavos),
+        canRequestPayout: netAvailableCentavos >= (partner.minPayoutCentavos || 15000),
+      },
+      channelBreakdown,
+      referralLink: `${process.env.NEXT_PUBLIC_APP_URL || "https://govstudyx.com"}/p/${partner.slug || displayPartnerId}`,
+    };
+  }
+
+  /**
+   * Atomically verifies partner balance and creates a payout request within a single transaction,
+   * reserving funds immediately to prevent concurrent double-withdrawal race conditions.
+   */
+  static async requestPayoutAtomic(params: {
+    partnerId: string;
+    requestedAmountCentavos: number;
+    method?: PayoutMethod;
+    accountNumber?: string;
+    accountName?: string;
+    bankName?: string | null;
+    profileId?: string;
+    ipAddress?: string;
+  }) {
+    const {
+      partnerId,
+      requestedAmountCentavos,
+      method,
+      accountNumber,
+      accountName,
+      bankName,
+      profileId,
+      ipAddress,
+    } = params;
+
+    return prisma.$transaction(async (tx) => {
+      const partner = await tx.partner.findUnique({
+        where: { id: partnerId },
+      });
+
+      if (!partner || partner.status !== "ACTIVE") {
+        throw new Error("Partner account is not active or does not exist.");
+      }
+
+      const minPayout = partner.minPayoutCentavos || 15000;
+      if (requestedAmountCentavos < minPayout) {
+        throw new Error(
+          `Requested amount is below minimum payout threshold of ${formatCentavosToPesos(minPayout)}.`
+        );
+      }
+
+      const now = new Date();
+
+      // Query active commissions and payouts inside the transaction
+      const [commissions, existingPayouts] = await Promise.all([
+        tx.partnerCommission.findMany({
+          where: { partnerId: partner.id },
+        }),
+        tx.partnerPayout.findMany({
+          where: { partnerId: partner.id },
+        }),
+      ]);
+
+      let availableCentavos = 0;
+      commissions.forEach((c) => {
+        if (
+          c.status === "AVAILABLE" ||
+          (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
+        ) {
+          availableCentavos += c.commissionAmountCentavos;
+        }
+      });
+
+      let alreadyReservedOrPaidCentavos = 0;
+      existingPayouts.forEach((p) => {
+        if (
+          p.status === "PAID" ||
+          p.status === "REQUESTED" ||
+          p.status === "RESERVED" ||
+          p.status === "UNDER_REVIEW" ||
+          p.status === "APPROVED" ||
+          p.status === "PROCESSING"
+        ) {
+          alreadyReservedOrPaidCentavos += p.amountCentavos;
+        }
+      });
+
+      const trueAvailableCentavos = Math.max(
+        0,
+        availableCentavos - alreadyReservedOrPaidCentavos
+      );
+
+      if (requestedAmountCentavos > trueAvailableCentavos) {
+        throw new Error(
+          `Insufficient available balance. You currently have ${formatCentavosToPesos(
+            trueAvailableCentavos
+          )} available for withdrawal.`
+        );
+      }
+
+      let resolvedMethod = method;
+      let resolvedAccountName = accountName || partner.contactName || partner.name;
+      let resolvedAccountNumber = accountNumber || "";
+      let resolvedBankName = bankName || null;
+
+      if (profileId) {
+        const profile = await tx.partnerPayoutProfile.findFirst({
+          where: { id: profileId, partnerId: partner.id },
+        });
+        if (profile) {
+          resolvedMethod = profile.method;
+          resolvedAccountName = profile.accountHolderName;
+          resolvedBankName = profile.bankName;
+          try {
+            resolvedAccountNumber = decrypt(profile.accountNumberEncrypted) || profile.accountNumberEncrypted;
+          } catch {
+            resolvedAccountNumber = profile.accountNumberEncrypted;
+          }
+        }
+      }
+
+      if (!resolvedAccountNumber || !resolvedAccountName) {
+        throw new Error("Account name and number are required for payout.");
+      }
+
+      // Encrypt account number securely
+      let encryptedAcc = resolvedAccountNumber.trim();
+      try {
+        const encResult = encrypt(encryptedAcc);
+        if (encResult) encryptedAcc = encResult;
+      } catch {
+        // preserve in test/dev
+      }
+
+      const payout = await tx.partnerPayout.create({
+        data: {
+          partnerId: partner.id,
+          amountCentavos: requestedAmountCentavos,
+          currency: "PHP",
+          method: resolvedMethod,
+          accountNumberEncrypted: encryptedAcc,
+          accountName: resolvedAccountName.trim(),
+          bankName: resolvedBankName ? resolvedBankName.trim() : null,
+          status: "RESERVED",
+        },
+      });
+
+      // Audit log payout reservation
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_PAYOUT_REQUESTED",
+        partnerId: partner.id,
+        amountCentavos: requestedAmountCentavos,
+        actorId: partner.id,
+        actorRole: "PARTNER",
+        ipAddress,
+        metadata: {
+          payoutId: payout.id,
+          method: resolvedMethod,
+          maskedAccount: this.maskAccountNumber(resolvedAccountNumber, resolvedMethod),
+          requestedAmountPesos: formatCentavosToPesos(requestedAmountCentavos),
+        },
+      }, tx);
+
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_PAYOUT_RESERVED",
+        partnerId: partner.id,
+        amountCentavos: requestedAmountCentavos,
+        actorId: "SYSTEM",
+        actorRole: "SYSTEM",
+        metadata: { payoutId: payout.id, status: "RESERVED" },
+      }, tx);
+
+      return {
+        payout,
+        remainingBalanceCentavos: trueAvailableCentavos - requestedAmountCentavos,
+      };
+    }, { timeout: 25000, maxWait: 15000 });
   }
 
   /**
@@ -393,7 +1044,10 @@ export class PartnerService {
       if (c.status === "PAID") {
         totalCommissionsCentavos += c.commissionAmountCentavos;
         paidCommissionsCentavos += c.commissionAmountCentavos;
-      } else if (c.status === "AVAILABLE" || (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)) {
+      } else if (
+        c.status === "AVAILABLE" ||
+        (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
+      ) {
         totalCommissionsCentavos += c.commissionAmountCentavos;
         availableCommissionsCentavos += c.commissionAmountCentavos;
       } else if (c.status === "PENDING") {
@@ -425,6 +1079,7 @@ export class PartnerService {
     return {
       partner: {
         id: partner.id,
+        partnerId: partner.partnerId || partner.code,
         code: partner.code,
         slug: partner.slug,
         name: partner.name,
@@ -466,7 +1121,26 @@ export class PartnerService {
         status: c.status,
         holdingUntil: c.holdingUntil?.toISOString() || null,
       })),
-      payouts: partner.payouts,
+      payouts: partner.payouts.map((p) => {
+        let rawAcc = "";
+        try {
+          rawAcc = decrypt(p.accountNumberEncrypted) || p.accountNumberEncrypted;
+        } catch {
+          rawAcc = p.accountNumberEncrypted;
+        }
+        return {
+          id: p.id,
+          amountCentavos: p.amountCentavos,
+          formattedAmount: formatCentavosToPesos(p.amountCentavos),
+          method: p.method,
+          accountName: p.accountName,
+          accountNumberMasked: this.maskAccountNumber(rawAcc, p.method),
+          bankName: p.bankName,
+          status: p.status,
+          transactionRef: p.transactionRef,
+          createdAt: p.createdAt.toISOString(),
+        };
+      }),
       rateHistory: partner.rateHistory,
     };
   }

@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/rooms/[roomId]/voice-token/route.ts
+// Relative Path: src/app/api/social/rooms/[roomId]/voice-token/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -20,8 +20,15 @@ export async function GET(
     const params = await context.params;
     const roomId = params.roomId;
 
-    const apiKey = process.env.LIVEKIT_API_KEY || "devkey";
-    const apiSecret = process.env.LIVEKIT_API_SECRET || "secretsecretsecretsecretsecretsecret";
+    const apiKey = process.env.LIVEKIT_API_KEY;
+    const apiSecret = process.env.LIVEKIT_API_SECRET;
+
+    if (!apiKey || !apiSecret) {
+      return NextResponse.json(
+        { error: "LiveKit server credentials are not configured on the server." },
+        { status: 500 }
+      );
+    }
 
     const at = new AccessToken(apiKey, apiSecret, {
       identity: String(rawUserId),

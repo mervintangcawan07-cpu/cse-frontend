@@ -58,6 +58,20 @@ export type TaxCalculationBasis =
   | "PAYOUT"
   | "OTHER";
 
+export type PayoutMethod = "GCASH" | "BANK_TRANSFER" | "MAYA";
+
+export type PayoutStatus =
+  | "REQUESTED"
+  | "RESERVED"
+  | "UNDER_REVIEW"
+  | "APPROVED"
+  | "PROCESSING"
+  | "PAID"
+  | "REJECTED"
+  | "CANCELLED"
+  | "FAILED"
+  | "REVERSED";
+
 export type TaxStatus = "ACTIVE" | "INACTIVE" | "DRAFT" | "ARCHIVED";
 
 export type DeductionCategory =

@@ -70,127 +70,30 @@ export async function POST(request: Request) {
           ? attributes.line_items[0].amount * (attributes.line_items[0].quantity || 1)
           : 0);
 
-      if (userId) {
-        const user = await prisma.user.findUnique({ where: { id: String(userId) } });
-        const now = new Date();
-        const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
-        let newPaidUntil: Date | null = new Date(baseDate);
-
-        if (planType === "1_MONTH") newPaidUntil.setDate(newPaidUntil.getDate() + 30);
-        else if (planType === "6_MONTHS") newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-        else if (planType === "1_YEAR" || planType === "LIFETIME") newPaidUntil.setDate(newPaidUntil.getDate() + 365);
-
-        // Extract PayMongo fee if available or calculate typical 2.5% + ₱15 or default fee
+      if (userId && checkoutSessionId) {
         const feeCentavos = attributes?.fee || attributes?.fees?.[0]?.amount || 0;
+        const partnerCode = metadata?.partnerCode;
+        const campaignSource = metadata?.campaignSource || "direct";
+        const paymentIntentId = attributes?.payment_intent?.id || attributes?.payment_intent_id;
 
-        const [_, transaction] = await prisma.$transaction([
-          prisma.user.update({
-            where: { id: String(userId) },
-            data: { isPaid: true, planType, paidUntil: newPaidUntil },
-          }),
-          prisma.transaction.upsert({
-            where: { checkoutSessionId: checkoutSessionId || `txn_${Date.now()}` },
-            update: {
-              status: "PAID",
-              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
-              feeAmountCentavos: feeCentavos,
-            },
-            create: {
-              userId: String(userId),
-              checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
-              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
-              grossAmountCentavos: purchaseAmountCentavos || 0,
-              discountAmountCentavos: 0,
-              feeAmountCentavos: feeCentavos,
-              planType,
-              status: "PAID",
-            },
-          }),
-        ]);
+        const { PaymentFinalizationService } = await import("@/lib/payment/paymentFinalizationService");
+        const finalization = await PaymentFinalizationService.finalizeVerifiedPayment({
+          userId: String(userId),
+          checkoutSessionId: String(checkoutSessionId),
+          planType: String(planType),
+          purchaseAmountCentavos,
+          feeAmountCentavos: feeCentavos,
+          partnerCode,
+          campaignSource,
+          paymentIntentId,
+          source: "WEBHOOK",
+        });
 
-        console.log(`[PayMongo Webhook Success]: Upgraded user ${userId} to ${planType}`);
-
-        const actualPaidCentavos = purchaseAmountCentavos || transaction.amount * 100;
-
-        // 📊 1. Double-Entry Accounting Ledger (Defensively isolated)
-        try {
-          const { LedgerService } = await import("@/lib/accounting/ledgerService");
-          await LedgerService.recordPaymentReceived({
-            transactionId: transaction.id,
-            amountCentavos: actualPaidCentavos,
-            userId: String(userId),
-            planType,
-          });
-
-          if (feeCentavos > 0) {
-            await LedgerService.recordPaymentFee({
-              transactionId: transaction.id,
-              feeAmountCentavos: feeCentavos,
-            });
-          }
-        } catch (ledgerErr) {
-          console.error("[Accounting Ledger Webhook Warning]:", ledgerErr);
-        }
-
-        // 🎁 2. Qualify Referral Reward
-        try {
-          const { ReferralService } = await import("@/lib/referral/referralService");
-          await ReferralService.qualifyReferralPayment({
-            userId: String(userId),
-            transactionId: transaction.id,
-            purchaseAmountCentavos: actualPaidCentavos,
-            planType,
-          });
-        } catch (referralErr) {
-          console.error("[Referral Webhook Qualification Warning]:", referralErr);
-        }
-
-        // 🤝 3. Qualify Partner Commission
-        try {
-          const { PartnerService } = await import("@/lib/accounting/partnerService");
-          const partnerCode = metadata?.partnerCode;
-          const campaignSource = metadata?.campaignSource || "direct";
-
-          if (partnerCode) {
-            await PartnerService.recordPartnerAttributionOnSignup({
-              referredUserId: String(userId),
-              codeOrSlug: partnerCode,
-              campaignSource,
-            }).catch(() => null);
-          }
-
-          await PartnerService.qualifyPartnerPayment({
-            userId: String(userId),
-            transactionId: transaction.id,
-            customerPaymentCentavos: actualPaidCentavos,
-            grossAmountCentavos: actualPaidCentavos,
-            campaignSource,
-          });
-        } catch (partnerErr) {
-          console.error("[Partner Webhook Qualification Warning]:", partnerErr);
-        }
-
-        // 🏛️ 4. Evaluate Tax Provisions
-        try {
-          const { TaxService } = await import("@/lib/accounting/taxService");
-          await TaxService.evaluateTransactionTaxes({
-            transactionId: transaction.id,
-            customerPaymentCentavos: actualPaidCentavos,
-            grossAmountCentavos: actualPaidCentavos,
-          });
-        } catch (taxErr) {
-          console.error("[Tax Webhook Evaluation Warning]:", taxErr);
-        }
-
-        // ⚖️ 5. Auto Reconciliation
-        try {
-          const { ReconciliationService } = await import("@/lib/accounting/reconciliationService");
-          await ReconciliationService.reconcileTransaction(transaction.id);
-        } catch (recErr) {
-          console.error("[Reconciliation Warning]:", recErr);
-        }
+        console.log(
+          `[PayMongo Webhook Result]: Finalized payment for user ${userId} (${planType}) - AlreadyFinalized: ${finalization.alreadyFinalized}`
+        );
       } else {
-        console.warn("[PayMongo Webhook Warning]: Paid event received but userId was missing in metadata.");
+        console.warn("[PayMongo Webhook Warning]: Paid event received but userId or checkoutSessionId was missing.");
       }
     } else if (
       eventType === "payment.refunded" ||

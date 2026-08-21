@@ -2,8 +2,59 @@
 import { NextResponse } from "next/server";
 import { requirePartnerAuth } from "@/lib/partnerAuth";
 import { prisma } from "@/lib/prisma";
-import { encrypt } from "@/lib/crypto/encryption";
+import { PartnerService } from "@/lib/accounting/partnerService";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
+import { decrypt } from "@/lib/crypto/encryption";
+
+export async function GET(request: Request) {
+  try {
+    const { partner, errorResponse } = await requirePartnerAuth(request);
+    if (errorResponse) return errorResponse;
+    if (!partner) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const [overview, payouts, savedMethods] = await Promise.all([
+      PartnerService.getPartnerFinancialOverview(partner.id),
+      prisma.partnerPayout.findMany({
+        where: { partnerId: partner.id },
+        orderBy: { createdAt: "desc" },
+      }),
+      PartnerService.listPayoutProfiles(partner.id),
+    ]);
+
+    const formattedPayouts = payouts.map((p) => {
+      let rawAcc = "";
+      try {
+        rawAcc = decrypt(p.accountNumberEncrypted) || p.accountNumberEncrypted;
+      } catch {
+        rawAcc = p.accountNumberEncrypted;
+      }
+
+      return {
+        id: p.id,
+        date: p.createdAt.toISOString(),
+        amountCentavos: p.amountCentavos,
+        formattedAmount: formatCentavosToPesos(p.amountCentavos),
+        method: p.method,
+        accountName: p.accountName,
+        accountNumberMasked: PartnerService.maskAccountNumber(rawAcc, p.method),
+        bankName: p.bankName,
+        status: p.status,
+        adminNotes: p.adminNotes,
+        transactionRef: p.transactionRef,
+      };
+    });
+
+    return NextResponse.json({
+      success: true,
+      metrics: overview.metrics,
+      savedMethods,
+      payouts: formattedPayouts,
+    });
+  } catch (error) {
+    console.error("[PARTNER_PORTAL_PAYOUT_GET_ERROR]", error);
+    return NextResponse.json({ error: "Failed to fetch payout data" }, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -12,11 +63,11 @@ export async function POST(request: Request) {
     if (!partner) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
-    const { amountPesos, method, accountNumber, accountName, bankName } = body;
+    const { amountPesos, method, accountNumber, accountName, bankName, profileId } = body;
 
-    if (!amountPesos || !method || !accountNumber || !accountName) {
+    if (!amountPesos || (!profileId && (!method || !accountNumber || !accountName))) {
       return NextResponse.json(
-        { error: "Amount, method, account holder name, and account number are required." },
+        { error: "Amount and payout destination details are required." },
         { status: 400 }
       );
     }
@@ -27,85 +78,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid payout amount." }, { status: 400 });
     }
 
-    const minPayout = partner.minPayoutCentavos || 15000;
-    if (requestedAmountCentavos < minPayout) {
-      return NextResponse.json(
-        {
-          error: `Requested amount is below the minimum payout threshold of ${formatCentavosToPesos(
-            minPayout
-          )}.`,
-        },
-        { status: 400 }
-      );
-    }
-
-    const now = new Date();
-
-    // Calculate live available balance
-    const [commissions, existingPayouts] = await Promise.all([
-      prisma.partnerCommission.findMany({
-        where: { partnerId: partner.id },
-      }),
-      prisma.partnerPayout.findMany({
-        where: { partnerId: partner.id },
-      }),
-    ]);
-
-    let availableCentavos = 0;
-    commissions.forEach((c) => {
-      if (
-        c.status === "AVAILABLE" ||
-        (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
-      ) {
-        availableCentavos += c.commissionAmountCentavos;
-      }
-    });
-
-    let alreadyReservedOrPaidCentavos = 0;
-    existingPayouts.forEach((p) => {
-      if (p.status === "PAID" || p.status === "REQUESTED" || p.status === "APPROVED") {
-        alreadyReservedOrPaidCentavos += p.amountCentavos;
-      }
-    });
-
-    const trueAvailableCentavos = Math.max(0, availableCentavos - alreadyReservedOrPaidCentavos);
-
-    if (requestedAmountCentavos > trueAvailableCentavos) {
-      return NextResponse.json(
-        {
-          error: `Insufficient available balance. You currently have ${formatCentavosToPesos(
-            trueAvailableCentavos
-          )} available for withdrawal.`,
-        },
-        { status: 400 }
-      );
-    }
-
-    // Encrypt account number
-    const encryptedAcc = encrypt(String(accountNumber).trim()) || String(accountNumber).trim();
-
-    const payout = await prisma.partnerPayout.create({
-      data: {
-        partnerId: partner.id,
-        amountCentavos: requestedAmountCentavos,
-        currency: "PHP",
-        method: method || "GCASH",
-        accountNumberEncrypted: encryptedAcc,
-        accountName: String(accountName).trim(),
-        bankName: bankName ? String(bankName).trim() : null,
-        status: "REQUESTED",
-      },
+    const result = await PartnerService.requestPayoutAtomic({
+      partnerId: partner.id,
+      requestedAmountCentavos,
+      method: method || "GCASH",
+      accountNumber,
+      accountName,
+      bankName,
+      profileId,
     });
 
     return NextResponse.json({
       success: true,
-      payoutId: payout.id,
+      payoutId: result.payout.id,
       message: `Payout request for ${formatCentavosToPesos(
         requestedAmountCentavos
-      )} submitted successfully! Our finance team will review and disburse within 1-2 business days.`,
+      )} submitted and funds reserved successfully! Our finance team will review and disburse shortly.`,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("[PARTNER_PORTAL_PAYOUT_ERROR]", error);
-    return NextResponse.json({ error: "Failed to submit payout request" }, { status: 500 });
+    const clientMessage =
+      error?.message && !error.message.startsWith("Critical")
+        ? error.message
+        : "Failed to submit payout request";
+    return NextResponse.json({ error: clientMessage }, { status: 400 });
   }
 }

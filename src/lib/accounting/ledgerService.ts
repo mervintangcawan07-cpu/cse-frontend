@@ -1,4 +1,4 @@
-// Relative Path: src/lib/accounting/ledgerService.ts
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import {
   AccountCategory,
@@ -23,16 +23,18 @@ export interface CreateLedgerEntryInput {
 
 export class LedgerService {
   /**
-   * Generates a unique sequential entry number (e.g. LED-000042).
+   * Generates a unique, collision-free sequential entry number (e.g. LED-260821-151822-1A2B3C).
    */
-  static async generateEntryNumber(): Promise<string> {
-    const count = await prisma.financialLedgerEntry.count();
-    const seq = (count + 1).toString().padStart(6, "0");
-    return `LED-${seq}`;
+  static generateEntryNumber(suffix: string = ""): string {
+    const now = new Date();
+    const datePart = now.toISOString().replace(/[-:T]/g, "").slice(2, 14); // YYMMDDHHMMSS
+    const randomHex = crypto.randomBytes(3).toString("hex").toUpperCase();
+    const tag = suffix ? `-${suffix}` : "";
+    return `LED-${datePart}-${randomHex}${tag}`;
   }
 
   /**
-   * Posts a pair of balanced double-entry ledger entries.
+   * Posts a pair of balanced double-entry ledger entries in an atomic transaction.
    */
   static async postBalancedDoubleEntry(params: {
     transactionId?: string;
@@ -64,13 +66,12 @@ export class LedgerService {
     if (amountCentavos <= 0) return [];
 
     const safeAmount = deterministicRound(amountCentavos);
-    const count = await prisma.financialLedgerEntry.count();
-    const entryNumDebit = `LED-${(count + 1).toString().padStart(6, "0")}`;
-    const entryNumCredit = `LED-${(count + 2).toString().padStart(6, "0")}`;
+    const entryNumDebit = this.generateEntryNumber("DR");
+    const entryNumCredit = this.generateEntryNumber("CR");
 
-    const [debitEntry, creditEntry] = await prisma.$transaction([
-      prisma.financialLedgerEntry.create({
-        data: {
+    const [debitEntry, creditEntry] = await prisma.financialLedgerEntry.createManyAndReturn({
+      data: [
+        {
           entryNumber: entryNumDebit,
           transactionId,
           transactionType,
@@ -85,9 +86,7 @@ export class LedgerService {
           periodId,
           createdBy,
         },
-      }),
-      prisma.financialLedgerEntry.create({
-        data: {
+        {
           entryNumber: entryNumCredit,
           transactionId,
           transactionType,
@@ -102,8 +101,8 @@ export class LedgerService {
           periodId,
           createdBy,
         },
-      }),
-    ]);
+      ],
+    });
 
     return [debitEntry, creditEntry];
   }

@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signPartnerJWT } from "@/lib/partnerAuth";
+import { PartnerService } from "@/lib/accounting/partnerService";
+import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 
 export async function POST(request: Request) {
   try {
@@ -12,24 +14,15 @@ export async function POST(request: Request) {
 
     if (!identifier || !password) {
       return NextResponse.json(
-        { error: "Partner tracking code/email and password are required" },
+        { error: "Invalid partner credentials" },
         { status: 400 }
       );
     }
 
     const cleanIdentifier = String(identifier).trim();
+    const partner = await PartnerService.resolvePartnerByIdentifier(cleanIdentifier);
 
-    // Look up partner by code, slug, or contactEmail
-    const partner = await prisma.partner.findFirst({
-      where: {
-        OR: [
-          { code: { equals: cleanIdentifier, mode: "insensitive" } },
-          { slug: { equals: cleanIdentifier, mode: "insensitive" } },
-          { contactEmail: { equals: cleanIdentifier.toLowerCase(), mode: "insensitive" } },
-        ],
-      },
-    });
-
+    // Generic error responses prevent identifier enumeration
     if (!partner) {
       return NextResponse.json(
         { error: "Invalid partner credentials" },
@@ -37,34 +30,46 @@ export async function POST(request: Request) {
       );
     }
 
-    if (partner.status !== "ACTIVE") {
+    if (partner.status !== "ACTIVE" && partner.status !== "PENDING") {
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_LOGIN_FAILED",
+        partnerId: partner.id,
+        reason: `Account status is ${partner.status}`,
+      });
       return NextResponse.json(
-        { error: `Partner account is currently ${partner.status.toLowerCase()}. Please contact GovStudyX Admin.` },
+        { error: "Invalid partner credentials or account suspended." },
         { status: 403 }
       );
     }
 
-    // Verify password if set
+    // Verify Password
+    let isPasswordValid = false;
+
     if (partner.passwordHash) {
-      const isValid = await bcrypt.compare(password, partner.passwordHash);
-      if (!isValid) {
-        return NextResponse.json(
-          { error: "Invalid partner credentials" },
-          { status: 401 }
-        );
-      }
+      isPasswordValid = await bcrypt.compare(password, partner.passwordHash);
+    } else if (partner.tempPasswordHash) {
+      isPasswordValid = await bcrypt.compare(password, partner.tempPasswordHash);
     } else {
-      // Default fallback if admin hasn't set custom password yet
-      // Allows initial login with partner code as password, requiring immediate change
-      if (password !== partner.code && password !== "GovStudyX2026!") {
-        return NextResponse.json(
-          { error: "Invalid partner credentials" },
-          { status: 401 }
-        );
+      // Fallback if no password hash set yet
+      if (password === partner.code || password === "GovStudyX2026!") {
+        isPasswordValid = true;
       }
     }
 
-    const token = await signPartnerJWT(partner.id, partner.code);
+    if (!isPasswordValid) {
+      await PartnerAuditService.logEvent({
+        action: "PARTNER_LOGIN_FAILED",
+        partnerId: partner.id,
+        reason: "Incorrect password",
+      });
+      return NextResponse.json(
+        { error: "Invalid partner credentials" },
+        { status: 401 }
+      );
+    }
+
+    const displayId = partner.partnerId || partner.code;
+    const token = await signPartnerJWT(partner.id, displayId);
 
     const cookieStore = await cookies();
     cookieStore.set("cse_partner_session", token, {
@@ -75,17 +80,26 @@ export async function POST(request: Request) {
       path: "/",
     });
 
+    await PartnerAuditService.logEvent({
+      action: "PARTNER_LOGIN_SUCCESS",
+      partnerId: partner.id,
+      metadata: { partnerId: displayId, identifierUsed: cleanIdentifier },
+    });
+
     return NextResponse.json({
       success: true,
       message: `Welcome to the Partner Portal, ${partner.name}!`,
       partner: {
         id: partner.id,
+        partnerId: displayId,
         code: partner.code,
         slug: partner.slug,
         name: partner.name,
         type: partner.type,
+        contactEmail: partner.contactEmail,
         commissionRate: partner.commissionRate,
         badgeText: partner.badgeText,
+        mustChangePassword: partner.mustChangePassword,
       },
     });
   } catch (error) {

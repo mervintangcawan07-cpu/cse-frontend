@@ -1021,6 +1021,7 @@ enum RewardLedgerStatus {
 
 enum PayoutStatus {
   REQUESTED
+  RESERVED
   UNDER_REVIEW
   APPROVED
   PROCESSING
@@ -1028,6 +1029,7 @@ enum PayoutStatus {
   REJECTED
   CANCELLED
   FAILED
+  REVERSED
 }
 
 enum PayoutMethod {
@@ -1339,10 +1341,17 @@ model FinancialLedgerEntry {
 
 model Partner {
   id                      String                 @id @default(cuid())
+  partnerId               String?                @unique // e.g. PT-000123
   code                    String                 @unique // e.g. PTR-FB-CSEPH
   slug                    String?                // e.g. "cse-philippines", "prof-juan-cse"
   name                    String
   passwordHash            String?                // For dedicated partner portal login
+  tempPasswordHash        String?                // Temporary password fallback
+  mustChangePassword      Boolean                @default(false)
+  setupToken              String?                @unique // Secure one-time onboarding token
+  setupTokenExpires       DateTime?
+  resetToken              String?                @unique // Secure password reset token
+  resetTokenExpires       DateTime?
   type                    PartnerType            @default(FACEBOOK_PAGE)
   tagline                 String?                // e.g. "Official Partner for Civil Service Review 2026"
   badgeText               String?                @default("Official Partner")
@@ -1371,16 +1380,44 @@ model Partner {
   createdAt               DateTime               @default(now())
   updatedAt               DateTime               @updatedAt
 
-  rateHistory  PartnerRateHistory[]
-  attributions PartnerAttribution[]
-  commissions  PartnerCommission[]
-  payouts      PartnerPayout[]
+  rateHistory    PartnerRateHistory[]
+  attributions   PartnerAttribution[]
+  commissions    PartnerCommission[]
+  payouts        PartnerPayout[]
+  payoutProfiles PartnerPayoutProfile[]
 
+  @@index([partnerId])
   @@index([code])
   @@index([slug])
   @@index([status])
   @@index([type])
   @@index([createdAt(sort: Desc)])
+}
+
+model PartnerPayoutProfile {
+  id                     String       @id @default(cuid())
+  partnerId              String
+  method                 PayoutMethod @default(GCASH)
+  accountHolderName      String
+  accountNumberEncrypted String
+  bankName               String?
+  accountType            String?
+  isDefault              Boolean      @default(false)
+  status                 String       @default("VERIFIED") // UNVERIFIED, PENDING_VERIFICATION, VERIFIED, REJECTED, DISABLED
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId])
+  @@index([status])
+  @@index([method])
+}
+
+model PartnerSequence {
+  id         String   @id @default("PARTNER_SEQ")
+  currentVal Int      @default(0)
+  updatedAt  DateTime @updatedAt
 }
 
 model PartnerRateHistory {

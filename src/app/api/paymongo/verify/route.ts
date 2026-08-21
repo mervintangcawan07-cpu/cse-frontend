@@ -53,123 +53,44 @@ export async function POST() {
       checkoutData?.attributes?.status === "paid";
 
     if (isPaidConfirmed) {
-      const now = new Date();
-      // Renewal logic: If user extends before plan expires, add days onto current paidUntil
-      const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
-
-      let newPaidUntil: Date | null = new Date(baseDate);
-
-      if (planType === "1_MONTH") {
-        newPaidUntil.setDate(newPaidUntil.getDate() + 30);
-      } else if (planType === "6_MONTHS") {
-        newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-      } else if (planType === "1_YEAR" || planType === "LIFETIME") {
-        newPaidUntil.setDate(newPaidUntil.getDate() + 365);
-      }
-
       const lineItemAmount = checkoutData?.attributes?.line_items?.[0]?.amount;
       const quantity = checkoutData?.attributes?.line_items?.[0]?.quantity || 1;
-      const purchaseAmountCentavos = lineItemAmount ? lineItemAmount * quantity : 0;
+      const purchaseAmountCentavos = lineItemAmount
+        ? lineItemAmount * quantity
+        : (checkoutData?.attributes?.amount || 0);
 
-      const [_, transaction] = await prisma.$transaction([
-        prisma.user.update({
-          where: { id: userId },
-          data: {
-            isPaid: true,
-            planType,
-            paidUntil: newPaidUntil,
-          },
-        }),
-        prisma.transaction.upsert({
-          where: { checkoutSessionId },
-          update: { status: "PAID" },
-          create: {
-            userId,
-            checkoutSessionId,
-            amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
-            planType,
-            status: "PAID",
-          },
-        }),
-      ]);
+      const feeCentavos =
+        checkoutData?.attributes?.fee ||
+        checkoutData?.attributes?.fees?.[0]?.amount ||
+        0;
 
-      const actualPaidCentavos = purchaseAmountCentavos || transaction.amount * 100;
+      const partnerCode = checkoutData?.attributes?.metadata?.partnerCode;
+      const campaignSource = checkoutData?.attributes?.metadata?.campaignSource || "direct";
+      const paymentIntentId = checkoutData?.attributes?.payment_intent?.id;
 
-      // 📊 1. Double-Entry Accounting Ledger (Idempotent)
-      try {
-        const { LedgerService } = await import("@/lib/accounting/ledgerService");
-        await LedgerService.recordPaymentReceived({
-          transactionId: transaction.id,
-          amountCentavos: actualPaidCentavos,
-          userId,
-          planType,
-        });
-      } catch (ledgerErr) {
-        console.error("[Accounting Ledger Verify Warning]:", ledgerErr);
-      }
-
-      // 🎁 2. Qualify Referral Reward (Idempotent)
-      try {
-        const { ReferralService } = await import("@/lib/referral/referralService");
-        await ReferralService.qualifyReferralPayment({
-          userId,
-          transactionId: transaction.id,
-          purchaseAmountCentavos: actualPaidCentavos,
-          planType,
-        });
-      } catch (referralErr) {
-        console.error("[Referral Verify Qualification Warning]:", referralErr);
-      }
-
-      // 🤝 3. Qualify Partner Commission (Idempotent)
-      try {
-        const { PartnerService } = await import("@/lib/accounting/partnerService");
-        const partnerCode = checkoutData?.attributes?.metadata?.partnerCode;
-        const campaignSource = checkoutData?.attributes?.metadata?.campaignSource || "direct";
-
-        if (partnerCode) {
-          await PartnerService.recordPartnerAttributionOnSignup({
-            referredUserId: userId,
-            codeOrSlug: partnerCode,
-            campaignSource,
-          }).catch(() => null);
-        }
-
-        await PartnerService.qualifyPartnerPayment({
-          userId,
-          transactionId: transaction.id,
-          customerPaymentCentavos: actualPaidCentavos,
-          grossAmountCentavos: actualPaidCentavos,
-          campaignSource,
-        });
-      } catch (partnerErr) {
-        console.error("[Partner Verify Qualification Warning]:", partnerErr);
-      }
-
-      // 🏛️ 4. Evaluate Tax Provisions
-      try {
-        const { TaxService } = await import("@/lib/accounting/taxService");
-        await TaxService.evaluateTransactionTaxes({
-          transactionId: transaction.id,
-          customerPaymentCentavos: actualPaidCentavos,
-          grossAmountCentavos: actualPaidCentavos,
-        });
-      } catch (taxErr) {
-        console.error("[Tax Verify Warning]:", taxErr);
-      }
-
-      // ⚖️ 5. Auto Reconciliation
-      try {
-        const { ReconciliationService } = await import("@/lib/accounting/reconciliationService");
-        await ReconciliationService.reconcileTransaction(transaction.id);
-      } catch (recErr) {
-        console.error("[Reconciliation Verify Warning]:", recErr);
-      }
+      const { PaymentFinalizationService } = await import("@/lib/payment/paymentFinalizationService");
+      const finalization = await PaymentFinalizationService.finalizeVerifiedPayment({
+        userId,
+        checkoutSessionId,
+        planType,
+        purchaseAmountCentavos,
+        feeAmountCentavos: feeCentavos,
+        partnerCode,
+        campaignSource,
+        paymentIntentId,
+        source: "VERIFY_POLL",
+      });
 
       cookieStore.delete("cse_checkout_id");
       cookieStore.delete("cse_checkout_plan");
 
-      return NextResponse.json({ success: true, message: "Payment verified and duration calculated." });
+      return NextResponse.json({
+        success: true,
+        alreadyFinalized: finalization.alreadyFinalized,
+        message: finalization.alreadyFinalized
+          ? "Payment already processed and active."
+          : "Payment verified and subscription activated.",
+      });
     }
 
     return NextResponse.json({ success: false, message: "Payment pending or unpaid." });

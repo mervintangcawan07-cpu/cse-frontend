@@ -4,12 +4,17 @@ import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "govstudyx-super-secret-production-partner-key-2026"
-);
+function getPartnerSecretKey(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.trim().length === 0) {
+    throw new Error("Critical Configuration Error: Required environment variable JWT_SECRET is not configured for Partner authentication.");
+  }
+  return new TextEncoder().encode(secret.trim());
+}
 
 export interface AuthenticatedPartner {
   id: string;
+  partnerId: string | null;
   code: string;
   slug: string | null;
   name: string;
@@ -34,6 +39,7 @@ export interface PartnerAuthResult {
  * Creates a signed JWT for Partner Portal sessions.
  */
 export async function signPartnerJWT(partnerId: string, emailOrCode: string): Promise<string> {
+  const secretKey = getPartnerSecretKey();
   return new SignJWT({
     partnerId,
     emailOrCode,
@@ -42,7 +48,7 @@ export async function signPartnerJWT(partnerId: string, emailOrCode: string): Pr
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("30d")
-    .sign(JWT_SECRET);
+    .sign(secretKey);
 }
 
 /**
@@ -50,7 +56,8 @@ export async function signPartnerJWT(partnerId: string, emailOrCode: string): Pr
  */
 export async function verifyPartnerJWT(token: string): Promise<{ partnerId: string; role: string } | null> {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
+    const secretKey = getPartnerSecretKey();
+    const { payload } = await jwtVerify(token, secretKey);
     if (!payload.partnerId || payload.role !== "PARTNER") {
       return null;
     }
@@ -91,6 +98,7 @@ export async function getAuthenticatedPartner(req?: Request): Promise<Authentica
       where: { id: payload.partnerId },
       select: {
         id: true,
+        partnerId: true,
         code: true,
         slug: true,
         name: true,

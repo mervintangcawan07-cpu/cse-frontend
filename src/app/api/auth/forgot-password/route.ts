@@ -24,16 +24,13 @@ export async function POST(request: Request) {
       });
     }
 
-    // 🔒 CRITICAL SECURITY GUARD: DISABLE ADMIN FORGOT PASSWORD
+    // 🔒 CRITICAL SECURITY GUARD: DISABLE ADMIN FORGOT PASSWORD WITHOUT REVEALING ROLE
     if (user.role === "ADMIN") {
       console.warn(`[SECURITY ALERT] Password reset attempt blocked for ADMIN account: ${user.email}`);
-      return NextResponse.json(
-        {
-          error:
-            "Password resets via email are strictly disabled for Administrator accounts to protect system security. Please reset credentials directly on the server console.",
-        },
-        { status: 403 }
-      );
+      return NextResponse.json({
+        success: true,
+        message: "If an account exists with this email, a reset link has been sent.",
+      });
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");

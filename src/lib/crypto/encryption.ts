@@ -1,4 +1,4 @@
-﻿// Relative Path: src/lib/crypto/encryption.ts
+// Relative Path: src/lib/crypto/encryption.ts
 
 import crypto from "crypto";
 import { logger } from "@/lib/logger/logger";
@@ -16,9 +16,9 @@ function getKeyForVersion(version: string): Buffer {
     process.env[envVarName] ||
     process.env.ENCRYPTION_KEY ||
     process.env.JWT_SECRET ||
-    "default-32-character-encryption-secret-key-prod";
+    "govstudyx_default_secure_encryption_key_2026";
 
-  return crypto.createHash("sha256").update(rawKey).digest();
+  return crypto.createHash("sha256").update(rawKey.trim()).digest();
 }
 
 export function isEncrypted(value: unknown): boolean {

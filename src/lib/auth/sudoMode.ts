@@ -1,4 +1,4 @@
-﻿// Relative Path: src/lib/auth/sudoMode.ts
+// Relative Path: src/lib/auth/sudoMode.ts
 
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
@@ -6,10 +6,14 @@ import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger/logger";
 import { SudoTicket } from "@/types/auth";
 
-const SUDO_SECRET =
-  process.env.SUDO_SECRET ||
-  process.env.JWT_SECRET ||
-  "fallback-sudo-secret-key-32-chars-minimum";
+function getSudoSecret(): string {
+  const secret = process.env.SUDO_SECRET || process.env.JWT_SECRET;
+  if (!secret || secret.trim().length === 0) {
+    throw new Error("Critical Configuration Error: Required environment variable SUDO_SECRET or JWT_SECRET is not configured.");
+  }
+  return secret.trim();
+}
+
 const SUDO_TTL_MS = 10 * 60 * 1000;
 const MAX_SUDO_ATTEMPTS = 3;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
@@ -73,9 +77,10 @@ export function generateSudoTicket(
     nonce: crypto.randomBytes(8).toString("hex"),
   };
 
+  const secret = getSudoSecret();
   const serialized = Buffer.from(JSON.stringify(payload)).toString("base64url");
   const signature = crypto
-    .createHmac("sha256", SUDO_SECRET)
+    .createHmac("sha256", secret)
     .update(serialized)
     .digest("base64url");
 
@@ -97,10 +102,16 @@ export function validateSudoTicket(rawToken: string): {
     return { valid: false, reason: "INVALID_FORMAT" };
   }
 
-  const expectedSignature = crypto
-    .createHmac("sha256", SUDO_SECRET)
-    .update(serialized)
-    .digest("base64url");
+  let expectedSignature: string;
+  try {
+    const secret = getSudoSecret();
+    expectedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(serialized)
+      .digest("base64url");
+  } catch {
+    return { valid: false, reason: "CONFIG_ERROR" };
+  }
 
   if (signature.length !== expectedSignature.length) {
     return { valid: false, reason: "INVALID_SIGNATURE" };

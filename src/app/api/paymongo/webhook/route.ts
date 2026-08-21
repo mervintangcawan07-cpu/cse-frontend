@@ -66,63 +66,30 @@ export async function POST(request: Request) {
           ? attributes.line_items[0].amount * (attributes.line_items[0].quantity || 1)
           : 0);
 
-      if (userId) {
-        // Fetch current user to compute accurate plan duration/extension
-        const user = await prisma.user.findUnique({
-          where: { id: String(userId) },
-          select: { paidUntil: true },
+      if (userId && checkoutSessionId) {
+        const feeCentavos = attributes?.fee || attributes?.fees?.[0]?.amount || 0;
+        const partnerCode = metadata.partnerCode;
+        const campaignSource = metadata.campaignSource || "direct";
+        const paymentIntentId = attributes?.payment_intent?.id || attributes?.payment_intent_id;
+
+        const { PaymentFinalizationService } = await import("@/lib/payment/paymentFinalizationService");
+        const finalization = await PaymentFinalizationService.finalizeVerifiedPayment({
+          userId: String(userId),
+          checkoutSessionId: String(checkoutSessionId),
+          planType: String(planType),
+          purchaseAmountCentavos,
+          feeAmountCentavos: feeCentavos,
+          partnerCode,
+          campaignSource,
+          paymentIntentId,
+          source: "WEBHOOK",
         });
 
-        const now = new Date();
-        const baseDate = user?.paidUntil && user.paidUntil > now ? new Date(user.paidUntil) : new Date(now);
-        let newPaidUntil: Date | null = new Date(baseDate);
-
-        if (planType === "1_MONTH") {
-          newPaidUntil.setDate(newPaidUntil.getDate() + 30);
-        } else if (planType === "6_MONTHS") {
-          newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-        } else if (planType === "1_YEAR" || planType === "LIFETIME") {
-          newPaidUntil.setDate(newPaidUntil.getDate() + 365);
-        }
-
-        const [_, transaction] = await prisma.$transaction([
-          prisma.user.update({
-            where: { id: String(userId) },
-            data: {
-              isPaid: true,
-              planType,
-              paidUntil: newPaidUntil,
-            },
-          }),
-          prisma.transaction.upsert({
-            where: { checkoutSessionId: checkoutSessionId || `txn_${Date.now()}` },
-            update: { status: "PAID" },
-            create: {
-              userId: String(userId),
-              checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
-              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
-              planType,
-              status: "PAID",
-            },
-          }),
-        ]);
-
-        console.log(`[PayMongo Webhook] User ID ${userId} upgraded to PRO (${planType}) until ${newPaidUntil.toISOString()}.`);
-
-        // 🎁 Qualify Referral Reward
-        try {
-          const { ReferralService } = await import("@/lib/referral/referralService");
-          await ReferralService.qualifyReferralPayment({
-            userId: String(userId),
-            transactionId: transaction.id,
-            purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
-            planType,
-          });
-        } catch (referralErr) {
-          console.error("[Referral Webhook Qualification Warning]:", referralErr);
-        }
+        console.log(
+          `[PayMongo Webhook] User ID ${userId} finalized (${planType}) - AlreadyFinalized: ${finalization.alreadyFinalized}`
+        );
       } else {
-        console.warn("[PayMongo Webhook] Paid event received but userId missing in metadata.");
+        console.warn("[PayMongo Webhook] Paid event received but userId or checkoutSessionId missing in metadata.");
       }
     }
 

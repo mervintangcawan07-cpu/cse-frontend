@@ -341,3 +341,106 @@ export async function sendPartnerPayoutProcessedEmail(params: {
     console.error("Failed to send partner payout email:", err);
   }
 }
+
+/**
+ * 🔑 Send One-Time Partner Portal Setup Link
+ */
+export async function sendPartnerSetupEmail(params: {
+  toEmail: string;
+  partnerName: string;
+  partnerId: string;
+  setupToken: string;
+}) {
+  const resend = getResendClient();
+  const setupUrl = `${getBaseUrl()}/partner-portal/setup?token=${params.setupToken}`;
+
+  const html = `
+    <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
+      <div style="background: linear-gradient(135deg, #059669, #0d9488); padding: 20px 24px; border-radius: 12px; margin-bottom: 20px;">
+        <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🎓 GovStudyX Partner Portal Invitation</h2>
+        <p style="margin: 6px 0 0; color: #d1fae5; font-size: 13px;">Official Educational Partner Ecosystem</p>
+      </div>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong>,</p>
+      <p style="font-size: 14px; color: #94a3b8;">You have been registered as an official partner on GovStudyX. Your unique Partner ID is <strong style="color: #34d399; font-family: monospace;">${params.partnerId}</strong>.</p>
+      <p style="font-size: 14px; color: #94a3b8;">Please click the button below to set your secure password and activate your partner portal account:</p>
+      <div style="margin: 24px 0;">
+        <a href="${setupUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Activate Partner Account</a>
+      </div>
+      <p style="font-size: 12px; color: #64748b; word-break: break-all;">
+        Or copy and paste this link into your browser:<br/>
+        <a href="${setupUrl}" style="color: #34d399;">${setupUrl}</a>
+      </p>
+      <p style="font-size: 11px; color: #475569;">This setup link is valid for 7 days. If you did not expect this email, please ignore it.</p>
+    </div>
+  `;
+
+  if (!resend) {
+    console.log("------------------------------------");
+    console.log(`[DEV MODE - PARTNER SETUP EMAIL] Setup Link for ${params.toEmail} (${params.partnerId}):`);
+    console.log(setupUrl);
+    console.log("------------------------------------");
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: getFromEmail(),
+      to: params.toEmail,
+      subject: `🎓 GovStudyX Partner Account Activation — ${params.partnerId}`,
+      html,
+    });
+  } catch (err) {
+    console.error("Failed to send partner setup email:", err);
+  }
+}
+
+/**
+ * 🔒 Send Partner Portal Password Reset Link
+ */
+export async function sendPartnerPasswordResetEmail(params: {
+  toEmail: string;
+  partnerName: string;
+  partnerId: string;
+  resetToken: string;
+}) {
+  const resend = getResendClient();
+  const resetUrl = `${getBaseUrl()}/partner-portal/reset-password?token=${params.resetToken}`;
+
+  const html = `
+    <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
+      <div style="background: linear-gradient(135deg, #059669, #0d9488); padding: 20px 24px; border-radius: 12px; margin-bottom: 20px;">
+        <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🔒 Partner Password Reset</h2>
+        <p style="margin: 6px 0 0; color: #d1fae5; font-size: 13px;">GovStudyX Partner Portal</p>
+      </div>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong> (${params.partnerId}),</p>
+      <p style="font-size: 14px; color: #94a3b8;">A password reset was requested for your partner account. Click the button below to create a new password:</p>
+      <div style="margin: 24px 0;">
+        <a href="${resetUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Reset Password</a>
+      </div>
+      <p style="font-size: 12px; color: #64748b; word-break: break-all;">
+        Or copy and paste this link into your browser:<br/>
+        <a href="${resetUrl}" style="color: #34d399;">${resetUrl}</a>
+      </p>
+      <p style="font-size: 11px; color: #475569;">This link will expire in 1 hour. If you did not request this, please contact security immediately.</p>
+    </div>
+  `;
+
+  if (!resend) {
+    console.log("------------------------------------");
+    console.log(`[DEV MODE - PARTNER PASSWORD RESET] Reset Link for ${params.toEmail}:`);
+    console.log(resetUrl);
+    console.log("------------------------------------");
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: getFromEmail(),
+      to: params.toEmail,
+      subject: `🔒 Password Reset Request — GovStudyX Partner Portal`,
+      html,
+    });
+  } catch (err) {
+    console.error("Failed to send partner password reset email:", err);
+  }
+}

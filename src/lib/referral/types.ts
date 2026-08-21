@@ -27,13 +27,15 @@ export type RewardLedgerStatus =
 
 export type PayoutStatus =
   | "REQUESTED"
+  | "RESERVED"
   | "UNDER_REVIEW"
   | "APPROVED"
   | "PROCESSING"
   | "PAID"
   | "REJECTED"
   | "CANCELLED"
-  | "FAILED";
+  | "FAILED"
+  | "REVERSED";
 
 export type PayoutMethod = "GCASH" | "BANK_TRANSFER" | "MAYA";
 
