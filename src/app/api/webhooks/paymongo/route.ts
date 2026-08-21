@@ -63,6 +63,13 @@ export async function POST(request: Request) {
       const planType = metadata?.planType || "1_MONTH";
       const checkoutSessionId = payload?.data?.attributes?.data?.id;
 
+      // Extract verified purchase amount in centavos (Authoritative base)
+      const purchaseAmountCentavos =
+        attributes?.amount ||
+        (attributes?.line_items?.[0]?.amount
+          ? attributes.line_items[0].amount * (attributes.line_items[0].quantity || 1)
+          : 0);
+
       if (userId) {
         const user = await prisma.user.findUnique({ where: { id: String(userId) } });
         const now = new Date();
@@ -71,9 +78,9 @@ export async function POST(request: Request) {
 
         if (planType === "1_MONTH") newPaidUntil.setDate(newPaidUntil.getDate() + 30);
         else if (planType === "6_MONTHS") newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-        else if (planType === "LIFETIME") newPaidUntil = null;
+        else if (planType === "1_YEAR" || planType === "LIFETIME") newPaidUntil.setDate(newPaidUntil.getDate() + 365);
 
-        await prisma.$transaction([
+        const [_, transaction] = await prisma.$transaction([
           prisma.user.update({
             where: { id: String(userId) },
             data: { isPaid: true, planType, paidUntil: newPaidUntil },
@@ -84,7 +91,7 @@ export async function POST(request: Request) {
             create: {
               userId: String(userId),
               checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
-              amount: attributes?.amount ? attributes.amount / 100 : 0,
+              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
               planType,
               status: "PAID",
             },
@@ -92,8 +99,49 @@ export async function POST(request: Request) {
         ]);
 
         console.log(`[PayMongo Webhook Success]: Upgraded user ${userId} to ${planType}`);
+
+        // 🎁 Qualify Referral Reward (Defensively isolated from PRO subscription upgrade)
+        try {
+          const { ReferralService } = await import("@/lib/referral/referralService");
+          await ReferralService.qualifyReferralPayment({
+            userId: String(userId),
+            transactionId: transaction.id,
+            purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
+            planType,
+          });
+        } catch (referralErr) {
+          console.error("[Referral Webhook Qualification Warning]:", referralErr);
+        }
       } else {
         console.warn("[PayMongo Webhook Warning]: Paid event received but userId was missing in metadata.");
+      }
+    } else if (
+      eventType === "payment.refunded" ||
+      eventType === "payment.refund.updated" ||
+      eventType === "refund.created"
+    ) {
+      // 💸 Payment Refund / Chargeback Handler
+      try {
+        const checkoutSessionId = payload?.data?.attributes?.data?.id;
+        const transaction = await prisma.transaction.findFirst({
+          where: { checkoutSessionId },
+        });
+
+        if (transaction) {
+          await prisma.transaction.update({
+            where: { id: transaction.id },
+            data: { status: "REFUNDED" },
+          });
+
+          const { ReferralService } = await import("@/lib/referral/referralService");
+          await ReferralService.handlePaymentRefundOrChargeback({
+            transactionId: transaction.id,
+            reason: `PayMongo refund event: ${eventType}`,
+          });
+          console.log(`[PayMongo Webhook]: Reversed referral reward for refunded transaction ${transaction.id}`);
+        }
+      } catch (refundErr) {
+        console.error("[PayMongo Refund Processing Error]:", refundErr);
       }
     }
 

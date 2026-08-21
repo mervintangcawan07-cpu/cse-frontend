@@ -59,6 +59,13 @@ export async function POST(request: Request) {
       const userId = metadata.userId || metadata.user_id;
       const planType = metadata.planType || "1_MONTH";
 
+      const checkoutSessionId = eventData?.id || event?.data?.id;
+      const purchaseAmountCentavos =
+        attributes?.amount ||
+        (attributes?.line_items?.[0]?.amount
+          ? attributes.line_items[0].amount * (attributes.line_items[0].quantity || 1)
+          : 0);
+
       if (userId) {
         // Fetch current user to compute accurate plan duration/extension
         const user = await prisma.user.findUnique({
@@ -75,19 +82,45 @@ export async function POST(request: Request) {
         } else if (planType === "6_MONTHS") {
           newPaidUntil.setDate(newPaidUntil.getDate() + 180);
         } else if (planType === "1_YEAR" || planType === "LIFETIME") {
-          // 👈 Calculate 365 days countdown for 1-Year Pass
           newPaidUntil.setDate(newPaidUntil.getDate() + 365);
         }
 
-        await prisma.user.update({
-          where: { id: String(userId) },
-          data: {
-            isPaid: true,
-            planType,
-            paidUntil: newPaidUntil,
-          },
-        });
+        const [_, transaction] = await prisma.$transaction([
+          prisma.user.update({
+            where: { id: String(userId) },
+            data: {
+              isPaid: true,
+              planType,
+              paidUntil: newPaidUntil,
+            },
+          }),
+          prisma.transaction.upsert({
+            where: { checkoutSessionId: checkoutSessionId || `txn_${Date.now()}` },
+            update: { status: "PAID" },
+            create: {
+              userId: String(userId),
+              checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
+              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
+              planType,
+              status: "PAID",
+            },
+          }),
+        ]);
+
         console.log(`[PayMongo Webhook] User ID ${userId} upgraded to PRO (${planType}) until ${newPaidUntil.toISOString()}.`);
+
+        // 🎁 Qualify Referral Reward
+        try {
+          const { ReferralService } = await import("@/lib/referral/referralService");
+          await ReferralService.qualifyReferralPayment({
+            userId: String(userId),
+            transactionId: transaction.id,
+            purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
+            planType,
+          });
+        } catch (referralErr) {
+          console.error("[Referral Webhook Qualification Warning]:", referralErr);
+        }
       } else {
         console.warn("[PayMongo Webhook] Paid event received but userId missing in metadata.");
       }

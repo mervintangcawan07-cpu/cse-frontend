@@ -92,6 +92,12 @@ export default async function AdminLayout({
               >
                 Examinees
               </Link>
+              <Link
+                href="/admin/referrals"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-pink-400 hover:text-pink-300 transition font-bold"
+              >
+                Referrals 🎁
+              </Link>
             </nav>
 
             {/* Exit Button */}

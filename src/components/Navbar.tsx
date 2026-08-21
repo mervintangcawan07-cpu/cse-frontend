@@ -86,6 +86,7 @@ export default function Navbar() {
     { label: "Practice & Prep", href: "/practice" },
     { label: "Learning Hub", href: "/learning" },
     { label: "Study Together 👥", href: "/social" },
+    { label: "Referrals 🎁", href: "/referrals" },
   ];
 
   if (user?.role === "ADMIN") {

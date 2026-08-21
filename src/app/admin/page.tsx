@@ -269,6 +269,23 @@ export default function AdminDashboardHub() {
                 Manage Pricing <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
               </div>
             </Link>
+
+            <Link
+              href="/admin/referrals"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-pink-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xl">🎁</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-pink-950 text-pink-400 border border-pink-800">REWARD 20%</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-pink-400 transition">Referral &amp; Reward System</h3>
+                <p className="text-xs text-slate-400 mt-1">Manage 20% referral commissions, payouts queue, rates, and fraud telemetry.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-pink-400">
+                Open Referral Center <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
           </div>
         </div>
       </div>

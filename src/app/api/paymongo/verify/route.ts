@@ -67,14 +67,44 @@ export async function POST() {
         newPaidUntil.setDate(newPaidUntil.getDate() + 365);
       }
 
-      await prisma.user.update({
-        where: { id: userId },
-        data: {
-          isPaid: true,
+      const lineItemAmount = checkoutData?.attributes?.line_items?.[0]?.amount;
+      const quantity = checkoutData?.attributes?.line_items?.[0]?.quantity || 1;
+      const purchaseAmountCentavos = lineItemAmount ? lineItemAmount * quantity : 0;
+
+      const [_, transaction] = await prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: {
+            isPaid: true,
+            planType,
+            paidUntil: newPaidUntil,
+          },
+        }),
+        prisma.transaction.upsert({
+          where: { checkoutSessionId },
+          update: { status: "PAID" },
+          create: {
+            userId,
+            checkoutSessionId,
+            amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
+            planType,
+            status: "PAID",
+          },
+        }),
+      ]);
+
+      // 🎁 Qualify Referral Reward (Idempotent)
+      try {
+        const { ReferralService } = await import("@/lib/referral/referralService");
+        await ReferralService.qualifyReferralPayment({
+          userId,
+          transactionId: transaction.id,
+          purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
           planType,
-          paidUntil: newPaidUntil,
-        },
-      });
+        });
+      } catch (referralErr) {
+        console.error("[Referral Verify Qualification Warning]:", referralErr);
+      }
 
       cookieStore.delete("cse_checkout_id");
       cookieStore.delete("cse_checkout_plan");

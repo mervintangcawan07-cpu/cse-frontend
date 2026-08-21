@@ -112,6 +112,16 @@ model User {
   studyPostComments  StudyPostComment[]  @relation("UserStudyPostComments")
   studyPostReactions StudyPostReaction[] @relation("UserStudyPostReactions")
 
+  // Referral System Relations
+  referralCode        ReferralCode?
+  referredAttribution ReferralAttribution?  @relation("ReferredAttribution")
+  inviterAttributions ReferralAttribution[] @relation("InviterAttributions")
+  invitedReferrals    Referral[]            @relation("InvitedReferrals")
+  receivedReferral    Referral?             @relation("ReceivedReferral")
+  earnedRewards       ReferralReward[]      @relation("EarnedRewards")
+  generatedRewards    ReferralReward[]      @relation("GeneratedRewards")
+  payouts             ReferralPayout[]      @relation("UserPayouts")
+
   @@index([email])
   @@index([role])
   @@index([deletedAt])
@@ -635,6 +645,8 @@ model Transaction {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  referralReward ReferralReward?
+
   @@index([userId])
   @@index([status])
 }
@@ -964,3 +976,213 @@ model StudyPostReaction {
   @@index([postId])
   @@index([userId])
 }
+
+// ==========================================
+// REFERRAL & REWARD SYSTEM MODELS
+// ==========================================
+
+enum ReferralStatus {
+  CLICKED
+  REGISTERED
+  PENDING_PREMIUM
+  QUALIFIED
+  REWARD_PENDING
+  AVAILABLE
+  PAYOUT_REQUESTED
+  PAID
+  REJECTED
+  CANCELLED
+  REFUNDED
+  REVERSED
+  SUSPICIOUS
+}
+
+enum ReferralRewardType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum RewardLedgerStatus {
+  PENDING
+  AVAILABLE
+  PAID
+  REVERSED
+  REFUNDED
+  CANCELLED
+}
+
+enum PayoutStatus {
+  REQUESTED
+  UNDER_REVIEW
+  APPROVED
+  PROCESSING
+  PAID
+  REJECTED
+  CANCELLED
+  FAILED
+}
+
+enum PayoutMethod {
+  GCASH
+  BANK_TRANSFER
+  MAYA
+}
+
+enum ReferralRiskLevel {
+  LOW_RISK
+  REVIEW
+  SUSPICIOUS
+  BLOCKED
+}
+
+model ReferralCode {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  code       String   @unique
+  clickCount Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attributions ReferralAttribution[]
+  referrals    Referral[]
+
+  @@index([code])
+  @@index([userId])
+}
+
+model ReferralAttribution {
+  id             String   @id @default(cuid())
+  referredUserId String   @unique
+  inviterId      String
+  referralCodeId String
+  attributedAt   DateTime @default(now())
+  expiresAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  isLocked       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  referredUser User         @relation("ReferredAttribution", fields: [referredUserId], references: [id], onDelete: Cascade)
+  inviter      User         @relation("InviterAttributions", fields: [inviterId], references: [id], onDelete: Cascade)
+  referralCode ReferralCode @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+
+  @@index([referredUserId])
+  @@index([inviterId])
+  @@index([referralCodeId])
+  @@index([expiresAt])
+}
+
+model Referral {
+  id                  String            @id @default(cuid())
+  inviterId           String
+  referredUserId      String            @unique
+  referralCodeId      String
+  status              ReferralStatus    @default(PENDING_PREMIUM)
+  qualifyingPaymentId String?           @unique
+  qualifyingAmount    Int?              // in centavos (e.g. 29900 = ₱299.00)
+  effectiveRate       Float?            // e.g. 20.0
+  rewardAmount        Int?              // in centavos (e.g. 5980 = ₱59.80)
+  holdingUntil        DateTime?
+  riskLevel           ReferralRiskLevel @default(LOW_RISK)
+  riskNotes           String?           @db.Text
+  createdAt           DateTime          @default(now())
+  qualifiedAt         DateTime?
+  availableAt         DateTime?
+  updatedAt           DateTime          @updatedAt
+
+  inviter      User            @relation("InvitedReferrals", fields: [inviterId], references: [id], onDelete: Cascade)
+  referredUser User            @relation("ReceivedReferral", fields: [referredUserId], references: [id], onDelete: Cascade)
+  referralCode ReferralCode    @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+  reward       ReferralReward?
+
+  @@index([inviterId, status])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([riskLevel])
+}
+
+model ReferralReward {
+  id                     String             @id @default(cuid())
+  referralId             String             @unique
+  inviterId              String
+  referredUserId         String
+  transactionId          String             @unique
+  purchaseAmountCentavos Int
+  rewardType             ReferralRewardType @default(PERCENTAGE)
+  effectiveRate          Float              // e.g. 20.0 (immutable rate at creation)
+  rewardAmountCentavos   Int                // e.g. 5980 (immutable calculated amount in centavos)
+  currency               String             @default("PHP")
+  status                 RewardLedgerStatus @default(PENDING)
+  holdingUntil           DateTime?
+  availableAt            DateTime?
+  reversalReason         String?            @db.Text
+  reversedAt             DateTime?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+
+  referral     Referral     @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  inviter      User         @relation("EarnedRewards", fields: [inviterId], references: [id], onDelete: Cascade)
+  referredUser User         @relation("GeneratedRewards", fields: [referredUserId], references: [id], onDelete: Cascade)
+  transaction  Transaction  @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([inviterId, status])
+  @@index([status])
+  @@index([holdingUntil])
+  @@index([createdAt(sort: Desc)])
+}
+
+model ReferralPayout {
+  id                     String       @id @default(cuid())
+  userId                 String
+  amountCentavos         Int          // e.g. 15000 = ₱150.00
+  currency               String       @default("PHP")
+  method                 PayoutMethod @default(GCASH)
+  accountNumberEncrypted String
+  accountName            String
+  bankName               String?
+  status                 PayoutStatus @default(REQUESTED)
+  adminNotes             String?      @db.Text
+  processedBy            String?
+  processedAt            DateTime?
+  transactionRef         String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  user User @relation("UserPayouts", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+model ReferralAuditLog {
+  id             String   @id @default(cuid())
+  actorId        String?
+  actorRole      String?
+  action         String
+  targetType     String
+  targetId       String?
+  previousState  String?  @db.Text
+  newState       String?  @db.Text
+  amountCentavos Int?
+  reason         String?  @db.Text
+  metadata       Json?
+  ipAddress      String?
+  createdAt      DateTime @default(now())
+
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt(sort: Desc)])
+  @@index([actorId])
+}
+
+model ReferralProgramSetting {
+  key         String   @id
+  value       String   @db.Text
+  description String?
+  updatedBy   String?
+  updatedAt   DateTime @updatedAt
+}
+

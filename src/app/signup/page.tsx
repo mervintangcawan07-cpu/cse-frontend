@@ -1,15 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export default function SignupPage() {
+function SignupForm() {
+  const searchParams = useSearchParams();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [referralCode, setReferralCode] = useState("");
+  const [inviterName, setInviterName] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+
+  // Capture referral code from URL search param e.g. ?ref=GSX-ABC123
+  useEffect(() => {
+    const refParam = searchParams.get("ref");
+    if (refParam) {
+      const cleanCode = refParam.trim().toUpperCase();
+      setReferralCode(cleanCode);
+
+      // Validate referral code
+      fetch(`/api/referral/validate-code?code=${encodeURIComponent(cleanCode)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.isValid) {
+            setInviterName(data.inviterName || "A fellow GovStudyX student");
+          }
+        })
+        .catch(() => null);
+    }
+  }, [searchParams]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +43,12 @@ export default function SignupPage() {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          referralCode: referralCode || undefined,
+        }),
       });
 
       const data = await res.json();
@@ -77,6 +105,22 @@ export default function SignupPage() {
             Start reviewing for the Civil Service Exam today.
           </p>
         </div>
+
+        {/* 🎁 Referral Invitation Welcome Banner */}
+        {referralCode && (
+          <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center gap-3 text-left">
+            <span className="text-2xl">🎁</span>
+            <div className="text-xs">
+              <div className="font-bold text-emerald-400">
+                You were invited to GovStudyX!
+              </div>
+              <div className="text-slate-300 text-[11px]">
+                {inviterName ? `Invited by ${inviterName}.` : "Referral code applied:"}{" "}
+                <span className="font-mono text-emerald-300 font-bold">{referralCode}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
@@ -161,3 +205,17 @@ export default function SignupPage() {
     </div>
   );
 }
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400 font-bold">
+          Loading registration...
+        </div>
+      }
+    >
+      <SignupForm />
+    </Suspense>
+  );
+}

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return createRateLimitResponse(rateResult, "Too many registration attempts. Please wait a moment before trying again.");
     }
 
-    const { name, email, password } = await req.json();
+    const { name, email, password, referralCode } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -57,6 +57,23 @@ export async function POST(req: Request) {
         isPaid: true,
       },
     });
+
+    // 🎁 Referral Attribution & Code Generation
+    try {
+      const { ReferralService } = await import("@/lib/referral/referralService");
+      await ReferralService.getOrCreateReferralCode(user.id).catch(() => null);
+
+      if (referralCode) {
+        await ReferralService.recordAttributionOnSignup({
+          referredUserId: user.id,
+          referralCodeString: referralCode,
+          ipAddress: clientIp,
+          userAgent: req.headers.get("user-agent"),
+        });
+      }
+    } catch (referralErr) {
+      console.error("[Referral Register Warning]:", referralErr);
+    }
 
     return NextResponse.json({ user }, { status: 201 });
   } catch (error) {

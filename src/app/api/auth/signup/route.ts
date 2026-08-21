@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, email, password } = body;
+    const { name, email, password, referralCode } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -57,6 +57,26 @@ export async function POST(request: Request) {
         emailVerificationExpires: verificationExpires,
       },
     });
+
+    // 🎁 Referral Attribution & Code Generation
+    try {
+      const { ReferralService } = await import("@/lib/referral/referralService");
+      
+      // Auto-generate this new user's personal referral code
+      await ReferralService.getOrCreateReferralCode(newUser.id).catch(() => null);
+
+      // If referred by someone, record locked attribution
+      if (referralCode) {
+        await ReferralService.recordAttributionOnSignup({
+          referredUserId: newUser.id,
+          referralCodeString: referralCode,
+          ipAddress: clientIp,
+          userAgent: request.headers.get("user-agent"),
+        });
+      }
+    } catch (referralErr) {
+      console.error("[Referral Signup Attribution Warning]:", referralErr);
+    }
 
     // Send the verification link via Resend
     await sendVerificationEmail(newUser.email, verificationToken);
