@@ -58,21 +58,38 @@ export async function POST(req: Request) {
       },
     });
 
-    // 🎁 Referral Attribution & Code Generation
+    // 🎁 Referral & Partner Attribution
     try {
       const { ReferralService } = await import("@/lib/referral/referralService");
+      const { PartnerService } = await import("@/lib/accounting/partnerService");
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+
       await ReferralService.getOrCreateReferralCode(user.id).catch(() => null);
 
-      if (referralCode) {
-        await ReferralService.recordAttributionOnSignup({
-          referredUserId: user.id,
-          referralCodeString: referralCode,
-          ipAddress: clientIp,
-          userAgent: req.headers.get("user-agent"),
-        });
+      const effectiveCode =
+        referralCode ||
+        cookieStore.get("cse_partner_ref")?.value ||
+        cookieStore.get("cse_ref")?.value;
+
+      if (effectiveCode) {
+        const partner = await PartnerService.resolvePartnerByCodeOrSlug(effectiveCode);
+        if (partner) {
+          await PartnerService.recordPartnerAttributionOnSignup({
+            referredUserId: user.id,
+            codeOrSlug: effectiveCode,
+          });
+        } else {
+          await ReferralService.recordAttributionOnSignup({
+            referredUserId: user.id,
+            referralCodeString: effectiveCode,
+            ipAddress: clientIp,
+            userAgent: req.headers.get("user-agent"),
+          });
+        }
       }
-    } catch (referralErr) {
-      console.error("[Referral Register Warning]:", referralErr);
+    } catch (attributionErr) {
+      console.error("[Attribution Register Warning]:", attributionErr);
     }
 
     return NextResponse.json({ user }, { status: 201 });

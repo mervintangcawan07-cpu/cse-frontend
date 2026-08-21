@@ -633,22 +633,30 @@ model ActivityLog {
 }
 
 model Transaction {
-  id                String   @id @default(cuid())
-  userId            String
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  checkoutSessionId String   @unique
-  paymentIntentId   String?
-  amount            Int
-  planType          String
-  status            String
-  receiptUrl        String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                     String   @id @default(cuid())
+  userId                 String
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkoutSessionId      String   @unique
+  paymentIntentId        String?
+  amount                 Int      // amount in pesos or centavos as stored
+  grossAmountCentavos    Int?     // authoritative gross list price in centavos
+  discountAmountCentavos Int?     @default(0) // discount applied in centavos
+  feeAmountCentavos      Int?     @default(0) // PayMongo processing fee in centavos
+  netSettlementCentavos  Int?     // net proceeds received in centavos
+  planType               String
+  status                 String
+  receiptUrl             String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
-  referralReward ReferralReward?
+  referralReward    ReferralReward?
+  partnerCommission PartnerCommission?
+  ledgerEntries     FinancialLedgerEntry[]
+  taxRecords        TaxRecord[]
 
   @@index([userId])
   @@index([status])
+  @@index([createdAt(sort: Desc)])
 }
 
 model Flashcard {
@@ -1185,4 +1193,429 @@ model ReferralProgramSetting {
   updatedBy   String?
   updatedAt   DateTime @updatedAt
 }
+
+// ==========================================
+// ACCOUNTING, PARTNERS & FINANCIAL MANAGEMENT MODELS
+// ==========================================
+
+enum LedgerEntryType {
+  DEBIT
+  CREDIT
+}
+
+enum AccountCategory {
+  CASH_PAYMONGO
+  REVENUE_PREMIUM
+  EXPENSE_PAYMENT_FEE
+  EXPENSE_REFERRAL
+  LIABILITY_REFERRAL_PAYABLE
+  EXPENSE_PARTNER
+  LIABILITY_PARTNER_PAYABLE
+  EXPENSE_TAX
+  LIABILITY_TAX_PAYABLE
+  EXPENSE_OPERATIONAL
+  ADJUSTMENT_SUSPENSE
+}
+
+enum FinancialTransactionType {
+  PAYMENT_RECEIVED
+  PAYMONGO_FEE
+  REFERRAL_COMMISSION
+  PARTNER_COMMISSION
+  TAX_PROVISION
+  DEDUCTION_EXPENSE
+  REFUND_REVERSAL
+  CHARGEBACK_REVERSAL
+  PAYOUT_DISBURSEMENT
+  MANUAL_ADJUSTMENT
+}
+
+enum PartnerType {
+  FACEBOOK_PAGE
+  CONTENT_CREATOR
+  HOST
+  AFFILIATE
+  SCHOOL
+  ORGANIZATION
+  MARKETING_PARTNER
+  EVENT_PARTNER
+  OTHER
+}
+
+enum PartnerStatus {
+  ACTIVE
+  PENDING
+  SUSPENDED
+  EXPIRED
+  TERMINATED
+  ARCHIVED
+}
+
+enum PartnerCommissionModel {
+  PERCENTAGE_OF_GROSS
+  PERCENTAGE_OF_CUSTOMER_PAYMENT
+  PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS
+  FIXED_PER_PURCHASE
+  FIXED_PER_REFERRAL
+  CUSTOM_RULE
+}
+
+enum TaxType {
+  VAT
+  PERCENTAGE_TAX
+  WITHHOLDING_TAX
+  OTHER_TAX
+}
+
+enum TaxCalculationBasis {
+  GROSS_SALE
+  CUSTOMER_PAYMENT
+  NET_REVENUE
+  COMMISSION
+  PAYOUT
+  OTHER
+}
+
+enum TaxStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+enum DeductionCategory {
+  ADVERTISING
+  HOSTING
+  MARKETING
+  PLATFORM_COSTS
+  PARTNER_EXPENSES
+  PROMOTIONAL_COSTS
+  ADMINISTRATIVE_COSTS
+  OTHER_EXPENSE
+}
+
+enum AccountingPeriodStatus {
+  OPEN
+  CLOSED
+  LOCKED
+}
+
+enum ReconciliationStatus {
+  MATCHED
+  MISMATCHED
+  MISSING
+  DUPLICATE
+  PENDING
+  MANUALLY_RESOLVED
+}
+
+model FinancialLedgerEntry {
+  id              String                   @id @default(cuid())
+  entryNumber     String                   @unique // e.g. LED-000001
+  transactionId   String?
+  transactionType FinancialTransactionType
+  accountCategory AccountCategory
+  entryType       LedgerEntryType
+  amountCentavos  Int
+  currency        String                   @default("PHP")
+  sourceEntity    String                   // e.g. Transaction, ReferralReward, PartnerCommission, ReferralPayout, PartnerPayout, FinancialAdjustment, TaxRecord
+  sourceId        String
+  description     String                   @db.Text
+  effectiveDate   DateTime                 @default(now())
+  periodId        String?
+  createdBy       String?
+  createdAt       DateTime                 @default(now())
+
+  transaction      Transaction?      @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  accountingPeriod AccountingPeriod? @relation(fields: [periodId], references: [id], onDelete: SetNull)
+
+  @@index([transactionType])
+  @@index([accountCategory])
+  @@index([effectiveDate(sort: Desc)])
+  @@index([sourceEntity, sourceId])
+  @@index([periodId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model Partner {
+  id                      String                 @id @default(cuid())
+  code                    String                 @unique // e.g. PTR-FB-CSEPH
+  slug                    String?                // e.g. "cse-philippines", "prof-juan-cse"
+  name                    String
+  passwordHash            String?                // For dedicated partner portal login
+  type                    PartnerType            @default(FACEBOOK_PAGE)
+  tagline                 String?                // e.g. "Official Partner for Civil Service Review 2026"
+  badgeText               String?                @default("Official Partner")
+  description             String?                @db.Text
+  discountPercent         Float?                 @default(0.0) // Optional discount given to referred students
+  avatarUrl               String?
+  facebookUrl             String?
+  websiteUrl              String?
+  contactName             String?
+  contactEmail            String?
+  contactPhone            String?
+  status                  PartnerStatus          @default(ACTIVE)
+  commissionModel         PartnerCommissionModel @default(PERCENTAGE_OF_CUSTOMER_PAYMENT)
+  commissionRate          Float                  @default(10.0) // e.g. 10.0%
+  fixedCommissionCentavos Int?                   @default(0)
+  holdingPeriodDays       Int                    @default(7)
+  minPayoutCentavos       Int                    @default(15000) // ₱150.00
+  agreementStart          DateTime               @default(now())
+  agreementEnd            DateTime?
+  payoutMethod            PayoutMethod           @default(GCASH)
+  accountNumberEncrypted  String?
+  accountName             String?
+  bankName                String?
+  notes                   String?                @db.Text
+  createdBy               String?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+
+  rateHistory  PartnerRateHistory[]
+  attributions PartnerAttribution[]
+  commissions  PartnerCommission[]
+  payouts      PartnerPayout[]
+
+  @@index([code])
+  @@index([slug])
+  @@index([status])
+  @@index([type])
+  @@index([createdAt(sort: Desc)])
+}
+
+model PartnerRateHistory {
+  id                      String                 @id @default(cuid())
+  partnerId               String
+  commissionModel         PartnerCommissionModel
+  commissionRate          Float
+  fixedCommissionCentavos Int?
+  effectiveDate           DateTime               @default(now())
+  endDate                 DateTime?
+  reason                  String?                @db.Text
+  updatedBy               String?
+  createdAt               DateTime               @default(now())
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId])
+  @@index([effectiveDate])
+}
+
+model PartnerAttribution {
+  id             String   @id @default(cuid())
+  referredUserId String   @unique
+  partnerId      String
+  attributedAt   DateTime @default(now())
+  expiresAt      DateTime
+  isLocked       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([referredUserId])
+  @@index([partnerId])
+  @@index([expiresAt])
+}
+
+model PartnerCommission {
+  id                       String                 @id @default(cuid())
+  partnerId                String
+  transactionId            String                 @unique
+  purchaseAmountCentavos   Int
+  commissionModel          PartnerCommissionModel
+  effectiveRate            Float
+  commissionAmountCentavos Int
+  currency                 String                 @default("PHP")
+  status                   RewardLedgerStatus     @default(PENDING)
+  holdingUntil             DateTime?
+  availableAt              DateTime?
+  reversedAt               DateTime?
+  reversalReason           String?                @db.Text
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+
+  partner     Partner     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId, status])
+  @@index([status])
+  @@index([holdingUntil])
+  @@index([createdAt(sort: Desc)])
+}
+
+model PartnerPayout {
+  id                     String       @id @default(cuid())
+  partnerId              String
+  amountCentavos         Int
+  currency               String       @default("PHP")
+  method                 PayoutMethod @default(GCASH)
+  accountNumberEncrypted String
+  accountName            String
+  bankName               String?
+  status                 PayoutStatus @default(REQUESTED)
+  adminNotes             String?      @db.Text
+  processedBy            String?
+  processedAt            DateTime?
+  transactionRef         String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  partner Partner @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+
+  @@index([partnerId, status])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+model TaxConfiguration {
+  id                        String              @id @default(cuid())
+  name                      String              // e.g. "VAT Provision Estimate"
+  taxType                   TaxType             @default(OTHER_TAX)
+  rate                      Float               @default(0.0) // percentage
+  fixedAmountCentavos       Int?                @default(0)
+  calculationBasis          TaxCalculationBasis @default(CUSTOMER_PAYMENT)
+  status                    TaxStatus           @default(ACTIVE)
+  effectiveDate             DateTime            @default(now())
+  expirationDate            DateTime?
+  applicableTransactionType String?             @default("ALL")
+  notes                     String?             @db.Text
+  createdBy                 String?
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+
+  taxRecords TaxRecord[]
+
+  @@index([status])
+  @@index([taxType])
+  @@index([effectiveDate])
+}
+
+model TaxRecord {
+  id                    String              @id @default(cuid())
+  taxConfigId           String
+  transactionId         String?
+  partnerPayoutId       String?
+  referralPayoutId      String?
+  taxableAmountCentavos Int
+  appliedRate           Float
+  taxAmountCentavos     Int
+  calculationBasis      TaxCalculationBasis
+  status                String              @default("PROVISIONED") // PROVISIONED, ACCRUED, PAID, REVERSED
+  effectiveDate         DateTime            @default(now())
+  createdAt             DateTime            @default(now())
+
+  taxConfig   TaxConfiguration @relation(fields: [taxConfigId], references: [id], onDelete: Cascade)
+  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@index([taxConfigId])
+  @@index([transactionId])
+  @@index([effectiveDate(sort: Desc)])
+}
+
+model FinancialDeduction {
+  id             String            @id @default(cuid())
+  category       DeductionCategory @default(OTHER_EXPENSE)
+  description    String
+  amountCentavos Int
+  reference      String?
+  status         String            @default("RECORDED") // RECORDED, APPROVED, REVERSED
+  periodId       String?
+  date           DateTime          @default(now())
+  createdBy      String?
+  approvedBy     String?
+  notes          String?           @db.Text
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  accountingPeriod AccountingPeriod? @relation(fields: [periodId], references: [id], onDelete: SetNull)
+
+  @@index([category])
+  @@index([status])
+  @@index([date(sort: Desc)])
+}
+
+model FinancialAdjustment {
+  id               String          @id @default(cuid())
+  adjustmentNumber String          @unique // e.g. ADJ-0001
+  amountCentavos   Int
+  direction        LedgerEntryType // DEBIT or CREDIT
+  category         String          // e.g. "CORRECTION_PAYMENT_FEE", "MANUAL_REVERSAL"
+  reason           String          @db.Text
+  reference        String?
+  status           String          @default("APPROVED") // PENDING_APPROVAL, APPROVED, REJECTED
+  createdBy        String?
+  approvedBy       String?
+  approvedAt       DateTime?
+  createdAt        DateTime        @default(now())
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+model AccountingPeriod {
+  id        String                 @id @default(cuid())
+  name      String                 @unique // e.g. "2026-08 (August 2026)"
+  startDate DateTime
+  endDate   DateTime
+  status    AccountingPeriodStatus @default(OPEN)
+  closedBy  String?
+  closedAt  DateTime?
+  notes     String?                @db.Text
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
+
+  ledgerEntries FinancialLedgerEntry[]
+  deductions    FinancialDeduction[]
+
+  @@index([status])
+  @@index([startDate, endDate])
+}
+
+model AccountingAuditLog {
+  id             String   @id @default(cuid())
+  actorId        String?
+  actorRole      String?
+  action         String
+  targetType     String
+  targetId       String?
+  previousState  String?  @db.Text
+  newState       String?  @db.Text
+  amountCentavos Int?
+  reason         String?  @db.Text
+  metadata       Json?
+  ipAddress      String?
+  createdAt      DateTime @default(now())
+
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt(sort: Desc)])
+  @@index([actorId])
+}
+
+model ReconciliationRecord {
+  id                   String               @id @default(cuid())
+  sourceType           String               // PAYMONGO_CHECKOUT, PAYMONGO_PAYMENT, INTERNAL_TRANSACTION, REFERRAL_REWARD, PARTNER_COMMISSION, PAYOUT
+  sourceId             String
+  matchedTransactionId String?
+  status               ReconciliationStatus @default(MATCHED)
+  discrepancyCentavos  Int                  @default(0)
+  discrepancyNotes     String?              @db.Text
+  reconciledBy         String?
+  reconciledAt         DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  @@index([sourceType, sourceId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+model FinancialSetting {
+  key         String   @id
+  value       String   @db.Text
+  description String?
+  updatedBy   String?
+  updatedAt   DateTime @updatedAt
+}
+
 

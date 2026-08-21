@@ -93,17 +93,65 @@ export async function POST() {
         }),
       ]);
 
-      // 🎁 Qualify Referral Reward (Idempotent)
+      const actualPaidCentavos = purchaseAmountCentavos || transaction.amount * 100;
+
+      // 📊 1. Double-Entry Accounting Ledger (Idempotent)
+      try {
+        const { LedgerService } = await import("@/lib/accounting/ledgerService");
+        await LedgerService.recordPaymentReceived({
+          transactionId: transaction.id,
+          amountCentavos: actualPaidCentavos,
+          userId,
+          planType,
+        });
+      } catch (ledgerErr) {
+        console.error("[Accounting Ledger Verify Warning]:", ledgerErr);
+      }
+
+      // 🎁 2. Qualify Referral Reward (Idempotent)
       try {
         const { ReferralService } = await import("@/lib/referral/referralService");
         await ReferralService.qualifyReferralPayment({
           userId,
           transactionId: transaction.id,
-          purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
+          purchaseAmountCentavos: actualPaidCentavos,
           planType,
         });
       } catch (referralErr) {
         console.error("[Referral Verify Qualification Warning]:", referralErr);
+      }
+
+      // 🤝 3. Qualify Partner Commission (Idempotent)
+      try {
+        const { PartnerService } = await import("@/lib/accounting/partnerService");
+        await PartnerService.qualifyPartnerPayment({
+          userId,
+          transactionId: transaction.id,
+          customerPaymentCentavos: actualPaidCentavos,
+          grossAmountCentavos: actualPaidCentavos,
+        });
+      } catch (partnerErr) {
+        console.error("[Partner Verify Qualification Warning]:", partnerErr);
+      }
+
+      // 🏛️ 4. Evaluate Tax Provisions
+      try {
+        const { TaxService } = await import("@/lib/accounting/taxService");
+        await TaxService.evaluateTransactionTaxes({
+          transactionId: transaction.id,
+          customerPaymentCentavos: actualPaidCentavos,
+          grossAmountCentavos: actualPaidCentavos,
+        });
+      } catch (taxErr) {
+        console.error("[Tax Verify Warning]:", taxErr);
+      }
+
+      // ⚖️ 5. Auto Reconciliation
+      try {
+        const { ReconciliationService } = await import("@/lib/accounting/reconciliationService");
+        await ReconciliationService.reconcileTransaction(transaction.id);
+      } catch (recErr) {
+        console.error("[Reconciliation Verify Warning]:", recErr);
       }
 
       cookieStore.delete("cse_checkout_id");

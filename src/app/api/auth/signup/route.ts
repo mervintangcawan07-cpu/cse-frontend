@@ -58,24 +58,41 @@ export async function POST(request: Request) {
       },
     });
 
-    // 🎁 Referral Attribution & Code Generation
+    // 🎁 1. Referral & Partner Attribution
     try {
       const { ReferralService } = await import("@/lib/referral/referralService");
-      
-      // Auto-generate this new user's personal referral code
+      const { PartnerService } = await import("@/lib/accounting/partnerService");
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+
+      // Auto-generate this new user's personal student referral code
       await ReferralService.getOrCreateReferralCode(newUser.id).catch(() => null);
 
-      // If referred by someone, record locked attribution
-      if (referralCode) {
-        await ReferralService.recordAttributionOnSignup({
-          referredUserId: newUser.id,
-          referralCodeString: referralCode,
-          ipAddress: clientIp,
-          userAgent: request.headers.get("user-agent"),
-        });
+      const effectiveCode =
+        referralCode ||
+        cookieStore.get("cse_partner_ref")?.value ||
+        cookieStore.get("cse_ref")?.value;
+
+      if (effectiveCode) {
+        // Check if code matches a Partner first
+        const partner = await PartnerService.resolvePartnerByCodeOrSlug(effectiveCode);
+        if (partner) {
+          await PartnerService.recordPartnerAttributionOnSignup({
+            referredUserId: newUser.id,
+            codeOrSlug: effectiveCode,
+          });
+        } else {
+          // Otherwise record Student Referral attribution
+          await ReferralService.recordAttributionOnSignup({
+            referredUserId: newUser.id,
+            referralCodeString: effectiveCode,
+            ipAddress: clientIp,
+            userAgent: request.headers.get("user-agent"),
+          });
+        }
       }
-    } catch (referralErr) {
-      console.error("[Referral Signup Attribution Warning]:", referralErr);
+    } catch (attributionErr) {
+      console.error("[Attribution Signup Warning]:", attributionErr);
     }
 
     // Send the verification link via Resend

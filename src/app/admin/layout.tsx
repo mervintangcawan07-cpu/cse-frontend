@@ -98,6 +98,12 @@ export default async function AdminLayout({
               >
                 Referrals 🎁
               </Link>
+              <Link
+                href="/admin/accounting"
+                className="px-2 py-1.5 rounded-md hover:bg-slate-800 text-emerald-400 hover:text-emerald-300 transition font-bold"
+              >
+                Accounting 📊
+              </Link>
             </nav>
 
             {/* Exit Button */}

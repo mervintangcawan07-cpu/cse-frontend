@@ -80,6 +80,9 @@ export async function POST(request: Request) {
         else if (planType === "6_MONTHS") newPaidUntil.setDate(newPaidUntil.getDate() + 180);
         else if (planType === "1_YEAR" || planType === "LIFETIME") newPaidUntil.setDate(newPaidUntil.getDate() + 365);
 
+        // Extract PayMongo fee if available or calculate typical 2.5% + ₱15 or default fee
+        const feeCentavos = attributes?.fee || attributes?.fees?.[0]?.amount || 0;
+
         const [_, transaction] = await prisma.$transaction([
           prisma.user.update({
             where: { id: String(userId) },
@@ -87,11 +90,18 @@ export async function POST(request: Request) {
           }),
           prisma.transaction.upsert({
             where: { checkoutSessionId: checkoutSessionId || `txn_${Date.now()}` },
-            update: { status: "PAID" },
+            update: {
+              status: "PAID",
+              amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
+              feeAmountCentavos: feeCentavos,
+            },
             create: {
               userId: String(userId),
               checkoutSessionId: checkoutSessionId || `txn_${Date.now()}`,
               amount: purchaseAmountCentavos ? Math.round(purchaseAmountCentavos / 100) : 0,
+              grossAmountCentavos: purchaseAmountCentavos || 0,
+              discountAmountCentavos: 0,
+              feeAmountCentavos: feeCentavos,
               planType,
               status: "PAID",
             },
@@ -100,17 +110,72 @@ export async function POST(request: Request) {
 
         console.log(`[PayMongo Webhook Success]: Upgraded user ${userId} to ${planType}`);
 
-        // 🎁 Qualify Referral Reward (Defensively isolated from PRO subscription upgrade)
+        const actualPaidCentavos = purchaseAmountCentavos || transaction.amount * 100;
+
+        // 📊 1. Double-Entry Accounting Ledger (Defensively isolated)
+        try {
+          const { LedgerService } = await import("@/lib/accounting/ledgerService");
+          await LedgerService.recordPaymentReceived({
+            transactionId: transaction.id,
+            amountCentavos: actualPaidCentavos,
+            userId: String(userId),
+            planType,
+          });
+
+          if (feeCentavos > 0) {
+            await LedgerService.recordPaymentFee({
+              transactionId: transaction.id,
+              feeAmountCentavos: feeCentavos,
+            });
+          }
+        } catch (ledgerErr) {
+          console.error("[Accounting Ledger Webhook Warning]:", ledgerErr);
+        }
+
+        // 🎁 2. Qualify Referral Reward
         try {
           const { ReferralService } = await import("@/lib/referral/referralService");
           await ReferralService.qualifyReferralPayment({
             userId: String(userId),
             transactionId: transaction.id,
-            purchaseAmountCentavos: purchaseAmountCentavos || transaction.amount * 100,
+            purchaseAmountCentavos: actualPaidCentavos,
             planType,
           });
         } catch (referralErr) {
           console.error("[Referral Webhook Qualification Warning]:", referralErr);
+        }
+
+        // 🤝 3. Qualify Partner Commission
+        try {
+          const { PartnerService } = await import("@/lib/accounting/partnerService");
+          await PartnerService.qualifyPartnerPayment({
+            userId: String(userId),
+            transactionId: transaction.id,
+            customerPaymentCentavos: actualPaidCentavos,
+            grossAmountCentavos: actualPaidCentavos,
+          });
+        } catch (partnerErr) {
+          console.error("[Partner Webhook Qualification Warning]:", partnerErr);
+        }
+
+        // 🏛️ 4. Evaluate Tax Provisions
+        try {
+          const { TaxService } = await import("@/lib/accounting/taxService");
+          await TaxService.evaluateTransactionTaxes({
+            transactionId: transaction.id,
+            customerPaymentCentavos: actualPaidCentavos,
+            grossAmountCentavos: actualPaidCentavos,
+          });
+        } catch (taxErr) {
+          console.error("[Tax Webhook Evaluation Warning]:", taxErr);
+        }
+
+        // ⚖️ 5. Auto Reconciliation
+        try {
+          const { ReconciliationService } = await import("@/lib/accounting/reconciliationService");
+          await ReconciliationService.reconcileTransaction(transaction.id);
+        } catch (recErr) {
+          console.error("[Reconciliation Warning]:", recErr);
         }
       } else {
         console.warn("[PayMongo Webhook Warning]: Paid event received but userId was missing in metadata.");
@@ -125,6 +190,7 @@ export async function POST(request: Request) {
         const checkoutSessionId = payload?.data?.attributes?.data?.id;
         const transaction = await prisma.transaction.findFirst({
           where: { checkoutSessionId },
+          include: { referralReward: true, partnerCommission: true },
         });
 
         if (transaction) {
@@ -133,12 +199,27 @@ export async function POST(request: Request) {
             data: { status: "REFUNDED" },
           });
 
+          // Reverse Referral
           const { ReferralService } = await import("@/lib/referral/referralService");
           await ReferralService.handlePaymentRefundOrChargeback({
             transactionId: transaction.id,
             reason: `PayMongo refund event: ${eventType}`,
           });
-          console.log(`[PayMongo Webhook]: Reversed referral reward for refunded transaction ${transaction.id}`);
+
+          // Reverse Ledger entries
+          const { LedgerService } = await import("@/lib/accounting/ledgerService");
+          const refundCentavos = transaction.amount > 5000 ? transaction.amount : transaction.amount * 100;
+          await LedgerService.recordRefundReversal({
+            transactionId: transaction.id,
+            refundAmountCentavos: refundCentavos,
+            referralRewardId: transaction.referralReward?.id,
+            referralRewardCentavos: transaction.referralReward?.rewardAmountCentavos,
+            partnerCommissionId: transaction.partnerCommission?.id,
+            partnerCommissionCentavos: transaction.partnerCommission?.commissionAmountCentavos,
+            reason: `Refund event: ${eventType}`,
+          });
+
+          console.log(`[PayMongo Webhook]: Reversed ledger and liabilities for refunded transaction ${transaction.id}`);
         }
       } catch (refundErr) {
         console.error("[PayMongo Refund Processing Error]:", refundErr);

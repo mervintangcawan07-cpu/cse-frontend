@@ -286,6 +286,23 @@ export default function AdminDashboardHub() {
                 Open Referral Center <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
               </div>
             </Link>
+
+            <Link
+              href="/admin/accounting"
+              className="group p-4 bg-slate-900 border border-slate-800 hover:border-emerald-500/60 rounded-xl transition duration-200 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xl">📊</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">LEDGER</span>
+                </div>
+                <h3 className="font-bold text-white text-sm mt-3 group-hover:text-emerald-400 transition">Accounting &amp; Finance</h3>
+                <p className="text-xs text-slate-400 mt-1">Double-entry general journal, waterfall calculations, partner commissions, and cash reconciliation.</p>
+              </div>
+              <div className="pt-3 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-400">
+                Open Financial Hub <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+              </div>
+            </Link>
           </div>
         </div>
       </div>
