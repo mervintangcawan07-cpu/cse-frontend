@@ -179,6 +179,15 @@ export async function sendPartnerCommissionAlertEmail(params: {
     </div>
   `;
 
+  // ⏸️ Resend Free Tier Protection: Commission alerts are paused by default to save email credits
+  const isEnabled = process.env.ENABLE_PARTNER_COMMISSION_EMAILS === "true";
+  if (!isEnabled) {
+    console.log(
+      `[COMMISSION_ALERT_EMAIL_PAUSED] Partner: ${params.partnerName}, Commission: ₱${cleanCommission} (set ENABLE_PARTNER_COMMISSION_EMAILS=true to enable)`
+    );
+    return;
+  }
+
   if (!resend) {
     console.log(`[DEV MODE - PARTNER COMMISSION ALERT] Partner: ${params.partnerName}, Commission: ₱${cleanCommission}`);
     return;
