@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const now = new Date();
 
-    let [nextSchedule, announcements, downloads] = await Promise.all([
+    const [fetchedSchedule, announcements, downloads] = await Promise.all([
       prisma.cSCExamSchedule.findFirst({
         where: {
           OR: [
@@ -24,6 +24,8 @@ export async function GET() {
         take: 5,
       }),
     ]);
+
+    let nextSchedule = fetchedSchedule;
 
     // 🛡️ Auto-Fallback: If no active future schedule exists, provide official 2027 CSE-PPT timetable and auto-persist
     if (!nextSchedule) {

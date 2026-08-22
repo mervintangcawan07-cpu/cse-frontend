@@ -100,7 +100,7 @@ export const PublicProfileCardModal: React.FC<PublicProfileCardModalProps> = ({
             {/* Bio (Respects Privacy) */}
             {profile.bio && (
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 italic leading-relaxed">
-                "{profile.bio}"
+                &quot;{profile.bio}&quot;
               </div>
             )}
 

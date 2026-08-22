@@ -245,7 +245,7 @@ export const PostComposerModal: React.FC<PostComposerModalProps> = ({
               />
               <div className="flex flex-col">
                 <span className="text-xs font-black text-slate-800">
-                  🎭 Post as "Anonymous Examinee"
+                  🎭 Post as &quot;Anonymous Examinee&quot;
                 </span>
                 <span className="text-[10px] text-slate-500">
                   Your name and avatar will be hidden to protect your privacy.

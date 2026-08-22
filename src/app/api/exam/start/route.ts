@@ -90,7 +90,7 @@ export async function GET(request: Request) {
     });
 
     // For MISTAKES_ONLY pool: get user's mistake question IDs
-    let mistakeQuestionIds: Set<string> = new Set();
+    const mistakeQuestionIds: Set<string> = new Set();
     if (pool === "MISTAKES_ONLY") {
       const mistakes = await prisma.userMistake.findMany({
         where: { userId, isMastered: false },
@@ -247,7 +247,7 @@ export async function GET(request: Request) {
       categoryMap[matchedKey].push(q);
     }
 
-    let finalExamQuestions: any[] = [];
+    const finalExamQuestions: any[] = [];
 
     // Process subtopics and quotas in memory
     for (const [catName, catQuota] of Object.entries(activeQuotas)) {
@@ -267,7 +267,7 @@ export async function GET(request: Request) {
       const baseQuotaPerSubtopic = Math.floor(catQuota / subtopicCount);
       let remainder = catQuota % subtopicCount;
 
-      let categoryPickedQuestions: any[] = [];
+      const categoryPickedQuestions: any[] = [];
       const pickedIdsInCat = new Set<string>();
 
       // Pull questions equally per subtopic

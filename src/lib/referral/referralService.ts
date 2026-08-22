@@ -723,7 +723,7 @@ export class ReferralService {
       select: { status: true },
     });
 
-    let totalReferrals = referrals.length;
+    const totalReferrals = referrals.length;
     let successfulReferrals = 0;
     let pendingReferrals = 0;
     let rejectedReferrals = 0;

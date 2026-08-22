@@ -137,6 +137,19 @@ export async function POST(request: Request) {
     const userId = String(rawUserId);
 
     const body = await request.json();
+    const {
+      profileCompleted = true,
+      // Privacy & Visibility Toggles
+      showAgeRange = false,
+      showGender = false,
+      showBio = true,
+      showStudyGoal = true,
+      showInterests = true,
+      showPreferences = true,
+      showAvailability = true,
+      showActivity = true,
+    } = body;
+
     let {
       displayName,
       avatar,
@@ -149,16 +162,6 @@ export async function POST(request: Request) {
       studyPreferences,
       availability,
       language,
-      profileCompleted = true,
-      // Privacy & Visibility Toggles
-      showAgeRange = false,
-      showGender = false,
-      showBio = true,
-      showStudyGoal = true,
-      showInterests = true,
-      showPreferences = true,
-      showAvailability = true,
-      showActivity = true,
       // Presence Settings
       presenceStatus = "ONLINE",
       customStatusText = null,

@@ -33,7 +33,7 @@ export const LeaveClubModal: React.FC<LeaveClubModalProps> = ({
               Leave Study Club?
             </h3>
             <p className="text-xs font-semibold text-slate-400 mt-1">
-              Are you sure you want to leave <span className="text-white font-bold">"{clubName}"</span>?
+              Are you sure you want to leave <span className="text-white font-bold">&quot;{clubName}&quot;</span>?
             </p>
           </div>
         </div>

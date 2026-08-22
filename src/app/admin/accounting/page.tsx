@@ -1012,7 +1012,7 @@ export default function AdminAccountingPage() {
                         <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">
                           Promotion Plan / Pitch:
                         </span>
-                        <p className="text-slate-400 leading-relaxed italic">"{app.pitchReason}"</p>
+                        <p className="text-slate-400 leading-relaxed italic">&quot;{app.pitchReason}&quot;</p>
                       </div>
                     )}
                   </div>

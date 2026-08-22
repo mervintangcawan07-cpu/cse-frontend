@@ -201,8 +201,8 @@ async function runTests() {
 
   // Batch redemption status transitions
   const totalCodesInBatch = 50;
-  let redeemedCount = 49;
-  let isFullyRedeemed = redeemedCount + 1 >= totalCodesInBatch;
+  const redeemedCount = 49;
+  const isFullyRedeemed = redeemedCount + 1 >= totalCodesInBatch;
   assert(isFullyRedeemed === true, "50th redemption marks batch status as FULLY_REDEEMED");
 
   // Commission alert email format check

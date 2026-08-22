@@ -130,7 +130,7 @@ function ExamResultContent() {
           No Recent Exam Found
         </h2>
         <p className="text-sm text-slate-500">
-          You haven't completed a mock examination in this session or your review history has expired.
+          You haven&apos;t completed a mock examination in this session or your review history has expired.
         </p>
         <Link
           href="/mock-exam/take"

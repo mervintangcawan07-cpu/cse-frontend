@@ -33,7 +33,7 @@ export const DeleteRoomModal: React.FC<DeleteRoomModalProps> = ({
             </h3>
             <p className="text-xs font-semibold text-slate-400 mt-1">
               Are you sure you want to delete{" "}
-              <span className="text-white font-bold">"{roomName}"</span>?
+              <span className="text-white font-bold">&quot;{roomName}&quot;</span>?
             </p>
           </div>
         </div>

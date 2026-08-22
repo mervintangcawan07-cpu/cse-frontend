@@ -172,7 +172,7 @@ export const OwnerLeaveClubModal: React.FC<OwnerLeaveClubModalProps> = ({
                 <span>ℹ️</span> Sole Member Notice
               </p>
               <p className="text-amber-400/90 leading-relaxed text-[11px]">
-                You are currently the only member in <strong>"{clubName}"</strong>. Because there are no other members to take over ownership, leaving the club will permanently disband and delete it.
+                You are currently the only member in <strong>&quot;{clubName}&quot;</strong>. Because there are no other members to take over ownership, leaving the club will permanently disband and delete it.
               </p>
             </div>
 
@@ -200,7 +200,7 @@ export const OwnerLeaveClubModal: React.FC<OwnerLeaveClubModalProps> = ({
           /* Case 2: Other members exist -> Option to transfer ownership & leave, or delete club */
           <div className="space-y-5">
             <p className="text-xs text-slate-300 leading-relaxed">
-              To leave <strong>"{clubName}"</strong>, please choose an option below. Owners cannot leave without designating a new owner or disbanding the club.
+              To leave <strong>&quot;{clubName}&quot;</strong>, please choose an option below. Owners cannot leave without designating a new owner or disbanding the club.
             </p>
 
             {/* Option A: Transfer & Leave */}

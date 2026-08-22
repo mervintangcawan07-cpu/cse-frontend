@@ -33,7 +33,7 @@ export const DeleteClubModal: React.FC<DeleteClubModalProps> = ({
             </h3>
             <p className="text-xs font-semibold text-slate-400 mt-1">
               Are you sure you want to delete{" "}
-              <span className="text-white font-bold">"{clubName}"</span>?
+              <span className="text-white font-bold">&quot;{clubName}&quot;</span>?
             </p>
           </div>
         </div>

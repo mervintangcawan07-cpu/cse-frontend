@@ -100,7 +100,7 @@ export default function CSCDailyQuestionWidget() {
   if (loading) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center text-slate-400 font-bold animate-pulse">
-        Loading Today's Question of the Day...
+        Loading Today&apos;s Question of the Day...
       </div>
     );
   }

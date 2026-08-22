@@ -30,7 +30,7 @@ export const DeleteEventModal: React.FC<DeleteEventModalProps> = ({
               Delete Scheduled Event?
             </h3>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">
-              Are you sure you want to delete <span className="text-slate-800 dark:text-slate-200 font-bold">"{eventTitle}"</span>?
+              Are you sure you want to delete <span className="text-slate-800 dark:text-slate-200 font-bold">&quot;{eventTitle}&quot;</span>?
             </p>
           </div>
         </div>

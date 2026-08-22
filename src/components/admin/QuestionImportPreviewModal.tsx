@@ -264,7 +264,7 @@ export default function QuestionImportPreviewModal({
                     </span>
                   </div>
                   <p>{err.message}</p>
-                  {err.prompt && <p className="text-slate-500 italic">Prompt: "{err.prompt.slice(0, 80)}..."</p>}
+                  {err.prompt && <p className="text-slate-500 italic">Prompt: &quot;{err.prompt.slice(0, 80)}...&quot;</p>}
                 </div>
               ))}
 
@@ -280,7 +280,7 @@ export default function QuestionImportPreviewModal({
                     </span>
                   </div>
                   <p>{warn.message}</p>
-                  {warn.prompt && <p className="text-slate-500 italic">Prompt: "{warn.prompt.slice(0, 80)}..."</p>}
+                  {warn.prompt && <p className="text-slate-500 italic">Prompt: &quot;{warn.prompt.slice(0, 80)}...&quot;</p>}
                 </div>
               ))}
             </div>

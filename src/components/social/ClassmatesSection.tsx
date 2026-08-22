@@ -479,7 +479,7 @@ export default function ClassmatesSection() {
 
         {suggested.length === 0 ? (
           <div className="bg-white border border-slate-200/90 rounded-3xl p-8 text-center text-xs text-slate-500 shadow-xs">
-            No examinees matching this filter category. Try selecting "All Classmates" to see all available study partners.
+            No examinees matching this filter category. Try selecting &quot;All Classmates&quot; to see all available study partners.
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

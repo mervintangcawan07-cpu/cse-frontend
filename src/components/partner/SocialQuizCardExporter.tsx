@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef } from "react";
 import {
@@ -603,7 +603,7 @@ export default function SocialQuizCardExporter({
                 Upload both images to <strong>TikTok Photo Mode</strong> or as a <strong>Facebook Carousel</strong>.
               </li>
               <li>
-                Add caption: <em>"Subukan niyo sagutan bago mag-swipe! Link in bio para sa 2,500+ practice questions 🔥"</em>
+                Add caption: <em>&quot;Subukan niyo sagutan bago mag-swipe! Link in bio para sa 2,500+ practice questions 🔥&quot;</em>
               </li>
               <li>
                 Add your promo code <strong className="text-emerald-400 font-mono">{partnerCode}</strong> for 10% student discount.

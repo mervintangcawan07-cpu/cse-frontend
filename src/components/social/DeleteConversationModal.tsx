@@ -33,7 +33,7 @@ export const DeleteConversationModal: React.FC<DeleteConversationModalProps> = (
             </h3>
             <p className="text-xs font-semibold text-slate-400 mt-1">
               Are you sure you want to delete your conversation with{" "}
-              <span className="text-white font-bold">"{classmateName || "Classmate"}"</span>?
+              <span className="text-white font-bold">&quot;{classmateName || "Classmate"}&quot;</span>?
             </p>
           </div>
         </div>

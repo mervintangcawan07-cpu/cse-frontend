@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
     if (format === "csv") {
       let csvContent = "";
-      let filename = `govstudyx_financial_${exportType}_${Date.now()}.csv`;
+      const filename = `govstudyx_financial_${exportType}_${Date.now()}.csv`;
 
       if (exportType === "ledger") {
         csvContent = await AccountingReportService.exportLedgerCSV();

@@ -388,7 +388,7 @@ export function renderFindingsCardHTML(title: string, findings: Array<{ num: str
  */
 export function autoEnhanceDataInterpretation(text: string): string {
   if (!text) return "";
-  let enhanced = text;
+  const enhanced = text;
 
   // Suppress charting for geometric polygon / number logic sequences
   if (/polygon|sequence where|at each step|geometric sequence/i.test(enhanced)) {

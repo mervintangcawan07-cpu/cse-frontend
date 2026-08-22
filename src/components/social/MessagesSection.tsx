@@ -382,7 +382,7 @@ export default function MessagesSection() {
             {/* REPLY BANNER */}
             {replyingTo && (
               <div className="px-4 py-2 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-xs text-slate-700">
-                <span className="truncate">Replying to: <i>"{replyingTo.content}"</i></span>
+                <span className="truncate">Replying to: <i>&quot;{replyingTo.content}&quot;</i></span>
                 <button
                   onClick={() => setReplyingTo(null)}
                   className="text-slate-400 hover:text-slate-900 ml-2 text-xs cursor-pointer"

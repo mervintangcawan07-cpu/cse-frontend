@@ -736,11 +736,11 @@ export default function LandingPage() {
               <div className="space-y-2 text-xs">
                 <div className="p-2.5 bg-slate-100 rounded-xl space-y-0.5">
                   <p className="font-bold text-indigo-950 text-[11px]">Classmate Maria:</p>
-                  <p className="text-slate-700">"How did you eliminate Choice C in the proportion problem?"</p>
+                  <p className="text-slate-700">&quot;How did you eliminate Choice C in the proportion problem?&quot;</p>
                 </div>
                 <div className="p-2.5 bg-blue-600 text-white rounded-xl space-y-0.5 text-right">
                   <p className="font-bold text-blue-100 text-[11px]">You:</p>
-                  <p className="text-white">"Check the common trap: C forgets the initial 2 hours work!"</p>
+                  <p className="text-white">&quot;Check the common trap: C forgets the initial 2 hours work!&quot;</p>
                 </div>
               </div>
             </div>

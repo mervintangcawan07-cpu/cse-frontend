@@ -140,7 +140,7 @@ export async function GET(request: Request) {
       const unmastered = allCategoryPool.filter((q) => !masteredQuestionIds.has(q.id));
       const mastered = allCategoryPool.filter((q) => masteredQuestionIds.has(q.id));
 
-      let picked = shuffleArray(unmastered);
+      const picked = shuffleArray(unmastered);
       if (picked.length < requestedLimit && mastered.length > 0) {
         const needed = requestedLimit - picked.length;
         picked.push(...shuffleArray(mastered).slice(0, needed));
@@ -163,7 +163,7 @@ export async function GET(request: Request) {
       },
     });
 
-    let finalExamQuestions: any[] = [];
+    const finalExamQuestions: any[] = [];
     const addedIds = new Set<string>();
 
     for (const subject of CSE_SUBJECT_ORDER) {
@@ -203,7 +203,7 @@ export async function GET(request: Request) {
           const unmastered = availableUnused.filter((q) => !masteredQuestionIds.has(q.id));
           const mastered = availableUnused.filter((q) => masteredQuestionIds.has(q.id));
 
-          let subPicked = shuffleArray(unmastered).slice(0, subTarget);
+          const subPicked = shuffleArray(unmastered).slice(0, subTarget);
 
           // Recycle mastered if unmastered is insufficient
           if (subPicked.length < subTarget && mastered.length > 0) {
@@ -226,7 +226,7 @@ export async function GET(request: Request) {
         const unmasteredCat = remainingInCat.filter((q) => !masteredQuestionIds.has(q.id));
         const masteredCat = remainingInCat.filter((q) => masteredQuestionIds.has(q.id));
 
-        let extra = shuffleArray(unmasteredCat).slice(0, needed);
+        const extra = shuffleArray(unmasteredCat).slice(0, needed);
         if (extra.length < needed && masteredCat.length > 0) {
           const stillNeeded = needed - extra.length;
           extra.push(...shuffleArray(masteredCat).slice(0, stillNeeded));

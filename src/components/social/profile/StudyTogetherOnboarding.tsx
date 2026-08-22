@@ -635,7 +635,7 @@ export default function StudyTogetherOnboarding({
         {step === 5 && (
           <div className="space-y-6 animate-fade-in">
             <div className="text-center space-y-1 border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-black text-white">🎉 You're Ready to Study Together!</h3>
+              <h3 className="text-lg font-black text-white">🎉 You&apos;re Ready to Study Together!</h3>
               <p className="text-xs text-slate-400">
                 Here is how your study card will look to other examinees across rooms, clubs, and group chats:
               </p>
@@ -662,7 +662,7 @@ export default function StudyTogetherOnboarding({
 
               {bio && (
                 <div className="p-3 bg-slate-900/90 border border-slate-800 rounded-xl text-xs text-slate-300 italic leading-relaxed">
-                  "{bio}"
+                  &quot;{bio}&quot;
                 </div>
               )}
 

@@ -62,7 +62,7 @@ export const PresenceBadge: React.FC<PresenceBadgeProps> = ({
       {presence.customStatusText && (
         <span className="text-[11px] text-slate-300 italic flex items-center gap-1 max-w-[200px] truncate">
           {presence.customStatusEmoji && <span>{presence.customStatusEmoji}</span>}
-          <span>"{presence.customStatusText}"</span>
+          <span>&quot;{presence.customStatusText}&quot;</span>
         </span>
       )}
     </div>

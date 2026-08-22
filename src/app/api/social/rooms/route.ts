@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/rooms/route.ts
+// Relative Path: src/app/api/social/rooms/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const filter = searchParams.get("filter") || "all"; // 'all', 'mine', 'public'
 
-    let whereClause: any = { state: { in: ["ACTIVE", "SCHEDULED"] } };
+    const whereClause: any = { state: { in: ["ACTIVE", "SCHEDULED"] } };
 
     if (filter === "mine") {
       whereClause.participants = { some: { userId } };

@@ -300,7 +300,7 @@ export default function NotificationsSection({ onNavigateTab }: NotificationsSec
       ) : notifications.length === 0 ? (
         <div className="bg-white border border-slate-200/90 rounded-3xl p-12 text-center space-y-3 shadow-xs">
           <span className="text-4xl block">🔔</span>
-          <h4 className="text-sm font-bold text-slate-900">You're All Caught Up!</h4>
+          <h4 className="text-sm font-bold text-slate-900">You&apos;re All Caught Up!</h4>
           <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
             Classmate requests, private messages, study room invites, and scheduled event reminders will appear here in real time.
           </p>
