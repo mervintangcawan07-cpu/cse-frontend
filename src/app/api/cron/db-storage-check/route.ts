@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/cron/db-storage-check/route.ts
+// Relative Path: src/app/api/cron/db-storage-check/route.ts
 import { NextResponse } from "next/server";
 import { checkDbStorageAndNotify } from "@/lib/dbStorageMonitor";
 
@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const authHeader = request.headers.get("authorization");
     const cronSecret = process.env.CRON_SECRET;
 
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: "Unauthorized cron trigger" }, { status: 401 });
     }
 

@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
+import {
+  AI_EXPLAIN_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
@@ -16,6 +21,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const userId = String(session.userId);
+
+    // 🔒 Limit: 15 AI mistake explanations per minute per user
+    const rateResult = await checkRateLimit(AI_EXPLAIN_LIMITER, `ai:explain-mistake:${userId}`);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many AI explanation requests. Please wait a moment before requesting another."
+      );
+    }
+
     const body = await request.json();
     const { prompt, userChoice, correctChoice, officialExplanation, category } = body;
 
@@ -23,19 +39,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required question parameters" }, { status: 400 });
     }
 
+    // Protect against oversized prompt injection / payload flooding
+    const safePrompt = String(prompt).slice(0, 2000);
+    const safeUserChoice = String(userChoice).slice(0, 500);
+    const safeCorrectChoice = String(correctChoice).slice(0, 500);
+    const safeExplanation = officialExplanation ? String(officialExplanation).slice(0, 1000) : "N/A";
+    const safeCategory = category ? String(category).slice(0, 100) : "General";
+
     const apiKey = process.env.GEMINI_API_KEY;
 
     // 💡 Option 1: Gemini 1.5 Flash AI Integration
     if (apiKey) {
       try {
         const aiPrompt = `You are an expert Civil Service Exam AI Tutor.
-A student chose an incorrect option for a ${category || "General"} question.
-Question: "${prompt}"
-Student's Chosen Wrong Choice: "${userChoice}"
-Correct Answer: "${correctChoice}"
-Official Explanation: "${officialExplanation || "N/A"}"
+A student chose an incorrect option for a ${safeCategory} question.
+Question: "${safePrompt}"
+Student's Chosen Wrong Choice: "${safeUserChoice}"
+Correct Answer: "${safeCorrectChoice}"
+Official Explanation: "${safeExplanation}"
 
-In 2 short, encouraging sentences, pinpoint the exact logical trap or misconception in the student's choice ("${userChoice}") and why "${correctChoice}" is the proper answer.`;
+In 2 short, encouraging sentences, pinpoint the exact logical trap or misconception in the student's choice ("${safeUserChoice}") and why "${safeCorrectChoice}" is the proper answer.`;
 
         const response = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -60,8 +83,8 @@ In 2 short, encouraging sentences, pinpoint the exact logical trap or misconcept
     }
 
     // 💡 Option 2: Fallback Logic Engine
-    const fallback = `You selected "${userChoice}". The correct choice is "${correctChoice}". ${
-      officialExplanation ? `Key Concept: ${officialExplanation}` : "Make sure to double-check key qualifiers and formula steps."
+    const fallback = `You selected "${safeUserChoice}". The correct choice is "${safeCorrectChoice}". ${
+      officialExplanation ? `Key Concept: ${safeExplanation}` : "Make sure to double-check key qualifiers and formula steps."
     }`;
 
     return NextResponse.json({ success: true, explanation: fallback });

@@ -3,9 +3,26 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `partner:reset-password:${clientIp}`;
+
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many password reset attempts. Please wait a moment before trying again."
+      );
+    }
+
     const body = await request.json();
     const { token, newPassword } = body;
 
@@ -16,7 +33,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (newPassword.length < 8) {
+    if (String(newPassword).length < 8) {
       return NextResponse.json(
         { error: "Password must be at least 8 characters long." },
         { status: 400 }

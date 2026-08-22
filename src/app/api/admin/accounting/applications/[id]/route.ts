@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { PartnerService } from "@/lib/accounting/partnerService";
@@ -46,7 +47,10 @@ export async function POST(
 
     if (action === "APPROVE") {
       const effectiveSlug = customSlug || application.proposedSlug || undefined;
-      const effectivePassword = initialPassword || "GovStudyX2026!";
+      const effectivePassword =
+        initialPassword && String(initialPassword).trim().length >= 8
+          ? String(initialPassword).trim()
+          : `GSX-${crypto.randomBytes(6).toString("base64url")}!9`;
       const rate = commissionRate !== undefined ? parseFloat(commissionRate) : 10.0;
 
       // Create the official Partner record

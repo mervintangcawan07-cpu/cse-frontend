@@ -2,14 +2,37 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendVerificationEmail } from "@/lib/email";
 import crypto from "crypto";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `auth:resend-verification:${clientIp}`;
+
+    // 🔒 Limit: 5 verification resend attempts per 10 seconds per IP
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many verification requests. Please wait a moment before trying again."
+      );
+    }
+
     const body = await request.json();
     const { email } = body;
 
+    const genericSuccessResponse = NextResponse.json({
+      success: true,
+      message: "If an unverified account exists, a new link has been sent.",
+    });
+
     if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+      return genericSuccessResponse;
     }
 
     const formattedEmail = String(email).toLowerCase().trim();
@@ -18,10 +41,7 @@ export async function POST(request: Request) {
     });
 
     if (!user || user.isEmailVerified) {
-      return NextResponse.json({
-        success: true,
-        message: "If an unverified account exists, a new link has been sent.",
-      });
+      return genericSuccessResponse;
     }
 
     const verificationToken = crypto.randomBytes(32).toString("hex");
@@ -43,6 +63,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Resend verification error:", error);
-    return NextResponse.json({ error: "Failed to resend verification email" }, { status: 500 });
+    return NextResponse.json({
+      success: true,
+      message: "If an unverified account exists, a new link has been sent.",
+    });
   }
 }

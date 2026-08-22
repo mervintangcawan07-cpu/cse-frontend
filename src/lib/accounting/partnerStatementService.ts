@@ -502,7 +502,7 @@ export class PartnerStatementService {
   }
 
   /**
-   * Generates structured CSV string for partner statement.
+   * Generates structured CSV string for partner statement with formula injection protection.
    */
   static generateStatementCSV(dataset: PartnerStatementDataset): string {
     const headers = [
@@ -518,30 +518,56 @@ export class PartnerStatementService {
       "Channel",
     ];
 
+    const sanitizeCell = (val: string | number | null | undefined): string => {
+      if (val === null || val === undefined) return '""';
+      const str = String(val);
+      const trimmed = str.trim();
+      // Pure numeric integer or decimal (e.g. 123.45, -299.00)
+      if (/^-?\s*[\d,]+(\.\d+)?$/.test(trimmed)) {
+        return str;
+      }
+      // Formatted currency (e.g. ₱299.00, -₱150.00)
+      if (/^-?₱\s*[\d,]+(\.\d+)?$/.test(trimmed)) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      // Formula-like or dangerous leading characters
+      if (
+        trimmed.startsWith("=") ||
+        trimmed.startsWith("+") ||
+        trimmed.startsWith("@") ||
+        trimmed.startsWith("\t") ||
+        trimmed.startsWith("\r") ||
+        trimmed.startsWith("-")
+      ) {
+        return `"'${str.replace(/"/g, '""')}"`;
+      }
+      return `"${str.replace(/"/g, '""')}"`;
+    };
+
     const rows = dataset.transactions.map((t) => [
-      dataset.statementReference,
-      t.date,
-      t.id,
-      t.planType,
-      `"${t.customerMasked}"`,
-      t.formattedPurchase,
-      `${t.effectiveRate}%`,
-      t.formattedCommission,
-      t.status,
-      t.campaignSource,
+      sanitizeCell(dataset.statementReference),
+      sanitizeCell(t.date),
+      sanitizeCell(t.id),
+      sanitizeCell(t.planType),
+      sanitizeCell(t.customerMasked),
+      sanitizeCell(t.formattedPurchase),
+      sanitizeCell(`${t.effectiveRate}%`),
+      sanitizeCell(t.formattedCommission),
+      sanitizeCell(t.status),
+      sanitizeCell(t.campaignSource),
     ]);
 
     const summarySection = [
-      `"GOVSTUDYX PARTNER FINANCIAL STATEMENT - ${dataset.statementReference}"`,
-      `"Partner: ${dataset.partner.name} (${dataset.partner.partnerId})"`,
-      `"Period: ${dataset.period.label}"`,
-      `"Qualifying Payments: ${dataset.summary.formattedQualifyingPayments}"`,
-      `"Gross Commission: ${dataset.summary.formattedGrossCommission}"`,
-      `"Refunds/Reversals: ${dataset.summary.formattedRefundReversals}"`,
-      `"Net Commission: ${dataset.summary.formattedNetCommission}"`,
-      `"Total Paid: ${dataset.summary.formattedPaid}"`,
-      `"Reserved: ${dataset.summary.formattedReserved}"`,
-      `"Outstanding Balance: ${dataset.summary.formattedOutstanding}"`,
+      `"GOVSTUDYX PARTNER FINANCIAL STATEMENT - ${dataset.statementReference.replace(/"/g, '""')}"`,
+      `"Partner: ${dataset.partner.name.replace(/"/g, '""')} (${(dataset.partner.partnerId || "").replace(/"/g, '""')})"`,
+      `"Period: ${(dataset.period.label || "").replace(/"/g, '""')}"`,
+      `"Qualifying Payments: ${(dataset.summary.formattedQualifyingPayments || "").replace(/"/g, '""')}"`,
+      `"Gross Commission: ${(dataset.summary.formattedGrossCommission || "").replace(/"/g, '""')}"`,
+      `"Refunds/Reversals: ${(dataset.summary.formattedRefundReversals || "").replace(/"/g, '""')}"`,
+      `"Net Commission: ${(dataset.summary.formattedNetCommission || "").replace(/"/g, '""')}"`,
+      `"Total Paid: ${(dataset.summary.formattedPaid || "").replace(/"/g, '""')}"`,
+      `"Reserved: ${(dataset.summary.formattedReserved || "").replace(/"/g, '""')}"`,
+      `"Outstanding Balance: ${(dataset.summary.formattedOutstanding || "").replace(/"/g, '""')}"`,
       "",
       headers.join(","),
     ];

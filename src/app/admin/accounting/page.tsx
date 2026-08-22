@@ -107,7 +107,7 @@ export default function AdminAccountingPage() {
   const [appActionType, setAppActionType] = useState<"APPROVE" | "REJECT">("APPROVE");
   const [appRateInput, setAppRateInput] = useState("10.0");
   const [appSlugInput, setAppSlugInput] = useState("");
-  const [appPasswordInput, setAppPasswordInput] = useState("GovStudyX2026!");
+  const [appPasswordInput, setAppPasswordInput] = useState("");
   const [appAdminNotes, setAppAdminNotes] = useState("");
   const [processingAppAction, setProcessingAppAction] = useState(false);
 
@@ -1040,7 +1040,7 @@ export default function AdminAccountingPage() {
                             setAppActionType("APPROVE");
                             setAppSlugInput(app.proposedSlug || "");
                             setAppRateInput("10.0");
-                            setAppPasswordInput("GovStudyX2026!");
+                            setAppPasswordInput("");
                             setAppAdminNotes("");
                           }}
                           className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer shadow-lg shadow-emerald-500/20"
@@ -1636,8 +1636,7 @@ export default function AdminAccountingPage() {
                   <input
                     type="text"
                     name="password"
-                    placeholder="e.g. Partner2026!"
-                    defaultValue="GovStudyX2026!"
+                    placeholder="Leave blank to auto-generate activation link"
                     className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                   />
                 </div>

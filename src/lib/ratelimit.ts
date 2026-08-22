@@ -39,6 +39,9 @@ export const EXAM_SUBMIT_LIMITER = createLimiter(10, "1 m", "@ratelimit/exam_sub
 // 🔒 3. Messaging Limiter: 20 requests per 1 minute (Social / Chat messages)
 export const MESSAGING_LIMITER = createLimiter(20, "1 m", "@ratelimit/messaging");
 
+// 🔒 4. AI Explain Limiter: 15 requests per 1 minute (AI mistake analysis)
+export const AI_EXPLAIN_LIMITER = createLimiter(15, "1 m", "@ratelimit/ai_explain");
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;

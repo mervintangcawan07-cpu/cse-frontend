@@ -70,10 +70,6 @@ export async function POST(request: Request) {
       isCurrentValid = await bcrypt.compare(currentPassword, dbPartner.passwordHash);
     } else if (dbPartner.tempPasswordHash) {
       isCurrentValid = await bcrypt.compare(currentPassword, dbPartner.tempPasswordHash);
-    } else {
-      if (currentPassword === dbPartner.code || currentPassword === "GovStudyX2026!") {
-        isCurrentValid = true;
-      }
     }
 
     if (!isCurrentValid) {

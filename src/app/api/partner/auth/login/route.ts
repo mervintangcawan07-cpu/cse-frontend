@@ -6,9 +6,27 @@ import { prisma } from "@/lib/prisma";
 import { signPartnerJWT } from "@/lib/partnerAuth";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `partner:login:${clientIp}`;
+
+    // 🔒 Limit: 5 partner login attempts per 10 seconds per IP
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many partner login attempts. Please wait a moment before trying again."
+      );
+    }
+
     const body = await request.json();
     const { identifier, password } = body;
 
@@ -42,25 +60,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Verify Password
+    // Verify Password strictly against cryptographic hashes (no static/code fallbacks)
     let isPasswordValid = false;
 
     if (partner.passwordHash) {
       isPasswordValid = await bcrypt.compare(password, partner.passwordHash);
     } else if (partner.tempPasswordHash) {
       isPasswordValid = await bcrypt.compare(password, partner.tempPasswordHash);
-    } else {
-      // Fallback if no password hash set yet
-      if (password === partner.code || password === "GovStudyX2026!") {
-        isPasswordValid = true;
-      }
     }
 
     if (!isPasswordValid) {
       await PartnerAuditService.logEvent({
         action: "PARTNER_LOGIN_FAILED",
         partnerId: partner.id,
-        reason: "Incorrect password",
+        reason: "Incorrect password or unactivated account",
       });
       return NextResponse.json(
         { error: "Invalid partner credentials" },

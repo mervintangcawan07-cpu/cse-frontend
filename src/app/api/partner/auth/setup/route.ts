@@ -4,9 +4,26 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { signPartnerJWT } from "@/lib/partnerAuth";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function GET(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `partner:setup:${clientIp}`;
+
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many setup verification requests. Please wait a moment."
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
 
@@ -53,12 +70,30 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `partner:setup:${clientIp}`;
+
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many setup attempts. Please wait a moment before trying again."
+      );
+    }
+
     const body = await request.json();
     const { token, password } = body;
 
     if (!token || !password) {
       return NextResponse.json(
         { error: "Setup token and password are required." },
+        { status: 400 }
+      );
+    }
+
+    if (String(password).length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long." },
         { status: 400 }
       );
     }

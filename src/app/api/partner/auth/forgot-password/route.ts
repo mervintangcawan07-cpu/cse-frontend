@@ -5,9 +5,26 @@ import { prisma } from "@/lib/prisma";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { sendPartnerPasswordResetEmail } from "@/lib/email";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
+import {
+  AUTH_LIMITER,
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    const rateLimitKey = `partner:forgot-password:${clientIp}`;
+
+    const rateResult = await checkRateLimit(AUTH_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many password reset requests. Please wait a moment before trying again."
+      );
+    }
+
     const body = await request.json();
     const { identifier } = body;
 

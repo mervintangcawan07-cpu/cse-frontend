@@ -10,15 +10,28 @@ const TAG_LENGTH = 16;
 const DEFAULT_VERSION = "v1";
 const PREFIX = "enc:";
 
-function getKeyForVersion(version: string): Buffer {
+/**
+ * Resolves the 256-bit encryption key for the specified key version.
+ * Strictly fails closed in production if no valid encryption secret is configured.
+ */
+export function getKeyForVersion(version: string): Buffer {
   const envVarName = version === "v1" ? "ENCRYPTION_KEY_V1" : `ENCRYPTION_KEY_${version.toUpperCase()}`;
   const rawKey =
-    process.env[envVarName] ||
-    process.env.ENCRYPTION_KEY ||
-    process.env.JWT_SECRET ||
-    "govstudyx_default_secure_encryption_key_2026";
+    process.env[envVarName]?.trim() ||
+    process.env.ENCRYPTION_KEY?.trim() ||
+    process.env.JWT_SECRET?.trim();
 
-  return crypto.createHash("sha256").update(rawKey.trim()).digest();
+  if (!rawKey) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        `Critical Security Error: Required encryption key (${envVarName}, ENCRYPTION_KEY, or JWT_SECRET) is not configured.`
+      );
+    }
+    // Development/test fallback only when running in non-production environments
+    return crypto.createHash("sha256").update("govstudyx_default_secure_encryption_key_2026").digest();
+  }
+
+  return crypto.createHash("sha256").update(rawKey).digest();
 }
 
 export function isEncrypted(value: unknown): boolean {
@@ -47,9 +60,10 @@ export function encrypt(plaintext: string | null | undefined, keyVersion: string
     const ivHex = iv.toString("hex");
 
     return `${PREFIX}${keyVersion}:${ivHex}:${tag}:${ciphertext}`;
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "CRYPTO_ENCRYPT_ERROR";
     logger.error("Encryption failed for field payload", {
-      context: { reason: err?.message || "CRYPTO_ENCRYPT_ERROR", keyVersion },
+      context: { reason: errorMsg, keyVersion },
     });
     throw new Error("Failed to encrypt field data.");
   }
@@ -88,9 +102,10 @@ export function decrypt(encryptedText: string | null | undefined): string | null
     decrypted += decipher.final("utf8");
 
     return decrypted;
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "CRYPTO_DECRYPT_ERROR";
     logger.error("Decryption failure or payload tampering detected", {
-      context: { reason: err?.message || "CRYPTO_DECRYPT_ERROR" },
+      context: { reason: errorMsg },
     });
     return encryptedText;
   }
