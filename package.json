@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@livekit/components-react": "^2.9.23",
-    "@prisma/adapter-pg": "^7.9.0",
-    "@prisma/client": "^7.9.0",
+    "@prisma/adapter-pg": "7.9.1",
+    "@prisma/client": "7.9.1",
     "@serwist/next": "^9.5.12",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.2",
@@ -43,7 +43,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
-    "prisma": "^7.9.0",
+    "prisma": "7.9.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
