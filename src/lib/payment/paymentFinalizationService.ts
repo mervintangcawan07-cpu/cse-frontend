@@ -58,7 +58,7 @@ export class PaymentFinalizationService {
       await tx.$queryRaw`
         SELECT pg_advisory_xact_lock(
           hashtextextended(${checkoutSessionId}, 0)
-        )
+        )::text AS lock_result
       `;
 
       // Check existing transaction
