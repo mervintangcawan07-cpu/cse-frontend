@@ -24,7 +24,7 @@
     "livekit-client": "^2.21.0",
     "livekit-server-sdk": "^2.17.0",
     "lucide-react": "^1.28.0",
-    "next": "16.2.10",
+    "next": "16.3.2",
     "papaparse": "^5.5.4",
     "pg": "^8.22.0",
     "react": "19.2.4",
@@ -42,7 +42,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.10",
+    "eslint-config-next": "16.3.2",
     "prisma": "^7.9.0",
     "tailwindcss": "^4",
     "typescript": "^5"
