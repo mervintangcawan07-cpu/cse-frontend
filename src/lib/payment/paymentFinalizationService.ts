@@ -54,6 +54,13 @@ export class PaymentFinalizationService {
 
     // 1. ATOMIC TRANSACTION: Check if already finalized, update User and Transaction
     const transactionResult = await prisma.$transaction(async (tx) => {
+      // 🔒 Acquire transaction-scoped advisory lock on checkoutSessionId to serialize concurrent finalization
+      await tx.$queryRaw`
+        SELECT pg_advisory_xact_lock(
+          hashtextextended(${checkoutSessionId}, 0)
+        )
+      `;
+
       // Check existing transaction
       const existingTxn = await tx.transaction.findUnique({
         where: { checkoutSessionId },

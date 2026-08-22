@@ -53,10 +53,7 @@ export async function POST(request: Request) {
 
     console.log(`[PayMongo Webhook Event]: ${eventType}`);
 
-    if (
-      eventType === "checkout_session.payment.paid" ||
-      eventType === "payment.paid"
-    ) {
+    if (eventType === "checkout_session.payment.paid") {
       const attributes = payload?.data?.attributes?.data?.attributes;
       const metadata = attributes?.metadata;
       const userId = metadata?.userId || metadata?.user_id;
