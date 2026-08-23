@@ -76,20 +76,23 @@ export async function GET() {
     }
 
     let isPaid = user.isPaid;
-    const updateData: { lastActiveAt: Date; isPaid?: boolean } = {
-      lastActiveAt: now,
-    };
 
-    // 🔒 REAL-WORLD SUBSCRIPTION EXPIRATION GUARD
+    // 🔒 REAL-WORLD SUBSCRIPTION EXPIRATION GUARD (Safe conditional CAS)
     if (user.paidUntil && user.paidUntil < now && user.role !== "ADMIN") {
       isPaid = false;
-      updateData.isPaid = false;
+      await prisma.user.updateMany({
+        where: {
+          id: user.id,
+          paidUntil: { lt: now },
+        },
+        data: { isPaid: false },
+      });
     }
 
-    // Update lastActiveAt timestamp & subscription state
+    // Update lastActiveAt timestamp
     await prisma.user.update({
       where: { id: user.id },
-      data: updateData,
+      data: { lastActiveAt: now },
     });
 
     return NextResponse.json({

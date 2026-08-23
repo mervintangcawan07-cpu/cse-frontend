@@ -670,7 +670,19 @@ export class RefundService {
 
         // 🎓 11. CUSTOMER PREMIUM ENTITLEMENT REVERSAL (Full Refund Only, Guarded)
         if (isFullRefund && currentTxn.user) {
-          const user = currentTxn.user;
+          // 🔒 Acquire Level 4 User-Entitlement advisory lock to serialize entitlement modifications
+          await tx.$queryRaw`
+            SELECT pg_advisory_xact_lock(
+              hashtextextended(${`user-entitlement:${currentTxn.user.id}`}, 0)
+            )::text AS lock_result
+          `;
+
+          // Re-fetch fresh user under user-entitlement lock
+          const freshUser = await tx.user.findUnique({
+            where: { id: currentTxn.user.id },
+            select: { id: true, isPaid: true, paidUntil: true, createdAt: true },
+          });
+          const user = freshUser || currentTxn.user;
 
           // A. Compute expected pre-refund state INCLUDING currentTxn
           const preRefundBaseline = await this.computeDeterministicEntitlement(user.id, undefined, tx);

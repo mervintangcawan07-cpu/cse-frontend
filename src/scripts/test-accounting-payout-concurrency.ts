@@ -1,4 +1,6 @@
 // Relative Path: src/scripts/test-accounting-payout-concurrency.ts
+export {};
+
 /**
  * GOVSTUDYX ACCOUNTING & PAYOUT CONCURRENCY SYNTHETIC TEST SUITE
  *

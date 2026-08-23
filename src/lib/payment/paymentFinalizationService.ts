@@ -61,6 +61,13 @@ export class PaymentFinalizationService {
         )::text AS lock_result
       `;
 
+      // 🔒 Acquire Level 4 User-Entitlement advisory lock to serialize concurrent entitlement stacking
+      await tx.$queryRaw`
+        SELECT pg_advisory_xact_lock(
+          hashtextextended(${`user-entitlement:${userId}`}, 0)
+        )::text AS lock_result
+      `;
+
       // Check existing transaction
       const existingTxn = await tx.transaction.findUnique({
         where: { checkoutSessionId },
