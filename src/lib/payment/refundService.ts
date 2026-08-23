@@ -410,107 +410,236 @@ export class RefundService {
 
         // 🤝 7. PARTNER COMMISSION REVERSAL EVALUATION
         let reversePartnerLiability = false;
+        let partnerCommissionReversalAmountCentavos = 0;
         if (isFullRefund && currentTxn.partnerCommission) {
           const ptrComm = currentTxn.partnerCommission;
-          if (ptrComm.status === "PENDING" || ptrComm.status === "AVAILABLE") {
-            await tx.partnerCommission.update({
-              where: { id: ptrComm.id },
-              data: {
-                status: "REVERSED",
-                reversedAt: new Date(),
-                reversalReason: `Full purchase refund (${refund.id})`,
-              },
-            });
 
-            await PartnerAuditService.logEvent(
-              {
-                action: "PARTNER_PAYOUT_REVERSED",
-                partnerId: ptrComm.partnerId,
-                amountCentavos: ptrComm.commissionAmountCentavos,
-                reason: `Purchase refunded via PayMongo (${refund.id})`,
-                metadata: {
-                  refundId: refund.id,
-                  transactionId: currentTxn.id,
-                  previousStatus: ptrComm.status,
-                },
-              },
-              tx
-            );
+          // 🔒 Level 2 Lock: Acquire partner-finance advisory lock
+          await tx.$queryRaw`
+            SELECT pg_advisory_xact_lock(
+              hashtextextended(${`partner-finance:${ptrComm.partnerId}`}, 0)
+            )::text AS lock_result
+          `;
 
+          const now = new Date();
+          const allCommissions = await tx.partnerCommission.findMany({
+            where: { partnerId: ptrComm.partnerId },
+          });
+          const allPayouts = await tx.partnerPayout.findMany({
+            where: { partnerId: ptrComm.partnerId },
+          });
+
+          let validEarnedBeforeRefund = 0;
+          allCommissions.forEach((c) => {
+            if (
+              c.status === "AVAILABLE" ||
+              c.status === "PAID" ||
+              (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now) ||
+              c.id === ptrComm.id // include target commission before reversal
+            ) {
+              validEarnedBeforeRefund += c.commissionAmountCentavos;
+            }
+          });
+
+          let historicalPaidPayoutTotal = 0;
+          let activeReservedPayoutTotal = 0;
+          allPayouts.forEach((p) => {
+            if (p.status === "PAID") {
+              historicalPaidPayoutTotal += p.amountCentavos;
+            } else if (["REQUESTED", "RESERVED", "UNDER_REVIEW", "APPROVED", "PROCESSING"].includes(p.status)) {
+              activeReservedPayoutTotal += p.amountCentavos;
+            }
+          });
+
+          // Always transition the refunded commission so it cannot be withdrawn in the future
+          await tx.partnerCommission.update({
+            where: { id: ptrComm.id },
+            data: {
+              status: "REVERSED",
+              reversedAt: new Date(),
+              reversalReason: `Full purchase refund (${refund.id})`,
+            },
+          });
+
+          await PartnerAuditService.logEvent(
+            {
+              action: "PARTNER_PAYOUT_REVERSED",
+              partnerId: ptrComm.partnerId,
+              amountCentavos: ptrComm.commissionAmountCentavos,
+              reason: `Purchase refunded via PayMongo (${refund.id})`,
+              metadata: {
+                refundId: refund.id,
+                transactionId: currentTxn.id,
+                previousStatus: ptrComm.status,
+              },
+            },
+            tx
+          );
+
+          const validEarnedAfterRefund = validEarnedBeforeRefund - ptrComm.commissionAmountCentavos;
+          const outstandingLiabilityBefore = Math.max(0, validEarnedBeforeRefund - historicalPaidPayoutTotal);
+          const safeLiabilityDebitCentavos = Math.min(ptrComm.commissionAmountCentavos, outstandingLiabilityBefore);
+
+          if (safeLiabilityDebitCentavos > 0) {
             reversePartnerLiability = true;
-          } else if (ptrComm.status === "PAID") {
-            // Commission already disbursed: preserve history, log manual review flag
+            partnerCommissionReversalAmountCentavos = safeLiabilityDebitCentavos;
+          }
+
+          if (historicalPaidPayoutTotal > validEarnedAfterRefund) {
+            const unbackedDelta = ptrComm.commissionAmountCentavos - safeLiabilityDebitCentavos;
             await tx.accountingAuditLog.create({
               data: {
                 action: "POST_PAYOUT_REFUND_MANUAL_REVIEW_REQUIRED",
                 targetType: "PARTNER_COMMISSION",
                 targetId: ptrComm.id,
-                amountCentavos: ptrComm.commissionAmountCentavos,
-                reason: `Full refund on Transaction ${currentTxn.id} occurred after Partner Commission was already PAID`,
+                amountCentavos: unbackedDelta,
+                reason: `Full refund on Transaction ${currentTxn.id} occurred after payout disbursement exceeded remaining aggregate balance. Unbacked amount: ${unbackedDelta} centavos`,
                 metadata: {
                   refundId: refund.id,
                   partnerId: ptrComm.partnerId,
-                  paidPayoutAmountCentavos: ptrComm.commissionAmountCentavos,
+                  unbackedDelta,
+                  historicalPaidPayoutTotal,
+                  validEarnedAfterRefund,
                 },
               },
             });
-            reversePartnerLiability = false;
+          } else if (historicalPaidPayoutTotal + activeReservedPayoutTotal > validEarnedAfterRefund) {
+            await tx.accountingAuditLog.create({
+              data: {
+                action: "PAYOUT_REFUND_CONFLICT_MANUAL_REVIEW_REQUIRED",
+                targetType: "PARTNER_COMMISSION",
+                targetId: ptrComm.id,
+                amountCentavos: ptrComm.commissionAmountCentavos,
+                reason: `Full refund on Transaction ${currentTxn.id} reduced valid earnings below active payout reservations. Manual review required before pending payouts can be disbursed.`,
+                metadata: {
+                  refundId: refund.id,
+                  partnerId: ptrComm.partnerId,
+                  activeReservedPayoutTotal,
+                  validEarnedAfterRefund,
+                },
+              },
+            });
           }
         }
 
         // 🎁 8. REFERRAL REWARD REVERSAL EVALUATION
         let reverseReferralLiability = false;
+        let referralRewardReversalAmountCentavos = 0;
         if (isFullRefund && currentTxn.referralReward) {
           const refReward = currentTxn.referralReward;
-          if (refReward.status === "PENDING" || refReward.status === "AVAILABLE") {
-            await tx.referralReward.update({
-              where: { id: refReward.id },
-              data: {
-                status: "REFUNDED",
-                reversedAt: new Date(),
-                reversalReason: `Full purchase refund (${refund.id})`,
+
+          // 🔒 Level 3 Lock: Acquire referral-finance advisory lock
+          await tx.$queryRaw`
+            SELECT pg_advisory_xact_lock(
+              hashtextextended(${`referral-finance:${refReward.inviterId}`}, 0)
+            )::text AS lock_result
+          `;
+
+          const now = new Date();
+          const allRewards = await tx.referralReward.findMany({
+            where: { inviterId: refReward.inviterId },
+          });
+          const allPayouts = await tx.referralPayout.findMany({
+            where: { userId: refReward.inviterId },
+          });
+
+          let validEarnedBeforeRefund = 0;
+          allRewards.forEach((r) => {
+            if (
+              r.status === "AVAILABLE" ||
+              r.status === "PAID" ||
+              (r.status === "PENDING" && r.holdingUntil && r.holdingUntil <= now) ||
+              r.id === refReward.id
+            ) {
+              validEarnedBeforeRefund += r.rewardAmountCentavos;
+            }
+          });
+
+          let historicalPaidPayoutTotal = 0;
+          let activeReservedPayoutTotal = 0;
+          allPayouts.forEach((p) => {
+            if (p.status === "PAID") {
+              historicalPaidPayoutTotal += p.amountCentavos;
+            } else if (["REQUESTED", "UNDER_REVIEW", "APPROVED", "PROCESSING"].includes(p.status)) {
+              activeReservedPayoutTotal += p.amountCentavos;
+            }
+          });
+
+          // Always transition the refunded reward so it cannot be withdrawn in the future
+          await tx.referralReward.update({
+            where: { id: refReward.id },
+            data: {
+              status: "REFUNDED",
+              reversedAt: new Date(),
+              reversalReason: `Full purchase refund (${refund.id})`,
+            },
+          });
+
+          await tx.referral.update({
+            where: { id: refReward.referralId },
+            data: { status: "REFUNDED" },
+          });
+
+          await tx.referralAuditLog.create({
+            data: {
+              actorId: "SYSTEM_PAYMONGO_REFUND",
+              actorRole: "SYSTEM",
+              action: "REWARD_REVERSED",
+              targetType: "REWARD",
+              targetId: refReward.id,
+              amountCentavos: refReward.rewardAmountCentavos,
+              reason: `PayMongo full refund (${refund.id})`,
+              metadata: {
+                refundId: refund.id,
+                transactionId: currentTxn.id,
+                previousStatus: refReward.status,
               },
-            });
+            },
+          });
 
-            await tx.referral.update({
-              where: { id: refReward.referralId },
-              data: { status: "REFUNDED" },
-            });
+          const validEarnedAfterRefund = validEarnedBeforeRefund - refReward.rewardAmountCentavos;
+          const outstandingLiabilityBefore = Math.max(0, validEarnedBeforeRefund - historicalPaidPayoutTotal);
+          const safeLiabilityDebitCentavos = Math.min(refReward.rewardAmountCentavos, outstandingLiabilityBefore);
 
-            await tx.referralAuditLog.create({
-              data: {
-                actorId: "SYSTEM_PAYMONGO_REFUND",
-                actorRole: "SYSTEM",
-                action: "REWARD_REVERSED",
-                targetType: "REWARD",
-                targetId: refReward.id,
-                amountCentavos: refReward.rewardAmountCentavos,
-                reason: `PayMongo full refund (${refund.id})`,
-                metadata: {
-                  refundId: refund.id,
-                  transactionId: currentTxn.id,
-                  previousStatus: refReward.status,
-                },
-              },
-            });
-
+          if (safeLiabilityDebitCentavos > 0) {
             reverseReferralLiability = true;
-          } else if (refReward.status === "PAID") {
-            // Reward already disbursed: preserve history, log manual review flag
+            referralRewardReversalAmountCentavos = safeLiabilityDebitCentavos;
+          }
+
+          if (historicalPaidPayoutTotal > validEarnedAfterRefund) {
+            const unbackedDelta = refReward.rewardAmountCentavos - safeLiabilityDebitCentavos;
             await tx.accountingAuditLog.create({
               data: {
                 action: "POST_PAYOUT_REFUND_MANUAL_REVIEW_REQUIRED",
                 targetType: "REFERRAL_REWARD",
                 targetId: refReward.id,
-                amountCentavos: refReward.rewardAmountCentavos,
-                reason: `Full refund on Transaction ${currentTxn.id} occurred after Referral Reward was already PAID`,
+                amountCentavos: unbackedDelta,
+                reason: `Full refund on Transaction ${currentTxn.id} occurred after payout disbursement exceeded remaining aggregate balance. Unbacked amount: ${unbackedDelta} centavos`,
                 metadata: {
                   refundId: refund.id,
                   inviterId: refReward.inviterId,
+                  unbackedDelta,
+                  historicalPaidPayoutTotal,
+                  validEarnedAfterRefund,
                 },
               },
             });
-            reverseReferralLiability = false;
+          } else if (historicalPaidPayoutTotal + activeReservedPayoutTotal > validEarnedAfterRefund) {
+            await tx.accountingAuditLog.create({
+              data: {
+                action: "PAYOUT_REFUND_CONFLICT_MANUAL_REVIEW_REQUIRED",
+                targetType: "REFERRAL_REWARD",
+                targetId: refReward.id,
+                amountCentavos: refReward.rewardAmountCentavos,
+                reason: `Full refund on Transaction ${currentTxn.id} reduced valid earnings below active payout reservations. Manual review required before pending payouts can be disbursed.`,
+                metadata: {
+                  refundId: refund.id,
+                  inviterId: refReward.inviterId,
+                  activeReservedPayoutTotal,
+                  validEarnedAfterRefund,
+                },
+              },
+            });
           }
         }
 
@@ -521,10 +650,10 @@ export class RefundService {
             refundAmountCentavos: effectiveRefundCentavos,
             refundId: refund.id,
             referralRewardId: currentTxn.referralReward?.id,
-            referralRewardCentavos: currentTxn.referralReward?.rewardAmountCentavos,
+            referralRewardCentavos: referralRewardReversalAmountCentavos,
             reverseReferralLiability,
             partnerCommissionId: currentTxn.partnerCommission?.id,
-            partnerCommissionCentavos: currentTxn.partnerCommission?.commissionAmountCentavos,
+            partnerCommissionCentavos: partnerCommissionReversalAmountCentavos,
             reversePartnerLiability,
             reason: `PayMongo refund ${refund.id} (${isFullRefund ? "FULL" : "PARTIAL"})`,
           },

@@ -129,71 +129,210 @@ export async function PATCH(request: Request) {
       });
       if (!res.success) return NextResponse.json({ error: res.error }, { status: 400 });
     } else {
-      // Partner Payout
-      const partnerPayout = await prisma.partnerPayout.findUnique({
+      // 1. Pre-lock lookup for partnerId
+      const preLookup = await prisma.partnerPayout.findUnique({
         where: { id: payoutId },
+        select: { partnerId: true },
       });
-      if (!partnerPayout) return NextResponse.json({ error: "Partner payout not found" }, { status: 404 });
+      if (!preLookup) return NextResponse.json({ error: "Partner payout not found" }, { status: 404 });
 
-      let newStatus: any = "REQUESTED";
-      let auditAction: any = "PARTNER_PAYOUT_APPROVED";
+      const txResult = await prisma.$transaction(async (tx) => {
+        // 🔒 Acquire transaction-scoped advisory lock on partner-finance domain
+        await tx.$queryRaw`
+          SELECT pg_advisory_xact_lock(
+            hashtextextended(${`partner-finance:${preLookup.partnerId}`}, 0)
+          )::text AS lock_result
+        `;
 
-      if (action === "APPROVE") {
-        newStatus = "APPROVED";
-        auditAction = "PARTNER_PAYOUT_APPROVED";
-      } else if (action === "PROCESSING") {
-        newStatus = "PROCESSING";
-        auditAction = "PARTNER_PAYOUT_PROCESSING";
-      } else if (action === "REJECT") {
-        newStatus = "REJECTED";
-        auditAction = "PARTNER_PAYOUT_REJECTED";
-      } else if (action === "FAIL") {
-        newStatus = "FAILED";
-        auditAction = "PARTNER_PAYOUT_FAILED";
-      } else if (action === "REVERSE") {
-        newStatus = "REVERSED";
-        auditAction = "PARTNER_PAYOUT_REVERSED";
-      } else if (action === "MARK_PAID") {
-        newStatus = "PAID";
-        auditAction = "PARTNER_PAYOUT_PAID";
-      }
+        // 🔍 Re-fetch payout inside lock
+        const partnerPayout = await tx.partnerPayout.findUnique({
+          where: { id: payoutId },
+        });
+        if (!partnerPayout) return { success: false, error: "Partner payout not found", status: 404 };
 
-      await prisma.partnerPayout.update({
-        where: { id: payoutId },
-        data: {
-          status: newStatus,
-          adminNotes: adminNotes || undefined,
-          transactionRef: transactionRef || undefined,
-          processedBy: user.id,
-          processedAt: new Date(),
-        },
-      });
+        let newStatus: any = "REQUESTED";
+        let auditAction: any = "PARTNER_PAYOUT_APPROVED";
+        let allowedPredecessors: any[] = [];
 
-      // Audit Log
-      await PartnerAuditService.logEvent({
-        action: auditAction,
-        partnerId: partnerPayout.partnerId,
-        actorId: user.id,
-        actorRole: "ADMIN",
-        amountCentavos: partnerPayout.amountCentavos,
-        reason: adminNotes,
-        metadata: { payoutId, action, transactionRef },
-      });
+        if (action === "APPROVE") {
+          newStatus = "APPROVED";
+          auditAction = "PARTNER_PAYOUT_APPROVED";
+          allowedPredecessors = ["REQUESTED", "RESERVED", "UNDER_REVIEW"];
+        } else if (action === "PROCESSING") {
+          newStatus = "PROCESSING";
+          auditAction = "PARTNER_PAYOUT_PROCESSING";
+          allowedPredecessors = ["REQUESTED", "RESERVED", "UNDER_REVIEW", "APPROVED"];
+        } else if (action === "REJECT") {
+          newStatus = "REJECTED";
+          auditAction = "PARTNER_PAYOUT_REJECTED";
+          allowedPredecessors = ["REQUESTED", "RESERVED", "UNDER_REVIEW", "APPROVED"];
+        } else if (action === "FAIL") {
+          newStatus = "FAILED";
+          auditAction = "PARTNER_PAYOUT_FAILED";
+          allowedPredecessors = ["PROCESSING", "APPROVED"];
+        } else if (action === "REVERSE") {
+          newStatus = "REVERSED";
+          auditAction = "PARTNER_PAYOUT_REVERSED";
+          allowedPredecessors = ["PAID"];
+        } else if (action === "MARK_PAID") {
+          newStatus = "PAID";
+          auditAction = "PARTNER_PAYOUT_PAID";
+          allowedPredecessors = ["REQUESTED", "RESERVED", "UNDER_REVIEW", "APPROVED", "PROCESSING"];
+        }
 
-      if (action === "MARK_PAID") {
-        await LedgerService.recordPayoutDisbursement({
-          payoutId,
-          payoutType: "PARTNER",
-          recipientId: partnerPayout.partnerId,
-          amountCentavos: partnerPayout.amountCentavos,
-          method: partnerPayout.method,
-          referenceNumber: transactionRef,
-          adminUserId: user.id,
+        // Check if already in target state (idempotent success)
+        if (partnerPayout.status === newStatus) {
+          return { success: true, alreadyProcessed: true, partnerPayout };
+        }
+
+        // Check valid predecessor
+        if (!allowedPredecessors.includes(partnerPayout.status)) {
+          return {
+            success: false,
+            error: `Cannot perform ${action} on payout currently in status '${partnerPayout.status}'.`,
+            status: 400,
+          };
+        }
+
+        // 🛡️ Backing Revalidation for financial progressions (APPROVE, PROCESSING, MARK_PAID)
+        if (["APPROVE", "PROCESSING", "MARK_PAID"].includes(action)) {
+          const now = new Date();
+          const commissions = await tx.partnerCommission.findMany({
+            where: { partnerId: preLookup.partnerId },
+          });
+          const allPayouts = await tx.partnerPayout.findMany({
+            where: { partnerId: preLookup.partnerId },
+          });
+
+          let totalValidEarnedCentavos = 0;
+          commissions.forEach((c) => {
+            if (
+              c.status === "AVAILABLE" ||
+              c.status === "PAID" ||
+              (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
+            ) {
+              totalValidEarnedCentavos += c.commissionAmountCentavos;
+            }
+          });
+
+          const FINANCIALLY_CONSUMING_STATUSES: string[] = [
+            "REQUESTED",
+            "RESERVED",
+            "UNDER_REVIEW",
+            "APPROVED",
+            "PROCESSING",
+          ];
+
+          let historicalPaidPayoutCentavos = 0;
+          let otherActivePayoutCentavos = 0;
+
+          allPayouts.forEach((p) => {
+            if (p.status === "PAID") {
+              historicalPaidPayoutCentavos += p.amountCentavos;
+            } else if (p.id !== payoutId && FINANCIALLY_CONSUMING_STATUSES.includes(p.status)) {
+              otherActivePayoutCentavos += p.amountCentavos;
+            }
+          });
+
+          const targetPayoutCentavos = partnerPayout.amountCentavos;
+          const totalCommittedCentavos =
+            historicalPaidPayoutCentavos + targetPayoutCentavos + otherActivePayoutCentavos;
+
+          if (totalCommittedCentavos > totalValidEarnedCentavos) {
+            // Log manual-review audit inside tx without throwing
+            await tx.accountingAuditLog.create({
+              data: {
+                action: "PAYOUT_BACKING_CONFLICT_MANUAL_REVIEW_REQUIRED",
+                targetType: "PARTNER_PAYOUT",
+                targetId: payoutId,
+                amountCentavos: targetPayoutCentavos,
+                reason: `Backing check failed for action ${action}. Valid earned: ${totalValidEarnedCentavos}, Already paid: ${historicalPaidPayoutCentavos}, Other active commitments: ${otherActivePayoutCentavos}, Target payout: ${targetPayoutCentavos}`,
+                metadata: {
+                  payoutId,
+                  partnerId: preLookup.partnerId,
+                  action,
+                  totalValidEarnedCentavos,
+                  historicalPaidPayoutCentavos,
+                  otherActivePayoutCentavos,
+                  targetPayoutCentavos,
+                  totalCommittedCentavos,
+                },
+              },
+            });
+
+            return {
+              success: false,
+              error: `Payout lacks sufficient financial backing earnings (Valid earned: ${formatCentavosToPesos(
+                totalValidEarnedCentavos
+              )}, Already paid: ${formatCentavosToPesos(
+                historicalPaidPayoutCentavos
+              )}, Other active commitments: ${formatCentavosToPesos(
+                otherActivePayoutCentavos
+              )}). Action blocked for manual review.`,
+              status: 400,
+            };
+          }
+        }
+
+        // Compare-and-Set update
+        const updateRes = await tx.partnerPayout.updateMany({
+          where: {
+            id: payoutId,
+            status: { in: allowedPredecessors },
+          },
+          data: {
+            status: newStatus,
+            adminNotes: adminNotes || undefined,
+            transactionRef: transactionRef || undefined,
+            processedBy: user.id,
+            processedAt: new Date(),
+          },
         });
 
-        // Fire payout notification email (non-blocking)
+        if (updateRes.count === 0) {
+          return { success: false, error: "Concurrent state change detected. Action aborted.", status: 409 };
+        }
+
+        // Audit Log
+        await PartnerAuditService.logEvent(
+          {
+            action: auditAction,
+            partnerId: preLookup.partnerId,
+            actorId: user.id,
+            actorRole: "ADMIN",
+            amountCentavos: partnerPayout.amountCentavos,
+            reason: adminNotes,
+            metadata: { payoutId, action, transactionRef },
+          },
+          tx
+        );
+
+        if (action === "MARK_PAID") {
+          await LedgerService.recordPayoutDisbursement(
+            {
+              payoutId,
+              payoutType: "PARTNER",
+              recipientId: preLookup.partnerId,
+              amountCentavos: partnerPayout.amountCentavos,
+              method: partnerPayout.method,
+              referenceNumber: transactionRef,
+              adminUserId: user.id,
+            },
+            tx
+          );
+        }
+
+        return { success: true, partnerPayout, partnerId: preLookup.partnerId };
+      });
+
+      if (!txResult.success) {
+        return NextResponse.json({ error: txResult.error }, { status: txResult.status || 400 });
+      }
+
+      if (!txResult.alreadyProcessed && action === "MARK_PAID") {
+        // Fire payout notification email post-commit (non-blocking)
         const partnerRecord = await prisma.partner.findUnique({
-          where: { id: partnerPayout.partnerId },
+          where: { id: preLookup.partnerId },
           select: { name: true, contactEmail: true },
         }).catch(() => null);
 
@@ -201,8 +340,8 @@ export async function PATCH(request: Request) {
           sendPartnerPayoutProcessedEmail({
             toEmail: partnerRecord.contactEmail,
             partnerName: partnerRecord.name,
-            amountPesos: formatCentavosToPesos(partnerPayout.amountCentavos),
-            payoutMethod: String(partnerPayout.method),
+            amountPesos: formatCentavosToPesos(txResult.partnerPayout!.amountCentavos),
+            payoutMethod: String(txResult.partnerPayout!.method),
             transactionRef: transactionRef || undefined,
             dashboardUrl: `${getSiteUrl()}/partner-portal/payouts`,
           }).catch((err) => console.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));

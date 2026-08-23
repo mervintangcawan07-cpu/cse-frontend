@@ -1,4 +1,5 @@
 // Relative Path: src/lib/referral/referralService.ts
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { DEFAULT_REFERRAL_CONFIG, REFERRAL_SETTING_KEYS } from "./config";
 import {
@@ -704,21 +705,25 @@ export class ReferralService {
    * 9. COMPUTE USER FINANCIAL BALANCES
    * Pure aggregation from authoritative reward & payout ledger records.
    */
-  public static async getUserBalances(userId: string): Promise<UserReferralStats> {
+  public static async getUserBalances(
+    userId: string,
+    client?: Prisma.TransactionClient
+  ): Promise<UserReferralStats> {
+    const db = client || prisma;
     const now = new Date();
 
     // Fetch all earned rewards
-    const rewards = await prisma.referralReward.findMany({
+    const rewards = await db.referralReward.findMany({
       where: { inviterId: userId },
     });
 
     // Fetch all payouts
-    const payouts = await prisma.referralPayout.findMany({
+    const payouts = await db.referralPayout.findMany({
       where: { userId },
     });
 
     // Count referrals
-    const referrals = await prisma.referral.findMany({
+    const referrals = await db.referral.findMany({
       where: { inviterId: userId },
       select: { status: true },
     });
@@ -793,7 +798,7 @@ export class ReferralService {
 
   /**
    * 10. REQUEST PAYOUT (USER)
-   * Enforces ₱150 minimum threshold, validates available balance, reserves funds.
+   * Enforces ₱150 minimum threshold, validates available balance, reserves funds under referral-finance advisory lock.
    */
   public static async requestPayout(params: {
     userId: string;
@@ -819,20 +824,26 @@ export class ReferralService {
       return { success: false, error: "Account details are required" };
     }
 
-    // 2. Check Available Balance
-    const balances = await this.getUserBalances(userId);
-    if (amountCentavos > balances.availableBalanceCentavos) {
-      return {
-        success: false,
-        error: `Insufficient available balance. Available: ${formatCentavosToPesos(balances.availableBalanceCentavos)}.`,
-      };
-    }
-
-    // 3. Encrypt Account Number
+    // 2. Encrypt Account Number
     const accountNumberEncrypted = encrypt(accountNumber.trim()) || accountNumber.trim();
 
     try {
       const payout = await prisma.$transaction(async (tx) => {
+        // 🔒 Acquire transaction-scoped advisory lock on referral-finance domain
+        await tx.$queryRaw`
+          SELECT pg_advisory_xact_lock(
+            hashtextextended(${`referral-finance:${userId}`}, 0)
+          )::text AS lock_result
+        `;
+
+        // 🔍 Authoritative balance check inside lock
+        const balances = await this.getUserBalances(userId, tx);
+        if (amountCentavos > balances.availableBalanceCentavos) {
+          throw new Error(
+            `Insufficient available balance. Available: ${formatCentavosToPesos(balances.availableBalanceCentavos)}.`
+          );
+        }
+
         const created = await tx.referralPayout.create({
           data: {
             userId,
@@ -867,18 +878,18 @@ export class ReferralService {
         return created;
       });
 
-      // Send Notification to user
+      // Send Notification to user strictly post-commit
       await createNotification({
         userId,
         title: "💸 Payout Request Submitted",
         message: `Your payout request of ${formatCentavosToPesos(amountCentavos)} via ${method} has been received and is being processed.`,
         type: "INFO",
-      });
+      }).catch((err) => console.error("[REFERRAL_PAYOUT_NOTIF_ERROR]", err));
 
       return { success: true, payoutId: payout.id };
     } catch (err: any) {
       console.error("[ReferralService.requestPayout] Error:", err);
-      return { success: false, error: "Failed to submit payout request. Please try again." };
+      return { success: false, error: err?.message || "Failed to submit payout request. Please try again." };
     }
   }
 
@@ -1156,31 +1167,162 @@ export class ReferralService {
   }
 
   /**
-   * 14. ADMIN PROCESS PAYOUT (APPROVE / REJECT / MARK PAID)
+   * 14. ADMIN PROCESS PAYOUT (APPROVE / PROCESSING / REJECT / MARK PAID)
+   * Hardened with referral-finance advisory lock, backing check, CAS state transition, and double-entry ledger posting.
    */
   public static async adminProcessPayout(params: {
     payoutId: string;
-    action: "APPROVE" | "REJECT" | "MARK_PAID";
+    action: "APPROVE" | "PROCESSING" | "REJECT" | "MARK_PAID";
     adminNotes?: string;
     transactionRef?: string;
     adminUserId: string;
     clientIp?: string;
-  }): Promise<{ success: boolean; error?: string }> {
-    const payout = await prisma.referralPayout.findUnique({
+  }): Promise<{ success: boolean; error?: string; alreadyProcessed?: boolean }> {
+    // 1. Pre-lock lookup to obtain userId
+    const preLookup = await prisma.referralPayout.findUnique({
       where: { id: params.payoutId },
-      include: { user: { select: { id: true, email: true, name: true } } },
+      select: { userId: true },
     });
 
-    if (!payout) return { success: false, error: "Payout record not found" };
+    if (!preLookup) return { success: false, error: "Payout record not found" };
 
-    let newStatus: PayoutStatus = payout.status;
-    if (params.action === "APPROVE") newStatus = "APPROVED";
-    else if (params.action === "REJECT") newStatus = "REJECTED";
-    else if (params.action === "MARK_PAID") newStatus = "PAID";
+    const { LedgerService } = await import("@/lib/accounting/ledgerService");
 
-    await prisma.$transaction(async (tx) => {
-      await tx.referralPayout.update({
+    const result = await prisma.$transaction(async (tx) => {
+      // 🔒 Acquire transaction-scoped advisory lock on referral-finance domain
+      await tx.$queryRaw`
+        SELECT pg_advisory_xact_lock(
+          hashtextextended(${`referral-finance:${preLookup.userId}`}, 0)
+        )::text AS lock_result
+      `;
+
+      // 🔍 Re-fetch payout inside lock
+      const payout = await tx.referralPayout.findUnique({
         where: { id: params.payoutId },
+        include: { user: { select: { id: true, email: true, name: true } } },
+      });
+
+      if (!payout) return { success: false, error: "Payout record not found" };
+
+      // Define allowed predecessors and target status
+      let newStatus: PayoutStatus = payout.status;
+      let allowedPredecessors: PayoutStatus[] = [];
+
+      if (params.action === "APPROVE") {
+        newStatus = "APPROVED";
+        allowedPredecessors = ["REQUESTED", "UNDER_REVIEW"];
+      } else if (params.action === "PROCESSING") {
+        newStatus = "PROCESSING";
+        allowedPredecessors = ["REQUESTED", "UNDER_REVIEW", "APPROVED"];
+      } else if (params.action === "MARK_PAID") {
+        newStatus = "PAID";
+        allowedPredecessors = ["REQUESTED", "UNDER_REVIEW", "APPROVED", "PROCESSING"];
+      } else if (params.action === "REJECT") {
+        newStatus = "REJECTED";
+        allowedPredecessors = ["REQUESTED", "UNDER_REVIEW", "APPROVED"];
+      }
+
+      // Check if already in target state (idempotent no-op)
+      if (payout.status === newStatus) {
+        return { success: true, alreadyProcessed: true, payout };
+      }
+
+      // If transition not allowed from current state
+      if (!allowedPredecessors.includes(payout.status)) {
+        return {
+          success: false,
+          error: `Cannot perform ${params.action} on payout currently in status '${payout.status}'.`,
+        };
+      }
+
+      // 🛡️ Backing Revalidation for financial progressions (APPROVE, PROCESSING, MARK_PAID)
+      if (["APPROVE", "PROCESSING", "MARK_PAID"].includes(params.action)) {
+        const now = new Date();
+        const rewards = await tx.referralReward.findMany({
+          where: { inviterId: payout.userId },
+        });
+        const allPayouts = await tx.referralPayout.findMany({
+          where: { userId: payout.userId },
+        });
+
+        let totalValidEarnedCentavos = 0;
+        rewards.forEach((r) => {
+          if (
+            r.status === "AVAILABLE" ||
+            r.status === "PAID" ||
+            (r.status === "PENDING" && r.holdingUntil && r.holdingUntil <= now)
+          ) {
+            totalValidEarnedCentavos += r.rewardAmountCentavos;
+          }
+        });
+
+        const FINANCIALLY_CONSUMING_STATUSES: string[] = [
+          "REQUESTED",
+          "RESERVED",
+          "UNDER_REVIEW",
+          "APPROVED",
+          "PROCESSING",
+        ];
+
+        let historicalPaidPayoutCentavos = 0;
+        let otherActivePayoutCentavos = 0;
+
+        allPayouts.forEach((p) => {
+          if (p.status === "PAID") {
+            historicalPaidPayoutCentavos += p.amountCentavos;
+          } else if (p.id !== params.payoutId && FINANCIALLY_CONSUMING_STATUSES.includes(p.status)) {
+            otherActivePayoutCentavos += p.amountCentavos;
+          }
+        });
+
+        const targetPayoutCentavos = payout.amountCentavos;
+        const totalCommittedCentavos =
+          historicalPaidPayoutCentavos + targetPayoutCentavos + otherActivePayoutCentavos;
+
+        if (totalCommittedCentavos > totalValidEarnedCentavos) {
+          // Log manual-review audit inside tx without throwing
+          await tx.referralAuditLog.create({
+            data: {
+              actorId: params.adminUserId,
+              actorRole: "ADMIN",
+              action: "PAYOUT_BACKING_CONFLICT_MANUAL_REVIEW_REQUIRED",
+              targetType: "PAYOUT",
+              targetId: params.payoutId,
+              amountCentavos: targetPayoutCentavos,
+              reason: `Backing check failed for action ${params.action}. Valid earned: ${totalValidEarnedCentavos}, Already paid: ${historicalPaidPayoutCentavos}, Other active commitments: ${otherActivePayoutCentavos}, Target payout: ${targetPayoutCentavos}`,
+              ipAddress: params.clientIp,
+              metadata: {
+                payoutId: params.payoutId,
+                userId: payout.userId,
+                action: params.action,
+                totalValidEarnedCentavos,
+                historicalPaidPayoutCentavos,
+                otherActivePayoutCentavos,
+                targetPayoutCentavos,
+                totalCommittedCentavos,
+              },
+            },
+          });
+
+          return {
+            success: false,
+            error: `Payout lacks sufficient financial backing earnings (Valid earned: ${formatCentavosToPesos(
+              totalValidEarnedCentavos
+            )}, Already paid: ${formatCentavosToPesos(
+              historicalPaidPayoutCentavos
+            )}, Other active commitments: ${formatCentavosToPesos(
+              otherActivePayoutCentavos
+            )}). Action blocked for manual review.`,
+          };
+        }
+      }
+
+      // Compare-and-Set Atomic Transition
+      const updateResult = await tx.referralPayout.updateMany({
+        where: {
+          id: params.payoutId,
+          status: { in: allowedPredecessors },
+        },
         data: {
           status: newStatus,
           adminNotes: params.adminNotes || payout.adminNotes,
@@ -1190,6 +1332,11 @@ export class ReferralService {
         },
       });
 
+      if (updateResult.count === 0) {
+        return { success: false, error: "Concurrent state change detected. Action aborted." };
+      }
+
+      // Audit Log
       await tx.referralAuditLog.create({
         data: {
           actorId: params.adminUserId,
@@ -1207,9 +1354,36 @@ export class ReferralService {
           },
         },
       });
+
+      // 📊 Double-Entry Accounting Ledger Posting for MARK_PAID
+      if (params.action === "MARK_PAID") {
+        await LedgerService.recordPayoutDisbursement(
+          {
+            payoutId: params.payoutId,
+            payoutType: "REFERRAL",
+            recipientId: payout.userId,
+            amountCentavos: payout.amountCentavos,
+            method: payout.method,
+            referenceNumber: params.transactionRef || payout.transactionRef || undefined,
+            adminUserId: params.adminUserId,
+          },
+          tx
+        );
+      }
+
+      return { success: true, payout, newStatus };
     });
 
-    // Notify User
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+
+    if (result.alreadyProcessed) {
+      return { success: true };
+    }
+
+    // Post-commit Notifications
+    const payout = result.payout!;
     const formattedAmount = formatCentavosToPesos(payout.amountCentavos);
     if (params.action === "MARK_PAID") {
       await createNotification({
@@ -1217,14 +1391,14 @@ export class ReferralService {
         title: "🎉 Payout Sent!",
         message: `Your referral payout of ${formattedAmount} has been sent via ${payout.method}. Ref: ${params.transactionRef || "N/A"}`,
         type: "INFO",
-      });
+      }).catch((err) => console.error("[REFERRAL_PAYOUT_PAID_NOTIF_ERROR]", err));
     } else if (params.action === "REJECT") {
       await createNotification({
         userId: payout.userId,
         title: "❌ Payout Request Rejected",
         message: `Your payout request of ${formattedAmount} was rejected. Reason: ${params.adminNotes || "Please contact support."}`,
         type: "SYSTEM",
-      });
+      }).catch((err) => console.error("[REFERRAL_PAYOUT_REJECT_NOTIF_ERROR]", err));
     }
 
     return { success: true };

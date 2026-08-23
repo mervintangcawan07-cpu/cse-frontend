@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   AccountCategory,
@@ -50,7 +51,7 @@ export class LedgerService {
       periodId?: string;
       createdBy?: string;
     },
-    client?: any
+    client?: Prisma.TransactionClient
   ) {
     const {
       transactionId,
@@ -202,30 +203,53 @@ export class LedgerService {
    * Records payout disbursement.
    * Debit: LIABILITY_REFERRAL_PAYABLE | LIABILITY_PARTNER_PAYABLE, Credit: CASH_PAYMONGO
    */
-  static async recordPayoutDisbursement(params: {
-    payoutId: string;
-    payoutType: "REFERRAL" | "PARTNER";
-    recipientId: string;
-    amountCentavos: number;
-    method: string;
-    referenceNumber?: string;
-    adminUserId?: string;
-  }) {
+  static async recordPayoutDisbursement(
+    params: {
+      payoutId: string;
+      payoutType: "REFERRAL" | "PARTNER";
+      recipientId: string;
+      amountCentavos: number;
+      method: string;
+      referenceNumber?: string;
+      adminUserId?: string;
+    },
+    client?: Prisma.TransactionClient
+  ) {
+    const db = client || prisma;
     const liabilityCategory: AccountCategory =
       params.payoutType === "REFERRAL"
         ? "LIABILITY_REFERRAL_PAYABLE"
         : "LIABILITY_PARTNER_PAYABLE";
 
-    return this.postBalancedDoubleEntry({
-      transactionType: "PAYOUT_DISBURSEMENT",
-      debitCategory: liabilityCategory,
-      creditCategory: "CASH_PAYMONGO",
-      amountCentavos: params.amountCentavos,
-      sourceEntity: params.payoutType === "REFERRAL" ? "ReferralPayout" : "PartnerPayout",
-      sourceId: params.payoutId,
-      description: `Payout fulfilled via ${params.method} (Ref: ${params.referenceNumber || "N/A"})`,
-      createdBy: params.adminUserId,
+    const sourceEntity = params.payoutType === "REFERRAL" ? "ReferralPayout" : "PartnerPayout";
+
+    // 🔒 Persistent Ledger Idempotency Guard
+    const existingDisbursement = await db.financialLedgerEntry.findFirst({
+      where: {
+        transactionType: "PAYOUT_DISBURSEMENT",
+        sourceEntity,
+        sourceId: params.payoutId,
+        entryType: "DEBIT",
+      },
     });
+
+    if (existingDisbursement) {
+      return [existingDisbursement];
+    }
+
+    return this.postBalancedDoubleEntry(
+      {
+        transactionType: "PAYOUT_DISBURSEMENT",
+        debitCategory: liabilityCategory,
+        creditCategory: "CASH_PAYMONGO",
+        amountCentavos: params.amountCentavos,
+        sourceEntity,
+        sourceId: params.payoutId,
+        description: `Payout fulfilled via ${params.method} (Ref: ${params.referenceNumber || "N/A"})`,
+        createdBy: params.adminUserId,
+      },
+      client
+    );
   }
 
   /**
@@ -244,7 +268,7 @@ export class LedgerService {
       reversePartnerLiability?: boolean;
       reason: string;
     },
-    client?: any
+    client?: Prisma.TransactionClient
   ) {
     const results = [];
     const sourceEntity = "Refund";

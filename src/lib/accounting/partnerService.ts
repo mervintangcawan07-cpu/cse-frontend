@@ -850,6 +850,13 @@ export class PartnerService {
     } = params;
 
     return prisma.$transaction(async (tx) => {
+      // 🔒 Acquire transaction-scoped advisory lock on partner-finance domain to serialize concurrent payout requests
+      await tx.$queryRaw`
+        SELECT pg_advisory_xact_lock(
+          hashtextextended(${`partner-finance:${partnerId}`}, 0)
+        )::text AS lock_result
+      `;
+
       const partner = await tx.partner.findUnique({
         where: { id: partnerId },
       });
