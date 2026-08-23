@@ -49,28 +49,35 @@ export async function POST(request: Request) {
 
     const amountCentavos = Math.round(Number(amountPesos) * 100);
 
-    const deduction = await prisma.financialDeduction.create({
-      data: {
-        category: category || "OTHER_EXPENSE",
-        description: description.trim(),
-        amountCentavos,
-        reference: reference?.trim(),
-        notes: notes?.trim(),
-        createdBy: user.id,
-        approvedBy: user.id,
-      },
-    });
+    const deduction = await prisma.$transaction(async (tx) => {
+      const d = await tx.financialDeduction.create({
+        data: {
+          category: category || "OTHER_EXPENSE",
+          description: description.trim(),
+          amountCentavos,
+          reference: reference?.trim() || null,
+          notes: notes?.trim() || null,
+          createdBy: user.id,
+          approvedBy: user.id,
+        },
+      });
 
-    // Post to double-entry ledger: Debit EXPENSE_OPERATIONAL, Credit CASH_PAYMONGO
-    await LedgerService.postBalancedDoubleEntry({
-      transactionType: "DEDUCTION_EXPENSE",
-      debitCategory: "EXPENSE_OPERATIONAL",
-      creditCategory: "CASH_PAYMONGO",
-      amountCentavos,
-      sourceEntity: "FinancialDeduction",
-      sourceId: deduction.id,
-      description: `Operational Expense (${deduction.category}): ${deduction.description}`,
-      createdBy: user.id,
+      // Post to double-entry ledger: Debit EXPENSE_OPERATIONAL, Credit CASH_PAYMONGO
+      await LedgerService.postBalancedDoubleEntry(
+        {
+          transactionType: "DEDUCTION_EXPENSE",
+          debitCategory: "EXPENSE_OPERATIONAL",
+          creditCategory: "CASH_PAYMONGO",
+          amountCentavos,
+          sourceEntity: "FinancialDeduction",
+          sourceId: d.id,
+          description: `Operational Expense (${d.category}): ${d.description}`,
+          createdBy: user.id,
+        },
+        tx
+      );
+
+      return d;
     });
 
     return NextResponse.json({
