@@ -94,48 +94,39 @@ export async function POST(request: Request) {
       }
     } else if (
       eventType === "payment.refunded" ||
-      eventType === "payment.refund.updated" ||
-      eventType === "refund.created"
+      eventType === "payment.refund.updated"
     ) {
-      // 💸 Payment Refund / Chargeback Handler
-      try {
-        const checkoutSessionId = payload?.data?.attributes?.data?.id;
-        const transaction = await prisma.transaction.findFirst({
-          where: { checkoutSessionId },
-          include: { referralReward: true, partnerCommission: true },
-        });
-
-        if (transaction) {
-          await prisma.transaction.update({
-            where: { id: transaction.id },
-            data: { status: "REFUNDED" },
-          });
-
-          // Reverse Referral
-          const { ReferralService } = await import("@/lib/referral/referralService");
-          await ReferralService.handlePaymentRefundOrChargeback({
-            transactionId: transaction.id,
-            reason: `PayMongo refund event: ${eventType}`,
-          });
-
-          // Reverse Ledger entries
-          const { LedgerService } = await import("@/lib/accounting/ledgerService");
-          const refundCentavos = transaction.amount > 5000 ? transaction.amount : transaction.amount * 100;
-          await LedgerService.recordRefundReversal({
-            transactionId: transaction.id,
-            refundAmountCentavos: refundCentavos,
-            referralRewardId: transaction.referralReward?.id,
-            referralRewardCentavos: transaction.referralReward?.rewardAmountCentavos,
-            partnerCommissionId: transaction.partnerCommission?.id,
-            partnerCommissionCentavos: transaction.partnerCommission?.commissionAmountCentavos,
-            reason: `Refund event: ${eventType}`,
-          });
-
-          console.log(`[PayMongo Webhook]: Reversed ledger and liabilities for refunded transaction ${transaction.id}`);
-        }
-      } catch (refundErr) {
-        console.error("[PayMongo Refund Processing Error]:", refundErr);
+      // 💸 Payment Refund / Chargeback Handler (Hardened, Idempotent, Advisory-Locked)
+      const secretKey = process.env.PAYMONGO_SECRET_KEY;
+      if (!secretKey) {
+        console.error("[PayMongo Webhook Error]: PAYMONGO_SECRET_KEY is missing for refund resolution.");
+        return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
       }
+
+      const { RefundService } = await import("@/lib/payment/refundService");
+      const outcome = await RefundService.processPayMongoRefundWebhook({
+        eventType,
+        payload,
+        secretKey,
+      });
+
+      console.log(
+        `[PayMongo Webhook Refund Outcome]: status=${outcome.status}, refundId=${outcome.refundId || "N/A"}, transactionId=${outcome.transactionId || "N/A"}`
+      );
+
+      if (!outcome.success) {
+        return NextResponse.json({ error: outcome.message, status: outcome.status }, { status: 500 });
+      }
+
+      return NextResponse.json(
+        {
+          received: true,
+          status: outcome.status,
+          refundId: outcome.refundId,
+          transactionId: outcome.transactionId,
+        },
+        { status: 200 }
+      );
     }
 
     return NextResponse.json({ received: true }, { status: 200 });

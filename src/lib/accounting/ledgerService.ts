@@ -36,19 +36,22 @@ export class LedgerService {
   /**
    * Posts a pair of balanced double-entry ledger entries in an atomic transaction.
    */
-  static async postBalancedDoubleEntry(params: {
-    transactionId?: string;
-    transactionType: FinancialTransactionType;
-    debitCategory: AccountCategory;
-    creditCategory: AccountCategory;
-    amountCentavos: number;
-    sourceEntity: string;
-    sourceId: string;
-    description: string;
-    effectiveDate?: Date;
-    periodId?: string;
-    createdBy?: string;
-  }) {
+  static async postBalancedDoubleEntry(
+    params: {
+      transactionId?: string;
+      transactionType: FinancialTransactionType;
+      debitCategory: AccountCategory;
+      creditCategory: AccountCategory;
+      amountCentavos: number;
+      sourceEntity: string;
+      sourceId: string;
+      description: string;
+      effectiveDate?: Date;
+      periodId?: string;
+      createdBy?: string;
+    },
+    client?: any
+  ) {
     const {
       transactionId,
       transactionType,
@@ -65,11 +68,12 @@ export class LedgerService {
 
     if (amountCentavos <= 0) return [];
 
+    const db = client || prisma;
     const safeAmount = deterministicRound(amountCentavos);
     const entryNumDebit = this.generateEntryNumber("DR");
     const entryNumCredit = this.generateEntryNumber("CR");
 
-    const [debitEntry, creditEntry] = await prisma.financialLedgerEntry.createManyAndReturn({
+    const [debitEntry, creditEntry] = await db.financialLedgerEntry.createManyAndReturn({
       data: [
         {
           entryNumber: entryNumDebit,
@@ -227,57 +231,84 @@ export class LedgerService {
   /**
    * Records refund or chargeback reversal in the ledger.
    */
-  static async recordRefundReversal(params: {
-    transactionId: string;
-    refundAmountCentavos: number;
-    referralRewardId?: string;
-    referralRewardCentavos?: number;
-    partnerCommissionId?: string;
-    partnerCommissionCentavos?: number;
-    reason: string;
-  }) {
+  static async recordRefundReversal(
+    params: {
+      transactionId: string;
+      refundAmountCentavos: number;
+      refundId?: string;
+      referralRewardId?: string;
+      referralRewardCentavos?: number;
+      reverseReferralLiability?: boolean;
+      partnerCommissionId?: string;
+      partnerCommissionCentavos?: number;
+      reversePartnerLiability?: boolean;
+      reason: string;
+    },
+    client?: any
+  ) {
     const results = [];
+    const sourceEntity = "Refund";
+    const canonicalSourceId = params.refundId || params.transactionId;
 
     // 1. Reverse Revenue: Debit REVENUE_PREMIUM, Credit CASH_PAYMONGO
-    const revEntries = await this.postBalancedDoubleEntry({
-      transactionId: params.transactionId,
-      transactionType: "REFUND_REVERSAL",
-      debitCategory: "REVENUE_PREMIUM",
-      creditCategory: "CASH_PAYMONGO",
-      amountCentavos: params.refundAmountCentavos,
-      sourceEntity: "Transaction",
-      sourceId: params.transactionId,
-      description: `Refund reversal: ${params.reason}`,
-    });
-    results.push(...revEntries);
-
-    // 2. Reverse Referral Liability if present: Debit LIABILITY_REFERRAL_PAYABLE, Credit EXPENSE_REFERRAL
-    if (params.referralRewardId && (params.referralRewardCentavos || 0) > 0) {
-      const refEntries = await this.postBalancedDoubleEntry({
+    const revEntries = await this.postBalancedDoubleEntry(
+      {
         transactionId: params.transactionId,
         transactionType: "REFUND_REVERSAL",
-        debitCategory: "LIABILITY_REFERRAL_PAYABLE",
-        creditCategory: "EXPENSE_REFERRAL",
-        amountCentavos: params.referralRewardCentavos!,
-        sourceEntity: "ReferralReward",
-        sourceId: params.referralRewardId,
-        description: `Reversal of referral commission liability on refund`,
-      });
+        debitCategory: "REVENUE_PREMIUM",
+        creditCategory: "CASH_PAYMONGO",
+        amountCentavos: params.refundAmountCentavos,
+        sourceEntity,
+        sourceId: canonicalSourceId,
+        description: `Refund reversal: ${params.reason}`,
+      },
+      client
+    );
+    results.push(...revEntries);
+
+    // 2. Reverse Referral Liability ONLY if explicitly requested and liability is still outstanding:
+    // Debit LIABILITY_REFERRAL_PAYABLE, Credit EXPENSE_REFERRAL
+    if (
+      params.reverseReferralLiability &&
+      params.referralRewardId &&
+      (params.referralRewardCentavos || 0) > 0
+    ) {
+      const refEntries = await this.postBalancedDoubleEntry(
+        {
+          transactionId: params.transactionId,
+          transactionType: "REFUND_REVERSAL",
+          debitCategory: "LIABILITY_REFERRAL_PAYABLE",
+          creditCategory: "EXPENSE_REFERRAL",
+          amountCentavos: params.referralRewardCentavos!,
+          sourceEntity,
+          sourceId: canonicalSourceId,
+          description: `Reversal of referral commission liability on full refund`,
+        },
+        client
+      );
       results.push(...refEntries);
     }
 
-    // 3. Reverse Partner Liability if present: Debit LIABILITY_PARTNER_PAYABLE, Credit EXPENSE_PARTNER
-    if (params.partnerCommissionId && (params.partnerCommissionCentavos || 0) > 0) {
-      const ptrEntries = await this.postBalancedDoubleEntry({
-        transactionId: params.transactionId,
-        transactionType: "REFUND_REVERSAL",
-        debitCategory: "LIABILITY_PARTNER_PAYABLE",
-        creditCategory: "EXPENSE_PARTNER",
-        amountCentavos: params.partnerCommissionCentavos!,
-        sourceEntity: "PartnerCommission",
-        sourceId: params.partnerCommissionId,
-        description: `Reversal of partner commission liability on refund`,
-      });
+    // 3. Reverse Partner Liability ONLY if explicitly requested and liability is still outstanding:
+    // Debit LIABILITY_PARTNER_PAYABLE, Credit EXPENSE_PARTNER
+    if (
+      params.reversePartnerLiability &&
+      params.partnerCommissionId &&
+      (params.partnerCommissionCentavos || 0) > 0
+    ) {
+      const ptrEntries = await this.postBalancedDoubleEntry(
+        {
+          transactionId: params.transactionId,
+          transactionType: "REFUND_REVERSAL",
+          debitCategory: "LIABILITY_PARTNER_PAYABLE",
+          creditCategory: "EXPENSE_PARTNER",
+          amountCentavos: params.partnerCommissionCentavos!,
+          sourceEntity,
+          sourceId: canonicalSourceId,
+          description: `Reversal of partner commission liability on full refund`,
+        },
+        client
+      );
       results.push(...ptrEntries);
     }
 
