@@ -46,27 +46,46 @@ export type SiteConfig = typeof siteConfig;
 /**
  * Resolves the canonical public site URL.
  * Priority:
- * 1. SITE_URL (Server-side canonical override)
- * 2. NEXT_PUBLIC_SITE_URL (Public build/runtime site URL)
- * 3. NEXT_PUBLIC_APP_URL
- * 4. In production: Always defaults to "https://govstudyx.com"
- * 5. In development: Defaults to "http://localhost:3000"
+ * 1. Vercel Production: Always use "https://govstudyx.com"
+ * 2. Configured site URL (including Vercel Preview, development, and tests)
+ * 3. Vercel Preview deployment URL
+ * 4. Non-Vercel production: Default to "https://govstudyx.com"
+ * 5. Local development: Default to "http://localhost:3000"
  */
 export function getSiteUrl(): string {
-  const envUrl =
+  const vercelEnvironment = process.env.VERCEL_ENV;
+
+  if (vercelEnvironment === "production") {
+    return siteConfig.url;
+  }
+
+  const configuredUrl =
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_APP_URL;
 
-  if (envUrl && envUrl.trim().length > 0) {
-    const cleaned = envUrl.replace(/\[.*?\]|\(|\)|['"]/g, "").trim();
+  if (configuredUrl && configuredUrl.trim().length > 0) {
+    const cleaned = configuredUrl.replace(/\[.*?\]|\(|\)|['"]/g, "").trim();
     if (cleaned.length > 0) {
       return cleaned.replace(/\/+$/, "");
     }
   }
 
-  if (process.env.NODE_ENV === "production") {
-    return "https://govstudyx.com";
+  if (vercelEnvironment === "preview") {
+    const previewDomain = process.env.VERCEL_URL
+      ?.replace(/\[.*?\]|\(|\)|['"]/g, "")
+      .trim()
+      .replace(/\/+$/, "");
+
+    if (previewDomain) {
+      return /^https?:\/\//i.test(previewDomain)
+        ? previewDomain
+        : `https://${previewDomain}`;
+    }
+  }
+
+  if (!vercelEnvironment && process.env.NODE_ENV === "production") {
+    return siteConfig.url;
   }
 
   return "http://localhost:3000";
