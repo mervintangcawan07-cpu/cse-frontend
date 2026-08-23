@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { LedgerService } from "@/lib/accounting/ledgerService";
+import { PeriodService, PeriodDomainError } from "@/lib/accounting/periodService";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 
 function generateAdjustmentNumber(): string {
@@ -58,6 +59,7 @@ export async function POST(request: Request) {
     }
 
     const amountCentavos = Math.round(Number(amountPesos) * 100);
+    const postingTime = new Date();
 
     const MAX_ATTEMPTS = 3;
     let createdAdjustment: any = null;
@@ -67,6 +69,10 @@ export async function POST(request: Request) {
       const candidateAdjustmentNumber = generateAdjustmentNumber();
       try {
         createdAdjustment = await prisma.$transaction(async (tx) => {
+          // 1. Lock and resolve covering open accounting period
+          const period = await PeriodService.lockAndResolveOpenPeriodForPosting(tx, postingTime);
+
+          // 2. Create FinancialAdjustment
           const adj = await tx.financialAdjustment.create({
             data: {
               adjustmentNumber: candidateAdjustmentNumber,
@@ -82,7 +88,7 @@ export async function POST(request: Request) {
             },
           });
 
-          // Balanced double entry: ADJUSTMENT_SUSPENSE vs CASH_PAYMONGO
+          // 3. Balanced double entry: ADJUSTMENT_SUSPENSE vs CASH_PAYMONGO
           const debitCat = direction === "DEBIT" ? "ADJUSTMENT_SUSPENSE" : "CASH_PAYMONGO";
           const creditCat = direction === "DEBIT" ? "CASH_PAYMONGO" : "ADJUSTMENT_SUSPENSE";
 
@@ -95,6 +101,8 @@ export async function POST(request: Request) {
               sourceEntity: "FinancialAdjustment",
               sourceId: adj.id,
               description: `Manual adjustment ${candidateAdjustmentNumber}: ${adj.reason}`,
+              effectiveDate: postingTime,
+              periodId: period.id,
               createdBy: user.id,
             },
             tx
@@ -106,6 +114,10 @@ export async function POST(request: Request) {
         finalAdjustmentNumber = candidateAdjustmentNumber;
         break; // Successfully committed transaction
       } catch (err: any) {
+        if (err instanceof PeriodDomainError) {
+          throw err; // Domain errors must not trigger ID collision retries
+        }
+
         const isAdjustmentNumberCollision =
           err instanceof Prisma.PrismaClientKnownRequestError &&
           err.code === "P2002" &&
@@ -130,6 +142,9 @@ export async function POST(request: Request) {
       message: `Adjustment ${finalAdjustmentNumber} created and posted to ledger!`,
     });
   } catch (error: any) {
+    if (error instanceof PeriodDomainError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
     console.error("[ADMIN_ADJUSTMENTS_POST_ERROR]", error);
     return NextResponse.json({ error: error.message || "Failed to create adjustment" }, { status: 500 });
   }

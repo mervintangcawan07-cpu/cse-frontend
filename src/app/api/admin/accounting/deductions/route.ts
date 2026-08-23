@@ -4,6 +4,7 @@ import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 import { LedgerService } from "@/lib/accounting/ledgerService";
+import { PeriodService, PeriodDomainError } from "@/lib/accounting/periodService";
 
 export async function GET(request: Request) {
   try {
@@ -48,8 +49,13 @@ export async function POST(request: Request) {
     }
 
     const amountCentavos = Math.round(Number(amountPesos) * 100);
+    const postingTime = new Date();
 
     const deduction = await prisma.$transaction(async (tx) => {
+      // 1. Lock and resolve covering open accounting period
+      const period = await PeriodService.lockAndResolveOpenPeriodForPosting(tx, postingTime);
+
+      // 2. Create FinancialDeduction with periodId and date
       const d = await tx.financialDeduction.create({
         data: {
           category: category || "OTHER_EXPENSE",
@@ -57,12 +63,14 @@ export async function POST(request: Request) {
           amountCentavos,
           reference: reference?.trim() || null,
           notes: notes?.trim() || null,
+          periodId: period.id,
+          date: postingTime,
           createdBy: user.id,
           approvedBy: user.id,
         },
       });
 
-      // Post to double-entry ledger: Debit EXPENSE_OPERATIONAL, Credit CASH_PAYMONGO
+      // 3. Post to double-entry ledger: Debit EXPENSE_OPERATIONAL, Credit CASH_PAYMONGO
       await LedgerService.postBalancedDoubleEntry(
         {
           transactionType: "DEDUCTION_EXPENSE",
@@ -72,6 +80,8 @@ export async function POST(request: Request) {
           sourceEntity: "FinancialDeduction",
           sourceId: d.id,
           description: `Operational Expense (${d.category}): ${d.description}`,
+          effectiveDate: postingTime,
+          periodId: period.id,
           createdBy: user.id,
         },
         tx
@@ -86,6 +96,9 @@ export async function POST(request: Request) {
       message: "Operational deduction recorded in accounting ledger!",
     });
   } catch (error: any) {
+    if (error instanceof PeriodDomainError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
     console.error("[ADMIN_DEDUCTIONS_POST_ERROR]", error);
     return NextResponse.json({ error: error.message || "Failed to record deduction" }, { status: 500 });
   }

@@ -574,9 +574,9 @@ async function runTests() {
   {
     const routePath = path.join(process.cwd(), "src/app/api/admin/accounting/deductions/route.ts");
     const routeContent = fs.readFileSync(routePath, "utf-8");
-    const passesTx = routeContent.includes("LedgerService.postBalancedDoubleEntry(") && routeContent.includes(",\n        tx\n      )");
+    const passesTx = /postBalancedDoubleEntry\s*\([\s\S]*?,\s*tx\s*\)/.test(routeContent);
     assert(
-      passesTx || routeContent.includes(", tx)"),
+      passesTx,
       "TEST 16: deductions/route.ts passes active TransactionClient tx to LedgerService"
     );
   }
@@ -585,9 +585,9 @@ async function runTests() {
   {
     const routePath = path.join(process.cwd(), "src/app/api/admin/accounting/adjustments/route.ts");
     const routeContent = fs.readFileSync(routePath, "utf-8");
-    const passesTx = routeContent.includes("LedgerService.postBalancedDoubleEntry(") && routeContent.includes(",\n            tx\n          )");
+    const passesTx = /postBalancedDoubleEntry\s*\([\s\S]*?,\s*tx\s*\)/.test(routeContent);
     assert(
-      passesTx || routeContent.includes(", tx)"),
+      passesTx,
       "TEST 17: adjustments/route.ts passes active TransactionClient tx to LedgerService"
     );
   }
