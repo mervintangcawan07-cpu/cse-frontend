@@ -1758,6 +1758,6 @@ model FinancialIdempotencyKey {
   resourceId     String
   createdAt      DateTime @default(now())
 
-  @@unique([actorId, operationType, idempotencyKey])
+  @@unique([actorId, operationType, idempotencyKey], map: "FinancialIdempotencyKey_actorId_operationType_idempotencyKey_ke")
   @@index([createdAt])
 }
