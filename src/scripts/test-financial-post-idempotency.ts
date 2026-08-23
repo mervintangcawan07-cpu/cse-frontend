@@ -1396,9 +1396,9 @@ async function runSyntheticIdempotencyTests() {
     const schema = fs.readFileSync(path.join(process.cwd(), "prisma/schema.prisma"), "utf-8");
     assert(
       schema.includes("model FinancialIdempotencyKey {") &&
-        schema.includes("@@unique([actorId, operationType, idempotencyKey])") &&
+        schema.includes('@@unique([actorId, operationType, idempotencyKey], map: "FinancialIdempotencyKey_actorId_operationType_idempotencyKey_ke")') &&
         schema.includes("@@index([createdAt])"),
-      "Test 35: Reviewed FinancialIdempotencyKey schema model preserved without modification"
+      "Test 35: FinancialIdempotencyKey schema preserves reviewed model with production index mapping"
     );
   }
 
