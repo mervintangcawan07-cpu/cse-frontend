@@ -22,6 +22,7 @@ import {
 } from "@/lib/email";
 import { PartnerAuditService } from "./partnerAuditService";
 import { getSiteUrl } from "@/lib/config/site";
+import { IdempotencyService, IdempotencyDomainError } from "./idempotencyService";
 
 export interface CreatePartnerInput {
   name: string;
@@ -555,14 +556,16 @@ export class PartnerService {
     const partner = await prisma.partner.findUnique({
       where: { id: input.partnerId },
     });
-    if (!partner) throw new Error("Partner not found");
-
-    let encryptedAcc = input.accountNumber.trim();
+    const trimmedAcc = input.accountNumber.trim();
+    let encryptedAcc: string;
     try {
-      const enc = encrypt(encryptedAcc);
-      if (enc) encryptedAcc = enc;
+      const enc = encrypt(trimmedAcc);
+      if (!enc || enc === trimmedAcc) {
+        throw new Error("Encryption failed");
+      }
+      encryptedAcc = enc;
     } catch {
-      // Fallback in test/dev
+      throw new Error("Unable to securely process account number for payout profile.");
     }
 
     return prisma.$transaction(async (tx) => {
@@ -837,6 +840,10 @@ export class PartnerService {
     bankName?: string | null;
     profileId?: string;
     ipAddress?: string;
+    idempotencyContext?: {
+      idempotencyKey: string;
+      requestHash: string;
+    };
   }) {
     const {
       partnerId,
@@ -847,157 +854,276 @@ export class PartnerService {
       bankName,
       profileId,
       ipAddress,
+      idempotencyContext,
     } = params;
 
-    return prisma.$transaction(async (tx) => {
-      // 🔒 Acquire transaction-scoped advisory lock on partner-finance domain to serialize concurrent payout requests
-      await tx.$queryRaw`
-        SELECT pg_advisory_xact_lock(
-          hashtextextended(${`partner-finance:${partnerId}`}, 0)
-        )::text AS lock_result
-      `;
+    try {
+      return await prisma.$transaction(async (tx) => {
+        // 🔒 Level 0: Acquire idempotency lock and check existing record if key is supplied
+        if (idempotencyContext) {
+          await IdempotencyService.acquireIdempotencyLock(
+            tx,
+            partnerId,
+            "PARTNER_PAYOUT_REQUEST",
+            idempotencyContext.idempotencyKey
+          );
 
-      const partner = await tx.partner.findUnique({
-        where: { id: partnerId },
-      });
+          const existingRecord = await IdempotencyService.findAuthoritativeIdempotencyRecord(
+            tx,
+            partnerId,
+            "PARTNER_PAYOUT_REQUEST",
+            idempotencyContext.idempotencyKey
+          );
 
-      if (!partner || partner.status !== "ACTIVE") {
-        throw new Error("Partner account is not active or does not exist.");
-      }
+          if (existingRecord) {
+            if (existingRecord.requestHash !== idempotencyContext.requestHash) {
+              throw new IdempotencyDomainError(
+                "IDEMPOTENCY_PAYLOAD_MISMATCH",
+                "Idempotency key was previously used with a different request.",
+                409
+              );
+            }
 
-      const minPayout = partner.minPayoutCentavos || 15000;
-      if (requestedAmountCentavos < minPayout) {
-        throw new Error(
-          `Requested amount is below minimum payout threshold of ${formatCentavosToPesos(minPayout)}.`
-        );
-      }
+            const existingPayout = await tx.partnerPayout.findFirst({
+              where: { id: existingRecord.resourceId, partnerId },
+            });
 
-      const now = new Date();
+            if (!existingPayout) {
+              throw new IdempotencyDomainError(
+                "IDEMPOTENCY_RESOURCE_NOT_FOUND",
+                "Referenced partner payout record not found or does not belong to partner.",
+                500
+              );
+            }
 
-      // Query active commissions and payouts inside the transaction
-      const [commissions, existingPayouts] = await Promise.all([
-        tx.partnerCommission.findMany({
-          where: { partnerId: partner.id },
-        }),
-        tx.partnerPayout.findMany({
-          where: { partnerId: partner.id },
-        }),
-      ]);
-
-      let availableCentavos = 0;
-      commissions.forEach((c) => {
-        if (
-          c.status === "AVAILABLE" ||
-          (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
-        ) {
-          availableCentavos += c.commissionAmountCentavos;
+            return {
+              payout: existingPayout,
+              remainingBalanceCentavos: 0,
+              isReplay: true,
+            };
+          }
         }
-      });
 
-      let alreadyReservedOrPaidCentavos = 0;
-      existingPayouts.forEach((p) => {
-        if (
-          p.status === "PAID" ||
-          p.status === "REQUESTED" ||
-          p.status === "RESERVED" ||
-          p.status === "UNDER_REVIEW" ||
-          p.status === "APPROVED" ||
-          p.status === "PROCESSING"
-        ) {
-          alreadyReservedOrPaidCentavos += p.amountCentavos;
-        }
-      });
+        // 🔒 Level 1: Acquire transaction-scoped advisory lock on partner-finance domain to serialize concurrent payout requests
+        await tx.$queryRaw`
+          SELECT pg_advisory_xact_lock(
+            hashtextextended(${`partner-finance:${partnerId}`}, 0)
+          )::text AS lock_result
+        `;
 
-      const trueAvailableCentavos = Math.max(
-        0,
-        availableCentavos - alreadyReservedOrPaidCentavos
-      );
-
-      if (requestedAmountCentavos > trueAvailableCentavos) {
-        throw new Error(
-          `Insufficient available balance. You currently have ${formatCentavosToPesos(
-            trueAvailableCentavos
-          )} available for withdrawal.`
-        );
-      }
-
-      let resolvedMethod = method;
-      let resolvedAccountName = accountName || partner.contactName || partner.name;
-      let resolvedAccountNumber = accountNumber || "";
-      let resolvedBankName = bankName || null;
-
-      if (profileId) {
-        const profile = await tx.partnerPayoutProfile.findFirst({
-          where: { id: profileId, partnerId: partner.id },
+        const partner = await tx.partner.findUnique({
+          where: { id: partnerId },
         });
-        if (profile) {
+
+        if (!partner || partner.status !== "ACTIVE") {
+          throw new Error("Partner account is not active or does not exist.");
+        }
+
+        const minPayout = partner.minPayoutCentavos || 15000;
+        if (requestedAmountCentavos < minPayout) {
+          throw new Error(
+            `Requested amount is below minimum payout threshold of ${formatCentavosToPesos(minPayout)}.`
+          );
+        }
+
+        const now = new Date();
+
+        // Query active commissions and payouts inside the transaction
+        const [commissions, existingPayouts] = await Promise.all([
+          tx.partnerCommission.findMany({
+            where: { partnerId: partner.id },
+          }),
+          tx.partnerPayout.findMany({
+            where: { partnerId: partner.id },
+          }),
+        ]);
+
+        let availableCentavos = 0;
+        commissions.forEach((c) => {
+          if (
+            c.status === "AVAILABLE" ||
+            (c.status === "PENDING" && c.holdingUntil && c.holdingUntil <= now)
+          ) {
+            availableCentavos += c.commissionAmountCentavos;
+          }
+        });
+
+        let alreadyReservedOrPaidCentavos = 0;
+        existingPayouts.forEach((p) => {
+          if (
+            p.status === "PAID" ||
+            p.status === "REQUESTED" ||
+            p.status === "RESERVED" ||
+            p.status === "UNDER_REVIEW" ||
+            p.status === "APPROVED" ||
+            p.status === "PROCESSING"
+          ) {
+            alreadyReservedOrPaidCentavos += p.amountCentavos;
+          }
+        });
+
+        const trueAvailableCentavos = Math.max(
+          0,
+          availableCentavos - alreadyReservedOrPaidCentavos
+        );
+
+        if (requestedAmountCentavos > trueAvailableCentavos) {
+          throw new Error(
+            `Insufficient available balance. You currently have ${formatCentavosToPesos(
+              trueAvailableCentavos
+            )} available for withdrawal.`
+          );
+        }
+
+        let resolvedMethod: PayoutMethod = method || "GCASH";
+        let resolvedAccountName = accountName;
+        let resolvedAccountNumber = accountNumber;
+        let resolvedBankName = bankName;
+
+        if (profileId) {
+          const profile = await tx.partnerPayoutProfile.findUnique({
+            where: { id: profileId },
+          });
+
+          if (!profile || profile.partnerId !== partner.id) {
+            throw new Error("Invalid payout profile selected.");
+          }
+
           resolvedMethod = profile.method;
           resolvedAccountName = profile.accountHolderName;
           resolvedBankName = profile.bankName;
+
           try {
-            resolvedAccountNumber = decrypt(profile.accountNumberEncrypted) || profile.accountNumberEncrypted;
+            const dec = decrypt(profile.accountNumberEncrypted);
+            resolvedAccountNumber = dec || profile.accountNumberEncrypted;
           } catch {
             resolvedAccountNumber = profile.accountNumberEncrypted;
           }
         }
-      }
 
-      if (!resolvedAccountNumber || !resolvedAccountName) {
-        throw new Error("Account name and number are required for payout.");
-      }
+        if (!resolvedAccountNumber || !resolvedAccountName) {
+          throw new Error("Account name and number are required for payout.");
+        }
 
-      // Encrypt account number securely
-      let encryptedAcc = resolvedAccountNumber.trim();
-      try {
-        const encResult = encrypt(encryptedAcc);
-        if (encResult) encryptedAcc = encResult;
-      } catch {
-        // preserve in test/dev
-      }
+        // Encrypt account number securely (fail closed)
+        const trimmedAcc = resolvedAccountNumber.trim();
+        let encryptedAcc: string;
+        try {
+          const encResult = encrypt(trimmedAcc);
+          if (!encResult || encResult === trimmedAcc) {
+            throw new Error("Encryption failed");
+          }
+          encryptedAcc = encResult;
+        } catch {
+          throw new Error("Unable to securely process account number for payout.");
+        }
 
-      const payout = await tx.partnerPayout.create({
-        data: {
+        const payout = await tx.partnerPayout.create({
+          data: {
+            partnerId: partner.id,
+            amountCentavos: requestedAmountCentavos,
+            currency: "PHP",
+            method: resolvedMethod,
+            accountNumberEncrypted: encryptedAcc,
+            accountName: resolvedAccountName.trim(),
+            bankName: resolvedBankName ? resolvedBankName.trim() : null,
+            status: "RESERVED",
+          },
+        });
+
+        // Audit log payout reservation
+        await PartnerAuditService.logEvent({
+          action: "PARTNER_PAYOUT_REQUESTED",
           partnerId: partner.id,
           amountCentavos: requestedAmountCentavos,
-          currency: "PHP",
-          method: resolvedMethod,
-          accountNumberEncrypted: encryptedAcc,
-          accountName: resolvedAccountName.trim(),
-          bankName: resolvedBankName ? resolvedBankName.trim() : null,
-          status: "RESERVED",
-        },
-      });
+          actorId: partner.id,
+          actorRole: "PARTNER",
+          ipAddress,
+          metadata: {
+            payoutId: payout.id,
+            method: resolvedMethod,
+            maskedAccount: this.maskAccountNumber(resolvedAccountNumber, resolvedMethod),
+            requestedAmountPesos: formatCentavosToPesos(requestedAmountCentavos),
+          },
+        }, tx);
 
-      // Audit log payout reservation
-      await PartnerAuditService.logEvent({
-        action: "PARTNER_PAYOUT_REQUESTED",
-        partnerId: partner.id,
-        amountCentavos: requestedAmountCentavos,
-        actorId: partner.id,
-        actorRole: "PARTNER",
-        ipAddress,
-        metadata: {
-          payoutId: payout.id,
-          method: resolvedMethod,
-          maskedAccount: this.maskAccountNumber(resolvedAccountNumber, resolvedMethod),
-          requestedAmountPesos: formatCentavosToPesos(requestedAmountCentavos),
-        },
-      }, tx);
+        await PartnerAuditService.logEvent({
+          action: "PARTNER_PAYOUT_RESERVED",
+          partnerId: partner.id,
+          amountCentavos: requestedAmountCentavos,
+          actorId: "SYSTEM",
+          actorRole: "SYSTEM",
+          metadata: { payoutId: payout.id, status: "RESERVED" },
+        }, tx);
 
-      await PartnerAuditService.logEvent({
-        action: "PARTNER_PAYOUT_RESERVED",
-        partnerId: partner.id,
-        amountCentavos: requestedAmountCentavos,
-        actorId: "SYSTEM",
-        actorRole: "SYSTEM",
-        metadata: { payoutId: payout.id, status: "RESERVED" },
-      }, tx);
+        // Persist durable FinancialIdempotencyKey record inside same transaction
+        if (idempotencyContext) {
+          await IdempotencyService.recordFinancialIdempotency(tx, {
+            actorId: partnerId,
+            operationType: "PARTNER_PAYOUT_REQUEST",
+            idempotencyKey: idempotencyContext.idempotencyKey,
+            requestHash: idempotencyContext.requestHash,
+            resourceId: payout.id,
+          });
+        }
 
-      return {
-        payout,
-        remainingBalanceCentavos: trueAvailableCentavos - requestedAmountCentavos,
-      };
-    }, { timeout: 25000, maxWait: 15000 });
+        return {
+          payout,
+          remainingBalanceCentavos: trueAvailableCentavos - requestedAmountCentavos,
+          isReplay: false,
+        };
+      }, { timeout: 25000, maxWait: 15000 });
+    } catch (err: any) {
+      if (err instanceof IdempotencyDomainError) {
+        throw err;
+      }
+
+      // Defensive composite idempotency P2002 recovery from outside aborted transaction
+      if (idempotencyContext && IdempotencyService.isIdempotencyCompositeP2002(err)) {
+        const fallbackRecord = await IdempotencyService.findAuthoritativeIdempotencyRecord(
+          prisma,
+          partnerId,
+          "PARTNER_PAYOUT_REQUEST",
+          idempotencyContext.idempotencyKey
+        );
+
+        if (fallbackRecord) {
+          if (fallbackRecord.requestHash !== idempotencyContext.requestHash) {
+            throw new IdempotencyDomainError(
+              "IDEMPOTENCY_PAYLOAD_MISMATCH",
+              "Idempotency key was previously used with a different request.",
+              409
+            );
+          }
+
+          const existingPayout = await prisma.partnerPayout.findFirst({
+            where: { id: fallbackRecord.resourceId, partnerId },
+          });
+
+          if (!existingPayout) {
+            throw new IdempotencyDomainError(
+              "IDEMPOTENCY_RESOURCE_NOT_FOUND",
+              "Referenced partner payout record not found or does not belong to partner.",
+              500
+            );
+          }
+
+          return {
+            payout: existingPayout,
+            remainingBalanceCentavos: 0,
+            isReplay: true,
+          };
+        } else {
+          throw new IdempotencyDomainError(
+            "IDEMPOTENCY_INCONSISTENT_STATE",
+            "Idempotency record is in an inconsistent state.",
+            500
+          );
+        }
+      }
+
+      throw err;
+    }
   }
 
   /**

@@ -1747,3 +1747,17 @@ model InstitutionalVoucherCode {
   @@index([redeemedBy])
   @@index([code])
 }
+
+/// Durable financial idempotency tracking for client-initiated financial operations.
+model FinancialIdempotencyKey {
+  id             String   @id @default(cuid())
+  actorId        String
+  operationType  String
+  idempotencyKey String
+  requestHash    String
+  resourceId     String
+  createdAt      DateTime @default(now())
+
+  @@unique([actorId, operationType, idempotencyKey])
+  @@index([createdAt])
+}

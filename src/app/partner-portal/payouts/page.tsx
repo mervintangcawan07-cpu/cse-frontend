@@ -18,6 +18,7 @@ import {
   Check,
   ShieldCheck,
 } from "lucide-react";
+import { getOrCreatePendingFinancialKey, clearPendingFinancialKey, abandonPendingFinancialOperation } from "@/lib/idempotency/client";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
 
 export default function PartnerPayoutsPage() {
@@ -39,6 +40,8 @@ export default function PartnerPayoutsPage() {
   const [submittingPayout, setSubmittingPayout] = useState(false);
   const [payoutError, setPayoutError] = useState<string | null>(null);
   const [payoutSuccess, setPayoutSuccess] = useState<string | null>(null);
+  const [payoutInfo, setPayoutInfo] = useState<string | null>(null);
+  const [idempotencyConflict, setIdempotencyConflict] = useState(false);
 
   // Add Method Modal State
   const [showAddMethodModal, setShowAddMethodModal] = useState(false);
@@ -46,10 +49,11 @@ export default function PartnerPayoutsPage() {
   const [newAccountName, setNewAccountName] = useState("");
   const [newAccountNumber, setNewAccountNumber] = useState("");
   const [newBankName, setNewBankName] = useState("");
-  const [newIsDefault, setNewIsDefault] = useState(true);
+  const [newIsDefault, setNewIsDefault] = useState(false);
   const [addingMethod, setAddingMethod] = useState(false);
   const [methodError, setMethodError] = useState<string | null>(null);
 
+  // Load Payout Data
   const fetchPayoutData = useCallback(async () => {
     setLoading(true);
     try {
@@ -90,14 +94,25 @@ export default function PartnerPayoutsPage() {
     fetchPayoutData();
   }, [fetchPayoutData]);
 
+  // Handle explicit user action to abandon pending operation after conflict
+  const handleStartNewPayout = () => {
+    abandonPendingFinancialOperation("PARTNER_PAYOUT_REQUEST");
+    setIdempotencyConflict(false);
+    setPayoutError(null);
+    setPayoutInfo("A new payout request can now be submitted.");
+  };
+
   // Handle Payout Request Submit
   const handlePayoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmittingPayout(true);
     setPayoutError(null);
     setPayoutSuccess(null);
+    setPayoutInfo(null);
 
     try {
+      const idempotencyKey = getOrCreatePendingFinancialKey("PARTNER_PAYOUT_REQUEST");
+
       const payload: any = {
         amountPesos: payoutAmount,
       };
@@ -115,13 +130,18 @@ export default function PartnerPayoutsPage() {
 
       const res = await fetch("/api/partner/portal/payout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+        },
         body: JSON.stringify(payload),
       });
 
       const json = await res.json();
 
       if (res.ok && json.success) {
+        clearPendingFinancialKey("PARTNER_PAYOUT_REQUEST");
+        setIdempotencyConflict(false);
         setPayoutSuccess(json.message);
         setPayoutAmount("");
         await fetchPayoutData();
@@ -130,10 +150,21 @@ export default function PartnerPayoutsPage() {
           setPayoutSuccess(null);
         }, 2500);
       } else {
-        setPayoutError(json.error || "Failed to submit payout request.");
+        const errorMsg = json.error || "Failed to submit payout request.";
+        setPayoutError(errorMsg);
+        if (
+          res.status === 409 &&
+          errorMsg === "Idempotency key was previously used with a different request."
+        ) {
+          setIdempotencyConflict(true);
+        }
       }
-    } catch {
-      setPayoutError("Network error. Please try again.");
+    } catch (err: any) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : "Unable to safely initialize this payout request. Please try again.";
+      setPayoutError(msg);
     } finally {
       setSubmittingPayout(false);
     }
@@ -465,8 +496,23 @@ export default function PartnerPayoutsPage() {
               </div>
 
               {payoutError && (
-                <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-300">
-                  {payoutError}
+                <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-300 space-y-2">
+                  <div>{payoutError}</div>
+                  {idempotencyConflict && (
+                    <button
+                      type="button"
+                      onClick={handleStartNewPayout}
+                      className="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                    >
+                      Start New Payout Request
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {payoutInfo && (
+                <div className="p-3.5 bg-blue-500/10 border border-blue-500/30 rounded-xl text-xs font-semibold text-blue-300">
+                  {payoutInfo}
                 </div>
               )}
 

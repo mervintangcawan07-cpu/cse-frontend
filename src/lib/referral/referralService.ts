@@ -23,6 +23,7 @@ import { evaluateReferralFraud } from "./fraudEngine";
 import { createNotification } from "@/lib/notifications";
 import { encrypt, decrypt } from "@/lib/crypto/encryption";
 import { siteConfig, getSiteUrl } from "@/lib/config/site";
+import { IdempotencyService, IdempotencyDomainError } from "@/lib/accounting/idempotencyService";
 
 export class ReferralService {
   /**
@@ -798,7 +799,7 @@ export class ReferralService {
 
   /**
    * 10. REQUEST PAYOUT (USER)
-   * Enforces ₱150 minimum threshold, validates available balance, reserves funds under referral-finance advisory lock.
+   * Enforces minimum threshold, validates available balance, reserves funds under referral-finance advisory lock.
    */
   public static async requestPayout(params: {
     userId: string;
@@ -808,40 +809,103 @@ export class ReferralService {
     accountName: string;
     bankName?: string;
     ipAddress?: string;
-  }): Promise<{ success: boolean; payoutId?: string; error?: string }> {
-    const config = await this.getProgramConfig();
+    idempotencyContext?: {
+      idempotencyKey: string;
+      requestHash: string;
+    };
+  }): Promise<{
+    success: boolean;
+    payoutId?: string;
+    error?: string;
+    isReplay?: boolean;
+    status?: number;
+  }> {
     const { userId, amountCentavos, method, accountNumber, accountName, bankName } = params;
 
-    // 1. Strict Minimum Payout Check (Default: ₱150 = 15000 centavos)
-    if (amountCentavos < config.minPayoutAmountCentavos) {
-      return {
-        success: false,
-        error: `Minimum payout is ${formatCentavosToPesos(config.minPayoutAmountCentavos)}. Requested amount is below threshold.`,
-      };
-    }
-
     if (!accountNumber || !accountName) {
-      return { success: false, error: "Account details are required" };
+      return { success: false, error: "Account details are required", status: 400 };
     }
-
-    // 2. Encrypt Account Number
-    const accountNumberEncrypted = encrypt(accountNumber.trim()) || accountNumber.trim();
 
     try {
-      const payout = await prisma.$transaction(async (tx) => {
-        // 🔒 Acquire transaction-scoped advisory lock on referral-finance domain
+      const payoutResult = await prisma.$transaction(async (tx) => {
+        // 🔒 Level 0: Acquire idempotency lock and check existing record if key is supplied
+        if (params.idempotencyContext) {
+          await IdempotencyService.acquireIdempotencyLock(
+            tx,
+            userId,
+            "REFERRAL_PAYOUT_REQUEST",
+            params.idempotencyContext.idempotencyKey
+          );
+
+          const existingRecord = await IdempotencyService.findAuthoritativeIdempotencyRecord(
+            tx,
+            userId,
+            "REFERRAL_PAYOUT_REQUEST",
+            params.idempotencyContext.idempotencyKey
+          );
+
+          if (existingRecord) {
+            if (existingRecord.requestHash !== params.idempotencyContext.requestHash) {
+              throw new IdempotencyDomainError(
+                "IDEMPOTENCY_PAYLOAD_MISMATCH",
+                "Idempotency key was previously used with a different request.",
+                409
+              );
+            }
+
+            const existingPayout = await tx.referralPayout.findFirst({
+              where: { id: existingRecord.resourceId, userId },
+            });
+
+            if (!existingPayout) {
+              throw new IdempotencyDomainError(
+                "IDEMPOTENCY_RESOURCE_NOT_FOUND",
+                "Referenced referral payout record not found or does not belong to user.",
+                500
+              );
+            }
+
+            return {
+              payout: existingPayout,
+              isReplay: true,
+            };
+          }
+        }
+
+        // 🔒 Level 1: Acquire transaction-scoped advisory lock on referral-finance domain
         await tx.$queryRaw`
           SELECT pg_advisory_xact_lock(
             hashtextextended(${`referral-finance:${userId}`}, 0)
           )::text AS lock_result
         `;
 
-        // 🔍 Authoritative balance check inside lock
+        // 1. Strict Minimum Payout Check for NEW request (Default: ₱150 = 15000 centavos)
+        const config = await this.getProgramConfig();
+        if (amountCentavos < config.minPayoutAmountCentavos) {
+          throw new Error(
+            `Minimum payout is ${formatCentavosToPesos(config.minPayoutAmountCentavos)}. Requested amount is below threshold.`
+          );
+        }
+
+        // 2. 🔍 Authoritative balance check inside lock
         const balances = await this.getUserBalances(userId, tx);
         if (amountCentavos > balances.availableBalanceCentavos) {
           throw new Error(
             `Insufficient available balance. Available: ${formatCentavosToPesos(balances.availableBalanceCentavos)}.`
           );
+        }
+
+        // 3. Encrypt Account Number (fail closed)
+        const trimmedAccountNumber = accountNumber.trim();
+        let accountNumberEncrypted: string;
+        try {
+          const enc = encrypt(trimmedAccountNumber);
+          if (!enc || enc === trimmedAccountNumber) {
+            throw new Error("Encryption failed");
+          }
+          accountNumberEncrypted = enc;
+        } catch {
+          throw new Error("Unable to securely process account number for payout.");
         }
 
         const created = await tx.referralPayout.create({
@@ -875,21 +939,100 @@ export class ReferralService {
           },
         });
 
-        return created;
+        // Persist durable FinancialIdempotencyKey record inside same transaction
+        if (params.idempotencyContext) {
+          await IdempotencyService.recordFinancialIdempotency(tx, {
+            actorId: userId,
+            operationType: "REFERRAL_PAYOUT_REQUEST",
+            idempotencyKey: params.idempotencyContext.idempotencyKey,
+            requestHash: params.idempotencyContext.requestHash,
+            resourceId: created.id,
+          });
+        }
+
+        return {
+          payout: created,
+          isReplay: false,
+        };
       });
 
-      // Send Notification to user strictly post-commit
-      await createNotification({
-        userId,
-        title: "💸 Payout Request Submitted",
-        message: `Your payout request of ${formatCentavosToPesos(amountCentavos)} via ${method} has been received and is being processed.`,
-        type: "INFO",
-      }).catch((err) => console.error("[REFERRAL_PAYOUT_NOTIF_ERROR]", err));
+      // Send Notification to user strictly post-commit if not a replay
+      if (!payoutResult.isReplay) {
+        await createNotification({
+          userId,
+          title: "💸 Payout Request Submitted",
+          message: `Your payout request of ${formatCentavosToPesos(amountCentavos)} via ${method} has been received and is being processed.`,
+          type: "INFO",
+        }).catch((err) => console.error("[REFERRAL_PAYOUT_NOTIF_ERROR]", err));
+      }
 
-      return { success: true, payoutId: payout.id };
+      return {
+        success: true,
+        payoutId: payoutResult.payout.id,
+        isReplay: payoutResult.isReplay,
+      };
     } catch (err: any) {
+      if (err instanceof IdempotencyDomainError) {
+        return { success: false, error: err.message, status: err.status };
+      }
+
+      // Defensive composite idempotency P2002 recovery from outside aborted transaction
+      if (params.idempotencyContext && IdempotencyService.isIdempotencyCompositeP2002(err)) {
+        const fallbackRecord = await IdempotencyService.findAuthoritativeIdempotencyRecord(
+          prisma,
+          userId,
+          "REFERRAL_PAYOUT_REQUEST",
+          params.idempotencyContext.idempotencyKey
+        );
+
+        if (fallbackRecord) {
+          if (fallbackRecord.requestHash !== params.idempotencyContext.requestHash) {
+            return {
+              success: false,
+              error: "Idempotency key was previously used with a different request.",
+              status: 409,
+            };
+          }
+
+          const existingPayout = await prisma.referralPayout.findFirst({
+            where: { id: fallbackRecord.resourceId, userId },
+          });
+
+          if (!existingPayout) {
+            return {
+              success: false,
+              error: "Referenced referral payout record not found or does not belong to user.",
+              status: 500,
+            };
+          }
+
+          return {
+            success: true,
+            payoutId: existingPayout.id,
+            isReplay: true,
+          };
+        } else {
+          return {
+            success: false,
+            error: "Idempotency record is in an inconsistent state.",
+            status: 500,
+          };
+        }
+      }
+
+      const msg = typeof err?.message === "string" ? err.message : "";
+      const isKnownBusinessError =
+        msg.startsWith("Minimum payout") ||
+        msg.startsWith("Insufficient available") ||
+        msg.startsWith("Account details") ||
+        msg.startsWith("Unable to securely process");
+
+      if (isKnownBusinessError) {
+        return { success: false, error: msg, status: 400 };
+      }
+
       console.error("[ReferralService.requestPayout] Error:", err);
-      return { success: false, error: err?.message || "Failed to submit payout request. Please try again." };
+      return { success: false, error: "Failed to process payout request. Please try again.", status: 500 };
     }
   }
 

@@ -23,6 +23,7 @@ import {
   ChevronRight,
   Info,
 } from "lucide-react";
+import { getOrCreatePendingFinancialKey, clearPendingFinancialKey, abandonPendingFinancialOperation } from "@/lib/idempotency/client";
 import {
   UserReferralDashboardData,
   PayoutMethod,
@@ -45,6 +46,8 @@ export default function UserReferralsPage() {
   const [bankName, setBankName] = useState("");
   const [submittingPayout, setSubmittingPayout] = useState(false);
   const [payoutMessage, setPayoutMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [payoutInfo, setPayoutInfo] = useState<string | null>(null);
+  const [idempotencyConflict, setIdempotencyConflict] = useState(false);
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -95,24 +98,41 @@ export default function UserReferralsPage() {
     }
   };
 
+  // Handle explicit user action to abandon pending operation after conflict
+  const handleStartNewPayout = () => {
+    abandonPendingFinancialOperation("REFERRAL_PAYOUT_REQUEST");
+    setIdempotencyConflict(false);
+    setPayoutMessage(null);
+    setPayoutInfo("A new payout request can now be submitted.");
+  };
+
   const handlePayoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPayoutMessage(null);
+    setPayoutInfo(null);
     setSubmittingPayout(true);
 
-    const amountFloat = parseFloat(payoutAmount);
-    if (isNaN(amountFloat) || amountFloat <= 0) {
+    const trimmedAmount = payoutAmount.trim();
+    const amountNum = Number(trimmedAmount);
+    if (!trimmedAmount || !Number.isFinite(amountNum) || amountNum <= 0) {
       setPayoutMessage({ type: "error", text: "Please enter a valid payout amount." });
       setSubmittingPayout(false);
       return;
     }
 
+    let requestStarted = false;
     try {
+      const idempotencyKey = getOrCreatePendingFinancialKey("REFERRAL_PAYOUT_REQUEST");
+      requestStarted = true;
+
       const res = await fetch("/api/referral/payout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+        },
         body: JSON.stringify({
-          amountPesos: amountFloat,
+          amountPesos: amountNum,
           method: payoutMethod,
           accountNumber,
           accountName,
@@ -122,6 +142,8 @@ export default function UserReferralsPage() {
 
       const json = await res.json();
       if (res.ok && json.success) {
+        clearPendingFinancialKey("REFERRAL_PAYOUT_REQUEST");
+        setIdempotencyConflict(false);
         setPayoutMessage({
           type: "success",
           text: "🎉 Payout request submitted! Our finance team will process it shortly.",
@@ -133,10 +155,25 @@ export default function UserReferralsPage() {
         await fetchDashboard();
         setTimeout(() => setShowPayoutModal(false), 2500);
       } else {
-        setPayoutMessage({ type: "error", text: json.error || "Failed to submit payout request." });
+        const errorMsg = json.error || "Failed to submit payout request.";
+        setPayoutMessage({ type: "error", text: errorMsg });
+        if (
+          res.status === 409 &&
+          errorMsg === "Idempotency key was previously used with a different request."
+        ) {
+          setIdempotencyConflict(true);
+        }
       }
-    } catch (err) {
-      setPayoutMessage({ type: "error", text: "Network error. Please try again." });
+    } catch (err: any) {
+      if (!requestStarted) {
+        const msg =
+          err instanceof Error && err.message
+            ? err.message
+            : "Unable to safely initialize this payout request. Please try again.";
+        setPayoutMessage({ type: "error", text: msg });
+      } else {
+        setPayoutMessage({ type: "error", text: "Network error. Please try again." });
+      }
     } finally {
       setSubmittingPayout(false);
     }
@@ -650,13 +687,28 @@ export default function UserReferralsPage() {
 
               {payoutMessage && (
                 <div
-                  className={`p-3.5 rounded-xl text-xs font-bold ${
+                  className={`p-3.5 rounded-xl text-xs font-bold space-y-2 ${
                     payoutMessage.type === "success"
                       ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
                       : "bg-rose-500/10 text-rose-400 border border-rose-500/30"
                   }`}
                 >
-                  {payoutMessage.text}
+                  <div>{payoutMessage.text}</div>
+                  {idempotencyConflict && payoutMessage.type === "error" && (
+                    <button
+                      type="button"
+                      onClick={handleStartNewPayout}
+                      className="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                    >
+                      Start New Payout Request
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {payoutInfo && (
+                <div className="p-3.5 bg-blue-500/10 border border-blue-500/30 rounded-xl text-xs font-semibold text-blue-300">
+                  {payoutInfo}
                 </div>
               )}
 

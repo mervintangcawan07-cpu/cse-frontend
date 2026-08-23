@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 import SocialQuizCardExporter from "@/components/partner/SocialQuizCardExporter";
-
+import { getOrCreatePendingFinancialKey, clearPendingFinancialKey, abandonPendingFinancialOperation } from "@/lib/idempotency/client";
 
 export default function PartnerDashboardPage() {
   const router = useRouter();
@@ -43,6 +43,8 @@ export default function PartnerDashboardPage() {
   const [submittingPayout, setSubmittingPayout] = useState(false);
   const [payoutError, setPayoutError] = useState<string | null>(null);
   const [payoutSuccessMsg, setPayoutSuccessMsg] = useState<string | null>(null);
+  const [payoutInfo, setPayoutInfo] = useState<string | null>(null);
+  const [idempotencyConflict, setIdempotencyConflict] = useState(false);
 
   // Fetch Partner Portal Overview & Transactions
   const fetchPortalData = useCallback(async () => {
@@ -115,17 +117,31 @@ export default function PartnerDashboardPage() {
     router.push("/partner/login");
   };
 
+  // Handle explicit user action to abandon pending operation after conflict
+  const handleStartNewPayout = () => {
+    abandonPendingFinancialOperation("PARTNER_PAYOUT_REQUEST");
+    setIdempotencyConflict(false);
+    setPayoutError(null);
+    setPayoutInfo("A new payout request can now be submitted.");
+  };
+
   // Submit Cash Payout
   const handlePayoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmittingPayout(true);
     setPayoutError(null);
     setPayoutSuccessMsg(null);
+    setPayoutInfo(null);
 
     try {
+      const idempotencyKey = getOrCreatePendingFinancialKey("PARTNER_PAYOUT_REQUEST");
+
       const res = await fetch("/api/partner/portal/payout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+        },
         body: JSON.stringify({
           amountPesos: payoutAmount,
           method: payoutMethod,
@@ -138,6 +154,8 @@ export default function PartnerDashboardPage() {
       const json = await res.json();
 
       if (res.ok && json.success) {
+        clearPendingFinancialKey("PARTNER_PAYOUT_REQUEST");
+        setIdempotencyConflict(false);
         setPayoutSuccessMsg(json.message);
         setPayoutAmount("");
         setPayoutAccountNumber("");
@@ -148,10 +166,21 @@ export default function PartnerDashboardPage() {
           setPayoutSuccessMsg(null);
         }, 3000);
       } else {
-        setPayoutError(json.error || "Failed to submit payout request.");
+        const errorMsg = json.error || "Failed to submit payout request.";
+        setPayoutError(errorMsg);
+        if (
+          res.status === 409 &&
+          errorMsg === "Idempotency key was previously used with a different request."
+        ) {
+          setIdempotencyConflict(true);
+        }
       }
-    } catch (err) {
-      setPayoutError("Network error. Please try again.");
+    } catch (err: any) {
+      const msg =
+        err instanceof Error && err.message
+          ? err.message
+          : "Network error. Please try again.";
+      setPayoutError(msg);
     } finally {
       setSubmittingPayout(false);
     }
@@ -737,8 +766,23 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
             </div>
 
             {payoutError && (
-              <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-300">
-                {payoutError}
+              <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-xl text-xs font-semibold text-rose-300 space-y-2">
+                <div>{payoutError}</div>
+                {idempotencyConflict && (
+                  <button
+                    type="button"
+                    onClick={handleStartNewPayout}
+                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                  >
+                    Start New Payout Request
+                  </button>
+                )}
+              </div>
+            )}
+
+            {payoutInfo && (
+              <div className="p-3.5 bg-blue-500/10 border border-blue-500/30 rounded-xl text-xs font-semibold text-blue-300">
+                {payoutInfo}
               </div>
             )}
 
