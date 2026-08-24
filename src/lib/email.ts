@@ -420,7 +420,9 @@ export async function sendPartnerPasswordResetEmail(params: {
       subject: `🔒 Password Reset Request — GovStudyX Partner Portal`,
       html,
     });
-  } catch (err) {
-    console.error("Failed to send partner password reset email:", err);
+  } catch {
+    console.error(
+      "[PARTNER_PASSWORD_RESET_EMAIL_ERROR] Email delivery failed."
+    );
   }
 }

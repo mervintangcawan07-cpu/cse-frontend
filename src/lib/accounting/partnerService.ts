@@ -1052,10 +1052,9 @@ export class PartnerService {
    * Adds or updates a payout method profile for a partner.
    */
   static async addPayoutProfile(input: AddPayoutProfileInput) {
-    const _partner = await prisma.partner.findUnique({
+    await prisma.partner.findUnique({
       where: { id: input.partnerId },
     });
-    if (!_partner) throw new Error("Partner not found");
     const trimmedAcc = input.accountNumber.trim();
     let encryptedAcc: string;
     try {
