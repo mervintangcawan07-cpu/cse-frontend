@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { AccessToken } from "livekit-server-sdk";
+import {
+  VOICE_TOKEN_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function GET(
   req: Request,
@@ -16,6 +21,17 @@ export async function GET(
     const session = await verifyJWT(token);
     const rawUserId = session?.userId || session?.id;
     if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const rateResult = await checkRateLimit(
+      VOICE_TOKEN_LIMITER,
+      `voice-token:${String(rawUserId)}`
+    );
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many voice connection requests. Please wait a moment before reconnecting."
+      );
+    }
 
     const params = await context.params;
     const roomId = params.roomId;

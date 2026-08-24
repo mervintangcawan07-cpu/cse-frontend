@@ -5,6 +5,11 @@ import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { acquireLock, releaseLock, getClientIp } from "@/lib/rate-limit";
 import { getSiteUrl } from "@/lib/config/site";
+import {
+  PAYMONGO_CHECKOUT_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 function getOriginUrl(request: Request): string {
   // If in production, always resolve to canonical public site URL
@@ -47,6 +52,18 @@ export async function POST(request: Request) {
     const session = await verifyJWT(token);
     if (!session?.userId) {
       return NextResponse.json({ error: "Invalid session: Please log in again." }, { status: 401 });
+    }
+
+    const userId = String(session.userId);
+    const rateResult = await checkRateLimit(
+      PAYMONGO_CHECKOUT_LIMITER,
+      `paymongo:checkout:${userId}`
+    );
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many checkout attempts. Please wait a moment before trying again."
+      );
     }
 
     const body = await request.json().catch(() => ({ planType: "1_MONTH" }));
@@ -94,7 +111,7 @@ export async function POST(request: Request) {
 
         // Ensure attribution is registered for this user
         await PartnerService.recordPartnerAttributionOnSignup({
-          referredUserId: String(session.userId),
+          referredUserId: userId,
           codeOrSlug: partner.code,
           campaignSource,
         }).catch(() => null);
@@ -150,7 +167,7 @@ export async function POST(request: Request) {
             success_url: successUrl,
             cancel_url: cancelUrl,
             metadata: {
-              userId: String(session.userId),
+              userId,
               planType,
               partnerCode: matchedPartnerCode || "",
               campaignSource,

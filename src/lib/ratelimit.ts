@@ -42,6 +42,34 @@ export const MESSAGING_LIMITER = createLimiter(20, "1 m", "@ratelimit/messaging"
 // 🔒 4. AI Explain Limiter: 15 requests per 1 minute (AI mistake analysis)
 export const AI_EXPLAIN_LIMITER = createLimiter(15, "1 m", "@ratelimit/ai_explain");
 
+// 🔒 5. PayMongo Checkout Limiter: 3 requests per 1 minute
+export const PAYMONGO_CHECKOUT_LIMITER = createLimiter(
+  3,
+  "1 m",
+  "@ratelimit/paymongo_checkout"
+);
+
+// 🔒 6. PayMongo Verify Limiter: 20 requests per 1 minute
+export const PAYMONGO_VERIFY_LIMITER = createLimiter(
+  20,
+  "1 m",
+  "@ratelimit/paymongo_verify"
+);
+
+// 🔒 7. Voice Token Limiter: 10 requests per 1 minute
+export const VOICE_TOKEN_LIMITER = createLimiter(
+  10,
+  "1 m",
+  "@ratelimit/voice_token"
+);
+
+// 🔒 8. Support Ticket Limiter: 3 requests per 10 minutes
+export const SUPPORT_TICKET_LIMITER = createLimiter(
+  3,
+  "10 m",
+  "@ratelimit/support_ticket"
+);
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;

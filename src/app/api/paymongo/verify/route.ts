@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  PAYMONGO_VERIFY_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST() {
   try {
@@ -18,6 +23,17 @@ export async function POST() {
     }
 
     const userId = String(session.userId);
+
+    const rateResult = await checkRateLimit(
+      PAYMONGO_VERIFY_LIMITER,
+      `paymongo:verify:${userId}`
+    );
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many payment verification requests. Please wait a moment."
+      );
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },

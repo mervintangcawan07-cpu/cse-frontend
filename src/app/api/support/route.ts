@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  SUPPORT_TICKET_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 // GET: Retrieve current user's support tickets
 export async function GET() {
@@ -45,6 +50,18 @@ export async function POST(request: Request) {
 
     const userId = session.id as string;
     const userEmail = session.email as string;
+    const rateLimitUserId = String(session.userId || session.id);
+
+    const rateResult = await checkRateLimit(
+      SUPPORT_TICKET_LIMITER,
+      `support-ticket:${rateLimitUserId}`
+    );
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many support tickets submitted. Please wait before creating another ticket."
+      );
+    }
 
     const { subject, message } = await request.json();
 
