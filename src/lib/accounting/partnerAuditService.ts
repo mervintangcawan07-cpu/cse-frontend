@@ -38,6 +38,7 @@ export class PartnerAuditService {
   /**
    * Records a secure audit log for partner events. Never stores passwords, tokens, or unmasked account numbers.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async logEvent(params: LogPartnerAuditParams, client?: any) {
     try {
       const db = client || prisma;
