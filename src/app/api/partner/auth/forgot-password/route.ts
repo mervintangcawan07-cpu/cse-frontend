@@ -2,7 +2,10 @@
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { PartnerService } from "@/lib/accounting/partnerService";
+import {
+  PartnerService,
+  canUsePartnerPasswordRecovery,
+} from "@/lib/accounting/partnerService";
 import { sendPartnerPasswordResetEmail } from "@/lib/email";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 import {
@@ -40,7 +43,7 @@ export async function POST(request: Request) {
 
     const partner = await PartnerService.resolvePartnerByIdentifier(String(identifier).trim());
 
-    if (!partner || !partner.contactEmail || partner.status !== "ACTIVE") {
+    if (!partner || !partner.contactEmail || !canUsePartnerPasswordRecovery(partner)) {
       // Return generic response without revealing non-existence
       return genericSuccessResponse;
     }
@@ -49,13 +52,23 @@ export async function POST(request: Request) {
     const resetTokenExpires = new Date();
     resetTokenExpires.setHours(resetTokenExpires.getHours() + 1); // 1 hour validity
 
-    await prisma.partner.update({
-      where: { id: partner.id },
+    const issued = await prisma.partner.updateMany({
+      where: {
+        id: partner.id,
+        status: "ACTIVE",
+        OR: [
+          { passwordHash: { not: null } },
+          { tempPasswordHash: { not: null } },
+        ],
+      },
       data: {
         resetToken,
         resetTokenExpires,
       },
     });
+    if (issued.count !== 1) {
+      return genericSuccessResponse;
+    }
 
     await PartnerAuditService.logEvent({
       action: "PARTNER_PASSWORD_RESET",

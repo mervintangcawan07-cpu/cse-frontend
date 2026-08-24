@@ -2,7 +2,12 @@
 import { NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
-import { PartnerService } from "@/lib/accounting/partnerService";
+import {
+  PartnerOnboardingError,
+  PartnerService,
+  buildPartnerSetupDeliveryResult,
+  canResendPartnerSetupLink,
+} from "@/lib/accounting/partnerService";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
 
 export async function GET(request: Request) {
@@ -74,6 +79,7 @@ export async function GET(request: Request) {
         availableBalanceCentavos: availableCentavos,
         formattedAvailable: formatCentavosToPesos(availableCentavos),
         paidCentavos,
+        canResendSetupLink: canResendPartnerSetupLink(p),
         createdAt: p.createdAt.toISOString(),
       };
     });
@@ -96,11 +102,17 @@ export async function POST(request: Request) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
+    if (Object.prototype.hasOwnProperty.call(body, "password")) {
+      return NextResponse.json(
+        { error: "Initial passwords are not accepted. Partners must use the secure setup link." },
+        { status: 400 }
+      );
+    }
+
     const {
       name,
       code,
       slug,
-      password,
       tagline,
       badgeText,
       description,
@@ -119,18 +131,23 @@ export async function POST(request: Request) {
     if (!name) {
       return NextResponse.json({ error: "Partner name is required" }, { status: 400 });
     }
+    if (!contactEmail || !String(contactEmail).trim()) {
+      return NextResponse.json(
+        { error: "Contact email is required for secure partner setup." },
+        { status: 400 }
+      );
+    }
 
     const partner = await PartnerService.createPartner({
       name,
       code,
       slug,
-      password,
       tagline,
       badgeText,
       description,
       type: type || "FACEBOOK_PAGE",
       contactName,
-      contactEmail,
+      contactEmail: String(contactEmail),
       contactPhone,
       commissionModel: commissionModel || "PERCENTAGE_OF_CUSTOMER_PAYMENT",
       commissionRate: commissionRate ?? 10.0,
@@ -142,12 +159,34 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({
-      success: true,
-      partner,
-      message: `Partner ${partner.name} (${partner.code}) created successfully!`,
+      ...buildPartnerSetupDeliveryResult("CREATED", partner.name, partner.deliveryStatus),
+      partner: {
+        id: partner.id,
+        partnerId: partner.partnerId || partner.code,
+        code: partner.code,
+        slug: partner.slug,
+        name: partner.name,
+        type: partner.type,
+        status: partner.status,
+        contactEmail: partner.contactEmail,
+      },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[ADMIN_PARTNERS_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to create partner" }, { status: 500 });
+    if (error instanceof PartnerOnboardingError) {
+      const status = error.code === "MISSING_EMAIL" ? 400 : 409;
+      return NextResponse.json({ error: error.message }, { status });
+    }
+    const errorCode = (error as { code?: string })?.code;
+    if (errorCode === "P2002" || errorCode === "P2034") {
+      return NextResponse.json(
+        { error: "The partner could not be created because a conflicting record already exists." },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Failed to create partner." },
+      { status: 500 }
+    );
   }
 }

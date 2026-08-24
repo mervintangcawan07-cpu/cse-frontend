@@ -77,6 +77,7 @@ export default function AdminAccountingPage() {
   const [partnersLoading, setPartnersLoading] = useState(false);
   const [showCreatePartnerModal, setShowCreatePartnerModal] = useState(false);
   const [selectedPartnerStatement, setSelectedPartnerStatement] = useState<any | null>(null);
+  const [resendingSetupPartnerId, setResendingSetupPartnerId] = useState<string | null>(null);
 
   // Payouts State
   const [payouts, setPayouts] = useState<any[]>([]);
@@ -107,7 +108,6 @@ export default function AdminAccountingPage() {
   const [appActionType, setAppActionType] = useState<"APPROVE" | "REJECT">("APPROVE");
   const [appRateInput, setAppRateInput] = useState("10.0");
   const [appSlugInput, setAppSlugInput] = useState("");
-  const [appPasswordInput, setAppPasswordInput] = useState("");
   const [appAdminNotes, setAppAdminNotes] = useState("");
   const [processingAppAction, setProcessingAppAction] = useState(false);
 
@@ -278,7 +278,6 @@ export default function AdminAccountingPage() {
             action: appActionType,
             commissionRate: appRateInput,
             customSlug: appSlugInput || undefined,
-            initialPassword: appPasswordInput,
             adminNotes: appAdminNotes,
           }),
         }
@@ -297,6 +296,32 @@ export default function AdminAccountingPage() {
       alert("Network error.");
     } finally {
       setProcessingAppAction(false);
+    }
+  };
+
+  const handleResendSetupLink = async (partner: { id: string; name: string }) => {
+    const confirmed = window.confirm(
+      `Generate and email a new setup link for ${partner.name}? Any previous setup link will stop working.`
+    );
+    if (!confirmed) return;
+
+    setResendingSetupPartnerId(partner.id);
+    try {
+      const res = await fetch(
+        `/api/admin/accounting/partners/${partner.id}/resend-setup`,
+        { method: "POST" }
+      );
+      const json = await res.json();
+      if (res.ok && json.success) {
+        alert(json.message);
+        await fetchPartners();
+      } else {
+        alert(json.error || "Failed to resend the setup link.");
+      }
+    } catch {
+      alert("Network error while resending the setup link.");
+    } finally {
+      setResendingSetupPartnerId(null);
     }
   };
 
@@ -886,19 +911,39 @@ export default function AdminAccountingPage() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={async () => {
-                      const res = await fetch(`/api/admin/accounting/partners/${p.id}/statement`);
-                      if (res.ok) {
-                        const json = await res.json();
-                        setSelectedPartnerStatement(json.data);
-                      }
-                    }}
-                    className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>View Financial Statement ➔</span>
-                  </button>
+                  <div className="space-y-2">
+                    {p.canResendSetupLink && (
+                      <button
+                        onClick={() => handleResendSetupLink(p)}
+                        disabled={resendingSetupPartnerId === p.id}
+                        className="w-full py-2.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer disabled:opacity-50"
+                      >
+                        <RefreshCw
+                          className={`w-3.5 h-3.5 ${
+                            resendingSetupPartnerId === p.id ? "animate-spin" : ""
+                          }`}
+                        />
+                        <span>
+                          {resendingSetupPartnerId === p.id
+                            ? "Sending Setup Link..."
+                            : "Resend Setup Link"}
+                        </span>
+                      </button>
+                    )}
+                    <button
+                      onClick={async () => {
+                        const res = await fetch(`/api/admin/accounting/partners/${p.id}/statement`);
+                        if (res.ok) {
+                          const json = await res.json();
+                          setSelectedPartnerStatement(json.data);
+                        }
+                      }}
+                      className="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>View Financial Statement ➔</span>
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1040,7 +1085,6 @@ export default function AdminAccountingPage() {
                             setAppActionType("APPROVE");
                             setAppSlugInput(app.proposedSlug || "");
                             setAppRateInput("10.0");
-                            setAppPasswordInput("");
                             setAppAdminNotes("");
                           }}
                           className="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer shadow-lg shadow-emerald-500/20"
@@ -1540,7 +1584,7 @@ export default function AdminAccountingPage() {
               <div>
                 <h3 className="text-lg font-black">Register New Partner / Collaborator</h3>
                 <p className="text-xs text-slate-400">
-                  Assign custom tracking links, portal credentials, and commission rates.
+                  Assign tracking and commission settings. The partner will receive a secure setup link by email.
                 </p>
               </div>
               <button
@@ -1559,7 +1603,6 @@ export default function AdminAccountingPage() {
                   name: formData.get("name"),
                   code: formData.get("code") || undefined,
                   slug: formData.get("slug") || undefined,
-                  password: formData.get("password") || undefined,
                   tagline: formData.get("tagline") || undefined,
                   badgeText: formData.get("badgeText") || undefined,
                   type: formData.get("type"),
@@ -1629,16 +1672,11 @@ export default function AdminAccountingPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block font-bold uppercase text-slate-400 mb-1">
-                    Initial Portal Password
-                  </label>
-                  <input
-                    type="text"
-                    name="password"
-                    placeholder="Leave blank to auto-generate activation link"
-                    className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
-                  />
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-300">
+                  <p className="font-bold uppercase mb-1">Secure Portal Setup</p>
+                  <p className="text-[10px] text-emerald-200/80">
+                    A seven-day, single-use setup link will be emailed after registration.
+                  </p>
                 </div>
               </div>
 
@@ -1667,10 +1705,11 @@ export default function AdminAccountingPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-bold uppercase text-slate-400 mb-1">Contact Email</label>
+                  <label className="block font-bold uppercase text-slate-400 mb-1">Contact Email *</label>
                   <input
                     type="email"
                     name="contactEmail"
+                    required
                     placeholder="partner@gmail.com"
                     className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                   />
@@ -1892,19 +1931,10 @@ export default function AdminAccountingPage() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
-                      Initial Portal Password
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={appPasswordInput}
-                      onChange={(e) => setAppPasswordInput(e.target.value)}
-                      className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl font-mono text-white outline-none focus:border-emerald-500"
-                    />
-                    <p className="text-[10px] text-slate-500 mt-1">
-                      Provide this password to the creator so they can log in at <code>/partner/login</code>.
+                  <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-300">
+                    <p className="font-bold uppercase mb-1">Secure Portal Setup</p>
+                    <p className="text-[10px] text-emerald-200/80">
+                      Approval creates one partner account and emails a seven-day, single-use setup link.
                     </p>
                   </div>
                 </>
@@ -1947,7 +1977,7 @@ export default function AdminAccountingPage() {
                   {processingAppAction
                     ? "Processing..."
                     : appActionType === "APPROVE"
-                    ? "Confirm & Create Partner Account"
+                    ? "Approve & Send Setup Link"
                     : "Confirm Rejection"}
                 </button>
               </div>

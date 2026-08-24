@@ -47,6 +47,13 @@ export class PartnerAuditService {
       if (sanitizedMeta) {
         delete (sanitizedMeta as Record<string, unknown>).password;
         delete (sanitizedMeta as Record<string, unknown>).token;
+        delete (sanitizedMeta as Record<string, unknown>).setupToken;
+        delete (sanitizedMeta as Record<string, unknown>).setupUrl;
+        delete (sanitizedMeta as Record<string, unknown>).passwordHash;
+        delete (sanitizedMeta as Record<string, unknown>).tempPasswordHash;
+        delete (sanitizedMeta as Record<string, unknown>).resetToken;
+        delete (sanitizedMeta as Record<string, unknown>).resetTokenExpires;
+        delete (sanitizedMeta as Record<string, unknown>).providerSecret;
         delete (sanitizedMeta as Record<string, unknown>).rawAccountNumber;
       }
 
@@ -63,8 +70,8 @@ export class PartnerAuditService {
           ipAddress: params.ipAddress,
         },
       });
-    } catch (error) {
-      console.error("[PARTNER_AUDIT_LOG_ERROR]", error);
+    } catch {
+      console.error("[PARTNER_AUDIT_LOG_ERROR] Audit event could not be recorded.");
       return null;
     }
   }

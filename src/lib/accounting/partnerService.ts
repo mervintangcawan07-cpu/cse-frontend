@@ -1,6 +1,7 @@
 // Relative Path: src/lib/accounting/partnerService.ts
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   PartnerCommissionModel,
@@ -20,22 +21,246 @@ import {
   sendPartnerCommissionAlertEmail,
   sendPartnerSetupEmail,
 } from "@/lib/email";
-import { PartnerAuditService } from "./partnerAuditService";
+import {
+  PartnerAuditService,
+  type LogPartnerAuditParams,
+} from "./partnerAuditService";
 import { getSiteUrl } from "@/lib/config/site";
 import { IdempotencyService, IdempotencyDomainError } from "./idempotencyService";
+
+export const ELIGIBLE_PARTNER_SETUP_STATUSES = ["ACTIVE", "PENDING"] as const;
+export type PartnerSetupDeliveryStatus = "SENT" | "FAILED";
+export type PartnerSetupAction = "CREATED" | "APPROVED" | "RESENT";
+
+export interface PartnerCredentialState {
+  status: string;
+  contactEmail?: string | null;
+  passwordHash?: string | null;
+  tempPasswordHash?: string | null;
+}
+
+export interface PartnerSetupCredential {
+  token: string;
+  expiresAt: Date;
+}
+
+export interface SafePartnerOnboardingPartner {
+  id: string;
+  partnerId: string | null;
+  code: string;
+  slug: string | null;
+  name: string;
+  type: PartnerType;
+  status: PartnerStatus;
+  contactEmail: string | null;
+  readonly setupToken?: never;
+  readonly setupTokenExpires?: never;
+  readonly passwordHash?: never;
+  readonly tempPasswordHash?: never;
+  readonly resetToken?: never;
+  readonly resetTokenExpires?: never;
+  readonly mustChangePassword?: never;
+}
+
+export function sanitizePartnerOnboardingPartner(partner: {
+  id: string;
+  partnerId: string | null;
+  code: string;
+  slug: string | null;
+  name: string;
+  type: PartnerType;
+  status: PartnerStatus;
+  contactEmail: string | null;
+}): SafePartnerOnboardingPartner {
+  return {
+    id: partner.id,
+    partnerId: partner.partnerId,
+    code: partner.code,
+    slug: partner.slug,
+    name: partner.name,
+    type: partner.type,
+    status: partner.status,
+    contactEmail: partner.contactEmail,
+  };
+}
+
+export class PartnerOnboardingError extends Error {
+  constructor(
+    public readonly code:
+      | "NOT_FOUND"
+      | "MISSING_EMAIL"
+      | "ALREADY_CREDENTIALED"
+      | "INELIGIBLE_STATUS"
+      | "CONFLICT"
+      | "DUPLICATE_PARTNER",
+    message: string
+  ) {
+    super(message);
+    this.name = "PartnerOnboardingError";
+  }
+}
+
+export function isPartnerSetupStatusEligible(status: string): boolean {
+  return ELIGIBLE_PARTNER_SETUP_STATUSES.includes(
+    status as (typeof ELIGIBLE_PARTNER_SETUP_STATUSES)[number]
+  );
+}
+
+export function hasEstablishedPartnerCredential(
+  partner: Pick<PartnerCredentialState, "passwordHash" | "tempPasswordHash">
+): boolean {
+  return Boolean(partner.passwordHash || partner.tempPasswordHash);
+}
+
+export function isUsablePartnerContactEmail(email?: string | null): boolean {
+  return Boolean(email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()));
+}
+
+export function canResendPartnerSetupLink(partner: PartnerCredentialState): boolean {
+  return (
+    isPartnerSetupStatusEligible(partner.status) &&
+    isUsablePartnerContactEmail(partner.contactEmail) &&
+    !hasEstablishedPartnerCredential(partner)
+  );
+}
+
+export function canUsePartnerPasswordRecovery(partner: PartnerCredentialState): boolean {
+  return partner.status === "ACTIVE" && hasEstablishedPartnerCredential(partner);
+}
+
+export function createPartnerSetupCredential(
+  now = new Date(),
+  randomBytes: (size: number) => Buffer = crypto.randomBytes
+): PartnerSetupCredential {
+  const expiresAt = new Date(now);
+  expiresAt.setDate(expiresAt.getDate() + 7);
+  return {
+    token: randomBytes(32).toString("hex"),
+    expiresAt,
+  };
+}
+
+export function buildPartnerSetupDeliveryResult(
+  action: PartnerSetupAction,
+  partnerName: string,
+  deliveryStatus: PartnerSetupDeliveryStatus
+) {
+  const actionMessage =
+    action === "APPROVED"
+      ? `Partner "${partnerName}" approved successfully.`
+      : action === "RESENT"
+        ? `A new setup link was generated for ${partnerName}.`
+        : `Partner ${partnerName} created successfully.`;
+
+  return {
+    success: true as const,
+    deliveryStatus,
+    message:
+      deliveryStatus === "SENT"
+        ? `${actionMessage} The secure setup email was sent.`
+        : `${actionMessage} Email delivery failed; use Resend Setup Link to try again.`,
+  };
+}
+
+interface SetupResendPartnerRecord extends PartnerCredentialState {
+  id: string;
+  partnerId: string | null;
+  code: string;
+  name: string;
+  setupToken: string | null;
+  contactEmail: string | null;
+}
+
+export interface PartnerSetupResendDependencies {
+  findPartner(partnerId: string): Promise<SetupResendPartnerRecord | null>;
+  rotateSetupToken(params: {
+    partnerId: string;
+    expectedSetupToken: string | null;
+    nextSetupToken: string;
+    setupTokenExpires: Date;
+  }): Promise<boolean>;
+  deliverSetupEmail(params: {
+    toEmail: string;
+    partnerName: string;
+    partnerId: string;
+    setupToken: string;
+  }): Promise<PartnerSetupDeliveryStatus>;
+  createCredential?: () => PartnerSetupCredential;
+}
+
+export async function executePartnerSetupResend(
+  partnerId: string,
+  dependencies: PartnerSetupResendDependencies
+) {
+  const partner = await dependencies.findPartner(partnerId);
+  if (!partner) {
+    throw new PartnerOnboardingError("NOT_FOUND", "Partner not found.");
+  }
+  if (hasEstablishedPartnerCredential(partner)) {
+    throw new PartnerOnboardingError(
+      "ALREADY_CREDENTIALED",
+      "This partner already has an established credential. Use Forgot Password instead."
+    );
+  }
+  if (!isUsablePartnerContactEmail(partner.contactEmail)) {
+    throw new PartnerOnboardingError(
+      "MISSING_EMAIL",
+      "A usable contact email is required before sending a setup link."
+    );
+  }
+  if (!isPartnerSetupStatusEligible(partner.status)) {
+    throw new PartnerOnboardingError(
+      "INELIGIBLE_STATUS",
+      "This partner's current status does not permit account setup."
+    );
+  }
+
+  const credential = dependencies.createCredential?.() ?? createPartnerSetupCredential();
+  const rotated = await dependencies.rotateSetupToken({
+    partnerId: partner.id,
+    expectedSetupToken: partner.setupToken,
+    nextSetupToken: credential.token,
+    setupTokenExpires: credential.expiresAt,
+  });
+
+  if (!rotated) {
+    throw new PartnerOnboardingError(
+      "CONFLICT",
+      "The partner account changed while the setup link was being refreshed. Reload and try again."
+    );
+  }
+
+  let deliveryStatus: PartnerSetupDeliveryStatus = "FAILED";
+  try {
+    deliveryStatus = await dependencies.deliverSetupEmail({
+      toEmail: partner.contactEmail!,
+      partnerName: partner.name,
+      partnerId: partner.partnerId || partner.code,
+      setupToken: credential.token,
+    });
+  } catch {
+    console.error("[PARTNER_SETUP_EMAIL_ERROR] Email delivery failed after token rotation.");
+  }
+
+  return {
+    partnerId: partner.id,
+    displayPartnerId: partner.partnerId || partner.code,
+    partnerName: partner.name,
+    deliveryStatus,
+  };
+}
 
 export interface CreatePartnerInput {
   name: string;
   partnerId?: string; // Optional manual override, otherwise server-generated PT-XXXXXX
   code?: string;
   slug?: string;
-  password?: string;
   tagline?: string;
   badgeText?: string;
   description?: string;
   type: PartnerType;
   contactName?: string;
-  contactEmail?: string;
+  contactEmail: string;
   contactPhone?: string;
   commissionModel?: PartnerCommissionModel;
   commissionRate?: number;
@@ -44,7 +269,6 @@ export interface CreatePartnerInput {
   minPayoutCentavos?: number;
   notes?: string;
   adminUserId?: string;
-  sendInviteEmail?: boolean;
 }
 
 export interface UpdatePartnerRateInput {
@@ -66,7 +290,26 @@ export interface AddPayoutProfileInput {
   isDefault?: boolean;
 }
 
+type PartnerDbClient = Prisma.TransactionClient | typeof prisma;
+
 export class PartnerService {
+  private static async recordPostCommitAudit(
+    params: LogPartnerAuditParams
+  ): Promise<void> {
+    try {
+      const auditRecord = await PartnerAuditService.logEvent(params);
+      if (!auditRecord) {
+        console.error(
+          "[PARTNER_POST_COMMIT_AUDIT_ERROR] Committed operation completed, but its audit event was not recorded."
+        );
+      }
+    } catch {
+      console.error(
+        "[PARTNER_POST_COMMIT_AUDIT_ERROR] Committed operation completed, but its audit event was not recorded."
+      );
+    }
+  }
+
   /**
    * Normalizes any partner ID input (e.g. "pt-000123", "Pt-123", "PT-000123") into canonical "PT-XXXXXX".
    */
@@ -85,35 +328,41 @@ export class PartnerService {
    * Concurrency-safe atomic generation of the next sequential Partner ID: PT-XXXXXX.
    * Utilizes database atomic sequence/counter inside transaction to prevent collisions.
    */
-  static async generateNextPartnerId(): Promise<string> {
-    return prisma.$transaction(async (tx) => {
-      // Upsert sequence counter atomically
-      const seq = await tx.partnerSequence.upsert({
-        where: { id: "PARTNER_SEQ" },
-        update: { currentVal: { increment: 1 } },
-        create: { id: "PARTNER_SEQ", currentVal: 1 },
-      });
+  private static async generateNextPartnerIdWithClient(
+    client: PartnerDbClient
+  ): Promise<string> {
+    const seq = await client.partnerSequence.upsert({
+      where: { id: "PARTNER_SEQ" },
+      update: { currentVal: { increment: 1 } },
+      create: { id: "PARTNER_SEQ", currentVal: 1 },
+    });
 
-      let nextVal = seq.currentVal;
-      let candidate = `PT-${String(nextVal).padStart(6, "0")}`;
+    let nextVal = seq.currentVal;
+    let candidate = `PT-${String(nextVal).padStart(6, "0")}`;
 
-      // Ensure candidate does not already exist (protection against manual inserts)
-      let exists = await tx.partner.findUnique({
+    // Ensure candidate does not already exist (protection against manual inserts)
+    let exists = await client.partner.findUnique({
+      where: { partnerId: candidate },
+      select: { id: true },
+    });
+
+    while (exists) {
+      nextVal++;
+      candidate = `PT-${String(nextVal).padStart(6, "0")}`;
+      exists = await client.partner.findUnique({
         where: { partnerId: candidate },
         select: { id: true },
       });
+    }
 
-      while (exists) {
-        nextVal++;
-        candidate = `PT-${String(nextVal).padStart(6, "0")}`;
-        exists = await tx.partner.findUnique({
-          where: { partnerId: candidate },
-          select: { id: true },
-        });
-      }
+    return candidate;
+  }
 
-      return candidate;
-    }, { timeout: 25000, maxWait: 15000 });
+  static async generateNextPartnerId(): Promise<string> {
+    return prisma.$transaction(
+      (tx) => this.generateNextPartnerIdWithClient(tx),
+      { timeout: 25000, maxWait: 15000 }
+    );
   }
 
   /**
@@ -228,10 +477,22 @@ export class PartnerService {
   /**
    * Registers a new Partner organization with PT-XXXXXX generation and secure one-time onboarding setup token.
    */
-  static async createPartner(input: CreatePartnerInput) {
+  private static async createPartnerRecord(
+    input: CreatePartnerInput,
+    client: PartnerDbClient,
+    credential: PartnerSetupCredential
+  ) {
+    const contactEmail = input.contactEmail.trim().toLowerCase();
+    if (!isUsablePartnerContactEmail(contactEmail)) {
+      throw new PartnerOnboardingError(
+        "MISSING_EMAIL",
+        "A usable contact email is required for secure partner setup."
+      );
+    }
+
     const partnerId = input.partnerId
       ? this.normalizePartnerId(input.partnerId)
-      : await this.generateNextPartnerId();
+      : await this.generateNextPartnerIdWithClient(client);
 
     const code = input.code
       ? input.code.toUpperCase().trim()
@@ -246,34 +507,43 @@ export class PartnerService {
         .replace(/^-|-$/g, "");
     }
 
-    let passwordHash: string | null = null;
-    if (input.password) {
-      passwordHash = await bcrypt.hash(input.password, 10);
+    const duplicateConditions: Prisma.PartnerWhereInput[] = [
+      { contactEmail: { equals: contactEmail, mode: "insensitive" } },
+    ];
+    if (cleanSlug) {
+      duplicateConditions.push({ slug: { equals: cleanSlug, mode: "insensitive" } });
     }
 
-    // Generate secure one-time setup token for email invitation
-    const setupToken = crypto.randomBytes(32).toString("hex");
-    const setupTokenExpires = new Date();
-    setupTokenExpires.setDate(setupTokenExpires.getDate() + 7); // 7 days expiration
+    const duplicate = await client.partner.findFirst({
+      where: { OR: duplicateConditions },
+      select: { id: true },
+    });
+    if (duplicate) {
+      throw new PartnerOnboardingError(
+        "DUPLICATE_PARTNER",
+        "A partner with this contact email or slug already exists."
+      );
+    }
 
     const safeRate = sanitizePercentage(input.commissionRate ?? 10.0, 10.0);
 
-    const partner = await prisma.partner.create({
+    const partner = await client.partner.create({
       data: {
         partnerId,
         code,
         slug: cleanSlug,
-        passwordHash,
-        setupToken: passwordHash ? null : setupToken,
-        setupTokenExpires: passwordHash ? null : setupTokenExpires,
-        mustChangePassword: !passwordHash,
+        passwordHash: null,
+        tempPasswordHash: null,
+        setupToken: credential.token,
+        setupTokenExpires: credential.expiresAt,
+        mustChangePassword: true,
         name: input.name.trim(),
         tagline: input.tagline?.trim(),
         badgeText: input.badgeText?.trim() || "Official Partner",
         description: input.description?.trim(),
         type: input.type,
         contactName: input.contactName?.trim(),
-        contactEmail: input.contactEmail?.trim().toLowerCase(),
+        contactEmail,
         contactPhone: input.contactPhone?.trim(),
         commissionModel: input.commissionModel ?? "PERCENTAGE_OF_CUSTOMER_PAYMENT",
         commissionRate: safeRate,
@@ -295,34 +565,228 @@ export class PartnerService {
       include: { rateHistory: true },
     });
 
-    // Log audit event
     await PartnerAuditService.logEvent({
       action: "PARTNER_ACCOUNT_CREATED",
       partnerId: partner.id,
       actorId: input.adminUserId,
       actorRole: "ADMIN",
       metadata: { partnerId: partner.partnerId, name: partner.name, email: partner.contactEmail },
-    });
+    }, client);
 
-    // Dispatch invitation email if requested or if setupToken is active
-    if (input.sendInviteEmail !== false && partner.contactEmail && partner.setupToken) {
-      await sendPartnerSetupEmail({
+    return partner;
+  }
+
+  private static async sendSetupInvitationAfterCommit(
+    partner: {
+      id: string;
+      partnerId: string | null;
+      code: string;
+      name: string;
+      contactEmail: string | null;
+    },
+    setupToken: string,
+    adminUserId?: string
+  ): Promise<PartnerSetupDeliveryStatus> {
+    if (!partner.contactEmail) return "FAILED";
+
+    let deliveryStatus: PartnerSetupDeliveryStatus = "FAILED";
+    try {
+      deliveryStatus = await sendPartnerSetupEmail({
         toEmail: partner.contactEmail,
         partnerName: partner.name,
         partnerId: partner.partnerId || partner.code,
-        setupToken: partner.setupToken,
+        setupToken,
       });
+    } catch {
+      console.error("[PARTNER_SETUP_EMAIL_ERROR] Email delivery failed after partner creation.");
+    }
 
-      await PartnerAuditService.logEvent({
+    if (deliveryStatus === "SENT") {
+      await this.recordPostCommitAudit({
         action: "PARTNER_INVITED",
         partnerId: partner.id,
-        actorId: input.adminUserId,
+        actorId: adminUserId,
         actorRole: "ADMIN",
         metadata: { partnerId: partner.partnerId, email: partner.contactEmail },
       });
     }
 
-    return partner;
+    return deliveryStatus;
+  }
+
+  static async createPartner(input: CreatePartnerInput) {
+    const credential = createPartnerSetupCredential();
+    const partner = await prisma.$transaction(
+      (tx) => this.createPartnerRecord(input, tx, credential),
+      {
+        isolationLevel: "Serializable",
+        timeout: 25000,
+        maxWait: 15000,
+      }
+    );
+
+    const deliveryStatus = await this.sendSetupInvitationAfterCommit(
+      partner,
+      credential.token,
+      input.adminUserId
+    );
+
+    return {
+      ...sanitizePartnerOnboardingPartner(partner),
+      deliveryStatus,
+    };
+  }
+
+  static async approvePartnerApplication(params: {
+    applicationId: string;
+    commissionRate: number;
+    customSlug?: string;
+    adminNotes?: string;
+    adminUserId: string;
+  }) {
+    const credential = createPartnerSetupCredential();
+    const result = await prisma.$transaction(
+      async (tx) => {
+        const application = await tx.partnerApplication.findUnique({
+          where: { id: params.applicationId },
+        });
+        if (!application) {
+          throw new PartnerOnboardingError("NOT_FOUND", "Application not found.");
+        }
+        if (application.status !== "PENDING" || application.createdPartnerId) {
+          throw new PartnerOnboardingError(
+            "CONFLICT",
+            "This application has already been processed."
+          );
+        }
+
+        const claimed = await tx.partnerApplication.updateMany({
+          where: {
+            id: application.id,
+            status: "PENDING",
+            createdPartnerId: null,
+          },
+          data: {
+            status: "APPROVED",
+            adminNotes: params.adminNotes || undefined,
+            reviewedBy: params.adminUserId,
+            reviewedAt: new Date(),
+          },
+        });
+        if (claimed.count !== 1) {
+          throw new PartnerOnboardingError(
+            "CONFLICT",
+            "This application changed while it was being approved."
+          );
+        }
+
+        const partner = await this.createPartnerRecord(
+          {
+            name: application.organizationName,
+            slug: params.customSlug || application.proposedSlug || undefined,
+            type: application.type as PartnerType,
+            contactName: application.applicantName,
+            contactEmail: application.email,
+            contactPhone: application.phone || undefined,
+            commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+            commissionRate: params.commissionRate,
+            holdingPeriodDays: 7,
+            minPayoutCentavos: 15000,
+            tagline: "Official Partner for 2026 Civil Service Review",
+            badgeText: "Official Partner",
+            notes: `Approved from online application (${application.id}). Social: ${application.socialUrl}`,
+            adminUserId: params.adminUserId,
+          },
+          tx,
+          credential
+        );
+
+        await tx.partnerApplication.update({
+          where: { id: application.id },
+          data: { createdPartnerId: partner.id },
+        });
+
+        return { partner };
+      },
+      {
+        isolationLevel: "Serializable",
+        timeout: 25000,
+        maxWait: 15000,
+      }
+    );
+
+    const deliveryStatus = await this.sendSetupInvitationAfterCommit(
+      result.partner,
+      credential.token,
+      params.adminUserId
+    );
+
+    return {
+      partner: sanitizePartnerOnboardingPartner(result.partner),
+      deliveryStatus,
+    };
+  }
+
+  static async resendPartnerSetupLink(params: {
+    partnerId: string;
+    adminUserId: string;
+  }) {
+    const result = await executePartnerSetupResend(params.partnerId, {
+      findPartner: (partnerId) =>
+        prisma.partner.findUnique({
+          where: { id: partnerId },
+          select: {
+            id: true,
+            partnerId: true,
+            code: true,
+            name: true,
+            status: true,
+            contactEmail: true,
+            passwordHash: true,
+            tempPasswordHash: true,
+            setupToken: true,
+          },
+        }),
+      rotateSetupToken: async ({
+        partnerId,
+        expectedSetupToken,
+        nextSetupToken,
+        setupTokenExpires,
+      }) => {
+        const rotated = await prisma.partner.updateMany({
+          where: {
+            id: partnerId,
+            passwordHash: null,
+            tempPasswordHash: null,
+            status: { in: [...ELIGIBLE_PARTNER_SETUP_STATUSES] },
+            setupToken: expectedSetupToken,
+          },
+          data: {
+            setupToken: nextSetupToken,
+            setupTokenExpires,
+            mustChangePassword: true,
+          },
+        });
+        return rotated.count === 1;
+      },
+      deliverSetupEmail: sendPartnerSetupEmail,
+    });
+
+    await this.recordPostCommitAudit({
+      action: "PARTNER_INVITED",
+      partnerId: result.partnerId,
+      actorId: params.adminUserId,
+      actorRole: "ADMIN",
+      reason: "Partner setup token rotated",
+      metadata: {
+        partnerId: result.displayPartnerId,
+        resent: true,
+        tokenRotated: true,
+        deliveryStatus: result.deliveryStatus,
+      },
+    });
+
+    return result;
   }
 
   /**
@@ -342,11 +806,16 @@ export class PartnerService {
       return { success: false, error: "Password must be at least 8 characters long." };
     }
 
+    const lookupTime = new Date();
     const partner = await prisma.partner.findFirst({
       where: {
         setupToken: token,
-        setupTokenExpires: { gt: new Date() },
+        setupTokenExpires: { gt: lookupTime },
+        status: { in: [...ELIGIBLE_PARTNER_SETUP_STATUSES] },
+        passwordHash: null,
+        tempPasswordHash: null,
       },
+      select: { id: true },
     });
 
     if (!partner) {
@@ -357,9 +826,17 @@ export class PartnerService {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const consumptionTime = new Date();
 
-    const updated = await prisma.partner.update({
-      where: { id: partner.id },
+    const consumed = await prisma.partner.updateMany({
+      where: {
+        id: partner.id,
+        setupToken: token,
+        setupTokenExpires: { gt: consumptionTime },
+        status: { in: [...ELIGIBLE_PARTNER_SETUP_STATUSES] },
+        passwordHash: null,
+        tempPasswordHash: null,
+      },
       data: {
         passwordHash,
         setupToken: null,
@@ -369,6 +846,27 @@ export class PartnerService {
         status: "ACTIVE",
       },
     });
+
+    if (consumed.count !== 1) {
+      return {
+        success: false,
+        error: "This setup link is invalid or has expired. Please contact GovStudyX Admin.",
+      };
+    }
+
+    const updated = await prisma.partner.findUnique({
+      where: { id: partner.id },
+      select: {
+        id: true,
+        partnerId: true,
+        code: true,
+        name: true,
+        status: true,
+      },
+    });
+    if (!updated) {
+      return { success: false, error: "Partner account could not be loaded after setup." };
+    }
 
     await PartnerAuditService.logEvent({
       action: "PARTNER_ACTIVATED",

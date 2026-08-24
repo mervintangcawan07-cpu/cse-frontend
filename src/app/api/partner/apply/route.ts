@@ -90,7 +90,7 @@ export async function POST(request: Request) {
       success: true,
       applicationId: application.id,
       message:
-        "Thank you! Your partner application has been submitted successfully. Our team reviews applications within 24-48 hours and will send your portal login credentials via email.",
+        "Thank you! Your partner application has been submitted successfully. Our team reviews applications within 24-48 hours and, if approved, will email a secure one-time portal setup link.",
     });
   } catch (error) {
     console.error("[PARTNER_APPLY_ERROR]", error);

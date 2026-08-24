@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
+import { canUsePartnerPasswordRecovery } from "@/lib/accounting/partnerService";
 import {
   AUTH_LIMITER,
   checkRateLimit,
@@ -40,14 +41,21 @@ export async function POST(request: Request) {
       );
     }
 
+    const lookupTime = new Date();
     const partner = await prisma.partner.findFirst({
       where: {
         resetToken: token,
-        resetTokenExpires: { gt: new Date() },
+        resetTokenExpires: { gt: lookupTime },
+      },
+      select: {
+        id: true,
+        status: true,
+        passwordHash: true,
+        tempPasswordHash: true,
       },
     });
 
-    if (!partner) {
+    if (!partner || !canUsePartnerPasswordRecovery(partner)) {
       return NextResponse.json(
         { error: "This password reset link is invalid or has expired. Please request a new one." },
         { status: 400 }
@@ -55,17 +63,35 @@ export async function POST(request: Request) {
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10);
+    const consumptionTime = new Date();
 
-    await prisma.partner.update({
-      where: { id: partner.id },
+    const consumed = await prisma.partner.updateMany({
+      where: {
+        id: partner.id,
+        resetToken: token,
+        resetTokenExpires: { gt: consumptionTime },
+        status: "ACTIVE",
+        OR: [
+          { passwordHash: { not: null } },
+          { tempPasswordHash: { not: null } },
+        ],
+      },
       data: {
         passwordHash,
         resetToken: null,
         resetTokenExpires: null,
+        setupToken: null,
+        setupTokenExpires: null,
         tempPasswordHash: null,
         mustChangePassword: false,
       },
     });
+    if (consumed.count !== 1) {
+      return NextResponse.json(
+        { error: "This password reset link is invalid or has expired. Please request a new one." },
+        { status: 400 }
+      );
+    }
 
     await PartnerAuditService.logEvent({
       action: "PARTNER_PASSWORD_CHANGED",

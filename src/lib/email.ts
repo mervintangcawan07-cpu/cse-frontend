@@ -251,79 +251,6 @@ export async function sendPartnerCommissionAlertEmail(params: {
 }
 
 /**
- * 🎓 Send Partner Application Approved & Welcome Onboarding Email
- */
-export async function sendPartnerApplicationApprovedEmail(params: {
-  toEmail: string;
-  applicantName: string;
-  organizationName: string;
-  partnerCode: string;
-  partnerSlug?: string | null;
-  loginUrl?: string;
-  initialPassword: string;
-}) {
-  const resend = getResendClient();
-  const loginUrl = params.loginUrl || `${getBaseUrl()}/partner-portal/login`;
-  const referralLink = `${getBaseUrl()}/p/${params.partnerSlug || params.partnerCode}`;
-
-  const html = `
-    <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
-      <div style="background: linear-gradient(135deg, #7c3aed, #4f46e5); padding: 20px 24px; border-radius: 12px; margin-bottom: 20px;">
-        <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🎉 Welcome to the GovStudyX Partner Program!</h2>
-        <p style="margin: 6px 0 0; color: #e0e7ff; font-size: 13px;">Official Educational Partner — Philippine Civil Service Exam Preparation</p>
-      </div>
-      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.applicantName}</strong>,</p>
-      <p style="font-size: 14px; color: #94a3b8;">Congratulations! Your application for <strong style="color: #a78bfa;">${params.organizationName}</strong> has been reviewed and officially approved.</p>
-
-      <div style="background: #1e293b; border: 1px solid #4f46e5; border-radius: 12px; padding: 20px; margin: 20px 0;">
-        <h3 style="margin-top: 0; color: #c4b5fd; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em;">Your Partner Portal Credentials</h3>
-        <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Partner Code</td>
-            <td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-weight: 900; font-family: monospace; border-bottom: 1px solid #334155;">${params.partnerCode}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Your Referral Link</td>
-            <td style="padding: 8px 0; color: #34d399; text-align: right; font-family: monospace; font-size: 12px; border-bottom: 1px solid #334155;">${referralLink}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Login Email</td>
-            <td style="padding: 8px 0; color: #f1f5f9; text-align: right; border-bottom: 1px solid #334155;">${params.toEmail}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; color: #64748b;">Initial Password</td>
-            <td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-family: monospace; font-weight: bold;">${params.initialPassword}</td>
-          </tr>
-        </table>
-      </div>
-
-      <div style="margin: 24px 0;">
-        <a href="${loginUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Access Your Partner Dashboard</a>
-      </div>
-      <p style="font-size: 11px; color: #475569;">Please change your password immediately after your first login. Your partner referral link is already active and tracked automatically.</p>
-      ${getDarkEmailFooter()}
-    </div>
-  `;
-
-  if (!resend) {
-    console.log(`[DEV MODE - PARTNER APPROVAL] Partner: ${params.organizationName}, Code: ${params.partnerCode}`);
-    return;
-  }
-
-  try {
-    await resend.emails.send({
-      from: getFromEmail(),
-      replyTo: getReplyToEmail(),
-      to: params.toEmail,
-      subject: `🎉 You're Approved! Welcome to GovStudyX Partner Program — ${params.organizationName}`,
-      html,
-    });
-  } catch (err) {
-    console.error("Failed to send partner approval email:", err);
-  }
-}
-
-/**
  * 💸 Send Partner Payout Processed Confirmation Email
  */
 export async function sendPartnerPayoutProcessedEmail(params: {
@@ -399,7 +326,7 @@ export async function sendPartnerSetupEmail(params: {
   partnerName: string;
   partnerId: string;
   setupToken: string;
-}) {
+}): Promise<"SENT" | "FAILED"> {
   const resend = getResendClient();
   const setupUrl = `${getBaseUrl()}/partner-portal/setup?token=${params.setupToken}`;
 
@@ -425,23 +352,26 @@ export async function sendPartnerSetupEmail(params: {
   `;
 
   if (!resend) {
-    console.log("------------------------------------");
-    console.log(`[DEV MODE - PARTNER SETUP EMAIL] Setup Link for ${params.toEmail} (${params.partnerId}):`);
-    console.log(setupUrl);
-    console.log("------------------------------------");
-    return;
+    console.warn("[PARTNER_SETUP_EMAIL_NOT_SENT] Email delivery is not configured.");
+    return "FAILED";
   }
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: getFromEmail(),
       replyTo: getReplyToEmail(),
       to: params.toEmail,
       subject: `🎓 GovStudyX Partner Account Activation — ${params.partnerId}`,
       html,
     });
-  } catch (err) {
-    console.error("Failed to send partner setup email:", err);
+    if (error) {
+      console.error("[PARTNER_SETUP_EMAIL_ERROR] Email delivery failed.");
+      return "FAILED";
+    }
+    return "SENT";
+  } catch {
+    console.error("[PARTNER_SETUP_EMAIL_ERROR] Email delivery failed.");
+    return "FAILED";
   }
 }
 
@@ -478,10 +408,7 @@ export async function sendPartnerPasswordResetEmail(params: {
   `;
 
   if (!resend) {
-    console.log("------------------------------------");
-    console.log(`[DEV MODE - PARTNER PASSWORD RESET] Reset Link for ${params.toEmail}:`);
-    console.log(resetUrl);
-    console.log("------------------------------------");
+    console.warn("[PARTNER_PASSWORD_RESET_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
 

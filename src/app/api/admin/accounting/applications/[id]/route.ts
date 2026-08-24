@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
-import { PartnerService } from "@/lib/accounting/partnerService";
-import { sendPartnerApplicationApprovedEmail } from "@/lib/email";
-
+import {
+  PartnerOnboardingError,
+  PartnerService,
+  buildPartnerSetupDeliveryResult,
+} from "@/lib/accounting/partnerService";
+import { getSiteUrl } from "@/lib/config/site";
 
 export async function POST(
   request: Request,
@@ -17,19 +19,32 @@ export async function POST(
 
     const { id } = await params;
     const body = await request.json();
-    const { action, commissionRate, customSlug, initialPassword, adminNotes } = body;
-
-    const application = await prisma.partnerApplication.findUnique({
-      where: { id },
-    });
-
-    if (!application) {
-      return NextResponse.json({ error: "Application not found" }, { status: 404 });
+    if (Object.prototype.hasOwnProperty.call(body, "initialPassword")) {
+      return NextResponse.json(
+        { error: "Initial passwords are not accepted. Partners must use the secure setup link." },
+        { status: 400 }
+      );
     }
 
+    const { action, commissionRate, customSlug, adminNotes } = body;
+
     if (action === "REJECT") {
-      const updated = await prisma.partnerApplication.update({
+      const application = await prisma.partnerApplication.findUnique({
         where: { id },
+        select: { id: true, organizationName: true, status: true, createdPartnerId: true },
+      });
+      if (!application) {
+        return NextResponse.json({ error: "Application not found" }, { status: 404 });
+      }
+      if (application.status !== "PENDING" || application.createdPartnerId) {
+        return NextResponse.json(
+          { error: "This application has already been processed." },
+          { status: 409 }
+        );
+      }
+
+      const rejected = await prisma.partnerApplication.updateMany({
+        where: { id, status: "PENDING", createdPartnerId: null },
         data: {
           status: "REJECTED",
           adminNotes: adminNotes || undefined,
@@ -37,85 +52,77 @@ export async function POST(
           reviewedAt: new Date(),
         },
       });
+      if (rejected.count !== 1) {
+        return NextResponse.json(
+          { error: "This application changed while it was being rejected." },
+          { status: 409 }
+        );
+      }
 
       return NextResponse.json({
         success: true,
         message: `Application for ${application.organizationName} has been rejected.`,
-        application: updated,
       });
     }
 
     if (action === "APPROVE") {
-      const effectiveSlug = customSlug || application.proposedSlug || undefined;
-      const effectivePassword =
-        initialPassword && String(initialPassword).trim().length >= 8
-          ? String(initialPassword).trim()
-          : `GSX-${crypto.randomBytes(6).toString("base64url")}!9`;
-      const rate = commissionRate !== undefined ? parseFloat(commissionRate) : 10.0;
+      const parsedRate = commissionRate === undefined ? 10 : Number(commissionRate);
+      if (!Number.isFinite(parsedRate)) {
+        return NextResponse.json(
+          { error: "Commission rate must be a valid number." },
+          { status: 400 }
+        );
+      }
 
-      // Create the official Partner record
-      const partner = await PartnerService.createPartner({
-        name: application.organizationName,
-        slug: effectiveSlug,
-        password: effectivePassword,
-        type: application.type,
-        contactName: application.applicantName,
-        contactEmail: application.email,
-        contactPhone: application.phone || undefined,
-        commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
-        commissionRate: rate,
-        holdingPeriodDays: 7,
-        minPayoutCentavos: 15000,
-        tagline: `Official Partner for 2026 Civil Service Review`,
-        badgeText: "Official Partner",
-        notes: `Approved from online application (${application.id}). Social: ${application.socialUrl}`,
+      const result = await PartnerService.approvePartnerApplication({
+        applicationId: id,
+        commissionRate: parsedRate,
+        customSlug: customSlug ? String(customSlug) : undefined,
+        adminNotes: adminNotes ? String(adminNotes) : undefined,
         adminUserId: user.id,
       });
-
-      // Update application to APPROVED
-      await prisma.partnerApplication.update({
-        where: { id },
-        data: {
-          status: "APPROVED",
-          createdPartnerId: partner.id,
-          adminNotes: adminNotes || undefined,
-          reviewedBy: user.id,
-          reviewedAt: new Date(),
-        },
-      });
-
-      const partnerLandingUrl = `https://govstudyx.com/p/${partner.slug || partner.code}`;
-
-      // Fire welcome onboarding email (non-blocking)
-      sendPartnerApplicationApprovedEmail({
-        toEmail: application.email,
-        applicantName: application.applicantName,
-        organizationName: application.organizationName,
-        partnerCode: partner.code,
-        partnerSlug: partner.slug,
-        initialPassword: effectivePassword,
-      }).catch((err) => console.error("[PARTNER_APPROVAL_EMAIL_ERROR]", err));
+      const partner = result.partner;
+      const deliveryResult = buildPartnerSetupDeliveryResult(
+        "APPROVED",
+        partner.name,
+        result.deliveryStatus
+      );
 
       return NextResponse.json({
-        success: true,
-        message: `Partner "${partner.name}" approved successfully!`,
+        ...deliveryResult,
         partner: {
           id: partner.id,
+          partnerId: partner.partnerId || partner.code,
           name: partner.name,
           code: partner.code,
           slug: partner.slug,
-          landingUrl: partnerLandingUrl,
-          loginUrl: "https://govstudyx.com/partner/login",
-          initialPassword: effectivePassword,
+          status: partner.status,
+          contactEmail: partner.contactEmail,
+          landingUrl: `${getSiteUrl()}/p/${partner.slug || partner.code}`,
         },
       });
     }
 
-    return NextResponse.json({ error: "Invalid action. Use APPROVE or REJECT." }, { status: 400 });
-  } catch (error: any) {
-    console.error("[ADMIN_PARTNER_APPLICATION_ACTION_ERROR]", error);
     return NextResponse.json(
-      { error: error.message || "Failed to process application" },
+      { error: "Invalid action. Use APPROVE or REJECT." },
+      { status: 400 }
+    );
+  } catch (error: unknown) {
+    console.error("[ADMIN_PARTNER_APPLICATION_ACTION_ERROR]", error);
+    if (error instanceof PartnerOnboardingError) {
+      const status =
+        error.code === "NOT_FOUND" ? 404 : error.code === "MISSING_EMAIL" ? 400 : 409;
+      return NextResponse.json({ error: error.message }, { status });
+    }
+    const errorCode = (error as { code?: string })?.code;
+    if (errorCode === "P2002" || errorCode === "P2034") {
+      return NextResponse.json(
+        { error: "This application was already processed or conflicts with an existing partner." },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Failed to process partner application." },
       { status: 500 }
     );
   }
