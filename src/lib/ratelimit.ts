@@ -30,6 +30,9 @@ function createLimiter(
   });
 }
 
+const rateLimitEnvironment =
+  process.env.VERCEL_ENV || process.env.NODE_ENV || "development";
+
 // 🔒 1. Auth Limiter: 5 requests per 10 seconds (Login / Register / Signup)
 export const AUTH_LIMITER = createLimiter(5, "10 s", "@ratelimit/auth");
 
@@ -46,28 +49,28 @@ export const AI_EXPLAIN_LIMITER = createLimiter(15, "1 m", "@ratelimit/ai_explai
 export const PAYMONGO_CHECKOUT_LIMITER = createLimiter(
   3,
   "1 m",
-  "@ratelimit/paymongo_checkout"
+  `@ratelimit/${rateLimitEnvironment}/paymongo_checkout`
 );
 
 // 🔒 6. PayMongo Verify Limiter: 20 requests per 1 minute
 export const PAYMONGO_VERIFY_LIMITER = createLimiter(
   20,
   "1 m",
-  "@ratelimit/paymongo_verify"
+  `@ratelimit/${rateLimitEnvironment}/paymongo_verify`
 );
 
 // 🔒 7. Voice Token Limiter: 10 requests per 1 minute
 export const VOICE_TOKEN_LIMITER = createLimiter(
   10,
   "1 m",
-  "@ratelimit/voice_token"
+  `@ratelimit/${rateLimitEnvironment}/voice_token`
 );
 
 // 🔒 8. Support Ticket Limiter: 3 requests per 10 minutes
 export const SUPPORT_TICKET_LIMITER = createLimiter(
   3,
   "10 m",
-  "@ratelimit/support_ticket"
+  `@ratelimit/${rateLimitEnvironment}/support_ticket`
 );
 
 export interface RateLimitCheckResult {
