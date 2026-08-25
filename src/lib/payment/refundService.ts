@@ -18,6 +18,23 @@ export interface PayMongoRefundResource {
   };
 }
 
+export interface PayMongoCheckoutSessionResource {
+  id: string; // cs_...
+  type: string; // checkout_session
+  attributes: {
+    status?: string;
+    amount?: number;
+    payment_intent?: {
+      id?: string;
+      attributes?: {
+        status?: string;
+      };
+    };
+    payments?: PayMongoPaymentResource[];
+    metadata?: Record<string, any>;
+  };
+}
+
 export interface PayMongoPaymentResource {
   id: string; // pay_...
   type: string; // payment
@@ -25,6 +42,14 @@ export interface PayMongoPaymentResource {
     amount: number; // original customer-paid payment amount in centavos
     currency: string;
     status: string; // pending, failed, paid
+    fee?: number; // authoritative PayMongo processing fee in centavos
+    net_amount?: number; // settlement amount after PayMongo fee
+    created_at?: number; // PayMongo Unix timestamp in seconds
+    source?: {
+      id?: string;
+      type?: string; // card, gcash, paymaya, qrph
+      attributes?: Record<string, any>;
+    };
     payment_intent_id?: string;
     payment_intent?: { id: string };
     refunds?: PayMongoRefundResource[];
@@ -63,6 +88,66 @@ export class RefundService {
   }
 
   /**
+   * Fetches a Checkout Session from PayMongo using Basic Auth.
+   * READ-ONLY: performs GET only and makes no database or financial mutations.
+   */
+  static async fetchPayMongoCheckoutSession(
+    checkoutSessionId: string,
+    secretKey: string
+  ): Promise<PayMongoCheckoutSessionResource | null> {
+    if (!checkoutSessionId || !checkoutSessionId.startsWith("cs_")) {
+      return null;
+    }
+
+    const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
+
+    let response: Response;
+    try {
+      response = await fetch(
+        `https://api.paymongo.com/v1/checkout_sessions/${checkoutSessionId}`,
+        {
+          headers: { Authorization: `Basic ${authHeader}` },
+          signal: AbortSignal.timeout(10000),
+        }
+      );
+    } catch (fetchErr) {
+      console.warn(
+        `[RefundService] PayMongo GET checkout session ${checkoutSessionId} network error:`,
+        fetchErr
+      );
+      return null;
+    }
+
+    if (!response.ok) {
+      console.warn(
+        `[RefundService] PayMongo GET checkout session ${checkoutSessionId} failed with HTTP ${response.status}`
+      );
+      return null;
+    }
+
+    const json = await response.json().catch(() => null);
+    return json?.data || null;
+  }
+
+  /**
+   * Returns the authoritative paid Payment embedded in a Checkout Session.
+   * Pure selection only; no side effects.
+   */
+  static resolvePaidPaymentFromCheckout(
+    checkout: PayMongoCheckoutSessionResource
+  ): PayMongoPaymentResource | null {
+    const payments = checkout?.attributes?.payments || [];
+
+    return (
+      payments.find(
+        (payment) =>
+          payment?.id?.startsWith("pay_") &&
+          payment?.attributes?.status === "paid"
+      ) || null
+    );
+  }
+
+  /**
    * Fetches the Payment resource from PayMongo API using Basic Auth.
    */
   static async fetchPayMongoPayment(
@@ -84,6 +169,142 @@ export class RefundService {
 
     const json = await response.json();
     return json?.data || null;
+  }
+
+  /**
+   * Strictly enumerates ALL Refund resources for a Payment.
+   *
+   * READ-ONLY. Intended for refund preview/execution preflight where an
+   * incomplete history must fail closed rather than be interpreted as zero.
+   *
+   * Unlike fetchAllSucceededRefunds(), this method has NO embedded-resource
+   * fallback and throws whenever authoritative pagination cannot be completed.
+   */
+  static async fetchAllRefundsStrict(
+    paymentId: string,
+    secretKey: string
+  ): Promise<PayMongoRefundResource[]> {
+    if (!paymentId || !paymentId.startsWith("pay_")) {
+      throw new Error("REFUND_HISTORY_INVALID_PAYMENT_ID");
+    }
+
+    if (!secretKey || !secretKey.trim()) {
+      throw new Error("REFUND_HISTORY_MISSING_SECRET");
+    }
+
+    const authHeader = Buffer.from(`${secretKey.trim()}:`).toString("base64");
+    const refundsById = new Map<string, PayMongoRefundResource>();
+
+    let afterCursor: string | null = null;
+
+    const MAX_PAGES = 10;
+    const LIMIT = 100;
+
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const url = new URL("https://api.paymongo.com/refunds");
+
+      url.searchParams.set(
+        "data.attributes.payment_id",
+        paymentId
+      );
+      url.searchParams.set(
+        "data.attributes.limit",
+        String(LIMIT)
+      );
+
+      if (afterCursor) {
+        url.searchParams.set(
+          "data.attributes.after",
+          afterCursor
+        );
+      }
+
+      let response: Response;
+
+      try {
+        response = await fetch(url.toString(), {
+          headers: {
+            Authorization: `Basic ${authHeader}`,
+          },
+          signal: AbortSignal.timeout(10000),
+        });
+      } catch {
+        throw new Error("REFUND_HISTORY_NETWORK_ERROR");
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          `REFUND_HISTORY_HTTP_${response.status}`
+        );
+      }
+
+      const body = await response.json().catch(() => null);
+
+      if (!body || !Array.isArray(body.data)) {
+        throw new Error("REFUND_HISTORY_INVALID_RESPONSE");
+      }
+
+      const items = body.data as PayMongoRefundResource[];
+
+      for (const refund of items) {
+        if (
+          !refund ||
+          typeof refund.id !== "string" ||
+          !refund.id.startsWith("ref_") ||
+          refund.type !== "refund"
+        ) {
+          throw new Error("REFUND_HISTORY_INVALID_RESOURCE");
+        }
+
+        if (refund.attributes?.payment_id !== paymentId) {
+          throw new Error("REFUND_HISTORY_PAYMENT_MISMATCH");
+        }
+
+        refundsById.set(refund.id, refund);
+      }
+
+      // A short page proves pagination is complete.
+      if (items.length < LIMIT) {
+        return Array.from(refundsById.values());
+      }
+
+      const nextCursor = items[items.length - 1]?.id;
+
+      if (
+        !nextCursor ||
+        nextCursor === afterCursor
+      ) {
+        throw new Error(
+          "REFUND_HISTORY_PAGINATION_INCOMPLETE"
+        );
+      }
+
+      afterCursor = nextCursor;
+    }
+
+    // Exactly MAX_PAGES full pages means additional history may exist.
+    // Never silently truncate financial history.
+    throw new Error(
+      "REFUND_HISTORY_PAGINATION_INCOMPLETE"
+    );
+  }
+
+  /**
+   * Strict succeeded-refund view used for cumulative refund accounting.
+   * Authoritative enumeration still occurs through fetchAllRefundsStrict().
+   */
+  static async fetchAllSucceededRefundsStrict(
+    paymentId: string,
+    secretKey: string
+  ): Promise<PayMongoRefundResource[]> {
+    const refunds = await this.fetchAllRefundsStrict(
+      paymentId,
+      secretKey
+    );
+
+    return refunds.filter(
+      (refund) => refund.attributes?.status === "succeeded"
+    );
   }
 
   /**
