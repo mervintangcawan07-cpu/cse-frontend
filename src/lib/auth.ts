@@ -18,7 +18,25 @@ function getJwtSecretKey(): Uint8Array {
   return new TextEncoder().encode(secret.trim());
 }
 
-export async function signJWT(payload: Record<string, any>): Promise<string> {
+function getUserSessionInvalidBefore(): number | null {
+  const raw = process.env.USER_SESSION_INVALID_BEFORE?.trim();
+
+  if (!raw) {
+    return null;
+  }
+
+  const cutoff = Number(raw);
+
+  if (!Number.isInteger(cutoff) || cutoff <= 0) {
+    throw new Error(
+      "Critical Configuration Error: USER_SESSION_INVALID_BEFORE must be a positive Unix timestamp in seconds."
+    );
+  }
+
+  return cutoff;
+}
+
+export async function signJWT(payload: Record<string, unknown>): Promise<string> {
   try {
     const secretKey = getJwtSecretKey();
     return await new SignJWT(payload)
@@ -36,6 +54,17 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
   try {
     const secretKey = getJwtSecretKey();
     const { payload } = await jwtVerify(token, secretKey);
+
+    if (payload.role === "USER") {
+      const invalidBefore = getUserSessionInvalidBefore();
+
+      if (
+        invalidBefore !== null &&
+        (typeof payload.iat !== "number" || payload.iat < invalidBefore)
+      ) {
+        return null;
+      }
+    }
     return payload as JWTPayload;
   } catch (error) {
     console.error("[verifyJWT Error]:", error);
