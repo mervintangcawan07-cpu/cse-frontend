@@ -138,21 +138,28 @@ export class LedgerService {
    * Records payment processing fees.
    * Debit: EXPENSE_PAYMENT_FEE, Credit: CASH_PAYMONGO
    */
-  static async recordPaymentFee(params: {
-    transactionId: string;
-    feeAmountCentavos: number;
-  }) {
+  static async recordPaymentFee(
+    params: {
+      transactionId: string;
+      feeAmountCentavos: number;
+    },
+    client?: Prisma.TransactionClient
+  ) {
     if (params.feeAmountCentavos <= 0) return [];
-    return this.postBalancedDoubleEntry({
-      transactionId: params.transactionId,
-      transactionType: "PAYMONGO_FEE",
-      debitCategory: "EXPENSE_PAYMENT_FEE",
-      creditCategory: "CASH_PAYMONGO",
-      amountCentavos: params.feeAmountCentavos,
-      sourceEntity: "Transaction",
-      sourceId: params.transactionId,
-      description: `PayMongo processing fee for Transaction ${params.transactionId}`,
-    });
+
+    return this.postBalancedDoubleEntry(
+      {
+        transactionId: params.transactionId,
+        transactionType: "PAYMONGO_FEE",
+        debitCategory: "EXPENSE_PAYMENT_FEE",
+        creditCategory: "CASH_PAYMONGO",
+        amountCentavos: params.feeAmountCentavos,
+        sourceEntity: "Transaction",
+        sourceId: params.transactionId,
+        description: `PayMongo processing fee for Transaction ${params.transactionId}`,
+      },
+      client
+    );
   }
 
   /**

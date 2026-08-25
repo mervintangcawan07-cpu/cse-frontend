@@ -82,15 +82,56 @@ export class PaymentFinalizationService {
       }
 
       if (existingTxn && existingTxn.status === "PAID") {
-        // Already finalized! Fetch user's current paidUntil
+        // Already finalized. Never extend entitlement again, but allow
+        // late PayMongo fee enrichment when the original finalization
+        // did not yet contain the provider fee.
         const currentUser = await tx.user.findUnique({
           where: { id: userId },
           select: { paidUntil: true },
         });
 
+        const existingFeeCentavos = existingTxn.feeAmountCentavos || 0;
+        const incomingFeeCentavos = Math.max(0, feeAmountCentavos || 0);
+        const authoritativeFeeCentavos =
+          existingFeeCentavos > 0 ? existingFeeCentavos : incomingFeeCentavos;
+
+        let enrichedTxn = existingTxn;
+
+        // Never overwrite an already-recorded nonzero provider fee.
+        if (existingFeeCentavos <= 0 && incomingFeeCentavos > 0) {
+          enrichedTxn = await tx.transaction.update({
+            where: { id: existingTxn.id },
+            data: { feeAmountCentavos: incomingFeeCentavos },
+          });
+        }
+
+        // Repair/add the fee ledger pair exactly once while protected by
+        // the checkout-session advisory lock above.
+        if (authoritativeFeeCentavos > 0) {
+          const existingFeeLedger = await tx.financialLedgerEntry.findFirst({
+            where: {
+              transactionId: existingTxn.id,
+              transactionType: "PAYMONGO_FEE",
+              sourceEntity: "Transaction",
+              sourceId: existingTxn.id,
+              entryType: "DEBIT",
+            },
+          });
+
+          if (!existingFeeLedger) {
+            await LedgerService.recordPaymentFee(
+              {
+                transactionId: existingTxn.id,
+                feeAmountCentavos: authoritativeFeeCentavos,
+              },
+              tx
+            );
+          }
+        }
+
         return {
           alreadyFinalized: true,
-          transaction: existingTxn,
+          transaction: enrichedTxn,
           paidUntil: currentUser?.paidUntil || null,
         };
       }

@@ -101,7 +101,14 @@ export async function POST() {
         ? lineItemAmount * quantity
         : (checkoutData?.attributes?.amount || 0);
 
+      const paidPayment =
+        payments.find(
+          (payment: { attributes?: { status?: string; fee?: number } }) =>
+            payment?.attributes?.status === "paid"
+        ) || payments[0];
+
       const feeCentavos =
+        paidPayment?.attributes?.fee ||
         checkoutData?.attributes?.fee ||
         checkoutData?.attributes?.fees?.[0]?.amount ||
         0;

@@ -78,7 +78,18 @@ export async function POST(request: Request) {
         typeof planType === "string" &&
         supportedPlanTypes.has(planType)
       ) {
-        const feeCentavos = attributes?.fee || attributes?.fees?.[0]?.amount || 0;
+        const payments = attributes?.payments || [];
+        const paidPayment =
+          payments.find(
+            (payment: { attributes?: { status?: string; fee?: number } }) =>
+              payment?.attributes?.status === "paid"
+          ) || payments[0];
+
+        const feeCentavos =
+          paidPayment?.attributes?.fee ||
+          attributes?.fee ||
+          attributes?.fees?.[0]?.amount ||
+          0;
         const partnerCode = metadata?.partnerCode;
         const campaignSource = metadata?.campaignSource || "direct";
         const paymentIntentId = attributes?.payment_intent?.id || attributes?.payment_intent_id;
