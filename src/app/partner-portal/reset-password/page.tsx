@@ -3,6 +3,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ShieldCheck,
@@ -172,9 +173,13 @@ export default function PartnerResetPasswordPage() {
       <header className="border-b border-slate-800/80 bg-slate-950/80 py-4 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-sm">
-              G
-            </div>
+            <Image
+              src="/brand/govstudyx-icon.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8 shrink-0 object-contain"
+            />
             <div className="font-extrabold text-sm tracking-tight text-white">
               GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">PASSWORD RESET</span>
             </div>

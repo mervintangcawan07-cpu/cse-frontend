@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
 
@@ -65,9 +66,13 @@ export default function Footer() {
           {/* Brand & Mission (2 Cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-white text-sm shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                GS
-              </div>
+              <Image
+                src="/brand/govstudyx-icon.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 shrink-0 object-contain"
+              />
               <span className="font-extrabold text-base text-white tracking-wide">
                 GovStudy<span className="text-blue-400 font-black">X</span>
               </span>
@@ -199,4 +204,3 @@ export default function Footer() {
     </footer>
   );
 }
-

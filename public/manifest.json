@@ -1,6 +1,6 @@
 ﻿{
-  "name": "Civil Service Exam Reviewer",
-  "short_name": "CSE Reviewer",
+  "name": "GovStudyX",
+  "short_name": "GovStudyX",
   "description": "Comprehensive practice drills and mock exams for Civil Service Exam preparation.",
   "start_url": "/",
   "display": "standalone",

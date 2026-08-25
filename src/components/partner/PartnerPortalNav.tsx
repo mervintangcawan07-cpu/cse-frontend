@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   TrendingUp,
@@ -62,9 +63,13 @@ export default function PartnerPortalNav({ partner }: PartnerPortalNavProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/partner-portal/dashboard" className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-sm shadow-md shadow-emerald-500/20">
-                G
-              </div>
+              <Image
+                src="/brand/govstudyx-icon.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-8 w-8 shrink-0 object-contain"
+              />
               <div>
                 <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
                   <span>GovStudyX</span>

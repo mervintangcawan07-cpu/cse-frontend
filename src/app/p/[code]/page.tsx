@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/config/site";
@@ -151,9 +152,13 @@ export default async function PartnerLandingPage({ params, searchParams }: Partn
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-emerald-500/20">
-              G
-            </div>
+            <Image
+              src="/brand/govstudyx-icon.png"
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 object-contain"
+            />
             <div>
               <div className="font-extrabold text-base tracking-tight text-white flex items-center gap-1.5">
                 GovStudyX <span className="text-emerald-400 text-xs px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">CSE 2026</span>

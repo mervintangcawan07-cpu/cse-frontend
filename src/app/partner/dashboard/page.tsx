@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   DollarSign,
@@ -254,9 +255,13 @@ May free practice test agad pagka-sign up niyo. Good luck sa review natin! 💯`
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-emerald-500/20">
-              G
-            </div>
+            <Image
+              src="/brand/govstudyx-icon.png"
+              alt="GovStudyX"
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 object-contain"
+            />
             <div>
               <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
                 <span>{partner?.name || "Partner Portal"}</span>
