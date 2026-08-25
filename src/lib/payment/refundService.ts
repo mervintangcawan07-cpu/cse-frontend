@@ -662,15 +662,7 @@ export class RefundService {
           tx
         );
 
-        // 🔄 10. TRANSACTION STATUS TRANSITION (Full Refund Only)
-        if (isFullRefund) {
-          await tx.transaction.update({
-            where: { id: currentTxn.id },
-            data: { status: "REFUNDED" },
-          });
-        }
-
-        // 🎓 11. CUSTOMER PREMIUM ENTITLEMENT REVERSAL (Full Refund Only, Guarded)
+        // 🎓 10. CUSTOMER PREMIUM ENTITLEMENT REVERSAL (Full Refund Only, Guarded)
         if (isFullRefund && currentTxn.user) {
           // 🔒 Acquire Level 4 User-Entitlement advisory lock to serialize entitlement modifications
           await tx.$queryRaw`
@@ -754,6 +746,16 @@ export class RefundService {
               },
             });
           }
+        }
+
+        // 🔄 11. TRANSACTION STATUS TRANSITION (Full Refund Only)
+        // Keep the transaction PAID until entitlement reconstruction is complete
+        // so the pre-refund baseline can correctly include currentTxn.
+        if (isFullRefund) {
+          await tx.transaction.update({
+            where: { id: currentTxn.id },
+            data: { status: "REFUNDED" },
+          });
         }
 
         // 🧾 12. TAX REFUND RECONCILIATION AUDIT LOG
