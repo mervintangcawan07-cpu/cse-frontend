@@ -73,6 +73,10 @@ export class PaymentFinalizationService {
         where: { checkoutSessionId },
       });
 
+      if (existingTxn && existingTxn.userId !== userId) {
+        throw new Error("Checkout ownership mismatch.");
+      }
+
       if (existingTxn && existingTxn.status === "PAID") {
         // Already finalized! Fetch user's current paidUntil
         const currentUser = await tx.user.findUnique({

@@ -40,8 +40,11 @@ export async function POST() {
       select: { id: true, isPaid: true, paidUntil: true },
     });
 
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const checkoutSessionId = cookieStore.get("cse_checkout_id")?.value;
-    const planType = cookieStore.get("cse_checkout_plan")?.value || "1_MONTH";
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
 
     if (!secretKey || !checkoutSessionId) {
@@ -60,11 +63,34 @@ export async function POST() {
     }
 
     const checkoutData = data?.data;
+    const checkoutMetadata = checkoutData?.attributes?.metadata;
+    const checkoutOwnerUserId =
+      checkoutMetadata?.userId ?? checkoutMetadata?.user_id;
+    const planType = checkoutMetadata?.planType;
+
+    if (
+      !checkoutOwnerUserId ||
+      String(checkoutOwnerUserId) !== userId ||
+      typeof planType !== "string" ||
+      planType.length === 0
+    ) {
+      cookieStore.delete("cse_checkout_id");
+      cookieStore.delete("cse_checkout_plan");
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Checkout session ownership verification failed.",
+        },
+        { status: 403 }
+      );
+    }
+
     const payments = checkoutData?.attributes?.payments || [];
     const paymentIntentStatus = checkoutData?.attributes?.payment_intent?.attributes?.status;
 
     const isPaidConfirmed =
-      payments.some((p: any) => p?.attributes?.status === "paid") ||
+      payments.some((payment: { attributes?: { status?: string } }) => payment?.attributes?.status === "paid") ||
       paymentIntentStatus === "succeeded" ||
       checkoutData?.attributes?.status === "paid";
 
