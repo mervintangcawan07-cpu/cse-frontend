@@ -1,10 +1,34 @@
-// Relative Path: src/proxy.ts
+﻿// Relative Path: src/proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Temporary production cleanup quiescence guard.
+  // When explicitly enabled, block all mutating API requests before
+  // route handlers can reach the database or external providers.
+  const cleanupWriteLock =
+    process.env.PRODUCTION_CLEANUP_LOCK === "YES" &&
+    pathname.startsWith("/api") &&
+    ["POST", "PUT", "PATCH", "DELETE"].includes(request.method);
+
+  if (cleanupWriteLock) {
+    return NextResponse.json(
+      {
+        error: "Service temporarily unavailable during scheduled maintenance.",
+        code: "PRODUCTION_CLEANUP_LOCK",
+      },
+      {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "Retry-After": "3600",
+        },
+      },
+    );
+  }
 
   // 1. Static files, Next internals, public assets, API routes, and webhooks bypass proxy
   if (
@@ -73,6 +97,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/api/:path*",
     "/admin/:path*",
     "/dashboard/:path*",
     "/practice/:path*",
