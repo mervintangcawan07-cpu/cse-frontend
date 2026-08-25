@@ -68,13 +68,15 @@ export default function PartnerApplyPage() {
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <Image
-              src="/brand/govstudyx-icon.png"
-              alt=""
-              width={36}
-              height={36}
-              className="h-9 w-9 shrink-0 object-contain"
-            />
+            <div className="h-9 w-9 shrink-0 overflow-hidden rounded-lg">
+              <Image
+                src="/brand/govstudyx-icon.png"
+                alt=""
+                width={36}
+                height={36}
+                className="h-full w-full object-cover"
+              />
+            </div>
             <span className="font-extrabold text-base tracking-tight text-white">GovStudyX</span>
           </Link>
 

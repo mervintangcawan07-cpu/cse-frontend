@@ -382,13 +382,15 @@ export default function LandingPage() {
       {/* TOP NAVIGATION BAR */}
       <nav className="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-4 sm:px-8 py-3.5 flex justify-between items-center shadow-xs">
         <Link href="/" className="flex items-center gap-2 font-black text-lg text-slate-900 tracking-tight">
-          <Image
-            src="/brand/govstudyx-icon.png"
-            alt=""
-            width={32}
-            height={32}
-            className="h-8 w-8 shrink-0 object-contain"
-          />
+          <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+            <Image
+              src="/brand/govstudyx-icon.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-full w-full object-cover"
+            />
+          </div>
           <span className="font-extrabold text-slate-900">
             GovStudy<span className="text-blue-600">X</span>
           </span>

@@ -53,13 +53,15 @@ export default function PartnerLoginPage() {
       <header className="border-b border-slate-800/80 bg-slate-950/80 py-4 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <Image
-              src="/brand/govstudyx-icon.png"
-              alt=""
-              width={32}
-              height={32}
-              className="h-8 w-8 shrink-0 object-contain"
-            />
+            <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+              <Image
+                src="/brand/govstudyx-icon.png"
+                alt=""
+                width={32}
+                height={32}
+                className="h-full w-full object-cover"
+              />
+            </div>
             <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
               GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">PARTNER PORTAL</span>
             </div>

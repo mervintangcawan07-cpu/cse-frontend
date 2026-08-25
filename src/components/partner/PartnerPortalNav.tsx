@@ -63,13 +63,15 @@ export default function PartnerPortalNav({ partner }: PartnerPortalNavProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/partner-portal/dashboard" className="flex items-center gap-2.5">
-              <Image
-                src="/brand/govstudyx-icon.png"
-                alt=""
-                width={32}
-                height={32}
-                className="h-8 w-8 shrink-0 object-contain"
-              />
+              <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+                <Image
+                  src="/brand/govstudyx-icon.png"
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <div>
                 <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
                   <span>GovStudyX</span>

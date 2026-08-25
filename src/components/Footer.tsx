@@ -66,13 +66,15 @@ export default function Footer() {
           {/* Brand & Mission (2 Cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2 group">
-              <Image
-                src="/brand/govstudyx-icon.png"
-                alt=""
-                width={32}
-                height={32}
-                className="h-8 w-8 shrink-0 object-contain"
-              />
+              <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+                <Image
+                  src="/brand/govstudyx-icon.png"
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <span className="font-extrabold text-base text-white tracking-wide">
                 GovStudy<span className="text-blue-400 font-black">X</span>
               </span>
