@@ -1,4 +1,4 @@
-﻿// Relative Path: src/proxy.ts
+// Relative Path: src/proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
@@ -7,14 +7,24 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Temporary production cleanup quiescence guard.
-  // When explicitly enabled, block all mutating API requests before
-  // route handlers can reach the database or external providers.
-  const cleanupWriteLock =
-    process.env.PRODUCTION_CLEANUP_LOCK === "YES" &&
-    pathname.startsWith("/api") &&
-    ["POST", "PUT", "PATCH", "DELETE"].includes(request.method);
+  // When explicitly enabled, block every API request except the two
+  // read-only health probes needed to verify production availability.
+  const cleanupLockEnabled =
+    process.env.PRODUCTION_CLEANUP_LOCK === "YES";
 
-  if (cleanupWriteLock) {
+  const cleanupHealthProbe =
+    ["GET", "HEAD"].includes(request.method) &&
+    (
+      pathname === "/api/health/readiness" ||
+      pathname === "/api/health/liveness"
+    );
+
+  const cleanupApiLock =
+    cleanupLockEnabled &&
+    pathname.startsWith("/api") &&
+    !cleanupHealthProbe;
+
+  if (cleanupApiLock) {
     return NextResponse.json(
       {
         error: "Service temporarily unavailable during scheduled maintenance.",
