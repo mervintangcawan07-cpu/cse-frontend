@@ -1761,3 +1761,56 @@ model FinancialIdempotencyKey {
   @@unique([actorId, operationType, idempotencyKey], map: "FinancialIdempotencyKey_actorId_operationType_idempotencyKey_ke")
   @@index([createdAt])
 }
+
+
+/// Durable state machine for admin-initiated PayMongo refund execution.
+/// FinancialIdempotencyKey continues to provide client-request replay protection;
+/// this model tracks the external financial mutation lifecycle itself.
+enum RefundOperationStatus {
+  RESERVED
+  SUBMITTING
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REJECTED
+  UNKNOWN
+  MANUAL_REVIEW_REQUIRED
+}
+
+model RefundOperation {
+  id                    String                @id @default(cuid())
+  transactionId         String
+  actorId               String
+  idempotencyKey        String
+  requestHash           String
+
+  /// Stable server-derived key reused for every retry of the same PayMongo POST.
+  paymongoIdempotencyKey String               @unique
+
+  paymentId             String
+  refundId              String?               @unique
+
+  amountCentavos        Int
+  reason                String
+  paymongoReason        String
+
+  status                RefundOperationStatus @default(RESERVED)
+  providerStatus        String?
+
+  attemptCount          Int                   @default(0)
+  lastAttemptAt         DateTime?
+  submittedAt           DateTime?
+  completedAt           DateTime?
+
+  lastHttpStatus        Int?
+  lastErrorCode         String?
+  lastErrorMessage      String?               @db.Text
+
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+
+  @@unique([actorId, idempotencyKey])
+  @@index([transactionId, status])
+  @@index([createdAt(sort: Desc)])
+}
