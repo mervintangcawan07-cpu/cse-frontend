@@ -34,14 +34,46 @@ export async function POST(request: Request) {
       if (trimmedKey === "li") liveSignature = trimmedValue;
     });
 
+    // Reject malformed or stale webhook timestamps before processing.
+    // PayMongo timestamps are Unix seconds; allow limited clock skew/retry delay.
+    const timestampSeconds = Number(timestamp);
+    const nowSeconds = Math.floor(Date.now() / 1000);
+    const MAX_SIGNATURE_AGE_SECONDS = 300;
+
+    if (
+      !timestamp ||
+      !Number.isInteger(timestampSeconds) ||
+      timestampSeconds <= 0 ||
+      Math.abs(nowSeconds - timestampSeconds) > MAX_SIGNATURE_AGE_SECONDS
+    ) {
+      console.error("[PayMongo Webhook Error]: Invalid or stale signature timestamp.");
+      return NextResponse.json(
+        { error: "Invalid or stale signature timestamp" },
+        { status: 400 }
+      );
+    }
+
     const comparisonString = `${timestamp}.${rawBody}`;
     const expectedSignature = crypto
       .createHmac("sha256", webhookSecret)
       .update(comparisonString)
       .digest("hex");
 
+    const timingSafeSignatureEqual = (
+      expected: string,
+      provided: string
+    ): boolean => {
+      if (!provided || expected.length !== provided.length) return false;
+
+      return crypto.timingSafeEqual(
+        Buffer.from(expected, "utf8"),
+        Buffer.from(provided, "utf8")
+      );
+    };
+
     const isValidSignature =
-      expectedSignature === testSignature || expectedSignature === liveSignature;
+      timingSafeSignatureEqual(expectedSignature, testSignature) ||
+      timingSafeSignatureEqual(expectedSignature, liveSignature);
 
     if (!isValidSignature) {
       console.error("[PayMongo Webhook Error]: Invalid signature verification.");
