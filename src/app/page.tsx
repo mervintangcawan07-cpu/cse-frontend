@@ -330,29 +330,94 @@ export default function LandingPage() {
     },
   ];
 
-  const pricingPlans = [
+  const [pricingPlans, setPricingPlans] = useState([
     {
+      planType: "1_MONTH",
       name: "1-Month Intensive Pass",
       price: "₱99",
       duration: "30 Days Access",
-      description: "Ideal for fast, focused preparation in the final weeks before your exam date.",
+      description:
+        "Ideal for fast, focused preparation in the final weeks before your exam date.",
       popular: false,
     },
     {
+      planType: "6_MONTHS",
       name: "6-Month Full Pass",
       price: "₱199",
       duration: "180 Days Access",
-      description: "Our most popular pass. Complete coverage with ample time to master all subjects.",
+      description:
+        "Our most popular pass. Complete coverage with ample time to master all subjects.",
       popular: true,
     },
     {
+      planType: "1_YEAR",
       name: "1-Year Mastery Pass",
       price: "₱299",
       duration: "365 Days Access",
-      description: "Best value for continuous review across multiple CSC PPT and COMEX schedules.",
+      description:
+        "Best value for continuous review across multiple CSC PPT and COMEX schedules.",
       popular: false,
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPricingPlans() {
+      try {
+        const res = await fetch("/api/pricing", {
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          return;
+        }
+
+        const data = (await res.json()) as {
+          plans?: Array<{
+            planType: string;
+            price: number;
+          }>;
+        };
+
+        if (cancelled || !Array.isArray(data.plans)) {
+          return;
+        }
+
+        const priceByType = new Map(
+          data.plans.map(
+            (plan) => [plan.planType, plan.price] as const
+          )
+        );
+
+        setPricingPlans((previous) =>
+          previous.map((plan) => {
+            const currentPrice = priceByType.get(plan.planType);
+
+            if (
+              typeof currentPrice !== "number" ||
+              !Number.isFinite(currentPrice)
+            ) {
+              return plan;
+            }
+
+            return {
+              ...plan,
+              price: `₱${currentPrice}`,
+            };
+          })
+        );
+      } catch (error) {
+        console.warn("Could not refresh public pricing:", error);
+      }
+    }
+
+    void loadPricingPlans();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const faqs = [
     {

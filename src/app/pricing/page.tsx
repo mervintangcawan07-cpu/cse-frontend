@@ -1,109 +1,206 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function PricingPage() {
-  const [loading, setLoading] = useState(false);
+interface Plan {
+  planType: string;
+  name: string;
+  price: number;
+  durationDays: number;
+}
 
-  const handleCheckout = async () => {
-    setLoading(true);
+const FALLBACK_PLANS: Plan[] = [
+  {
+    planType: "1_MONTH",
+    name: "1-Month Pass",
+    price: 99,
+    durationDays: 30,
+  },
+  {
+    planType: "6_MONTHS",
+    name: "6-Month Pass",
+    price: 199,
+    durationDays: 180,
+  },
+  {
+    planType: "1_YEAR",
+    name: "1-Year Pass",
+    price: 299,
+    durationDays: 365,
+  },
+];
+
+export default function PricingPage() {
+  const [plans, setPlans] = useState<Plan[]>(FALLBACK_PLANS);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPricing() {
+      try {
+        const res = await fetch("/api/pricing", {
+          cache: "no-store",
+        });
+
+        if (!res.ok) {
+          return;
+        }
+
+        const data = (await res.json()) as {
+          plans?: Plan[];
+        };
+
+        if (
+          !cancelled &&
+          Array.isArray(data.plans) &&
+          data.plans.length > 0
+        ) {
+          setPlans(data.plans);
+        }
+      } catch (error) {
+        console.warn("Could not load current pricing:", error);
+      }
+    }
+
+    void loadPricing();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleCheckout = async (planType: string) => {
+    setLoadingPlan(planType);
+
     try {
-      const res = await fetch("/api/paymongo/checkout", { method: "POST" });
+      const res = await fetch("/api/paymongo/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ planType }),
+      });
+
       const data = await res.json();
+
       if (res.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
-      } else {
-        alert(data.error || "Failed to launch payment.");
+        return;
       }
-    } catch (err) {
-      console.error(err);
+
+      alert(data.error || "Failed to launch payment.");
+    } catch (error) {
+      console.error(error);
       alert("Error starting checkout session.");
     } finally {
-      setLoading(false);
+      setLoadingPlan(null);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 sm:py-16 px-2 sm:px-4">
-      <div className="w-full max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <Link href="/dashboard" className="text-blue-600 font-semibold hover:underline mb-6 inline-block">
+    <div className="min-h-screen bg-slate-50 py-8 sm:py-16 px-4">
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <Link
+            href="/dashboard"
+            className="text-blue-600 font-semibold hover:underline mb-6 inline-block"
+          >
             &larr; Back to Dashboard
           </Link>
-          <h1 className="text-4xl font-extrabold text-slate-900">Upgrade to PRO</h1>
-          <p className="text-lg text-slate-600 mt-4">Unlock all features and pass the Civil Service Exam.</p>
+
+          <h1 className="text-4xl font-extrabold text-slate-900">
+            Upgrade to PRO
+          </h1>
+
+          <p className="text-lg text-slate-600 mt-4">
+            Choose the access period that fits your review schedule.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Free Tier */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col">
-            <h2 className="text-2xl font-bold text-slate-800">Basic Free</h2>
-            <p className="text-slate-500 mt-2">Get started with basic practice tools.</p>
-            <div className="my-6">
-              <span className="text-4xl font-extrabold text-slate-900">₱0</span>
-              <span className="text-slate-500 font-medium"> / forever</span>
-            </div>
-            <ul className="space-y-4 mb-8 flex-1">
-              <li className="flex items-center gap-3 text-slate-700">✓ Limited Study Notes</li>
-              <li className="flex items-center gap-3 text-slate-700">✓ Free Preview Materials</li>
-            </ul>
-            <button className="w-full py-4 rounded-xl font-bold bg-slate-100 text-slate-500 cursor-not-allowed">
-              Current Plan
-            </button>
-          </div>
+        <div className="grid md:grid-cols-3 gap-6">
+          {plans.map((plan) => {
+            const recommended = plan.planType === "6_MONTHS";
 
-          {/* PRO Tier */}
-          <div className="bg-slate-900 rounded-3xl p-8 border border-emerald-500 shadow-xl flex flex-col relative">
-            <div className="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-xs font-bold px-4 py-1 rounded-bl-lg uppercase">
-              Recommended
-            </div>
-            <h2 className="text-2xl font-bold text-white">CSE PRO Pass</h2>
-            <p className="text-slate-400 mt-2">Full access to pass your exam.</p>
-            <div className="my-6">
-              <span className="text-4xl font-extrabold text-white">₱499</span>
-              <span className="text-slate-400 font-medium"> / lifetime access</span>
-            </div>
-            <ul className="space-y-4 mb-8 flex-1 text-slate-200 text-sm">
-              <li>✓ Unlimited Full Mock Exams</li>
-              <li>✓ Category-Specific Speed Drills</li>
-              <li>✓ Full Access to PDF & Word Handbooks</li>
-              <li>✓ Instructor Study Notes & Pro-Tips</li>
-            </ul>
-            <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="w-full py-4 rounded-xl font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-lg disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg
-                    className="animate-spin h-4 w-4 text-slate-950 shrink-0"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+            return (
+              <div
+                key={plan.planType}
+                className={
+                  recommended
+                    ? "bg-slate-900 rounded-3xl p-7 border-2 border-emerald-500 shadow-xl flex flex-col relative"
+                    : "bg-white rounded-3xl p-7 border border-slate-200 shadow-sm flex flex-col"
+                }
+              >
+                {recommended && (
+                  <div className="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-xs font-bold px-4 py-1 rounded-bl-lg uppercase">
+                    Recommended
+                  </div>
+                )}
+
+                <h2
+                  className={
+                    recommended
+                      ? "text-xl font-bold text-white"
+                      : "text-xl font-bold text-slate-900"
+                  }
+                >
+                  {plan.name}
+                </h2>
+
+                <div className="my-6">
+                  <span
+                    className={
+                      recommended
+                        ? "text-4xl font-extrabold text-white"
+                        : "text-4xl font-extrabold text-slate-900"
+                    }
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  <span>Connecting to PayMongo Gateway...</span>
-                </>
-              ) : (
-                <span>Pay ₱499 via PayMongo 💳</span>
-              )}
-            </button>
-          </div>
+                    ₱{plan.price}
+                  </span>
+
+                  <span
+                    className={
+                      recommended
+                        ? "text-slate-400 font-medium"
+                        : "text-slate-500 font-medium"
+                    }
+                  >
+                    {" "}
+                    / {plan.durationDays} days
+                  </span>
+                </div>
+
+                <ul
+                  className={
+                    recommended
+                      ? "space-y-3 mb-8 flex-1 text-slate-200 text-sm"
+                      : "space-y-3 mb-8 flex-1 text-slate-700 text-sm"
+                  }
+                >
+                  <li>✓ Unlimited Full Mock Exams</li>
+                  <li>✓ Category-Specific Speed Drills</li>
+                  <li>✓ Full Access to Study Notes</li>
+                  <li>✓ CSE Review Tools and Analytics</li>
+                </ul>
+
+                <button
+                  type="button"
+                  onClick={() => handleCheckout(plan.planType)}
+                  disabled={loadingPlan !== null}
+                  className={
+                    recommended
+                      ? "w-full py-4 rounded-xl font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition disabled:opacity-60"
+                      : "w-full py-4 rounded-xl font-black bg-blue-600 hover:bg-blue-500 text-white transition disabled:opacity-60"
+                  }
+                >
+                  {loadingPlan === plan.planType
+                    ? "Connecting to PayMongo..."
+                    : `Pay ₱${plan.price} via PayMongo`}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

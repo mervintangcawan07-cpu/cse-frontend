@@ -72,7 +72,7 @@ export async function POST() {
       !checkoutOwnerUserId ||
       String(checkoutOwnerUserId) !== userId ||
       typeof planType !== "string" ||
-      planType.length === 0
+      !["1_MONTH", "6_MONTHS", "1_YEAR"].includes(planType)
     ) {
       cookieStore.delete("cse_checkout_id");
       cookieStore.delete("cse_checkout_plan");

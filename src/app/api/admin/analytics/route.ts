@@ -38,17 +38,19 @@ export async function GET(request: Request) {
     let totalRevenue = 0;
     let monthlyRevenue = 0;
     let sixMonthRevenue = 0;
-    let lifetimeRevenue = 0;
+    let oneYearRevenue = 0;
 
     paidTransactions.forEach((tx) => {
       totalRevenue += tx.amount;
       if (tx.planType === "1_MONTH") monthlyRevenue += tx.amount;
       else if (tx.planType === "6_MONTHS") sixMonthRevenue += tx.amount;
-      else if (tx.planType === "LIFETIME") lifetimeRevenue += tx.amount;
+      else if (tx.planType === "1_YEAR") oneYearRevenue += tx.amount;
     });
 
     const totalExamsTaken = allResults.length;
-    const estimatedRevenue = totalRevenue > 0 ? totalRevenue : paidUsers * 499;
+    // Revenue must be backed by actual paid transactions.
+    // Do not infer revenue from the number of paid users.
+    const estimatedRevenue = totalRevenue;
     const passingExams = allResults.filter((r) => r.score >= 80).length;
     const overallPassRate = totalExamsTaken > 0 ? Math.round((passingExams / totalExamsTaken) * 100) : 0;
     const platformAverageScore =
@@ -66,7 +68,7 @@ export async function GET(request: Request) {
           totalRevenue: estimatedRevenue,
           monthlyRevenue,
           sixMonthRevenue,
-          lifetimeRevenue,
+          oneYearRevenue,
           totalTransactions: paidTransactions.length,
         },
         totalQuestions,

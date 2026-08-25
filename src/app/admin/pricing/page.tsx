@@ -19,7 +19,7 @@ export default function AdminPricingPage() {
   useEffect(() => {
     async function loadPricing() {
       try {
-        const res = await fetch("/api/pricing");
+        const res = await fetch("/api/pricing", { cache: "no-store" });
         const data = await res.json();
         if (res.ok && data.plans) {
           setPlans(data.plans);

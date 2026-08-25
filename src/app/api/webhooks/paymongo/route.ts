@@ -57,7 +57,12 @@ export async function POST(request: Request) {
       const attributes = payload?.data?.attributes?.data?.attributes;
       const metadata = attributes?.metadata;
       const userId = metadata?.userId || metadata?.user_id;
-      const planType = metadata?.planType || "1_MONTH";
+      const planType = metadata?.planType;
+      const supportedPlanTypes = new Set([
+        "1_MONTH",
+        "6_MONTHS",
+        "1_YEAR",
+      ]);
       const checkoutSessionId = payload?.data?.attributes?.data?.id;
 
       // Extract verified purchase amount in centavos (Authoritative base)
@@ -67,7 +72,12 @@ export async function POST(request: Request) {
           ? attributes.line_items[0].amount * (attributes.line_items[0].quantity || 1)
           : 0);
 
-      if (userId && checkoutSessionId) {
+      if (
+        userId &&
+        checkoutSessionId &&
+        typeof planType === "string" &&
+        supportedPlanTypes.has(planType)
+      ) {
         const feeCentavos = attributes?.fee || attributes?.fees?.[0]?.amount || 0;
         const partnerCode = metadata?.partnerCode;
         const campaignSource = metadata?.campaignSource || "direct";
@@ -77,7 +87,7 @@ export async function POST(request: Request) {
         const finalization = await PaymentFinalizationService.finalizeVerifiedPayment({
           userId: String(userId),
           checkoutSessionId: String(checkoutSessionId),
-          planType: String(planType),
+          planType,
           purchaseAmountCentavos,
           feeAmountCentavos: feeCentavos,
           partnerCode,
@@ -90,7 +100,9 @@ export async function POST(request: Request) {
           `[PayMongo Webhook Result]: Finalized payment for user ${userId} (${planType}) - AlreadyFinalized: ${finalization.alreadyFinalized}`
         );
       } else {
-        console.warn("[PayMongo Webhook Warning]: Paid event received but userId or checkoutSessionId was missing.");
+        console.warn(
+          "[PayMongo Webhook Warning]: Paid event rejected because userId, checkoutSessionId, or supported planType was missing."
+        );
       }
     } else if (
       eventType === "payment.refunded" ||

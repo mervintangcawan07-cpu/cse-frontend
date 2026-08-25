@@ -55,9 +55,11 @@ export class RefundService {
    * Helper: Resolves plan duration in days from planType.
    */
   static getPlanDurationDays(planType: string | null | undefined): number {
+    if (planType === "1_MONTH") return 30;
     if (planType === "6_MONTHS") return 180;
-    if (planType === "1_YEAR" || planType === "LIFETIME") return 365;
-    return 30; // default 1_MONTH
+    if (planType === "1_YEAR") return 365;
+
+    throw new Error("Unsupported pricing plan.");
   }
 
   /**

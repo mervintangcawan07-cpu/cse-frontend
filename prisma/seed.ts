@@ -119,7 +119,7 @@ async function main() {
   if ((prisma as any).pricingPlan) {
     console.log("Purging old plan entries and syncing 3 clean pricing plans...");
 
-    // Remove obsolete plan keys (e.g. LIFETIME) that cause duplicate entries
+    // Remove unsupported legacy plan keys so only the 3 standard plans remain
     await (prisma as any).pricingPlan.deleteMany({
       where: {
         planType: {

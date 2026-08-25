@@ -28,7 +28,7 @@ const SAMPLE_EVENTS: SocialProofEvent[] = [
     name: "Maria Santos",
     location: "Iloilo City",
     action: "unlocked",
-    detail: "Lifetime Reviewer Pass",
+    detail: "1-Year Reviewer Pass",
     icon: "sparkles",
     timeAgo: "4 mins ago",
   },

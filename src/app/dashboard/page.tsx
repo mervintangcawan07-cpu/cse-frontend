@@ -71,9 +71,24 @@ interface DashboardAnalytics {
 }
 
 const DEFAULT_PLANS: Plan[] = [
-  { planType: "1_MONTH", name: "1-Month Pass", price: 199, durationDays: 30 },
-  { planType: "6_MONTHS", name: "6-Month Pass", price: 299, durationDays: 180 },
-  { planType: "LIFETIME", name: "Lifetime Pass", price: 499, durationDays: 0 },
+  {
+    planType: "1_MONTH",
+    name: "1-Month Pass",
+    price: 99,
+    durationDays: 30,
+  },
+  {
+    planType: "6_MONTHS",
+    name: "6-Month Pass",
+    price: 199,
+    durationDays: 180,
+  },
+  {
+    planType: "1_YEAR",
+    name: "1-Year Pass",
+    price: 299,
+    durationDays: 365,
+  },
 ];
 
 function DashboardContent() {
@@ -140,7 +155,7 @@ function DashboardContent() {
 
           // Graceful Error Recovery: Fetch independent datasets concurrently without all-or-nothing failure
           const results = await Promise.allSettled([
-            fetch("/api/pricing").then((r) => (r.ok ? r.json() : null)),
+            fetch("/api/pricing", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)),
             fetch("/api/analytics/dashboard").then((r) => (r.ok ? r.json() : null)),
             fetch("/api/user/analytics/detailed").then((r) => (r.ok ? r.json() : null)),
           ]);
@@ -282,11 +297,6 @@ function DashboardContent() {
               {isPaid && daysRemaining !== null && (
                 <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-amber-400 text-slate-950 rounded-full shadow-md font-bold">
                   ⏳ {daysRemaining} Days Remaining
-                </span>
-              )}
-              {isPaid && daysRemaining === null && !isAdmin && (
-                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-emerald-400 text-slate-950 rounded-full shadow-md font-bold">
-                  ⏳ Active Lifetime / Custom Pass
                 </span>
               )}
             </div>

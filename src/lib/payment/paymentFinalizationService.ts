@@ -49,6 +49,10 @@ export class PaymentFinalizationService {
       source,
     } = params;
 
+    if (!["1_MONTH", "6_MONTHS", "1_YEAR"].includes(planType)) {
+      throw new Error("Unsupported pricing plan.");
+    }
+
     const normalizedAmountCentavos = Math.max(0, purchaseAmountCentavos);
     const amountPesos = Math.round(normalizedAmountCentavos / 100);
 
@@ -110,7 +114,7 @@ export class PaymentFinalizationService {
         newPaidUntil.setDate(newPaidUntil.getDate() + 30);
       } else if (planType === "6_MONTHS") {
         newPaidUntil.setDate(newPaidUntil.getDate() + 180);
-      } else if (planType === "1_YEAR" || planType === "LIFETIME") {
+      } else if (planType === "1_YEAR") {
         newPaidUntil.setDate(newPaidUntil.getDate() + 365);
       }
 

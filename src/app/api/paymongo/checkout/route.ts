@@ -66,8 +66,28 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await request.json().catch(() => ({ planType: "1_MONTH" }));
-    const planType = body.planType || "1_MONTH";
+    const body = await request.json().catch(() => ({}));
+
+    const requestedPlanType =
+      typeof body.planType === "string" ? body.planType : null;
+
+    const supportedPlanTypes = new Set([
+      "1_MONTH",
+      "6_MONTHS",
+      "1_YEAR",
+    ]);
+
+    if (
+      !requestedPlanType ||
+      !supportedPlanTypes.has(requestedPlanType)
+    ) {
+      return NextResponse.json(
+        { error: "Unsupported pricing plan." },
+        { status: 400 }
+      );
+    }
+
+    const planType = requestedPlanType;
 
     // Fetch dynamic plan price set by Admin from Database
     let plan = await prisma.pricingPlan.findUnique({
@@ -75,14 +95,32 @@ export async function POST(request: Request) {
     });
 
     if (!plan) {
-      const defaults: Record<string, { price: number; name: string; durationDays: number }> = {
-        "1_MONTH": { price: 99, name: "1-Month CSE PRO Access", durationDays: 30 },
-        "6_MONTHS": { price: 199, name: "6-Month CSE PRO Access", durationDays: 180 },
-        "1_YEAR": { price: 299, name: "1-Year CSE PRO Access", durationDays: 365 },
-        "LIFETIME": { price: 299, name: "1-Year CSE PRO Access", durationDays: 365 },
+      const defaults: Record<
+        string,
+        {
+          price: number;
+          name: string;
+          durationDays: number;
+        }
+      > = {
+        "1_MONTH": {
+          price: 99,
+          name: "1-Month CSE PRO Access",
+          durationDays: 30,
+        },
+        "6_MONTHS": {
+          price: 199,
+          name: "6-Month CSE PRO Access",
+          durationDays: 180,
+        },
+        "1_YEAR": {
+          price: 299,
+          name: "1-Year CSE PRO Access",
+          durationDays: 365,
+        },
       };
 
-      const fallback = defaults[planType] || { price: 99, name: "CSE PRO Access", durationDays: 30 };
+      const fallback = defaults[planType];
 
       plan = {
         id: "default",
