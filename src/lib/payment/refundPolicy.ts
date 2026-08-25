@@ -74,7 +74,6 @@ export interface RefundPolicyDecision {
   paymongoReason:
     | "duplicate"
     | "fraudulent"
-    | "requested_by_customer"
     | "others";
 }
 
@@ -110,18 +109,14 @@ function paymongoReasonFor(
 ):
   | "duplicate"
   | "fraudulent"
-  | "requested_by_customer"
   | "others" {
   if (reason === "DUPLICATE_PAYMENT") return "duplicate";
   if (reason === "UNAUTHORIZED_CHARGE") return "fraudulent";
 
-  if (
-    reason === "CUSTOMER_CANCELLATION" ||
-    reason === "CHANGE_OF_MIND"
-  ) {
-    return "requested_by_customer";
-  }
-
+  // PayMongo's Create Refund contract accepts:
+  // duplicate | fraudulent | others.
+  // Customer-requested cancellation/change-of-mind is represented
+  // as "others"; the execution layer supplies descriptive notes.
   return "others";
 }
 

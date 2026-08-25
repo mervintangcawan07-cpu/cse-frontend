@@ -6,7 +6,8 @@ export type FinancialOperationType =
   | "MANUAL_ADJUSTMENT"
   | "MANUAL_DEDUCTION"
   | "PARTNER_PAYOUT_REQUEST"
-  | "REFERRAL_PAYOUT_REQUEST";
+  | "REFERRAL_PAYOUT_REQUEST"
+  | "REFUND_EXECUTION";
 
 export class IdempotencyDomainError extends Error {
   public readonly code: string;
