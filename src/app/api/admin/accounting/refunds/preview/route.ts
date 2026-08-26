@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
-import {
-  RefundService,
-  type PayMongoRefundResource,
-} from "@/lib/payment/refundService";
+import { RefundService } from "@/lib/payment/refundService";
 import {
   REFUND_REASONS,
-  calculateRefundPolicy,
   type RefundReason,
 } from "@/lib/payment/refundPolicy";
+import {
+  prepareRefundExecution,
+  type RefundExecutionPreparationDependencies,
+} from "@/lib/payment/refundExecutionPreparation";
 
 function isRefundReason(value: unknown): value is RefundReason {
   return (
@@ -18,36 +18,47 @@ function isRefundReason(value: unknown): value is RefundReason {
   );
 }
 
-function sumSucceededRefunds(
-  refunds: PayMongoRefundResource[]
-): number {
-  let total = 0;
+const preparationDependencies: RefundExecutionPreparationDependencies = {
+  async findTransaction(transactionId) {
+    return prisma.transaction.findUnique({
+      where: { id: transactionId },
+      select: {
+        id: true,
+        userId: true,
+        checkoutSessionId: true,
+        grossAmountCentavos: true,
+        feeAmountCentavos: true,
+        status: true,
+        planType: true,
+        createdAt: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+  },
 
-  for (const refund of refunds) {
-    if (refund.attributes?.status !== "succeeded") continue;
+  fetchPayMongoCheckoutSession(checkoutSessionId, secretKey) {
+    return RefundService.fetchPayMongoCheckoutSession(
+      checkoutSessionId,
+      secretKey
+    );
+  },
 
-    const amount = refund.attributes?.amount;
-    const currency = refund.attributes?.currency;
+  resolvePaidPaymentFromCheckout(checkout) {
+    return RefundService.resolvePaidPaymentFromCheckout(checkout);
+  },
 
-    if (
-      typeof amount !== "number" ||
-      !Number.isInteger(amount) ||
-      amount <= 0 ||
-      currency !== "PHP"
-    ) {
-      throw new Error("INVALID_SUCCEEDED_REFUND_AMOUNT");
-    }
-
-    total += amount;
-
-    if (!Number.isSafeInteger(total)) {
-      throw new Error("REFUND_TOTAL_OVERFLOW");
-    }
-  }
-
-  return total;
-}
-
+  fetchAllRefundsStrict(paymentId, secretKey) {
+    return RefundService.fetchAllRefundsStrict(
+      paymentId,
+      secretKey
+    );
+  },
+};
 export async function POST(request: Request) {
   try {
     const { user, errorResponse } =
@@ -88,282 +99,88 @@ export async function POST(request: Request) {
       );
     }
 
-    const transaction = await prisma.transaction.findUnique({
-      where: { id: transactionId },
-      select: {
-        id: true,
-        userId: true,
-        checkoutSessionId: true,
-        grossAmountCentavos: true,
-        feeAmountCentavos: true,
-        status: true,
-        planType: true,
-        createdAt: true,
-        user: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-
-    if (!transaction) {
-      return NextResponse.json(
-        { error: "Transaction not found." },
-        { status: 404 }
-      );
-    }
-
-    if (
-      transaction.status !== "PAID" &&
-      transaction.status !== "REFUNDED"
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Only paid or previously refunded transactions can be evaluated for refund.",
-          transactionStatus: transaction.status,
-        },
-        { status: 409 }
-      );
-    }
-
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
 
-    if (!secretKey?.trim()) {
-      console.error(
-        "[ADMIN_REFUND_PREVIEW] PAYMONGO_SECRET_KEY is missing."
-      );
+    const preparation = await prepareRefundExecution(
+      preparationDependencies,
+      {
+        transactionId,
+        reason,
+        secretKey,
+      }
+    );
 
-      return NextResponse.json(
-        { error: "Payment provider configuration unavailable." },
-        { status: 503 }
-      );
-    }
-
-    const checkout =
-      await RefundService.fetchPayMongoCheckoutSession(
-        transaction.checkoutSessionId,
-        secretKey
-      );
-
-    if (!checkout) {
-      return NextResponse.json(
-        {
-          error:
-            "Unable to retrieve the authoritative PayMongo Checkout Session.",
-        },
-        { status: 502 }
-      );
-    }
-
-    const checkoutOwnerUserId =
-      checkout.attributes?.metadata?.userId ??
-      checkout.attributes?.metadata?.user_id;
-
-    if (
-      !checkoutOwnerUserId ||
-      String(checkoutOwnerUserId) !== transaction.userId
-    ) {
-      console.error(
-        `[ADMIN_REFUND_PREVIEW] Checkout ownership missing or mismatched for transaction ${transaction.id}`
-      );
-
-      return NextResponse.json(
-        { error: "Checkout ownership verification failed." },
-        { status: 409 }
-      );
-    }
-
-    const payment =
-      RefundService.resolvePaidPaymentFromCheckout(checkout);
-
-    if (!payment) {
-      return NextResponse.json(
-        {
-          error:
-            "No authoritative paid PayMongo Payment was found for this Checkout Session.",
-        },
-        { status: 409 }
-      );
-    }
-
-    const paymentAmountCentavos =
-      payment.attributes?.amount;
-
-    if (
-      typeof paymentAmountCentavos !== "number" ||
-      !Number.isInteger(paymentAmountCentavos) ||
-      paymentAmountCentavos <= 0 ||
-      payment.attributes?.currency !== "PHP"
-    ) {
-      return NextResponse.json(
-        { error: "Invalid authoritative PayMongo payment amount." },
-        { status: 409 }
-      );
-    }
-
-    if (
-      transaction.grossAmountCentavos &&
-      transaction.grossAmountCentavos > 0 &&
-      transaction.grossAmountCentavos !== paymentAmountCentavos
-    ) {
-      console.error(
-        `[ADMIN_REFUND_PREVIEW] Payment amount mismatch for transaction ${transaction.id}`
-      );
-
-      return NextResponse.json(
-        {
-          error:
-            "GovStudyX and PayMongo payment amounts do not match. Manual reconciliation is required.",
-        },
-        { status: 409 }
-      );
-    }
-
-    const authoritativeFeeCentavos =
-      payment.attributes?.fee;
-
-    if (
-      typeof authoritativeFeeCentavos !== "number" ||
-      !Number.isInteger(authoritativeFeeCentavos) ||
-      authoritativeFeeCentavos < 0 ||
-      authoritativeFeeCentavos > paymentAmountCentavos
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Authoritative PayMongo processing fee is unavailable or invalid.",
-        },
-        { status: 409 }
-      );
-    }
-
-    const storedFeeCentavos =
-      transaction.feeAmountCentavos || 0;
-
-    if (
-      storedFeeCentavos > 0 &&
-      storedFeeCentavos !== authoritativeFeeCentavos
-    ) {
-      console.error(
-        `[ADMIN_REFUND_PREVIEW] Fee mismatch for transaction ${transaction.id}: stored=${storedFeeCentavos}, paymongo=${authoritativeFeeCentavos}`
-      );
-
-      return NextResponse.json(
-        {
-          error:
-            "GovStudyX and PayMongo processing fees do not match. Manual reconciliation is required.",
-        },
-        { status: 409 }
-      );
-    }
-
-    let allRefunds: PayMongoRefundResource[];
-
-    try {
-      allRefunds =
-        await RefundService.fetchAllRefundsStrict(
-          payment.id,
-          secretKey
+    if (!preparation.ok) {
+      if (
+        preparation.code ===
+        "PAYMONGO_CONFIGURATION_UNAVAILABLE"
+      ) {
+        console.error(
+          "[ADMIN_REFUND_PREVIEW] PAYMONGO_SECRET_KEY is missing."
         );
-    } catch (error) {
-      console.error(
-        "[ADMIN_REFUND_PREVIEW] Authoritative refund history unavailable:",
-        error
-      );
+      }
+
+      if (
+        preparation.code ===
+        "CHECKOUT_OWNERSHIP_MISMATCH"
+      ) {
+        console.error(
+          `[ADMIN_REFUND_PREVIEW] Checkout ownership missing or mismatched for transaction ${transactionId}`
+        );
+      }
+
+      if (
+        preparation.code ===
+        "PAYMENT_AMOUNT_MISMATCH"
+      ) {
+        console.error(
+          `[ADMIN_REFUND_PREVIEW] Payment amount mismatch for transaction ${transactionId}`
+        );
+      }
+
+      if (
+        preparation.code ===
+        "PAYMENT_FEE_MISMATCH"
+      ) {
+        console.error(
+          `[ADMIN_REFUND_PREVIEW] Fee mismatch for transaction ${transactionId}`
+        );
+      }
+
+      if (
+        preparation.code ===
+        "REFUND_HISTORY_UNAVAILABLE"
+      ) {
+        console.error(
+          "[ADMIN_REFUND_PREVIEW] Authoritative refund history unavailable."
+        );
+      }
+
+      if (
+        preparation.code ===
+        "SUCCEEDED_REFUND_AMOUNT_INVALID"
+      ) {
+        console.error(
+          "[ADMIN_REFUND_PREVIEW] Invalid refund history amount."
+        );
+      }
 
       return NextResponse.json(
-        {
-          error:
-            "Authoritative PayMongo refund history could not be completely verified.",
-        },
-        { status: 502 }
+        preparation.body,
+        { status: preparation.status }
       );
     }
 
-    const nonFinalRefunds = allRefunds.filter((refund) => {
-      const status = String(
-        refund.attributes?.status || ""
-      ).toLowerCase();
-
-      return status !== "succeeded" && status !== "failed";
-    });
-
-    if (nonFinalRefunds.length > 0) {
-      return NextResponse.json(
-        {
-          error:
-            "A PayMongo refund is already pending or processing. Wait for it to reach a final state before creating another refund.",
-          activeRefunds: nonFinalRefunds.map((refund) => ({
-            id: refund.id,
-            status: refund.attributes?.status || "unknown",
-            amountCentavos:
-              refund.attributes?.amount ?? null,
-          })),
-        },
-        { status: 409 }
-      );
-    }
-
-    let cumulativeRefundedCentavos: number;
-
-    try {
-      cumulativeRefundedCentavos =
-        sumSucceededRefunds(allRefunds);
-    } catch (error) {
-      console.error(
-        "[ADMIN_REFUND_PREVIEW] Invalid refund history amount:",
-        error
-      );
-
-      return NextResponse.json(
-        {
-          error:
-            "PayMongo refund history contains an invalid financial amount.",
-        },
-        { status: 409 }
-      );
-    }
-
-    if (
-      cumulativeRefundedCentavos >
-      paymentAmountCentavos
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Cumulative PayMongo refunds exceed the original payment. Manual reconciliation is required.",
-        },
-        { status: 409 }
-      );
-    }
-
-    const paymentMethod =
-      payment.attributes?.source?.type || "";
-
-    const createdAtSeconds =
-      payment.attributes?.created_at;
-
-    const paymentCreatedAt =
-      typeof createdAtSeconds === "number" &&
-      Number.isFinite(createdAtSeconds) &&
-      createdAtSeconds > 0
-        ? new Date(createdAtSeconds * 1000)
-        : undefined;
-
-    const decision = calculateRefundPolicy({
-      reason,
-      paymentMethod,
-      originalPaymentCentavos:
-        paymentAmountCentavos,
-      originalProcessingFeeCentavos:
-        authoritativeFeeCentavos,
+    const {
+      transaction,
+      payment,
+      paymentAmountCentavos,
+      authoritativeFeeCentavos,
+      storedFeeCentavos,
       cumulativeRefundedCentavos,
-      paymentCreatedAt,
-    });
-
+      successfulRefundCount,
+      policy: decision,
+    } = preparation;
     return NextResponse.json(
       {
         success: true,
@@ -403,12 +220,7 @@ export async function POST(request: Request) {
           remainingRefundableCentavos:
             paymentAmountCentavos -
             cumulativeRefundedCentavos,
-          successfulRefundCount:
-            allRefunds.filter(
-              (refund) =>
-                refund.attributes?.status ===
-                "succeeded"
-            ).length,
+          successfulRefundCount,
         },
 
         policy: decision,
