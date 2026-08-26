@@ -364,7 +364,19 @@ export async function prepareRefundExecution(
         payment.id,
         secretKey
       );
-  } catch {
+  } catch (error) {
+    const diagnosticCode =
+      error instanceof Error &&
+      /^REFUND_HISTORY_(?:NETWORK_ERROR|HTTP_\d{3}|INVALID_RESPONSE|INVALID_RESOURCE|PAYMENT_MISMATCH|PAGINATION_INCOMPLETE|INVALID_PAYMENT_ID|MISSING_SECRET)$/.test(
+        error.message
+      )
+        ? error.message
+        : "REFUND_HISTORY_UNKNOWN_ERROR";
+
+    console.error(
+      `[REFUND_EXECUTION_PREPARATION] Refund history verification failed: ${diagnosticCode}`
+    );
+
     return failure(
       "REFUND_HISTORY_UNAVAILABLE",
       502,
