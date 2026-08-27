@@ -2,7 +2,7 @@
 
 ## Purpose and authority boundary
 
-This procedure closes the production credential and session-containment work that remains after the GSA-P0-001 source remediation. It is an operator runbook, not authorization to access production, change credentials, alter environment variables, restart services, or deploy. Each production action requires the application's normal incident/change approval.
+This document preserves the human-operated production credential and session-containment runbook and records its completed outcome after the GSA-P0-001 source remediation. This documentation update is not authorization to access production, change credentials, alter environment variables, restart services, or deploy.
 
 Never place an old or replacement password, JWT signing secret, session token, encryption key, or other credential in this document, source control, a ticket, chat, email, terminal command, shell history, screenshot, recording, application log, or deployment log.
 
@@ -11,7 +11,10 @@ Current status:
 - SOURCE REMEDIATION: **RESOLVED**
 - CURRENT-WORKTREE DOCUMENTATION CREDENTIAL EXPOSURE: **REMEDIATED**
 - GIT-HISTORY CREDENTIAL EXPOSURE: **CONFIRMED**
-- PRODUCTION CREDENTIAL ROTATION: **STILL REQUIRED**
+- PRODUCTION PASSWORD ROTATION: **COMPLETED**
+- PRODUCTION JWT_SECRET ROTATION: **COMPLETED**
+- PRE-ROTATION ADMIN SESSION INVALIDATION: **VERIFIED**
+- GSA-P0-001 FINAL STATUS: **CLOSED**
 
 ## Current implementation evidence
 
@@ -96,7 +99,7 @@ After the encryption-key prerequisite is formally satisfied:
 5. Confirm readiness and application health using value-free health checks. Do not print environment variables or secret-manager contents.
 6. Existing sudo tickets expire after ten minutes. If `SUDO_SECRET` is independently configured, follow the incident owner's separate decision for its rotation or wait for the full ticket lifetime before declaring privileged-session containment. Never assume `JWT_SECRET` rotation changes an independent `SUDO_SECRET`.
 
-This task does not perform or authorize any step in this phase.
+The production actions in this phase were completed by authorized human operators. This documentation task does not perform or authorize any production action.
 
 ## Phase 5: verify containment
 
@@ -137,4 +140,35 @@ The human incident record should contain only:
 
 Never record the old password, replacement password, JWT signing secret, encryption key, reset token, session cookie, or JWT.
 
-Production closure is complete only after password rotation, assured session invalidation, verification, and independent review have all passed. Until then, `PRODUCTION CREDENTIAL ROTATION` remains **STILL REQUIRED** and Git-history exposure remains **CONFIRMED**.
+## Final production closure record
+
+- SOURCE REMEDIATION: **RESOLVED**
+- SOURCE REMEDIATION COMMIT: `27c1f40` — `security: remove hardcoded admin bootstrap credentials`
+- SOURCE REMEDIATION DEPLOYED TO PRODUCTION: **VERIFIED**
+- PRODUCTION PASSWORD ROTATION: **COMPLETED**
+- OLD PASSWORD REJECTION: **VERIFIED**
+- NEW PASSWORD LOGIN: **VERIFIED**
+- PRODUCTION JWT_SECRET ROTATION: **COMPLETED**
+- ALL PRODUCTION RUNTIMES REDEPLOYED: **VERIFIED**
+- PRE-ROTATION ADMIN SESSION INVALIDATION: **VERIFIED**
+- PRODUCTION HEALTH AFTER ROTATION: **UP**
+- ENCRYPTED PRODUCTION DATA DEPENDENCY: **NONE FOUND**
+- STAGE B KEY-COMPATIBILITY CHECK: **NOT REQUIRED FOR EXISTING DATA**
+- GIT-HISTORY CREDENTIAL EXPOSURE: **CONFIRMED**
+- GSA-P0-001 FINAL STATUS: **CLOSED**
+
+The production readiness endpoint reported the application, database, and environment as UP after deployment and again after `JWT_SECRET` rotation. Production `ENCRYPTION_KEY_V1` remained unchanged.
+
+The Stage A read-only inventory returned zero values for:
+
+- `ReferralPayout.accountNumberEncrypted`
+- `Partner.accountNumberEncrypted`
+- `PartnerPayoutProfile.accountNumberEncrypted`
+- `PartnerPayout.accountNumberEncrypted`
+- `User.banReason`
+
+All Stage A classifications were also zero: `ENCRYPTED_PREFIX_ANY`, `ENCRYPTED_FORMAT`, `ENC_V1`, `ENC_OTHER_VERSION`, `PLAINTEXT_OR_UNKNOWN_FORMAT`, and `MALFORMED_OR_UNKNOWN`. No existing production data required Stage B key-compatibility testing.
+
+Production does not configure `SUDO_SECRET`. Current source therefore signs and verifies Sudo tickets with the `JWT_SECRET` fallback. The completed `JWT_SECRET` rotation invalidated outstanding Sudo tickets as well as pre-rotation user, administrator, and partner JWTs.
+
+The historical credential exposure in Git remains **CONFIRMED**. Git history was not rewritten, and this document contains neither the historical credential nor any replacement secret.

@@ -6,7 +6,8 @@
 - Finding: GSA-P0-001 — executable seed contained fixed administrator credentials
 - Branch: `main`
 - Baseline HEAD: `a3d82674ae5483469603c7775b831ec5c363c2a0` (`a3d8267`)
-- Current HEAD after remediation: `a3d82674ae5483469603c7775b831ec5c363c2a0` (`a3d8267`)
+- Source remediation commit: `27c1f404250755e2205c46ae58e1b80f91d1632a` (`27c1f40`) — `security: remove hardcoded admin bootstrap credentials`
+- Production deployment: **CONFIRMED**
 - Initial tracked diff: none
 - Protected pre-existing untracked paths: `README.PORTFOLIO.md`, `README.PORTFOLIO.REAUDIT.md`, `docs/`, and `scripts/`
 
@@ -94,7 +95,7 @@ For the explicitly configured bootstrap email, the existing upsert can still pro
 
 Static administrator identity authorization checks were observed in `src/app/api/admin/elimination-drills/route.ts` and `src/app/api/admin/trash/route.ts`. They were not modified because P0-002 and all other findings are outside this task.
 
-## Database, production, and Git impact
+## Source-remediation task impact (historical execution record)
 
 - Database modified: **NO**
 - Migration created: **NO**
@@ -102,24 +103,36 @@ Static administrator identity authorization checks were observed in `src/app/api
 - Dependencies changed: **NO**
 - API contract changed: **NO**
 - Authentication flow refactored: **NO**
-- Commit created: **NO**
-- Changes staged: **NO**
-- Push or deployment performed: **NO**
-- Current HEAD differs from baseline: **NO**
+- Commit created during the initial remediation turn: **NO**; the reviewed remediation was later committed as `27c1f40`
+- Changes staged during the initial remediation turn: **NO**
+- Push or deployment performed during the initial remediation turn: **NO**; production deployment was later confirmed
+- HEAD at the end of the initial remediation turn differed from baseline: **NO**
 
-Git status after remediation contains the intended tracked modification to `prisma/seed.ts`, this new untracked report within the already-untracked `docs/` tree, and the protected pre-existing untracked paths. No unrelated tracked source file changed.
+Git status at the end of the initial remediation turn contained the intended tracked modification to `prisma/seed.ts`, this report within the then-untracked `docs/` tree, and the protected pre-existing untracked paths. No unrelated tracked source file changed.
 
-## Status and remaining action
+## Final closure status
 
 - SOURCE REMEDIATION: **RESOLVED**
+- PRODUCTION PASSWORD ROTATION: **COMPLETED**
+- OLD PASSWORD REJECTION: **VERIFIED**
+- NEW PASSWORD LOGIN: **VERIFIED**
+- PRODUCTION JWT_SECRET ROTATION: **COMPLETED**
+- PRE-ROTATION ADMIN SESSION INVALIDATION: **VERIFIED**
+- ENCRYPTED PRODUCTION DATA DEPENDENCY: **NONE FOUND**
+- STAGE B KEY-COMPATIBILITY CHECK: **NOT REQUIRED FOR EXISTING DATA**
+- PRODUCTION HEALTH AFTER ROTATION: **UP**
 - CURRENT-TREE DOCUMENTATION CREDENTIAL EXPOSURE: **REMEDIATED**
-- GIT-HISTORY SECRET EXPOSURE: **STILL CONFIRMED**
-- PRODUCTION CREDENTIAL ROTATION: **STILL REQUIRED**
+- GIT-HISTORY CREDENTIAL EXPOSURE: **CONFIRMED**
+- GSA-P0-001 FINAL STATUS: **CLOSED**
 
-Because the credential was committed at the baseline HEAD, source remediation does not close the production incident. A human security/database operator must identify affected environments, rotate or invalidate the compromised administrator credential, review active sessions and recovery access, and document completion without placing replacement secrets in source control.
+Production closure was completed through human-operated actions after the source remediation was deployed. The administrator password was rotated; rejection of the historical password and successful authentication with the replacement password were verified. Production `JWT_SECRET` was rotated, all production runtimes were redeployed, and a pre-rotation administrator session was rejected. The readiness endpoint reported the application, database, and environment as UP after rotation.
 
-The exact human-operated production procedure is recorded in `docs/audit/remediation/P0-001-PRODUCTION-CLOSURE.md`. No credential or session operation was performed during documentation closure.
+Production `ENCRYPTION_KEY_V1` remained unchanged. The approved Stage A read-only inventory returned zero values for every identified potentially encrypted field and zero results for every encryption-format classification. Stage B key-compatibility testing was therefore not required for existing data.
+
+`SUDO_SECRET` is not configured in Production. Current source consequently uses `JWT_SECRET` as the Sudo signing fallback, so the completed `JWT_SECRET` rotation also invalidated outstanding Sudo tickets.
+
+The historical credential remains exposed in Git history. That exposure is **CONFIRMED** and was not removed or rewritten by this remediation.
 
 ## Next recommended action
 
-Human review of this remediation and the production credential rotation/invalidating procedure before starting GSA-P0-002.
+Preserve this report and the production closure record as incident evidence. Do not start GSA-P0-002 without separate human authorization.
