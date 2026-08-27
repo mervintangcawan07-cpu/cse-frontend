@@ -228,6 +228,8 @@ export function calculateRefundPolicy(
 
   let customerRefundCentavos: number;
   let deductedOriginalProcessingFeeCentavos = 0;
+  let merchantAbsorbsOriginalProcessingFee =
+    reasonClass === "PROTECTED";
 
   if (reasonClass === "PROTECTED") {
     // Merchant/platform-fault and protected cases return the full
@@ -253,26 +255,34 @@ export function calculateRefundPolicy(
       };
     }
 
-    deductedOriginalProcessingFeeCentavos =
-      input.originalProcessingFeeCentavos;
+    if (paymentMethod === "qrph") {
+      // QR Ph supports full refunds only. For an otherwise eligible first
+      // discretionary refund, GovStudyX absorbs the original processing fee
+      // instead of turning the provider request into an unsupported partial refund.
+      customerRefundCentavos = remainingRefundableCentavos;
+      merchantAbsorbsOriginalProcessingFee = true;
+    } else {
+      deductedOriginalProcessingFeeCentavos =
+        input.originalProcessingFeeCentavos;
 
-    customerRefundCentavos =
-      remainingRefundableCentavos -
-      deductedOriginalProcessingFeeCentavos;
+      customerRefundCentavos =
+        remainingRefundableCentavos -
+        deductedOriginalProcessingFeeCentavos;
 
-    if (customerRefundCentavos <= 0) {
-      return {
-        ...base,
-        allowed: false,
-        code: "NON_POSITIVE_NET_REFUND",
-        message:
-          "The calculated discretionary refund is not a positive amount after the actual original processing fee.",
-        remainingRefundableCentavos,
-        customerRefundCentavos: 0,
-        deductedOriginalProcessingFeeCentavos,
-        merchantAbsorbedOriginalProcessingFeeCentavos: 0,
-        isPartialRefund: false,
-      };
+      if (customerRefundCentavos <= 0) {
+        return {
+          ...base,
+          allowed: false,
+          code: "NON_POSITIVE_NET_REFUND",
+          message:
+            "The calculated discretionary refund is not a positive amount after the actual original processing fee.",
+          remainingRefundableCentavos,
+          customerRefundCentavos: 0,
+          deductedOriginalProcessingFeeCentavos,
+          merchantAbsorbedOriginalProcessingFeeCentavos: 0,
+          isPartialRefund: false,
+        };
+      }
     }
   }
 
@@ -348,14 +358,14 @@ export function calculateRefundPolicy(
         ? "APPROVED_FULL"
         : "APPROVED_NET_DISCRETIONARY",
     message:
-      reasonClass === "PROTECTED"
+      merchantAbsorbsOriginalProcessingFee
         ? "Full remaining customer payment is refundable; GovStudyX absorbs the original processing fee."
         : "Discretionary refund may deduct only the actual original PayMongo processing fee.",
     remainingRefundableCentavos,
     customerRefundCentavos,
     deductedOriginalProcessingFeeCentavos,
     merchantAbsorbedOriginalProcessingFeeCentavos:
-      reasonClass === "PROTECTED"
+      merchantAbsorbsOriginalProcessingFee
         ? input.originalProcessingFeeCentavos
         : 0,
     isPartialRefund,
