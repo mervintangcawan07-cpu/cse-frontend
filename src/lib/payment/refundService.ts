@@ -1,4 +1,5 @@
 // Relative Path: src/lib/payment/refundService.ts
+import { isExactPayMongoPaymentIdListRejection } from "@/lib/payment/refundHistorySafety";
 import { prisma } from "@/lib/prisma";
 import { LedgerService } from "@/lib/accounting/ledgerService";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
@@ -266,6 +267,17 @@ export class RefundService {
         console.error(
           `[REFUND_SERVICE] Refund history request rejected: HTTP_${response.status} code=${safeCode} pointer=${safePointer}`
         );
+
+        if (
+          isExactPayMongoPaymentIdListRejection(
+            response.status,
+            errorPayload
+          )
+        ) {
+          throw new Error(
+            "REFUND_HISTORY_PAYMENT_ID_LIST_REJECTED"
+          );
+        }
 
         throw new Error(
           `REFUND_HISTORY_HTTP_${response.status}`

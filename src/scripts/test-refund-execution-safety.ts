@@ -54,6 +54,11 @@ import {
   type PayMongoRefundSubmissionResult,
 } from "../lib/payment/refundProviderSubmission";
 
+import {
+  hasVerifiedEmptyEmbeddedRefundHistory,
+  isExactPayMongoPaymentIdListRejection,
+} from "../lib/payment/refundHistorySafety";
+
 let totalTests = 0;
 let passedTests = 0;
 let failedTests = 0;
@@ -1129,6 +1134,284 @@ async function main(): Promise<void> {
     );
 
     // ============================================================
+    // ============================================================
+    // 5A. First-refund empty-history safety predicates
+    // ============================================================
+
+    console.log(
+      "\n--- First-refund empty-history safety ---"
+    );
+
+    const refundServiceSource =
+      fs.readFileSync(
+        path.join(
+          process.cwd(),
+          "src",
+          "lib",
+          "payment",
+          "refundService.ts"
+        ),
+        "utf8"
+      );
+
+    const refundPreparationSource =
+      fs.readFileSync(
+        path.join(
+          process.cwd(),
+          "src",
+          "lib",
+          "payment",
+          "refundExecutionPreparation.ts"
+        ),
+        "utf8"
+      );
+
+    const providerRejectionPosition =
+      refundServiceSource.indexOf(
+        "isExactPayMongoPaymentIdListRejection(",
+        refundServiceSource.indexOf(
+          "if (!response.ok)"
+        )
+      );
+
+    const providerMarkerPosition =
+      refundServiceSource.indexOf(
+        `"REFUND_HISTORY_PAYMENT_ID_LIST_REJECTED"`,
+        providerRejectionPosition
+      );
+
+    const genericHttpFailurePosition =
+      refundServiceSource.indexOf(
+        "REFUND_HISTORY_HTTP_${response.status}",
+        providerMarkerPosition
+      );
+
+    assert(
+      providerRejectionPosition >= 0 &&
+        providerMarkerPosition >
+          providerRejectionPosition &&
+        genericHttpFailurePosition >
+          providerMarkerPosition,
+      "Strict refund history maps classified payment_id rejection to explicit marker"
+    );
+
+    const preparationFallbackStart =
+      refundPreparationSource.indexOf(
+        "const exactFirstRefundEmptyHistory ="
+      );
+
+    const preparationFallbackEnd =
+      refundPreparationSource.indexOf(
+        "if (exactFirstRefundEmptyHistory)",
+        preparationFallbackStart
+      );
+
+    const preparationFallbackBlock =
+      preparationFallbackStart >= 0 &&
+      preparationFallbackEnd >
+        preparationFallbackStart
+        ? refundPreparationSource.slice(
+            preparationFallbackStart,
+            preparationFallbackEnd
+          )
+        : "";
+
+    assert(
+      preparationFallbackBlock.includes(
+        `"REFUND_HISTORY_PAYMENT_ID_LIST_REJECTED"`
+      ) &&
+        preparationFallbackBlock.includes(
+          "hasVerifiedEmptyEmbeddedRefundHistory("
+        ) &&
+        preparationFallbackBlock.includes(
+          "payment.id"
+        ),
+      "Preparation requires exact marker plus authoritative verified empty embedded history"
+    );
+
+    const exactPaymentIdError = {
+      errors: [
+        {
+          code:
+            "parameter_invalid",
+          source: {
+            pointer:
+              "data.attributes.payment_id",
+          },
+        },
+      ],
+    };
+
+    assert(
+      isExactPayMongoPaymentIdListRejection(
+        400,
+        exactPaymentIdError
+      ),
+      "Exact HTTP 400 payment_id rejection is recognized"
+    );
+
+    assert(
+      !isExactPayMongoPaymentIdListRejection(
+        422,
+        exactPaymentIdError
+      ),
+      "Non-400 provider response cannot unlock empty-history handling"
+    );
+
+    assert(
+      !isExactPayMongoPaymentIdListRejection(
+        400,
+        {
+          errors: [
+            {
+              code:
+                "parameter_missing",
+              source: {
+                pointer:
+                  "data.attributes.payment_id",
+              },
+            },
+          ],
+        }
+      ),
+      "Different PayMongo error code fails closed"
+    );
+
+    assert(
+      !isExactPayMongoPaymentIdListRejection(
+        400,
+        {
+          errors: [
+            {
+              code:
+                "parameter_invalid",
+              source: {
+                pointer:
+                  "data.attributes.limit",
+              },
+            },
+          ],
+        }
+      ),
+      "Different PayMongo error pointer fails closed"
+    );
+
+    assert(
+      !isExactPayMongoPaymentIdListRejection(
+        400,
+        {
+          errors: [
+            exactPaymentIdError.errors[0],
+            {
+              code:
+                "parameter_invalid",
+              source: {
+                pointer:
+                  "data.attributes.limit",
+              },
+            },
+          ],
+        }
+      ),
+      "Multiple PayMongo errors fail closed"
+    );
+
+    const emptyPaidPayment = {
+      id:
+        PAYMENT_ID,
+      type:
+        "payment",
+      attributes: {
+        status:
+          "paid",
+        refunds: [],
+      },
+    };
+
+    assert(
+      hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        emptyPaidPayment
+      ),
+      "Matching paid Payment with explicit empty refunds is verified"
+    );
+
+    assert(
+      !hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        {
+          id:
+            PAYMENT_ID,
+          type:
+            "payment",
+          attributes: {
+            status:
+              "paid",
+          },
+        }
+      ),
+      "Missing embedded refunds array fails closed"
+    );
+
+    assert(
+      !hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        {
+          ...emptyPaidPayment,
+          attributes: {
+            status:
+              "paid",
+            refunds: [
+              {
+                id:
+                  "ref_existing_synthetic",
+              },
+            ],
+          },
+        }
+      ),
+      "Non-empty embedded refund history fails closed"
+    );
+
+    assert(
+      !hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        {
+          ...emptyPaidPayment,
+          id:
+            "pay_different_synthetic",
+        }
+      ),
+      "Payment identity mismatch fails closed"
+    );
+
+    assert(
+      !hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        {
+          ...emptyPaidPayment,
+          type:
+            "payment_intent",
+        }
+      ),
+      "Unexpected PayMongo resource type fails closed"
+    );
+
+    assert(
+      !hasVerifiedEmptyEmbeddedRefundHistory(
+        PAYMENT_ID,
+        {
+          ...emptyPaidPayment,
+          attributes: {
+            status:
+              "pending",
+            refunds: [],
+          },
+        }
+      ),
+      "Non-paid Payment fails closed"
+    );
+
     // 6. PayMongo adapter with injected fetch only
     // ============================================================
 

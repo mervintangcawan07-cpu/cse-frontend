@@ -1,3 +1,4 @@
+import { hasVerifiedEmptyEmbeddedRefundHistory } from "@/lib/payment/refundHistorySafety";
 // Relative Path: src/lib/payment/refundExecutionPreparation.ts
 
 import {
@@ -365,28 +366,40 @@ export async function prepareRefundExecution(
         secretKey
       );
   } catch (error) {
-    const diagnosticCode =
+    const exactFirstRefundEmptyHistory =
       error instanceof Error &&
-      /^REFUND_HISTORY_(?:NETWORK_ERROR|HTTP_\d{3}|INVALID_RESPONSE|INVALID_RESOURCE|PAYMENT_MISMATCH|PAGINATION_INCOMPLETE|INVALID_PAYMENT_ID|MISSING_SECRET)$/.test(
-        error.message
-      )
-        ? error.message
-        : "REFUND_HISTORY_UNKNOWN_ERROR";
+      error.message ===
+        "REFUND_HISTORY_PAYMENT_ID_LIST_REJECTED" &&
+      hasVerifiedEmptyEmbeddedRefundHistory(
+        payment.id,
+        payment
+      );
 
-    console.error(
-      `[REFUND_EXECUTION_PREPARATION] Refund history verification failed: ${diagnosticCode}`
-    );
+    if (exactFirstRefundEmptyHistory) {
+      allRefunds = [];
+    } else {
+      const diagnosticCode =
+        error instanceof Error &&
+        /^REFUND_HISTORY_(?:NETWORK_ERROR|HTTP_\d{3}|INVALID_RESPONSE|INVALID_RESOURCE|PAYMENT_MISMATCH|PAGINATION_INCOMPLETE|INVALID_PAYMENT_ID|MISSING_SECRET|PAYMENT_ID_LIST_REJECTED)$/.test(
+          error.message
+        )
+          ? error.message
+          : "REFUND_HISTORY_UNKNOWN_ERROR";
 
-    return failure(
-      "REFUND_HISTORY_UNAVAILABLE",
-      502,
-      {
-        error:
-          "Authoritative PayMongo refund history could not be completely verified.",
-      }
-    );
+      console.error(
+        `[REFUND_EXECUTION_PREPARATION] Refund history verification failed: ${diagnosticCode}`
+      );
+
+      return failure(
+        "REFUND_HISTORY_UNAVAILABLE",
+        502,
+        {
+          error:
+            "Authoritative PayMongo refund history could not be completely verified.",
+        }
+      );
+    }
   }
-
   const nonFinalRefunds =
     allRefunds.filter((refund) => {
       const status = String(
