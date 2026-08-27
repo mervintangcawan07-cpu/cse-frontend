@@ -233,6 +233,40 @@ export class RefundService {
       }
 
       if (!response.ok) {
+        const errorPayload =
+          (await response.json().catch(() => null)) as
+            | {
+                errors?: Array<{
+                  code?: unknown;
+                  source?: { pointer?: unknown };
+                }>;
+              }
+            | null;
+
+        const rawCode =
+          errorPayload?.errors?.[0]?.code;
+
+        const rawPointer =
+          errorPayload?.errors?.[0]?.source?.pointer;
+
+        const safeCode =
+          typeof rawCode === "string" &&
+          /^[A-Za-z0-9_-]{1,80}$/.test(rawCode)
+            ? rawCode
+            : "UNKNOWN";
+
+        const safePointer =
+          typeof rawPointer === "string" &&
+          /^[A-Za-z0-9_./\[\]-]{1,120}$/.test(
+            rawPointer
+          )
+            ? rawPointer
+            : "NONE";
+
+        console.error(
+          `[REFUND_SERVICE] Refund history request rejected: HTTP_${response.status} code=${safeCode} pointer=${safePointer}`
+        );
+
         throw new Error(
           `REFUND_HISTORY_HTTP_${response.status}`
         );
