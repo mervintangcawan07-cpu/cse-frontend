@@ -3,12 +3,38 @@ import { prisma } from "../src/lib/prisma";
 import bcrypt from "bcryptjs";
 import { numericalNotesData } from "./data/numericalNotes";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getBootstrapAdminCredentials() {
+  const configuredEmail = process.env.BOOTSTRAP_ADMIN_EMAIL;
+  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD;
+
+  if (!configuredEmail || configuredEmail.trim().length === 0) {
+    throw new Error("BOOTSTRAP_ADMIN_EMAIL is required");
+  }
+
+  const email = configuredEmail.trim().toLowerCase();
+  if (!EMAIL_REGEX.test(email)) {
+    throw new Error("BOOTSTRAP_ADMIN_EMAIL must be a valid email address");
+  }
+
+  if (!password || password.trim().length === 0) {
+    throw new Error("BOOTSTRAP_ADMIN_PASSWORD is required");
+  }
+
+  if (password.length < 6) {
+    throw new Error("BOOTSTRAP_ADMIN_PASSWORD must be at least 6 characters");
+  }
+
+  return { email, password };
+}
+
 async function main() {
+  const { email: adminEmail, password: adminPassword } = getBootstrapAdminCredentials();
+
   console.log("🌱 Starting safe database seeding (preserving existing users and data)...");
 
   // 1. Upsert Admin Account (NO USER DELETIONS)
-  const adminEmail = "thamarmervin@cse.com";
-  const adminPassword = "Azel110521";
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   const adminUser = await prisma.user.upsert({
@@ -26,7 +52,7 @@ async function main() {
     },
   });
 
-  console.log("✓ Admin account verified/created:", adminUser.email);
+  console.log("✓ Admin account verified");
 
   // 2. Seed Question Bank safely
   console.log("Checking and seeding question bank...");
