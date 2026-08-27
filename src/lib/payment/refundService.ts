@@ -199,7 +199,10 @@ export class RefundService {
     let afterCursor: string | null = null;
 
     const MAX_PAGES = 10;
-    const LIMIT = 100;
+    // PayMongo List Refunds defaults to 10 when limit is omitted.
+    // Keep the provider default authoritative; PAGE_SIZE is used only
+    // for local pagination-completeness detection.
+    const PAGE_SIZE = 10;
 
     for (let page = 1; page <= MAX_PAGES; page++) {
       const url = new URL("https://api.paymongo.com/refunds");
@@ -207,10 +210,6 @@ export class RefundService {
       url.searchParams.set(
         "data.attributes.payment_id",
         paymentId
-      );
-      url.searchParams.set(
-        "data.attributes.limit",
-        String(LIMIT)
       );
 
       if (afterCursor) {
@@ -349,7 +348,7 @@ export class RefundService {
       }
 
       // A short page proves pagination is complete.
-      if (items.length < LIMIT) {
+      if (items.length < PAGE_SIZE) {
         return Array.from(refundsById.values());
       }
 
