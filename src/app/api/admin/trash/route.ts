@@ -54,7 +54,16 @@ export async function POST(request: Request) {
 
     if (action === "PURGE") {
       const purgeResults = await purgeExpiredRecords(30);
-      return NextResponse.json({ success: true, purgeResults });
+      const userPurgeResult = purgeResults.find((result) => result.entityType === "user");
+
+      return NextResponse.json({
+        success: true,
+        userHardPurgeDisabled: userPurgeResult?.disabled === true,
+        code: userPurgeResult?.code,
+        message:
+          "Expired non-User records were processed. Physical User purge is disabled.",
+        purgeResults,
+      });
     }
 
     return NextResponse.json({ error: "Invalid action or parameters." }, { status: 400 });

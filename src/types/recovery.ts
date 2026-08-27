@@ -25,4 +25,7 @@ export interface PurgeResult {
   totalPurged: number;
   retentionDays: number;
   purgedBefore: Date;
+  disabled?: boolean;
+  code?: string;
+  message?: string;
 }

@@ -5,6 +5,9 @@ import { logger } from "@/lib/logger/logger";
 import { TrashItem, RestoreResponse, PurgeResult, SupportedEntityType } from "@/types/recovery";
 
 const DEFAULT_RETENTION_DAYS = 30;
+const USER_HARD_PURGE_DISABLED_CODE = "USER_HARD_PURGE_DISABLED";
+const USER_HARD_PURGE_DISABLED_MESSAGE =
+  "Physical User purge is disabled pending an approved retention-safe implementation.";
 
 export function calculateRestoreDeadline(
   deletedAt: Date = new Date(),
@@ -202,10 +205,15 @@ export async function purgeExpiredRecords(
 
   const results: PurgeResult[] = [];
 
-  const userPurge = await prisma.user.deleteMany({
-    where: { deletedAt: { lte: cutoffDate } },
+  results.push({
+    entityType: "user",
+    totalPurged: 0,
+    retentionDays,
+    purgedBefore: cutoffDate,
+    disabled: true,
+    code: USER_HARD_PURGE_DISABLED_CODE,
+    message: USER_HARD_PURGE_DISABLED_MESSAGE,
   });
-  results.push({ entityType: "user", totalPurged: userPurge.count, retentionDays, purgedBefore: cutoffDate });
 
   const questionPurge = await prisma.question.deleteMany({
     where: { deletedAt: { lte: cutoffDate } },

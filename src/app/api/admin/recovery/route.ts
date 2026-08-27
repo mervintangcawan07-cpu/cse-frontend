@@ -124,10 +124,16 @@ export const DELETE = requireSudo(async (req: NextRequest) => {
 
     const purgeResult = await purgeExpiredRecords(batchSize);
 
-    return NextResponse.json({
-      success: true,
-      result: purgeResult,
-    });
+    return NextResponse.json(
+      {
+        success: false,
+        userHardPurgeDisabled: purgeResult.disabled === true,
+        code: purgeResult.code,
+        message: purgeResult.message,
+        result: purgeResult,
+      },
+      { status: 501 }
+    );
   } catch (error: any) {
     logger.error("Manual background purge execution failed", {
       context: { reason: error?.message },

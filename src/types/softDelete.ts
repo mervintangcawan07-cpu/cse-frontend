@@ -29,5 +29,14 @@ export interface PurgeJobResult {
   batchCount: number;
   errorsCount: number;
   purgedAt: Date;
-  details: Array<{ entityType: string; count: number }>;
+  disabled?: boolean;
+  code?: string;
+  message?: string;
+  details: Array<{
+    entityType: string;
+    count: number;
+    disabled?: boolean;
+    code?: string;
+    message?: string;
+  }>;
 }
