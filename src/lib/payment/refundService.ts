@@ -268,6 +268,45 @@ export class RefundService {
           `[REFUND_SERVICE] Refund history request rejected: HTTP_${response.status} code=${safeCode} pointer=${safePointer}`
         );
 
+        const diagnosticErrors =
+          Array.isArray(errorPayload?.errors)
+            ? errorPayload.errors
+            : [];
+
+        const safeDiagnosticSet =
+          diagnosticErrors
+            .slice(0, 8)
+            .map((item, index) => {
+              const itemCode =
+                item?.code;
+
+              const itemPointer =
+                item?.source?.pointer;
+
+              const sanitizedCode =
+                typeof itemCode === "string" &&
+                /^[A-Za-z0-9_-]{1,80}$/.test(
+                  itemCode
+                )
+                  ? itemCode
+                  : "UNKNOWN";
+
+              const sanitizedPointer =
+                typeof itemPointer === "string" &&
+                /^[A-Za-z0-9_./\[\]-]{1,120}$/.test(
+                  itemPointer
+                )
+                  ? itemPointer
+                  : "NONE";
+
+              return `${index + 1}:${sanitizedCode}:${sanitizedPointer}`;
+            })
+            .join(",");
+
+        console.error(
+          `[REFUND_SERVICE] Refund history rejection set: HTTP_${response.status} errorCount=${diagnosticErrors.length} errors=${safeDiagnosticSet || "NONE"}`
+        );
+
         if (
           isExactPayMongoPaymentIdListRejection(
             response.status,
