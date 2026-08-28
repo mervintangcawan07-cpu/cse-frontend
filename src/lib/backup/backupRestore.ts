@@ -6,13 +6,30 @@ import { backupVerificationService } from "./backupVerification";
 import { BackupType, BackupStatus, BackupVerificationStatus } from "@prisma/client";
 import zlib from "zlib";
 
+export const P0_003_RESTORE_DISABLED_CODE = "P0_003_RESTORE_DISABLED" as const;
+
+export const P0_003_RESTORE_DISABLED_MESSAGE =
+  "Application-level database restore is temporarily disabled while P0-003 recovery integrity remediation is in progress.";
+
+const P0_003_RESTORE_CONTAINMENT_ACTIVE = true;
+
 export interface RestoreResult {
   success: boolean;
   backupId: string;
+  code?: typeof P0_003_RESTORE_DISABLED_CODE;
   emergencyBackupId?: string;
   message: string;
   rollbackExecuted?: boolean;
   restoredTablesCount?: number;
+}
+
+function getRestoreContainmentResult(backupId: string): RestoreResult {
+  return {
+    success: false,
+    backupId,
+    code: P0_003_RESTORE_DISABLED_CODE,
+    message: P0_003_RESTORE_DISABLED_MESSAGE,
+  };
 }
 
 export class BackupRestoreService {
@@ -24,6 +41,10 @@ export class BackupRestoreService {
     confirmationText: string,
     actorInfo: { actorId?: string; actorEmail?: string; ipAddress?: string } = {}
   ): Promise<RestoreResult> {
+    if (P0_003_RESTORE_CONTAINMENT_ACTIVE) {
+      return getRestoreContainmentResult(backupId);
+    }
+
     if (confirmationText !== "RESTORE") {
       return {
         success: false,
@@ -42,6 +63,10 @@ export class BackupRestoreService {
     backupId: string,
     actorInfo: { actorId?: string; actorEmail?: string; ipAddress?: string } = {}
   ): Promise<RestoreResult> {
+    if (P0_003_RESTORE_CONTAINMENT_ACTIVE) {
+      return getRestoreContainmentResult(backupId);
+    }
+
     // 1. Fetch target backup record
     const targetBackup = await prisma.backup.findUnique({
       where: { id: backupId },

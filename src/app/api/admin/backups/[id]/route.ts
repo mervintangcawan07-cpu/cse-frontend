@@ -3,7 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { backupStorage } from "@/lib/backup/backupStorage";
 import { backupVerificationService } from "@/lib/backup/backupVerification";
-import { backupRestoreService } from "@/lib/backup/backupRestore";
+import {
+  P0_003_RESTORE_DISABLED_CODE,
+  P0_003_RESTORE_DISABLED_MESSAGE,
+} from "@/lib/backup/backupRestore";
 import { verifyJWT } from "@/lib/auth";
 
 async function authenticateAdmin(request: NextRequest) {
@@ -42,7 +45,7 @@ export async function POST(
 
     const { id } = await params;
     const body = await request.json();
-    const { action, confirmationText } = body;
+    const { action } = body;
 
     if (action === "verify") {
       const result = await backupVerificationService.verifyBackup(id, {
@@ -75,15 +78,14 @@ export async function POST(
     }
 
     if (action === "restore") {
-      const result = await backupRestoreService.executeRestore(id, confirmationText, {
-        actorEmail: admin.email,
-      });
-
-      if (!result.success) {
-        return NextResponse.json({ error: result.message }, { status: 400 });
-      }
-
-      return NextResponse.json({ success: true, result });
+      return NextResponse.json(
+        {
+          success: false,
+          code: P0_003_RESTORE_DISABLED_CODE,
+          error: P0_003_RESTORE_DISABLED_MESSAGE,
+        },
+        { status: 503 }
+      );
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

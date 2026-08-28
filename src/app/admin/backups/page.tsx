@@ -208,7 +208,7 @@ export default function AdminBackupsPage() {
             Disaster Recovery & Backup Management
           </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Automated database backups, SHA-256 integrity checks, and emergency restoration shields.
+            Backup capture and SHA-256 integrity checks. Application-level database restore is temporarily disabled under P0-003.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -401,16 +401,12 @@ export default function AdminBackupsPage() {
                       </button>
                       {b.verificationStatus === "PASSED" && (
                         <button
-                          onClick={() => {
-                            setSelectedRestoreBackup(b);
-                            setConfirmInput("");
-                            setRestoreModalOpen(true);
-                          }}
-                          title="One-Click Restore"
-                          className="px-2.5 py-1 text-xs bg-amber-600 hover:bg-amber-500 text-white rounded font-medium transition inline-flex items-center gap-1"
+                          disabled
+                          title="Restore temporarily disabled under P0-003 recovery containment"
+                          className="px-2.5 py-1 text-xs bg-slate-800 text-slate-500 rounded font-medium transition inline-flex items-center gap-1 cursor-not-allowed opacity-70"
                         >
                           <RotateCcw className="w-3 h-3" />
-                          Restore
+                          Restore Disabled
                         </button>
                       )}
                       <button
@@ -440,14 +436,14 @@ export default function AdminBackupsPage() {
             </div>
             
             <p className="text-sm text-slate-300 leading-relaxed">
-              You are about to restore the database to the exact state saved in backup file:
+              Application-level database restore is temporarily disabled while recovery integrity remediation is in progress. This backup cannot currently be used for one-click full database restoration:
             </p>
             <div className="p-3 bg-slate-950 rounded border border-slate-800 font-mono text-xs text-amber-300">
               {selectedRestoreBackup.filename} ({new Date(selectedRestoreBackup.createdAt).toLocaleString()})
             </div>
 
             <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 rounded text-xs text-emerald-300">
-              <strong>Emergency Shield Enabled:</strong> A mandatory pre-restore emergency snapshot will automatically be generated before overwriting data.
+              <strong>P0-003 containment active:</strong> Backup verification confirms payload integrity only; it does not currently establish complete database restorability.
             </div>
 
             <div className="space-y-2">

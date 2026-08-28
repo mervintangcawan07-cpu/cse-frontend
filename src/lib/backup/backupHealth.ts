@@ -81,6 +81,15 @@ export class BackupHealthMonitor {
       alerts.push(`CRITICAL: High failure rate detected (${failedCount} failed backup/verification attempts)!`);
     }
 
+    // P0-003 containment:
+    // Integrity verification does not currently establish full restorability.
+    // Until recovery capability is remediated and independently validated,
+    // disaster-recovery health must fail closed rather than advertise HEALTHY.
+    status = "CRITICAL";
+    alerts.unshift(
+      "CRITICAL: Application-level database restore is disabled under P0-003. Backup integrity verification does not currently establish full database restorability."
+    );
+
     return {
       status,
       lastBackupAt: lastSuccessfulBackup?.createdAt || null,
