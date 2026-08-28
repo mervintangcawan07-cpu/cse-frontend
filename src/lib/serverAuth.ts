@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyJWT, JWTPayload } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  authenticateExistingAccountSession,
+  isAccountAuthorizedFor,
+  type AccountSessionFailureCode,
+} from "@/lib/accountLifecycle";
 
 export interface AuthenticatedUser {
   id: string;
@@ -12,6 +17,30 @@ export interface AuthenticatedUser {
   isPaid: boolean;
   paidUntil?: Date | null;
   planType?: string | null;
+  lastActiveAt?: Date | null;
+}
+
+export interface AuthenticatedSession {
+  user: AuthenticatedUser;
+  sessionId: string;
+}
+
+export type AuthenticatedSessionResult =
+  | { authenticated: true; session: AuthenticatedSession }
+  | {
+      authenticated: false;
+      code: AccountSessionFailureCode | "NO_TOKEN" | "AUTHENTICATION_ERROR";
+    };
+
+export interface AuthenticatedUserRecord extends AuthenticatedUser {
+  isBanned: boolean;
+  deletedAt: Date | null;
+  activeSessionId: string | null;
+}
+
+export interface SessionAuthenticationDependencies {
+  verifyToken(token: string): Promise<JWTPayload | null>;
+  findUserById(userId: string): Promise<AuthenticatedUserRecord | null>;
 }
 
 export interface AuthResult {
@@ -19,60 +48,123 @@ export interface AuthResult {
   errorResponse: NextResponse | null;
 }
 
+async function findAuthenticatedUserRecord(
+  userId: string
+): Promise<AuthenticatedUserRecord | null> {
+  const dbUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isPaid: true,
+      paidUntil: true,
+      planType: true,
+      lastActiveAt: true,
+      isBanned: true,
+      deletedAt: true,
+      activeSessionId: true,
+    },
+  });
+
+  if (!dbUser) return null;
+
+  return {
+    id: dbUser.id,
+    email: dbUser.email,
+    name: dbUser.name,
+    role: dbUser.role as "USER" | "ADMIN",
+    isPaid: dbUser.isPaid || dbUser.role === "ADMIN",
+    paidUntil: dbUser.paidUntil,
+    planType: dbUser.planType,
+    lastActiveAt: dbUser.lastActiveAt,
+    isBanned: dbUser.isBanned,
+    deletedAt: dbUser.deletedAt,
+    activeSessionId: dbUser.activeSessionId,
+  };
+}
+
+export async function authenticateSessionTokenResult(
+  token: string,
+  dependencies: SessionAuthenticationDependencies
+): Promise<AuthenticatedSessionResult> {
+  const decision = await authenticateExistingAccountSession(token, dependencies);
+  if (!decision.allowed) {
+    return { authenticated: false, code: decision.code };
+  }
+
+  const dbUser = decision.user;
+
+  return {
+    authenticated: true,
+    session: {
+      user: {
+        id: dbUser.id,
+        email: dbUser.email,
+        name: dbUser.name,
+        role: dbUser.role,
+        isPaid: dbUser.isPaid,
+        paidUntil: dbUser.paidUntil,
+        planType: dbUser.planType,
+        lastActiveAt: dbUser.lastActiveAt,
+      },
+      sessionId: decision.sessionId,
+    },
+  };
+}
+
+export async function authenticateSessionToken(
+  token: string,
+  dependencies: SessionAuthenticationDependencies
+): Promise<AuthenticatedSession | null> {
+  const result = await authenticateSessionTokenResult(token, dependencies);
+  return result.authenticated ? result.session : null;
+}
+
 /**
- * Server-Side Authentication: Cryptographically verifies JWT and checks database record.
+ * Canonical server-side authority: verifies the token and requires a live,
+ * exact database-backed session before returning a safe User DTO.
  */
-export async function getAuthenticatedUser(req?: Request): Promise<AuthenticatedUser | null> {
+export async function getAuthenticatedSessionResult(
+  req?: Request
+): Promise<AuthenticatedSessionResult> {
   try {
     let token: string | undefined;
 
-    // 1. Try extracting from cookies
     const cookieStore = await cookies();
     token = cookieStore.get("cse_session")?.value;
 
-    // 2. Fallback to Authorization header if provided
     if (!token && req) {
       const authHeader = req.headers.get("authorization");
-      if (authHeader && authHeader.startsWith("Bearer ")) {
+      if (authHeader?.startsWith("Bearer ")) {
         token = authHeader.substring(7);
       }
     }
 
-    if (!token) return null;
+    if (!token) return { authenticated: false, code: "NO_TOKEN" };
 
-    // 3. Cryptographically verify signature and expiration
-    const payload: JWTPayload | null = await verifyJWT(token);
-    if (!payload?.userId) return null;
-
-    // 4. Validate user against live database to prevent revoked/stale sessions
-    const dbUser = await prisma.user.findUnique({
-      where: { id: String(payload.userId) },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        isPaid: true,
-        paidUntil: true,
-        planType: true,
-      },
+    return authenticateSessionTokenResult(token, {
+      verifyToken: verifyJWT,
+      findUserById: findAuthenticatedUserRecord,
     });
-
-    if (!dbUser) return null;
-
-    return {
-      id: dbUser.id,
-      email: dbUser.email,
-      name: dbUser.name,
-      role: dbUser.role as "USER" | "ADMIN",
-      isPaid: dbUser.isPaid || dbUser.role === "ADMIN",
-      paidUntil: dbUser.paidUntil,
-      planType: dbUser.planType,
-    };
   } catch (error) {
     console.error("[serverAuth] Authentication error:", error);
-    return null;
+    return { authenticated: false, code: "AUTHENTICATION_ERROR" };
   }
+}
+
+export async function getAuthenticatedSession(
+  req?: Request
+): Promise<AuthenticatedSession | null> {
+  const result = await getAuthenticatedSessionResult(req);
+  return result.authenticated ? result.session : null;
+}
+
+export async function getAuthenticatedUser(
+  req?: Request
+): Promise<AuthenticatedUser | null> {
+  return (await getAuthenticatedSession(req))?.user ?? null;
 }
 
 /**
@@ -107,7 +199,7 @@ export async function requireAdminAuth(req?: Request): Promise<AuthResult> {
     };
   }
 
-  if (user.role !== "ADMIN") {
+  if (!isAccountAuthorizedFor(user, "ADMIN")) {
     return {
       user: null,
       errorResponse: NextResponse.json(
@@ -136,11 +228,7 @@ export async function requireProAuth(req?: Request): Promise<AuthResult> {
   }
 
   // Check if subscription has expired
-  const isPaidValid =
-    user.role === "ADMIN" ||
-    (user.isPaid && (!user.paidUntil || new Date(user.paidUntil).getTime() > Date.now()));
-
-  if (!isPaidValid) {
+  if (!isAccountAuthorizedFor(user, "PRO")) {
     return {
       user: null,
       errorResponse: NextResponse.json(

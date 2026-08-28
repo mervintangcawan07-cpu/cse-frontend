@@ -1,24 +1,17 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSession } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function PUT(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized: Session expired." }, { status: 401 });
-    }
-
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
+    const authenticatedSession = await getAuthenticatedSession(request);
+    if (!authenticatedSession) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = String(session.userId);
+    const { user: authenticatedUser, sessionId } = authenticatedSession;
+    const userId = authenticatedUser.id;
     const body = await request.json();
     const { name, currentPassword, newPassword } = body;
 
@@ -68,11 +61,28 @@ export async function PUT(request: Request) {
       return NextResponse.json({ message: "No changes submitted." });
     }
 
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
+    const profileUpdate = await prisma.user.updateMany({
+      where: {
+        id: userId,
+        isBanned: false,
+        deletedAt: null,
+        activeSessionId: sessionId,
+      },
       data: updateData,
+    });
+
+    if (profileUpdate.count !== 1) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const updatedUser = await prisma.user.findUnique({
+      where: { id: userId },
       select: { id: true, name: true, email: true, role: true, isPaid: true },
     });
+
+    if (!updatedUser) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
 
     return NextResponse.json({
       success: true,

@@ -7,6 +7,7 @@ import {
   getClientIp,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function POST(request: Request) {
   try {
@@ -48,16 +49,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Admin password resets are disabled" }, { status: 403 });
     }
 
+    if (!isAccountOperational(user)) {
+      return NextResponse.json({ error: "Invalid or expired password reset token" }, { status: 400 });
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await prisma.user.update({
-      where: { id: user.id },
+    const passwordUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        role: "USER",
+        isBanned: false,
+        deletedAt: null,
+        passwordResetToken: token,
+        passwordResetExpires: { gt: new Date() },
+      },
       data: {
         password: hashedPassword,
         passwordResetToken: null,
         passwordResetExpires: null,
       },
     });
+
+    if (passwordUpdate.count !== 1) {
+      return NextResponse.json({ error: "Invalid or expired password reset token" }, { status: 400 });
+    }
 
     return NextResponse.json({ success: true, message: "Password reset successful! You can now log in." });
   } catch (error) {

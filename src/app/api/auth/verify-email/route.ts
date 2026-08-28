@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function GET(request: Request) {
   try {
@@ -21,14 +22,28 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Invalid or expired verification token" }, { status: 400 });
     }
 
-    await prisma.user.update({
-      where: { id: user.id },
+    if (!isAccountOperational(user)) {
+      return NextResponse.json({ error: "Invalid or expired verification token" }, { status: 400 });
+    }
+
+    const verificationUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        isBanned: false,
+        deletedAt: null,
+        emailVerificationToken: token,
+        emailVerificationExpires: { gt: new Date() },
+      },
       data: {
         isEmailVerified: true,
         emailVerificationToken: null,
         emailVerificationExpires: null,
       },
     });
+
+    if (verificationUpdate.count !== 1) {
+      return NextResponse.json({ error: "Invalid or expired verification token" }, { status: 400 });
+    }
 
     return NextResponse.json({ success: true, message: "Email verified successfully!" });
   } catch (error) {

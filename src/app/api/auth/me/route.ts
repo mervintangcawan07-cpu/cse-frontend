@@ -1,7 +1,7 @@
 // Relative Path: src/app/api/auth/me/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
@@ -13,46 +13,23 @@ export async function GET() {
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated) {
+      cookieStore.delete("cse_session");
+
+      if (authentication.code === "SESSION_MISMATCH") {
+        return NextResponse.json({
+          user: null,
+          kicked: true,
+          reason: "CONCURRENT_LOGIN",
+          message: "Your account was logged in from another device.",
+        }, { status: 200 });
+      }
+
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: String(session.userId) },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        isPaid: true,
-        paidUntil: true,
-        planType: true,
-        activeSessionId: true,
-        lastActiveAt: true,
-      },
-    });
-
-    if (!user) {
-      cookieStore.delete("cse_session");
-      return NextResponse.json({ user: null }, { status: 200 });
-    }
-
-    // 🔒 SINGLE ACTIVE SESSION GUARD (Concurrent Device Invalidation)
-    const sessionActiveId = String(session.activeSessionId || session.sessionId || "");
-    if (
-      sessionActiveId &&
-      user.activeSessionId &&
-      user.activeSessionId !== sessionActiveId
-    ) {
-      cookieStore.delete("cse_session");
-      return NextResponse.json({
-        user: null,
-        kicked: true,
-        reason: "CONCURRENT_LOGIN",
-        message: "Your account was logged in from another device.",
-      }, { status: 200 });
-    }
+    const { user, sessionId } = authentication.session;
 
     const now = new Date();
     const INACTIVITY_LIMIT_MINUTES = 30;
@@ -63,8 +40,11 @@ export async function GET() {
         (now.getTime() - new Date(user.lastActiveAt).getTime()) / (1000 * 60);
 
       if (minutesInactive >= INACTIVITY_LIMIT_MINUTES) {
-        await prisma.user.update({
-          where: { id: user.id },
+        await prisma.user.updateMany({
+          where: {
+            id: user.id,
+            activeSessionId: sessionId,
+          },
           data: {
             activeSessionId: null,
             lastActiveAt: null,
@@ -89,11 +69,22 @@ export async function GET() {
       });
     }
 
-    // Update lastActiveAt timestamp
-    await prisma.user.update({
-      where: { id: user.id },
+    // Update only while this exact session remains live. This closes the race
+    // where another login rotates activeSessionId during the request.
+    const activityUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        isBanned: false,
+        deletedAt: null,
+        activeSessionId: sessionId,
+      },
       data: { lastActiveAt: now },
     });
+
+    if (activityUpdate.count !== 1) {
+      cookieStore.delete("cse_session");
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
 
     return NextResponse.json({
       user: {

@@ -8,6 +8,7 @@ import {
   getClientIp,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function POST(request: Request) {
   try {
@@ -40,20 +41,29 @@ export async function POST(request: Request) {
       where: { email: formattedEmail },
     });
 
-    if (!user || user.isEmailVerified) {
+    if (!user || user.isEmailVerified || !isAccountOperational(user)) {
       return genericSuccessResponse;
     }
 
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const verificationExpires = new Date(Date.now() + 24 * 3600 * 1000);
 
-    await prisma.user.update({
-      where: { id: user.id },
+    const tokenUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        isBanned: false,
+        deletedAt: null,
+        isEmailVerified: false,
+      },
       data: {
         emailVerificationToken: verificationToken,
         emailVerificationExpires: verificationExpires,
       },
     });
+
+    if (tokenUpdate.count !== 1) {
+      return genericSuccessResponse;
+    }
 
     await sendVerificationEmail(user.email, verificationToken);
 

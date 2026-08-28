@@ -15,6 +15,7 @@ import {
   resetFailedAttempts,
 } from "@/lib/accountLockout";
 import { recordLoginFailure } from "@/lib/systemHealthMonitor";
+import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function POST(request: Request) {
   try {
@@ -82,6 +83,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
     }
 
+    if (!isAccountOperational(user)) {
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+    }
+
     // 🔒 Reset failed attempts on successful password verification
     resetFailedAttempts(cleanEmail);
 
@@ -99,13 +104,21 @@ export async function POST(request: Request) {
 
     // 🆔 Generate active session ID & update session timestamp prior to JWT issuance
     const activeSessionId = crypto.randomUUID();
-    await prisma.user.update({
-      where: { id: user.id },
+    const sessionUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        isBanned: false,
+        deletedAt: null,
+      },
       data: {
         activeSessionId,
         lastActiveAt: new Date(),
       },
     });
+
+    if (sessionUpdate.count !== 1) {
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
+    }
 
     const token = await signJWT({
       userId: user.id,

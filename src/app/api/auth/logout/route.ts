@@ -1,22 +1,48 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { verifyJWT } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import {
+  getPresentedSessionId,
+  isValidIdentifier,
+} from "@/lib/accountLifecycle";
 
 export async function POST() {
-  try {
-    const response = NextResponse.json({ message: "Logged out successfully" }, { status: 200 });
+  const response = NextResponse.json({ message: "Logged out successfully" }, { status: 200 });
 
-    // Clear the cookie by setting its expiration to the past
-    response.cookies.set("cse_session", "", {
-      httpOnly: true,
-      expires: new Date(0),
-      path: "/",
-    });
+  // Cookie expiration is unconditional, including when token parsing or the
+  // best-effort matching-session database update fails.
+  response.cookies.set("cse_session", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    path: "/",
+  });
+
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("cse_session")?.value;
+
+    if (token) {
+      const payload = await verifyJWT(token);
+      const sessionId = payload ? getPresentedSessionId(payload) : null;
+
+      if (payload && isValidIdentifier(payload.userId) && sessionId) {
+        await prisma.user.updateMany({
+          where: {
+            id: payload.userId,
+            activeSessionId: sessionId,
+          },
+          data: {
+            activeSessionId: null,
+            lastActiveAt: null,
+          },
+        });
+      }
+    }
 
     return response;
   } catch (error) {
     console.error("[AUTH_LOGOUT_ERROR]", error);
-    return NextResponse.json(
-      { error: "Failed to process logout cleanly." },
-      { status: 500 }
-    );
+    return response;
   }
 }

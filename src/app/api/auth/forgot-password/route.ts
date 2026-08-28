@@ -8,6 +8,7 @@ import {
   getClientIp,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function POST(request: Request) {
   try {
@@ -50,16 +51,29 @@ export async function POST(request: Request) {
       return genericSuccessResponse;
     }
 
+    if (!isAccountOperational(user)) {
+      return genericSuccessResponse;
+    }
+
     const resetToken = crypto.randomBytes(32).toString("hex");
     const resetExpires = new Date(Date.now() + 3600 * 1000);
 
-    await prisma.user.update({
-      where: { id: user.id },
+    const tokenUpdate = await prisma.user.updateMany({
+      where: {
+        id: user.id,
+        role: "USER",
+        isBanned: false,
+        deletedAt: null,
+      },
       data: {
         passwordResetToken: resetToken,
         passwordResetExpires: resetExpires,
       },
     });
+
+    if (tokenUpdate.count !== 1) {
+      return genericSuccessResponse;
+    }
 
     await sendPasswordResetEmail(user.email, resetToken);
 
