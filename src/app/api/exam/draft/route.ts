@@ -1,19 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ draft: null }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    if (!session?.userId) return NextResponse.json({ draft: null }, { status: 401 });
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ draft: null }, { status: 401 });
 
     const draft = await prisma.examDraft.findUnique({
-      where: { userId: String(session.userId) },
+      where: { userId: authenticatedUser.id },
     });
 
     return NextResponse.json({ draft });
@@ -25,18 +20,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    if (!session?.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
     const { category, answersJson, questionsJson, currentIndex, timeLeft } = body;
 
     const draft = await prisma.examDraft.upsert({
-      where: { userId: String(session.userId) },
+      where: { userId: authenticatedUser.id },
       update: {
         category,
         answersJson,
@@ -45,7 +36,7 @@ export async function POST(request: Request) {
         timeLeft,
       },
       create: {
-        userId: String(session.userId),
+        userId: authenticatedUser.id,
         category: category || "All",
         answersJson: answersJson || "{}",
         questionsJson: questionsJson || "[]",
@@ -63,15 +54,11 @@ export async function POST(request: Request) {
 
 export async function DELETE() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    if (!session?.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     await prisma.examDraft.delete({
-      where: { userId: String(session.userId) },
+      where: { userId: authenticatedUser.id },
     }).catch(() => null);
 
     return NextResponse.json({ success: true });

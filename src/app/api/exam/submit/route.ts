@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
 import { evaluateAndAwardBadges } from "@/lib/badges";
@@ -18,19 +17,12 @@ interface SubmittedAnswer {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = String(session.userId);
+    const userId = authenticatedUser.id;
 
     // 🔒 Limit: 10 exam submissions per minute per user
     const rateResult = await checkRateLimit(EXAM_SUBMIT_LIMITER, `exam_submit:${userId}`);

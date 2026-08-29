@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
@@ -9,19 +8,11 @@ export async function GET(
 ) {
   try {
     const { id: attemptId } = await params;
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const session = await verifyJWT(token);
-    const userId = String(session?.userId || session?.id || "");
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = authenticatedUser.id;
 
     let attempt: any = null;
 

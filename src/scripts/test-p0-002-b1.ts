@@ -570,6 +570,117 @@ function runSourceIntegratedRouteTests(): void {
     "B2.1 removes only redundant current-User queries and retains required business User lookups"
   );
 
+  const b22Routes = [
+    ["src/app/api/exam/draft/route.ts", 3],
+    ["src/app/api/exam/start/route.ts", 1],
+    ["src/app/api/exam/submit/route.ts", 1],
+    ["src/app/api/mock-exam/history/[id]/route.ts", 1],
+    ["src/app/api/mock-exam/history/route.ts", 1],
+  ] as const;
+  const b22RouteSources = new Map(
+    b22Routes.map(([file]) => [file, read(file)])
+  );
+  assert(
+    b22Routes.every(([file, methodCount]) => {
+      const source = b22RouteSources.get(file) || "";
+      return (
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes('from "next/headers"') &&
+        !source.includes("cse_session") &&
+        source.includes('from "@/lib/serverAuth"') &&
+        (source.match(/\bgetAuthenticatedUser\(\)/g) || []).length === methodCount &&
+        !source.includes("getAuthenticatedUser(request")
+      );
+    }),
+    "all five B2.2 routes use cookie-only canonical authentication in every migrated method"
+  );
+
+  const examDraft = b22RouteSources.get("src/app/api/exam/draft/route.ts") || "";
+  assert(
+    examDraft.includes(
+      "if (!authenticatedUser) return NextResponse.json({ draft: null }, { status: 401 });"
+    ) &&
+      (examDraft.match(/\{ error: "Unauthorized" \}, \{ status: 401 \}/g) || [])
+        .length === 2,
+    "B2.2 exam draft methods preserve their exact unauthorized response contracts"
+  );
+  assert(
+    appearsBefore(examDraft, "await getAuthenticatedUser()", "await request.json()") &&
+      (examDraft.match(/where: \{ userId: authenticatedUser\.id \}/g) || []).length === 3 &&
+      examDraft.includes("userId: authenticatedUser.id") &&
+      examDraft.includes("prisma.examDraft.upsert") &&
+      examDraft.includes("prisma.examDraft.delete") &&
+      examDraft.includes(".catch(() => null)"),
+    "B2.2 draft authentication precedes processing and preserves canonical ownership and save/cleanup behavior"
+  );
+
+  const examStart = b22RouteSources.get("src/app/api/exam/start/route.ts") || "";
+  assert(
+    examStart.includes("CSE_CATEGORY_QUOTAS") &&
+      examStart.includes("shuffleArray") &&
+      examStart.includes("prisma.examResult.findMany") &&
+      examStart.includes("prisma.userMistake.findMany") &&
+      examStart.includes("prisma.question.findMany") &&
+      examStart.includes("answerIndex: shuffledOptions.findIndex") &&
+      examStart.includes("explanation: q.explanation || null"),
+    "B2.2 exam start preserves selection, randomization, history, mistake, answer, and explanation behavior"
+  );
+  assert(
+    !/requireProAuth|isPaid|paidUntil|planType|Payment required|status:\s*402/.test(
+      examStart
+    ),
+    "B2.2 exam start does not introduce PRO, payment, or plan authorization"
+  );
+
+  const examSubmit = b22RouteSources.get("src/app/api/exam/submit/route.ts") || "";
+  assert(
+    appearsBefore(examSubmit, "await getAuthenticatedUser()", "await request.json()") &&
+      examSubmit.includes("EXAM_SUBMIT_LIMITER") &&
+      examSubmit.includes("checkRateLimit") &&
+      examSubmit.includes("userIdx === q.answerIndex") &&
+      examSubmit.includes("prisma.examResult.create") &&
+      examSubmit.includes("prisma.userMistake.upsert") &&
+      examSubmit.includes("prisma.$transaction(upsertOperations)") &&
+      examSubmit.includes("recordUserActivityStreak(userId)") &&
+      examSubmit.includes("evaluateAndAwardBadges(userId)") &&
+      examSubmit.includes("prisma.examDraft.deleteMany"),
+    "B2.2 exam submit preserves rate limiting, grading, writes, transaction, streak, badge, and cleanup behavior"
+  );
+  assert(
+    !/idempotenc|replay|attemptId|examAttempt/i.test(examSubmit),
+    "B2.2 exam submit adds no replay, idempotency, or attempt-ownership mechanism"
+  );
+
+  const mockExamHistoryById =
+    b22RouteSources.get("src/app/api/mock-exam/history/[id]/route.ts") || "";
+  const mockExamHistory =
+    b22RouteSources.get("src/app/api/mock-exam/history/route.ts") || "";
+  assert(
+    mockExamHistoryById.includes("where: { id: attemptId, userId }") &&
+      mockExamHistoryById.includes("userId: userId") &&
+      mockExamHistoryById.includes("Exam review record not found or access denied.") &&
+      mockExamHistoryById.includes("{ status: 404 }") &&
+      mockExamHistoryById.includes('{ error: "Unauthorized" }'),
+    "B2.2 mock exam review preserves User ownership, exact 401, and combined 404 behavior"
+  );
+  assert(
+    mockExamHistory.includes("where: { userId }") &&
+      mockExamHistory.includes('orderBy: { createdAt: "desc" }') &&
+      mockExamHistory.includes("attempts: formattedAttempts") &&
+      mockExamHistory.includes("history: formattedAttempts") &&
+      mockExamHistory.includes('{ error: "Unauthorized" }'),
+    "B2.2 mock exam history preserves per-User filtering, ordering, response aliases, and exact 401"
+  );
+
+  const deferredExamHistory = read("src/app/api/exam/history/route.ts");
+  assert(
+    /\bverifyJWT\b/.test(deferredExamHistory) &&
+      /\bcookies\s*\(/.test(deferredExamHistory) &&
+      deferredExamHistory.includes('searchParams.get("userId")'),
+    "exam/history remains explicitly deferred with its existing direct authentication behavior"
+  );
+
   assert(
     /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")) &&
       /\bverifyJWT\b/.test(read("src/app/api/questions/daily/route.ts")),
@@ -722,8 +833,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 65,
-    "65 remaining direct verifyJWT callers are explicitly deferred after B2.1"
+    deferredToB2.length === 60,
+    "60 remaining direct verifyJWT callers are explicitly deferred after B2.2"
   );
 }
 
