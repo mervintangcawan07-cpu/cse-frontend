@@ -915,6 +915,95 @@ function runSourceIntegratedRouteTests(): void {
     "B2.3 preserves recovery/trash User hard-purge containment and destructive auth ordering"
   );
 
+  const b24aFiles = [
+    "src/app/api/social/classmates/respond/route.ts",
+    "src/app/api/social/classmates/route.ts",
+    "src/app/api/social/counts/route.ts",
+    "src/app/api/social/presence/route.ts",
+    "src/app/api/social/profile/[userId]/route.ts",
+    "src/app/api/social/profile/route.ts",
+  ] as const;
+  const b24aRouteSources = new Map(
+    b24aFiles.map((file) => [file, read(file)] as const)
+  );
+  assert(
+    b24aFiles.every((file) => {
+      const source = b24aRouteSources.get(file) || "";
+      return (
+        source.includes("getAuthenticatedUser()") &&
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes("getAuthenticatedUser(request")
+      );
+    }),
+    "B2.4A social routes use cookie-only canonical authentication without direct JWT handling"
+  );
+  assert(
+    Array.from(b24aRouteSources.values()).reduce(
+      (total, source) => total + (source.match(/getAuthenticatedUser\(\)/g) || []).length,
+      0
+    ) === 8 &&
+      b24aFiles.every((file) =>
+        (b24aRouteSources.get(file) || "").includes(
+          'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+        )
+      ),
+    "B2.4A preserves all eight mandatory cookie-auth method guards and exact 401 body"
+  );
+
+  const socialClassmateRespond =
+    b24aRouteSources.get("src/app/api/social/classmates/respond/route.ts") || "";
+  const socialClassmates =
+    b24aRouteSources.get("src/app/api/social/classmates/route.ts") || "";
+  const socialCounts =
+    b24aRouteSources.get("src/app/api/social/counts/route.ts") || "";
+  const socialPresence =
+    b24aRouteSources.get("src/app/api/social/presence/route.ts") || "";
+  const socialPublicProfile =
+    b24aRouteSources.get("src/app/api/social/profile/[userId]/route.ts") || "";
+  const socialProfile =
+    b24aRouteSources.get("src/app/api/social/profile/route.ts") || "";
+
+  assert(
+    appearsBefore(socialClassmateRespond, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(socialClassmates, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(socialPresence, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(socialProfile, "await getAuthenticatedUser()", "await request.json()"),
+    "B2.4A authentication remains before social request-body processing and writes"
+  );
+  assert(
+    socialClassmateRespond.includes("prisma.user.findUnique") &&
+      socialClassmateRespond.includes("studyProfile: { select: { displayName: true } }") &&
+      socialClassmates.includes("const caller = await prisma.user.findUnique") &&
+      socialClassmates.includes("studyInterests: true") &&
+      socialClassmates.includes("prisma.classmateRelation.findMany") &&
+      socialCounts.includes("prisma.classmateRelation.count") &&
+      socialCounts.includes("prisma.directMessage.count"),
+    "B2.4A retains classmate display-name, relevance, relationship, and social-count business queries"
+  );
+  assert(
+    socialPresence.includes("const user = await prisma.user.update") &&
+      appearsBefore(socialPresence, "await getAuthenticatedUser()", "prisma.user.update") &&
+      socialPresence.includes("prisma.studyTogetherProfile.upsert"),
+    "B2.4A preserves the presence heartbeat and profile-presence write after canonical authentication"
+  );
+  assert(
+    socialPublicProfile.includes("const targetUser = await prisma.user.findUnique") &&
+      socialPublicProfile.includes("showBio") &&
+      socialPublicProfile.includes("showStudyGoal") &&
+      socialPublicProfile.includes("showInterests") &&
+      socialPublicProfile.includes("showActivity"),
+    "B2.4A retains target-profile lookup and privacy filtering"
+  );
+  assert(
+    !socialProfile.includes("prisma.user.findUnique") &&
+      socialProfile.includes("authenticatedUser.name") &&
+      socialProfile.includes("authenticatedUser.lastActiveAt") &&
+      socialProfile.includes("prisma.studyTogetherProfile.findUnique") &&
+      socialProfile.includes("prisma.studyTogetherProfile.upsert"),
+    "B2.4A removes only the redundant own-profile User read while preserving profile read/write behavior"
+  );
+
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
   assert(
     /\bverifyJWT\b/.test(deferredCriticalActions),
@@ -1073,8 +1162,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 36,
-    "36 remaining direct verifyJWT callers are explicitly deferred after B2.3"
+    deferredToB2.length === 30,
+    "30 remaining direct verifyJWT callers are explicitly deferred after B2.4A"
   );
 }
 
