@@ -1,9 +1,7 @@
 // Relative Path: src/app/admin/layout.tsx
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { verifyJWT } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { SudoProvider } from "@/context/SudoContext";
 
 export default async function AdminLayout({
@@ -11,20 +9,10 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
+  const user = await getAuthenticatedUser();
+  if (!user) redirect("/login");
 
-  if (!token) redirect("/login");
-
-  const session = await verifyJWT(token);
-  if (!session?.userId) redirect("/login");
-
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { role: true, email: true },
-  });
-
-  if (user?.role !== "ADMIN") redirect("/dashboard");
+  if (user.role !== "ADMIN") redirect("/dashboard");
 
   return (
     <SudoProvider>

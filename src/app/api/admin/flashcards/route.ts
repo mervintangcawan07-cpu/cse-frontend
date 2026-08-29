@@ -1,25 +1,12 @@
 // Relative Path: src/app/api/admin/flashcards/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 
 async function checkAdminAuth() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-
-  if (!token) return null;
-
-  const session = await verifyJWT(token);
-  if (!session?.userId) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { id: true, role: true },
-  });
-
+  const user = await getAuthenticatedUser();
   if (user?.role !== "ADMIN") return null;
 
   return user;

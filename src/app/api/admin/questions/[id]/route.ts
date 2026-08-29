@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/admin/questions/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { requireSudo } from "@/middleware/requireSudo";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 
@@ -10,17 +9,20 @@ export const DELETE = requireSudo(async (
   { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session || session.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const { id } = await params;
-    await softDeleteRecord("question", id, String(session.userId));
+    await softDeleteRecord("question", id, authentication.session.user.id);
 
     return NextResponse.json({ success: true, message: "Question soft-deleted successfully." });
   } catch (error) {

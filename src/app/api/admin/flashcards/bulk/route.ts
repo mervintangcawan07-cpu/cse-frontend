@@ -1,18 +1,20 @@
 // Relative Path: src/app/api/admin/flashcards/bulk/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { requireSudo } from "@/middleware/requireSudo";
 
 export async function POST(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session || session.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -52,12 +54,15 @@ export async function POST(req: NextRequest) {
 
 export const DELETE = requireSudo(async (req: NextRequest) => {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session || session.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -70,7 +75,7 @@ export const DELETE = requireSudo(async (req: NextRequest) => {
       where: { id: { in: ids } },
       data: {
         deletedAt: new Date(),
-        deletedBy: String(session.userId),
+        deletedBy: authentication.session.user.id,
       },
     });
 

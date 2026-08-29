@@ -7,19 +7,10 @@ import {
   P0_003_RESTORE_DISABLED_CODE,
   P0_003_RESTORE_DISABLED_MESSAGE,
 } from "@/lib/backup/backupRestore";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 
-async function authenticateAdmin(request: NextRequest) {
-  const token = request.cookies.get("cse_session")?.value;
-  if (!token) return null;
-  const session = await verifyJWT(token);
-  if (!session?.userId) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { email: true, role: true },
-  });
-
+async function authenticateAdmin() {
+  const user = await getAuthenticatedUser();
   return user?.role === "ADMIN" ? user : null;
 }
 
@@ -38,7 +29,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await authenticateAdmin(request);
+    const admin = await authenticateAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -100,7 +91,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const admin = await authenticateAdmin(request);
+    const admin = await authenticateAdmin();
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

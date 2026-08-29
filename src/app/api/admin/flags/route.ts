@@ -1,18 +1,10 @@
 // Relative Path: src/app/api/admin/flags/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
-async function verifyAdmin(cookieStore: Awaited<ReturnType<typeof cookies>>) {
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-  const session = await verifyJWT(token).catch(() => null);
-  if (!session) return null;
-  const user = await prisma.user.findUnique({
-    where: { id: String(session.userId || session.id || "") },
-    select: { id: true, role: true },
-  });
+async function verifyAdmin() {
+  const user = await getAuthenticatedUser();
   if (!user || user.role !== "ADMIN") return null;
   return user;
 }
@@ -20,8 +12,7 @@ async function verifyAdmin(cookieStore: Awaited<ReturnType<typeof cookies>>) {
 // GET: Paginated list of flagged questions
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const admin = await verifyAdmin(cookieStore);
+    const admin = await verifyAdmin();
     if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
@@ -101,8 +92,7 @@ export async function GET(request: Request) {
 // PATCH: Dismiss or resolve a flag group for a question
 export async function PATCH(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const admin = await verifyAdmin(cookieStore);
+    const admin = await verifyAdmin();
     if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const body = await request.json();

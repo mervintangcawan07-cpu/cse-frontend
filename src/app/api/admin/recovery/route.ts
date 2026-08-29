@@ -1,8 +1,7 @@
 ﻿// Relative Path: src/app/api/admin/recovery/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { requireSudo } from "@/middleware/requireSudo";
 import { calculateDaysRemaining } from "@/lib/db/softDelete";
@@ -11,12 +10,15 @@ import { logger } from "@/lib/logger/logger";
 
 export async function GET(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session || session.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 

@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/admin/elimination-drills/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 
@@ -28,15 +27,16 @@ interface IncomingQuestionPayload {
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
@@ -70,15 +70,16 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
@@ -203,15 +204,16 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
@@ -232,7 +234,7 @@ export async function DELETE(request: Request) {
       });
 
       for (const q of allDrillQuestions) {
-        await softDeleteRecord("question", q.id, String(session.userId));
+        await softDeleteRecord("question", q.id, authentication.session.user.id);
       }
 
       return NextResponse.json({
@@ -260,7 +262,7 @@ export async function DELETE(request: Request) {
     }
 
     for (const id of idsToDelete) {
-      await softDeleteRecord("question", id, String(session.userId));
+      await softDeleteRecord("question", id, authentication.session.user.id);
     }
 
     return NextResponse.json({
@@ -280,15 +282,16 @@ export async function DELETE(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 

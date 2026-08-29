@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/admin/trash/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { getTrashBinItems, restoreRecord, purgeExpiredRecords } from "@/lib/recovery/softDelete";
 import { SupportedEntityType } from "@/types/recovery";
 
@@ -9,15 +8,16 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied." }, { status: 403 });
     }
 
@@ -32,15 +32,16 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session || (session.role !== "ADMIN" && session.email !== "mervintangcawan07@gmail.com")) {
+    if (
+      !authentication.authenticated ||
+      (authentication.session.user.role !== "ADMIN" &&
+        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+    ) {
       return NextResponse.json({ error: "Access denied." }, { status: 403 });
     }
 
@@ -48,7 +49,11 @@ export async function POST(request: Request) {
     const { action, entityType, entityId } = body;
 
     if (action === "RESTORE" && entityType && entityId) {
-      const result = await restoreRecord(entityType as SupportedEntityType, entityId, String(session.email));
+      const result = await restoreRecord(
+        entityType as SupportedEntityType,
+        entityId,
+        authentication.session.user.email
+      );
       return NextResponse.json(result);
     }
 

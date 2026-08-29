@@ -1,14 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 
 async function checkAdminSession() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-  const session = await verifyJWT(token);
-  return session?.role === "ADMIN" ? session : null;
+  const user = await getAuthenticatedUser();
+  return user?.role === "ADMIN" ? user : null;
 }
 
 export async function PUT(

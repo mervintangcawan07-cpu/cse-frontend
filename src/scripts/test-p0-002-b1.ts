@@ -681,6 +681,246 @@ function runSourceIntegratedRouteTests(): void {
     "exam/history remains explicitly deferred with its existing direct authentication behavior"
   );
 
+  const b23UserRoutes = [
+    "src/app/admin/layout.tsx",
+    "src/app/api/admin/backups/[id]/route.ts",
+    "src/app/api/admin/backups/route.ts",
+    "src/app/api/admin/flags/route.ts",
+    "src/app/api/admin/flashcards/route.ts",
+    "src/app/api/admin/notifications/route.ts",
+    "src/app/api/admin/pricing/route.ts",
+    "src/app/api/admin/reading/[id]/route.ts",
+    "src/app/api/admin/reading/route.ts",
+  ] as const;
+  const b23ResultRoutes = [
+    "src/app/api/admin/db-storage/route.ts",
+    "src/app/api/admin/elimination-drills/route.ts",
+    "src/app/api/admin/feature-flags/route.ts",
+    "src/app/api/admin/flashcards/bulk/route.ts",
+    "src/app/api/admin/login-history/route.ts",
+    "src/app/api/admin/logs/route.ts",
+    "src/app/api/admin/questions/[id]/route.ts",
+    "src/app/api/admin/questions/ai-generate/route.ts",
+    "src/app/api/admin/questions/bulk-delete/route.ts",
+    "src/app/api/admin/questions/export/route.ts",
+    "src/app/api/admin/questions/import/route.ts",
+    "src/app/api/admin/recovery/route.ts",
+    "src/app/api/admin/support-tickets/route.ts",
+    "src/app/api/admin/trash/route.ts",
+    "src/app/api/admin/users/action/route.ts",
+  ] as const;
+  const b23Routes = [...b23UserRoutes, ...b23ResultRoutes];
+  const b23RouteSources = new Map(
+    b23Routes.map((file) => [file, read(file)])
+  );
+  assert(
+    b23Routes.length === 24 &&
+      [...b23RouteSources.values()].every(
+        (source) =>
+          !/\bverifyJWT\b/.test(source) &&
+          !/\bcookies\s*\(/.test(source) &&
+          !source.includes("cse_session") &&
+          source.includes('from "@/lib/serverAuth"')
+      ),
+    "all 24 B2.3 admin files use canonical authentication without direct JWT or cookie handling"
+  );
+  assert(
+    b23UserRoutes.every((file) =>
+      (b23RouteSources.get(file) || "").includes("getAuthenticatedUser()")
+    ) &&
+      b23ResultRoutes.every((file) =>
+        (b23RouteSources.get(file) || "").includes(
+          "getAuthenticatedSessionResult()"
+        )
+      ) &&
+      [...b23RouteSources.values()].every(
+        (source) =>
+          !source.includes("getAuthenticatedUser(request") &&
+          !source.includes("getAuthenticatedSessionResult(request")
+      ),
+    "B2.3 preserves the approved helper map and cookie-only authentication"
+  );
+
+  const adminLayout = b23RouteSources.get("src/app/admin/layout.tsx") || "";
+  assert(
+    adminLayout.includes('if (!user) redirect("/login")') &&
+      adminLayout.includes(
+        'if (user.role !== "ADMIN") redirect("/dashboard")'
+      ) &&
+      adminLayout.includes("<SudoProvider>") &&
+      adminLayout.includes("</SudoProvider>"),
+    "B2.3 admin layout preserves login/non-admin redirects and SudoProvider"
+  );
+
+  const adminFeatureFlags =
+    b23RouteSources.get("src/app/api/admin/feature-flags/route.ts") || "";
+  const featureFlagsGetStart = adminFeatureFlags.indexOf("export async function GET");
+  const featureFlagsPostStart = adminFeatureFlags.indexOf("export async function POST");
+  const featureFlagsGet = adminFeatureFlags.slice(
+    featureFlagsGetStart,
+    featureFlagsPostStart
+  );
+  const featureFlagsPost = adminFeatureFlags.slice(featureFlagsPostStart);
+  assert(
+    featureFlagsGetStart >= 0 &&
+      featureFlagsPostStart > featureFlagsGetStart &&
+      !featureFlagsGet.includes("getAuthenticated") &&
+      featureFlagsPost.includes("getAuthenticatedSessionResult()") &&
+      featureFlagsPost.includes('authentication.session.user.role !== "ADMIN"'),
+    "B2.3 feature-flags GET remains public while POST remains ADMIN-only"
+  );
+
+  const adminElimination =
+    b23RouteSources.get("src/app/api/admin/elimination-drills/route.ts") || "";
+  const adminTrash =
+    b23RouteSources.get("src/app/api/admin/trash/route.ts") || "";
+  assert(
+    adminElimination.includes(
+      'authentication.session.user.email !== "mervintangcawan07@gmail.com"'
+    ) &&
+      adminTrash.includes(
+        'authentication.session.user.email !== "mervintangcawan07@gmail.com"'
+      ) &&
+      adminElimination.includes("Access denied. Admin privileges required.") &&
+      adminTrash.includes('{ error: "Access denied." }'),
+    "B2.3 preserves canonical designated-email authorization and exact access-denied bodies"
+  );
+
+  const adminBackupsById =
+    b23RouteSources.get("src/app/api/admin/backups/[id]/route.ts") || "";
+  const adminBackups =
+    b23RouteSources.get("src/app/api/admin/backups/route.ts") || "";
+  const adminFlags =
+    b23RouteSources.get("src/app/api/admin/flags/route.ts") || "";
+  const adminFlashcards =
+    b23RouteSources.get("src/app/api/admin/flashcards/route.ts") || "";
+  const adminNotifications =
+    b23RouteSources.get("src/app/api/admin/notifications/route.ts") || "";
+  const adminPricing =
+    b23RouteSources.get("src/app/api/admin/pricing/route.ts") || "";
+  const adminReadingById =
+    b23RouteSources.get("src/app/api/admin/reading/[id]/route.ts") || "";
+  const adminReading =
+    b23RouteSources.get("src/app/api/admin/reading/route.ts") || "";
+  assert(
+    adminBackups.includes('{ error: "Unauthorized access" }') &&
+      adminBackupsById.includes('{ error: "Unauthorized" }') &&
+      adminFlags.includes('{ error: "Forbidden" }') &&
+      adminFlashcards.includes("Unauthorized: Admin access required.") &&
+      adminNotifications.includes("Forbidden: Admin access required") &&
+      adminReading.includes('{ error: "Forbidden" }') &&
+      adminReadingById.includes('{ error: "Forbidden" }'),
+    "B2.3 preserves collapsed backup, flags, flashcard, notification, and reading auth responses"
+  );
+
+  const adminLogs =
+    b23RouteSources.get("src/app/api/admin/logs/route.ts") || "";
+  assert(
+    b23ResultRoutes.every((file) => {
+      const source = b23RouteSources.get(file) || "";
+      return source.includes('authentication.code === "NO_TOKEN"');
+    }) &&
+      adminLogs.includes("{ logs: [] }") &&
+      adminLogs.includes("{ status: 401 }") &&
+      adminPricing.includes('{ error: "Unauthorized" }') &&
+      adminPricing.includes("Forbidden: Admin access required."),
+    "B2.3 preserves route-owned missing-token, invalid-session, non-admin, logs, and pricing responses"
+  );
+
+  const redundantAdminLookupFiles = [
+    "src/app/admin/layout.tsx",
+    "src/app/api/admin/backups/[id]/route.ts",
+    "src/app/api/admin/backups/route.ts",
+    "src/app/api/admin/flags/route.ts",
+    "src/app/api/admin/flashcards/route.ts",
+    "src/app/api/admin/pricing/route.ts",
+  ] as const;
+  assert(
+    redundantAdminLookupFiles.every(
+      (file) =>
+        !(b23RouteSources.get(file) || "").includes("prisma.user.findUnique")
+    ),
+    "B2.3 removes only the six approved redundant current-admin User lookups"
+  );
+
+  const adminFlashcardsBulk =
+    b23RouteSources.get("src/app/api/admin/flashcards/bulk/route.ts") || "";
+  const adminQuestionById =
+    b23RouteSources.get("src/app/api/admin/questions/[id]/route.ts") || "";
+  const adminQuestionBulkDelete =
+    b23RouteSources.get("src/app/api/admin/questions/bulk-delete/route.ts") || "";
+  const adminQuestionImport =
+    b23RouteSources.get("src/app/api/admin/questions/import/route.ts") || "";
+  assert(
+    adminBackups.includes("actorId: admin.id") &&
+      adminBackups.includes("actorEmail: admin.email") &&
+      adminBackupsById.includes("actorEmail: admin.email") &&
+      adminElimination.includes("authentication.session.user.id") &&
+      adminFlashcardsBulk.includes("authentication.session.user.id") &&
+      adminQuestionById.includes("authentication.session.user.id") &&
+      adminQuestionBulkDelete.includes("authentication.session.user.id") &&
+      adminQuestionImport.includes(
+        "const userId = authentication.session.user.id"
+      ) &&
+      adminNotifications.includes("userId: session.id") &&
+      adminTrash.includes("authentication.session.user.email"),
+    "B2.3 acting-admin audit identities come only from canonical User data"
+  );
+
+  const adminRecovery =
+    b23RouteSources.get("src/app/api/admin/recovery/route.ts") || "";
+  const adminSupport =
+    b23RouteSources.get("src/app/api/admin/support-tickets/route.ts") || "";
+  const adminUserAction =
+    b23RouteSources.get("src/app/api/admin/users/action/route.ts") || "";
+  assert(
+    adminRecovery.includes("prisma.user.findMany") &&
+      adminRecovery.includes("prisma.user.findUnique") &&
+      adminRecovery.includes("prisma.user.update") &&
+      adminSupport.includes("prisma.user.findUnique") &&
+      (adminUserAction.match(/prisma\.user\.update/g) || []).length === 3,
+    "B2.3 retains required recovery, support, and admin target-User operations"
+  );
+  assert(
+    adminFlashcardsBulk.includes("export const DELETE = requireSudo") &&
+      adminQuestionById.includes("export const DELETE = requireSudo") &&
+      adminQuestionBulkDelete.includes("export const DELETE = requireSudo") &&
+      adminRecovery.includes("export const POST = requireSudo") &&
+      adminRecovery.includes("export const DELETE = requireSudo") &&
+      adminUserAction.includes("export const POST = requireSudo"),
+    "B2.3 preserves every approved requireSudo wrapper"
+  );
+  assert(
+    adminBackupsById.includes("P0_003_RESTORE_DISABLED_CODE") &&
+      adminBackupsById.includes("P0_003_RESTORE_DISABLED_MESSAGE") &&
+      adminBackupsById.includes("{ status: 503 }") &&
+      adminBackupsById.includes("if (backup.protected)") &&
+      appearsBefore(
+        adminBackupsById,
+        "const admin = await authenticateAdmin()",
+        "await request.json()"
+      ),
+    "B2.3 preserves P0-003 restore containment, protected-backup deletion safeguards, and auth ordering"
+  );
+  assert(
+    adminRecovery.includes("userHardPurgeDisabled") &&
+      adminRecovery.includes("{ status: 501 }") &&
+      adminTrash.includes("userHardPurgeDisabled") &&
+      adminTrash.includes("Physical User purge is disabled") &&
+      appearsBefore(
+        adminTrash,
+        "await getAuthenticatedSessionResult()",
+        "await request.json()"
+      ),
+    "B2.3 preserves recovery/trash User hard-purge containment and destructive auth ordering"
+  );
+
+  const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
+  assert(
+    /\bverifyJWT\b/.test(deferredCriticalActions),
+    "admin criticalActions remains explicitly deferred after B2.3"
+  );
+
   assert(
     /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")) &&
       /\bverifyJWT\b/.test(read("src/app/api/questions/daily/route.ts")),
@@ -833,8 +1073,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 60,
-    "60 remaining direct verifyJWT callers are explicitly deferred after B2.2"
+    deferredToB2.length === 36,
+    "36 remaining direct verifyJWT callers are explicitly deferred after B2.3"
   );
 }
 

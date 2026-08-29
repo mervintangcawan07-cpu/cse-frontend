@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 // Helper to verify Admin authorization
 async function getAdminSession() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-
-  const session = await verifyJWT(token);
-  if (!session?.userId || session.role !== "ADMIN") return null;
-
-  return session;
+  const user = await getAuthenticatedUser();
+  if (user?.role !== "ADMIN") return null;
+  return user;
 }
 
 // 1. GET: Fetch all broadcast announcements for the admin history list
@@ -62,7 +56,7 @@ export async function POST(request: Request) {
     // Log admin activity
     await prisma.activityLog.create({
       data: {
-        userId: String(session.userId),
+        userId: session.id,
         action: "BROADCAST_NOTIFICATION_SENT",
         metadata: JSON.stringify({ title, type, targetUserId }),
       },
@@ -97,7 +91,7 @@ export async function DELETE(request: Request) {
     // Log admin deletion activity
     await prisma.activityLog.create({
       data: {
-        userId: String(session.userId),
+        userId: session.id,
         action: "BROADCAST_NOTIFICATION_DELETED",
         metadata: JSON.stringify({ notificationId: id, title: deleted.title }),
       },

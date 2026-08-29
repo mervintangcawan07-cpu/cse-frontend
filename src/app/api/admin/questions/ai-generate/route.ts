@@ -1,21 +1,20 @@
 // Relative Path: src/app/api/admin/questions/ai-generate/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { StructuredQuestion } from "@/types/question";
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId || session?.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 

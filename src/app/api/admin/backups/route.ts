@@ -1,24 +1,12 @@
 // Relative Path: src/app/api/admin/backups/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { backupService } from "@/lib/backup/backupService";
 import { backupHealthMonitor } from "@/lib/backup/backupHealth";
 
 async function verifyAdminAuth() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-
-  const session = await verifyJWT(token);
-  if (!session?.userId) return null;
-
-  const adminUser = await prisma.user.findUnique({
-    where: { id: String(session.userId) },
-    select: { id: true, email: true, role: true },
-  });
-
+  const adminUser = await getAuthenticatedUser();
   if (adminUser?.role !== "ADMIN") return null;
   return adminUser;
 }
