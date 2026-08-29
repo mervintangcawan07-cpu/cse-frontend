@@ -1,25 +1,14 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export async function POST() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await getAuthenticatedUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const userId = String(session.userId);
-
-    // Get current user profile
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { name: true },
-    });
-    const userName = user?.name || "Reviewee";
+    const userId = user.id;
+    const userName = user.name || "Reviewee";
 
     // 1. Look for open match waiting for an opponent
     const openMatch = await prisma.duelMatch.findFirst({

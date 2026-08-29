@@ -451,6 +451,131 @@ function runSourceIntegratedRouteTests(): void {
     "ADMIN and PRO guards apply authorization only after canonical liveness"
   );
 
+  const b21Routes = [
+    ["src/app/api/ai/explain-mistake/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/analytics/dashboard/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/bookmarks/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/duels/[id]/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/duels/challenge/respond/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/duels/challenge/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/duels/matchmake/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/flashcards/route.ts", ["getAuthenticatedSessionResult"]],
+    ["src/app/api/notifications/read-all/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/notifications/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/questions/[id]/route.ts", ["getAuthenticatedSessionResult"]],
+    ["src/app/api/questions/flag/route.ts", ["getAuthenticatedUser"]],
+    [
+      "src/app/api/questions/route.ts",
+      ["getAuthenticatedUser", "getAuthenticatedSessionResult"],
+    ],
+    ["src/app/api/support/route.ts", ["getAuthenticatedSessionResult"]],
+    ["src/app/api/user/analytics/detailed/route.ts", ["getAuthenticatedSessionResult"]],
+    ["src/app/api/user/badges/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/user/mistakes/route.ts", ["getAuthenticatedUser"]],
+    ["src/app/api/user/readiness-card/route.ts", ["getAuthenticatedUser"]],
+  ] as const;
+  const b21RouteSources = new Map(
+    b21Routes.map(([file]) => [file, read(file)])
+  );
+  assert(
+    b21Routes.every(([file, helpers]) => {
+      const source = b21RouteSources.get(file) || "";
+      return (
+        !/\bverifyJWT\b/.test(source) &&
+        source.includes('from "@/lib/serverAuth"') &&
+        helpers.every((helper) => source.includes(helper))
+      );
+    }),
+    "all 18 B2.1 routes use their planned canonical database-backed authentication"
+  );
+  assert(
+    [...b21RouteSources.values()].every(
+      (source) =>
+        !source.includes("getAuthenticatedUser(request") &&
+        !source.includes("getAuthenticatedSessionResult(request")
+    ),
+    "B2.1 routes preserve cookie-only authentication without adding Bearer fallback"
+  );
+
+  const duelById = b21RouteSources.get("src/app/api/duels/[id]/route.ts") || "";
+  const duelGetStart = duelById.indexOf("export async function GET");
+  const duelPostStart = duelById.indexOf("export async function POST");
+  const duelGet = duelById.slice(duelGetStart, duelPostStart);
+  const duelPost = duelById.slice(duelPostStart);
+  assert(
+    duelGetStart >= 0 &&
+      duelPostStart > duelGetStart &&
+      !duelGet.includes("getAuthenticated") &&
+      duelPost.includes("getAuthenticatedUser()"),
+    "/duels/[id] GET remains public while POST uses canonical authentication"
+  );
+
+  const questionById = b21RouteSources.get("src/app/api/questions/[id]/route.ts") || "";
+  const questions = b21RouteSources.get("src/app/api/questions/route.ts") || "";
+  assert(
+    questionById.includes('authentication.code === "NO_TOKEN"') &&
+      questionById.includes('authentication.session.user.role !== "ADMIN"') &&
+      questionById.includes('{ error: "Unauthorized" }') &&
+      questionById.includes('Forbidden: Admin access required') &&
+      questions.includes('authentication.code === "NO_TOKEN"') &&
+      questions.includes('authentication.session.user.role !== "ADMIN"') &&
+      questions.includes('Forbidden: Admin access required'),
+    "B2.1 ADMIN routes preserve database-backed role checks and exact 401/403 errors"
+  );
+
+  const flashcards = b21RouteSources.get("src/app/api/flashcards/route.ts") || "";
+  const support = b21RouteSources.get("src/app/api/support/route.ts") || "";
+  const detailedAnalytics =
+    b21RouteSources.get("src/app/api/user/analytics/detailed/route.ts") || "";
+  assert(
+    flashcards.includes("Unauthorized: Please log in.") &&
+      flashcards.includes("Unauthorized: Session invalid.") &&
+      support.includes('{ error: "Unauthorized" }') &&
+      support.includes('{ error: "Invalid session" }') &&
+      detailedAnalytics.includes('{ error: "Unauthorized" }') &&
+      detailedAnalytics.includes('{ error: "Invalid session" }'),
+    "B2.1 route-specific missing-token and invalid-session responses remain intact"
+  );
+
+  const aiExplain = b21RouteSources.get("src/app/api/ai/explain-mistake/route.ts") || "";
+  const bookmarks = b21RouteSources.get("src/app/api/bookmarks/route.ts") || "";
+  const duelRespond =
+    b21RouteSources.get("src/app/api/duels/challenge/respond/route.ts") || "";
+  const notifications = b21RouteSources.get("src/app/api/notifications/route.ts") || "";
+  const questionFlag = b21RouteSources.get("src/app/api/questions/flag/route.ts") || "";
+  assert(
+    aiExplain.includes("AI_EXPLAIN_LIMITER") &&
+      support.includes("SUPPORT_TICKET_LIMITER") &&
+      bookmarks.includes("deleteMany") &&
+      bookmarks.includes("userId,") &&
+      duelRespond.includes("match.challengedUserId !== userId") &&
+      notifications.includes("notif.userId !== userId") &&
+      questionFlag.includes("userId_questionId"),
+    "B2.1 ownership and per-user rate-limit protections remain present"
+  );
+
+  const duelChallenge =
+    b21RouteSources.get("src/app/api/duels/challenge/route.ts") || "";
+  const duelMatchmake =
+    b21RouteSources.get("src/app/api/duels/matchmake/route.ts") || "";
+  const readinessCard =
+    b21RouteSources.get("src/app/api/user/readiness-card/route.ts") || "";
+  assert(
+    !duelRespond.includes("prisma.user.findUnique") &&
+      !duelMatchmake.includes("prisma.user.findUnique") &&
+      (duelChallenge.match(/prisma\.user\.findUnique/g) || []).length === 1 &&
+      duelChallenge.includes("targetUserId") &&
+      readinessCard.includes("prisma.user.findUnique") &&
+      readinessCard.includes("createdAt: true"),
+    "B2.1 removes only redundant current-User queries and retains required business User lookups"
+  );
+
+  assert(
+    /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")) &&
+      /\bverifyJWT\b/.test(read("src/app/api/questions/daily/route.ts")),
+    "csc/sync and questions/daily remain deferred to the mixed-auth batch"
+  );
+
   const login = read("src/app/api/auth/login/route.ts");
   assert(
     appearsBefore(login, "isAccountOperational(user)", "crypto.randomUUID()") &&
@@ -597,8 +722,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 83,
-    "83 remaining direct verifyJWT callers are explicitly deferred to later B2 batches"
+    deferredToB2.length === 65,
+    "65 remaining direct verifyJWT callers are explicitly deferred after B2.1"
   );
 }
 

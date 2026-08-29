@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 const DEFAULT_SEED_CARDS = [
@@ -85,15 +84,12 @@ const DEFAULT_SEED_CARDS = [
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized: Please log in." }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
+    if (!authentication.authenticated) {
       return NextResponse.json({ error: "Unauthorized: Session invalid." }, { status: 401 });
     }
 

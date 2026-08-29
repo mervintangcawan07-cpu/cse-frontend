@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import {
   SUPPORT_TICKET_LIMITER,
@@ -11,15 +10,16 @@ import {
 // GET: Retrieve current user's support tickets
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!authentication.authenticated) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session) return NextResponse.json({ error: "Invalid session" }, { status: 401 });
-
-    const userId = session.id as string;
-    const userEmail = session.email as string;
+    const userId = authentication.session.user.id;
+    const userEmail = authentication.session.user.email;
 
     const tickets = await prisma.supportTicket.findMany({
       where: {
@@ -41,16 +41,17 @@ export async function GET() {
 // POST: Create a new support ticket
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!authentication.authenticated) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+    }
 
-    const session = await verifyJWT(token);
-    if (!session) return NextResponse.json({ error: "Invalid session" }, { status: 401 });
-
-    const userId = session.id as string;
-    const userEmail = session.email as string;
-    const rateLimitUserId = String(session.userId || session.id);
+    const userId = authentication.session.user.id;
+    const userEmail = authentication.session.user.email;
+    const rateLimitUserId = userId;
 
     const rateResult = await checkRateLimit(
       SUPPORT_TICKET_LIMITER,

@@ -1,19 +1,14 @@
 // Relative Path: src/app/api/duels/challenge/respond/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const userId = session?.userId ? String(session.userId) : null;
-    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await getAuthenticatedUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = user.id;
 
     const body = await request.json();
     const { matchId, action } = body; // action: "ACCEPT" | "DECLINE"
@@ -35,11 +30,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "You are not authorized to respond to this challenge." }, { status: 403 });
     }
 
-    const responder = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { name: true },
-    });
-    const responderName = responder?.name || "Opponent";
+    const responderName = user.name || "Opponent";
 
     if (action === "ACCEPT") {
       const updatedMatch = await prisma.duelMatch.update({

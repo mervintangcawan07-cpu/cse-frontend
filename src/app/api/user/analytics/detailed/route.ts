@@ -1,23 +1,19 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
+    if (!authentication.authenticated) {
       return NextResponse.json({ error: "Invalid session" }, { status: 401 });
     }
 
-    const userId = String(session.userId);
+    const userId = authentication.session.user.id;
 
     // Fetch real exam attempt results for this user from Neon DB (excluding heavy detailsJson)
     const results = await prisma.examResult.findMany({

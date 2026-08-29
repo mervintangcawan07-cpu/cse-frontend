@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 // Helper for Session Authentication
 async function getAuthUserId() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("cse_session")?.value;
-  if (!token) return null;
-
-  const session = await verifyJWT(token);
-  return session?.userId ? String(session.userId) : null;
+  return (await getAuthenticatedUser())?.id ?? null;
 }
 
 // 1. GET ALL BOOKMARKED QUESTIONS & STUDY NOTES FOR CURRENT USER

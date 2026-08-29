@@ -1,7 +1,9 @@
 // Relative Path: src/app/api/questions/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import {
+  getAuthenticatedSessionResult,
+  getAuthenticatedUser,
+} from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import Papa from "papaparse";
@@ -25,19 +27,11 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const user = await getAuthenticatedUser();
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const session = await verifyJWT(token);
-    const userId = session?.userId || session?.id;
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const userId = user.id;
 
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
@@ -270,17 +264,15 @@ export async function GET(request: Request) {
 // ----------------------------------------------------------------------
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const authentication = await getAuthenticatedSessionResult();
+    if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    const userId = session?.userId || session?.id;
-
-    if (!userId || session?.role !== "ADMIN") {
+    if (
+      !authentication.authenticated ||
+      authentication.session.user.role !== "ADMIN"
+    ) {
       return NextResponse.json(
         { error: "Forbidden: Admin access required" },
         { status: 403 }

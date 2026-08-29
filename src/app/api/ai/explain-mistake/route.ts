@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import {
   AI_EXPLAIN_LIMITER,
   checkRateLimit,
@@ -9,19 +8,12 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-
-    if (!token) {
+    const user = await getAuthenticatedUser();
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = String(session.userId);
+    const userId = user.id;
 
     // 🔒 Limit: 15 AI mistake explanations per minute per user
     const rateResult = await checkRateLimit(AI_EXPLAIN_LIMITER, `ai:explain-mistake:${userId}`);

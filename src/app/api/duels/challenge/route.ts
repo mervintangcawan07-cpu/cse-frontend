@@ -1,19 +1,14 @@
 // Relative Path: src/app/api/duels/challenge/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const userId = session?.userId ? String(session.userId) : null;
-    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await getAuthenticatedUser();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = user.id;
 
     const body = await request.json();
     const { targetUserId } = body;
@@ -26,12 +21,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "You cannot challenge yourself." }, { status: 400 });
     }
 
-    // Get current user profile
-    const challenger = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { name: true },
-    });
-    const challengerName = challenger?.name || "Examinee";
+    const challengerName = user.name || "Examinee";
 
     // Verify target user exists
     const targetUser = await prisma.user.findUnique({
