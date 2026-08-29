@@ -3,6 +3,7 @@ export type AccountSessionFailureCode =
   | "INVALID_USER_ID"
   | "INVALID_SESSION_ID"
   | "USER_NOT_FOUND"
+  | "TERMINAL_ANONYMIZED"
   | "BANNED"
   | "CLOSURE_PENDING"
   | "SESSION_REVOKED"
@@ -13,6 +14,8 @@ export type AccountSessionDecision =
   | { allowed: false; code: AccountSessionFailureCode };
 
 export interface ExistingAccountState {
+  anonymizedAt: Date | null;
+  anonymizationVersion: number | null;
   isBanned: boolean;
   deletedAt: Date | null;
   activeSessionId: string | null;
@@ -92,9 +95,17 @@ export function getPresentedSessionId(
 }
 
 export function isAccountOperational(
-  user: Pick<ExistingAccountState, "isBanned" | "deletedAt">
+  user: Pick<
+    ExistingAccountState,
+    "anonymizedAt" | "anonymizationVersion" | "isBanned" | "deletedAt"
+  >
 ): boolean {
-  return user.isBanned === false && user.deletedAt === null;
+  return (
+    user.anonymizedAt === null &&
+    user.anonymizationVersion === null &&
+    user.isBanned === false &&
+    user.deletedAt === null
+  );
 }
 
 export function isAccountAuthorizedFor(
@@ -124,6 +135,13 @@ export function evaluateAccountSession(
 
   if (!input.user) {
     return { allowed: false, code: "USER_NOT_FOUND" };
+  }
+
+  if (
+    input.user.anonymizedAt !== null ||
+    input.user.anonymizationVersion !== null
+  ) {
+    return { allowed: false, code: "TERMINAL_ANONYMIZED" };
   }
 
   if (input.user.isBanned) {

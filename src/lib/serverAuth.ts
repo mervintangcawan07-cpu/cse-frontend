@@ -33,6 +33,8 @@ export type AuthenticatedSessionResult =
     };
 
 export interface AuthenticatedUserRecord extends AuthenticatedUser {
+  anonymizedAt: Date | null;
+  anonymizationVersion: number | null;
   isBanned: boolean;
   deletedAt: Date | null;
   activeSessionId: string | null;
@@ -62,6 +64,8 @@ async function findAuthenticatedUserRecord(
       paidUntil: true,
       planType: true,
       lastActiveAt: true,
+      anonymizedAt: true,
+      anonymizationVersion: true,
       isBanned: true,
       deletedAt: true,
       activeSessionId: true,
@@ -79,6 +83,8 @@ async function findAuthenticatedUserRecord(
     paidUntil: dbUser.paidUntil,
     planType: dbUser.planType,
     lastActiveAt: dbUser.lastActiveAt,
+    anonymizedAt: dbUser.anonymizedAt,
+    anonymizationVersion: dbUser.anonymizationVersion,
     isBanned: dbUser.isBanned,
     deletedAt: dbUser.deletedAt,
     activeSessionId: dbUser.activeSessionId,

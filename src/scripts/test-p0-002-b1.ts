@@ -55,6 +55,8 @@ function relative(file: string): string {
 
 function runPurePolicyMatrix(): void {
   const active: ExistingAccountState = {
+    anonymizedAt: null,
+    anonymizationVersion: null,
     isBanned: false,
     deletedAt: null,
     activeSessionId: "B",
@@ -121,6 +123,55 @@ function runPurePolicyMatrix(): void {
       code: "USER_NOT_FOUND",
     },
     {
+      description: "fully marked terminal User with matching session is denied",
+      input: {
+        userId: "user-1",
+        presentedSessionId: "B",
+        user: {
+          ...active,
+          anonymizedAt: new Date(0),
+          anonymizationVersion: 1,
+        },
+      },
+      allowed: false,
+      code: "TERMINAL_ANONYMIZED",
+    },
+    {
+      description: "anonymizedAt-only terminal state fails closed",
+      input: {
+        userId: "user-1",
+        presentedSessionId: "B",
+        user: { ...active, anonymizedAt: new Date(0) },
+      },
+      allowed: false,
+      code: "TERMINAL_ANONYMIZED",
+    },
+    {
+      description: "anonymizationVersion-only terminal state fails closed",
+      input: {
+        userId: "user-1",
+        presentedSessionId: "B",
+        user: { ...active, anonymizationVersion: 1 },
+      },
+      allowed: false,
+      code: "TERMINAL_ANONYMIZED",
+    },
+    {
+      description: "terminal lifecycle takes precedence over ban and deletion",
+      input: {
+        userId: "user-1",
+        presentedSessionId: "B",
+        user: {
+          ...active,
+          anonymizedAt: new Date(0),
+          isBanned: true,
+          deletedAt: new Date(0),
+        },
+      },
+      allowed: false,
+      code: "TERMINAL_ANONYMIZED",
+    },
+    {
       description: "banned User with matching session is denied",
       input: {
         userId: "user-1",
@@ -179,6 +230,8 @@ function runPurePolicyMatrix(): void {
   }
 
   const replayState: ExistingAccountState = {
+    anonymizedAt: null,
+    anonymizationVersion: null,
     isBanned: false,
     deletedAt: null,
     activeSessionId: "A",
@@ -211,6 +264,14 @@ function runPurePolicyMatrix(): void {
   );
 
   assert(isAccountOperational(active), "active account can use login/recovery flows");
+  assert(
+    !isAccountOperational({ ...active, anonymizedAt: new Date(0) }),
+    "anonymizedAt makes an account non-operational"
+  );
+  assert(
+    !isAccountOperational({ ...active, anonymizationVersion: 1 }),
+    "anonymizationVersion makes an account non-operational"
+  );
   assert(
     !isAccountOperational({ ...active, isBanned: true }),
     "banned account cannot use login/recovery flows"
@@ -249,6 +310,8 @@ function runPurePolicyMatrix(): void {
 async function runMockedCanonicalAuthTests(): Promise<void> {
   const liveUser: ExistingAccountState & { id: string } = {
     id: "user-1",
+    anonymizedAt: null,
+    anonymizationVersion: null,
     isBanned: false,
     deletedAt: null,
     activeSessionId: "B",
@@ -282,6 +345,27 @@ async function runMockedCanonicalAuthTests(): Promise<void> {
   assert(
     !(await authenticate({ userId: "user-1", sessionId: "B" }, null)).allowed,
     "mocked canonical auth denies a missing database User"
+  );
+  assert(
+    !(await authenticate(
+      { userId: "user-1", sessionId: "B" },
+      { ...liveUser, anonymizedAt: new Date(0), anonymizationVersion: 1 }
+    )).allowed,
+    "mocked canonical auth denies a terminally anonymized User"
+  );
+  assert(
+    !(await authenticate(
+      { userId: "user-1", sessionId: "B" },
+      { ...liveUser, anonymizedAt: new Date(0) }
+    )).allowed,
+    "mocked canonical auth fails closed for anonymizedAt-only state"
+  );
+  assert(
+    !(await authenticate(
+      { userId: "user-1", sessionId: "B" },
+      { ...liveUser, anonymizationVersion: 1 }
+    )).allowed,
+    "mocked canonical auth fails closed for anonymizationVersion-only state"
   );
   assert(
     !(await authenticate(
@@ -328,10 +412,23 @@ async function runMockedCanonicalAuthTests(): Promise<void> {
 function runSourceIntegratedRouteTests(): void {
   const serverAuth = read("src/lib/serverAuth.ts");
   assert(
-    serverAuth.includes("isBanned: true") &&
+    serverAuth.includes("anonymizedAt: true") &&
+      serverAuth.includes("anonymizationVersion: true") &&
+      serverAuth.includes("isBanned: true") &&
       serverAuth.includes("deletedAt: true") &&
       serverAuth.includes("activeSessionId: true"),
-    "serverAuth loads all existing-field liveness state"
+    "serverAuth loads terminal and existing-field liveness state"
+  );
+  const publicUserDtoStart = serverAuth.indexOf(
+    "export interface AuthenticatedUser {"
+  );
+  const publicUserDtoEnd = serverAuth.indexOf("\n}", publicUserDtoStart);
+  const publicUserDto = serverAuth.slice(publicUserDtoStart, publicUserDtoEnd);
+  assert(
+    publicUserDtoStart >= 0 &&
+      publicUserDtoEnd > publicUserDtoStart &&
+      !/anonymizedAt|anonymizationVersion/.test(publicUserDto),
+    "AuthenticatedUser safe DTO does not expose terminal lifecycle markers"
   );
   assert(
     serverAuth.includes("authenticateExistingAccountSession(token, dependencies)"),
@@ -466,12 +563,11 @@ function runStaticSafetyChecks(): void {
     "src/app/api/user/profile/route.ts",
     "src/app/api/auth/logout/route.ts",
   ];
-  const futureLifecycleFieldPattern = /anonymizedAt|anonymizationVersion/;
   assert(
-    approvedProductionFiles.every(
-      (file) => !futureLifecycleFieldPattern.test(read(file))
-    ),
-    "B1 production implementation does not reference future lifecycle fields"
+    approvedProductionFiles
+      .filter((file) => file !== "src/lib/accountLifecycle.ts" && file !== "src/lib/serverAuth.ts")
+      .every((file) => !/anonymizedAt|anonymizationVersion/.test(read(file))),
+    "B2.0 lifecycle foundation remains limited to canonical authentication production files"
   );
 
   const runtimeFiles = runtimeSourceFiles(path.join(process.cwd(), "src"));
@@ -500,7 +596,10 @@ function runStaticSafetyChecks(): void {
 
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
-  assert(deferredToB2.length > 0, "remaining direct verifyJWT callers are explicitly deferred to B2");
+  assert(
+    deferredToB2.length === 83,
+    "83 remaining direct verifyJWT callers are explicitly deferred to later B2 batches"
+  );
 }
 
 async function main(): Promise<void> {
