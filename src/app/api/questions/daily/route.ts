@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/questions/daily/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
 
@@ -25,14 +24,8 @@ function stringToHash(str: string): number {
 
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    let userId: string | null = null;
-
-    if (token) {
-      const session = await verifyJWT(token).catch(() => null);
-      if (session?.userId) userId = String(session.userId);
-    }
+    const authenticatedUser = await getAuthenticatedUser();
+    const userId: string | null = authenticatedUser?.id ?? null;
 
     const dateString = getTodayDateString();
 
@@ -146,13 +139,13 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authenticatedUser = await getAuthenticatedUser();
 
-    const session = await verifyJWT(token);
-    const userId = session?.userId ? String(session.userId) : null;
-    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!authenticatedUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = authenticatedUser.id;
 
     const body = await request.json();
     const { questionId, selectedIndex } = body;

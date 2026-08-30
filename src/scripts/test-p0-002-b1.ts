@@ -2046,12 +2046,11 @@ function runSourceIntegratedRouteTests(): void {
     "src/app/api/exam/history/route.ts",
     "src/app/api/paymongo/checkout/route.ts",
     "src/app/api/paymongo/verify/route.ts",
-    "src/app/api/questions/daily/route.ts",
     "src/routes/admin/criticalActions.ts",
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4E"
+    "five non-social special direct verifyJWT callers remain explicitly deferred after B2.5A"
   );
 
   assert(
@@ -2067,10 +2066,103 @@ function runSourceIntegratedRouteTests(): void {
   );
 
   assert(
-    /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")) &&
-      /\bverifyJWT\b/.test(read("src/app/api/questions/daily/route.ts")),
-    "csc/sync and questions/daily remain deferred to the mixed-auth batch"
+    /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")),
+    "csc/sync remains deferred to the mixed-auth batch"
   );
+
+  // B2.5A — questions/daily canonical auth migration
+  const dailyRoute = read("src/app/api/questions/daily/route.ts");
+  const dailyGet = exportedMethodSource(dailyRoute, "GET");
+  const dailyPost = exportedMethodSource(dailyRoute, "POST");
+
+  assert(
+    !/\bverifyJWT\b/.test(dailyRoute),
+    "B2.5A: questions/daily contains no direct verifyJWT call"
+  );
+  assert(
+    !/\bcookies\b\s*\(\s*\)/.test(dailyRoute),
+    "B2.5A: questions/daily does not use raw cookies() for authentication"
+  );
+  assert(
+    dailyGet.includes("getAuthenticatedUser()"),
+    "B2.5A: GET uses getAuthenticatedUser()"
+  );
+  assert(
+    !/getAuthenticatedUser\s*\(\s*request\s*\)/.test(dailyGet),
+    "B2.5A: GET calls getAuthenticatedUser() without a request argument"
+  );
+  assert(
+    dailyGet.includes("authenticatedUser?.id ?? null"),
+    "B2.5A: GET derives userId from authenticatedUser?.id — nullable for anonymous callers"
+  );
+  assert(
+    !dailyGet.includes('"Unauthorized"'),
+    "B2.5A: GET does not return 401 for unauthenticated callers"
+  );
+  assert(
+    dailyGet.includes("answerIndex: hasAnswered ? question.answerIndex : null"),
+    "B2.5A: GET preserves answerIndex redaction before user answers"
+  );
+  assert(
+    dailyGet.includes("explanation: hasAnswered ? question.explanation : null"),
+    "B2.5A: GET preserves explanation redaction before user answers"
+  );
+  assert(
+    dailyGet.includes("communityStats:"),
+    "B2.5A: GET preserves community statistics in response"
+  );
+  assert(
+    dailyPost.includes("getAuthenticatedUser()"),
+    "B2.5A: POST uses getAuthenticatedUser()"
+  );
+  assert(
+    !/getAuthenticatedUser\s*\(\s*request\s*\)/.test(dailyPost),
+    "B2.5A: POST calls getAuthenticatedUser() without a request argument"
+  );
+  assert(
+    dailyPost.includes("if (!authenticatedUser)"),
+    "B2.5A: POST authentication is mandatory — guards on null authenticatedUser"
+  );
+  assert(
+    dailyPost.includes('{ error: "Unauthorized" }') && dailyPost.includes("{ status: 401 }"),
+    "B2.5A: POST preserves exact 401 { error: 'Unauthorized' } response"
+  );
+  assert(
+    dailyPost.includes("const userId = authenticatedUser.id"),
+    "B2.5A: POST derives userId from authenticatedUser.id"
+  );
+  assert(
+    dailyPost.includes("userId_dateString:"),
+    "B2.5A: POST preserves DailyQuestionAttempt ownership and same-day uniqueness"
+  );
+  assert(
+    dailyPost.includes("selectedIndex === question.answerIndex"),
+    "B2.5A: POST preserves correctness grading"
+  );
+  assert(
+    dailyPost.includes("recordUserActivityStreak(userId)"),
+    "B2.5A: POST preserves streak recording"
+  );
+  assert(
+    dailyPost.includes("prisma.userMistake.upsert"),
+    "B2.5A: POST preserves UserMistake upsert for incorrect answers"
+  );
+  assert(
+    !dailyRoute.includes("isPaid") &&
+      !dailyRoute.includes("paidUntil") &&
+      !dailyRoute.includes("requireProAuth"),
+    "B2.5A: no PRO/payment authorization introduced"
+  );
+  assert(
+    !/Authorization.*Bearer/.test(dailyRoute) &&
+      !/req\.headers\.get\s*\(\s*['"]authorization/.test(dailyRoute),
+    "B2.5A: no Bearer auth fallback introduced"
+  );
+  assert(
+    !dailyRoute.includes("authCache") && !dailyRoute.includes("sessionCache"),
+    "B2.5A: no auth cache introduced"
+  );
+
 
   const login = read("src/app/api/auth/login/route.ts");
   assert(
@@ -2218,8 +2310,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 6,
-    "6 remaining direct verifyJWT caller files are independently inventoried after B2.4F2"
+    deferredToB2.length === 5,
+    "5 remaining direct verifyJWT caller files are independently inventoried after B2.5A"
   );
 }
 
