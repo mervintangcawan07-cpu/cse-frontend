@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/rooms/[roomId]/whiteboard/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export interface DrawPoint {
@@ -22,6 +21,31 @@ interface RoomWhiteboardState {
   version: number;
   lastUpdated: number;
 }
+
+interface WhiteboardAuthorization {
+  room: {
+    allowMemberWhiteboard: boolean;
+  };
+  participant: {
+    role: "HOST" | "MODERATOR" | "MEMBER";
+    canDraw: boolean;
+  };
+}
+
+type WhiteboardAuthorizationResult =
+  | { allowed: true; authorization: WhiteboardAuthorization }
+  | { allowed: false; response: NextResponse };
+
+// The current client sends one normalized point per pointer/touch move. This
+// generous cap preserves unusually long strokes while bounding request geometry.
+const MAX_WHITEBOARD_POINTS_PER_DELTA = 10_000;
+const MAX_WHITEBOARD_POINTS_PER_REQUEST = 10_000;
+// Match the existing retained-stroke window so one batch cannot exceed stored state.
+const MAX_WHITEBOARD_BATCH_SIZE = 500;
+// Current client colors are six-digit hex strings and widths are 3 (pen) or 24 (eraser).
+const WHITEBOARD_COLOR_LENGTH = 7;
+const MAX_WHITEBOARD_WIDTH = 24;
+const WHITEBOARD_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
 declare global {
   // eslint-disable-next-line no-var
@@ -59,42 +83,172 @@ function cleanStaleWhiteboards() {
   }
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isValidDrawPoint(value: unknown): value is DrawPoint {
+  if (!isRecord(value)) return false;
+
+  const keys = Object.keys(value);
+  return (
+    keys.length === 2 &&
+    keys.every((key) => key === "x" || key === "y") &&
+    typeof value.x === "number" &&
+    Number.isFinite(value.x) &&
+    value.x >= 0 &&
+    value.x <= 1 &&
+    typeof value.y === "number" &&
+    Number.isFinite(value.y) &&
+    value.y >= 0 &&
+    value.y <= 1
+  );
+}
+
+function isValidDrawDelta(value: unknown): value is DrawDelta {
+  if (!isRecord(value)) return false;
+
+  const keys = Object.keys(value);
+  const hasOnlySupportedFields = keys.every(
+    (key) => key === "points" || key === "color" || key === "width" || key === "isEraser"
+  );
+
+  return (
+    hasOnlySupportedFields &&
+    Array.isArray(value.points) &&
+    value.points.length >= 1 &&
+    value.points.length <= MAX_WHITEBOARD_POINTS_PER_DELTA &&
+    value.points.every(isValidDrawPoint) &&
+    typeof value.color === "string" &&
+    value.color.length === WHITEBOARD_COLOR_LENGTH &&
+    WHITEBOARD_COLOR_PATTERN.test(value.color) &&
+    typeof value.width === "number" &&
+    Number.isFinite(value.width) &&
+    value.width > 0 &&
+    value.width <= MAX_WHITEBOARD_WIDTH &&
+    (value.isEraser === undefined || typeof value.isEraser === "boolean")
+  );
+}
+
+function parseWhiteboardDeltas(body: unknown): DrawDelta[] | null {
+  if (!isRecord(body)) return null;
+
+  const keys = Object.keys(body);
+  if (keys.length !== 1) return null;
+
+  let candidates: unknown[];
+  if (keys[0] === "delta") {
+    candidates = [body.delta];
+  } else if (keys[0] === "deltas" && Array.isArray(body.deltas)) {
+    if (body.deltas.length < 1 || body.deltas.length > MAX_WHITEBOARD_BATCH_SIZE) {
+      return null;
+    }
+    candidates = body.deltas;
+  } else {
+    return null;
+  }
+
+  const deltas: DrawDelta[] = [];
+  let totalPoints = 0;
+  for (const candidate of candidates) {
+    if (!isValidDrawDelta(candidate)) return null;
+    totalPoints += candidate.points.length;
+    if (totalPoints > MAX_WHITEBOARD_POINTS_PER_REQUEST) return null;
+    deltas.push(candidate);
+  }
+
+  return deltas;
+}
+
+function parseSynchronizationParameter(value: string | null): number | null {
+  if (value === null) return 0;
+  if (!/^(?:0|[1-9]\d*)$/.test(value)) return null;
+
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+async function authorizeWhiteboardAccess(
+  roomId: string,
+  userId: string
+): Promise<WhiteboardAuthorizationResult> {
+  const room = await prisma.studyRoom.findUnique({
+    where: { id: roomId },
+    select: {
+      state: true,
+      allowMemberWhiteboard: true,
+    },
+  });
+
+  if (!room || (room.state !== "ACTIVE" && room.state !== "SCHEDULED")) {
+    return {
+      allowed: false,
+      response: NextResponse.json(
+        { error: "Study Room not found or no longer active" },
+        { status: 404 }
+      ),
+    };
+  }
+
+  const participant = await prisma.studyRoomParticipant.findUnique({
+    where: { roomId_userId: { roomId, userId } },
+    select: { role: true, canDraw: true },
+  });
+
+  if (!participant) {
+    return {
+      allowed: false,
+      response: NextResponse.json(
+        { error: "Access denied to room whiteboard" },
+        { status: 403 }
+      ),
+    };
+  }
+
+  return {
+    allowed: true,
+    authorization: {
+      room: { allowMemberWhiteboard: room.allowMemberWhiteboard },
+      participant,
+    },
+  };
+}
+
+function hasWhiteboardDrawingAuthority(authorization: WhiteboardAuthorization): boolean {
+  const { room, participant } = authorization;
+  return (
+    participant.role === "HOST" ||
+    participant.role === "MODERATOR" ||
+    (participant.role === "MEMBER" &&
+      room.allowMemberWhiteboard &&
+      participant.canDraw)
+  );
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
 ) {
   try {
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
-
-    // Verify user is in room or room is valid
-    const participant = await prisma.studyRoomParticipant.findUnique({
-      where: { roomId_userId: { roomId, userId } },
-    });
-
-    if (!participant) {
-      // Check if user is host or room is public
-      const room = await prisma.studyRoom.findUnique({
-        where: { id: roomId },
-        select: { id: true, hostId: true },
-      });
-      if (!room) {
-        return NextResponse.json({ error: "Room not found" }, { status: 404 });
-      }
-    }
+    const access = await authorizeWhiteboardAccess(roomId, authenticatedUser.id);
+    if (!access.allowed) return access.response;
 
     const { searchParams } = new URL(request.url);
-    const sinceVersion = parseInt(searchParams.get("sinceVersion") || "0", 10);
-    const clientClearTime = parseInt(searchParams.get("clearTime") || "0", 10);
+    const sinceVersion = parseSynchronizationParameter(searchParams.get("sinceVersion"));
+    const clientClearTime = parseSynchronizationParameter(searchParams.get("clearTime"));
+
+    if (sinceVersion === null || clientClearTime === null) {
+      return NextResponse.json(
+        { error: "Invalid whiteboard synchronization parameters" },
+        { status: 400 }
+      );
+    }
 
     const state = getOrCreateRoomState(roomId);
 
@@ -132,38 +286,41 @@ export async function POST(
   { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
 ) {
   try {
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const access = await authorizeWhiteboardAccess(roomId, authenticatedUser.id);
+    if (!access.allowed) return access.response;
 
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
-
-    const participant = await prisma.studyRoomParticipant.findUnique({
-      where: { roomId_userId: { roomId, userId } },
-    });
-
-    if (participant && !participant.canDraw && participant.role === "MEMBER") {
+    if (!hasWhiteboardDrawingAuthority(access.authorization)) {
       return NextResponse.json({ error: "Drawing disabled for this user" }, { status: 403 });
     }
 
-    const body = await request.json();
-    const state = getOrCreateRoomState(roomId);
-
-    if (body.delta) {
-      state.strokes.push(body.delta);
-      state.version += 1;
-      state.lastUpdated = Date.now();
-    } else if (Array.isArray(body.deltas)) {
-      state.strokes.push(...body.deltas);
-      state.version += body.deltas.length;
-      state.lastUpdated = Date.now();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid whiteboard delta payload" },
+        { status: 400 }
+      );
     }
+
+    const deltas = parseWhiteboardDeltas(body);
+    if (!deltas) {
+      return NextResponse.json(
+        { error: "Invalid whiteboard delta payload" },
+        { status: 400 }
+      );
+    }
+
+    const state = getOrCreateRoomState(roomId);
+    state.strokes.push(...deltas);
+    state.version += deltas.length;
+    state.lastUpdated = Date.now();
 
     // Cap strokes array at 500 items to conserve memory while preserving detailed drawings
     if (state.strokes.length > 500) {
@@ -184,20 +341,22 @@ export async function POST(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
 ) {
   try {
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const access = await authorizeWhiteboardAccess(roomId, authenticatedUser.id);
+    if (!access.allowed) return access.response;
 
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!hasWhiteboardDrawingAuthority(access.authorization)) {
+      return NextResponse.json({ error: "Drawing disabled for this user" }, { status: 403 });
+    }
 
     const state = getOrCreateRoomState(roomId);
     state.strokes = [];

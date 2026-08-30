@@ -1899,9 +1899,146 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4F1 preserves credential, generic failure, success, and SDK-default TTL behavior"
   );
   assert(
-    /\bverifyJWT\b/.test(socialRoomWhiteboard) &&
-      /\bcookies\s*\(/.test(socialRoomWhiteboard),
-    "B2.4F1 leaves whiteboard authentication unchanged and explicitly deferred"
+    !/\bverifyJWT\b/.test(socialRoomVoiceToken) &&
+      voiceTokenGet.includes("prisma.studyRoomParticipant.findUnique") &&
+      voiceTokenGet.includes("identity: authenticatedUser.id"),
+    "B2.4F1 voice-token canonical authentication, room membership, and identity protections remain intact"
+  );
+
+  const whiteboardGet = exportedMethodSource(socialRoomWhiteboard, "GET");
+  const whiteboardPost = exportedMethodSource(socialRoomWhiteboard, "POST");
+  const whiteboardDelete = exportedMethodSource(socialRoomWhiteboard, "DELETE");
+  const prismaSchema = read("prisma/schema.prisma");
+
+  assert(
+    socialRoomWhiteboard.includes('import { getAuthenticatedUser } from "@/lib/serverAuth"') &&
+      !/\bverifyJWT\b/.test(socialRoomWhiteboard) &&
+      !/\bcookies\s*\(/.test(socialRoomWhiteboard) &&
+      !socialRoomWhiteboard.includes("getAuthenticatedUser(request") &&
+      !socialRoomWhiteboard.includes("getAuthenticatedUser(_request") &&
+      !/headers\.get\(["']authorization["']\)|Bearer\s/.test(socialRoomWhiteboard) &&
+      (socialRoomWhiteboard.match(/getAuthenticatedUser\(\)/g) || []).length === 3,
+    "B2.4F2 whiteboard GET, POST, and DELETE use cookie-only canonical authentication without direct JWT or Bearer handling"
+  );
+  assert(
+    [whiteboardGet, whiteboardPost, whiteboardDelete].every(
+      (source) =>
+        source.includes("const authenticatedUser = await getAuthenticatedUser()") &&
+        source.includes('NextResponse.json({ error: "Unauthorized" }, { status: 401 })') &&
+        appearsBefore(source, "await getAuthenticatedUser()", "authorizeWhiteboardAccess")
+    ),
+    "B2.4F2 preserves the exact 401 contract and authenticates before protected room authorization in all methods"
+  );
+  assert(
+    socialRoomWhiteboard.includes("async function authorizeWhiteboardAccess(") &&
+      socialRoomWhiteboard.includes("const room = await prisma.studyRoom.findUnique") &&
+      socialRoomWhiteboard.includes("where: { id: roomId }") &&
+      socialRoomWhiteboard.includes("state: true") &&
+      socialRoomWhiteboard.includes("allowMemberWhiteboard: true") &&
+      socialRoomWhiteboard.includes('room.state !== "ACTIVE"') &&
+      socialRoomWhiteboard.includes('room.state !== "SCHEDULED"') &&
+      socialRoomWhiteboard.includes('error: "Study Room not found or no longer active"') &&
+      socialRoomWhiteboard.includes("{ status: 404 }") &&
+      appearsBefore(
+        socialRoomWhiteboard,
+        "const room = await prisma.studyRoom.findUnique",
+        "const participant = await prisma.studyRoomParticipant.findUnique"
+      ),
+    "B2.4F2 validates minimal ACTIVE or SCHEDULED room state before membership and returns the approved 404"
+  );
+  assert(
+    socialRoomWhiteboard.includes("const participant = await prisma.studyRoomParticipant.findUnique") &&
+      socialRoomWhiteboard.includes("where: { roomId_userId: { roomId, userId } }") &&
+      socialRoomWhiteboard.includes("select: { role: true, canDraw: true }") &&
+      socialRoomWhiteboard.includes('error: "Access denied to room whiteboard"') &&
+      socialRoomWhiteboard.includes("{ status: 403 }") &&
+      [whiteboardGet, whiteboardPost, whiteboardDelete].every((source) =>
+        source.includes("authorizeWhiteboardAccess(roomId, authenticatedUser.id)")
+      ) &&
+      !socialRoomWhiteboard.includes('authenticatedUser.role === "ADMIN"') &&
+      !/isPublic|hostId/.test(socialRoomWhiteboard),
+    "B2.4F2 requires exact canonical room membership in all methods without public, host, or platform-ADMIN bypass"
+  );
+  assert(
+    socialRoomWhiteboard.includes("function hasWhiteboardDrawingAuthority(") &&
+      socialRoomWhiteboard.includes('participant.role === "HOST"') &&
+      socialRoomWhiteboard.includes('participant.role === "MODERATOR"') &&
+      socialRoomWhiteboard.includes('participant.role === "MEMBER"') &&
+      socialRoomWhiteboard.includes("room.allowMemberWhiteboard &&") &&
+      socialRoomWhiteboard.includes("participant.canDraw") &&
+      !whiteboardGet.includes("hasWhiteboardDrawingAuthority") &&
+      whiteboardPost.includes("hasWhiteboardDrawingAuthority(access.authorization)") &&
+      whiteboardDelete.includes("hasWhiteboardDrawingAuthority(access.authorization)") &&
+      whiteboardPost.includes('error: "Drawing disabled for this user"') &&
+      whiteboardDelete.includes('error: "Drawing disabled for this user"'),
+    "B2.4F2 permits participant reads and applies the same host, moderator, or fully-enabled member drawing policy to POST and DELETE"
+  );
+  assert(
+    socialRoomWhiteboard.includes("const MAX_WHITEBOARD_POINTS_PER_DELTA = 10_000") &&
+      socialRoomWhiteboard.includes("const MAX_WHITEBOARD_POINTS_PER_REQUEST = 10_000") &&
+      socialRoomWhiteboard.includes("const MAX_WHITEBOARD_BATCH_SIZE = 500") &&
+      socialRoomWhiteboard.includes("const WHITEBOARD_COLOR_LENGTH = 7") &&
+      socialRoomWhiteboard.includes("const MAX_WHITEBOARD_WIDTH = 24") &&
+      socialRoomWhiteboard.includes("const WHITEBOARD_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/") &&
+      socialRoomWhiteboard.includes("Number.isFinite(value.x)") &&
+      socialRoomWhiteboard.includes("value.x >= 0") &&
+      socialRoomWhiteboard.includes("value.x <= 1") &&
+      socialRoomWhiteboard.includes("Number.isFinite(value.y)") &&
+      socialRoomWhiteboard.includes("value.y >= 0") &&
+      socialRoomWhiteboard.includes("value.y <= 1") &&
+      socialRoomWhiteboard.includes("Number.isFinite(value.width)") &&
+      socialRoomWhiteboard.includes("value.width > 0") &&
+      socialRoomWhiteboard.includes("typeof value.isEraser === \"boolean\"") &&
+      socialRoomWhiteboard.includes("value.points.every(isValidDrawPoint)"),
+    "B2.4F2 validates the current normalized geometry, hex color, bounded width, optional eraser flag, points, and request limits"
+  );
+  assert(
+    socialRoomWhiteboard.includes('if (keys[0] === "delta")') &&
+      socialRoomWhiteboard.includes('keys[0] === "deltas" && Array.isArray(body.deltas)') &&
+      socialRoomWhiteboard.includes("body.deltas.length < 1") &&
+      socialRoomWhiteboard.includes("body.deltas.length > MAX_WHITEBOARD_BATCH_SIZE") &&
+      socialRoomWhiteboard.includes("if (!isValidDrawDelta(candidate)) return null") &&
+      socialRoomWhiteboard.includes("if (totalPoints > MAX_WHITEBOARD_POINTS_PER_REQUEST) return null") &&
+      whiteboardPost.includes("const deltas = parseWhiteboardDeltas(body)") &&
+      whiteboardPost.includes('error: "Invalid whiteboard delta payload"') &&
+      appearsBefore(whiteboardPost, "parseWhiteboardDeltas(body)", "getOrCreateRoomState(roomId)") &&
+      appearsBefore(whiteboardPost, "if (!deltas)", "state.strokes.push(...deltas)"),
+    "B2.4F2 preserves valid single and batch forms while rejecting missing, malformed, nonfinite, or excessive payloads before state mutation"
+  );
+  assert(
+    socialRoomWhiteboard.includes("function parseSynchronizationParameter(") &&
+      socialRoomWhiteboard.includes("Number.isSafeInteger(parsed)") &&
+      whiteboardGet.includes('searchParams.get("sinceVersion")') &&
+      whiteboardGet.includes('searchParams.get("clearTime")') &&
+      whiteboardGet.includes('error: "Invalid whiteboard synchronization parameters"') &&
+      appearsBefore(
+        whiteboardGet,
+        "parseSynchronizationParameter(searchParams.get",
+        "getOrCreateRoomState(roomId)"
+      ),
+    "B2.4F2 accepts absent or nonnegative safe-integer synchronization parameters and rejects unsafe values before state access"
+  );
+  assert(
+    [whiteboardGet, whiteboardPost, whiteboardDelete].every((source) =>
+      appearsBefore(source, "authorizeWhiteboardAccess", "getOrCreateRoomState(roomId)")
+    ) &&
+      socialRoomWhiteboard.includes("globalThis.__roomWhiteboardStore") &&
+      socialRoomWhiteboard.includes("Map<string, RoomWhiteboardState>") &&
+      socialRoomWhiteboard.includes("state.version += deltas.length") &&
+      socialRoomWhiteboard.includes("state.version += 1") &&
+      socialRoomWhiteboard.includes("state.clearTimestamp = Date.now()") &&
+      socialRoomWhiteboard.includes("state.strokes = state.strokes.slice(-500)") &&
+      socialRoomWhiteboard.includes("cleanStaleWhiteboards()") &&
+      whiteboardPost.includes("strokeCount: state.strokes.length") &&
+      whiteboardDelete.includes("clearTimestamp: state.clearTimestamp"),
+    "B2.4F2 authorizes before state access while preserving process-local storage, version, clear, retention, cleanup, and response behavior"
+  );
+  assert(
+    !/checkRateLimit|RATE_LIMITER|Redis|livekit|AccessToken/.test(socialRoomWhiteboard) &&
+      !/^model\s+.*Whiteboard/im.test(prismaSchema) &&
+      !socialRoomWhiteboard.includes("prisma.whiteboard") &&
+      !socialRoomWhiteboard.includes("prisma.studyRoomWhiteboard"),
+    "B2.4F2 adds no rate limiter, Redis, LiveKit, Prisma whiteboard persistence, or schema-backed state redesign"
   );
 
   const deferredNonSocialSpecialCallers = [
@@ -1917,12 +2054,10 @@ function runSourceIntegratedRouteTests(): void {
     "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4E"
   );
 
-  const deferredB24SocialCallers = [
-    "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
-  ];
   assert(
-    deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "whiteboard remains the only social direct verifyJWT caller deferred after B2.4F1"
+    !/\bverifyJWT\b/.test(socialRoomVoiceToken) &&
+      !/\bverifyJWT\b/.test(socialRoomWhiteboard),
+    "no social direct verifyJWT caller remains after B2.4F2"
   );
 
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
@@ -2083,8 +2218,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 7,
-    "7 remaining direct verifyJWT caller files are independently inventoried after B2.4F1"
+    deferredToB2.length === 6,
+    "6 remaining direct verifyJWT caller files are independently inventoried after B2.4F2"
   );
 }
 
