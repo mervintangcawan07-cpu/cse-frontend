@@ -1793,6 +1793,117 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4E adds no PRO, payment, auth caching, or unrelated authorization policy"
   );
 
+  const socialRoomVoiceToken = read(
+    "src/app/api/social/rooms/[roomId]/voice-token/route.ts"
+  );
+  const socialRoomWhiteboard = read(
+    "src/app/api/social/rooms/[roomId]/whiteboard/route.ts"
+  );
+  const voiceTokenGet = exportedMethodSource(socialRoomVoiceToken, "GET");
+  const rateLimit = read("src/lib/ratelimit.ts");
+
+  assert(
+    socialRoomVoiceToken.includes('import { getAuthenticatedUser } from "@/lib/serverAuth"') &&
+      socialRoomVoiceToken.includes('import { prisma } from "@/lib/prisma"') &&
+      !/\bverifyJWT\b/.test(socialRoomVoiceToken) &&
+      !/\bcookies\s*\(/.test(socialRoomVoiceToken) &&
+      !socialRoomVoiceToken.includes("getAuthenticatedUser(req") &&
+      !socialRoomVoiceToken.includes("getAuthenticatedUser(request") &&
+      !/Authorization|Bearer/.test(socialRoomVoiceToken),
+    "B2.4F1 voice-token uses cookie-only canonical authentication without direct JWT verification or Bearer fallback"
+  );
+  assert(
+    (socialRoomVoiceToken.match(/getAuthenticatedUser\(\)/g) || []).length === 1 &&
+      voiceTokenGet.includes("const authenticatedUser = await getAuthenticatedUser()") &&
+      voiceTokenGet.includes(
+        'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+      ) &&
+      appearsBefore(voiceTokenGet, "await getAuthenticatedUser()", "await checkRateLimit") &&
+      appearsBefore(voiceTokenGet, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(voiceTokenGet, "await getAuthenticatedUser()", "new AccessToken"),
+    "B2.4F1 preserves the exact 401 contract and authenticates before rate limiting, room access, and token creation"
+  );
+  assert(
+    voiceTokenGet.includes("VOICE_TOKEN_LIMITER") &&
+      voiceTokenGet.includes("await checkRateLimit") &&
+      voiceTokenGet.includes("`voice-token:${authenticatedUser.id}`") &&
+      voiceTokenGet.includes("createRateLimitResponse") &&
+      voiceTokenGet.includes("Too many voice connection requests") &&
+      rateLimit.includes("export const VOICE_TOKEN_LIMITER = createLimiter(") &&
+      /VOICE_TOKEN_LIMITER = createLimiter\(\s*10,\s*"1 m"/.test(rateLimit) &&
+      rateLimit.includes('"Retry-After"') &&
+      rateLimit.includes('"X-RateLimit-Limit"') &&
+      rateLimit.includes("status: 429") &&
+      rateLimit.includes("RATELIMIT_FAIL_OPEN_WARNING"),
+    "B2.4F1 preserves the 10-per-minute voice limiter, canonical identity key, 429 headers, and fail-open behavior"
+  );
+  assert(
+    voiceTokenGet.includes("const room = await prisma.studyRoom.findUnique") &&
+      voiceTokenGet.includes("where: { id: roomId }") &&
+      voiceTokenGet.includes("select: { state: true }") &&
+      voiceTokenGet.includes('room.state !== "ACTIVE"') &&
+      voiceTokenGet.includes('room.state !== "SCHEDULED"') &&
+      voiceTokenGet.includes('error: "Study Room not found or no longer active"') &&
+      voiceTokenGet.includes("{ status: 404 }") &&
+      appearsBefore(voiceTokenGet, "prisma.studyRoom.findUnique", "prisma.studyRoomParticipant.findUnique") &&
+      appearsBefore(voiceTokenGet, "prisma.studyRoom.findUnique", "new AccessToken"),
+    "B2.4F1 requires an existing ACTIVE or SCHEDULED room before participant authorization and token creation"
+  );
+  assert(
+    voiceTokenGet.includes("const participant = await prisma.studyRoomParticipant.findUnique") &&
+      voiceTokenGet.includes("roomId_userId") &&
+      voiceTokenGet.includes("roomId,") &&
+      voiceTokenGet.includes("userId: authenticatedUser.id") &&
+      voiceTokenGet.includes("if (!participant)") &&
+      voiceTokenGet.includes('error: "Access denied to room voice"') &&
+      voiceTokenGet.includes("{ status: 403 }") &&
+      appearsBefore(voiceTokenGet, "prisma.studyRoomParticipant.findUnique", "new AccessToken") &&
+      !voiceTokenGet.includes('authenticatedUser.role === "ADMIN"') &&
+      !voiceTokenGet.includes('participant.role === "HOST"') &&
+      !voiceTokenGet.includes('participant.role === "MODERATOR"') &&
+      !voiceTokenGet.includes('participant.role === "MEMBER"'),
+    "B2.4F1 requires exact canonical room membership without platform-ADMIN bypass or room-role restrictions"
+  );
+  assert(
+    voiceTokenGet.includes("identity: authenticatedUser.id") &&
+      voiceTokenGet.includes(
+        'name: authenticatedUser.name || authenticatedUser.email || "Examinee"'
+      ) &&
+      !voiceTokenGet.includes("request.json()") &&
+      !voiceTokenGet.includes("searchParams") &&
+      !voiceTokenGet.includes("rawUserId") &&
+      appearsBefore(voiceTokenGet, "const roomId = params.roomId", "room: roomId") &&
+      appearsBefore(voiceTokenGet, "prisma.studyRoomParticipant.findUnique", "room: roomId"),
+    "B2.4F1 derives LiveKit identity only from the canonical User and scopes the token to the validated requested room"
+  );
+  assert(
+    voiceTokenGet.includes("roomJoin: true") &&
+      voiceTokenGet.includes("room: roomId") &&
+      voiceTokenGet.includes("canPublish: true") &&
+      voiceTokenGet.includes("canSubscribe: true") &&
+      voiceTokenGet.includes("canPublishData: true") &&
+      (voiceTokenGet.match(/at\.addGrant\s*\(/g) || []).length === 1 &&
+      !/roomAdmin|roomCreate|roomList|roomRecord|hidden|recorder|ingress|canUpdateOwnMetadata/.test(
+        voiceTokenGet
+      ) &&
+      !/isMuted|canShare|canDraw|allowMemberScreenShare/.test(voiceTokenGet),
+    "B2.4F1 preserves the exact participant LiveKit grants without admin grants or internal permission redesign"
+  );
+  assert(
+    voiceTokenGet.includes(
+      'error: "LiveKit server credentials are not configured on the server."'
+    ) &&
+      voiceTokenGet.includes('error: "Failed to generate voice token"') &&
+      voiceTokenGet.includes("NextResponse.json({ success: true, token: jwt })") &&
+      !/ttl\s*:/.test(voiceTokenGet),
+    "B2.4F1 preserves credential, generic failure, success, and SDK-default TTL behavior"
+  );
+  assert(
+    /\bverifyJWT\b/.test(socialRoomWhiteboard) &&
+      /\bcookies\s*\(/.test(socialRoomWhiteboard),
+    "B2.4F1 leaves whiteboard authentication unchanged and explicitly deferred"
+  );
+
   const deferredNonSocialSpecialCallers = [
     "src/app/api/csc/sync/route.ts",
     "src/app/api/exam/history/route.ts",
@@ -1807,12 +1918,11 @@ function runSourceIntegratedRouteTests(): void {
   );
 
   const deferredB24SocialCallers = [
-    "src/app/api/social/rooms/[roomId]/voice-token/route.ts",
     "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
   ];
   assert(
     deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "voice-token and whiteboard remain unchanged direct verifyJWT callers deferred after B2.4E"
+    "whiteboard remains the only social direct verifyJWT caller deferred after B2.4F1"
   );
 
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
@@ -1973,8 +2083,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 8,
-    "8 remaining direct verifyJWT caller files are independently inventoried after B2.4E"
+    deferredToB2.length === 7,
+    "7 remaining direct verifyJWT caller files are independently inventoried after B2.4F1"
   );
 }
 

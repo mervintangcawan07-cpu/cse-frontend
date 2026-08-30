@@ -1,7 +1,7 @@
 // Relative Path: src/app/api/social/rooms/[roomId]/voice-token/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { prisma } from "@/lib/prisma";
 import { AccessToken } from "livekit-server-sdk";
 import {
   VOICE_TOKEN_LIMITER,
@@ -14,17 +14,12 @@ export async function GET(
   context: { params: Promise<{ roomId: string }> | { roomId: string } }
 ) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const rateResult = await checkRateLimit(
       VOICE_TOKEN_LIMITER,
-      `voice-token:${String(rawUserId)}`
+      `voice-token:${authenticatedUser.id}`
     );
     if (!rateResult.success) {
       return createRateLimitResponse(
@@ -35,6 +30,32 @@ export async function GET(
 
     const params = await context.params;
     const roomId = params.roomId;
+
+    const room = await prisma.studyRoom.findUnique({
+      where: { id: roomId },
+      select: { state: true },
+    });
+
+    if (!room || (room.state !== "ACTIVE" && room.state !== "SCHEDULED")) {
+      return NextResponse.json(
+        { error: "Study Room not found or no longer active" },
+        { status: 404 }
+      );
+    }
+
+    const participant = await prisma.studyRoomParticipant.findUnique({
+      where: {
+        roomId_userId: {
+          roomId,
+          userId: authenticatedUser.id,
+        },
+      },
+      select: { id: true },
+    });
+
+    if (!participant) {
+      return NextResponse.json({ error: "Access denied to room voice" }, { status: 403 });
+    }
 
     const apiKey = process.env.LIVEKIT_API_KEY;
     const apiSecret = process.env.LIVEKIT_API_SECRET;
@@ -47,8 +68,8 @@ export async function GET(
     }
 
     const at = new AccessToken(apiKey, apiSecret, {
-      identity: String(rawUserId),
-      name: String(session.name || session.email || "Examinee"),
+      identity: authenticatedUser.id,
+      name: authenticatedUser.name || authenticatedUser.email || "Examinee",
     });
 
     at.addGrant({
