@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/posts/[id]/reactions/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -17,14 +16,9 @@ export async function POST(
     const params = await props.params;
     const postId = params.id;
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const body = await request.json();
     const reactionType = String(body.reactionType || "").toUpperCase();

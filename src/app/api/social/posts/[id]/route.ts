@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/posts/[id]/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -15,14 +14,9 @@ export async function DELETE(
     const params = await props.params;
     const postId = params.id;
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const currentUserId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const currentUserId = authenticatedUser.id;
 
     const post = await prisma.studyPost.findUnique({
       where: { id: postId },
@@ -33,13 +27,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: currentUserId },
-      select: { role: true },
-    });
-
     const isAuthor = post.authorId === currentUserId;
-    const isAdmin = user?.role === "ADMIN";
+    const isAdmin = authenticatedUser.role === "ADMIN";
 
     if (!isAuthor && !isAdmin) {
       return NextResponse.json({ error: "Forbidden: You cannot delete this post." }, { status: 403 });

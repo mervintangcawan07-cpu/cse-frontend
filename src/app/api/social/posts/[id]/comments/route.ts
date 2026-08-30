@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/posts/[id]/comments/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -15,14 +14,9 @@ export async function GET(
     const params = await props.params;
     const postId = params.id;
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const currentUserId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const currentUserId = authenticatedUser.id;
 
     const comments = await prisma.studyPostComment.findMany({
       where: {
@@ -94,14 +88,9 @@ export async function POST(
     const params = await props.params;
     const postId = params.id;
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const authorId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authorId = authenticatedUser.id;
 
     const body = await request.json();
     const { content, isAnonymous } = body;

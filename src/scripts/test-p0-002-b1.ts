@@ -34,6 +34,14 @@ function appearsBefore(source: string, first: string, second: string): boolean {
   return firstIndex >= 0 && secondIndex >= 0 && firstIndex < secondIndex;
 }
 
+function exportedMethodSource(source: string, method: string): string {
+  const methodStart = source.indexOf(`export async function ${method}(`);
+  if (methodStart < 0) return "";
+
+  const nextMethod = source.indexOf("\nexport async function ", methodStart + 1);
+  return source.slice(methodStart, nextMethod < 0 ? undefined : nextMethod);
+}
+
 function runtimeSourceFiles(directory: string): string[] {
   const files: string[] = [];
 
@@ -1004,6 +1012,196 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4A removes only the redundant own-profile User read while preserving profile read/write behavior"
   );
 
+  const b24bFiles = [
+    "src/app/api/social/posts/route.ts",
+    "src/app/api/social/posts/[id]/route.ts",
+    "src/app/api/social/posts/[id]/comments/route.ts",
+    "src/app/api/social/posts/[id]/reactions/route.ts",
+  ] as const;
+  const b24bRouteSources = new Map(
+    b24bFiles.map((file) => [file, read(file)] as const)
+  );
+  const socialPosts =
+    b24bRouteSources.get("src/app/api/social/posts/route.ts") || "";
+  const socialPost =
+    b24bRouteSources.get("src/app/api/social/posts/[id]/route.ts") || "";
+  const socialComments =
+    b24bRouteSources.get("src/app/api/social/posts/[id]/comments/route.ts") || "";
+  const socialReactions =
+    b24bRouteSources.get("src/app/api/social/posts/[id]/reactions/route.ts") || "";
+  const b24bMethodSources = [
+    exportedMethodSource(socialPosts, "GET"),
+    exportedMethodSource(socialPosts, "POST"),
+    exportedMethodSource(socialPost, "DELETE"),
+    exportedMethodSource(socialComments, "GET"),
+    exportedMethodSource(socialComments, "POST"),
+    exportedMethodSource(socialReactions, "POST"),
+  ];
+
+  assert(
+    b24bFiles.every((file) => {
+      const source = b24bRouteSources.get(file) || "";
+      return (
+        source.includes("getAuthenticatedUser()") &&
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes("getAuthenticatedUser(request")
+      );
+    }) &&
+      b24bMethodSources.every((source) =>
+        source.includes("await getAuthenticatedUser()")
+      ),
+    "B2.4B social post routes use cookie-only canonical authentication in all six methods"
+  );
+  assert(
+    Array.from(b24bRouteSources.values()).reduce(
+      (total, source) => total + (source.match(/getAuthenticatedUser\(\)/g) || []).length,
+      0
+    ) === 6 &&
+      b24bMethodSources.every((source) =>
+        source.includes(
+          'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+        )
+      ),
+    "B2.4B preserves all six mandatory auth guards and exact 401 body"
+  );
+  assert(
+    appearsBefore(
+      exportedMethodSource(socialPosts, "GET"),
+      "await getAuthenticatedUser()",
+      "prisma.studyPost.findMany"
+    ) &&
+      appearsBefore(
+        exportedMethodSource(socialPosts, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialPost, "DELETE"),
+        "await getAuthenticatedUser()",
+        "prisma.studyPost.update"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialComments, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialReactions, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ),
+    "B2.4B authentication remains before feed access, request bodies, and authenticated writes"
+  );
+  assert(
+    socialPosts.includes("const currentUserId = authenticatedUser.id") &&
+      socialPosts.includes("deletedAt: null") &&
+      socialPosts.includes('topic && topic !== "ALL"') &&
+      socialPosts.includes('{ isPinned: "desc" }') &&
+      socialPosts.includes('{ createdAt: "desc" }') &&
+      socialPosts.includes("take: limit") &&
+      socialPosts.includes("userId: true") &&
+      socialPosts.includes("comments:") &&
+      socialPosts.includes("post.authorId === currentUserId") &&
+      socialPosts.includes("r.userId === currentUserId"),
+    "B2.4B preserves authenticated post feed filtering, ordering, counts, and canonical viewer identity"
+  );
+  assert(
+    socialPosts.includes("const authorId = authenticatedUser.id") &&
+      socialPosts.includes('typeof content !== "string"') &&
+      socialPosts.includes("validTopics.includes(topic)") &&
+      socialPosts.includes("prisma.studyPost.create") &&
+      socialPosts.includes("authorId,") &&
+      socialPosts.includes("createdAt: newPost.createdAt.toISOString()") &&
+      socialPosts.includes("commentsCount: 0"),
+    "B2.4B preserves post validation, creation response, and canonical author identity"
+  );
+  assert(
+    socialPost.includes("prisma.studyPost.findUnique") &&
+      socialPost.includes("select: { id: true, authorId: true, deletedAt: true }") &&
+      socialPost.includes("const isAuthor = post.authorId === currentUserId") &&
+      socialPost.includes('const isAdmin = authenticatedUser.role === "ADMIN"') &&
+      socialPost.includes("if (!isAuthor && !isAdmin)") &&
+      socialPost.includes("prisma.studyPost.update") &&
+      socialPost.includes("data: { deletedAt: new Date() }") &&
+      !socialPost.includes("prisma.user.findUnique"),
+    "B2.4B preserves post author-or-platform-ADMIN deletion and removes only the redundant current-User role read"
+  );
+  assert(
+    socialComments.includes("const currentUserId = authenticatedUser.id") &&
+      socialComments.includes("const authorId = authenticatedUser.id") &&
+      socialComments.includes("prisma.studyPostComment.findMany") &&
+      socialComments.includes('orderBy: { createdAt: "asc" }') &&
+      socialComments.includes("c.authorId === currentUserId") &&
+      socialComments.includes("prisma.studyPost.findUnique") &&
+      socialComments.includes("where: { id: postId, deletedAt: null }") &&
+      socialComments.includes("prisma.studyPostComment.create") &&
+      socialComments.includes("createdAt: newComment.createdAt.toISOString()"),
+    "B2.4B preserves comment projection, order, post existence, validation, creation, and response identity"
+  );
+  assert(
+    socialReactions.includes("const userId = authenticatedUser.id") &&
+      socialReactions.includes("prisma.studyPost.findUnique") &&
+      socialReactions.includes("postId_userId_reactionType") &&
+      socialReactions.includes("prisma.studyPostReaction.findUnique") &&
+      socialReactions.includes("prisma.studyPostReaction.delete") &&
+      socialReactions.includes("prisma.studyPostReaction.create") &&
+      socialReactions.includes("prisma.studyPostReaction.findMany") &&
+      socialReactions.includes("reactions: reactionCounts") &&
+      socialReactions.includes("userReactions,") &&
+      !socialReactions.includes("prisma.user.findUnique"),
+    "B2.4B preserves reaction uniqueness, toggle writes, post checks, counts, response, and a single canonical User read"
+  );
+  assert(
+    Array.from(b24bRouteSources.values()).every(
+      (source) =>
+        !/requireProAuth|isAccountAuthorizedFor|isPaid|paidUntil|planType|status:\s*402|payment/i.test(
+          source
+        )
+    ),
+    "B2.4B adds no PRO, payment, or unrelated authorization policy"
+  );
+
+  const deferredNonSocialSpecialCallers = [
+    "src/app/api/csc/sync/route.ts",
+    "src/app/api/exam/history/route.ts",
+    "src/app/api/paymongo/checkout/route.ts",
+    "src/app/api/paymongo/verify/route.ts",
+    "src/app/api/questions/daily/route.ts",
+    "src/routes/admin/criticalActions.ts",
+  ];
+  assert(
+    deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
+    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4B"
+  );
+
+  const deferredB24SocialCallers = [
+    "src/app/api/social/clubs/[clubId]/invite/route.ts",
+    "src/app/api/social/clubs/[clubId]/members/route.ts",
+    "src/app/api/social/clubs/[clubId]/route.ts",
+    "src/app/api/social/clubs/[clubId]/transfer/route.ts",
+    "src/app/api/social/clubs/join/route.ts",
+    "src/app/api/social/clubs/route.ts",
+    "src/app/api/social/events/route.ts",
+    "src/app/api/social/events/rsvp/route.ts",
+    "src/app/api/social/messages/[conversationId]/route.ts",
+    "src/app/api/social/messages/conversations/route.ts",
+    "src/app/api/social/rooms/[roomId]/chat/route.ts",
+    "src/app/api/social/rooms/[roomId]/invite/route.ts",
+    "src/app/api/social/rooms/[roomId]/leave/route.ts",
+    "src/app/api/social/rooms/[roomId]/participants/route.ts",
+    "src/app/api/social/rooms/[roomId]/route.ts",
+    "src/app/api/social/rooms/[roomId]/topic/route.ts",
+    "src/app/api/social/rooms/[roomId]/voice-token/route.ts",
+    "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
+    "src/app/api/social/rooms/join/route.ts",
+    "src/app/api/social/rooms/route.ts",
+  ];
+  assert(
+    deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
+    "remaining B2.4 clubs, events, messages, and rooms callers remain explicitly deferred"
+  );
+
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
   assert(
     /\bverifyJWT\b/.test(deferredCriticalActions),
@@ -1162,8 +1360,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 30,
-    "30 remaining direct verifyJWT callers are explicitly deferred after B2.4A"
+    deferredToB2.length === 26,
+    "26 remaining direct verifyJWT caller files are independently inventoried after B2.4B"
   );
 }
 

@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/posts/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -9,14 +8,9 @@ export const dynamic = "force-dynamic";
 // GET /api/social/posts - List posts with topic filtering, reactions, and comment counts
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const currentUserId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const currentUserId = authenticatedUser.id;
 
     const { searchParams } = new URL(request.url);
     const topic = searchParams.get("topic") || "ALL"; // 'ALL', 'QUESTION_HELP', 'EXAM_INTEL', 'MINDSET_VENT', 'STUDY_HACKS'
@@ -140,14 +134,9 @@ export async function GET(request: Request) {
 // POST /api/social/posts - Create a new Study Commons post
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const authorId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const authorId = authenticatedUser.id;
 
     const body = await request.json();
     const { topic, title, content, hasSpoiler, spoilerContent, isAnonymous } = body;
