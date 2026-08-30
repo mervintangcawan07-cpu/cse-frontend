@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/clubs/[clubId]/members/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 
@@ -13,14 +12,9 @@ export async function GET(
     const resolvedParams = await params;
     const clubId = String(resolvedParams.clubId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const club = await prisma.studyClub.findUnique({
       where: { id: clubId },
@@ -84,14 +78,9 @@ export async function PATCH(
     const resolvedParams = await params;
     const clubId = String(resolvedParams.clubId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const club = await prisma.studyClub.findUnique({
       where: { id: clubId },
@@ -103,7 +92,7 @@ export async function PATCH(
     }
 
     const isOwner = club.ownerId === userId;
-    const isPlatformAdmin = session?.role === "ADMIN";
+    const isPlatformAdmin = authenticatedUser.role === "ADMIN";
 
     // 🔒 Only the group owner or platform admin can promote or demote club moderators/admins
     if (!isOwner && !isPlatformAdmin) {
@@ -163,14 +152,9 @@ export async function DELETE(
     const resolvedParams = await params;
     const clubId = String(resolvedParams.clubId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const { searchParams } = new URL(request.url);
     const targetUserId = searchParams.get("targetUserId");
@@ -192,7 +176,7 @@ export async function DELETE(
     const callerMember = club.members.find((m) => m.userId === userId);
     const isOwner = club.ownerId === userId || callerMember?.role === "OWNER";
     const isClubAdmin = callerMember?.role === "ADMIN";
-    const isPlatformAdmin = session?.role === "ADMIN";
+    const isPlatformAdmin = authenticatedUser.role === "ADMIN";
 
     // 🔒 STRICT AUTHORIZATION GATE: Regular members cannot remove anyone
     if (!isOwner && !isClubAdmin && !isPlatformAdmin) {

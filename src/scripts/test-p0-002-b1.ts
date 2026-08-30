@@ -1162,6 +1162,240 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4B adds no PRO, payment, or unrelated authorization policy"
   );
 
+  const b24cFiles = [
+    "src/app/api/social/clubs/route.ts",
+    "src/app/api/social/clubs/join/route.ts",
+    "src/app/api/social/clubs/[clubId]/route.ts",
+    "src/app/api/social/clubs/[clubId]/invite/route.ts",
+    "src/app/api/social/clubs/[clubId]/members/route.ts",
+    "src/app/api/social/clubs/[clubId]/transfer/route.ts",
+    "src/app/api/social/events/route.ts",
+    "src/app/api/social/events/rsvp/route.ts",
+  ] as const;
+  const b24cRouteSources = new Map(
+    b24cFiles.map((file) => [file, read(file)] as const)
+  );
+  const socialClubs =
+    b24cRouteSources.get("src/app/api/social/clubs/route.ts") || "";
+  const socialClubJoin =
+    b24cRouteSources.get("src/app/api/social/clubs/join/route.ts") || "";
+  const socialClub =
+    b24cRouteSources.get("src/app/api/social/clubs/[clubId]/route.ts") || "";
+  const socialClubInvite =
+    b24cRouteSources.get("src/app/api/social/clubs/[clubId]/invite/route.ts") || "";
+  const socialClubMembers =
+    b24cRouteSources.get("src/app/api/social/clubs/[clubId]/members/route.ts") || "";
+  const socialClubTransfer =
+    b24cRouteSources.get("src/app/api/social/clubs/[clubId]/transfer/route.ts") || "";
+  const socialEvents =
+    b24cRouteSources.get("src/app/api/social/events/route.ts") || "";
+  const socialEventRsvp =
+    b24cRouteSources.get("src/app/api/social/events/rsvp/route.ts") || "";
+  const b24cMethodSources = [
+    exportedMethodSource(socialClubs, "GET"),
+    exportedMethodSource(socialClubs, "POST"),
+    exportedMethodSource(socialClubJoin, "POST"),
+    exportedMethodSource(socialClub, "GET"),
+    exportedMethodSource(socialClub, "DELETE"),
+    exportedMethodSource(socialClubInvite, "POST"),
+    exportedMethodSource(socialClubMembers, "GET"),
+    exportedMethodSource(socialClubMembers, "PATCH"),
+    exportedMethodSource(socialClubMembers, "DELETE"),
+    exportedMethodSource(socialClubTransfer, "POST"),
+    exportedMethodSource(socialEvents, "GET"),
+    exportedMethodSource(socialEvents, "POST"),
+    exportedMethodSource(socialEventRsvp, "POST"),
+  ];
+
+  assert(
+    b24cFiles.every((file) => {
+      const source = b24cRouteSources.get(file) || "";
+      return (
+        source.includes("getAuthenticatedUser()") &&
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes("getAuthenticatedUser(request") &&
+        !/Authorization|Bearer/.test(source)
+      );
+    }) &&
+      b24cMethodSources.every((source) =>
+        source.includes("await getAuthenticatedUser()")
+      ),
+    "B2.4C club and event routes use cookie-only canonical authentication in all 13 methods"
+  );
+  assert(
+    Array.from(b24cRouteSources.values()).reduce(
+      (total, source) => total + (source.match(/getAuthenticatedUser\(\)/g) || []).length,
+      0
+    ) === 13 &&
+      b24cMethodSources.every((source) =>
+        source.includes(
+          'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+        )
+      ),
+    "B2.4C preserves all 13 mandatory auth guards and exact 401 body"
+  );
+  assert(
+    appearsBefore(
+      exportedMethodSource(socialClubs, "GET"),
+      "await getAuthenticatedUser()",
+      "prisma.studyClub.findMany"
+    ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubs, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubJoin, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClub, "DELETE"),
+        "await getAuthenticatedUser()",
+        "prisma.studyClub.delete"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubInvite, "POST"),
+        "await getAuthenticatedUser()",
+        "prisma.studyClub.findUnique"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubMembers, "PATCH"),
+        "await getAuthenticatedUser()",
+        "prisma.studyClubMember.update"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubMembers, "DELETE"),
+        "await getAuthenticatedUser()",
+        "prisma.studyClubMember.delete"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialClubTransfer, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialEvents, "GET"),
+        "await getAuthenticatedUser()",
+        "prisma.studyEvent.findMany"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialEvents, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ) &&
+      appearsBefore(
+        exportedMethodSource(socialEventRsvp, "POST"),
+        "await getAuthenticatedUser()",
+        "await request.json()"
+      ),
+    "B2.4C authentication remains before sensitive reads, request bodies, and authenticated writes"
+  );
+  assert(
+    socialClubs.includes("const userId = authenticatedUser.id") &&
+      socialClubs.includes("let whereClause: any = { isPublic: true }") &&
+      socialClubs.includes('filter === "mine"') &&
+      socialClubs.includes("members: { some: { userId } }") &&
+      socialClubs.includes('orderBy: { createdAt: "desc" }') &&
+      socialClubs.includes("prisma.studyClub.create") &&
+      socialClubs.includes("ownerId: userId") &&
+      socialClubs.includes('role: "OWNER"') &&
+      socialClubs.includes('message: "Study club created!"'),
+    "B2.4C preserves club listing visibility, filtering, ordering, creation, owner identity, and initial membership"
+  );
+  assert(
+    socialClub.includes("prisma.studyClub.findUnique") &&
+      socialClub.includes("currentMember") &&
+      socialClub.includes("currentUserRole") &&
+      socialClub.includes("memberCount: club.members.length") &&
+      socialClub.includes("club.ownerId !== userId") &&
+      socialClub.includes('authenticatedUser.role !== "ADMIN"') &&
+      socialClub.includes("prisma.studyClub.delete"),
+    "B2.4C preserves club detail membership projection and owner-or-platform-ADMIN deletion"
+  );
+  assert(
+    socialClubJoin.includes("const userId = authenticatedUser.id") &&
+      socialClubJoin.includes("prisma.studyClub.findUnique") &&
+      socialClubJoin.includes("prisma.studyClubMember.findUnique") &&
+      socialClubJoin.includes("prisma.studyClubMember.create") &&
+      socialClubJoin.includes("prisma.studyClubMember.delete") &&
+      socialClubJoin.includes('existingMember.role === "OWNER"') &&
+      socialClubJoin.includes("club.ownerId === userId") &&
+      !socialClubJoin.includes("authenticatedUser.role"),
+    "B2.4C limits clubs/join to canonical identity plumbing while preserving existing join, leave, membership, and owner safeguards"
+  );
+  assert(
+    socialClubInvite.includes("prisma.studyClub.findUnique") &&
+      socialClubInvite.includes("members: true") &&
+      socialClubInvite.includes("club.ownerId === userId") &&
+      socialClubInvite.includes("club.members.some") &&
+      socialClubInvite.includes("targetUserIds") &&
+      socialClubInvite.includes("const callerUser = await prisma.user.findUnique") &&
+      socialClubInvite.includes("studyProfile: { select: { displayName: true } }") &&
+      socialClubInvite.includes("await createNotification") &&
+      socialClubInvite.includes("invitedCount"),
+    "B2.4C preserves invite membership authority, caller display identity, targets, notifications, and response counts"
+  );
+  assert(
+    socialClubMembers.includes("const callerMember = club.members.find") &&
+      socialClubMembers.includes('callerMember?.role === "OWNER"') &&
+      socialClubMembers.includes('callerMember?.role === "ADMIN"') &&
+      socialClubMembers.includes('authenticatedUser.role === "ADMIN"') &&
+      socialClubMembers.includes("const targetMember = club.members.find") &&
+      socialClubMembers.includes("prisma.studyClubMember.update") &&
+      socialClubMembers.includes("prisma.studyClubMember.delete") &&
+      socialClubMembers.includes("await createNotification"),
+    "B2.4C preserves club-level owner/moderator roles, platform-ADMIN authority, target membership, updates, removals, and notifications"
+  );
+  assert(
+    socialClubTransfer.includes("const userId = authenticatedUser.id") &&
+      socialClubTransfer.includes("club.ownerId !== userId") &&
+      socialClubTransfer.includes("const newOwnerMember = club.members.find") &&
+      socialClubTransfer.includes("await prisma.$transaction") &&
+      appearsBefore(socialClubTransfer, "await tx.studyClub.update", "await tx.studyClubMember.update") &&
+      socialClubTransfer.includes('data: { role: "OWNER" }') &&
+      socialClubTransfer.includes('data: { role: "MEMBER" }') &&
+      socialClubTransfer.includes("await createNotification"),
+    "B2.4C preserves owner-only transfer, target membership validation, transaction ordering, old-owner handling, and notification"
+  );
+  assert(
+    socialEvents.includes("const userId = authenticatedUser.id") &&
+      socialEvents.includes("let whereClause: any = { isPublic: true }") &&
+      socialEvents.includes('filter === "mine"') &&
+      socialEvents.includes("scheduledAt = { gte:") &&
+      socialEvents.includes('orderBy: { scheduledAt: "asc" }') &&
+      socialEvents.includes("attendingCount") &&
+      socialEvents.includes("myRsvp") &&
+      socialEvents.includes("prisma.studyEvent.create") &&
+      socialEvents.includes("hostId: userId") &&
+      socialEvents.includes('status: "ATTENDING"') &&
+      socialEvents.includes('message: "Study event scheduled!"'),
+    "B2.4C preserves event visibility, mine/upcoming filters, order, counts, canonical host identity, validation, and creation response"
+  );
+  assert(
+    socialEventRsvp.includes("const userId = authenticatedUser.id") &&
+      socialEventRsvp.includes("prisma.studyEvent.findUnique") &&
+      socialEventRsvp.includes("prisma.studyEventRSVP.findUnique") &&
+      socialEventRsvp.includes("eventId_userId") &&
+      socialEventRsvp.includes("prisma.studyEventRSVP.update") &&
+      socialEventRsvp.includes("prisma.studyEventRSVP.create") &&
+      socialEventRsvp.includes('status === "ATTENDING"') &&
+      socialEventRsvp.includes("await createNotification") &&
+      socialEventRsvp.includes("RSVP status set to ${status}"),
+    "B2.4C preserves RSVP validation, event existence, uniqueness, update/create semantics, notification, and response"
+  );
+  assert(
+    Array.from(b24cRouteSources.values()).every(
+      (source) =>
+        !/requireProAuth|isAccountAuthorizedFor|isPaid\s*[&|=]|paidUntil|planType|status:\s*402|payment/i.test(
+          source
+        )
+    ),
+    "B2.4C adds no PRO, payment, caching, or unrelated authorization policy"
+  );
+
   const deferredNonSocialSpecialCallers = [
     "src/app/api/csc/sync/route.ts",
     "src/app/api/exam/history/route.ts",
@@ -1172,18 +1406,10 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4B"
+    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4C"
   );
 
   const deferredB24SocialCallers = [
-    "src/app/api/social/clubs/[clubId]/invite/route.ts",
-    "src/app/api/social/clubs/[clubId]/members/route.ts",
-    "src/app/api/social/clubs/[clubId]/route.ts",
-    "src/app/api/social/clubs/[clubId]/transfer/route.ts",
-    "src/app/api/social/clubs/join/route.ts",
-    "src/app/api/social/clubs/route.ts",
-    "src/app/api/social/events/route.ts",
-    "src/app/api/social/events/rsvp/route.ts",
     "src/app/api/social/messages/[conversationId]/route.ts",
     "src/app/api/social/messages/conversations/route.ts",
     "src/app/api/social/rooms/[roomId]/chat/route.ts",
@@ -1199,7 +1425,7 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "remaining B2.4 clubs, events, messages, and rooms callers remain explicitly deferred"
+    "remaining B2.4 messages and rooms callers, including voice-token and whiteboard, remain explicitly deferred"
   );
 
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
@@ -1360,8 +1586,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 26,
-    "26 remaining direct verifyJWT caller files are independently inventoried after B2.4B"
+    deferredToB2.length === 18,
+    "18 remaining direct verifyJWT caller files are independently inventoried after B2.4C"
   );
 }
 

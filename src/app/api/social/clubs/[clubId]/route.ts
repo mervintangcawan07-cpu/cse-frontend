@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/clubs/[clubId]/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(
@@ -12,14 +11,9 @@ export async function GET(
     const resolvedParams = await params;
     const clubId = String(resolvedParams.clubId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const club = await prisma.studyClub.findUnique({
       where: { id: clubId },
@@ -111,14 +105,9 @@ export async function DELETE(
     const resolvedParams = await params;
     const clubId = String(resolvedParams.clubId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const club = await prisma.studyClub.findUnique({
       where: { id: clubId },
@@ -129,7 +118,7 @@ export async function DELETE(
     }
 
     // 🔒 Strictly enforce that ONLY the club owner (or ADMIN) can delete the club
-    if (club.ownerId !== userId && session?.role !== "ADMIN") {
+    if (club.ownerId !== userId && authenticatedUser.role !== "ADMIN") {
       return NextResponse.json(
         { error: "Forbidden: Only the club owner can delete this study club" },
         { status: 403 }
