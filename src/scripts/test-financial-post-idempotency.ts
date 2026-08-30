@@ -1276,14 +1276,18 @@ async function runSyntheticIdempotencyTests() {
 
   // Test 31: Both partner payout official frontend callers send key and handle lifecycle
   {
-    const portalPage = fs.readFileSync(
-      path.join(process.cwd(), "src/app/partner-portal/payouts/page.tsx"),
-      "utf-8"
-    );
-    const dashPage = fs.readFileSync(
-      path.join(process.cwd(), "src/app/partner/dashboard/page.tsx"),
-      "utf-8"
-    );
+    const portalPage = fs
+      .readFileSync(
+        path.join(process.cwd(), "src/app/partner-portal/payouts/page.tsx"),
+        "utf-8"
+      )
+      .replace(/\r\n/g, "\n");
+    const dashPage = fs
+      .readFileSync(
+        path.join(process.cwd(), "src/app/partner/dashboard/page.tsx"),
+        "utf-8"
+      )
+      .replace(/\r\n/g, "\n");
     const portalKeyInTry = portalPage.includes("try {\n      const idempotencyKey = getOrCreatePendingFinancialKey");
     const portalHasAbandon = portalPage.includes("abandonPendingFinancialOperation(\"PARTNER_PAYOUT_REQUEST\")");
     const dashKeyInTry = dashPage.includes("try {\n      const idempotencyKey = getOrCreatePendingFinancialKey");
@@ -1302,10 +1306,12 @@ async function runSyntheticIdempotencyTests() {
 
   // Test 32: Referral payout official frontend caller sends key and handles lifecycle
   {
-    const refPage = fs.readFileSync(
-      path.join(process.cwd(), "src/app/referrals/page.tsx"),
-      "utf-8"
-    );
+    const refPage = fs
+      .readFileSync(
+        path.join(process.cwd(), "src/app/referrals/page.tsx"),
+        "utf-8"
+      )
+      .replace(/\r\n/g, "\n");
     const refKeyInTry = refPage.includes("try {\n      const idempotencyKey = getOrCreatePendingFinancialKey");
     const refHasAbandon = refPage.includes("abandonPendingFinancialOperation(\"REFERRAL_PAYOUT_REQUEST\")");
     const refStrictAmount = refPage.includes("Number.isFinite") && !refPage.includes("parseFloat(payoutAmount)");
