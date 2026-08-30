@@ -2041,12 +2041,10 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4F2 adds no rate limiter, Redis, LiveKit, Prisma whiteboard persistence, or schema-backed state redesign"
   );
 
-  const deferredNonSocialSpecialCallers = [
-    "src/routes/admin/criticalActions.ts",
-  ];
+  const deferredNonSocialSpecialCallers: string[] = [];
   assert(
-    deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "one non-social special direct verifyJWT caller remains explicitly deferred after B2.5D"
+    deferredNonSocialSpecialCallers.length === 0,
+    "zero non-social special direct verifyJWT callers remain deferred after B2.5E"
   );
 
   assert(
@@ -2055,10 +2053,63 @@ function runSourceIntegratedRouteTests(): void {
     "no social direct verifyJWT caller remains after B2.4F2"
   );
 
-  const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
+  // B2.5E — admin criticalActions / sudo elevation canonical auth migration
+  const criticalActionsSource = read("src/routes/admin/criticalActions.ts");
+  const sudoElevationSource = exportedMethodSource(criticalActionsSource, "handleSudoElevation");
+
   assert(
-    /\bverifyJWT\b/.test(deferredCriticalActions),
-    "admin criticalActions remains explicitly deferred after B2.3"
+    !/\bverifyJWT\b/.test(criticalActionsSource),
+    "B2.5E: criticalActions contains no direct verifyJWT call"
+  );
+  assert(
+    sudoElevationSource.includes("getAuthenticatedSessionResult(req)"),
+    "B2.5E: handleSudoElevation uses canonical getAuthenticatedSessionResult(req) helper"
+  );
+  assert(
+    sudoElevationSource.includes('authResult.code === "NO_TOKEN"') &&
+      sudoElevationSource.includes('{ error: "Unauthorized primary session." }') &&
+      sudoElevationSource.includes("{ status: 401 }"),
+    "B2.5E: missing session token maps to exact 401 { error: 'Unauthorized primary session.' }"
+  );
+  assert(
+    sudoElevationSource.includes("if (!authResult.authenticated)") &&
+      sudoElevationSource.includes('{ error: "Invalid primary session token." }') &&
+      sudoElevationSource.includes("{ status: 401 }"),
+    "B2.5E: invalid or non-operational session maps to exact 401 { error: 'Invalid primary session token.' }"
+  );
+  assert(
+    sudoElevationSource.includes("const userId = authResult.session.user.id") &&
+      sudoElevationSource.includes("const email = authResult.session.user.email"),
+    "B2.5E: canonical userId and email derive strictly from authResult.session.user"
+  );
+  assert(
+    sudoElevationSource.includes("checkSudoRateLimit") &&
+      sudoElevationSource.includes("status: 429"),
+    "B2.5E: rate limiting uses IP and canonical userId with exact 429 response"
+  );
+  assert(
+    sudoElevationSource.includes("verifyAdminCredentials(userId, body.password)") &&
+      sudoElevationSource.includes('error: "Incorrect password."') &&
+      sudoElevationSource.includes("{ status: 401 }"),
+    "B2.5E: password re-authentication and admin verification remain strictly required"
+  );
+  assert(
+    sudoElevationSource.includes('generateSudoTicket(userId, email, "ADMIN")'),
+    "B2.5E: sudo ticket generation uses canonical userId and email with ADMIN role"
+  );
+  assert(
+    sudoElevationSource.includes('response.cookies.set("cse_sudo_token", sudoToken') &&
+      sudoElevationSource.includes("expiresInSeconds: 600"),
+    "B2.5E: sudo response token and cse_sudo_token cookie remain preserved"
+  );
+  assert(
+    criticalActionsSource.includes("export const handleDeleteUserCritical = requireSudo(") &&
+      !criticalActionsSource.includes("prisma.user.delete"),
+    "B2.5E: handleDeleteUserCritical remains protected by requireSudo with zero physical User delete"
+  );
+  assert(
+    !criticalActionsSource.includes("authCache") && !criticalActionsSource.includes("sessionCache"),
+    "B2.5E: no auth cache introduced"
   );
 
   // B2.5D — exam/history canonical auth and ownership hardening
@@ -2596,8 +2647,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 1,
-    "1 remaining direct verifyJWT caller file is independently inventoried after B2.5D"
+    deferredToB2.length === 0,
+    "0 remaining direct verifyJWT caller files after B2.5E — all direct callers migrated"
   );
 }
 
