@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/rooms/[roomId]/leave/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
 async function handleLeaveRoom(
@@ -12,14 +11,9 @@ async function handleLeaveRoom(
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const participant = await prisma.studyRoomParticipant.findUnique({
       where: { roomId_userId: { roomId, userId } },

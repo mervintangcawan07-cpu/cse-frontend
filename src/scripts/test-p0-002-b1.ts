@@ -1557,6 +1557,242 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4D adds no PRO, payment, caching, or unrelated authorization policy"
   );
 
+  const b24eFiles = [
+    "src/app/api/social/rooms/route.ts",
+    "src/app/api/social/rooms/join/route.ts",
+    "src/app/api/social/rooms/[roomId]/route.ts",
+    "src/app/api/social/rooms/[roomId]/invite/route.ts",
+    "src/app/api/social/rooms/[roomId]/leave/route.ts",
+    "src/app/api/social/rooms/[roomId]/participants/route.ts",
+    "src/app/api/social/rooms/[roomId]/topic/route.ts",
+  ] as const;
+  const b24eRouteSources = new Map(
+    b24eFiles.map((file) => [file, read(file)] as const)
+  );
+  const socialRooms = b24eRouteSources.get("src/app/api/social/rooms/route.ts") || "";
+  const socialRoomJoin = b24eRouteSources.get("src/app/api/social/rooms/join/route.ts") || "";
+  const socialRoom = b24eRouteSources.get("src/app/api/social/rooms/[roomId]/route.ts") || "";
+  const socialRoomInvite =
+    b24eRouteSources.get("src/app/api/social/rooms/[roomId]/invite/route.ts") || "";
+  const socialRoomLeave =
+    b24eRouteSources.get("src/app/api/social/rooms/[roomId]/leave/route.ts") || "";
+  const socialRoomParticipants =
+    b24eRouteSources.get("src/app/api/social/rooms/[roomId]/participants/route.ts") || "";
+  const socialRoomTopic =
+    b24eRouteSources.get("src/app/api/social/rooms/[roomId]/topic/route.ts") || "";
+
+  const roomsGet = exportedMethodSource(socialRooms, "GET");
+  const roomsPost = exportedMethodSource(socialRooms, "POST");
+  const roomJoinPost = exportedMethodSource(socialRoomJoin, "POST");
+  const roomGet = exportedMethodSource(socialRoom, "GET");
+  const roomPatch = exportedMethodSource(socialRoom, "PATCH");
+  const roomDelete = exportedMethodSource(socialRoom, "DELETE");
+  const roomInvitePost = exportedMethodSource(socialRoomInvite, "POST");
+  const roomLeavePost = exportedMethodSource(socialRoomLeave, "POST");
+  const roomLeaveDelete = exportedMethodSource(socialRoomLeave, "DELETE");
+  const roomParticipantsPatch = exportedMethodSource(socialRoomParticipants, "PATCH");
+  const roomParticipantsDelete = exportedMethodSource(socialRoomParticipants, "DELETE");
+  const roomTopicGet = exportedMethodSource(socialRoomTopic, "GET");
+  const roomTopicPost = exportedMethodSource(socialRoomTopic, "POST");
+  const roomTopicDelete = exportedMethodSource(socialRoomTopic, "DELETE");
+  const b24eAuthSources = [
+    roomsGet,
+    roomsPost,
+    roomJoinPost,
+    roomGet,
+    roomPatch,
+    roomDelete,
+    roomInvitePost,
+    socialRoomLeave,
+    roomParticipantsPatch,
+    roomParticipantsDelete,
+    roomTopicGet,
+    roomTopicPost,
+    roomTopicDelete,
+  ];
+
+  assert(
+    b24eFiles.every((file) => {
+      const source = b24eRouteSources.get(file) || "";
+      return (
+        source.includes("getAuthenticatedUser()") &&
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes("getAuthenticatedUser(request") &&
+        !/Authorization|Bearer/.test(source)
+      );
+    }) &&
+      b24eAuthSources.every((source) =>
+        source.includes("await getAuthenticatedUser()")
+      ) &&
+      roomLeavePost.includes("return handleLeaveRoom(request, params)") &&
+      roomLeaveDelete.includes("return handleLeaveRoom(request, params)"),
+    "B2.4E room lifecycle routes use cookie-only canonical authentication across 13 guards and both leave methods"
+  );
+  assert(
+    Array.from(b24eRouteSources.values()).reduce(
+      (total, source) => total + (source.match(/getAuthenticatedUser\(\)/g) || []).length,
+      0
+    ) === 13 &&
+      b24eAuthSources.every((source) =>
+        source.includes(
+          'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+        )
+      ),
+    "B2.4E preserves all 13 canonical auth guards and the exact 401 body"
+  );
+  assert(
+    appearsBefore(roomsGet, "await getAuthenticatedUser()", "prisma.studyRoom.findMany") &&
+      appearsBefore(roomsPost, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(roomJoinPost, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(roomGet, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomPatch, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomDelete, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomInvitePost, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(socialRoomLeave, "await getAuthenticatedUser()", "prisma.studyRoomParticipant.findUnique") &&
+      appearsBefore(roomParticipantsPatch, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomParticipantsDelete, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomTopicGet, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomTopicPost, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomTopicDelete, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique"),
+    "B2.4E authentication remains before protected room reads, request bodies, and writes"
+  );
+  assert(
+    roomsGet.includes('state: { in: ["ACTIVE", "SCHEDULED"] }') &&
+      roomsGet.includes('filter === "mine"') &&
+      roomsGet.includes('filter === "public"') &&
+      roomsGet.includes("whereClause.OR") &&
+      roomsGet.includes("participants: { some: { userId } }") &&
+      roomsGet.includes('orderBy: { createdAt: "desc" }') &&
+      roomsGet.includes("participantCount: room.participants.length") &&
+      roomsGet.includes("isHost: room.hostId === userId") &&
+      roomsGet.includes("isMember: room.participants.some"),
+    "B2.4E preserves active/scheduled room discovery, mine/public visibility, ordering, counts, and canonical viewer flags"
+  );
+  assert(
+    roomsPost.includes("const userId = authenticatedUser.id") &&
+      roomsPost.includes('error: "Room name is required"') &&
+      roomsPost.includes("Math.min(Math.max(Number(maxParticipants) || 10, 2), 50)") &&
+      roomsPost.includes("generateInviteCode()") &&
+      roomsPost.includes("prisma.studyRoom.findUnique") &&
+      roomsPost.includes("prisma.studyRoom.create") &&
+      roomsPost.includes("hostId: userId") &&
+      roomsPost.includes('role: "HOST"') &&
+      roomsPost.includes('isPublic: isPublic !== false') &&
+      roomsPost.includes('"SCHEDULED" : "ACTIVE"'),
+    "B2.4E preserves room validation, capacity bounds, invite-code uniqueness, defaults, canonical host, initial HOST membership, and schedule state"
+  );
+  assert(
+    roomJoinPost.includes("const userId = authenticatedUser.id") &&
+      roomJoinPost.includes("if (!roomId && !inviteCode)") &&
+      roomJoinPost.includes("where: { inviteCode: String(inviteCode).toUpperCase().trim() }") &&
+      roomJoinPost.includes("where: { id: String(roomId) }") &&
+      roomJoinPost.includes('room.state === "ENDED"') &&
+      roomJoinPost.includes('room.state === "CANCELLED"') &&
+      roomJoinPost.includes("room.participants.find") &&
+      roomJoinPost.includes("room.isLocked && room.hostId !== userId") &&
+      roomJoinPost.includes("room.participants.length >= room.maxParticipants") &&
+      roomJoinPost.includes("!room.isPublic && !inviteCode") &&
+      roomJoinPost.includes("prisma.studyRoomParticipant.create") &&
+      roomJoinPost.includes('role: "MEMBER"'),
+    "B2.4E preserves join lookup, active-state, existing membership, lock, capacity, private invite-code gate, and MEMBER creation"
+  );
+  assert(
+    roomGet.includes("prisma.studyRoom.findUnique") &&
+      roomGet.includes('orderBy: { joinedAt: "asc" }') &&
+      roomGet.includes("const currentParticipant = room.participants.find") &&
+      roomGet.includes("!room.isPublic && !isMember") &&
+      roomGet.includes("currentUserRole") &&
+      roomGet.includes("participants: room.participants.map") &&
+      roomPatch.includes("room.hostId !== userId") &&
+      roomPatch.includes("prisma.studyRoom.update") &&
+      roomPatch.includes("allowMemberWhiteboard") &&
+      roomPatch.includes("allowMemberScreenShare") &&
+      roomPatch.includes("allowMemberChat") &&
+      roomPatch.includes("isLocked"),
+    "B2.4E preserves room detail privacy, participant projection and roles, plus host-only room settings"
+  );
+  assert(
+    roomDelete.includes("room.hostId !== userId") &&
+      roomDelete.includes('authenticatedUser.role !== "ADMIN"') &&
+      roomDelete.includes("prisma.studyRoom.delete") &&
+      roomParticipantsPatch.includes('authenticatedUser.role === "ADMIN"') &&
+      roomParticipantsDelete.includes('authenticatedUser.role === "ADMIN"'),
+    "B2.4E preserves the existing platform-ADMIN overrides only for room deletion and participant controls"
+  );
+  assert(
+    roomInvitePost.includes("participants: true") &&
+      roomInvitePost.includes("room.hostId === userId") &&
+      roomInvitePost.includes("room.participants.some") &&
+      roomInvitePost.includes("targetUserIds") &&
+      roomInvitePost.includes("const callerUser = await prisma.user.findUnique") &&
+      roomInvitePost.includes("studyProfile: { select: { displayName: true } }") &&
+      roomInvitePost.includes("if (targetId === userId) continue") &&
+      roomInvitePost.includes("await createNotification") &&
+      roomInvitePost.includes("invitedCount"),
+    "B2.4E preserves invite room authority, current-caller display lookup, target filtering, notifications, and response count"
+  );
+  assert(
+    socialRoomLeave.includes("roomId_userId") &&
+      socialRoomLeave.includes("prisma.studyRoomParticipant.delete") &&
+      socialRoomLeave.includes('participant.role === "HOST"') &&
+      socialRoomLeave.includes("prisma.studyRoomParticipant.findFirst") &&
+      socialRoomLeave.includes('orderBy: { joinedAt: "asc" }') &&
+      socialRoomLeave.includes("await prisma.$transaction") &&
+      socialRoomLeave.includes('data: { role: "HOST" }') &&
+      socialRoomLeave.includes("data: { hostId: remaining.userId }") &&
+      socialRoomLeave.includes('data: { state: "ENDED" }'),
+    "B2.4E preserves leave membership deletion, oldest-participant host transfer, and empty-room ending behavior"
+  );
+  assert(
+    roomParticipantsPatch.includes("const callerParticipant = room.participants.find") &&
+      roomParticipantsPatch.includes('callerParticipant?.role === "MODERATOR"') &&
+      roomParticipantsPatch.includes("const targetParticipant = room.participants.find") &&
+      roomParticipantsPatch.includes("Moderators cannot modify Host or other Moderators") &&
+      roomParticipantsPatch.includes("Only the Room Host can promote or demote roles") &&
+      roomParticipantsPatch.includes("prisma.studyRoomParticipant.update") &&
+      roomParticipantsPatch.includes("await createNotification") &&
+      roomParticipantsDelete.includes("targetUserId === room.hostId") &&
+      roomParticipantsDelete.includes("targetUserId === userId") &&
+      roomParticipantsDelete.includes("Moderators cannot remove other moderators") &&
+      roomParticipantsDelete.includes("prisma.studyRoomParticipant.delete"),
+    "B2.4E preserves room-role participant controls, target lookup, host/self protections, moderator restrictions, writes, and promotion notification"
+  );
+  assert(
+    roomTopicGet.includes("room.participants.some") &&
+      roomTopicGet.includes("!room.isPublic && !isMemberOrHost") &&
+      roomTopicGet.includes("Prisma.QuestionWhereInput") &&
+      roomTopicGet.includes("deletedAt: null") &&
+      roomTopicGet.includes("prisma.question.findMany") &&
+      roomTopicGet.includes("prisma.question.count") &&
+      roomTopicGet.includes("skip,") &&
+      roomTopicGet.includes("take: limit") &&
+      roomTopicPost.includes("room.hostId !== userId") &&
+      roomTopicPost.includes("prisma.question.findUnique") &&
+      roomTopicPost.includes('topicType === "IMAGE"') &&
+      roomTopicPost.includes("imageUrl.length > 7.5 * 1024 * 1024") &&
+      roomTopicPost.includes("prisma.studyRoom.update") &&
+      roomTopicDelete.includes("room.hostId !== userId") &&
+      roomTopicDelete.includes("activeTopicMeta: Prisma.DbNull"),
+    "B2.4E preserves topic visibility, question filtering/pagination, host-only selection/upload/removal, validation, and room writes"
+  );
+  assert(
+    b24eFiles
+      .filter((file) => file !== "src/app/api/social/rooms/[roomId]/invite/route.ts")
+      .every((file) => !(b24eRouteSources.get(file) || "").includes("prisma.user.findUnique")) &&
+      (socialRoomInvite.match(/prisma\.user\.findUnique/g) || []).length === 1,
+    "B2.4E adds no duplicate current-User lookup and retains the one caller profile query needed for invite display name"
+  );
+  assert(
+    Array.from(b24eRouteSources.values()).every(
+      (source) =>
+        !/requireProAuth|isAccountAuthorizedFor|isPaid\s*[&|=]|paidUntil|planType|status:\s*402|payment|unstable_cache|\bcache\s*\(/i.test(
+          source
+        )
+    ),
+    "B2.4E adds no PRO, payment, auth caching, or unrelated authorization policy"
+  );
+
   const deferredNonSocialSpecialCallers = [
     "src/app/api/csc/sync/route.ts",
     "src/app/api/exam/history/route.ts",
@@ -1567,23 +1803,16 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4D"
+    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4E"
   );
 
   const deferredB24SocialCallers = [
-    "src/app/api/social/rooms/[roomId]/invite/route.ts",
-    "src/app/api/social/rooms/[roomId]/leave/route.ts",
-    "src/app/api/social/rooms/[roomId]/participants/route.ts",
-    "src/app/api/social/rooms/[roomId]/route.ts",
-    "src/app/api/social/rooms/[roomId]/topic/route.ts",
     "src/app/api/social/rooms/[roomId]/voice-token/route.ts",
     "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
-    "src/app/api/social/rooms/join/route.ts",
-    "src/app/api/social/rooms/route.ts",
   ];
   assert(
     deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "remaining B2.4 room lifecycle callers, including voice-token and whiteboard, remain explicitly deferred after B2.4D"
+    "voice-token and whiteboard remain unchanged direct verifyJWT callers deferred after B2.4E"
   );
 
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
@@ -1744,8 +1973,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 15,
-    "15 remaining direct verifyJWT caller files are independently inventoried after B2.4D"
+    deferredToB2.length === 8,
+    "8 remaining direct verifyJWT caller files are independently inventoried after B2.4E"
   );
 }
 
