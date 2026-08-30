@@ -2043,12 +2043,11 @@ function runSourceIntegratedRouteTests(): void {
 
   const deferredNonSocialSpecialCallers = [
     "src/app/api/exam/history/route.ts",
-    "src/app/api/paymongo/verify/route.ts",
     "src/routes/admin/criticalActions.ts",
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "three non-social special direct verifyJWT callers remain explicitly deferred after B2.5C-1"
+    "two non-social special direct verifyJWT callers remain explicitly deferred after B2.5C-2"
   );
 
   assert(
@@ -2061,6 +2060,79 @@ function runSourceIntegratedRouteTests(): void {
   assert(
     /\bverifyJWT\b/.test(deferredCriticalActions),
     "admin criticalActions remains explicitly deferred after B2.3"
+  );
+
+  // B2.5C-2 — paymongo/verify canonical auth migration
+  const verifyRoute = read("src/app/api/paymongo/verify/route.ts");
+  const verifyPost = exportedMethodSource(verifyRoute, "POST");
+
+  assert(
+    !/\bverifyJWT\b/.test(verifyRoute),
+    "B2.5C-2: paymongo/verify contains no direct verifyJWT call"
+  );
+  assert(
+    verifyPost.includes("getAuthenticatedUser()"),
+    "B2.5C-2: verify uses canonical getAuthenticatedUser helper"
+  );
+  assert(
+    !/getAuthenticatedUser\s*\(\s*request\s*\)/.test(verifyPost),
+    "B2.5C-2: getAuthenticatedUser is called without a request argument"
+  );
+  assert(
+    !/Authorization.*Bearer/.test(verifyPost) &&
+      !/req\.headers\.get\s*\(\s*['"]authorization/i.test(verifyPost),
+    "B2.5C-2: no User Bearer JWT support is introduced"
+  );
+  assert(
+    verifyPost.includes("if (!authenticatedUser)") &&
+      verifyPost.includes('{ error: "Unauthorized" }') &&
+      verifyPost.includes("{ status: 401 }"),
+    "B2.5C-2: missing or invalid session preserves exact 401 { error: 'Unauthorized' }"
+  );
+  assert(
+    verifyPost.includes("const userId = authenticatedUser.id"),
+    "B2.5C-2: canonical identity derives from authenticated database User ID"
+  );
+  assert(
+    verifyPost.includes("`paymongo:verify:${userId}`"),
+    "B2.5C-2: rate limit identity remains that canonical User ID"
+  );
+  assert(
+    verifyPost.includes("https://api.paymongo.com/v1/checkout_sessions/${checkoutSessionId}"),
+    "B2.5C-2: PayMongo checkout session retrieval remains authoritative"
+  );
+  assert(
+    verifyPost.includes("String(checkoutOwnerUserId) !== userId") &&
+      verifyPost.includes("{ status: 403 }") &&
+      verifyPost.includes('"Checkout session ownership verification failed."'),
+    "B2.5C-2: PayMongo metadata ownership comparison against canonical User ID is preserved with exact 403"
+  );
+  assert(
+    verifyPost.includes('["1_MONTH", "6_MONTHS", "1_YEAR"].includes(planType)'),
+    "B2.5C-2: planType validation remains intact"
+  );
+  assert(
+    verifyPost.includes("PaymentFinalizationService.finalizeVerifiedPayment({") &&
+      verifyPost.includes("userId,") &&
+      verifyPost.includes("checkoutSessionId,") &&
+      verifyPost.includes("planType,") &&
+      verifyPost.includes('source: "VERIFY_POLL"'),
+    "B2.5C-2: PaymentFinalizationService invocation and arguments remain intact"
+  );
+  assert(
+    verifyPost.includes('cookieStore.delete("cse_checkout_id")') &&
+      verifyPost.includes('cookieStore.delete("cse_checkout_plan")'),
+    "B2.5C-2: checkout cookie cleanup behavior remains preserved"
+  );
+  assert(
+    !verifyRoute.includes("requireProAuth") &&
+      !verifyRoute.includes("paidUntil") &&
+      !/\bauthenticatedUser\.isPaid\b/.test(verifyRoute),
+    "B2.5C-2: no PRO/payment-policy redesign is introduced"
+  );
+  assert(
+    !verifyRoute.includes("authCache") && !verifyRoute.includes("sessionCache"),
+    "B2.5C-2: no auth cache introduced"
   );
 
   // B2.5C-1 — paymongo/checkout canonical auth migration
@@ -2458,8 +2530,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 3,
-    "3 remaining direct verifyJWT caller files are independently inventoried after B2.5C-1"
+    deferredToB2.length === 2,
+    "2 remaining direct verifyJWT caller files are independently inventoried after B2.5C-2"
   );
 }
 

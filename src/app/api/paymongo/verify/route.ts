@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import {
   PAYMONGO_VERIFY_LIMITER,
   checkRateLimit,
@@ -10,19 +9,13 @@ import {
 
 export async function POST() {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
+    const authenticatedUser = await getAuthenticatedUser();
 
-    if (!token) {
+    if (!authenticatedUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = String(session.userId);
+    const userId = authenticatedUser.id;
 
     const rateResult = await checkRateLimit(
       PAYMONGO_VERIFY_LIMITER,
@@ -35,14 +28,7 @@ export async function POST() {
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, isPaid: true, paidUntil: true },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const cookieStore = await cookies();
 
     const checkoutSessionId = cookieStore.get("cse_checkout_id")?.value;
     const secretKey = process.env.PAYMONGO_SECRET_KEY;
