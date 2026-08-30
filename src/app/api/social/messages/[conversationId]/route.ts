@@ -1,7 +1,6 @@
 // Relative Path: src/app/api/social/messages/[conversationId]/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 import {
@@ -18,14 +17,9 @@ export async function GET(
     const resolvedParams = await params;
     const conversationId = String(resolvedParams.conversationId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     // Verify user is a participant
     const participant = await prisma.directMessageParticipant.findUnique({
@@ -123,14 +117,9 @@ export async function POST(
     const resolvedParams = await params;
     const conversationId = String(resolvedParams.conversationId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const participant = await prisma.directMessageParticipant.findUnique({
       where: {
@@ -230,14 +219,9 @@ export async function DELETE(
     const resolvedParams = await params;
     const conversationId = String(resolvedParams.conversationId);
 
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
-    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const session = await verifyJWT(token);
-    const rawUserId = session?.userId || session?.id;
-    if (!rawUserId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const userId = String(rawUserId);
+    const authenticatedUser = await getAuthenticatedUser();
+    if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const userId = authenticatedUser.id;
 
     const { searchParams } = new URL(request.url);
     const messageId = searchParams.get("messageId");
@@ -252,7 +236,7 @@ export async function DELETE(
         return NextResponse.json({ error: "Message not found" }, { status: 404 });
       }
 
-      if (msg.senderId !== userId && session?.role !== "ADMIN") {
+      if (msg.senderId !== userId && authenticatedUser.role !== "ADMIN") {
         return NextResponse.json({ error: "You can only delete your own messages" }, { status: 403 });
       }
 
@@ -273,7 +257,7 @@ export async function DELETE(
       },
     });
 
-    if (!isParticipant && session?.role !== "ADMIN") {
+    if (!isParticipant && authenticatedUser.role !== "ADMIN") {
       return NextResponse.json({ error: "Access denied: You are not a participant in this conversation" }, { status: 403 });
     }
 

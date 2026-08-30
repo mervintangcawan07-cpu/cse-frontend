@@ -1396,6 +1396,167 @@ function runSourceIntegratedRouteTests(): void {
     "B2.4C adds no PRO, payment, caching, or unrelated authorization policy"
   );
 
+  const b24dFiles = [
+    "src/app/api/social/messages/[conversationId]/route.ts",
+    "src/app/api/social/messages/conversations/route.ts",
+    "src/app/api/social/rooms/[roomId]/chat/route.ts",
+  ] as const;
+  const b24dRouteSources = new Map(
+    b24dFiles.map((file) => [file, read(file)] as const)
+  );
+  const socialConversation =
+    b24dRouteSources.get("src/app/api/social/messages/[conversationId]/route.ts") || "";
+  const socialConversations =
+    b24dRouteSources.get("src/app/api/social/messages/conversations/route.ts") || "";
+  const socialRoomChat =
+    b24dRouteSources.get("src/app/api/social/rooms/[roomId]/chat/route.ts") || "";
+  const b24dMethodSources = [
+    exportedMethodSource(socialConversation, "GET"),
+    exportedMethodSource(socialConversation, "POST"),
+    exportedMethodSource(socialConversation, "DELETE"),
+    exportedMethodSource(socialConversations, "GET"),
+    exportedMethodSource(socialConversations, "POST"),
+    exportedMethodSource(socialRoomChat, "GET"),
+    exportedMethodSource(socialRoomChat, "POST"),
+    exportedMethodSource(socialRoomChat, "PATCH"),
+    exportedMethodSource(socialRoomChat, "DELETE"),
+  ];
+
+  assert(
+    b24dFiles.every((file) => {
+      const source = b24dRouteSources.get(file) || "";
+      return (
+        source.includes("getAuthenticatedUser()") &&
+        !/\bverifyJWT\b/.test(source) &&
+        !/\bcookies\s*\(/.test(source) &&
+        !source.includes("getAuthenticatedUser(request") &&
+        !/Authorization|Bearer/.test(source)
+      );
+    }) &&
+      b24dMethodSources.every((source) =>
+        source.includes("await getAuthenticatedUser()")
+      ),
+    "B2.4D direct-message and room-chat routes use cookie-only canonical authentication in all 9 methods"
+  );
+  assert(
+    Array.from(b24dRouteSources.values()).reduce(
+      (total, source) => total + (source.match(/getAuthenticatedUser\(\)/g) || []).length,
+      0
+    ) === 9 &&
+      b24dMethodSources.every((source) =>
+        source.includes(
+          'NextResponse.json({ error: "Unauthorized" }, { status: 401 })'
+        )
+      ),
+    "B2.4D preserves all 9 mandatory auth guards and exact 401 body"
+  );
+
+  const conversationGet = exportedMethodSource(socialConversation, "GET");
+  const conversationPost = exportedMethodSource(socialConversation, "POST");
+  const conversationDelete = exportedMethodSource(socialConversation, "DELETE");
+  const conversationsGet = exportedMethodSource(socialConversations, "GET");
+  const conversationsPost = exportedMethodSource(socialConversations, "POST");
+  const roomChatGet = exportedMethodSource(socialRoomChat, "GET");
+  const roomChatPost = exportedMethodSource(socialRoomChat, "POST");
+  const roomChatPatch = exportedMethodSource(socialRoomChat, "PATCH");
+  const roomChatDelete = exportedMethodSource(socialRoomChat, "DELETE");
+
+  assert(
+    appearsBefore(conversationGet, "await getAuthenticatedUser()", "prisma.directMessageParticipant.findUnique") &&
+      appearsBefore(conversationPost, "await getAuthenticatedUser()", "prisma.directMessageParticipant.findUnique") &&
+      appearsBefore(conversationDelete, "await getAuthenticatedUser()", "prisma.directMessage.findUnique") &&
+      appearsBefore(conversationsGet, "await getAuthenticatedUser()", "prisma.directMessageParticipant.findMany") &&
+      appearsBefore(conversationsPost, "await getAuthenticatedUser()", "await request.json()") &&
+      appearsBefore(roomChatGet, "await getAuthenticatedUser()", "prisma.studyRoomParticipant.findUnique") &&
+      appearsBefore(roomChatPost, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomChatPatch, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique") &&
+      appearsBefore(roomChatDelete, "await getAuthenticatedUser()", "prisma.studyRoom.findUnique"),
+    "B2.4D authentication remains before sensitive reads, request bodies, and authenticated writes"
+  );
+  assert(
+    conversationGet.includes("conversationId_userId") &&
+      conversationGet.includes("prisma.directMessage.updateMany") &&
+      conversationGet.includes('state: { not: "READ" }') &&
+      conversationGet.includes('data: { state: "READ" }') &&
+      conversationGet.includes("prisma.directMessage.findMany") &&
+      conversationGet.includes('orderBy: { createdAt: "asc" }') &&
+      conversationGet.includes("take: 100") &&
+      conversationGet.includes("replyTo:") &&
+      conversationGet.includes("otherUser: otherParticipant"),
+    "B2.4D preserves direct-message participation, read-state mutation, ordering, limit, replies, and peer projection"
+  );
+  assert(
+    conversationPost.includes("conversationId_userId") &&
+      conversationPost.includes("checkRateLimit(MESSAGING_LIMITER") &&
+      conversationPost.includes("`msg:${userId}`") &&
+      conversationPost.includes("prisma.directMessage.create") &&
+      conversationPost.includes("senderId: userId") &&
+      conversationPost.includes('state: "SENT"') &&
+      conversationPost.includes("prisma.conversation.update") &&
+      conversationPost.includes("await createNotification") &&
+      conversationPost.includes('type: "DIRECT_MESSAGE"'),
+    "B2.4D preserves direct-message membership, throttling, canonical sender, state, conversation activity, and notification"
+  );
+  assert(
+    conversationDelete.includes("msg.conversationId !== conversationId") &&
+      conversationDelete.includes('authenticatedUser.role !== "ADMIN"') &&
+      conversationDelete.includes("msg.senderId !== userId") &&
+      conversationDelete.includes("prisma.directMessage.delete") &&
+      conversationDelete.includes("conversationId_userId") &&
+      conversationDelete.includes("!isParticipant") &&
+      conversationDelete.includes("prisma.conversation.delete"),
+    "B2.4D preserves message ownership or platform-ADMIN deletion and participant or platform-ADMIN conversation deletion"
+  );
+  assert(
+    conversationsGet.includes("prisma.directMessageParticipant.findMany") &&
+      conversationsGet.includes("prisma.conversation.findMany") &&
+      conversationsGet.includes('orderBy: { updatedAt: "desc" }') &&
+      conversationsGet.includes("prisma.directMessage.groupBy") &&
+      conversationsGet.includes('state: { not: "READ" }') &&
+      conversationsGet.includes("unreadCount") &&
+      conversationsPost.includes("targetUserId === userId") &&
+      conversationsPost.includes("prisma.classmateRelation.findFirst") &&
+      conversationsPost.includes('relation.status !== "ACCEPTED"') &&
+      conversationsPost.includes("c.participants.length === 2") &&
+      conversationsPost.includes("prisma.conversation.create") &&
+      conversationsPost.includes("create: [{ userId }, { userId: targetUserId }]"),
+    "B2.4D preserves conversation membership filtering, recency, unread counts, accepted-classmate gate, reuse, and creation"
+  );
+  assert(
+    roomChatGet.includes("roomId_userId") &&
+      roomChatGet.includes("prisma.studyRoomMessage.findMany") &&
+      roomChatGet.includes('orderBy: { createdAt: "asc" }') &&
+      roomChatGet.includes("take: 100") &&
+      roomChatGet.includes("messages.find((m) => m.isPinned)") &&
+      roomChatPost.includes("const participant = room.participants.find") &&
+      roomChatPost.includes('participant.role === "MODERATOR"') &&
+      roomChatPost.includes("room.allowMemberChat === false") &&
+      roomChatPost.includes("prisma.studyRoomMessage.create") &&
+      roomChatPost.includes("senderId: userId"),
+    "B2.4D preserves room-chat membership, ordering, limit, pinned response, locked-chat host/moderator policy, and canonical sender"
+  );
+  assert(
+    roomChatPatch.includes("room.hostId === userId") &&
+      roomChatPatch.includes('participant?.role === "MODERATOR"') &&
+      roomChatPatch.includes("targetMessage.roomId !== roomId") &&
+      roomChatPatch.includes("prisma.studyRoomMessage.updateMany") &&
+      roomChatPatch.includes("prisma.studyRoomMessage.update") &&
+      roomChatDelete.includes("msg.roomId !== roomId") &&
+      roomChatDelete.includes("msg.senderId !== userId && !isHost && !isModerator") &&
+      roomChatDelete.includes("prisma.studyRoomMessage.delete") &&
+      !socialRoomChat.includes("authenticatedUser.role"),
+    "B2.4D preserves room-scoped pinning, single-pin behavior, and author/host/moderator deletion without adding platform-role authority"
+  );
+  assert(
+    Array.from(b24dRouteSources.values()).every(
+      (source) =>
+        !/requireProAuth|isAccountAuthorizedFor|isPaid\s*[&|=]|paidUntil|planType|status:\s*402|payment/i.test(
+          source
+        )
+    ),
+    "B2.4D adds no PRO, payment, caching, or unrelated authorization policy"
+  );
+
   const deferredNonSocialSpecialCallers = [
     "src/app/api/csc/sync/route.ts",
     "src/app/api/exam/history/route.ts",
@@ -1406,13 +1567,10 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4C"
+    "six non-social special direct verifyJWT callers remain explicitly deferred after B2.4D"
   );
 
   const deferredB24SocialCallers = [
-    "src/app/api/social/messages/[conversationId]/route.ts",
-    "src/app/api/social/messages/conversations/route.ts",
-    "src/app/api/social/rooms/[roomId]/chat/route.ts",
     "src/app/api/social/rooms/[roomId]/invite/route.ts",
     "src/app/api/social/rooms/[roomId]/leave/route.ts",
     "src/app/api/social/rooms/[roomId]/participants/route.ts",
@@ -1425,7 +1583,7 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredB24SocialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "remaining B2.4 messages and rooms callers, including voice-token and whiteboard, remain explicitly deferred"
+    "remaining B2.4 room lifecycle callers, including voice-token and whiteboard, remain explicitly deferred after B2.4D"
   );
 
   const deferredCriticalActions = read("src/routes/admin/criticalActions.ts");
@@ -1586,8 +1744,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 18,
-    "18 remaining direct verifyJWT caller files are independently inventoried after B2.4C"
+    deferredToB2.length === 15,
+    "15 remaining direct verifyJWT caller files are independently inventoried after B2.4D"
   );
 }
 
