@@ -1,26 +1,16 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    let userId = searchParams.get("userId");
+    const authenticatedUser = await getAuthenticatedUser();
 
-    // Authenticate via session cookie if userId param isn't provided directly
-    if (!userId) {
-      const cookieStore = await cookies();
-      const token = cookieStore.get("cse_session")?.value;
-      if (token) {
-        const session = await verifyJWT(token);
-        userId = String(session?.userId || session?.id || "");
-      }
-    }
-
-    if (!userId) {
+    if (!authenticatedUser) {
       return NextResponse.json({ error: "Unauthorized: Missing user authentication" }, { status: 401 });
     }
+
+    const userId = authenticatedUser.id;
 
     // Fetch ALL completed exams (No 'take: 3' restriction)
     let history: any[] = [];

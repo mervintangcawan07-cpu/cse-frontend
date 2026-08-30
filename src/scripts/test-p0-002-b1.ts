@@ -681,12 +681,12 @@ function runSourceIntegratedRouteTests(): void {
     "B2.2 mock exam history preserves per-User filtering, ordering, response aliases, and exact 401"
   );
 
-  const deferredExamHistory = read("src/app/api/exam/history/route.ts");
+  const migratedExamHistory = read("src/app/api/exam/history/route.ts");
   assert(
-    /\bverifyJWT\b/.test(deferredExamHistory) &&
-      /\bcookies\s*\(/.test(deferredExamHistory) &&
-      deferredExamHistory.includes('searchParams.get("userId")'),
-    "exam/history remains explicitly deferred with its existing direct authentication behavior"
+    !/\bverifyJWT\b/.test(migratedExamHistory) &&
+      !migratedExamHistory.includes('searchParams.get("userId")') &&
+      migratedExamHistory.includes("getAuthenticatedUser()"),
+    "exam/history is migrated to canonical auth without query userId authority after B2.5D"
   );
 
   const b23UserRoutes = [
@@ -2042,12 +2042,11 @@ function runSourceIntegratedRouteTests(): void {
   );
 
   const deferredNonSocialSpecialCallers = [
-    "src/app/api/exam/history/route.ts",
     "src/routes/admin/criticalActions.ts",
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "two non-social special direct verifyJWT callers remain explicitly deferred after B2.5C-2"
+    "one non-social special direct verifyJWT caller remains explicitly deferred after B2.5D"
   );
 
   assert(
@@ -2060,6 +2059,73 @@ function runSourceIntegratedRouteTests(): void {
   assert(
     /\bverifyJWT\b/.test(deferredCriticalActions),
     "admin criticalActions remains explicitly deferred after B2.3"
+  );
+
+  // B2.5D — exam/history canonical auth and ownership hardening
+  const examHistoryRoute = read("src/app/api/exam/history/route.ts");
+  const examHistoryGet = exportedMethodSource(examHistoryRoute, "GET");
+
+  assert(
+    !/\bverifyJWT\b/.test(examHistoryRoute),
+    "B2.5D: exam/history contains no direct verifyJWT call"
+  );
+  assert(
+    !/\bcookies\s*\(/.test(examHistoryRoute),
+    "B2.5D: raw cookies() authentication removed from exam/history"
+  );
+  assert(
+    examHistoryGet.includes("getAuthenticatedUser()"),
+    "B2.5D: exam/history uses canonical getAuthenticatedUser helper"
+  );
+  assert(
+    !/getAuthenticatedUser\s*\(\s*request\s*\)/.test(examHistoryGet),
+    "B2.5D: getAuthenticatedUser is called without a request argument"
+  );
+  assert(
+    !/Authorization.*Bearer/.test(examHistoryGet) &&
+      !/req\.headers\.get\s*\(\s*['"]authorization/i.test(examHistoryGet),
+    "B2.5D: no User Bearer JWT fallback is introduced"
+  );
+  assert(
+    examHistoryGet.includes("if (!authenticatedUser)") &&
+      examHistoryGet.includes('{ error: "Unauthorized: Missing user authentication" }') &&
+      examHistoryGet.includes("{ status: 401 }"),
+    "B2.5D: unauthenticated access preserves exact 401 { error: 'Unauthorized: Missing user authentication' }"
+  );
+  assert(
+    examHistoryGet.includes("const userId = authenticatedUser.id"),
+    "B2.5D: history lookup identity derives strictly from authenticatedUser.id"
+  );
+  assert(
+    !examHistoryGet.includes("searchParams") &&
+      !examHistoryGet.includes("userId = searchParams"),
+    "B2.5D: query ?userId= parameter has zero authority over history query"
+  );
+  assert(
+    !examHistoryGet.includes("role === 'ADMIN'") &&
+      !examHistoryGet.includes('role === "ADMIN"'),
+    "B2.5D: no unapproved cross-user ADMIN bypass is introduced"
+  );
+  assert(
+    examHistoryGet.includes("prisma.examResult.findMany({") &&
+      examHistoryGet.includes("where: { userId },") &&
+      examHistoryGet.includes('orderBy: { createdAt: "desc" }'),
+    "B2.5D: Prisma examResult query and descending ordering remain preserved"
+  );
+  assert(
+    examHistoryGet.includes("history: formattedHistory") &&
+      examHistoryGet.includes("attempts: formattedHistory"),
+    "B2.5D: response structure with history and attempts aliases remains preserved"
+  );
+  assert(
+    !examHistoryRoute.includes("requireProAuth") &&
+      !examHistoryRoute.includes("isPaid") &&
+      !examHistoryRoute.includes("paidUntil"),
+    "B2.5D: no PRO/payment policy introduced"
+  );
+  assert(
+    !examHistoryRoute.includes("authCache") && !examHistoryRoute.includes("sessionCache"),
+    "B2.5D: no auth cache introduced"
   );
 
   // B2.5C-2 — paymongo/verify canonical auth migration
@@ -2530,8 +2596,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 2,
-    "2 remaining direct verifyJWT caller files are independently inventoried after B2.5C-2"
+    deferredToB2.length === 1,
+    "1 remaining direct verifyJWT caller file is independently inventoried after B2.5D"
   );
 }
 
