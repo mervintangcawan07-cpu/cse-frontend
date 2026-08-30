@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { logger } from "@/lib/logger/logger";
 import { validateSudoTicket } from "@/lib/auth/sudoMode";
 import { SudoErrorResponse } from "@/types/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 
 type SudoProtectedHandler = (
   req: NextRequest,
@@ -52,6 +53,30 @@ export function requireSudo(handler: SudoProtectedHandler) {
             ? "Your elevated Sudo session has expired. Please re-enter your password."
             : "Invalid Sudo elevation ticket.",
         code,
+      };
+
+      const res = NextResponse.json(payload, { status: 403 });
+      res.headers.set("X-Sudo-Required", "true");
+      return res;
+    }
+
+    const authResult = await getAuthenticatedSessionResult(req);
+    if (
+      !authResult.authenticated ||
+      authResult.session.user.role !== "ADMIN" ||
+      authResult.session.user.id !== verification.ticket.userId
+    ) {
+      logger.warn(`Sudo Elevation Denied: Primary Session Mismatch or Inactive [${method}] ${route}`, {
+        request: { route, method, statusCode: 403 },
+        context: {
+          ticketUserId: verification.ticket.userId,
+          authCode: !authResult.authenticated ? authResult.code : "ROLE_OR_IDENTITY_MISMATCH",
+        },
+      });
+
+      const payload: SudoErrorResponse = {
+        error: "Critical action requires password re-authentication (Sudo Mode).",
+        code: "SUDO_REQUIRED",
       };
 
       const res = NextResponse.json(payload, { status: 403 });

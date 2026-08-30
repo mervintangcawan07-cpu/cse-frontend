@@ -2112,6 +2112,52 @@ function runSourceIntegratedRouteTests(): void {
     "B2.5E: no auth cache introduced"
   );
 
+  // Post-B2 — Sudo Liveness Remediation & Logout Cleanup
+  const requireSudoSource = read("src/middleware/requireSudo.ts");
+  const logoutSource = read("src/app/api/auth/logout/route.ts");
+
+  assert(
+    requireSudoSource.includes('req.headers.get("x-sudo-token")') &&
+      requireSudoSource.includes('req.cookies.get("cse_sudo_token")') &&
+      requireSudoSource.includes("const token = sudoHeader || sudoCookie"),
+    "Post-B2: requireSudo preserves x-sudo-token and cse_sudo_token transport with header precedence"
+  );
+  assert(
+    requireSudoSource.includes("validateSudoTicket(token)") &&
+      requireSudoSource.includes('"SUDO_REQUIRED"') &&
+      requireSudoSource.includes('"SUDO_EXPIRED"') &&
+      requireSudoSource.includes('"INVALID_SUDO_TOKEN"') &&
+      requireSudoSource.includes('res.headers.set("X-Sudo-Required", "true")'),
+    "Post-B2: requireSudo preserves exact missing, expired, and invalid sudo token contracts"
+  );
+  assert(
+    requireSudoSource.includes("const authResult = await getAuthenticatedSessionResult(req)") &&
+      !requireSudoSource.includes("getAuthenticatedSessionResult()") &&
+      !requireSudoSource.includes("getAuthenticatedUser") &&
+      !requireSudoSource.includes("requireAdminAuth"),
+    "Post-B2: requireSudo mandates request-aware getAuthenticatedSessionResult(req) canonical primary authentication"
+  );
+  assert(
+    appearsBefore(
+      requireSudoSource,
+      "validateSudoTicket(token)",
+      "getAuthenticatedSessionResult(req)"
+    ),
+    "Post-B2: canonical primary authentication executes strictly after sudo ticket validation"
+  );
+  assert(
+    requireSudoSource.includes("!authResult.authenticated") &&
+      requireSudoSource.includes('authResult.session.user.role !== "ADMIN"') &&
+      requireSudoSource.includes("authResult.session.user.id !== verification.ticket.userId"),
+    "Post-B2: requireSudo enforces live session, current ADMIN role, and ticket User ID match"
+  );
+  assert(
+    logoutSource.includes('response.cookies.set("cse_session"') &&
+      logoutSource.includes('response.cookies.set("cse_sudo_token"') &&
+      logoutSource.includes('path: "/"'),
+    "Post-B2: logout unconditionally expires both cse_session and cse_sudo_token cookies"
+  );
+
   // B2.5D — exam/history canonical auth and ownership hardening
   const examHistoryRoute = read("src/app/api/exam/history/route.ts");
   const examHistoryGet = exportedMethodSource(examHistoryRoute, "GET");

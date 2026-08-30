@@ -17,6 +17,11 @@ export async function POST() {
     expires: new Date(0),
     path: "/",
   });
+  response.cookies.set("cse_sudo_token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    path: "/",
+  });
 
   try {
     const cookieStore = await cookies();
