@@ -2042,7 +2042,6 @@ function runSourceIntegratedRouteTests(): void {
   );
 
   const deferredNonSocialSpecialCallers = [
-    "src/app/api/csc/sync/route.ts",
     "src/app/api/exam/history/route.ts",
     "src/app/api/paymongo/checkout/route.ts",
     "src/app/api/paymongo/verify/route.ts",
@@ -2050,7 +2049,7 @@ function runSourceIntegratedRouteTests(): void {
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "five non-social special direct verifyJWT callers remain explicitly deferred after B2.5A"
+    "four non-social special direct verifyJWT callers remain explicitly deferred after B2.5B"
   );
 
   assert(
@@ -2065,9 +2064,60 @@ function runSourceIntegratedRouteTests(): void {
     "admin criticalActions remains explicitly deferred after B2.3"
   );
 
+  // B2.5B — csc/sync canonical admin auth migration & cron preservation
+  const cscSyncRoute = read("src/app/api/csc/sync/route.ts");
+  const cscSyncPost = exportedMethodSource(cscSyncRoute, "POST");
+
   assert(
-    /\bverifyJWT\b/.test(read("src/app/api/csc/sync/route.ts")),
-    "csc/sync remains deferred to the mixed-auth batch"
+    !/\bverifyJWT\b/.test(cscSyncRoute),
+    "B2.5B: csc/sync contains no direct verifyJWT call"
+  );
+  assert(
+    !/\bcookies\b\s*\(\s*\)/.test(cscSyncRoute),
+    "B2.5B: csc/sync does not use raw cookies() for authentication"
+  );
+  assert(
+    cscSyncPost.includes('request.headers.get("authorization")') &&
+      cscSyncPost.includes("process.env.CRON_SECRET_KEY"),
+    "B2.5B: Authorization header handling remains present for CRON_SECRET_KEY"
+  );
+  assert(
+    cscSyncPost.includes("isCronKeyValid") &&
+      appearsBefore(cscSyncPost, "isCronKeyValid =", "if (!isCronKeyValid)"),
+    "B2.5B: Valid CRON_SECRET_KEY path is evaluated first and independently of User auth"
+  );
+  assert(
+    cscSyncPost.includes("getAuthenticatedUser()") &&
+      !/getAuthenticatedUser\s*\(\s*request\s*\)/.test(cscSyncPost),
+    "B2.5B: Admin path calls getAuthenticatedUser() without a request argument"
+  );
+  assert(
+    cscSyncPost.includes('authenticatedUser?.role === "ADMIN"') ||
+      cscSyncPost.includes("authenticatedUser?.role === 'ADMIN'"),
+    "B2.5B: Canonical authenticated User must have role ADMIN"
+  );
+  assert(
+    cscSyncPost.includes('{ error: "Unauthorized sync trigger" }') &&
+      cscSyncPost.includes("{ status: 401 }"),
+    "B2.5B: Missing or unauthorized access preserves exact HTTP 401 { error: 'Unauthorized sync trigger' }"
+  );
+  assert(
+    appearsBefore(cscSyncPost, "if (!isCronKeyValid && !isAdmin)", "runCSCSynchronization(isAdmin)"),
+    "B2.5B: Authentication/authorization strictly completes before runCSCSynchronization is invoked"
+  );
+  assert(
+    cscSyncPost.includes("runCSCSynchronization(isAdmin)"),
+    "B2.5B: runCSCSynchronization boolean argument semantics are preserved"
+  );
+  assert(
+    !cscSyncRoute.includes("isPaid") &&
+      !cscSyncRoute.includes("paidUntil") &&
+      !cscSyncRoute.includes("requireProAuth"),
+    "B2.5B: no PRO/payment authorization introduced"
+  );
+  assert(
+    !cscSyncRoute.includes("authCache") && !cscSyncRoute.includes("sessionCache"),
+    "B2.5B: no auth cache introduced"
   );
 
   // B2.5A — questions/daily canonical auth migration
@@ -2310,8 +2360,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 5,
-    "5 remaining direct verifyJWT caller files are independently inventoried after B2.5A"
+    deferredToB2.length === 4,
+    "4 remaining direct verifyJWT caller files are independently inventoried after B2.5B"
   );
 }
 

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { runCSCSynchronization } from "@/lib/cscSyncEngine";
-import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
 
 export async function POST(request: Request) {
   try {
@@ -10,12 +9,8 @@ export async function POST(request: Request) {
 
     let isAdmin = false;
     if (!isCronKeyValid) {
-      const cookieStore = await cookies();
-      const token = cookieStore.get("cse_session")?.value;
-      if (token) {
-        const session = await verifyJWT(token);
-        isAdmin = session?.role === "ADMIN";
-      }
+      const authenticatedUser = await getAuthenticatedUser();
+      isAdmin = authenticatedUser?.role === "ADMIN";
     }
 
     if (!isCronKeyValid && !isAdmin) {
