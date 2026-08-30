@@ -2043,13 +2043,12 @@ function runSourceIntegratedRouteTests(): void {
 
   const deferredNonSocialSpecialCallers = [
     "src/app/api/exam/history/route.ts",
-    "src/app/api/paymongo/checkout/route.ts",
     "src/app/api/paymongo/verify/route.ts",
     "src/routes/admin/criticalActions.ts",
   ];
   assert(
     deferredNonSocialSpecialCallers.every((file) => /\bverifyJWT\b/.test(read(file))),
-    "four non-social special direct verifyJWT callers remain explicitly deferred after B2.5B"
+    "three non-social special direct verifyJWT callers remain explicitly deferred after B2.5C-1"
   );
 
   assert(
@@ -2062,6 +2061,105 @@ function runSourceIntegratedRouteTests(): void {
   assert(
     /\bverifyJWT\b/.test(deferredCriticalActions),
     "admin criticalActions remains explicitly deferred after B2.3"
+  );
+
+  // B2.5C-1 — paymongo/checkout canonical auth migration
+  const checkoutRoute = read("src/app/api/paymongo/checkout/route.ts");
+  const checkoutPost = exportedMethodSource(checkoutRoute, "POST");
+
+  assert(
+    !/\bverifyJWT\b/.test(checkoutRoute),
+    "B2.5C-1: paymongo/checkout contains no direct verifyJWT call"
+  );
+  assert(
+    checkoutPost.includes("getAuthenticatedSessionResult()"),
+    "B2.5C-1: checkout uses canonical getAuthenticatedSessionResult helper"
+  );
+  assert(
+    !/getAuthenticatedSessionResult\s*\(\s*request\s*\)/.test(checkoutPost),
+    "B2.5C-1: getAuthenticatedSessionResult is called without a request argument"
+  );
+  assert(
+    !/Authorization.*Bearer/.test(checkoutPost) &&
+      !/req\.headers\.get\s*\(\s*['"]authorization/i.test(checkoutPost),
+    "B2.5C-1: no User Bearer JWT support is introduced"
+  );
+  assert(
+    checkoutPost.includes('authResult.code === "NO_TOKEN"') &&
+      checkoutPost.includes('{ error: "Unauthorized: Please log in first." }') &&
+      checkoutPost.includes("{ status: 401 }"),
+    "B2.5C-1: missing session cookie preserves exact 401 { error: 'Unauthorized: Please log in first.' }"
+  );
+  assert(
+    checkoutPost.includes('{ error: "Invalid session: Please log in again." }') &&
+      checkoutPost.includes("{ status: 401 }"),
+    "B2.5C-1: invalid or non-operational session preserves exact 401 { error: 'Invalid session: Please log in again.' }"
+  );
+  assert(
+    checkoutPost.includes("authResult.session.user.id"),
+    "B2.5C-1: canonical identity derives from authenticated database User ID"
+  );
+  assert(
+    checkoutPost.includes("`paymongo:checkout:${userId}`"),
+    "B2.5C-1: rate limit identity remains that canonical User ID"
+  );
+  assert(
+    checkoutPost.includes("metadata: {") &&
+      checkoutPost.includes("userId,") &&
+      !checkoutPost.includes("userId: body.userId"),
+    "B2.5C-1: PayMongo metadata.userId derives strictly from canonical User ID"
+  );
+  assert(
+    checkoutPost.includes("new Set([") &&
+      checkoutPost.includes('"1_MONTH"') &&
+      checkoutPost.includes('"6_MONTHS"') &&
+      checkoutPost.includes('"1_YEAR"'),
+    "B2.5C-1: planType remains allowlisted according to existing behavior"
+  );
+  assert(
+    checkoutPost.includes("prisma.pricingPlan.findUnique") &&
+      !checkoutPost.includes("body.amount") &&
+      !checkoutPost.includes("body.price"),
+    "B2.5C-1: price remains server-authoritative and request body amount is not trusted"
+  );
+  assert(
+    checkoutPost.includes("Math.round(amountInCentavos * discountMultiplier)"),
+    "B2.5C-1: discount calculation remains server-computed"
+  );
+  assert(
+    checkoutPost.includes("PartnerService.resolvePartnerByCodeOrSlug") &&
+      checkoutPost.includes("PartnerService.recordPartnerAttributionOnSignup"),
+    "B2.5C-1: partner promo/ref attribution remains intact"
+  );
+  assert(
+    checkoutPost.includes("acquireLock(lockKey)") &&
+      checkoutPost.includes("releaseLock(lockKey)") &&
+      checkoutPost.includes("{ status: 409 }"),
+    "B2.5C-1: lock acquisition, release, and 409 in-flight protection remain intact"
+  );
+  assert(
+    checkoutPost.includes("AbortSignal.timeout(10000)"),
+    "B2.5C-1: PayMongo API timeout remains intact"
+  );
+  assert(
+    checkoutPost.includes('"cse_checkout_id"') &&
+      checkoutPost.includes('"cse_checkout_plan"') &&
+      checkoutPost.includes("httpOnly: true"),
+    "B2.5C-1: checkout cookies remain httpOnly with existing settings"
+  );
+  assert(
+    checkoutPost.includes("{ checkoutUrl }"),
+    "B2.5C-1: success response contract remains { checkoutUrl }"
+  );
+  assert(
+    !checkoutRoute.includes("isPaid") &&
+      !checkoutRoute.includes("paidUntil") &&
+      !checkoutRoute.includes("requireProAuth"),
+    "B2.5C-1: no PRO/payment-policy redesign is introduced"
+  );
+  assert(
+    !checkoutRoute.includes("authCache") && !checkoutRoute.includes("sessionCache"),
+    "B2.5C-1: no auth cache introduced"
   );
 
   // B2.5B — csc/sync canonical admin auth migration & cron preservation
@@ -2360,8 +2458,8 @@ function runStaticSafetyChecks(): void {
   console.log(`B2_DEFERRED_VERIFY_JWT_COUNT=${deferredToB2.length}`);
   for (const file of deferredToB2) console.log(`B2_DEFERRED_VERIFY_JWT_PATH=${file}`);
   assert(
-    deferredToB2.length === 4,
-    "4 remaining direct verifyJWT caller files are independently inventoried after B2.5B"
+    deferredToB2.length === 3,
+    "3 remaining direct verifyJWT caller files are independently inventoried after B2.5C-1"
   );
 }
 

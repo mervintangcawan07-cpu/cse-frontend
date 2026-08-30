@@ -1,7 +1,7 @@
 // Relative Path: src/app/api/paymongo/checkout/route.ts
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJWT } from "@/lib/auth";
+import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { acquireLock, releaseLock, getClientIp } from "@/lib/rate-limit";
 import { getSiteUrl } from "@/lib/config/site";
@@ -42,19 +42,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("cse_session")?.value;
+    const authResult = await getAuthenticatedSessionResult();
 
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized: Please log in first." }, { status: 401 });
-    }
+    if (!authResult.authenticated) {
+      if (authResult.code === "NO_TOKEN") {
+        return NextResponse.json({ error: "Unauthorized: Please log in first." }, { status: 401 });
+      }
 
-    const session = await verifyJWT(token);
-    if (!session?.userId) {
       return NextResponse.json({ error: "Invalid session: Please log in again." }, { status: 401 });
     }
 
-    const userId = String(session.userId);
+    const userId = authResult.session.user.id;
+    const cookieStore = await cookies();
     const rateResult = await checkRateLimit(
       PAYMONGO_CHECKOUT_LIMITER,
       `paymongo:checkout:${userId}`
