@@ -9,6 +9,8 @@
  */
 
 import { prisma } from "@/lib/prisma";
+import { DEFAULT_REFERRAL_CONFIG, REFERRAL_SETTING_KEYS } from "@/lib/referral/config";
+import { sanitizeRewardPercentage } from "@/lib/referral/rewardCalculator";
 import {
   MANIFEST_VERSION,
   INTENT_VERSION,
@@ -40,6 +42,9 @@ import {
   TransactionIdentityMismatchError,
   ExistingReferralRewardConflictError,
   ExistingPartnerCommissionConflictError,
+  PaymentFinalizationPlanningError,
+  InvalidMonetaryAmountError,
+  InvalidTimestampError,
   validatePlanType,
   validateCurrency,
   validateTransactionId,
@@ -52,6 +57,156 @@ import {
   canonicalizeJson,
   computeSha256Hash,
 } from "./paymentFinalizationContracts";
+
+const POSTGRESQL_INTEGER_MAX = 2_147_483_647;
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+
+export interface ReferralPlanningConfig {
+  readonly programEnabled: boolean;
+  readonly rewardType: "PERCENTAGE" | "FIXED";
+  readonly rewardPercentage: number;
+  readonly fixedRewardAmountCentavos: number;
+  readonly holdingPeriodDays: number;
+}
+
+function parsePresentFiniteNumber(
+  rawValue: string,
+  fieldName: string,
+  errorCode: "PLANNING_ERROR" | "INVALID_RATE"
+): number {
+  if (rawValue.trim().length === 0) {
+    throw new PaymentFinalizationPlanningError(
+      `${fieldName} setting is invalid.`,
+      errorCode
+    );
+  }
+
+  const parsed = Number(rawValue);
+  if (!Number.isFinite(parsed)) {
+    throw new PaymentFinalizationPlanningError(
+      `${fieldName} setting is invalid.`,
+      errorCode
+    );
+  }
+
+  return parsed;
+}
+
+function validateFixedRewardAmountCentavos(value: number): number {
+  if (
+    !Number.isFinite(value) ||
+    !Number.isSafeInteger(value) ||
+    value < 0 ||
+    value > POSTGRESQL_INTEGER_MAX
+  ) {
+    throw new InvalidMonetaryAmountError(
+      "Referral fixed reward amount setting is invalid."
+    );
+  }
+
+  return value;
+}
+
+function parseFixedRewardAmountCentavos(rawValue: string): number {
+  if (rawValue.trim().length === 0) {
+    throw new InvalidMonetaryAmountError(
+      "Referral fixed reward amount setting is invalid."
+    );
+  }
+
+  return validateFixedRewardAmountCentavos(Number(rawValue));
+}
+
+function validateHoldingPeriodDays(value: number): number {
+  if (!Number.isFinite(value) || !Number.isSafeInteger(value) || value < 0) {
+    throw new PaymentFinalizationPlanningError(
+      "Referral holding period setting is invalid.",
+      "PLANNING_ERROR"
+    );
+  }
+
+  return value;
+}
+
+export function parseReferralPlanningConfig(
+  settings: readonly { readonly key: string; readonly value: string }[]
+): ReferralPlanningConfig {
+  const settingsMap = new Map<string, string>(
+    settings.map((setting) => [setting.key, setting.value])
+  );
+
+  const rawProgramEnabled = settingsMap.get(REFERRAL_SETTING_KEYS.PROGRAM_ENABLED);
+  let programEnabled = DEFAULT_REFERRAL_CONFIG.programEnabled;
+  if (rawProgramEnabled !== undefined) {
+    if (rawProgramEnabled === "true") {
+      programEnabled = true;
+    } else if (rawProgramEnabled === "false") {
+      programEnabled = false;
+    } else {
+      throw new PaymentFinalizationPlanningError(
+        "Referral program enabled setting is invalid.",
+        "PLANNING_ERROR"
+      );
+    }
+  }
+
+  const rawRewardType = settingsMap.get(REFERRAL_SETTING_KEYS.REWARD_TYPE);
+  let rewardType: "PERCENTAGE" | "FIXED";
+  if (rawRewardType === undefined) {
+    rewardType =
+      DEFAULT_REFERRAL_CONFIG.rewardType === "FIXED_AMOUNT" ? "FIXED" : "PERCENTAGE";
+  } else if (rawRewardType === "PERCENTAGE") {
+    rewardType = "PERCENTAGE";
+  } else if (rawRewardType === "FIXED_AMOUNT") {
+    rewardType = "FIXED";
+  } else {
+    throw new PaymentFinalizationPlanningError(
+      "Referral reward type setting is invalid.",
+      "PLANNING_ERROR"
+    );
+  }
+
+  const rawRewardPercentage = settingsMap.get(REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE);
+  const rewardPercentage =
+    rawRewardPercentage === undefined
+      ? DEFAULT_REFERRAL_CONFIG.rewardPercentage
+      : sanitizeRewardPercentage(
+          parsePresentFiniteNumber(
+            rawRewardPercentage,
+            "Referral reward percentage",
+            "INVALID_RATE"
+          ),
+          DEFAULT_REFERRAL_CONFIG.rewardPercentage
+        );
+
+  const rawFixedRewardAmount = settingsMap.get(
+    REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS
+  );
+  const fixedRewardAmountCentavos = validateFixedRewardAmountCentavos(
+    rawFixedRewardAmount === undefined
+      ? DEFAULT_REFERRAL_CONFIG.fixedRewardAmountCentavos
+      : parseFixedRewardAmountCentavos(rawFixedRewardAmount)
+  );
+
+  const rawHoldingPeriodDays = settingsMap.get(REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS);
+  const holdingPeriodDays = validateHoldingPeriodDays(
+    rawHoldingPeriodDays === undefined
+      ? DEFAULT_REFERRAL_CONFIG.holdingPeriodDays
+      : parsePresentFiniteNumber(
+          rawHoldingPeriodDays,
+          "Referral holding period",
+          "PLANNING_ERROR"
+        )
+  );
+
+  return {
+    programEnabled,
+    rewardType,
+    rewardPercentage,
+    fixedRewardAmountCentavos,
+    holdingPeriodDays,
+  };
+}
 
 /**
  * Production read-only data reader backed by Prisma Client queries.
@@ -95,25 +250,16 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
 
     if (!referral) return null;
 
-    const settings = await prisma.referralProgramSetting.findMany();
-    const settingsMap = new Map<string, string>(settings.map((s) => [s.key, s.value]));
-
-    const programEnabled = settingsMap.has("PROGRAM_ENABLED")
-      ? settingsMap.get("PROGRAM_ENABLED") === "true"
-      : true;
-    const rawRewardType = settingsMap.get("REWARD_TYPE") ?? "PERCENTAGE";
-    const rewardType: "PERCENTAGE" | "FIXED" =
-      rawRewardType === "FIXED" ? "FIXED" : "PERCENTAGE";
-
-    const rewardPercentage = settingsMap.has("REWARD_PERCENTAGE")
-      ? Number(settingsMap.get("REWARD_PERCENTAGE")) || 20.0
-      : 20.0;
-    const fixedRewardAmountCentavos = settingsMap.has("FIXED_REWARD_AMOUNT_CENTAVOS")
-      ? Number(settingsMap.get("FIXED_REWARD_AMOUNT_CENTAVOS")) || 5000
-      : 5000;
-    const holdingPeriodDays = settingsMap.has("HOLDING_PERIOD_DAYS")
-      ? Number(settingsMap.get("HOLDING_PERIOD_DAYS")) || 7
-      : 7;
+    let settings: readonly { readonly key: string; readonly value: string }[];
+    try {
+      settings = await prisma.referralProgramSetting.findMany();
+    } catch {
+      throw new PaymentFinalizationPlanningError(
+        "Referral planning configuration could not be read.",
+        "PLANNING_ERROR"
+      );
+    }
+    const planningConfig = parseReferralPlanningConfig(settings);
 
     const existingReward = referral.reward
       ? { id: referral.reward.id, transactionId: referral.reward.transactionId }
@@ -122,11 +268,7 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
     return {
       referralId: referral.id,
       inviterId: referral.inviterId,
-      programEnabled,
-      rewardType,
-      rewardPercentage,
-      fixedRewardAmountCentavos,
-      holdingPeriodDays,
+      ...planningConfig,
       existingReward,
     };
   }
@@ -608,13 +750,28 @@ export class PaymentFinalizationManifestService {
       };
     }
 
-    // Check existing reward state machine
+    // Preserve same-transaction conflict precedence before producing any intent.
     if (attribution.existingReward !== null) {
       if (attribution.existingReward.transactionId === transactionId) {
         throw new ExistingReferralRewardConflictError(
           `A ReferralReward already exists for this transaction (Reward ID: "${attribution.existingReward.id}").`
         );
-      } else {
+      }
+    }
+
+    const normalizedHoldingPeriodDays = validateHoldingPeriodDays(
+      attribution.holdingPeriodDays
+    );
+    let rewardRateBasisPoints = 0;
+    let canonicalRewardPercentage = 0;
+    if (attribution.rewardType === "PERCENTAGE") {
+      const safeRate = validateSafeRate(attribution.rewardPercentage, "rewardPercentage");
+      rewardRateBasisPoints = rateToBasisPoints(safeRate);
+      canonicalRewardPercentage = rewardRateBasisPoints / 100;
+    }
+
+    if (attribution.existingReward !== null) {
+      if (attribution.existingReward.transactionId !== transactionId) {
         // Referral was already rewarded on an earlier transaction (1 reward per referral lifetime)
         const intent: ReferralRewardIntent = {
           effectType: "REFERRAL_REWARD",
@@ -626,10 +783,10 @@ export class PaymentFinalizationManifestService {
           referredUserId: userId,
           purchaseAmountCentavos: customerPaymentCentavos,
           rewardType: attribution.rewardType,
-          rewardRateBasisPoints: rateToBasisPoints(attribution.rewardPercentage),
+          rewardRateBasisPoints,
           rewardAmountCentavos: 0,
           currency: SUPPORTED_CURRENCY,
-          holdingPeriodDays: attribution.holdingPeriodDays,
+          holdingPeriodDays: normalizedHoldingPeriodDays,
           holdingUntil: null,
         };
         const intentHash = computeSha256Hash(canonicalizeJson(intent));
@@ -657,10 +814,10 @@ export class PaymentFinalizationManifestService {
         referredUserId: userId,
         purchaseAmountCentavos: customerPaymentCentavos,
         rewardType: attribution.rewardType,
-        rewardRateBasisPoints: rateToBasisPoints(attribution.rewardPercentage),
+        rewardRateBasisPoints,
         rewardAmountCentavos: 0,
         currency: SUPPORTED_CURRENCY,
-        holdingPeriodDays: attribution.holdingPeriodDays,
+        holdingPeriodDays: normalizedHoldingPeriodDays,
         holdingUntil: null,
       };
       const intentHash = computeSha256Hash(canonicalizeJson(intent));
@@ -677,19 +834,15 @@ export class PaymentFinalizationManifestService {
     }
 
     let calculatedRewardCentavos = 0;
-    let rewardRateBasisPoints: number | null = null;
 
     if (attribution.rewardType === "FIXED") {
-      calculatedRewardCentavos = validateSafeCentavos(
-        attribution.fixedRewardAmountCentavos,
-        "fixedRewardAmountCentavos",
-        true
+      calculatedRewardCentavos = validateFixedRewardAmountCentavos(
+        attribution.fixedRewardAmountCentavos
       );
-      rewardRateBasisPoints = 0;
     } else {
-      const safeRate = validateSafeRate(attribution.rewardPercentage, "rewardPercentage");
-      rewardRateBasisPoints = rateToBasisPoints(safeRate);
-      calculatedRewardCentavos = Math.round((customerPaymentCentavos * safeRate) / 100);
+      calculatedRewardCentavos = Math.round(
+        (customerPaymentCentavos * canonicalRewardPercentage) / 100
+      );
     }
 
     if (calculatedRewardCentavos <= 0) {
@@ -706,7 +859,7 @@ export class PaymentFinalizationManifestService {
         rewardRateBasisPoints,
         rewardAmountCentavos: 0,
         currency: SUPPORTED_CURRENCY,
-        holdingPeriodDays: attribution.holdingPeriodDays,
+        holdingPeriodDays: normalizedHoldingPeriodDays,
         holdingUntil: null,
       };
       const intentHash = computeSha256Hash(canonicalizeJson(intent));
@@ -723,9 +876,21 @@ export class PaymentFinalizationManifestService {
     }
 
     const verifiedDate = new Date(verifiedAtIso);
-    const holdingUntilDate = new Date(
-      verifiedDate.getTime() + attribution.holdingPeriodDays * 24 * 60 * 60 * 1000
-    );
+    const verifiedTimestamp = verifiedDate.getTime();
+    const holdingDurationMilliseconds = normalizedHoldingPeriodDays * MILLISECONDS_PER_DAY;
+    const holdingUntilTimestamp = verifiedTimestamp + holdingDurationMilliseconds;
+    if (
+      !Number.isFinite(verifiedTimestamp) ||
+      !Number.isSafeInteger(holdingDurationMilliseconds) ||
+      !Number.isSafeInteger(holdingUntilTimestamp)
+    ) {
+      throw new InvalidTimestampError("Referral holding-until timestamp is invalid.");
+    }
+
+    const holdingUntilDate = new Date(holdingUntilTimestamp);
+    if (!Number.isFinite(holdingUntilDate.getTime())) {
+      throw new InvalidTimestampError("Referral holding-until timestamp is invalid.");
+    }
 
     const intent: ReferralRewardIntent = {
       effectType: "REFERRAL_REWARD",
@@ -739,7 +904,7 @@ export class PaymentFinalizationManifestService {
       rewardRateBasisPoints,
       rewardAmountCentavos: calculatedRewardCentavos,
       currency: SUPPORTED_CURRENCY,
-      holdingPeriodDays: attribution.holdingPeriodDays,
+      holdingPeriodDays: normalizedHoldingPeriodDays,
       holdingUntil: holdingUntilDate.toISOString(),
     };
 

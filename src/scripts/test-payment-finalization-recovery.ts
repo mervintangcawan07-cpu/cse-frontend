@@ -1,12 +1,13 @@
 // Relative Path: src/scripts/test-payment-finalization-recovery.ts
 /**
- * Synthetic Test Suite: GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2.1)
+ * Synthetic Test Suite: GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2.2)
  *
  * STRICTLY STATIC / IN-MEMORY SYNTHETIC TESTS — ZERO LIVE DATABASE MUTATIONS OR PROVIDER CALLS.
  */
 
 import fs from "fs";
 import path from "path";
+import { REFERRAL_SETTING_KEYS } from "../lib/referral/config";
 import {
   MANIFEST_VERSION,
   INTENT_VERSION,
@@ -56,6 +57,7 @@ import {
 } from "../lib/payment/paymentFinalizationContracts";
 import {
   PaymentFinalizationManifestService,
+  parseReferralPlanningConfig,
 } from "../lib/payment/paymentFinalizationManifestService";
 
 let totalTests = 0;
@@ -127,7 +129,7 @@ class MockFinalizationDataReader implements IFinalizationDataReader {
 
 async function runPaymentFinalizationRecoveryTests(): Promise<void> {
   console.log("================================================================================");
-  console.log("🧪 RUNNING SYNTHETIC SUITE: PAYMENT FINALIZATION RECOVERY (SLICE 2.1)");
+  console.log("🧪 RUNNING SYNTHETIC SUITE: PAYMENT FINALIZATION RECOVERY (SLICE 2.2)");
   console.log("================================================================================\n");
 
   const mockReader = new MockFinalizationDataReader();
@@ -573,6 +575,417 @@ async function runPaymentFinalizationRecoveryTests(): Promise<void> {
         intentCaseB.notApplicableReason === "REFERRAL_ALREADY_REWARDED" &&
         refConflictCaught,
       "Test 9: Referral existing-output state machine accurately distinguishes new, earlier-rewarded, and same-transaction conflicts"
+    );
+  }
+
+  // Test 9.1: Referral configuration parity — canonical keys, defaults, and strict parsing
+  {
+    const defaults = parseReferralPlanningConfig([]);
+    const legacyOnly = parseReferralPlanningConfig([
+      { key: "PROGRAM_ENABLED", value: "true" },
+      { key: "REWARD_TYPE", value: "FIXED" },
+      { key: "REWARD_PERCENTAGE", value: "99" },
+      { key: "FIXED_REWARD_AMOUNT_CENTAVOS", value: "1" },
+      { key: "HOLDING_PERIOD_DAYS", value: "1" },
+    ]);
+    const canonical = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "true" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_TYPE, value: "FIXED_AMOUNT" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE, value: "20.005" },
+      { key: REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS, value: "0" },
+      { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value: "0" },
+    ]);
+    const canonicalFalse = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "false" },
+    ]);
+
+    assert(
+      defaults.programEnabled === false &&
+        defaults.rewardType === "PERCENTAGE" &&
+        defaults.rewardPercentage === 20 &&
+        defaults.fixedRewardAmountCentavos === 5000 &&
+        defaults.holdingPeriodDays === 7,
+      "Test 9.1A: Missing referral settings use the canonical production defaults, including disabled-by-default"
+    );
+    assert(
+      legacyOnly.programEnabled === defaults.programEnabled &&
+        legacyOnly.rewardType === defaults.rewardType &&
+        legacyOnly.rewardPercentage === defaults.rewardPercentage &&
+        legacyOnly.fixedRewardAmountCentavos === defaults.fixedRewardAmountCentavos &&
+        legacyOnly.holdingPeriodDays === defaults.holdingPeriodDays,
+      "Test 9.1B: Legacy unprefixed referral setting keys are ignored"
+    );
+    assert(
+      canonical.programEnabled &&
+        canonicalFalse.programEnabled === false &&
+        canonical.rewardType === "FIXED" &&
+        canonical.rewardPercentage === 20.01 &&
+        canonical.fixedRewardAmountCentavos === 0 &&
+        canonical.holdingPeriodDays === 0,
+      "Test 9.1C: Canonical prefixed keys map FIXED_AMOUNT to FIXED and preserve explicit numeric zeroes"
+    );
+
+    const invalidBooleanValues = ["", " ", "TRUE", "1", "0", "yes", "on"];
+    const invalidBooleansFailClosed = invalidBooleanValues.every((value) => {
+      try {
+        parseReferralPlanningConfig([
+          { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value },
+        ]);
+        return false;
+      } catch (error) {
+        return error instanceof PaymentFinalizationPlanningError && error.code === "PLANNING_ERROR";
+      }
+    });
+    assert(
+      invalidBooleansFailClosed,
+      "Test 9.1D: Present program-enabled values accept only exact true or false strings"
+    );
+
+    const invalidRewardTypeFailsClosed = ["FIXED", "UNKNOWN"].every((value) => {
+      try {
+        parseReferralPlanningConfig([
+          { key: REFERRAL_SETTING_KEYS.REWARD_TYPE, value },
+        ]);
+        return false;
+      } catch (error) {
+        return error instanceof PaymentFinalizationPlanningError && error.code === "PLANNING_ERROR";
+      }
+    });
+    assert(
+      invalidRewardTypeFailsClosed,
+      "Test 9.1E: Planner token FIXED and unknown values are not accepted as persisted production reward types"
+    );
+  }
+
+  // Test 9.2: Referral numeric settings — clamp policy, bounds, and fail-closed errors
+  {
+    const percentageCases = [
+      { value: "-1", expected: 0 },
+      { value: "0", expected: 0 },
+      { value: "20.005", expected: 20.01 },
+      { value: "100", expected: 100 },
+      { value: "101", expected: 100 },
+    ];
+    const percentagesNormalize = percentageCases.every(({ value, expected }) =>
+      parseReferralPlanningConfig([
+        { key: REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE, value },
+      ]).rewardPercentage === expected
+    );
+    assert(
+      percentagesNormalize,
+      "Test 9.2A: Finite referral percentages reuse production clamp and two-decimal rounding policy"
+    );
+
+    const invalidPercentageValues = ["", " ", "NaN", "Infinity", "-Infinity", "invalid"];
+    const invalidPercentagesFailClosed = invalidPercentageValues.every((value) => {
+      try {
+        parseReferralPlanningConfig([
+          { key: REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE, value },
+        ]);
+        return false;
+      } catch (error) {
+        return error instanceof PaymentFinalizationPlanningError && error.code === "INVALID_RATE";
+      }
+    });
+    assert(
+      invalidPercentagesFailClosed,
+      "Test 9.2B: Empty, malformed, and non-finite present percentages fail with INVALID_RATE"
+    );
+
+    const validFixedZero = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS, value: "0" },
+    ]).fixedRewardAmountCentavos;
+    const validFixedMaximum = parseReferralPlanningConfig([
+      {
+        key: REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS,
+        value: "2147483647",
+      },
+    ]).fixedRewardAmountCentavos;
+    const invalidFixedValues = [
+      "",
+      " ",
+      "-1",
+      "1.5",
+      "NaN",
+      "Infinity",
+      "2147483648",
+      "9007199254740992",
+    ];
+    const invalidFixedAmountsFailClosed = invalidFixedValues.every((value) => {
+      try {
+        parseReferralPlanningConfig([
+          { key: REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS, value },
+        ]);
+        return false;
+      } catch (error) {
+        return error instanceof InvalidMonetaryAmountError && error.code === "INVALID_MONETARY_AMOUNT";
+      }
+    });
+    assert(
+      validFixedZero === 0 &&
+        validFixedMaximum === 2_147_483_647 &&
+        invalidFixedAmountsFailClosed,
+      "Test 9.2C: Fixed rewards preserve zero and reject invalid or PostgreSQL-incompatible integer values"
+    );
+
+    const validHoldingZero = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value: "0" },
+    ]).holdingPeriodDays;
+    const validLargeHoldingPeriod = parseReferralPlanningConfig([
+      {
+        key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS,
+        value: String(Number.MAX_SAFE_INTEGER),
+      },
+    ]).holdingPeriodDays;
+    const invalidHoldingValues = ["", " ", "-1", "1.5", "NaN", "Infinity", "9007199254740992"];
+    const invalidHoldingPeriodsFailClosed = invalidHoldingValues.every((value) => {
+      try {
+        parseReferralPlanningConfig([
+          { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value },
+        ]);
+        return false;
+      } catch (error) {
+        return error instanceof PaymentFinalizationPlanningError && error.code === "PLANNING_ERROR";
+      }
+    });
+    assert(
+      validHoldingZero === 0 &&
+        validLargeHoldingPeriod === Number.MAX_SAFE_INTEGER &&
+        invalidHoldingPeriodsFailClosed,
+      "Test 9.2D: Holding periods preserve zero, impose no arbitrary cap, and reject invalid integers"
+    );
+  }
+
+  // Test 9.3: Referral intent metadata and production-equivalent percentage arithmetic
+  {
+    mockReader.reset();
+
+    const disabledConfig = parseReferralPlanningConfig([]);
+    mockReader.referrals.set("user_ref_disabled", {
+      referralId: "ref_disabled",
+      inviterId: "inviter_disabled",
+      ...disabledConfig,
+      existingReward: null,
+    });
+    const disabledEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_disabled",
+      "user_ref_disabled",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const disabledIntent = disabledEffect.intent as ReferralRewardIntent;
+
+    const fixedConfig = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "true" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_TYPE, value: "FIXED_AMOUNT" },
+      { key: REFERRAL_SETTING_KEYS.FIXED_REWARD_AMOUNT_CENTAVOS, value: "1234" },
+      { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value: "0" },
+    ]);
+    mockReader.referrals.set("user_ref_fixed", {
+      referralId: "ref_fixed",
+      inviterId: "inviter_fixed",
+      ...fixedConfig,
+      existingReward: null,
+    });
+    const fixedEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_fixed",
+      "user_ref_fixed",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const fixedIntent = fixedEffect.intent as ReferralRewardIntent;
+
+    mockReader.referrals.set("user_ref_fixed_disabled", {
+      referralId: "ref_fixed_disabled",
+      inviterId: "inviter_fixed_disabled",
+      ...fixedConfig,
+      programEnabled: false,
+      existingReward: null,
+    });
+    const fixedDisabledEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_fixed_disabled",
+      "user_ref_fixed_disabled",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const fixedDisabledIntent = fixedDisabledEffect.intent as ReferralRewardIntent;
+
+    mockReader.referrals.set("user_ref_fixed_zero", {
+      referralId: "ref_fixed_zero",
+      inviterId: "inviter_fixed_zero",
+      ...fixedConfig,
+      fixedRewardAmountCentavos: 0,
+      existingReward: null,
+    });
+    const fixedZeroEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_fixed_zero",
+      "user_ref_fixed_zero",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const fixedZeroIntent = fixedZeroEffect.intent as ReferralRewardIntent;
+
+    mockReader.referrals.set("user_ref_fixed_prior", {
+      referralId: "ref_fixed_prior",
+      inviterId: "inviter_fixed_prior",
+      ...fixedConfig,
+      existingReward: { id: "reward_fixed_prior", transactionId: "txn_ref_prior" },
+    });
+    const fixedPriorEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_fixed_current",
+      "user_ref_fixed_prior",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const fixedPriorIntent = fixedPriorEffect.intent as ReferralRewardIntent;
+
+    assert(
+      disabledEffect.status === "NOT_APPLICABLE" &&
+        disabledIntent.notApplicableReason === "PROGRAM_DISABLED" &&
+        disabledIntent.rewardRateBasisPoints === 2000,
+      "Test 9.3A: Missing settings generate a disabled percentage intent with canonical metadata"
+    );
+    assert(
+      fixedEffect.status === "PENDING" &&
+        fixedIntent.rewardAmountCentavos === 1234 &&
+        fixedIntent.rewardRateBasisPoints === 0 &&
+        fixedIntent.holdingUntil === testVerifiedAtStr &&
+        fixedDisabledIntent.notApplicableReason === "PROGRAM_DISABLED" &&
+        fixedDisabledIntent.rewardRateBasisPoints === 0 &&
+        fixedZeroIntent.notApplicableReason === "ZERO_REWARD_CALCULATED" &&
+        fixedZeroIntent.rewardRateBasisPoints === 0 &&
+        fixedPriorIntent.notApplicableReason === "REFERRAL_ALREADY_REWARDED" &&
+        fixedPriorIntent.rewardRateBasisPoints === 0,
+      "Test 9.3B: FIXED intents use zero basis points across pending, disabled, zero, and earlier-reward branches"
+    );
+
+    const percentageConfig = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "true" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_TYPE, value: "PERCENTAGE" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE, value: "38.80" },
+      { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value: "0" },
+    ]);
+    mockReader.referrals.set("user_ref_percentage", {
+      referralId: "ref_percentage",
+      inviterId: "inviter_percentage",
+      ...percentageConfig,
+      existingReward: null,
+    });
+    const percentageEffectA = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_percentage",
+      "user_ref_percentage",
+      13_423_625,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const percentageEffectB = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_percentage",
+      "user_ref_percentage",
+      13_423_625,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const percentageIntent = percentageEffectA.intent as ReferralRewardIntent;
+    assert(
+      percentageIntent.rewardRateBasisPoints === 3880 &&
+        percentageIntent.rewardAmountCentavos === 5_208_366 &&
+        percentageEffectA.intentHash === percentageEffectB.intentHash,
+      "Test 9.3C: Percentage planning uses canonical basis points, production formula ordering, and deterministic hashes"
+    );
+
+    const roundedConfig = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "true" },
+      { key: REFERRAL_SETTING_KEYS.REWARD_PERCENTAGE, value: "20.005" },
+      { key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS, value: "0" },
+    ]);
+    mockReader.referrals.set("user_ref_rounded", {
+      referralId: "ref_rounded",
+      inviterId: "inviter_rounded",
+      ...roundedConfig,
+      existingReward: null,
+    });
+    const roundedEffect = await PaymentFinalizationManifestService.planReferralRewardEffect(
+      "txn_ref_rounded",
+      "user_ref_rounded",
+      29900,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const roundedIntent = roundedEffect.intent as ReferralRewardIntent;
+    assert(
+      roundedIntent.rewardRateBasisPoints === 2001 &&
+        roundedIntent.rewardAmountCentavos === 5983,
+      "Test 9.3D: Sanitized percentage metadata and reward calculation share one canonical rate"
+    );
+  }
+
+  // Test 9.4: Referral conflict precedence and holding timestamp overflow protection
+  {
+    mockReader.reset();
+    mockReader.referrals.set("user_ref_precedence", {
+      referralId: "ref_precedence",
+      inviterId: "inviter_precedence",
+      programEnabled: true,
+      rewardType: "PERCENTAGE",
+      rewardPercentage: 101,
+      fixedRewardAmountCentavos: 0,
+      holdingPeriodDays: -1,
+      existingReward: { id: "reward_same", transactionId: "txn_ref_precedence" },
+    });
+    let sameTransactionConflictPrecedesConfigValidation = false;
+    try {
+      await PaymentFinalizationManifestService.planReferralRewardEffect(
+        "txn_ref_precedence",
+        "user_ref_precedence",
+        29900,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (error) {
+      sameTransactionConflictPrecedesConfigValidation =
+        error instanceof ExistingReferralRewardConflictError &&
+        error.code === "EXISTING_REFERRAL_REWARD_CONFLICT";
+    }
+
+    const overflowConfig = parseReferralPlanningConfig([
+      { key: REFERRAL_SETTING_KEYS.PROGRAM_ENABLED, value: "true" },
+      {
+        key: REFERRAL_SETTING_KEYS.HOLDING_PERIOD_DAYS,
+        value: String(Number.MAX_SAFE_INTEGER),
+      },
+    ]);
+    mockReader.referrals.set("user_ref_overflow", {
+      referralId: "ref_overflow",
+      inviterId: "inviter_overflow",
+      ...overflowConfig,
+      existingReward: null,
+    });
+    let holdingOverflowFailsClosed = false;
+    try {
+      await PaymentFinalizationManifestService.planReferralRewardEffect(
+        "txn_ref_overflow",
+        "user_ref_overflow",
+        29900,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (error) {
+      holdingOverflowFailsClosed =
+        error instanceof InvalidTimestampError && error.code === "INVALID_TIMESTAMP";
+    }
+
+    assert(
+      sameTransactionConflictPrecedesConfigValidation,
+      "Test 9.4A: Same-transaction existing reward conflict retains precedence"
+    );
+    assert(
+      holdingOverflowFailsClosed,
+      "Test 9.4B: Holding date arithmetic overflow fails closed before ISO serialization"
     );
   }
 
