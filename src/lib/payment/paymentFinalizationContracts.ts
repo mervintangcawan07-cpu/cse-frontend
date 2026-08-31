@@ -1,6 +1,6 @@
 // Relative Path: src/lib/payment/paymentFinalizationContracts.ts
 /**
- * GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2)
+ * GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2.1)
  *
  * Strongly typed dormant domain contracts, discriminated intent unions,
  * closed operation-key builder, deterministic canonical serialization,
@@ -10,10 +10,14 @@
  */
 
 import crypto from "crypto";
+import type { AccountCategory } from "@/lib/accounting/types";
 
 export const MANIFEST_VERSION = 1 as const;
 export const INTENT_VERSION = 1 as const;
 export const CANONICAL_VERSION = 1 as const;
+
+export const SUPPORTED_CURRENCY = "PHP" as const;
+export type SupportedCurrency = typeof SUPPORTED_CURRENCY;
 
 export const SUPPORTED_PLAN_TYPES = ["1_MONTH", "6_MONTHS", "1_YEAR"] as const;
 export type SupportedPlanType = (typeof SUPPORTED_PLAN_TYPES)[number];
@@ -47,7 +51,7 @@ export type PaymentFinalizationEffectType =
 export type PaymentFinalizationFeeKnowledge = "UNKNOWN" | "KNOWN";
 
 // ============================================================================
-// CLOSED NOT_APPLICABLE REASON UNIONS (NO OPEN-ENDED STRINGS, NO UNSUPPORTED_PLAN)
+// CLOSED NOT_APPLICABLE REASON UNIONS (NO OPEN-ENDED STRINGS)
 // ============================================================================
 
 export type ProviderFeeNotApplicableReason = "ZERO_PROVIDER_FEE";
@@ -56,7 +60,8 @@ export type ReferralRewardNotApplicableReason =
   | "NO_REFERRAL_ATTRIBUTION"
   | "PROGRAM_DISABLED"
   | "ZERO_REWARD_CALCULATED"
-  | "NON_POSITIVE_AMOUNT";
+  | "NON_POSITIVE_AMOUNT"
+  | "REFERRAL_ALREADY_REWARDED";
 
 export type PartnerCommissionNotApplicableReason =
   | "NO_PARTNER_ATTRIBUTION"
@@ -70,13 +75,31 @@ export type TaxProvisionNotApplicableReason =
   | "ZERO_TAX_CALCULATED";
 
 // ============================================================================
-// DOMAIN ERROR HIERARCHY
+// CLOSED DOMAIN ERROR CODES & HIERARCHY
 // ============================================================================
 
-export class PaymentFinalizationPlanningError extends Error {
-  public readonly code: string;
+export type PaymentFinalizationErrorCode =
+  | "PLANNING_ERROR"
+  | "UNSUPPORTED_PLAN_TYPE"
+  | "INVALID_MONETARY_AMOUNT"
+  | "MISSING_AUTHORITATIVE_GROSS"
+  | "INVALID_OPERATION_KEY"
+  | "DUPLICATE_EFFECT_KEY"
+  | "INVALID_TIMESTAMP"
+  | "INVALID_CURRENCY"
+  | "INVALID_FEE_STATE"
+  | "USER_NOT_FOUND"
+  | "TRANSACTION_NOT_FOUND"
+  | "TRANSACTION_IDENTITY_MISMATCH"
+  | "EXISTING_REFERRAL_REWARD_CONFLICT"
+  | "EXISTING_PARTNER_COMMISSION_CONFLICT"
+  | "INVALID_RATE"
+  | "CANONICAL_SERIALIZATION_ERROR";
 
-  constructor(message: string, code: string = "PLANNING_ERROR") {
+export class PaymentFinalizationPlanningError extends Error {
+  public readonly code: PaymentFinalizationErrorCode;
+
+  constructor(message: string, code: PaymentFinalizationErrorCode = "PLANNING_ERROR") {
     super(message);
     this.name = "PaymentFinalizationPlanningError";
     this.code = code;
@@ -129,8 +152,57 @@ export class InvalidTimestampError extends PaymentFinalizationPlanningError {
   }
 }
 
+export class InvalidCurrencyError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "INVALID_CURRENCY");
+    this.name = "InvalidCurrencyError";
+  }
+}
+
+export class InvalidFeeStateError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "INVALID_FEE_STATE");
+    this.name = "InvalidFeeStateError";
+  }
+}
+
+export class UserNotFoundError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "USER_NOT_FOUND");
+    this.name = "UserNotFoundError";
+  }
+}
+
+export class TransactionNotFoundError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "TRANSACTION_NOT_FOUND");
+    this.name = "TransactionNotFoundError";
+  }
+}
+
+export class TransactionIdentityMismatchError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "TRANSACTION_IDENTITY_MISMATCH");
+    this.name = "TransactionIdentityMismatchError";
+  }
+}
+
+export class ExistingReferralRewardConflictError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "EXISTING_REFERRAL_REWARD_CONFLICT");
+    this.name = "ExistingReferralRewardConflictError";
+  }
+}
+
+export class ExistingPartnerCommissionConflictError extends PaymentFinalizationPlanningError {
+  constructor(message: string) {
+    super(message, "EXISTING_PARTNER_COMMISSION_CONFLICT");
+    this.name = "ExistingPartnerCommissionConflictError";
+  }
+}
+
 // ============================================================================
-// DISCRIMINATED INTENT UNIONS (IMMUTABLE SNAPSHOTS WITH CLOSED REASONS)
+// DISCRIMINATED INTENT UNIONS (COMPILED AGAINST CANONICAL ACCOUNT CATEGORIES)
 // ============================================================================
 
 export interface PaymentLedgerIntent {
@@ -140,8 +212,8 @@ export interface PaymentLedgerIntent {
   readonly amountCentavos: number;
   readonly userId: string;
   readonly planType: SupportedPlanType;
-  readonly debitCategory: "CASH_PAYMONGO";
-  readonly creditCategory: "SUBSCRIPTION_REVENUE";
+  readonly debitCategory: Extract<AccountCategory, "CASH_PAYMONGO">;
+  readonly creditCategory: Extract<AccountCategory, "REVENUE_PREMIUM">;
 }
 
 export interface ProviderFeeLedgerIntent {
@@ -151,8 +223,8 @@ export interface ProviderFeeLedgerIntent {
   readonly feeAmountCentavos: number | null;
   readonly status: "PENDING" | "AWAITING_DATA" | "NOT_APPLICABLE";
   readonly notApplicableReason?: ProviderFeeNotApplicableReason;
-  readonly debitCategory: "EXPENSE_PAYMENT_GATEWAY" | null;
-  readonly creditCategory: "CASH_PAYMONGO" | null;
+  readonly debitCategory: Extract<AccountCategory, "EXPENSE_PAYMENT_FEE"> | null;
+  readonly creditCategory: Extract<AccountCategory, "CASH_PAYMONGO"> | null;
 }
 
 export interface ReferralRewardIntent {
@@ -167,7 +239,7 @@ export interface ReferralRewardIntent {
   readonly rewardType: "PERCENTAGE" | "FIXED" | null;
   readonly rewardRateBasisPoints: number | null;
   readonly rewardAmountCentavos: number;
-  readonly currency: string;
+  readonly currency: "PHP";
   readonly holdingPeriodDays: number | null;
   readonly holdingUntil: string | null;
 }
@@ -192,7 +264,7 @@ export interface PartnerCommissionIntent {
   readonly calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_PRICE" | "FIXED_AMOUNT" | null;
   readonly baseAmountCentavos: number | null;
   readonly commissionAmountCentavos: number;
-  readonly currency: string;
+  readonly currency: "PHP";
   readonly campaignSource: string | null;
   readonly holdingPeriodDays: number | null;
   readonly holdingUntil: string | null;
@@ -205,8 +277,8 @@ export interface PartnerLiabilityLedgerIntent {
   readonly notApplicableReason?: PartnerLiabilityNotApplicableReason;
   readonly partnerId: string | null;
   readonly amountCentavos: number;
-  readonly debitCategory: "EXPENSE_PARTNER_COMMISSION" | null;
-  readonly creditCategory: "LIABILITY_PARTNER_PAYABLE" | null;
+  readonly debitCategory: Extract<AccountCategory, "EXPENSE_PARTNER"> | null;
+  readonly creditCategory: Extract<AccountCategory, "LIABILITY_PARTNER_PAYABLE"> | null;
 }
 
 export interface TaxProvisionIntent {
@@ -221,8 +293,8 @@ export interface TaxProvisionIntent {
   readonly taxableAmountCentavos: number;
   readonly taxRateBasisPoints: number | null;
   readonly taxAmountCentavos: number;
-  readonly debitCategory: "EXPENSE_TAX" | null;
-  readonly creditCategory: "LIABILITY_TAX_PAYABLE" | null;
+  readonly debitCategory: Extract<AccountCategory, "EXPENSE_TAX"> | null;
+  readonly creditCategory: Extract<AccountCategory, "LIABILITY_TAX_PAYABLE"> | null;
 }
 
 export interface ReconciliationIntent {
@@ -266,14 +338,20 @@ export interface PlannedManifest {
   readonly manifestRevision: 1;
   readonly transactionId: string;
   readonly checkoutSessionId: string;
-  readonly userId: string;
+  readonly userId: string; // Planner context identity (reaches User via Transaction.userId)
+  readonly providerPaymentId: string | null;
+  readonly providerPaidAt: string | null;
+  readonly source: PaymentFinalizationSource;
+  readonly origin: PaymentFinalizationOrigin;
   readonly planType: SupportedPlanType;
+  readonly currency: "PHP";
   readonly purchaseAmountCentavos: number;
   readonly feeKnowledge: PaymentFinalizationFeeKnowledge;
   readonly feeAmountCentavos: number | null;
-  readonly source: PaymentFinalizationSource;
-  readonly origin: PaymentFinalizationOrigin;
-  readonly currency: string;
+  readonly feeObservedAt: string | null;
+  readonly verifiedAt: string; // Canonical ISO UTC string
+  readonly entitlementBefore: string | null;
+  readonly entitlementAfter: string | null;
   readonly manifestHash: string;
   readonly effects: readonly PlannedEffect[];
 }
@@ -291,16 +369,23 @@ export interface FinalizationPlanningInput {
   readonly authoritativeGrossAmountCentavos?: number;
   readonly feeKnowledge: PaymentFinalizationFeeKnowledge;
   readonly feeAmountCentavos?: number | null;
+  readonly feeObservedAtIso?: string | null;
   readonly providerPaymentId?: string | null;
-  readonly providerPaidAt?: string | null;
+  readonly providerPaidAtIso?: string | null;
   readonly source: PaymentFinalizationSource;
   readonly origin?: PaymentFinalizationOrigin;
   readonly currency?: string;
-  readonly partnerCode?: string | null;
+  readonly partnerCode?: string | null; // Non-authoritative context only
   readonly campaignSource?: string | null;
   readonly paymentIntentId?: string | null;
   readonly receiptUrl?: string | null;
-  readonly referenceDate?: string | Date;
+  readonly verifiedAtIso: string; // REQUIRED non-null ISO-8601 UTC string
+}
+
+export interface TransactionIdentityForPlanning {
+  readonly id: string;
+  readonly userId: string;
+  readonly checkoutSessionId: string;
 }
 
 export interface UserRecordForPlanning {
@@ -312,12 +397,15 @@ export interface UserRecordForPlanning {
 export interface ReferralAttributionForPlanning {
   readonly referralId: string;
   readonly inviterId: string;
-  readonly alreadyRewarded: boolean;
   readonly programEnabled: boolean;
   readonly rewardType: "PERCENTAGE" | "FIXED";
   readonly rewardPercentage: number;
   readonly fixedRewardAmountCentavos: number;
   readonly holdingPeriodDays: number;
+  readonly existingReward: {
+    readonly id: string;
+    readonly transactionId: string;
+  } | null;
 }
 
 export type PartnerStatus =
@@ -338,7 +426,12 @@ export interface PartnerAttributionForPlanning {
   readonly fixedCommissionCentavos: number;
   readonly holdingPeriodDays: number;
   readonly defaultCampaignSource: string | null;
-  readonly alreadyCommissioned: boolean;
+}
+
+export interface PartnerCommissionRecordForPlanning {
+  readonly id: string;
+  readonly partnerId: string;
+  readonly transactionId: string;
 }
 
 export interface TaxConfigForPlanning {
@@ -351,12 +444,11 @@ export interface TaxConfigForPlanning {
 }
 
 export interface IFinalizationDataReader {
+  findTransactionIdentity(transactionId: string): Promise<TransactionIdentityForPlanning | null>;
   findUser(userId: string): Promise<UserRecordForPlanning | null>;
   findReferralAttribution(userId: string): Promise<ReferralAttributionForPlanning | null>;
-  findPartnerAttribution(
-    userId: string,
-    partnerCode?: string | null
-  ): Promise<PartnerAttributionForPlanning | null>;
+  findExistingPartnerCommission(transactionId: string): Promise<PartnerCommissionRecordForPlanning | null>;
+  findPartnerAttribution(userId: string): Promise<PartnerAttributionForPlanning | null>;
   findActiveTaxConfigs(referenceDate: Date): Promise<TaxConfigForPlanning[]>;
 }
 
@@ -373,6 +465,18 @@ export function validatePlanType(planType: string | null | undefined): Supported
     throw new UnsupportedPlanTypeError(trimmed);
   }
   return trimmed as SupportedPlanType;
+}
+
+export function validateCurrency(currency?: string | null): "PHP" {
+  if (currency === undefined || currency === null) {
+    return SUPPORTED_CURRENCY;
+  }
+  if (typeof currency !== "string" || currency.trim().toUpperCase() !== "PHP") {
+    throw new InvalidCurrencyError(
+      `Unsupported currency "${currency}". GovStudyX only supports "${SUPPORTED_CURRENCY}".`
+    );
+  }
+  return SUPPORTED_CURRENCY;
 }
 
 export function validateSafeCentavos(
@@ -417,7 +521,7 @@ export function rateToBasisPoints(ratePercent: number): number {
   return Math.round(ratePercent * 100);
 }
 
-// STRICT IDENTIFIER REGEX: Forbids ":" because ":" is the structural delimiter of operation keys
+// STRICT OPERATION KEY IDENTIFIER REGEX: Forbids ":" because ":" is the structural delimiter
 const IDENTIFIER_REGEX = /^[A-Za-z0-9_\-.]+$/;
 
 export function validateIdentifier(id: string | null | undefined, fieldName: string): string {
@@ -446,6 +550,34 @@ export function validateIdentifier(id: string | null | undefined, fieldName: str
 
 export function validateTransactionId(transactionId: string | null | undefined): string {
   return validateIdentifier(transactionId, "transactionId");
+}
+
+// GENERAL CONTEXT IDENTIFIERS (Allows standard provider format while preventing whitespace/empty)
+export function validateContextIdentifier(
+  id: string | null | undefined,
+  fieldName: string,
+  maxLength: number = 255
+): string {
+  if (!id || typeof id !== "string") {
+    throw new PaymentFinalizationPlanningError(
+      `${fieldName} must be a non-empty string.`,
+      "PLANNING_ERROR"
+    );
+  }
+  const trimmed = id.trim();
+  if (trimmed.length === 0) {
+    throw new PaymentFinalizationPlanningError(
+      `${fieldName} cannot be empty or whitespace only.`,
+      "PLANNING_ERROR"
+    );
+  }
+  if (trimmed.length > maxLength) {
+    throw new PaymentFinalizationPlanningError(
+      `${fieldName} exceeds maximum length of ${maxLength} characters.`,
+      "PLANNING_ERROR"
+    );
+  }
+  return trimmed;
 }
 
 const ISO_8601_UTC_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;

@@ -1,6 +1,6 @@
 // Relative Path: src/lib/payment/paymentFinalizationManifestService.ts
 /**
- * GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2)
+ * GovStudyX Durable Payment Finalization Recovery Engine (Phase 1 / Slice 2.1)
  *
  * Authoritative, deterministic, read-only Payment Finalization Manifest Planner.
  * Generates immutable financial intent manifests and cryptographic SHA-256 hashes.
@@ -12,6 +12,8 @@ import { prisma } from "@/lib/prisma";
 import {
   MANIFEST_VERSION,
   INTENT_VERSION,
+  SUPPORTED_CURRENCY,
+  SupportedPlanType,
   FinalizationPlanningInput,
   PlannedManifest,
   PlannedEffect,
@@ -24,14 +26,24 @@ import {
   ReconciliationIntent,
   PartnerCommissionNotApplicableReason,
   IFinalizationDataReader,
+  TransactionIdentityForPlanning,
   UserRecordForPlanning,
   ReferralAttributionForPlanning,
   PartnerAttributionForPlanning,
+  PartnerCommissionRecordForPlanning,
   TaxConfigForPlanning,
   MissingAuthoritativeGrossError,
   DuplicateEffectKeyError,
+  InvalidFeeStateError,
+  UserNotFoundError,
+  TransactionNotFoundError,
+  TransactionIdentityMismatchError,
+  ExistingReferralRewardConflictError,
+  ExistingPartnerCommissionConflictError,
   validatePlanType,
+  validateCurrency,
   validateTransactionId,
+  validateContextIdentifier,
   validateSafeCentavos,
   validateSafeRate,
   rateToBasisPoints,
@@ -47,6 +59,19 @@ import {
  * Contains ZERO mutating calls (no create, update, delete, upsert, executeRaw).
  */
 export class PrismaFinalizationDataReader implements IFinalizationDataReader {
+  async findTransactionIdentity(transactionId: string): Promise<TransactionIdentityForPlanning | null> {
+    const tx = await prisma.transaction.findUnique({
+      where: { id: transactionId },
+      select: { id: true, userId: true, checkoutSessionId: true },
+    });
+    if (!tx) return null;
+    return {
+      id: tx.id,
+      userId: tx.userId,
+      checkoutSessionId: tx.checkoutSessionId ?? "",
+    };
+  }
+
   async findUser(userId: string): Promise<UserRecordForPlanning | null> {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -90,51 +115,40 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
       ? Number(settingsMap.get("HOLDING_PERIOD_DAYS")) || 7
       : 7;
 
+    const existingReward = referral.reward
+      ? { id: referral.reward.id, transactionId: referral.reward.transactionId }
+      : null;
+
     return {
       referralId: referral.id,
       inviterId: referral.inviterId,
-      alreadyRewarded: referral.reward !== null,
       programEnabled,
       rewardType,
       rewardPercentage,
       fixedRewardAmountCentavos,
       holdingPeriodDays,
+      existingReward,
     };
   }
 
-  async findPartnerAttribution(
-    userId: string,
-    partnerCode?: string | null
-  ): Promise<PartnerAttributionForPlanning | null> {
+  async findExistingPartnerCommission(transactionId: string): Promise<PartnerCommissionRecordForPlanning | null> {
+    const commission = await prisma.partnerCommission.findUnique({
+      where: { transactionId },
+      select: { id: true, partnerId: true, transactionId: true },
+    });
+    if (!commission) return null;
+    return {
+      id: commission.id,
+      partnerId: commission.partnerId,
+      transactionId: commission.transactionId,
+    };
+  }
+
+  async findPartnerAttribution(userId: string): Promise<PartnerAttributionForPlanning | null> {
     const attribution = await prisma.partnerAttribution.findUnique({
       where: { referredUserId: userId },
       include: { partner: true },
     });
-
-    if (!attribution && partnerCode) {
-      const trimmed = partnerCode.trim();
-      const partner = await prisma.partner.findFirst({
-        where: {
-          OR: [
-            { code: { equals: trimmed, mode: "insensitive" } },
-            { slug: { equals: trimmed, mode: "insensitive" } },
-          ],
-        },
-      });
-      if (partner) {
-        return {
-          partnerId: partner.id,
-          partnerCode: partner.code,
-          status: partner.status,
-          commissionModel: partner.commissionModel,
-          commissionRate: partner.commissionRate,
-          fixedCommissionCentavos: partner.fixedCommissionCentavos ?? 0,
-          holdingPeriodDays: partner.holdingPeriodDays ?? 7,
-          defaultCampaignSource: null,
-          alreadyCommissioned: false,
-        };
-      }
-    }
 
     if (!attribution) return null;
 
@@ -147,7 +161,6 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
       fixedCommissionCentavos: attribution.partner.fixedCommissionCentavos ?? 0,
       holdingPeriodDays: attribution.partner.holdingPeriodDays ?? 7,
       defaultCampaignSource: attribution.campaignSource,
-      alreadyCommissioned: false,
     };
   }
 
@@ -188,10 +201,112 @@ export class PaymentFinalizationManifestService {
     reader: IFinalizationDataReader = PaymentFinalizationManifestService.defaultReader
   ): Promise<PlannedManifest> {
     const validatedTxId = validateTransactionId(input.transactionId);
+    const validatedCheckoutSessionId = validateContextIdentifier(
+      input.checkoutSessionId,
+      "checkoutSessionId"
+    );
+    const validatedUserId = validateContextIdentifier(input.userId, "userId");
     const validatedPlan = validatePlanType(input.planType);
+    const validatedCurrency = validateCurrency(input.currency);
 
-    // Validate external input timestamps before hashing material is assembled
-    validateIsoUtcTimestamp(input.providerPaidAt, "providerPaidAt", true);
+    // Mandatory authoritative verified timestamp (zero ambient wall-clock fallback)
+    const normalizedVerifiedAt = validateIsoUtcTimestamp(
+      input.verifiedAtIso,
+      "verifiedAtIso",
+      false
+    )!;
+    const verifiedAtDate = new Date(normalizedVerifiedAt);
+
+    // Optional provider payment timestamps (strictly normalized UTC strings when supplied)
+    const providerPaymentId = input.providerPaymentId
+      ? validateContextIdentifier(input.providerPaymentId, "providerPaymentId")
+      : null;
+    const providerPaidAt = validateIsoUtcTimestamp(
+      input.providerPaidAtIso,
+      "providerPaidAtIso",
+      true
+    );
+
+    // 🔒 1. BIND TRANSACTION IDENTITY TO DATABASE SOURCE OF TRUTH
+    const txIdentity = await reader.findTransactionIdentity(validatedTxId);
+    if (!txIdentity) {
+      throw new TransactionNotFoundError(
+        `Transaction with ID "${validatedTxId}" not found in database.`
+      );
+    }
+    if (txIdentity.id !== validatedTxId) {
+      throw new TransactionIdentityMismatchError(
+        `Transaction ID mismatch: expected "${validatedTxId}", found "${txIdentity.id}".`
+      );
+    }
+    if (txIdentity.userId !== validatedUserId) {
+      throw new TransactionIdentityMismatchError(
+        `Transaction ownership mismatch: requested userId "${validatedUserId}" does not match transaction record userId "${txIdentity.userId}".`
+      );
+    }
+    if (txIdentity.checkoutSessionId !== validatedCheckoutSessionId) {
+      throw new TransactionIdentityMismatchError(
+        `Transaction checkoutSessionId mismatch: requested "${validatedCheckoutSessionId}" does not match transaction record "${txIdentity.checkoutSessionId}".`
+      );
+    }
+
+    // 🔒 2. USER & ENTITLEMENT SNAPSHOT
+    const user = await reader.findUser(validatedUserId);
+    if (!user) {
+      throw new UserNotFoundError(`User with ID "${validatedUserId}" not found in database.`);
+    }
+
+    const entitlementBefore = user.paidUntil
+      ? validateIsoUtcTimestamp(user.paidUntil, "user.paidUntil", true)
+      : null;
+
+    const baseEntitlementDate =
+      entitlementBefore && new Date(entitlementBefore).getTime() > verifiedAtDate.getTime()
+        ? new Date(entitlementBefore)
+        : new Date(verifiedAtDate);
+
+    const durationDays =
+      validatedPlan === "1_MONTH" ? 30 : validatedPlan === "6_MONTHS" ? 180 : 365;
+
+    const entitlementAfterDate = new Date(baseEntitlementDate);
+    entitlementAfterDate.setDate(entitlementAfterDate.getDate() + durationDays);
+    const entitlementAfter = entitlementAfterDate.toISOString();
+
+    // 🔒 3. STRICT FEE KNOWLEDGE CONTRACT
+    let feeAmountCentavos: number | null = null;
+    let feeObservedAt: string | null = null;
+
+    if (input.feeKnowledge === "UNKNOWN") {
+      if (input.feeAmountCentavos !== undefined && input.feeAmountCentavos !== null) {
+        throw new InvalidFeeStateError(
+          "feeAmountCentavos must not be supplied when feeKnowledge is UNKNOWN."
+        );
+      }
+      if (input.feeObservedAtIso !== undefined && input.feeObservedAtIso !== null) {
+        throw new InvalidFeeStateError(
+          "feeObservedAtIso must not be supplied when feeKnowledge is UNKNOWN."
+        );
+      }
+      feeAmountCentavos = null;
+      feeObservedAt = null;
+    } else {
+      // KNOWN fee knowledge requires explicit feeAmountCentavos
+      if (input.feeAmountCentavos === undefined || input.feeAmountCentavos === null) {
+        throw new InvalidFeeStateError(
+          "feeAmountCentavos must be explicitly provided when feeKnowledge is KNOWN."
+        );
+      }
+      feeAmountCentavos = validateSafeCentavos(
+        input.feeAmountCentavos,
+        "feeAmountCentavos",
+        true
+      );
+      feeObservedAt = validateIsoUtcTimestamp(
+        input.feeObservedAtIso,
+        "feeObservedAtIso",
+        true
+      );
+    }
 
     const customerPaymentCentavos = validateSafeCentavos(
       input.purchaseAmountCentavos,
@@ -199,12 +314,52 @@ export class PaymentFinalizationManifestService {
       false
     );
 
-    const paymentLedgerEffect = this.planPaymentLedgerEffect(input);
-    const providerFeeLedgerEffect = this.planProviderFeeLedgerEffect(input);
-    const referralRewardEffect = await this.planReferralRewardEffect(input, reader);
-    const partnerEffects = await this.planPartnerCommissionEffects(input, reader);
-    const taxEffects = await this.planTaxProvisionEffects(input, reader);
-    const reconciliationEffect = this.planReconciliationEffect(input);
+    // 🔒 4. PLAN ALL DOWNSTREAM FINANCIAL EFFECTS
+    const paymentLedgerEffect = this.planPaymentLedgerEffect(
+      validatedTxId,
+      validatedUserId,
+      validatedPlan,
+      customerPaymentCentavos
+    );
+
+    const providerFeeLedgerEffect = this.planProviderFeeLedgerEffect(
+      validatedTxId,
+      input.feeKnowledge,
+      feeAmountCentavos
+    );
+
+    const referralRewardEffect = await this.planReferralRewardEffect(
+      validatedTxId,
+      validatedUserId,
+      customerPaymentCentavos,
+      normalizedVerifiedAt,
+      reader
+    );
+
+    const partnerEffects = await this.planPartnerCommissionEffects(
+      validatedTxId,
+      validatedUserId,
+      customerPaymentCentavos,
+      input.authoritativeGrossAmountCentavos,
+      input.campaignSource,
+      normalizedVerifiedAt,
+      reader
+    );
+
+    const taxEffects = await this.planTaxProvisionEffects(
+      validatedTxId,
+      customerPaymentCentavos,
+      input.authoritativeGrossAmountCentavos,
+      verifiedAtDate,
+      reader
+    );
+
+    const reconciliationEffect = this.planReconciliationEffect(
+      validatedTxId,
+      customerPaymentCentavos,
+      input.feeKnowledge,
+      feeAmountCentavos
+    );
 
     const allEffects: readonly PlannedEffect[] = [
       paymentLedgerEffect,
@@ -236,29 +391,32 @@ export class PaymentFinalizationManifestService {
       seenOperationKeys.add(effect.operationKey);
     }
 
-    const feeAmountCentavos =
-      input.feeKnowledge === "KNOWN"
-        ? validateSafeCentavos(input.feeAmountCentavos ?? 0, "feeAmountCentavos", true)
-        : null;
-
+    // 🔒 5. COMPLETE ROOT SNAPSHOT & CANONICAL MANIFEST HASH
     const manifestSummary = {
       manifestVersion: MANIFEST_VERSION,
       manifestRevision: 1,
       transactionId: validatedTxId,
-      checkoutSessionId: input.checkoutSessionId.trim(),
-      userId: input.userId.trim(),
+      checkoutSessionId: validatedCheckoutSessionId,
+      userId: validatedUserId,
+      providerPaymentId,
+      providerPaidAt,
+      source: input.source,
+      origin: input.origin ?? "NEW_PAYMENT",
       planType: validatedPlan,
+      currency: validatedCurrency,
       purchaseAmountCentavos: customerPaymentCentavos,
       feeKnowledge: input.feeKnowledge,
       feeAmountCentavos,
-      source: input.source,
-      origin: input.origin ?? "NEW_PAYMENT",
-      currency: input.currency ?? "PHP",
+      feeObservedAt,
+      verifiedAt: normalizedVerifiedAt,
+      entitlementBefore,
+      entitlementAfter,
       effects: allEffects.map((e) => ({
         effectType: e.effectType,
         effectKey: e.effectKey,
         operationKey: e.operationKey,
         status: e.status,
+        intentVersion: e.intentVersion,
         intentHash: e.intentHash,
       })),
     };
@@ -269,45 +427,48 @@ export class PaymentFinalizationManifestService {
       manifestVersion: MANIFEST_VERSION,
       manifestRevision: 1,
       transactionId: validatedTxId,
-      checkoutSessionId: input.checkoutSessionId.trim(),
-      userId: input.userId.trim(),
+      checkoutSessionId: validatedCheckoutSessionId,
+      userId: validatedUserId,
+      providerPaymentId,
+      providerPaidAt,
+      source: input.source,
+      origin: input.origin ?? "NEW_PAYMENT",
       planType: validatedPlan,
+      currency: validatedCurrency,
       purchaseAmountCentavos: customerPaymentCentavos,
       feeKnowledge: input.feeKnowledge,
       feeAmountCentavos,
-      source: input.source,
-      origin: input.origin ?? "NEW_PAYMENT",
-      currency: input.currency ?? "PHP",
+      feeObservedAt,
+      verifiedAt: normalizedVerifiedAt,
+      entitlementBefore,
+      entitlementAfter,
       manifestHash,
       effects: allEffects,
     };
   }
 
   /**
-   * Plans the primary double-entry payment ledger entry (Debit CASH_PAYMONGO, Credit SUBSCRIPTION_REVENUE).
+   * Plans the primary double-entry payment ledger entry (Debit CASH_PAYMONGO, Credit REVENUE_PREMIUM).
    * Operation Key: pfin:<transactionId>:payment
    */
-  static planPaymentLedgerEffect(input: FinalizationPlanningInput): PlannedEffect {
-    const validatedTxId = validateTransactionId(input.transactionId);
-    const validatedPlan = validatePlanType(input.planType);
-    const amountCentavos = validateSafeCentavos(
-      input.purchaseAmountCentavos,
-      "purchaseAmountCentavos",
-      false
-    );
-
+  static planPaymentLedgerEffect(
+    transactionId: string,
+    userId: string,
+    planType: SupportedPlanType,
+    amountCentavos: number
+  ): PlannedEffect {
     const effectKey = "payment";
-    const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, { kind: "PAYMENT" });
+    const operationKey = buildPaymentFinalizationOperationKey(transactionId, { kind: "PAYMENT" });
 
     const intent: PaymentLedgerIntent = {
       effectType: "PAYMENT_LEDGER",
       intentVersion: INTENT_VERSION,
       status: "PENDING",
       amountCentavos,
-      userId: input.userId.trim(),
-      planType: validatedPlan,
+      userId,
+      planType,
       debitCategory: "CASH_PAYMONGO",
-      creditCategory: "SUBSCRIPTION_REVENUE",
+      creditCategory: "REVENUE_PREMIUM",
     };
 
     const intentHash = computeSha256Hash(canonicalizeJson(intent));
@@ -324,15 +485,18 @@ export class PaymentFinalizationManifestService {
   }
 
   /**
-   * Plans provider gateway fee entry (Debit EXPENSE_PAYMENT_GATEWAY, Credit CASH_PAYMONGO).
+   * Plans provider gateway fee entry (Debit EXPENSE_PAYMENT_FEE, Credit CASH_PAYMONGO).
    * Operation Key: pfin:<transactionId>:fee
    */
-  static planProviderFeeLedgerEffect(input: FinalizationPlanningInput): PlannedEffect {
-    const validatedTxId = validateTransactionId(input.transactionId);
+  static planProviderFeeLedgerEffect(
+    transactionId: string,
+    feeKnowledge: "UNKNOWN" | "KNOWN",
+    feeAmountCentavos: number | null
+  ): PlannedEffect {
     const effectKey = "fee";
-    const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, { kind: "FEE" });
+    const operationKey = buildPaymentFinalizationOperationKey(transactionId, { kind: "FEE" });
 
-    if (input.feeKnowledge === "UNKNOWN") {
+    if (feeKnowledge === "UNKNOWN") {
       const intent: ProviderFeeLedgerIntent = {
         effectType: "PROVIDER_FEE_LEDGER",
         intentVersion: INTENT_VERSION,
@@ -354,13 +518,7 @@ export class PaymentFinalizationManifestService {
       };
     }
 
-    const feeCentavos = validateSafeCentavos(
-      input.feeAmountCentavos ?? 0,
-      "feeAmountCentavos",
-      true
-    );
-
-    if (feeCentavos === 0) {
+    if (feeAmountCentavos === 0) {
       const intent: ProviderFeeLedgerIntent = {
         effectType: "PROVIDER_FEE_LEDGER",
         intentVersion: INTENT_VERSION,
@@ -387,9 +545,9 @@ export class PaymentFinalizationManifestService {
       effectType: "PROVIDER_FEE_LEDGER",
       intentVersion: INTENT_VERSION,
       feeKnowledge: "KNOWN",
-      feeAmountCentavos: feeCentavos,
+      feeAmountCentavos,
       status: "PENDING",
-      debitCategory: "EXPENSE_PAYMENT_GATEWAY",
+      debitCategory: "EXPENSE_PAYMENT_FEE",
       creditCategory: "CASH_PAYMONGO",
     };
     const intentHash = computeSha256Hash(canonicalizeJson(intent));
@@ -408,22 +566,18 @@ export class PaymentFinalizationManifestService {
   /**
    * Plans student referral reward effect.
    * Operation Key: pfin:<transactionId>:referral
-   * Preserves exact millisecond-based holding calculation semantics.
    */
   static async planReferralRewardEffect(
-    input: FinalizationPlanningInput,
+    transactionId: string,
+    userId: string,
+    customerPaymentCentavos: number,
+    verifiedAtIso: string,
     reader: IFinalizationDataReader
   ): Promise<PlannedEffect> {
-    const validatedTxId = validateTransactionId(input.transactionId);
     const effectKey = "referral";
-    const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, { kind: "REFERRAL" });
-    const customerPaymentCentavos = validateSafeCentavos(
-      input.purchaseAmountCentavos,
-      "purchaseAmountCentavos",
-      false
-    );
+    const operationKey = buildPaymentFinalizationOperationKey(transactionId, { kind: "REFERRAL" });
 
-    const attribution = await reader.findReferralAttribution(input.userId);
+    const attribution = await reader.findReferralAttribution(userId);
 
     if (!attribution) {
       const intent: ReferralRewardIntent = {
@@ -433,12 +587,12 @@ export class PaymentFinalizationManifestService {
         notApplicableReason: "NO_REFERRAL_ATTRIBUTION",
         referralId: null,
         inviterId: null,
-        referredUserId: input.userId.trim(),
+        referredUserId: userId,
         purchaseAmountCentavos: customerPaymentCentavos,
         rewardType: null,
         rewardRateBasisPoints: null,
         rewardAmountCentavos: 0,
-        currency: input.currency ?? "PHP",
+        currency: SUPPORTED_CURRENCY,
         holdingPeriodDays: null,
         holdingUntil: null,
       };
@@ -454,6 +608,44 @@ export class PaymentFinalizationManifestService {
       };
     }
 
+    // Check existing reward state machine
+    if (attribution.existingReward !== null) {
+      if (attribution.existingReward.transactionId === transactionId) {
+        throw new ExistingReferralRewardConflictError(
+          `A ReferralReward already exists for this transaction (Reward ID: "${attribution.existingReward.id}").`
+        );
+      } else {
+        // Referral was already rewarded on an earlier transaction (1 reward per referral lifetime)
+        const intent: ReferralRewardIntent = {
+          effectType: "REFERRAL_REWARD",
+          intentVersion: INTENT_VERSION,
+          status: "NOT_APPLICABLE",
+          notApplicableReason: "REFERRAL_ALREADY_REWARDED",
+          referralId: attribution.referralId,
+          inviterId: attribution.inviterId,
+          referredUserId: userId,
+          purchaseAmountCentavos: customerPaymentCentavos,
+          rewardType: attribution.rewardType,
+          rewardRateBasisPoints: rateToBasisPoints(attribution.rewardPercentage),
+          rewardAmountCentavos: 0,
+          currency: SUPPORTED_CURRENCY,
+          holdingPeriodDays: attribution.holdingPeriodDays,
+          holdingUntil: null,
+        };
+        const intentHash = computeSha256Hash(canonicalizeJson(intent));
+        return {
+          effectType: "REFERRAL_REWARD",
+          effectKey,
+          operationKey,
+          status: "NOT_APPLICABLE",
+          intentVersion: INTENT_VERSION,
+          intent,
+          intentHash,
+          referralId: attribution.referralId,
+        };
+      }
+    }
+
     if (!attribution.programEnabled) {
       const intent: ReferralRewardIntent = {
         effectType: "REFERRAL_REWARD",
@@ -462,12 +654,12 @@ export class PaymentFinalizationManifestService {
         notApplicableReason: "PROGRAM_DISABLED",
         referralId: attribution.referralId,
         inviterId: attribution.inviterId,
-        referredUserId: input.userId.trim(),
+        referredUserId: userId,
         purchaseAmountCentavos: customerPaymentCentavos,
         rewardType: attribution.rewardType,
         rewardRateBasisPoints: rateToBasisPoints(attribution.rewardPercentage),
         rewardAmountCentavos: 0,
-        currency: input.currency ?? "PHP",
+        currency: SUPPORTED_CURRENCY,
         holdingPeriodDays: attribution.holdingPeriodDays,
         holdingUntil: null,
       };
@@ -508,12 +700,12 @@ export class PaymentFinalizationManifestService {
         notApplicableReason: "ZERO_REWARD_CALCULATED",
         referralId: attribution.referralId,
         inviterId: attribution.inviterId,
-        referredUserId: input.userId.trim(),
+        referredUserId: userId,
         purchaseAmountCentavos: customerPaymentCentavos,
         rewardType: attribution.rewardType,
         rewardRateBasisPoints,
         rewardAmountCentavos: 0,
-        currency: input.currency ?? "PHP",
+        currency: SUPPORTED_CURRENCY,
         holdingPeriodDays: attribution.holdingPeriodDays,
         holdingUntil: null,
       };
@@ -530,18 +722,9 @@ export class PaymentFinalizationManifestService {
       };
     }
 
-    // Preserve exact millisecond-based holding calculation semantics from ReferralService
-    const validatedRefIso =
-      typeof input.referenceDate === "string"
-        ? validateIsoUtcTimestamp(input.referenceDate, "referenceDate", false)!
-        : input.referenceDate instanceof Date
-        ? input.referenceDate.toISOString()
-        : new Date().toISOString();
-
-    const refDate = new Date(validatedRefIso);
-
+    const verifiedDate = new Date(verifiedAtIso);
     const holdingUntilDate = new Date(
-      refDate.getTime() + attribution.holdingPeriodDays * 24 * 60 * 60 * 1000
+      verifiedDate.getTime() + attribution.holdingPeriodDays * 24 * 60 * 60 * 1000
     );
 
     const intent: ReferralRewardIntent = {
@@ -550,12 +733,12 @@ export class PaymentFinalizationManifestService {
       status: "PENDING",
       referralId: attribution.referralId,
       inviterId: attribution.inviterId,
-      referredUserId: input.userId.trim(),
+      referredUserId: userId,
       purchaseAmountCentavos: customerPaymentCentavos,
       rewardType: attribution.rewardType,
       rewardRateBasisPoints,
       rewardAmountCentavos: calculatedRewardCentavos,
-      currency: input.currency ?? "PHP",
+      currency: SUPPORTED_CURRENCY,
       holdingPeriodDays: attribution.holdingPeriodDays,
       holdingUntil: holdingUntilDate.toISOString(),
     };
@@ -581,26 +764,32 @@ export class PaymentFinalizationManifestService {
    *   Liability:  pfin:<transactionId>:partner-liability
    */
   static async planPartnerCommissionEffects(
-    input: FinalizationPlanningInput,
+    transactionId: string,
+    userId: string,
+    customerPaymentCentavos: number,
+    authoritativeGrossAmountCentavos: number | undefined,
+    campaignSource: string | null | undefined,
+    verifiedAtIso: string,
     reader: IFinalizationDataReader
   ): Promise<PlannedEffect[]> {
-    const validatedTxId = validateTransactionId(input.transactionId);
     const commissionEffectKey = "partner-commission";
     const liabilityEffectKey = "partner-liability";
-    const commissionOpKey = buildPaymentFinalizationOperationKey(validatedTxId, {
+    const commissionOpKey = buildPaymentFinalizationOperationKey(transactionId, {
       kind: "PARTNER_COMMISSION",
     });
-    const liabilityOpKey = buildPaymentFinalizationOperationKey(validatedTxId, {
+    const liabilityOpKey = buildPaymentFinalizationOperationKey(transactionId, {
       kind: "PARTNER_LIABILITY",
     });
 
-    const customerPaymentCentavos = validateSafeCentavos(
-      input.purchaseAmountCentavos,
-      "purchaseAmountCentavos",
-      false
-    );
+    // 🔒 Check existing partner commission on THIS transaction
+    const existingCommission = await reader.findExistingPartnerCommission(transactionId);
+    if (existingCommission !== null) {
+      throw new ExistingPartnerCommissionConflictError(
+        `A PartnerCommission already exists for this transaction (Commission ID: "${existingCommission.id}").`
+      );
+    }
 
-    const attribution = await reader.findPartnerAttribution(input.userId, input.partnerCode);
+    const attribution = await reader.findPartnerAttribution(userId);
 
     if (!attribution || attribution.status !== "ACTIVE") {
       const notApplicableReason: PartnerCommissionNotApplicableReason = !attribution
@@ -619,8 +808,8 @@ export class PaymentFinalizationManifestService {
         calculationBasis: null,
         baseAmountCentavos: null,
         commissionAmountCentavos: 0,
-        currency: input.currency ?? "PHP",
-        campaignSource: input.campaignSource ?? attribution?.defaultCampaignSource ?? null,
+        currency: SUPPORTED_CURRENCY,
+        campaignSource: campaignSource ?? attribution?.defaultCampaignSource ?? null,
         holdingPeriodDays: attribution?.holdingPeriodDays ?? null,
         holdingUntil: null,
       };
@@ -668,15 +857,15 @@ export class PaymentFinalizationManifestService {
 
     if (attribution.commissionModel === "PERCENTAGE_OF_GROSS") {
       if (
-        input.authoritativeGrossAmountCentavos === undefined ||
-        input.authoritativeGrossAmountCentavos === null
+        authoritativeGrossAmountCentavos === undefined ||
+        authoritativeGrossAmountCentavos === null
       ) {
         throw new MissingAuthoritativeGrossError(
           "authoritativeGrossAmountCentavos is required for PERCENTAGE_OF_GROSS partner commission model."
         );
       }
       const grossCentavos = validateSafeCentavos(
-        input.authoritativeGrossAmountCentavos,
+        authoritativeGrossAmountCentavos,
         "authoritativeGrossAmountCentavos",
         false
       );
@@ -695,14 +884,14 @@ export class PaymentFinalizationManifestService {
         true
       );
     } else {
-      // Default / PERCENTAGE_OF_CUSTOMER_PAYMENT / PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS
+      // Default: PERCENTAGE_OF_CUSTOMER_PAYMENT / PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS
       calculationBasis = "CUSTOMER_PAYMENT";
       baseAmountCentavos = customerPaymentCentavos;
       commissionAmountCentavos = Math.round((customerPaymentCentavos * safeRate) / 100);
     }
 
     const effectiveCampaignSource =
-      input.campaignSource ?? attribution.defaultCampaignSource ?? "direct";
+      campaignSource ?? attribution.defaultCampaignSource ?? "direct";
 
     if (commissionAmountCentavos <= 0) {
       const commIntent: PartnerCommissionIntent = {
@@ -717,7 +906,7 @@ export class PaymentFinalizationManifestService {
         calculationBasis,
         baseAmountCentavos,
         commissionAmountCentavos: 0,
-        currency: input.currency ?? "PHP",
+        currency: SUPPORTED_CURRENCY,
         campaignSource: effectiveCampaignSource,
         holdingPeriodDays: attribution.holdingPeriodDays,
         holdingUntil: null,
@@ -758,16 +947,8 @@ export class PaymentFinalizationManifestService {
       ];
     }
 
-    // Preserve exact calendar-day holding date semantics from PartnerService
-    const validatedRefIso =
-      typeof input.referenceDate === "string"
-        ? validateIsoUtcTimestamp(input.referenceDate, "referenceDate", false)!
-        : input.referenceDate instanceof Date
-        ? input.referenceDate.toISOString()
-        : new Date().toISOString();
-
-    const refDate = new Date(validatedRefIso);
-    const partnerHoldingDate = new Date(refDate);
+    const verifiedDate = new Date(verifiedAtIso);
+    const partnerHoldingDate = new Date(verifiedDate);
     partnerHoldingDate.setDate(partnerHoldingDate.getDate() + (attribution.holdingPeriodDays || 7));
 
     const commIntent: PartnerCommissionIntent = {
@@ -781,7 +962,7 @@ export class PaymentFinalizationManifestService {
       calculationBasis,
       baseAmountCentavos,
       commissionAmountCentavos,
-      currency: input.currency ?? "PHP",
+      currency: SUPPORTED_CURRENCY,
       campaignSource: effectiveCampaignSource,
       holdingPeriodDays: attribution.holdingPeriodDays,
       holdingUntil: partnerHoldingDate.toISOString(),
@@ -793,7 +974,7 @@ export class PaymentFinalizationManifestService {
       status: "PENDING",
       partnerId: attribution.partnerId,
       amountCentavos: commissionAmountCentavos,
-      debitCategory: "EXPENSE_PARTNER_COMMISSION",
+      debitCategory: "EXPENSE_PARTNER",
       creditCategory: "LIABILITY_PARTNER_PAYABLE",
     };
 
@@ -828,29 +1009,17 @@ export class PaymentFinalizationManifestService {
    *   Zero taxes: pfin:<transactionId>:tax:none
    */
   static async planTaxProvisionEffects(
-    input: FinalizationPlanningInput,
+    transactionId: string,
+    customerPaymentCentavos: number,
+    authoritativeGrossAmountCentavos: number | undefined,
+    verifiedAtDate: Date,
     reader: IFinalizationDataReader
   ): Promise<PlannedEffect[]> {
-    const validatedTxId = validateTransactionId(input.transactionId);
-    const customerPaymentCentavos = validateSafeCentavos(
-      input.purchaseAmountCentavos,
-      "purchaseAmountCentavos",
-      false
-    );
-
-    const validatedRefIso =
-      typeof input.referenceDate === "string"
-        ? validateIsoUtcTimestamp(input.referenceDate, "referenceDate", false)!
-        : input.referenceDate instanceof Date
-        ? input.referenceDate.toISOString()
-        : new Date().toISOString();
-
-    const refDate = new Date(validatedRefIso);
-    const activeTaxes = await reader.findActiveTaxConfigs(refDate);
+    const activeTaxes = await reader.findActiveTaxConfigs(verifiedAtDate);
 
     if (!activeTaxes.length) {
       const effectKey = "tax:none";
-      const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, {
+      const operationKey = buildPaymentFinalizationOperationKey(transactionId, {
         kind: "TAX_NONE",
       });
       const intent: TaxProvisionIntent = {
@@ -886,7 +1055,7 @@ export class PaymentFinalizationManifestService {
 
     for (const tax of activeTaxes) {
       const effectKey = `tax:${tax.id}`;
-      const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, {
+      const operationKey = buildPaymentFinalizationOperationKey(transactionId, {
         kind: "TAX",
         taxConfigId: tax.id,
       });
@@ -897,15 +1066,15 @@ export class PaymentFinalizationManifestService {
       if (tax.calculationBasis === "GROSS_SALE") {
         calculationBasis = "GROSS_SALE";
         if (
-          input.authoritativeGrossAmountCentavos === undefined ||
-          input.authoritativeGrossAmountCentavos === null
+          authoritativeGrossAmountCentavos === undefined ||
+          authoritativeGrossAmountCentavos === null
         ) {
           throw new MissingAuthoritativeGrossError(
             `authoritativeGrossAmountCentavos is required for GROSS_SALE tax policy "${tax.name}".`
           );
         }
         taxableAmountCentavos = validateSafeCentavos(
-          input.authoritativeGrossAmountCentavos,
+          authoritativeGrossAmountCentavos,
           "authoritativeGrossAmountCentavos",
           false
         );
@@ -989,22 +1158,16 @@ export class PaymentFinalizationManifestService {
    * Plans the internal transaction reconciliation effect.
    * Operation Key: pfin:<transactionId>:reconciliation
    */
-  static planReconciliationEffect(input: FinalizationPlanningInput): PlannedEffect {
-    const validatedTxId = validateTransactionId(input.transactionId);
+  static planReconciliationEffect(
+    transactionId: string,
+    expectedPaymentCentavos: number,
+    feeKnowledge: "UNKNOWN" | "KNOWN",
+    expectedFeeCentavos: number | null
+  ): PlannedEffect {
     const effectKey = "reconciliation";
-    const operationKey = buildPaymentFinalizationOperationKey(validatedTxId, {
+    const operationKey = buildPaymentFinalizationOperationKey(transactionId, {
       kind: "RECONCILIATION",
     });
-    const expectedPaymentCentavos = validateSafeCentavos(
-      input.purchaseAmountCentavos,
-      "purchaseAmountCentavos",
-      false
-    );
-
-    const expectedFeeCentavos =
-      input.feeKnowledge === "KNOWN"
-        ? validateSafeCentavos(input.feeAmountCentavos ?? 0, "feeAmountCentavos", true)
-        : null;
 
     const intent: ReconciliationIntent = {
       effectType: "RECONCILIATION",
@@ -1012,7 +1175,7 @@ export class PaymentFinalizationManifestService {
       status: "PENDING",
       expectedPaymentCentavos,
       expectedFeeCentavos,
-      feeKnowledge: input.feeKnowledge,
+      feeKnowledge,
       sourceType: "INTERNAL_TRANSACTION",
     };
 
