@@ -1417,7 +1417,15 @@ async function runSuite(): Promise<void> {
     check(!serviceCode.includes("nodemailer"), "zero mailer imports in service");
     check(!serviceCode.includes("qualifyPartnerPayment"), "zero qualifyPartnerPayment calls in service");
 
-    const excludedPaths = new Set([servicePath, testPath]);
+    const taxProvisionTestPath = path.resolve(
+      process.cwd(),
+      "src/scripts/test-idempotent-tax-provision.ts"
+    );
+    const excludedPaths = new Set([
+      servicePath,
+      testPath,
+      taxProvisionTestPath,
+    ]);
     const unexpectedConsumers = listSourceFiles(path.resolve(process.cwd(), "src"))
       .filter((sourcePath) => !excludedPaths.has(sourcePath))
       .filter((sourcePath) => {
