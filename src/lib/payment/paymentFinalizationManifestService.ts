@@ -128,6 +128,32 @@ function validateHoldingPeriodDays(value: number): number {
   return value;
 }
 
+function validatePartnerHoldingPeriodDays(value: number): number {
+  if (!Number.isFinite(value) || !Number.isSafeInteger(value) || value < 0) {
+    throw new PaymentFinalizationPlanningError(
+      "Partner holding period setting is invalid.",
+      "PLANNING_ERROR"
+    );
+  }
+
+  return value;
+}
+
+function validateFixedCommissionCentavos(value: number): number {
+  if (
+    !Number.isFinite(value) ||
+    !Number.isSafeInteger(value) ||
+    value < 0 ||
+    value > POSTGRESQL_INTEGER_MAX
+  ) {
+    throw new InvalidMonetaryAmountError(
+      "Partner fixed commission amount setting is invalid."
+    );
+  }
+
+  return value;
+}
+
 export function parseReferralPlanningConfig(
   settings: readonly { readonly key: string; readonly value: string }[]
 ): ReferralPlanningConfig {
@@ -969,13 +995,13 @@ export class PaymentFinalizationManifestService {
         partnerId: attribution?.partnerId ?? null,
         partnerCode: attribution?.partnerCode ?? null,
         commissionModel: attribution?.commissionModel ?? null,
-        commissionRateBasisPoints: attribution ? rateToBasisPoints(attribution.commissionRate) : null,
+        commissionRateBasisPoints: null,
         calculationBasis: null,
         baseAmountCentavos: null,
         commissionAmountCentavos: 0,
         currency: SUPPORTED_CURRENCY,
         campaignSource: campaignSource ?? attribution?.defaultCampaignSource ?? null,
-        holdingPeriodDays: attribution?.holdingPeriodDays ?? null,
+        holdingPeriodDays: null,
         holdingUntil: null,
       };
 
@@ -1014,13 +1040,34 @@ export class PaymentFinalizationManifestService {
       ];
     }
 
-    let calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_PRICE" | "FIXED_AMOUNT" = "CUSTOMER_PAYMENT";
-    let baseAmountCentavos: number | null = customerPaymentCentavos;
+    // 🔒 1. CLASSIFY ACTIVE MODEL BEFORE HOLDING VALIDATION (Fail closed immediately on unsupported models)
+    if (
+      attribution.commissionModel !== "PERCENTAGE_OF_CUSTOMER_PAYMENT" &&
+      attribution.commissionModel !== "PERCENTAGE_OF_GROSS" &&
+      attribution.commissionModel !== "FIXED_PER_PURCHASE"
+    ) {
+      throw new PaymentFinalizationPlanningError(
+        `Unsupported partner commission model: "${attribution.commissionModel}".`,
+        "PLANNING_ERROR"
+      );
+    }
+
+    // 🔒 2. VALIDATE HOLDING PERIOD FOR SUPPORTED ACTIVE MODELS
+    const normalizedHoldingPeriodDays = validatePartnerHoldingPeriodDays(
+      attribution.holdingPeriodDays
+    );
+
+    // 🔒 3. MODEL-SPECIFIC FINANCIAL INPUT VALIDATION & CALCULATION
+    let calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_PRICE" | "FIXED_AMOUNT";
+    let baseAmountCentavos: number | null;
     let commissionAmountCentavos = 0;
-    const safeRate = validateSafeRate(attribution.commissionRate, "commissionRate");
-    const rateBps = rateToBasisPoints(safeRate);
+    let effectiveRateBps: number;
 
     if (attribution.commissionModel === "PERCENTAGE_OF_GROSS") {
+      const safeRate = validateSafeRate(attribution.commissionRate, "commissionRate");
+      const rateBps = rateToBasisPoints(safeRate);
+      const canonicalPercentage = rateBps / 100;
+
       if (
         authoritativeGrossAmountCentavos === undefined ||
         authoritativeGrossAmountCentavos === null
@@ -1036,23 +1083,25 @@ export class PaymentFinalizationManifestService {
       );
       calculationBasis = "GROSS_PRICE";
       baseAmountCentavos = grossCentavos;
-      commissionAmountCentavos = Math.round((grossCentavos * safeRate) / 100);
-    } else if (
-      attribution.commissionModel === "FIXED_PER_PURCHASE" ||
-      attribution.commissionModel === "FIXED_PER_REFERRAL"
-    ) {
-      calculationBasis = "FIXED_AMOUNT";
-      baseAmountCentavos = null;
-      commissionAmountCentavos = validateSafeCentavos(
-        attribution.fixedCommissionCentavos,
-        "fixedCommissionCentavos",
-        true
-      );
-    } else {
-      // Default: PERCENTAGE_OF_CUSTOMER_PAYMENT / PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS
+      commissionAmountCentavos = Math.round((grossCentavos * canonicalPercentage) / 100);
+      effectiveRateBps = rateBps;
+    } else if (attribution.commissionModel === "PERCENTAGE_OF_CUSTOMER_PAYMENT") {
+      const safeRate = validateSafeRate(attribution.commissionRate, "commissionRate");
+      const rateBps = rateToBasisPoints(safeRate);
+      const canonicalPercentage = rateBps / 100;
+
       calculationBasis = "CUSTOMER_PAYMENT";
       baseAmountCentavos = customerPaymentCentavos;
-      commissionAmountCentavos = Math.round((customerPaymentCentavos * safeRate) / 100);
+      commissionAmountCentavos = Math.round((customerPaymentCentavos * canonicalPercentage) / 100);
+      effectiveRateBps = rateBps;
+    } else {
+      // attribution.commissionModel === "FIXED_PER_PURCHASE"
+      calculationBasis = "FIXED_AMOUNT";
+      baseAmountCentavos = null;
+      commissionAmountCentavos = validateFixedCommissionCentavos(
+        attribution.fixedCommissionCentavos
+      );
+      effectiveRateBps = 0;
     }
 
     const effectiveCampaignSource =
@@ -1067,13 +1116,13 @@ export class PaymentFinalizationManifestService {
         partnerId: attribution.partnerId,
         partnerCode: attribution.partnerCode,
         commissionModel: attribution.commissionModel,
-        commissionRateBasisPoints: rateBps,
+        commissionRateBasisPoints: effectiveRateBps,
         calculationBasis,
         baseAmountCentavos,
         commissionAmountCentavos: 0,
         currency: SUPPORTED_CURRENCY,
         campaignSource: effectiveCampaignSource,
-        holdingPeriodDays: attribution.holdingPeriodDays,
+        holdingPeriodDays: normalizedHoldingPeriodDays,
         holdingUntil: null,
       };
 
@@ -1112,9 +1161,24 @@ export class PaymentFinalizationManifestService {
       ];
     }
 
+    // 🔒 4. DETERMINISTIC HOLDING TIMESTAMP ARITHMETIC (Integer ms arithmetic)
     const verifiedDate = new Date(verifiedAtIso);
-    const partnerHoldingDate = new Date(verifiedDate);
-    partnerHoldingDate.setDate(partnerHoldingDate.getDate() + (attribution.holdingPeriodDays || 7));
+    const verifiedTimestamp = verifiedDate.getTime();
+    const holdingDurationMilliseconds = normalizedHoldingPeriodDays * MILLISECONDS_PER_DAY;
+    const holdingUntilTimestamp = verifiedTimestamp + holdingDurationMilliseconds;
+
+    if (
+      !Number.isFinite(verifiedTimestamp) ||
+      !Number.isSafeInteger(holdingDurationMilliseconds) ||
+      !Number.isSafeInteger(holdingUntilTimestamp)
+    ) {
+      throw new InvalidTimestampError("Partner holding-until timestamp is invalid.");
+    }
+
+    const holdingUntilDate = new Date(holdingUntilTimestamp);
+    if (!Number.isFinite(holdingUntilDate.getTime())) {
+      throw new InvalidTimestampError("Partner holding-until timestamp is invalid.");
+    }
 
     const commIntent: PartnerCommissionIntent = {
       effectType: "PARTNER_COMMISSION",
@@ -1123,14 +1187,14 @@ export class PaymentFinalizationManifestService {
       partnerId: attribution.partnerId,
       partnerCode: attribution.partnerCode,
       commissionModel: attribution.commissionModel,
-      commissionRateBasisPoints: rateBps,
+      commissionRateBasisPoints: effectiveRateBps,
       calculationBasis,
       baseAmountCentavos,
       commissionAmountCentavos,
       currency: SUPPORTED_CURRENCY,
       campaignSource: effectiveCampaignSource,
-      holdingPeriodDays: attribution.holdingPeriodDays,
-      holdingUntil: partnerHoldingDate.toISOString(),
+      holdingPeriodDays: normalizedHoldingPeriodDays,
+      holdingUntil: holdingUntilDate.toISOString(),
     };
 
     const liabIntent: PartnerLiabilityLedgerIntent = {

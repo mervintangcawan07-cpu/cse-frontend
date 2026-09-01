@@ -1068,6 +1068,686 @@ async function runPaymentFinalizationRecoveryTests(): Promise<void> {
     );
   }
 
+  // Test 10.1: Partner Holding Period Determinism & Parity (Zero-day, integer arithmetic, fail-closed)
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_hold", "user_ptr_hold", "cs_ptr_hold");
+
+    // 10.1A: holdingPeriodDays = 0 preserved in intent and produces holdingUntil === verifiedAtIso
+    mockReader.partners.set("user_ptr_hold", {
+      partnerId: "part_hold_0",
+      partnerCode: "PART_ZERO_HOLD",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 0,
+      defaultCampaignSource: null,
+    });
+
+    const effectsZeroHold = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_hold",
+      "user_ptr_hold",
+      10000,
+      undefined,
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentZeroHold = effectsZeroHold[0].intent as PartnerCommissionIntent;
+
+    // 10.1B: Positive holdingPeriodDays (14 days) exact ms arithmetic
+    mockReader.partners.set("user_ptr_hold", {
+      partnerId: "part_hold_14",
+      partnerCode: "PART_14_HOLD",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 14,
+      defaultCampaignSource: null,
+    });
+
+    const effects14Hold = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_hold",
+      "user_ptr_hold",
+      10000,
+      undefined,
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intent14Hold = effects14Hold[0].intent as PartnerCommissionIntent;
+    const expected14Iso = new Date(new Date(testVerifiedAtStr).getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
+
+    // 10.1C: Negative holdingPeriodDays rejected
+    mockReader.partners.set("user_ptr_hold", {
+      partnerId: "part_hold_neg",
+      partnerCode: "PART_NEG_HOLD",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: -1,
+      defaultCampaignSource: null,
+    });
+
+    let negHoldCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_hold",
+        "user_ptr_hold",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "PLANNING_ERROR") {
+        negHoldCaught = true;
+      }
+    }
+
+    // 10.1D: Fractional holdingPeriodDays rejected
+    mockReader.partners.set("user_ptr_hold", {
+      partnerId: "part_hold_frac",
+      partnerCode: "PART_FRAC_HOLD",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 3.5,
+      defaultCampaignSource: null,
+    });
+
+    let fracHoldCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_hold",
+        "user_ptr_hold",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "PLANNING_ERROR") {
+        fracHoldCaught = true;
+      }
+    }
+
+    // 10.1E: Partner holding duration overflow (Number.MAX_SAFE_INTEGER) rejected with INVALID_TIMESTAMP
+    mockReader.partners.set("user_ptr_hold", {
+      partnerId: "part_hold_overflow",
+      partnerCode: "PART_OVERFLOW_HOLD",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: Number.MAX_SAFE_INTEGER,
+      defaultCampaignSource: null,
+    });
+
+    let overflowHoldCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_hold",
+        "user_ptr_hold",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof InvalidTimestampError && err.code === "INVALID_TIMESTAMP") {
+        overflowHoldCaught = true;
+      }
+    }
+
+    assert(
+      intentZeroHold.holdingPeriodDays === 0 &&
+        intentZeroHold.holdingUntil === testVerifiedAtStr &&
+        intent14Hold.holdingPeriodDays === 14 &&
+        intent14Hold.holdingUntil === expected14Iso &&
+        negHoldCaught &&
+        fracHoldCaught &&
+        overflowHoldCaught,
+      "Test 10.1: Partner holding period determinism (0-day preserved, 14-day exact ms arithmetic, negative/fractional/overflow rejected)"
+    );
+  }
+
+  // Test 10.2: Active Partner Model Classification Precedence & Unsupported Model Guard
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_model", "user_ptr_model", "cs_ptr_model");
+
+    // 10.2A: ACTIVE CUSTOM_RULE with malformed holdingPeriodDays fails as unsupported model (proves holding validation is NOT reached)
+    mockReader.partners.set("user_ptr_model", {
+      partnerId: "part_custom",
+      partnerCode: "PART_CUSTOM",
+      status: "ACTIVE",
+      commissionModel: "CUSTOM_RULE",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: -999,
+      defaultCampaignSource: null,
+    });
+
+    let customRuleCaught = false;
+    let customRuleMsg = "";
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_model",
+        "user_ptr_model",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "PLANNING_ERROR") {
+        customRuleCaught = true;
+        customRuleMsg = err.message;
+      }
+    }
+
+    // 10.2B: ACTIVE FIXED_PER_REFERRAL with malformed rate/fixed/holding fails as unsupported model immediately
+    mockReader.partners.set("user_ptr_model", {
+      partnerId: "part_fpr",
+      partnerCode: "PART_FPR",
+      status: "ACTIVE",
+      commissionModel: "FIXED_PER_REFERRAL",
+      commissionRate: Number.NaN,
+      fixedCommissionCentavos: -500,
+      holdingPeriodDays: -10,
+      defaultCampaignSource: null,
+    });
+
+    let fprCaught = false;
+    let fprMsg = "";
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_model",
+        "user_ptr_model",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "PLANNING_ERROR") {
+        fprCaught = true;
+        fprMsg = err.message;
+      }
+    }
+
+    // 10.2C: ACTIVE PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS fails as unsupported model
+    mockReader.partners.set("user_ptr_model", {
+      partnerId: "part_net_ded",
+      partnerCode: "PART_NET_DED",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_NET_AFTER_CONFIGURED_DEDUCTIONS",
+      commissionRate: 10.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    let netDedCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_model",
+        "user_ptr_model",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "PLANNING_ERROR") {
+        netDedCaught = true;
+      }
+    }
+
+    assert(
+      customRuleCaught &&
+        customRuleMsg.includes('Unsupported partner commission model: "CUSTOM_RULE"') &&
+        fprCaught &&
+        fprMsg.includes('Unsupported partner commission model: "FIXED_PER_REFERRAL"') &&
+        netDedCaught,
+      "Test 10.2: Active partner model classification precedence (unsupported models fail closed immediately before holding/rate validation)"
+    );
+  }
+
+  // Test 10.3: Model-Specific Financial Input Isolation
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_iso", "user_ptr_iso", "cs_ptr_iso");
+
+    // 10.3A: FIXED_PER_PURCHASE with unused commissionRate (NaN, Infinity, -999) succeeds with rateBps = 0
+    for (const unusedRate of [Number.NaN, Number.POSITIVE_INFINITY, -999]) {
+      mockReader.partners.set("user_ptr_iso", {
+        partnerId: "part_fpp",
+        partnerCode: "PART_FPP",
+        status: "ACTIVE",
+        commissionModel: "FIXED_PER_PURCHASE",
+        commissionRate: unusedRate,
+        fixedCommissionCentavos: 5000,
+        holdingPeriodDays: 7,
+        defaultCampaignSource: null,
+      });
+
+      const effectsFpp = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_iso",
+        "user_ptr_iso",
+        29900,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+      const intentFpp = effectsFpp[0].intent as PartnerCommissionIntent;
+
+      assert(
+        intentFpp.commissionModel === "FIXED_PER_PURCHASE" &&
+          intentFpp.commissionRateBasisPoints === 0 &&
+          intentFpp.calculationBasis === "FIXED_AMOUNT" &&
+          intentFpp.baseAmountCentavos === null &&
+          intentFpp.commissionAmountCentavos === 5000,
+        `Test 10.3A: FIXED_PER_PURCHASE with unused rate ${unusedRate} succeeds with rateBps=0`
+      );
+    }
+
+    // 10.3B: PERCENTAGE_OF_CUSTOMER_PAYMENT with unused fixedCommissionCentavos (-500, NaN) succeeds without validating fixed amount
+    for (const unusedFixed of [-500, Number.NaN]) {
+      mockReader.partners.set("user_ptr_iso", {
+        partnerId: "part_pcp",
+        partnerCode: "PART_PCP",
+        status: "ACTIVE",
+        commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+        commissionRate: 15.0,
+        fixedCommissionCentavos: unusedFixed,
+        holdingPeriodDays: 7,
+        defaultCampaignSource: null,
+      });
+
+      const effectsPcp = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_iso",
+        "user_ptr_iso",
+        20000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+      const intentPcp = effectsPcp[0].intent as PartnerCommissionIntent;
+
+      assert(
+        intentPcp.commissionModel === "PERCENTAGE_OF_CUSTOMER_PAYMENT" &&
+          intentPcp.commissionRateBasisPoints === 1500 &&
+          intentPcp.calculationBasis === "CUSTOMER_PAYMENT" &&
+          intentPcp.baseAmountCentavos === 20000 &&
+          intentPcp.commissionAmountCentavos === 3000,
+        `Test 10.3B: PERCENTAGE_OF_CUSTOMER_PAYMENT with unused fixed ${unusedFixed} succeeds without validating fixed amount`
+      );
+    }
+  }
+
+  // Test 10.4: Canonical Rate Parity & Evaluated Percentage Arithmetic
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_rate", "user_ptr_rate", "cs_ptr_rate");
+
+    // 10.4A: 3-decimal rate 12.345% normalizes to 1235 bps (12.35%), calculates 123,500 centavos on 1,000,000 centavos
+    mockReader.partners.set("user_ptr_rate", {
+      partnerId: "part_rate_bps",
+      partnerCode: "PART_RATE_BPS",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 12.345,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    const effectsBps = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_rate",
+      "user_ptr_rate",
+      1000000,
+      undefined,
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentBps = effectsBps[0].intent as PartnerCommissionIntent;
+    const oldRawCalc = Math.round((1000000 * 12.345) / 100); // 123450
+
+    // 10.4B: Real JavaScript floating-point operation-order counterexample
+    // Demonstrates that Math.round((base * (rateBps / 100)) / 100) !== Math.round(base * rateBps / 10000)
+    const operationOrderBase = 13_423_625;
+    const operationOrderRateBps = 3_880; // 38.80%
+    const operationOrderCanonicalPercentage = operationOrderRateBps / 100;
+    const canonicalOperationOrderAmount = Math.round(
+      (operationOrderBase * operationOrderCanonicalPercentage) / 100
+    );
+    const directBasisPointAmount = Math.round(
+      (operationOrderBase * operationOrderRateBps) / 10_000
+    );
+    const counterexampleDiverges = (canonicalOperationOrderAmount as number) !== (directBasisPointAmount as number);
+
+    // Verify mathematical preconditions of the counterexample
+    assert(
+      canonicalOperationOrderAmount === 5_208_366 &&
+        directBasisPointAmount === 5_208_367 &&
+        counterexampleDiverges,
+      "Counterexample mathematical preconditions verified (5208366 vs 5208367)"
+    );
+
+    // Exercise the actual partner planner
+    mockReader.partners.set("user_ptr_rate", {
+      partnerId: "part_op_order",
+      partnerCode: "PART_OP_ORDER",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: 38.8,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    const effectsOpOrder = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_rate",
+      "user_ptr_rate",
+      operationOrderBase,
+      undefined,
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentOpOrder = effectsOpOrder[0].intent as PartnerCommissionIntent;
+
+    // 10.4C: PERCENTAGE_OF_GROSS with valid gross amount vs missing gross amount
+    mockReader.partners.set("user_ptr_rate", {
+      partnerId: "part_gross",
+      partnerCode: "PART_GROSS",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_GROSS",
+      commissionRate: 20.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    const effectsGross = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_rate",
+      "user_ptr_rate",
+      15000,
+      30000, // authoritative gross
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentGross = effectsGross[0].intent as PartnerCommissionIntent;
+
+    let missingGrossCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_rate",
+        "user_ptr_rate",
+        15000,
+        undefined, // missing gross
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof MissingAuthoritativeGrossError && err.code === "MISSING_AUTHORITATIVE_GROSS") {
+        missingGrossCaught = true;
+      }
+    }
+
+    // 10.4D: Invalid rate (<0 or >100 or NaN) throws INVALID_RATE
+    mockReader.partners.set("user_ptr_rate", {
+      partnerId: "part_inval_rate",
+      partnerCode: "PART_INVAL_RATE",
+      status: "ACTIVE",
+      commissionModel: "PERCENTAGE_OF_CUSTOMER_PAYMENT",
+      commissionRate: -5.0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    let invalidRateCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_rate",
+        "user_ptr_rate",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof PaymentFinalizationPlanningError && err.code === "INVALID_RATE") {
+        invalidRateCaught = true;
+      }
+    }
+
+    const plannerMatchesCanonical =
+      intentOpOrder.commissionAmountCentavos === canonicalOperationOrderAmount &&
+      (intentOpOrder.commissionAmountCentavos as number) !== (directBasisPointAmount as number);
+
+    assert(
+      intentBps.commissionRateBasisPoints === 1235 &&
+        intentBps.commissionAmountCentavos === 123500 &&
+        intentBps.commissionAmountCentavos !== oldRawCalc &&
+        intentOpOrder.commissionRateBasisPoints === 3880 &&
+        intentOpOrder.commissionAmountCentavos === 5208366 &&
+        plannerMatchesCanonical &&
+        intentGross.commissionModel === "PERCENTAGE_OF_GROSS" &&
+        intentGross.calculationBasis === "GROSS_PRICE" &&
+        intentGross.baseAmountCentavos === 30000 &&
+        intentGross.commissionAmountCentavos === 6000 &&
+        missingGrossCaught &&
+        invalidRateCaught,
+      "Test 10.4: Canonical rate parity, authoritative percentage evaluation order with counterexample, gross base validation, and INVALID_RATE handling"
+    );
+  }
+
+  // Test 10.5: Fixed Amount Validation & Zero Commission
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_fixed", "user_ptr_fixed", "cs_ptr_fixed");
+
+    // 10.5A: FIXED_PER_PURCHASE zero fixed amount -> ZERO_COMMISSION_CALCULATED paired NOT_APPLICABLE
+    mockReader.partners.set("user_ptr_fixed", {
+      partnerId: "part_fpp_0",
+      partnerCode: "PART_FPP_0",
+      status: "ACTIVE",
+      commissionModel: "FIXED_PER_PURCHASE",
+      commissionRate: 0,
+      fixedCommissionCentavos: 0,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    const effectsZeroFixed = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_fixed",
+      "user_ptr_fixed",
+      10000,
+      undefined,
+      undefined,
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentZeroFixedComm = effectsZeroFixed[0].intent as PartnerCommissionIntent;
+    const intentZeroFixedLiab = effectsZeroFixed[1].intent as PartnerLiabilityLedgerIntent;
+
+    // 10.5B: Negative fixed amount rejected
+    mockReader.partners.set("user_ptr_fixed", {
+      partnerId: "part_fpp_neg",
+      partnerCode: "PART_FPP_NEG",
+      status: "ACTIVE",
+      commissionModel: "FIXED_PER_PURCHASE",
+      commissionRate: 0,
+      fixedCommissionCentavos: -100,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    let negFixedCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_fixed",
+        "user_ptr_fixed",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof InvalidMonetaryAmountError && err.code === "INVALID_MONETARY_AMOUNT") {
+        negFixedCaught = true;
+      }
+    }
+
+    // 10.5C: Fractional fixed amount rejected
+    mockReader.partners.set("user_ptr_fixed", {
+      partnerId: "part_fpp_frac",
+      partnerCode: "PART_FPP_FRAC",
+      status: "ACTIVE",
+      commissionModel: "FIXED_PER_PURCHASE",
+      commissionRate: 0,
+      fixedCommissionCentavos: 100.5,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    let fracFixedCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_fixed",
+        "user_ptr_fixed",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof InvalidMonetaryAmountError && err.code === "INVALID_MONETARY_AMOUNT") {
+        fracFixedCaught = true;
+      }
+    }
+
+    // 10.5D: Fixed amount exceeding PostgreSQL integer maximum rejected
+    mockReader.partners.set("user_ptr_fixed", {
+      partnerId: "part_fpp_max",
+      partnerCode: "PART_FPP_MAX",
+      status: "ACTIVE",
+      commissionModel: "FIXED_PER_PURCHASE",
+      commissionRate: 0,
+      fixedCommissionCentavos: 2_147_483_648,
+      holdingPeriodDays: 7,
+      defaultCampaignSource: null,
+    });
+
+    let maxFixedCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+        "txn_ptr_fixed",
+        "user_ptr_fixed",
+        10000,
+        undefined,
+        undefined,
+        testVerifiedAtStr,
+        mockReader
+      );
+    } catch (err) {
+      if (err instanceof InvalidMonetaryAmountError && err.code === "INVALID_MONETARY_AMOUNT") {
+        maxFixedCaught = true;
+      }
+    }
+
+    assert(
+      intentZeroFixedComm.status === "NOT_APPLICABLE" &&
+        intentZeroFixedComm.notApplicableReason === "ZERO_COMMISSION_CALCULATED" &&
+        intentZeroFixedComm.commissionRateBasisPoints === 0 &&
+        intentZeroFixedComm.commissionAmountCentavos === 0 &&
+        intentZeroFixedComm.holdingUntil === null &&
+        intentZeroFixedLiab.status === "NOT_APPLICABLE" &&
+        intentZeroFixedLiab.notApplicableReason === "NO_PARTNER_COMMISSION" &&
+        intentZeroFixedLiab.amountCentavos === 0 &&
+        intentZeroFixedLiab.debitCategory === null &&
+        intentZeroFixedLiab.creditCategory === null &&
+        negFixedCaught &&
+        fracFixedCaught &&
+        maxFixedCaught,
+      "Test 10.5: Fixed commission amount validation (zero->ZERO_COMMISSION_CALCULATED, negative/fractional/overflow rejected)"
+    );
+  }
+
+  // Test 10.6: Inactive Partner Graceful NOT_APPLICABLE & Non-Interference
+  {
+    mockReader.reset();
+    mockReader.setupStandardContext("txn_ptr_inact", "user_ptr_inact", "cs_ptr_inact");
+
+    // 10.6A: INACTIVE partner with malformed/unsupported fields (CUSTOM_RULE, rate=NaN, fixed=-500, holding=-10) succeeds as NOT_APPLICABLE
+    mockReader.partners.set("user_ptr_inact", {
+      partnerId: "part_inact_dormant",
+      partnerCode: "PART_INACT_DORMANT",
+      status: "SUSPENDED",
+      commissionModel: "CUSTOM_RULE",
+      commissionRate: Number.NaN,
+      fixedCommissionCentavos: -500,
+      holdingPeriodDays: -10,
+      defaultCampaignSource: "sub_channel_a",
+    });
+
+    const effectsInact = await PaymentFinalizationManifestService.planPartnerCommissionEffects(
+      "txn_ptr_inact",
+      "user_ptr_inact",
+      10000,
+      undefined,
+      "campaign_override",
+      testVerifiedAtStr,
+      mockReader
+    );
+    const intentInactComm = effectsInact[0].intent as PartnerCommissionIntent;
+    const intentInactLiab = effectsInact[1].intent as PartnerLiabilityLedgerIntent;
+
+    assert(
+      effectsInact[0].status === "NOT_APPLICABLE" &&
+        intentInactComm.notApplicableReason === "INACTIVE_PARTNER" &&
+        intentInactComm.partnerId === "part_inact_dormant" &&
+        intentInactComm.partnerCode === "PART_INACT_DORMANT" &&
+        intentInactComm.commissionModel === "CUSTOM_RULE" &&
+        intentInactComm.commissionRateBasisPoints === null &&
+        intentInactComm.calculationBasis === null &&
+        intentInactComm.baseAmountCentavos === null &&
+        intentInactComm.commissionAmountCentavos === 0 &&
+        intentInactComm.campaignSource === "campaign_override" &&
+        intentInactComm.holdingPeriodDays === null &&
+        intentInactComm.holdingUntil === null &&
+        effectsInact[1].status === "NOT_APPLICABLE" &&
+        intentInactLiab.notApplicableReason === "NO_PARTNER_COMMISSION" &&
+        intentInactLiab.partnerId === "part_inact_dormant" &&
+        intentInactLiab.amountCentavos === 0 &&
+        intentInactLiab.debitCategory === null &&
+        intentInactLiab.creditCategory === null,
+      "Test 10.6: Inactive partner graceful NOT_APPLICABLE without active financial validation interference"
+    );
+  }
+
   // Test 11: Entitlement Snapshot (expired/null vs active subscription extensions)
   {
     mockReader.reset();
