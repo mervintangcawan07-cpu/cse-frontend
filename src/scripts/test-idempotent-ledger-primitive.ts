@@ -892,34 +892,44 @@ async function runIdempotentLedgerPrimitiveTests(): Promise<void> {
     const hasExecuteRawUnsafe = primitiveSource.includes("$executeRawUnsafe");
     const usesQueryRaw = primitiveSource.includes("$queryRaw`SELECT pg_advisory_xact_lock");
 
-    // Verify zero production callers import IdempotentLedgerService
-    function checkImports(dir: string): boolean {
+    // Verify zero application callers and exactly the approved recovery-domain consumer.
+    function findLedgerConsumers(dir: string): string[] {
+      const consumers: string[] = [];
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       for (const entry of entries) {
         const full = path.join(dir, entry.name);
         if (entry.isDirectory()) {
-          if (checkImports(full)) return true;
+          consumers.push(...findLedgerConsumers(full));
         } else if (entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx"))) {
-          if (
-            entry.name === "idempotentLedgerService.ts" ||
-            entry.name === "test-idempotent-ledger-primitive.ts"
-          ) {
-            continue;
-          }
           const content = fs.readFileSync(full, "utf-8");
           if (
             content.includes("IdempotentLedgerService") ||
             content.includes("idempotentLedgerService")
           ) {
-            return true;
+            consumers.push(
+              path.relative(process.cwd(), full).split(path.sep).join("/")
+            );
           }
         }
       }
-      return false;
+      return consumers.sort((left, right) => left.localeCompare(right));
     }
 
-    const appHasImport = checkImports(path.join(process.cwd(), "src/app"));
-    const libHasImport = checkImports(path.join(process.cwd(), "src/lib"));
+    const primitiveRelativePath =
+      "src/lib/accounting/idempotentLedgerService.ts";
+    const approvedLibConsumers = [
+      "src/lib/accounting/" +
+        "idempotentPartner" +
+        "CommissionService.ts",
+    ] as const;
+    const appConsumers = findLedgerConsumers(path.join(process.cwd(), "src/app"));
+    const libConsumers = findLedgerConsumers(path.join(process.cwd(), "src/lib"))
+      .filter((consumer) => consumer !== primitiveRelativePath);
+    const hasExactlyApprovedLibConsumers =
+      libConsumers.length === approvedLibConsumers.length &&
+      approvedLibConsumers.every(
+        (approvedConsumer, index) => libConsumers[index] === approvedConsumer
+      );
 
     assert(
       !hasAny &&
@@ -929,9 +939,9 @@ async function runIdempotentLedgerPrimitiveTests(): Promise<void> {
         !hasQueryRawUnsafe &&
         !hasExecuteRawUnsafe &&
         usesQueryRaw &&
-        !appHasImport &&
-        !libHasImport,
-      "Test 67-70: Static architectural invariants verified (0 `any`, 0 skipDuplicates, 0 ambient Date, 0 $executeRaw, 0 unsafe raw, $queryRaw tagged template used, 0 production callers)"
+        appConsumers.length === 0 &&
+        hasExactlyApprovedLibConsumers,
+      "Test 67-70: Static architectural invariants verified (0 `any`, 0 skipDuplicates, 0 ambient Date, 0 $executeRaw, 0 unsafe raw, $queryRaw tagged template used, 0 application callers, exactly approved recovery-domain library consumers)"
     );
   }
 
