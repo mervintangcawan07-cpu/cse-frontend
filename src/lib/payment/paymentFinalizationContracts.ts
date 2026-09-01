@@ -74,6 +74,26 @@ export type TaxProvisionNotApplicableReason =
   | "NO_ACTIVE_TAX_RULES"
   | "ZERO_TAX_CALCULATED";
 
+export const PAYMENT_FINALIZATION_V1_TAX_TYPES = [
+  "VAT",
+  "PERCENTAGE_TAX",
+  "WITHHOLDING_TAX",
+  "OTHER_TAX",
+] as const;
+export type PaymentFinalizationV1TaxType =
+  (typeof PAYMENT_FINALIZATION_V1_TAX_TYPES)[number];
+
+export const TAX_CALCULATION_BASES_FOR_PLANNING = [
+  "GROSS_SALE",
+  "CUSTOMER_PAYMENT",
+  "NET_REVENUE",
+  "COMMISSION",
+  "PAYOUT",
+  "OTHER",
+] as const;
+export type TaxCalculationBasisForPlanning =
+  (typeof TAX_CALCULATION_BASES_FOR_PLANNING)[number];
+
 // ============================================================================
 // CLOSED DOMAIN ERROR CODES & HIERARCHY
 // ============================================================================
@@ -288,7 +308,7 @@ export interface TaxProvisionIntent {
   readonly notApplicableReason?: TaxProvisionNotApplicableReason;
   readonly taxConfigId: string | null;
   readonly taxName: string | null;
-  readonly taxType: string | null;
+  readonly taxType: PaymentFinalizationV1TaxType | null;
   readonly calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_SALE" | null;
   readonly taxableAmountCentavos: number;
   readonly taxRateBasisPoints: number | null;
@@ -437,10 +457,11 @@ export interface PartnerCommissionRecordForPlanning {
 export interface TaxConfigForPlanning {
   readonly id: string;
   readonly name: string;
-  readonly taxType: string;
+  readonly taxType: PaymentFinalizationV1TaxType;
   readonly rate: number;
-  readonly fixedAmountCentavos: number;
-  readonly calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_SALE";
+  readonly fixedAmountCentavos: number | null;
+  readonly calculationBasis: TaxCalculationBasisForPlanning;
+  readonly applicableTransactionType: string | null;
 }
 
 export interface IFinalizationDataReader {

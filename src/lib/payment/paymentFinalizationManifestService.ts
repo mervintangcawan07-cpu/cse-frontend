@@ -34,6 +34,8 @@ import {
   PartnerAttributionForPlanning,
   PartnerCommissionRecordForPlanning,
   TaxConfigForPlanning,
+  PaymentFinalizationV1TaxType,
+  PAYMENT_FINALIZATION_V1_TAX_TYPES,
   MissingAuthoritativeGrossError,
   DuplicateEffectKeyError,
   InvalidFeeStateError,
@@ -52,6 +54,7 @@ import {
   validateSafeCentavos,
   validateSafeRate,
   rateToBasisPoints,
+  validateIdentifier,
   validateIsoUtcTimestamp,
   buildPaymentFinalizationOperationKey,
   canonicalizeJson,
@@ -148,6 +151,66 @@ function validateFixedCommissionCentavos(value: number): number {
   ) {
     throw new InvalidMonetaryAmountError(
       "Partner fixed commission amount setting is invalid."
+    );
+  }
+
+  return value;
+}
+
+const PAYMENT_FINALIZATION_V1_TAX_TYPE_SET: ReadonlySet<string> = new Set(
+  PAYMENT_FINALIZATION_V1_TAX_TYPES
+);
+
+function validatePaymentFinalizationV1TaxType(
+  value: unknown
+): PaymentFinalizationV1TaxType {
+  if (
+    typeof value !== "string" ||
+    !PAYMENT_FINALIZATION_V1_TAX_TYPE_SET.has(value)
+  ) {
+    throw new PaymentFinalizationPlanningError(
+      "tax.taxType is unsupported for payment-finalization manifest version 1.",
+      "PLANNING_ERROR"
+    );
+  }
+
+  return value as PaymentFinalizationV1TaxType;
+}
+
+function validateTaxFixedAmountCentavos(value: unknown): number {
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    !Number.isSafeInteger(value) ||
+    value < 0 ||
+    value > POSTGRESQL_INTEGER_MAX
+  ) {
+    throw new InvalidMonetaryAmountError(
+      "tax.fixedAmountCentavos must be a non-negative PostgreSQL INTEGER centavo amount."
+    );
+  }
+
+  return value;
+}
+
+function validateTaxCalculationBasis(
+  value: unknown
+): "CUSTOMER_PAYMENT" | "GROSS_SALE" {
+  if (value !== "CUSTOMER_PAYMENT" && value !== "GROSS_SALE") {
+    throw new PaymentFinalizationPlanningError(
+      "tax.calculationBasis is unsupported for payment-finalization manifest version 1.",
+      "PLANNING_ERROR"
+    );
+  }
+
+  return value;
+}
+
+function validateTaxApplicableTransactionType(value: unknown): "ALL" {
+  if (value !== "ALL") {
+    throw new PaymentFinalizationPlanningError(
+      'tax.applicableTransactionType must be exactly "ALL" for payment-finalization manifest version 1.',
+      "PLANNING_ERROR"
     );
   }
 
@@ -347,8 +410,9 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
       name: c.name,
       taxType: c.taxType,
       rate: c.rate,
-      fixedAmountCentavos: c.fixedAmountCentavos ?? 0,
-      calculationBasis: c.calculationBasis === "GROSS_SALE" ? "GROSS_SALE" : "CUSTOMER_PAYMENT",
+      fixedAmountCentavos: c.fixedAmountCentavos,
+      calculationBasis: c.calculationBasis,
+      applicableTransactionType: c.applicableTransactionType,
     }));
   }
 }
@@ -1283,17 +1347,32 @@ export class PaymentFinalizationManifestService {
     const effects: PlannedEffect[] = [];
 
     for (const tax of activeTaxes) {
-      const effectKey = `tax:${tax.id}`;
+      const taxConfigId = validateIdentifier(tax.id, "taxConfigId");
+      if (taxConfigId !== tax.id) {
+        throw new PaymentFinalizationPlanningError(
+          "tax.id must already be in canonical operation-key form.",
+          "PLANNING_ERROR"
+        );
+      }
+      const taxType = validatePaymentFinalizationV1TaxType(tax.taxType);
+      const safeRate = validateSafeRate(tax.rate, "tax.rate");
+      const fixedAmountCentavos = validateTaxFixedAmountCentavos(
+        tax.fixedAmountCentavos
+      );
+      const calculationBasis = validateTaxCalculationBasis(
+        tax.calculationBasis
+      );
+      validateTaxApplicableTransactionType(tax.applicableTransactionType);
+
+      const effectKey = `tax:${taxConfigId}`;
       const operationKey = buildPaymentFinalizationOperationKey(transactionId, {
         kind: "TAX",
-        taxConfigId: tax.id,
+        taxConfigId,
       });
 
       let taxableAmountCentavos = customerPaymentCentavos;
-      let calculationBasis: "CUSTOMER_PAYMENT" | "GROSS_SALE" = "CUSTOMER_PAYMENT";
 
-      if (tax.calculationBasis === "GROSS_SALE") {
-        calculationBasis = "GROSS_SALE";
+      if (calculationBasis === "GROSS_SALE") {
         if (
           authoritativeGrossAmountCentavos === undefined ||
           authoritativeGrossAmountCentavos === null
@@ -1311,17 +1390,16 @@ export class PaymentFinalizationManifestService {
 
       let taxAmountCentavos = 0;
       let taxRateBasisPoints: number | null = null;
+      const canonicalRateBasisPoints = rateToBasisPoints(safeRate);
 
-      if (tax.rate > 0) {
-        const safeRate = validateSafeRate(tax.rate, "tax.rate");
-        taxRateBasisPoints = rateToBasisPoints(safeRate);
-        taxAmountCentavos = Math.round((taxableAmountCentavos * safeRate) / 100);
-      } else if (tax.fixedAmountCentavos > 0) {
-        taxAmountCentavos = validateSafeCentavos(
-          tax.fixedAmountCentavos,
-          "tax.fixedAmountCentavos",
-          true
+      if (canonicalRateBasisPoints > 0) {
+        taxRateBasisPoints = canonicalRateBasisPoints;
+        const canonicalPercentage = taxRateBasisPoints / 100;
+        taxAmountCentavos = Math.round(
+          (taxableAmountCentavos * canonicalPercentage) / 100
         );
+      } else if (fixedAmountCentavos > 0) {
+        taxAmountCentavos = fixedAmountCentavos;
       }
 
       if (taxAmountCentavos <= 0) {
@@ -1330,9 +1408,9 @@ export class PaymentFinalizationManifestService {
           intentVersion: INTENT_VERSION,
           status: "NOT_APPLICABLE",
           notApplicableReason: "ZERO_TAX_CALCULATED",
-          taxConfigId: tax.id,
+          taxConfigId,
           taxName: tax.name,
-          taxType: tax.taxType,
+          taxType,
           calculationBasis,
           taxableAmountCentavos,
           taxRateBasisPoints,
@@ -1349,16 +1427,16 @@ export class PaymentFinalizationManifestService {
           intentVersion: INTENT_VERSION,
           intent,
           intentHash,
-          taxConfigId: tax.id,
+          taxConfigId,
         });
       } else {
         const intent: TaxProvisionIntent = {
           effectType: "TAX_PROVISION",
           intentVersion: INTENT_VERSION,
           status: "PENDING",
-          taxConfigId: tax.id,
+          taxConfigId,
           taxName: tax.name,
-          taxType: tax.taxType,
+          taxType,
           calculationBasis,
           taxableAmountCentavos,
           taxRateBasisPoints,
@@ -1375,7 +1453,7 @@ export class PaymentFinalizationManifestService {
           intentVersion: INTENT_VERSION,
           intent,
           intentHash,
-          taxConfigId: tax.id,
+          taxConfigId,
         });
       }
     }

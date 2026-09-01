@@ -127,6 +127,53 @@ class MockFinalizationDataReader implements IFinalizationDataReader {
   }
 }
 
+function makeTaxConfig(
+  overrides: Partial<TaxConfigForPlanning> = {}
+): TaxConfigForPlanning {
+  return {
+    id: "tax_v1",
+    name: "Payment Finalization Tax",
+    taxType: "VAT",
+    rate: 12,
+    fixedAmountCentavos: 0,
+    calculationBasis: "CUSTOMER_PAYMENT",
+    applicableTransactionType: "ALL",
+    ...overrides,
+  };
+}
+
+function makeRuntimeTaxConfig(
+  overrides: Readonly<Record<string, unknown>>
+): TaxConfigForPlanning {
+  return {
+    ...makeTaxConfig(),
+    ...overrides,
+  } as unknown as TaxConfigForPlanning;
+}
+
+async function taxPlanningFailsClosed(
+  reader: MockFinalizationDataReader,
+  config: TaxConfigForPlanning,
+  expectedCode?: "PLANNING_ERROR" | "INVALID_RATE" | "INVALID_MONETARY_AMOUNT"
+): Promise<boolean> {
+  reader.taxConfigs = [config];
+  try {
+    await PaymentFinalizationManifestService.planTaxProvisionEffects(
+      "txn_tax_validation",
+      210,
+      300,
+      new Date("2026-08-31T10:00:00.000Z"),
+      reader
+    );
+    return false;
+  } catch (error) {
+    return (
+      error instanceof PaymentFinalizationPlanningError &&
+      (expectedCode === undefined || error.code === expectedCode)
+    );
+  }
+}
+
 async function runPaymentFinalizationRecoveryTests(): Promise<void> {
   console.log("================================================================================");
   console.log("🧪 RUNNING SYNTHETIC SUITE: PAYMENT FINALIZATION RECOVERY (SLICE 2.2)");
@@ -1915,6 +1962,7 @@ async function runPaymentFinalizationRecoveryTests(): Promise<void> {
         rate: 12.0,
         fixedAmountCentavos: 0,
         calculationBasis: "CUSTOMER_PAYMENT",
+        applicableTransactionType: "ALL",
       },
     ];
 
@@ -1970,9 +2018,393 @@ async function runPaymentFinalizationRecoveryTests(): Promise<void> {
 
     assert(
       taxNoneEffect.status === "NOT_APPLICABLE" &&
+        taxNoneEffect.effectKey === "tax:none" &&
         taxNoneEffect.operationKey === "pfin:txn_no_tax_test:tax:none" &&
-        taxNoneIntent.notApplicableReason === "NO_ACTIVE_TAX_RULES",
+        taxNoneIntent.notApplicableReason === "NO_ACTIVE_TAX_RULES" &&
+        taxNoneIntent.taxConfigId === null &&
+        taxNoneIntent.taxType === null &&
+        taxNoneIntent.calculationBasis === null &&
+        taxNoneIntent.taxAmountCentavos === 0,
       "Test 16: Zero active tax configs produces single NOT_APPLICABLE tax effect with closed reason NO_ACTIVE_TAX_RULES"
+    );
+  }
+
+  // Slice 6A tax manifest contract-hardening regression groups A-O.
+  {
+    // A. Closed tax-type allowlist.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_vat", taxType: "VAT" }),
+      makeTaxConfig({ id: "tax_percentage", taxType: "PERCENTAGE_TAX" }),
+      makeTaxConfig({ id: "tax_withholding", taxType: "WITHHOLDING_TAX" }),
+      makeTaxConfig({ id: "tax_other", taxType: "OTHER_TAX" }),
+    ];
+    const approvedTypeEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_types",
+        10_000,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    assert(
+      approvedTypeEffects.map((effect) => (effect.intent as TaxProvisionIntent).taxType).join(",") ===
+        "VAT,PERCENTAGE_TAX,WITHHOLDING_TAX,OTHER_TAX",
+      "Test 16A: All four closed payment-finalization v1 tax types are accepted"
+    );
+
+    mockReader.reset();
+    assert(
+      await taxPlanningFailsClosed(
+        mockReader,
+        makeRuntimeTaxConfig({ taxType: "CUSTOM_TAX" }),
+        "PLANNING_ERROR"
+      ),
+      "Test 16B: Invalid runtime taxType fails closed"
+    );
+
+    // C. CUSTOMER_PAYMENT authority.
+    mockReader.reset();
+    mockReader.taxConfigs = [makeTaxConfig({ id: "tax_customer", rate: 10 })];
+    const customerEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_customer",
+        210,
+        999,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const customerIntent = customerEffects[0].intent as TaxProvisionIntent;
+    assert(
+      customerIntent.calculationBasis === "CUSTOMER_PAYMENT" &&
+        customerIntent.taxableAmountCentavos === 210 &&
+        customerIntent.taxAmountCentavos === 21,
+      "Test 16C: CUSTOMER_PAYMENT uses the immutable customer-payment amount"
+    );
+
+    // D. GROSS_SALE requires and uses authoritative gross.
+    mockReader.reset();
+    const grossConfig = makeTaxConfig({
+      id: "tax_gross",
+      calculationBasis: "GROSS_SALE",
+      rate: 10,
+    });
+    mockReader.taxConfigs = [grossConfig];
+    const grossEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_gross",
+        210,
+        500,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    let missingGrossCaught = false;
+    try {
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_gross_missing",
+        210,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    } catch (error) {
+      missingGrossCaught = error instanceof MissingAuthoritativeGrossError;
+    }
+    const grossIntent = grossEffects[0].intent as TaxProvisionIntent;
+    assert(
+      grossIntent.calculationBasis === "GROSS_SALE" &&
+        grossIntent.taxableAmountCentavos === 500 &&
+        grossIntent.taxAmountCentavos === 50 &&
+        missingGrossCaught,
+      "Test 16D: GROSS_SALE uses authoritative gross and fails when gross is missing"
+    );
+
+    // E. Every currently unsupported Prisma tax basis fails independently.
+    for (const unsupportedBasis of [
+      "NET_REVENUE",
+      "COMMISSION",
+      "PAYOUT",
+      "OTHER",
+    ] as const) {
+      mockReader.reset();
+      assert(
+        await taxPlanningFailsClosed(
+          mockReader,
+          makeTaxConfig({ calculationBasis: unsupportedBasis }),
+          "PLANNING_ERROR"
+        ),
+        `Test 16E: ${unsupportedBasis} tax basis fails closed in manifest v1`
+      );
+    }
+
+    // F-G. applicableTransactionType is exact and is never normalized.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_all", applicableTransactionType: "ALL" }),
+    ];
+    const allEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_all",
+        210,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    assert(
+      allEffects.length === 1 && allEffects[0].status === "PENDING",
+      'Test 16F: applicableTransactionType exact "ALL" is accepted'
+    );
+
+    for (const invalidApplicableTransactionType of [
+      null,
+      "",
+      " ALL ",
+      "PAYMENT_RECEIVED",
+      "TAX_PROVISION",
+      "CUSTOM_EVENT",
+    ] as const) {
+      mockReader.reset();
+      assert(
+        await taxPlanningFailsClosed(
+          mockReader,
+          makeRuntimeTaxConfig({
+            applicableTransactionType: invalidApplicableTransactionType,
+          }),
+          "PLANNING_ERROR"
+        ),
+        `Test 16G: applicableTransactionType ${JSON.stringify(invalidApplicableTransactionType)} fails closed`
+      );
+    }
+
+    // H. Tax amount is calculated from canonical basis points, not the raw float.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_canonical_rate", rate: 38.805 }),
+    ];
+    const canonicalRateEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_canonical_rate",
+        210,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const canonicalRateIntent = canonicalRateEffects[0]
+      .intent as TaxProvisionIntent;
+    assert(
+      canonicalRateIntent.taxRateBasisPoints === 3881 &&
+        canonicalRateIntent.taxAmountCentavos === 82,
+      "Test 16H: 38.805% canonicalizes to 3881 bps and 82 centavos on a 210-centavo base"
+    );
+
+    // I. Inclusive percentage-rate boundaries.
+    for (const boundaryCase of [
+      { rate: 0, expectedAmount: 0, expectedStatus: "NOT_APPLICABLE" },
+      { rate: 100, expectedAmount: 210, expectedStatus: "PENDING" },
+    ] as const) {
+      mockReader.reset();
+      mockReader.taxConfigs = [
+        makeTaxConfig({ id: `tax_rate_${boundaryCase.rate}`, rate: boundaryCase.rate }),
+      ];
+      const boundaryEffects =
+        await PaymentFinalizationManifestService.planTaxProvisionEffects(
+          `txn_tax_rate_${boundaryCase.rate}`,
+          210,
+          undefined,
+          new Date(testVerifiedAtStr),
+          mockReader
+        );
+      const boundaryIntent = boundaryEffects[0].intent as TaxProvisionIntent;
+      assert(
+        boundaryIntent.taxAmountCentavos === boundaryCase.expectedAmount &&
+          boundaryIntent.status === boundaryCase.expectedStatus,
+        `Test 16I: Tax rate boundary ${boundaryCase.rate}% is accepted exactly`
+      );
+    }
+
+    // J. Malformed percentage rates never fall back to fixed tax.
+    for (const invalidRate of [-0.01, 100.01, Number.NaN, Infinity, -Infinity]) {
+      mockReader.reset();
+      assert(
+        await taxPlanningFailsClosed(
+          mockReader,
+          makeTaxConfig({ rate: invalidRate, fixedAmountCentavos: 100 }),
+          "INVALID_RATE"
+        ),
+        `Test 16J: Invalid tax rate ${String(invalidRate)} fails closed before fixed-tax fallback`
+      );
+    }
+
+    // K. Fixed amounts are exact PostgreSQL INTEGER centavo values.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_fixed_positive", rate: 0, fixedAmountCentavos: 123 }),
+    ];
+    const fixedPositiveEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_fixed_positive",
+        210,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const fixedPositiveIntent = fixedPositiveEffects[0]
+      .intent as TaxProvisionIntent;
+    assert(
+      fixedPositiveIntent.taxRateBasisPoints === null &&
+        fixedPositiveIntent.taxAmountCentavos === 123 &&
+        fixedPositiveIntent.status === "PENDING",
+      "Test 16K: Positive fixed tax remains an exact centavo amount with null basis-point rate"
+    );
+
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_fixed_zero", rate: 0, fixedAmountCentavos: 0 }),
+    ];
+    const fixedZeroEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_fixed_zero",
+        210,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const fixedZeroIntent = fixedZeroEffects[0].intent as TaxProvisionIntent;
+    assert(
+      fixedZeroIntent.status === "NOT_APPLICABLE" &&
+        fixedZeroIntent.notApplicableReason === "ZERO_TAX_CALCULATED" &&
+        fixedZeroIntent.taxRateBasisPoints === null &&
+        fixedZeroIntent.taxAmountCentavos === 0,
+      "Test 16K: Zero fixed tax remains NOT_APPLICABLE"
+    );
+
+    for (const invalidFixedAmount of [
+      null,
+      -1,
+      1.5,
+      Number.MAX_SAFE_INTEGER + 1,
+      2_147_483_648,
+    ]) {
+      mockReader.reset();
+      assert(
+        await taxPlanningFailsClosed(
+          mockReader,
+          makeTaxConfig({ rate: 0, fixedAmountCentavos: invalidFixedAmount }),
+          "INVALID_MONETARY_AMOUNT"
+        ),
+        `Test 16K: Invalid fixed tax ${String(invalidFixedAmount)} fails closed`
+      );
+    }
+
+    // L. A positive canonical percentage remains authoritative over valid fixed tax.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_percentage_first", rate: 10, fixedAmountCentavos: 999 }),
+    ];
+    const percentageFirstEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_percentage_first",
+        250,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const percentageFirstIntent = percentageFirstEffects[0]
+      .intent as TaxProvisionIntent;
+    assert(
+      percentageFirstIntent.taxRateBasisPoints === 1000 &&
+        percentageFirstIntent.taxAmountCentavos === 25,
+      "Test 16L: Positive canonical percentage takes precedence over valid fixed tax"
+    );
+
+    // M. A positive canonical rate may still round to a zero, not-applicable tax.
+    mockReader.reset();
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_rounds_zero", rate: 0.01 }),
+    ];
+    const roundedZeroEffects =
+      await PaymentFinalizationManifestService.planTaxProvisionEffects(
+        "txn_tax_rounds_zero",
+        1,
+        undefined,
+        new Date(testVerifiedAtStr),
+        mockReader
+      );
+    const roundedZeroIntent = roundedZeroEffects[0].intent as TaxProvisionIntent;
+    assert(
+      roundedZeroIntent.taxRateBasisPoints === 1 &&
+        roundedZeroIntent.taxAmountCentavos === 0 &&
+        roundedZeroIntent.status === "NOT_APPLICABLE" &&
+        roundedZeroIntent.notApplicableReason === "ZERO_TAX_CALCULATED",
+      "Test 16M: Zero calculated tax remains NOT_APPLICABLE after canonical-rate rounding"
+    );
+
+    // N is covered by the strengthened canonical tax:none Test 16 above.
+
+    // O. Repeated complete planning preserves intent and manifest hashes.
+    mockReader.reset();
+    mockReader.setupStandardContext(
+      "txn_tax_repeat",
+      "user_tax_repeat",
+      "cs_tax_repeat"
+    );
+    mockReader.taxConfigs = [
+      makeTaxConfig({ id: "tax_repeat", taxType: "WITHHOLDING_TAX", rate: 7.125 }),
+    ];
+    const repeatInput: FinalizationPlanningInput = {
+      transactionId: "txn_tax_repeat",
+      checkoutSessionId: "cs_tax_repeat",
+      userId: "user_tax_repeat",
+      planType: "1_YEAR",
+      purchaseAmountCentavos: 29_900,
+      feeKnowledge: "UNKNOWN",
+      source: "WEBHOOK",
+      verifiedAtIso: testVerifiedAtStr,
+    };
+    const repeatedManifestA =
+      await PaymentFinalizationManifestService.planFinalization(
+        repeatInput,
+        mockReader
+      );
+    const repeatedManifestB =
+      await PaymentFinalizationManifestService.planFinalization(
+        repeatInput,
+        mockReader
+      );
+    const repeatedTaxA = repeatedManifestA.effects.find(
+      (effect) => effect.effectType === "TAX_PROVISION"
+    );
+    const repeatedTaxB = repeatedManifestB.effects.find(
+      (effect) => effect.effectType === "TAX_PROVISION"
+    );
+    assert(
+      repeatedTaxA?.intentHash === repeatedTaxB?.intentHash &&
+        repeatedManifestA.manifestHash === repeatedManifestB.manifestHash,
+      "Test 16O: Repeated planning preserves tax intent hash and complete manifest hash"
+    );
+
+    // Strict tax config identifiers must already be canonical operation-key segments.
+    const invalidTaxConfigIds = [
+      "",
+      "   ",
+      " tax_id ",
+      "tax:id",
+      "tax/id",
+      "x".repeat(129),
+    ];
+    let everyInvalidTaxConfigIdFailed = true;
+    for (const invalidTaxConfigId of invalidTaxConfigIds) {
+      mockReader.reset();
+      everyInvalidTaxConfigIdFailed =
+        everyInvalidTaxConfigIdFailed &&
+        (await taxPlanningFailsClosed(
+          mockReader,
+          makeRuntimeTaxConfig({ id: invalidTaxConfigId })
+        ));
+    }
+    assert(
+      everyInvalidTaxConfigIdFailed,
+      "Test 16P: Malformed or non-canonical tax configuration IDs fail closed"
     );
   }
 
