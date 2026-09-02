@@ -23,6 +23,7 @@ import {
   IdempotentReconciliationService,
   ReconciliationExecutionError,
 } from "../lib/accounting/idempotentReconciliationService";
+import { classifyLegacyReconciliationRecord } from "../lib/accounting/legacyReconciliationClassifier";
 import {
   buildPaymentFinalizationOperationKey,
   canonicalizeJson,
@@ -435,6 +436,21 @@ function makeRecord(overrides?: Partial<ReconciliationRecord>): ReconciliationRe
   };
 }
 
+function makeLegacyRecord(
+  overrides?: Partial<ReconciliationRecord>
+): ReconciliationRecord {
+  return makeRecord({
+    id: "rec_" + TX,
+    finalizationEffectId: null,
+    status: "MATCHED",
+    discrepancyCentavos: 0,
+    discrepancyNotes: "Matched with verified ledger entries.",
+    reconciledBy: null,
+    reconciledAt: null,
+    ...overrides,
+  });
+}
+
 class MockTx {
   public reconEffect = makeReconEffect();
   public siblings = baseSiblings();
@@ -445,9 +461,12 @@ class MockTx {
   public reconciliations: ReconciliationRecord[] = [];
   public rawQueries: string[] = [];
   public writeCount = 0;
+  public reconCreateCount = 0;
+  public reconUpdateCount = 0;
   public postAbortCallCount = 0;
   public aborted = false;
   public simulateReconCreateError: unknown = null;
+  public simulateReconUpdateError: unknown = null;
 
   public noteCall(): void {
     if (this.aborted) this.postAbortCallCount++;
@@ -622,6 +641,7 @@ Object.defineProperty(MockTx.prototype, "reconciliationRecord", {
       }) => {
         this.noteCall();
         this.writeCount++;
+        this.reconCreateCount++;
         if (this.simulateReconCreateError) {
           this.aborted = true;
           throw this.simulateReconCreateError;
@@ -642,6 +662,11 @@ Object.defineProperty(MockTx.prototype, "reconciliationRecord", {
       }) => {
         this.noteCall();
         this.writeCount++;
+        this.reconUpdateCount++;
+        if (this.simulateReconUpdateError) {
+          this.aborted = true;
+          throw this.simulateReconUpdateError;
+        }
         const index = this.reconciliations.findIndex((r) => r.id === args.where.id);
         if (index < 0) throw new Error("mock update target missing");
         const row: ReconciliationRecord = {
@@ -934,6 +959,283 @@ async function runSuite(): Promise<void> {
       finalizationEffectId: null,
     })];
     await expectCode(mock, "LEGACY_RECONCILIATION_REQUIRES_CLASSIFICATION");
+  });
+
+  await group("pristine historical MATCHED row adopts in place", async () => {
+    const mock = new MockTx();
+    const legacy = makeLegacyRecord();
+    const originalCreatedAt = legacy.createdAt.toISOString();
+    mock.reconciliations = [legacy];
+    const result = await execute(mock);
+    check(result.outcome === "MATCHED" && !result.isReplay, "adoption uses current MATCHED result");
+    check(result.record.id === "rec_" + TX, "historical row id preserved");
+    check(result.record.finalizationEffectId === REC, "reconciliation effect linked");
+    check(result.record.sourceType === "INTERNAL_TRANSACTION", "source type preserved");
+    check(result.record.sourceId === TX, "source id preserved");
+    check(result.record.matchedTransactionId === TX, "matched transaction preserved");
+    check(result.record.createdAt.toISOString() === originalCreatedAt, "createdAt preserved");
+    check(result.record.reconciledAt instanceof Date, "adoption audit timestamp populated");
+    check(result.record.discrepancyNotes === "ALL_EVIDENCE_MATCHED", "current diagnostics replace legacy");
+    check(mock.reconUpdateCount === 1, "exactly one reconciliation update");
+    check(mock.reconCreateCount === 0, "zero reconciliation creates");
+    check(mock.writeCount === 1, "adoption performs one write");
+  });
+
+  await group("pristine historical MISSING row adopts using current MATCHED evidence", async () => {
+    const mock = new MockTx();
+    mock.reconciliations = [makeLegacyRecord({
+      status: "MISSING",
+      discrepancyCentavos: 0,
+      discrepancyNotes: "Missing balanced payment ledger entries.",
+    })];
+    const result = await execute(mock);
+    check(result.outcome === "MATCHED", "current durable evidence overrides legacy MISSING");
+    check(result.record.status === "MATCHED", "adopted status is current MATCHED");
+    check(result.record.discrepancyCentavos === 0, "current discrepancy persisted");
+    check(result.record.discrepancyNotes === "ALL_EVIDENCE_MATCHED", "current notes persisted");
+    check(mock.reconUpdateCount === 1 && mock.reconCreateCount === 0, "in-place adoption only");
+  });
+
+  await group("pristine historical MISMATCHED row adopts", async () => {
+    const mock = new MockTx();
+    mock.reconciliations = [makeLegacyRecord({
+      status: "MISMATCHED",
+      discrepancyCentavos: 9_900,
+      discrepancyNotes: "Amount mismatch: Expected 29900, got 20000",
+    })];
+    const result = await execute(mock);
+    check(result.outcome === "MATCHED", "valid historical mismatch adopts");
+    check(result.record.status === "MATCHED", "current durable result is authoritative");
+    check(mock.reconUpdateCount === 1 && mock.reconCreateCount === 0, "same row updated");
+  });
+
+  await group("historical MISMATCHED discrepancy zero remains auto-adoptable", async () => {
+    const mock = new MockTx();
+    const legacy = makeLegacyRecord({
+      status: "MISMATCHED",
+      discrepancyCentavos: 0,
+      discrepancyNotes: "Amount mismatch: Expected 29900, got 29900",
+    });
+    const classification = classifyLegacyReconciliationRecord(legacy, TX);
+    check(classification.outcome === "AUTO_ADOPTABLE", "zero discrepancy historical mismatch accepted");
+    mock.reconciliations = [legacy];
+    const result = await execute(mock);
+    check(result.outcome === "MATCHED", "zero-discrepancy mismatch adopts current result");
+    check(mock.reconUpdateCount === 1, "zero-discrepancy mismatch updated once");
+  });
+
+  await group("legacy MATCHED can adopt into current durable MISSING", async () => {
+    const mock = new MockTx();
+    mock.reconciliations = [makeLegacyRecord()];
+    mock.ledger = mock.ledger.filter((row) => row.finalizationEffectId !== PAY);
+    const result = await execute(mock);
+    check(
+      result.outcome === "DISCREPANCY" && result.status === "MISSING",
+      "current missing evidence overrides legacy MATCHED"
+    );
+    check(result.record.discrepancyCentavos === PURCHASE, "current expected discrepancy persisted");
+    check(result.record.discrepancyNotes?.includes("PAYMENT_LEDGER_MISSING") === true, "current notes persisted");
+  });
+
+  for (const scenario of [
+    {
+      name: "deterministic id mismatch",
+      record: makeLegacyRecord({ id: "rec_non_historical" }),
+    },
+    {
+      name: "MANUALLY_RESOLVED status",
+      record: makeLegacyRecord({
+        status: "MANUALLY_RESOLVED",
+        discrepancyNotes: "human reviewed",
+      }),
+    },
+    {
+      name: "reconciledBy present",
+      record: makeLegacyRecord({ reconciledBy: "admin_001" }),
+    },
+    {
+      name: "reconciledAt present",
+      record: makeLegacyRecord({ reconciledAt: VERIFIED }),
+    },
+    {
+      name: "PENDING status",
+      record: makeLegacyRecord({ status: "PENDING" }),
+    },
+    {
+      name: "DUPLICATE status",
+      record: makeLegacyRecord({ status: "DUPLICATE" }),
+    },
+  ]) {
+    await group("legacy provenance fails closed untouched: " + scenario.name, async () => {
+      const mock = new MockTx();
+      mock.reconciliations = [scenario.record];
+      const before = JSON.stringify(scenario.record);
+      await expectCode(mock, "LEGACY_RECONCILIATION_REQUIRES_CLASSIFICATION");
+      check(mock.writeCount === 0, "manual-review classification performs zero writes");
+      check(JSON.stringify(mock.reconciliations[0]) === before, "legacy row remains untouched");
+    });
+  }
+
+  for (const scenario of [
+    {
+      name: "malformed MATCHED payload",
+      record: makeLegacyRecord({ discrepancyNotes: "Matched." }),
+    },
+    {
+      name: "malformed MISSING payload",
+      record: makeLegacyRecord({
+        status: "MISSING",
+        discrepancyCentavos: 1,
+        discrepancyNotes: "Missing balanced payment ledger entries.",
+      }),
+    },
+    {
+      name: "malformed mismatch note",
+      record: makeLegacyRecord({
+        status: "MISMATCHED",
+        discrepancyCentavos: 9_900,
+        discrepancyNotes: "Amount mismatch: Expected 29900, got 20000 trailing",
+      }),
+    },
+    {
+      name: "mismatch discrepancy arithmetic inconsistency",
+      record: makeLegacyRecord({
+        status: "MISMATCHED",
+        discrepancyCentavos: 1,
+        discrepancyNotes: "Amount mismatch: Expected 29900, got 20000",
+      }),
+    },
+    {
+      name: "mismatch PostgreSQL integer overflow",
+      record: makeLegacyRecord({
+        status: "MISMATCHED",
+        discrepancyCentavos: 0,
+        discrepancyNotes: "Amount mismatch: Expected 2147483648, got 2147483648",
+      }),
+    },
+  ]) {
+    await group("legacy diagnostic fails closed untouched: " + scenario.name, async () => {
+      const mock = new MockTx();
+      mock.reconciliations = [scenario.record];
+      const before = JSON.stringify(scenario.record);
+      await expectCode(mock, "LEGACY_RECONCILIATION_REQUIRES_CLASSIFICATION");
+      check(mock.writeCount === 0, "malformed diagnostic performs zero writes");
+      check(JSON.stringify(mock.reconciliations[0]) === before, "malformed legacy row untouched");
+    });
+  }
+
+  await group("legacy matchedTransactionId mismatch is identity conflict", async () => {
+    const mock = new MockTx();
+    const legacy = makeLegacyRecord({ matchedTransactionId: "txn_other" });
+    mock.reconciliations = [legacy];
+    const before = JSON.stringify(legacy);
+    await expectCode(mock, "RECONCILIATION_IDENTITY_CONFLICT");
+    check(mock.writeCount === 0, "identity conflict performs zero writes");
+    check(JSON.stringify(mock.reconciliations[0]) === before, "identity-conflict row untouched");
+  });
+
+  await group("classifier identity conflict contracts are closed", () => {
+    const matchedMismatch = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ matchedTransactionId: "txn_other" }),
+      TX
+    );
+    check(matchedMismatch.outcome === "IDENTITY_CONFLICT", "matched transaction conflict");
+    check(matchedMismatch.reason === "MATCHED_TRANSACTION_ID_MISMATCH", "matched reason exact");
+
+    const sourceMismatch = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ sourceId: "txn_other" }),
+      TX
+    );
+    check(sourceMismatch.outcome === "IDENTITY_CONFLICT", "source identity conflict");
+    check(sourceMismatch.reason === "SOURCE_ID_MISMATCH", "source reason exact");
+
+    const sourceTypeMismatch = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ sourceType: "PAYMONGO_PAYMENT" }),
+      TX
+    );
+    check(sourceTypeMismatch.outcome === "IDENTITY_CONFLICT", "source type conflict");
+    check(sourceTypeMismatch.reason === "SOURCE_TYPE_MISMATCH", "source type reason exact");
+
+    const effectPresent = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ finalizationEffectId: REC }),
+      TX
+    );
+    check(effectPresent.outcome === "IDENTITY_CONFLICT", "non-null effect conflict");
+    check(effectPresent.reason === "FINALIZATION_EFFECT_PRESENT", "effect reason exact");
+  });
+
+  await group("classifier manual-review reason codes are deterministic", () => {
+    const idMismatch = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ id: "rec_other" }),
+      TX
+    );
+    check(idMismatch.outcome === "MANUAL_REVIEW_REQUIRED", "id mismatch manual review");
+    check(idMismatch.reason === "NON_HISTORICAL_RECORD_ID", "id reason exact");
+
+    const human = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ reconciledBy: "admin_001" }),
+      TX
+    );
+    check(human.outcome === "MANUAL_REVIEW_REQUIRED", "human field manual review");
+    check(human.reason === "RECONCILED_BY_PRESENT", "human reason exact");
+
+    const pending = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ status: "PENDING" }),
+      TX
+    );
+    check(pending.outcome === "MANUAL_REVIEW_REQUIRED", "pending manual review");
+    check(pending.reason === "UNSUPPORTED_HISTORICAL_STATUS", "pending reason exact");
+
+    const malformed = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({ discrepancyNotes: null }),
+      TX
+    );
+    check(malformed.outcome === "MANUAL_REVIEW_REQUIRED", "null matched note manual review");
+    check(
+      malformed.reason === "MALFORMED_HISTORICAL_MATCHED_PAYLOAD",
+      "matched payload reason exact"
+    );
+
+    const arithmetic = classifyLegacyReconciliationRecord(
+      makeLegacyRecord({
+        status: "MISMATCHED",
+        discrepancyCentavos: 1,
+        discrepancyNotes: "Amount mismatch: Expected 29900, got 20000",
+      }),
+      TX
+    );
+    check(arithmetic.outcome === "MANUAL_REVIEW_REQUIRED", "arithmetic manual review");
+    check(
+      arithmetic.reason === "HISTORICAL_MISMATCH_DISCREPANCY_INCONSISTENT",
+      "arithmetic reason exact"
+    );
+  });
+
+  await group("replay-only pristine legacy row fails before adoption write", async () => {
+    const mock = new MockTx();
+    const legacy = makeLegacyRecord();
+    mock.reconciliations = [legacy];
+    mock.reconEffect.finalization.status = "COMPLETE";
+    const before = JSON.stringify(legacy);
+    await expectCode(mock, "INVALID_LIFECYCLE");
+    check(mock.writeCount === 0, "replay-only adoption performs zero writes");
+    check(JSON.stringify(mock.reconciliations[0]) === before, "replay-only legacy row untouched");
+  });
+
+  await group("legacy adoption P2002 maps to concurrent conflict and stops calls", async () => {
+    const mock = new MockTx();
+    const legacy = makeLegacyRecord();
+    mock.reconciliations = [legacy];
+    mock.simulateReconUpdateError = {
+      code: "P2002",
+      meta: { target: ["finalizationEffectId"] },
+    };
+    const before = JSON.stringify(legacy);
+    await expectCode(mock, "CONCURRENT_IDENTITY_CONFLICT");
+    check(mock.reconUpdateCount === 1, "adoption update attempted exactly once");
+    check(mock.reconCreateCount === 0, "adoption creates zero records");
+    check(mock.postAbortCallCount === 0, "zero DB calls after aborted adoption update");
+    check(JSON.stringify(mock.reconciliations[0]) === before, "failed adoption leaves row untouched");
   });
 
   await group("duplicate source identities fail closed", async () => {
@@ -1641,6 +1943,39 @@ async function runSuite(): Promise<void> {
     check(!service.includes(".taxRecord.create"), "no tax creates");
     check(service.includes(".reconciliationRecord.create"), "reconciliation create allowed");
     check(service.includes(".reconciliationRecord.update"), "reconciliation update allowed");
+  });
+
+  await group("legacy classifier is pure and contains no runtime infrastructure", () => {
+    const classifier = fs.readFileSync(
+      path.resolve(process.cwd(), "src/lib/accounting/legacyReconciliationClassifier.ts"),
+      "utf8"
+    );
+    check(
+      classifier.includes('import type { ReconciliationRecord } from "@prisma/client"'),
+      "classifier uses type-only record import"
+    );
+    check(!classifier.includes("PrismaClient"), "no PrismaClient");
+    check(!classifier.includes("TransactionClient"), "no TransactionClient");
+    check(!classifier.includes("import { prisma }"), "no prisma runtime import");
+    check(!classifier.includes('from "../prisma"'), "no application prisma import");
+    check(!classifier.includes("$queryRaw"), "no raw query");
+    check(!classifier.includes("$executeRaw"), "no raw mutation");
+    check(!classifier.includes("fetch("), "no fetch");
+    check(!classifier.includes("Date.now"), "no Date.now");
+    check(!classifier.includes("new Date"), "no new Date");
+    check(!classifier.includes("process.env"), "no environment access");
+    check(!classifier.includes("console."), "no console side effects");
+    check(!classifier.includes('from "fs"'), "no filesystem import");
+    const explicitAnyTokens = [
+      ": " + "a" + "ny",
+      "as " + "a" + "ny",
+      "<" + "a" + "ny>",
+      "a" + "ny[]",
+    ];
+    check(
+      explicitAnyTokens.every((token) => !classifier.includes(token)),
+      "classifier contains zero any types"
+    );
   });
 
   await group("service imports no child executor or ledger primitive", async () => {

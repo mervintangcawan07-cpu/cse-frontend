@@ -29,6 +29,7 @@ import {
   validateIsoUtcTimestamp,
   validateTransactionId,
 } from "../payment/paymentFinalizationContracts";
+import { classifyLegacyReconciliationRecord } from "./legacyReconciliationClassifier";
 import type { ReconciliationStatus } from "./types";
 
 const POSTGRESQL_INTEGER_MAX = 2_147_483_647;
@@ -3098,17 +3099,36 @@ export class IdempotentReconciliationService {
     const identityState = await readReconciliationIdentity(client, effectId, transactionId);
     const identity = classifyReconciliationIdentity(identityState, transactionId, effectId);
 
-    if (identity.kind === "LEGACY") {
-      fail(
-        "LEGACY_RECONCILIATION_REQUIRES_CLASSIFICATION",
-        "A source-identical legacy reconciliation row requires explicit Slice 7 classification."
-      );
-    }
     if (identity.kind === "DUPLICATE" || identity.kind === "CONFLICT") {
       fail(
         "RECONCILIATION_IDENTITY_CONFLICT",
         "Reconciliation effect/source identities resolve to an inconsistent state."
       );
+    }
+
+    if (identity.kind === "LEGACY") {
+      const legacyClassification = classifyLegacyReconciliationRecord(
+        identity.record,
+        transactionId
+      );
+      if (legacyClassification.outcome === "IDENTITY_CONFLICT") {
+        fail(
+          "RECONCILIATION_IDENTITY_CONFLICT",
+          "Legacy reconciliation identity is inconsistent with the requested transaction."
+        );
+      }
+      if (legacyClassification.outcome === "MANUAL_REVIEW_REQUIRED") {
+        fail(
+          "LEGACY_RECONCILIATION_REQUIRES_CLASSIFICATION",
+          "Legacy reconciliation provenance requires explicit manual classification."
+        );
+      }
+      if (replayOnly) {
+        fail(
+          "INVALID_LIFECYCLE",
+          "Replay-only reconciliation lifecycle cannot adopt a legacy reconciliation row."
+        );
+      }
     }
 
     if (identity.kind === "EXACT" && identity.record.status === "MANUALLY_RESOLVED") {
@@ -3132,6 +3152,36 @@ export class IdempotentReconciliationService {
       parsed,
       effect.finalization
     );
+
+    if (identity.kind === "LEGACY") {
+      const reconciledAt = new Date();
+      if (!Number.isFinite(reconciledAt.getTime())) {
+        fail("DATABASE_EXECUTION_FAILED", "Unable to obtain reconciliation audit timestamp.");
+      }
+
+      try {
+        const adopted = await client.reconciliationRecord.update({
+          where: { id: identity.record.id },
+          data: {
+            finalizationEffectId: effectId,
+            status: evaluation.status,
+            discrepancyCentavos: evaluation.discrepancyCentavos,
+            discrepancyNotes: evaluation.discrepancyNotes,
+            reconciledBy: null,
+            reconciledAt,
+          },
+        });
+        return resultFromRecord(adopted, false);
+      } catch (error: unknown) {
+        if (isReconciliationIdentityP2002Error(error)) {
+          fail(
+            "CONCURRENT_IDENTITY_CONFLICT",
+            "Concurrent legacy reconciliation adoption requires a new transaction retry."
+          );
+        }
+        throw error;
+      }
+    }
 
     if (identity.kind === "EXACT") {
       if (identity.record.reconciledBy !== null) {
