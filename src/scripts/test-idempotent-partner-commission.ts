@@ -1421,10 +1421,15 @@ async function runSuite(): Promise<void> {
       process.cwd(),
       "src/scripts/test-idempotent-tax-provision.ts"
     );
+    const reconciliationTestPath = path.resolve(
+      process.cwd(),
+      "src/scripts/test-idempotent-reconciliation.ts"
+    );
     const excludedPaths = new Set([
       servicePath,
       testPath,
       taxProvisionTestPath,
+      reconciliationTestPath,
     ]);
     const unexpectedConsumers = listSourceFiles(path.resolve(process.cwd(), "src"))
       .filter((sourcePath) => !excludedPaths.has(sourcePath))
