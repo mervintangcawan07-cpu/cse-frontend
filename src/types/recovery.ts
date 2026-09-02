@@ -29,3 +29,18 @@ export interface PurgeResult {
   code?: string;
   message?: string;
 }
+
+export interface BatchOperationResult {
+  success: boolean;
+  requestedCount: number;
+  processedCount: number;
+  skippedCount: number;
+  failedCount: number;
+  message?: string;
+  details?: Array<{
+    id: string;
+    entityType: SupportedEntityType;
+    status: "PROCESSED" | "SKIPPED" | "FAILED";
+    reason?: string;
+  }>;
+}

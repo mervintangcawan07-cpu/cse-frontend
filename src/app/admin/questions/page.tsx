@@ -276,6 +276,14 @@ export default function AdminQuestionsPage() {
           </button>
 
           <Link
+            href="/admin/trash"
+            className="px-3.5 py-2.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 font-bold text-xs rounded-xl transition flex items-center gap-1.5"
+          >
+            <span>🗑️</span>
+            <span>Trash Bin</span>
+          </Link>
+
+          <Link
             href="/dashboard"
             className="px-3.5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition"
           >
