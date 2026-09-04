@@ -198,8 +198,8 @@ export default function ReadinessCardPage() {
   if (!metrics) return null;
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 text-slate-100 font-sans">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6 text-slate-100 font-sans">
+      <div className="bg-slate-900 border border-slate-800 rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl shadow-xl overflow-hidden">
         {/* HEADER BANNER - Seamlessly integrated */}
         <div className="bg-slate-900 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800">
           <div>

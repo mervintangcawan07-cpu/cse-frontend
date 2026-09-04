@@ -126,7 +126,7 @@ export default function ExamReviewPage({
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-24 text-center space-y-4">
+      <div className="w-full py-24 text-center space-y-4">
         <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p className="font-extrabold text-slate-700 dark:text-slate-300">
           Loading detailed exam review answers and explanations...
@@ -149,7 +149,7 @@ export default function ExamReviewPage({
   });
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
+    <div className="w-full px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 lg:px-8 space-y-4 sm:space-y-6">
       {/* HEADER BANNER */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>

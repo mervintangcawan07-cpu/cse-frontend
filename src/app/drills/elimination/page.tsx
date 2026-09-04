@@ -259,7 +259,7 @@ export default function EliminationTrainerPage() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+      <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
         Loading Elimination Trainer & Question Bank...
       </div>
     );
@@ -270,7 +270,7 @@ export default function EliminationTrainerPage() {
   const accuracyPercent = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6">
+    <div className="w-full max-w-5xl mx-auto py-3 sm:py-6 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-6">
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-slate-900 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-md">
         <div>

@@ -611,7 +611,7 @@ function TakeExamPageInner() {
       className={
         isFocusMode
           ? "fixed inset-0 z-50 bg-slate-950 p-3 sm:p-6 md:p-8 overflow-y-auto w-full flex flex-col justify-start max-w-5xl mx-auto space-y-4"
-          : "w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 space-y-4 sm:space-y-6"
+          : "w-full max-w-5xl mx-auto py-3 sm:py-6 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-6"
       }
     >
       {/* EXAM SUBMISSION & GRADING FULLSCREEN OVERLAY */}
@@ -892,7 +892,7 @@ function TakeExamPageInner() {
 export default function TakeExamPage() {
   return (
     <Suspense fallback={
-      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+      <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
         Preparing your exam...
       </div>
     }>

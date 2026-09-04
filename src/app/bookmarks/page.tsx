@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -98,15 +98,15 @@ export default function BookmarksPage() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+      <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
         Loading saved bookmarks...
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 text-slate-100">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6 text-slate-100">
+      <div className="bg-slate-900 border border-slate-800 rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl shadow-xl overflow-hidden">
         {/* HEADER BANNER - Seamlessly integrated */}
         <div className="bg-slate-900 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800">
           <div>

@@ -149,7 +149,7 @@ export default function SocialDashboardPage() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto py-24 text-center font-bold text-slate-400 animate-pulse space-y-3">
+      <div className="w-full py-24 text-center font-bold text-slate-400 animate-pulse space-y-3">
         <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p className="text-xs uppercase tracking-widest text-slate-500">
           Loading Study Together Hub...
@@ -224,7 +224,7 @@ export default function SocialDashboardPage() {
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-3 sm:py-6 px-2 sm:px-4 md:px-6 space-y-3 sm:space-y-6 text-slate-900">
+    <div className="w-full py-3 sm:py-6 px-2 sm:px-4 md:px-6 lg:px-8 space-y-3 sm:space-y-6 text-slate-900">
       {/* MINIMIZED SLEEK TOP PROFILE & BRAND BAR */}
       <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-lg shadow-purple-600/10 relative">
         <div className="flex items-center justify-between gap-2">
