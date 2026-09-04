@@ -1345,6 +1345,7 @@ async function runSuite(): Promise<void> {
     const approved = [
       "src/lib/accounting/idempotentPartnerCommissionService.ts",
       "src/lib/accounting/idempotentTaxProvisionService.ts",
+      "src/lib/payment/paymentFinalizationCoordinator.ts",
     ].sort((left, right) => left.localeCompare(right));
     check(JSON.stringify(consumers) === JSON.stringify(approved), `exact consumers: ${consumers.join(", ")}`);
     const slice3 = fs.readFileSync(

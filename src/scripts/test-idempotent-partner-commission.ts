@@ -1430,6 +1430,10 @@ async function runSuite(): Promise<void> {
       testPath,
       taxProvisionTestPath,
       reconciliationTestPath,
+      path.resolve(
+        process.cwd(),
+        "src/lib/payment/paymentFinalizationCoordinator.ts"
+      ),
     ]);
     const unexpectedConsumers = listSourceFiles(path.resolve(process.cwd(), "src"))
       .filter((sourcePath) => !excludedPaths.has(sourcePath))

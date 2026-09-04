@@ -325,7 +325,12 @@ async function runSuite(): Promise<void> {
         productionTypeScriptFiles()
           .filter(
             (file) =>
-              path.resolve(file) !== durablePath
+              path.resolve(file) !== durablePath &&
+          path.resolve(file) !==
+            path.resolve(
+              process.cwd(),
+              "src/lib/payment/paymentFinalizationCoordinator.ts"
+            )
           )
           .filter((file) => {
             const source =

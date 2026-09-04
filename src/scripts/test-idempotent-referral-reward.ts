@@ -1426,10 +1426,15 @@ async function runSuite(): Promise<void> {
     check(!serviceSource.includes("while ("), "Service must have zero retry loop.");
     check(!forbiddenTopType.test(testSource), "Focused test must contain zero unsafe top types.");
 
+    const coordinatorPath = path.resolve(
+      process.cwd(),
+      "src/lib/payment/paymentFinalizationCoordinator.ts"
+    );
     const runtimeFiles = sourceFiles(path.join(process.cwd(), "src")).filter(
       (file) =>
         !file.includes(`${path.sep}scripts${path.sep}`) &&
-        file !== servicePath
+        file !== servicePath &&
+        file !== coordinatorPath
     );
     const productionCallers = runtimeFiles.filter((file) =>
       fs

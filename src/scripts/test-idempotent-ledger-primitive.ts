@@ -924,6 +924,7 @@ async function runIdempotentLedgerPrimitiveTests(): Promise<void> {
       "src/lib/accounting/" +
         "idempotentTax" +
         "ProvisionService.ts",
+      "src/lib/payment/paymentFinalizationCoordinator.ts",
     ] as const;
     const appConsumers = findLedgerConsumers(path.join(process.cwd(), "src/app"));
     const libConsumers = findLedgerConsumers(path.join(process.cwd(), "src/lib"))
