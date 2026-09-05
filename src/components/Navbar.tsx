@@ -74,6 +74,17 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   }, [pathname]);
 
+  // Close compact navigation drawer on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -100,9 +111,9 @@ export default function Navbar() {
 
   return (
     <header className="bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
-      <div className="w-full max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="w-full max-w-none px-3 sm:px-4 md:px-6 xl:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 group">
+          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 group shrink-0">
             <div className="h-8 w-8 shrink-0 overflow-hidden rounded-lg">
               <Image
                 src="/brand/govstudyx-icon.png"
@@ -118,7 +129,7 @@ export default function Navbar() {
           </Link>
 
           {/* DESKTOP NAVIGATION */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
               return (
@@ -139,7 +150,7 @@ export default function Navbar() {
         </div>
 
         {/* DESKTOP ACTIONS */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden xl:flex items-center gap-3">
           {/* Offline / Sync Indicator */}
           {(!isOnline || pendingCount > 0) && (
             <button
@@ -184,18 +195,19 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 href="/profile"
-                className="text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-slate-900"
+                title={user.name || "My Account"}
+                className="text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2 px-2.5 py-1 rounded-lg hover:bg-slate-900 max-w-[180px]"
               >
-                <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-blue-400 uppercase">
+                <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-blue-400 uppercase shrink-0">
                   {user.name ? user.name[0] : "U"}
                 </div>
-                <span>{user.name || "My Account"}</span>
+                <span className="truncate">{user.name || "My Account"}</span>
               </Link>
 
               <button
                 type="button"
                 onClick={handleLogout}
-                className="px-3 py-1.5 bg-slate-900 hover:bg-rose-950/40 hover:border-rose-500/30 border border-slate-800 text-slate-400 hover:text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                className="px-3 py-1.5 bg-slate-900 hover:bg-rose-950/40 hover:border-rose-500/30 border border-slate-800 text-slate-400 hover:text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer shrink-0"
               >
                 Log Out
               </button>
@@ -203,24 +215,61 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition shadow-md"
+              className="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition shadow-md shrink-0"
             >
               Sign In
             </Link>
           )}
-
-          {/* Theme Toggle */}
           <ThemeToggle />
         </div>
 
-        {/* MOBILE HAMBURGER BUTTON & ACCOUNT ICON */}
-        <div className="flex items-center gap-2 md:hidden">
+        {/* MOBILE/TABLET HAMBURGER BUTTON & SHORTCUTS */}
+        <div className="flex items-center gap-2 xl:hidden">
           <ThemeToggle />
+          {(!isOnline || pendingCount > 0) && (
+            <button
+              type="button"
+              onClick={() => void syncNow()}
+              disabled={isSyncing || !isOnline}
+              title={
+                !isOnline
+                  ? "You are offline"
+                  : isSyncing
+                  ? "Syncing pending submissions…"
+                  : `${pendingCount} pending submission${pendingCount > 1 ? "s" : ""} — click to sync`
+              }
+              className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold transition cursor-pointer disabled:cursor-not-allowed ${
+                !isOnline
+                  ? "bg-slate-900 border-slate-700 text-slate-400"
+                  : isSyncing
+                  ? "bg-blue-950/50 border-blue-700/50 text-blue-400 animate-pulse"
+                  : "bg-amber-950/40 border-amber-600/40 text-amber-400 hover:bg-amber-950/60"
+              }`}
+            >
+              {!isOnline ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-500 inline-block" />
+                  <span>Offline</span>
+                </>
+              ) : isSyncing ? (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 inline-block animate-pulse" />
+                  <span>Syncing…</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" />
+                  <span>{pendingCount} Pending</span>
+                </>
+              )}
+            </button>
+          )}
 
           {user && (
             <Link
               href="/profile"
-              className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase"
+              title={user.name || "My Account"}
+              className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase shrink-0"
             >
               {user.name ? user.name[0] : "U"}
             </Link>
@@ -231,6 +280,8 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition cursor-pointer"
             aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation-menu"
           >
             {mobileMenuOpen ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,9 +296,54 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MOBILE DROPDOWN DRAWER */}
+      {/* MOBILE/TABLET DROPDOWN DRAWER */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-950 border-b border-slate-800/80 px-4 pt-3 pb-5 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          id="mobile-navigation-menu"
+          className="xl:hidden bg-slate-950 border-b border-slate-800/80 px-4 sm:px-6 md:px-8 pt-3 pb-5 space-y-4 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 max-h-[calc(100dvh-4rem)] overflow-y-auto"
+        >
+          {/* Compact Menu Offline / Sync Indicator */}
+          {(!isOnline || pendingCount > 0) && (
+            <div className="pb-1">
+              <button
+                type="button"
+                onClick={() => void syncNow()}
+                disabled={isSyncing || !isOnline}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold border transition cursor-pointer disabled:cursor-not-allowed ${
+                  !isOnline
+                    ? "bg-slate-900 border-slate-700 text-slate-400"
+                    : isSyncing
+                    ? "bg-blue-950/50 border-blue-700/50 text-blue-400 animate-pulse"
+                    : "bg-amber-950/40 border-amber-600/40 text-amber-400 hover:bg-amber-950/60"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      !isOnline
+                        ? "bg-slate-500"
+                        : isSyncing
+                        ? "bg-blue-400 animate-pulse"
+                        : "bg-amber-400"
+                    }`}
+                  />
+                  <span>
+                    {!isOnline
+                      ? "Offline Mode"
+                      : isSyncing
+                      ? "Syncing pending submissions…"
+                      : `${pendingCount} pending submission${pendingCount > 1 ? "s" : ""}`}
+                  </span>
+                </div>
+                {isOnline && !isSyncing && (
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-900/60 px-2 py-0.5 rounded-md border border-amber-500/30">
+                    Sync Now
+                  </span>
+                )}
+              </button>
+            </div>
+          )}
+
           <div>
             <p className="px-1 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
               Navigation
@@ -278,7 +374,7 @@ export default function Navbar() {
               <p className="px-1 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1.5">
                 Quick Review Tools
               </p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <Link
                   href="/mistakes"
                   className="px-3 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl flex items-center gap-1.5 transition"
@@ -314,17 +410,17 @@ export default function Navbar() {
           <div className="pt-3 border-t border-slate-900 flex items-center justify-between">
             {user ? (
               <>
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-blue-400 uppercase shrink-0">
                     {user.name ? user.name[0] : "U"}
                   </div>
-                  <span className="text-xs font-bold text-slate-200">{user.name || "My Account"}</span>
+                  <span className="text-xs font-bold text-slate-200 truncate">{user.name || "My Account"}</span>
                 </div>
 
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="px-3.5 py-1.5 bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer"
+                  className="px-3.5 py-1.5 bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-bold rounded-xl transition cursor-pointer shrink-0"
                 >
                   Log Out
                 </button>
