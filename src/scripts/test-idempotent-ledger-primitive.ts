@@ -925,6 +925,7 @@ async function runIdempotentLedgerPrimitiveTests(): Promise<void> {
         "idempotentTax" +
         "ProvisionService.ts",
       "src/lib/payment/paymentFinalizationCoordinator.ts",
+      "src/lib/payment/paymentFinalizationIngestionService.ts", // Slice 8E-C dormant ingestion
     ] as const;
     const appConsumers = findLedgerConsumers(path.join(process.cwd(), "src/app"));
     const libConsumers = findLedgerConsumers(path.join(process.cwd(), "src/lib"))

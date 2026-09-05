@@ -1434,6 +1434,14 @@ async function runSuite(): Promise<void> {
         process.cwd(),
         "src/lib/payment/paymentFinalizationCoordinator.ts"
       ),
+      path.resolve(
+        process.cwd(),
+        "src/scripts/test-payment-finalization-ingestion-postgres.ts"
+      ),
+      path.resolve(
+        process.cwd(),
+        "src/scripts/test-payment-finalization-ingestion-service-postgres.ts"
+      ),
     ]);
     const unexpectedConsumers = listSourceFiles(path.resolve(process.cwd(), "src"))
       .filter((sourcePath) => !excludedPaths.has(sourcePath))

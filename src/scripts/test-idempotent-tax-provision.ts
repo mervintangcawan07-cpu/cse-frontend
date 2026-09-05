@@ -1346,6 +1346,7 @@ async function runSuite(): Promise<void> {
       "src/lib/accounting/idempotentPartnerCommissionService.ts",
       "src/lib/accounting/idempotentTaxProvisionService.ts",
       "src/lib/payment/paymentFinalizationCoordinator.ts",
+      "src/lib/payment/paymentFinalizationIngestionService.ts", // Slice 8E-C dormant ingestion
     ].sort((left, right) => left.localeCompare(right));
     check(JSON.stringify(consumers) === JSON.stringify(approved), `exact consumers: ${consumers.join(", ")}`);
     const slice3 = fs.readFileSync(

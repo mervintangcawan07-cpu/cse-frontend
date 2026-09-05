@@ -2467,39 +2467,62 @@ async function runPaymentFinalizationRecoveryTests(): Promise<void> {
     );
   }
 
-  // Test 19: Architectural Invariants — Dormant engine (zero production callers import planner)
+  // Test 19: Architectural Invariants — Dormant engine topology
   {
     const appDir = path.join(process.cwd(), "src/app");
     const libDir = path.join(process.cwd(), "src/lib");
+    const targetName = "PaymentFinalizationManifestService";
+    const selfFiles = new Set([
+      "paymentFinalizationContracts.ts",
+      "paymentFinalizationManifestService.ts",
+    ]);
 
-    function searchForImport(dir: string, targetName: string): boolean {
+    function findConsumers(dir: string): string[] {
+      const results: string[] = [];
+      if (!fs.existsSync(dir)) return results;
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
-          if (searchForImport(fullPath, targetName)) return true;
+          results.push(...findConsumers(fullPath));
         } else if (entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx"))) {
-          if (
-            entry.name === "paymentFinalizationContracts.ts" ||
-            entry.name === "paymentFinalizationManifestService.ts"
-          ) {
+          if (selfFiles.has(entry.name)) {
             continue;
           }
           const content = fs.readFileSync(fullPath, "utf-8");
           if (content.includes(targetName)) {
-            return true;
+            const relPath = path.relative(process.cwd(), fullPath).replace(/\\/g, "/");
+            results.push(relPath);
           }
         }
       }
-      return false;
+      return results;
     }
 
-    const hasAppImport = searchForImport(appDir, "PaymentFinalizationManifestService");
-    const hasLibImport = searchForImport(libDir, "PaymentFinalizationManifestService");
+    const appConsumers = findConsumers(appDir);
+    const libConsumers = findConsumers(libDir);
+
+    const approvedLibConsumers = [
+      "src/lib/payment/paymentFinalizationIngestionService.ts",
+    ];
+
+    const sortedLib = [...libConsumers].sort((a, b) => a.localeCompare(b));
+    const sortedApproved = [...approvedLibConsumers].sort((a, b) => a.localeCompare(b));
+
+    const zeroAppCallers = appConsumers.length === 0;
+    const exactLibTopology = JSON.stringify(sortedLib) === JSON.stringify(sortedApproved);
+
+    let failureDetail: string | undefined;
+    if (!zeroAppCallers) {
+      failureDetail = `Unexpected src/app consumers: ${appConsumers.join(", ")}`;
+    } else if (!exactLibTopology) {
+      failureDetail = `Expected exact src/lib consumers [${sortedApproved.join(", ")}], found [${sortedLib.join(", ")}]`;
+    }
 
     assert(
-      !hasAppImport && !hasLibImport,
-      "Test 19: Planner is strictly dormant (zero production caller imports outside tests)"
+      zeroAppCallers && exactLibTopology,
+      "Test 19: Planner remains production-route dormant with exactly one approved dormant library consumer",
+      failureDetail
     );
   }
 
