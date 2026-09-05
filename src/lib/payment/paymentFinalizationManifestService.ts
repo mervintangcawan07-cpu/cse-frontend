@@ -9,6 +9,7 @@
  */
 
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { DEFAULT_REFERRAL_CONFIG, REFERRAL_SETTING_KEYS } from "@/lib/referral/config";
 import { sanitizeRewardPercentage } from "@/lib/referral/rewardCalculator";
 import {
@@ -416,6 +417,135 @@ export class PrismaFinalizationDataReader implements IFinalizationDataReader {
     }));
   }
 }
+
+/**
+ * Transaction-scoped finalization data reader.
+ * Enables deterministic manifest planning within an active uncommitted database transaction.
+ * Pure read-only; delegates strictly to the provided Prisma.TransactionClient with zero fallback.
+ */
+export class TransactionScopedFinalizationDataReader implements IFinalizationDataReader {
+  constructor(private readonly tx: Prisma.TransactionClient) {
+    if (!tx || typeof tx !== "object" || !("$queryRaw" in tx)) {
+      throw new TypeError(
+        "TransactionScopedFinalizationDataReader requires a valid Prisma.TransactionClient."
+      );
+    }
+  }
+
+  async findTransactionIdentity(transactionId: string): Promise<TransactionIdentityForPlanning | null> {
+    const record = await this.tx.transaction.findUnique({
+      where: { id: transactionId },
+      select: { id: true, userId: true, checkoutSessionId: true },
+    });
+    if (!record) return null;
+    return {
+      id: record.id,
+      userId: record.userId,
+      checkoutSessionId: record.checkoutSessionId ?? "",
+    };
+  }
+
+  async findUser(userId: string): Promise<UserRecordForPlanning | null> {
+    const user = await this.tx.user.findUnique({
+      where: { id: userId },
+      select: { id: true, isPaid: true, paidUntil: true },
+    });
+    if (!user) return null;
+    return {
+      id: user.id,
+      isPaid: user.isPaid,
+      paidUntil: user.paidUntil ? user.paidUntil.toISOString() : null,
+    };
+  }
+
+  async findReferralAttribution(userId: string): Promise<ReferralAttributionForPlanning | null> {
+    const referral = await this.tx.referral.findUnique({
+      where: { referredUserId: userId },
+      include: {
+        reward: true,
+      },
+    });
+
+    if (!referral) return null;
+
+    let settings: readonly { readonly key: string; readonly value: string }[];
+    try {
+      settings = await this.tx.referralProgramSetting.findMany();
+    } catch {
+      throw new PaymentFinalizationPlanningError(
+        "Referral planning configuration could not be read.",
+        "PLANNING_ERROR"
+      );
+    }
+    const planningConfig = parseReferralPlanningConfig(settings);
+
+    const existingReward = referral.reward
+      ? { id: referral.reward.id, transactionId: referral.reward.transactionId }
+      : null;
+
+    return {
+      referralId: referral.id,
+      inviterId: referral.inviterId,
+      ...planningConfig,
+      existingReward,
+    };
+  }
+
+  async findExistingPartnerCommission(transactionId: string): Promise<PartnerCommissionRecordForPlanning | null> {
+    const commission = await this.tx.partnerCommission.findUnique({
+      where: { transactionId },
+      select: { id: true, partnerId: true, transactionId: true },
+    });
+    if (!commission) return null;
+    return {
+      id: commission.id,
+      partnerId: commission.partnerId,
+      transactionId: commission.transactionId,
+    };
+  }
+
+  async findPartnerAttribution(userId: string): Promise<PartnerAttributionForPlanning | null> {
+    const attribution = await this.tx.partnerAttribution.findUnique({
+      where: { referredUserId: userId },
+      include: { partner: true },
+    });
+
+    if (!attribution) return null;
+
+    return {
+      partnerId: attribution.partner.id,
+      partnerCode: attribution.partner.code,
+      status: attribution.partner.status,
+      commissionModel: attribution.partner.commissionModel,
+      commissionRate: attribution.partner.commissionRate,
+      fixedCommissionCentavos: attribution.partner.fixedCommissionCentavos ?? 0,
+      holdingPeriodDays: attribution.partner.holdingPeriodDays ?? 7,
+      defaultCampaignSource: attribution.campaignSource,
+    };
+  }
+
+  async findActiveTaxConfigs(referenceDate: Date): Promise<TaxConfigForPlanning[]> {
+    const configs = await this.tx.taxConfiguration.findMany({
+      where: {
+        status: "ACTIVE",
+        effectiveDate: { lte: referenceDate },
+        OR: [{ expirationDate: null }, { expirationDate: { gte: referenceDate } }],
+      },
+      orderBy: { id: "asc" },
+    });
+
+    return configs.map((c) => ({
+      id: c.id,
+      name: c.name,
+      taxType: c.taxType,
+      rate: c.rate,
+      fixedAmountCentavos: c.fixedAmountCentavos,
+      calculationBasis: c.calculationBasis,
+      applicableTransactionType: c.applicableTransactionType,
+    }));
+  }
+}
+
 
 /**
  * Pure, deterministic finalization manifest planner.

@@ -317,8 +317,8 @@ export class IdempotentLedgerService {
     const opLockName = `ledger:operation:${exactOpKey}`;
     const effectLockName = `ledger:effect:${trimmedEffectId}`;
 
-    await client.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${opLockName}, 0))`;
-    await client.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${effectLockName}, 0))`;
+    await client.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${opLockName}, 0))::text AS lock_result`;
+    await client.$queryRaw`SELECT pg_advisory_xact_lock(hashtextextended(${effectLockName}, 0))::text AS lock_result`;
 
     // 🔒 7. CROSS-IDENTITY STATE QUERY
     const byOpKey = await client.financialLedgerEntry.findMany({

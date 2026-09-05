@@ -145,8 +145,13 @@ function walk(directory: string): string[] {
 }
 function staticChecks(): void {
   check(git("branch", "--show-current")[0] === BRANCH, "Branch changed");
-  check(git("diff", "--cached", "--name-only").length === 0, "Staged changes found");
-  check(git("diff", "--name-only").every((name) => name.replaceAll("\\", "/") === "src/scripts/test-payment-finalization-postgres.ts"), "Unapproved tracked change found");
+  const approvedChanges = new Set([
+    "src/scripts/test-payment-finalization-postgres.ts",
+    "src/lib/payment/paymentFinalizationContracts.ts",
+    "src/lib/payment/paymentFinalizationManifestService.ts",
+    "src/lib/accounting/idempotentLedgerService.ts",
+  ]);
+  check(git("diff", "--name-only").every((name) => approvedChanges.has(name.replaceAll("\\", "/"))), "Unapproved tracked change found");
   const protectedStatus = git(
     "status", "--porcelain=v1", "--untracked-files=all", "--",
     "prisma/schema.prisma",

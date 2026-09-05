@@ -835,3 +835,29 @@ export function canonicalizeJson(value: unknown, seen: WeakSet<object> = new Wea
 export function computeSha256Hash(canonicalString: string): string {
   return crypto.createHash("sha256").update(canonicalString, "utf8").digest("hex");
 }
+
+// ============================================================================
+// STICKY PER-PAYMENT ARCHITECTURE OWNERSHIP (Slice 8E-B)
+// ============================================================================
+
+export type PaymentArchitectureOwner = "DURABLE" | "LEGACY";
+
+export interface ResolveOwnershipInput {
+  readonly hasDurableFinalization: boolean;
+  readonly durableEnabledFlag: boolean;
+}
+
+/**
+ * Enforces sticky durable ownership:
+ * If a payment has ever been persisted as a durable PaymentFinalization, it remains
+ * permanently owned by the durable architecture regardless of the global activation flag.
+ * Only un-finalized new payments look at the current feature flag.
+ */
+export function resolvePaymentArchitectureOwnership(
+  input: ResolveOwnershipInput
+): PaymentArchitectureOwner {
+  if (input.hasDurableFinalization) {
+    return "DURABLE";
+  }
+  return input.durableEnabledFlag ? "DURABLE" : "LEGACY";
+}
