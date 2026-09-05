@@ -1,6 +1,30 @@
 // Relative Path: src/lib/referral/config.ts
 import { ReferralProgramConfig } from "./types";
 
+/**
+ * Evaluates whether the normal-user referral program is enabled.
+ * Strictly requires exact "true". Any missing, invalid, or falsy value yields false.
+ */
+export function isUserReferralEnabled(envValue?: string): boolean {
+  const val =
+    envValue !== undefined
+      ? envValue
+      : process.env.NEXT_PUBLIC_USER_REFERRAL_ENABLED;
+  return val === "true";
+}
+
+/**
+ * Master Feature Flag for Normal-User Referral UI Exposure.
+ * Soft-launch state: false (hidden completely from desktop nav, mobile drawer, and discovery).
+ * Partner referrals, admin controls, and underlying referral engine remain 100% active.
+ *
+ * Future public launch procedure:
+ * 1. Set Vercel/production environment variable NEXT_PUBLIC_USER_REFERRAL_ENABLED="true"
+ * 2. Redeploy GovStudyX
+ * 3. Normal-user referral UI entry points will automatically reappear
+ */
+export const USER_REFERRAL_ENABLED: boolean = isUserReferralEnabled();
+
 export const REFERRAL_SETTING_KEYS = {
   PROGRAM_ENABLED: "REFERRAL_PROGRAM_ENABLED",
   REWARD_TYPE: "REFERRAL_REWARD_TYPE",

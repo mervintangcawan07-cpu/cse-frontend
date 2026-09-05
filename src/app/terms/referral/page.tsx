@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
-import { ShieldCheck, Gift, Clock, Wallet, AlertTriangle, Scale, CheckCircle2 } from "lucide-react";
+import { USER_REFERRAL_ENABLED } from "@/lib/referral/config";
+import { ShieldCheck, Gift, Clock, Wallet, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: `Referral & Reward Program Terms | ${siteConfig.name}`,
@@ -148,9 +149,15 @@ export default function ReferralTermsPage() {
 
         {/* Back Link */}
         <div className="text-center pt-4">
-          <Link href="/referrals" className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-black text-xs uppercase tracking-wider">
-            <span>Back to User Referral Dashboard ➔</span>
-          </Link>
+          {USER_REFERRAL_ENABLED ? (
+            <Link href="/referrals" className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-black text-xs uppercase tracking-wider">
+              <span>Back to User Referral Dashboard ➔</span>
+            </Link>
+          ) : (
+            <Link href="/dashboard" className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-black text-xs uppercase tracking-wider">
+              <span>Back to Dashboard ➔</span>
+            </Link>
+          )}
         </div>
       </div>
     </div>

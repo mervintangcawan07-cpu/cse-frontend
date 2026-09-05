@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import ThemeToggle from "@/components/common/ThemeToggle";
+import { USER_REFERRAL_ENABLED } from "@/lib/referral/config";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -88,7 +89,9 @@ export default function Navbar() {
     { label: "Practice & Prep", href: "/practice" },
     { label: "Learning Hub", href: "/learning" },
     { label: "Study Together 👥", href: "/social" },
-    { label: "Referrals 🎁", href: "/referrals" },
+    ...(USER_REFERRAL_ENABLED
+      ? [{ label: "Referrals 🎁", href: "/referrals" }]
+      : []),
   ];
 
   if (user?.role === "ADMIN") {
