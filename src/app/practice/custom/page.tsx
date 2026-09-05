@@ -80,8 +80,8 @@ export default function CustomQuizBuilderPage() {
   const allCatsSelected = selectedCategories.length === CATEGORIES.length;
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
-      <div className="bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-800 shadow-2xl overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
+      <div className="bg-slate-900 rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-800 shadow-2xl overflow-hidden">
         {/* Header - Seamlessly integrated */}
         <div className="relative bg-slate-900 text-white p-4 sm:p-8 space-y-3 overflow-hidden border-b border-slate-800">
           <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />

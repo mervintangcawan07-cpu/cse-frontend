@@ -40,8 +40,8 @@ export default function DrillsPage() {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
+      <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
         {/* Top Hero Banner - Seamlessly integrated */}
         <div className="bg-slate-900 text-white p-4 sm:p-8 md:p-10 space-y-3">
           <span className="text-xs font-black uppercase tracking-widest px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">

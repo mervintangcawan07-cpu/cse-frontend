@@ -49,8 +49,8 @@ export default function ReadingMaterialsPage() {
   });
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 select-none" onContextMenu={(e) => e.preventDefault()}>
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6 select-none" onContextMenu={(e) => e.preventDefault()}>
+      <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
         {/* Top Header - Seamlessly integrated */}
         <div className="bg-slate-900 text-white p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -40,7 +40,7 @@ export default function ExamHistoryPage() {
 
   if (loading) {
     return (
-      <div className="w-full max-w-6xl mx-auto py-6 sm:py-12 px-2 sm:px-4 space-y-6">
+      <div className="w-full px-2 py-3 sm:px-4 sm:py-6 md:px-6 lg:px-8 space-y-6">
         <DatabaseLoadingIndicator
           title="Loading Exam History & Diagnostics..."
           subtitle="Querying your past mock exam attempts, scores, and review keys from the database."
@@ -63,8 +63,8 @@ export default function ExamHistoryPage() {
   const recent3Attempts = attempts.slice(0, 3);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6 text-slate-100">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6 text-slate-100">
+      <div className="bg-slate-900 border border-slate-800 rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl shadow-xl overflow-hidden">
         {/* HEADER BANNER WITH OVERALL STATS - Seamlessly integrated */}
         <div className="bg-slate-900 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800">
           <div>

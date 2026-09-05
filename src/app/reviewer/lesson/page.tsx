@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LessonPage() {
   return (
-    <div className="w-full max-w-4xl mx-auto py-4 sm:py-12 px-2 sm:px-4 space-y-4 sm:space-y-8">
+    <div className="w-full max-w-5xl mx-auto py-3 sm:py-6 md:py-10 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-8">
       {/* Breadcrumb Navigation */}
       <div className="text-sm font-bold text-slate-500 space-x-2">
         <Link href="/reviewer" className="hover:text-blue-600 transition">Reviewer</Link>

@@ -113,7 +113,7 @@ function ExamResultContent() {
 
   if (!mounted || loading) {
     return (
-      <div className="max-w-2xl mx-auto py-24 text-center space-y-4">
+      <div className="w-full py-24 text-center space-y-4">
         <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p className="font-extrabold text-slate-700 dark:text-slate-300">
           Loading diagnostic review data...
@@ -124,7 +124,7 @@ function ExamResultContent() {
 
   if (!reviewData) {
     return (
-      <div className="max-w-md mx-auto py-24 text-center space-y-6">
+      <div className="w-full py-24 text-center space-y-6">
         <div className="text-5xl">📊</div>
         <h2 className="text-2xl font-black text-slate-900 dark:text-white">
           No Recent Exam Found
@@ -160,7 +160,7 @@ function ExamResultContent() {
     });
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 space-y-4 sm:space-y-8 relative">
+    <div className="w-full px-2 py-3.5 sm:px-4 sm:py-6 md:px-6 lg:px-8 space-y-4 sm:space-y-8 relative">
       {/* 🎉 Milestone Celebration Confetti on Passing Score (≥80%) */}
       {isPassed && <ConfettiCelebration />}
 
@@ -374,7 +374,7 @@ export default function ExamResultPage() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-2xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+        <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
           Loading exam results...
         </div>
       }
