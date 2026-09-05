@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -204,10 +205,15 @@ export default function Navbar() {
               Sign In
             </Link>
           )}
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
         </div>
 
         {/* MOBILE HAMBURGER BUTTON & ACCOUNT ICON */}
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+
           {user && (
             <Link
               href="/profile"

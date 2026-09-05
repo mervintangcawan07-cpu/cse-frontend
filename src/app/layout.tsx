@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/common/CookieConsent";
 import { siteConfig } from "@/lib/config/site";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,22 +39,32 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900">
-        {/* The global Navbar */}
-        <Navbar />
-        
-        {/* Main page content wrapped in a subtle background */}
-        <main className="w-full flex-grow">
-          {children}
-        </main>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';}}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        <ThemeProvider>
+          {/* The global Navbar */}
+          <Navbar />
 
-        {/* Global Footer */}
-        <Footer />
+          {/* Main page content wrapped in a subtle background */}
+          <main className="w-full flex-grow">
+            {children}
+          </main>
 
-        {/* Cookie Consent Banner */}
-        <CookieConsent />
+          {/* Global Footer */}
+          <Footer />
+
+          {/* Cookie Consent Banner */}
+          <CookieConsent />
+        </ThemeProvider>
       </body>
     </html>
   );
