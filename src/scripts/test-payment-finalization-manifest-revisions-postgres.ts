@@ -49,7 +49,10 @@ import { IdempotentPartnerCommissionService } from "../lib/accounting/idempotent
 import { IdempotentTaxProvisionService } from "../lib/accounting/idempotentTaxProvisionService";
 import { IdempotentReconciliationService } from "../lib/accounting/idempotentReconciliationService";
 
-const BRANCH = "security/p1-001-payment-finalization-recovery";
+const ALLOWED_BRANCHES = new Set([
+  "security/p1-001-payment-finalization-recovery",
+  "integration/payment-performance",
+]);
 const URL_ENV = "PAYMENT_FINALIZATION_TEST_DATABASE_URL";
 const ACK_ENV = "PAYMENT_FINALIZATION_ALLOW_ISOLATED_DB_TESTS";
 const APPROVED_SLICE_8FB_STAGED_PATHS = [
@@ -220,7 +223,7 @@ function walk(directory: string): string[] {
 }
 
 function staticChecks(): void {
-  check(git("branch", "--show-current")[0] === BRANCH, "Branch changed");
+  check(ALLOWED_BRANCHES.has(git("branch", "--show-current")[0] ?? ""), "Branch changed");
   const stagedPaths = git("diff", "--cached", "--name-only").sort();
   const approvedPaths = [...APPROVED_SLICE_8FB_STAGED_PATHS].sort();
 

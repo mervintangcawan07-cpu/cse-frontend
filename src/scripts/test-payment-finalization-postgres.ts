@@ -26,7 +26,10 @@ import type {
   ExecuteReconciliationEffectResult as ReconciliationResult,
 } from "../lib/accounting/idempotentReconciliationService";
 
-const BRANCH = "security/p1-001-payment-finalization-recovery";
+const ALLOWED_BRANCHES = new Set([
+  "security/p1-001-payment-finalization-recovery",
+  "integration/payment-performance",
+]);
 const URL_ENV = "PAYMENT_FINALIZATION_TEST_DATABASE_URL";
 const ACK_ENV = "PAYMENT_FINALIZATION_ALLOW_ISOLATED_DB_TESTS";
 const LOCK_SQL = "SELECT pg_advisory_xact_lock(hashtextextended($1, 0))";
@@ -144,7 +147,7 @@ function walk(directory: string): string[] {
   });
 }
 function staticChecks(): void {
-  check(git("branch", "--show-current")[0] === BRANCH, "Branch changed");
+  check(ALLOWED_BRANCHES.has(git("branch", "--show-current")[0] ?? ""), "Branch changed");
   const approvedChanges = new Set([
     "src/lib/payment/paymentFinalizationContracts.ts",
     "src/lib/payment/paymentFinalizationManifestService.ts",
