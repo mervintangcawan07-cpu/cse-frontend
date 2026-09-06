@@ -1,7 +1,7 @@
 // Relative Path: src/app/admin/referrals/page.tsx
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
   Gift,
@@ -45,9 +45,62 @@ export default function AdminReferralsPage() {
   const [totalReferrals, setTotalReferrals] = useState(0);
   const [referralsLoading, setReferralsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [riskFilter, setRiskFilter] = useState("ALL");
   const [page, setPage] = useState(1);
+
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const referralAbortRef = useRef<AbortController | null>(null);
+  const referralRequestIdRef = useRef<number>(0);
+
+  // Search and filter handlers with debouncing and page-reset control
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    if (val === "") {
+      // Clear search immediately per Slice 3C rules:
+      // Cancel pending debounce and superseded in-flight request,
+      // activate empty search immediately and reset page to 1
+      if (referralAbortRef.current) {
+        referralAbortRef.current.abort();
+      }
+      setDebouncedSearchQuery("");
+      setPage(1);
+    } else {
+      debounceTimerRef.current = setTimeout(() => {
+        setDebouncedSearchQuery(val);
+        setPage(1);
+      }, 300);
+    }
+  };
+
+  const handleStatusFilterChange = (newStatus: string) => {
+    setStatusFilter(newStatus);
+    setPage(1);
+  };
+
+  const handleRiskFilterChange = (newRisk: string) => {
+    setRiskFilter(newRisk);
+    setPage(1);
+  };
+
+  // Cleanup debounce timer and in-flight request on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+      if (referralAbortRef.current) {
+        referralAbortRef.current.abort();
+        referralAbortRef.current = null;
+      }
+    };
+  }, []);
 
   // Single Referral Inspect Modal
   const [selectedReferral, setSelectedReferral] = useState<AdminReferralItem | null>(null);
@@ -72,7 +125,7 @@ export default function AdminReferralsPage() {
   const [settingsMsg, setSettingsMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [rateAuditLogs, setRateAuditLogs] = useState<any[]>([]);
 
-  // Fetch Analytics
+  // Fetch Analytics (independent of search)
   const fetchAnalytics = useCallback(async () => {
     setAnalyticsLoading(true);
     try {
@@ -88,32 +141,53 @@ export default function AdminReferralsPage() {
     }
   }, []);
 
-  // Fetch Referrals Table
-  const fetchReferrals = useCallback(async () => {
+  // Fetch Referrals Table (debounced, cancellable, stale-response protected)
+  const fetchReferrals = useCallback(async (
+    query: string = debouncedSearchQuery,
+    status: string = statusFilter,
+    risk: string = riskFilter,
+    currentPage: number = page
+  ) => {
+    if (referralAbortRef.current) {
+      referralAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    referralAbortRef.current = controller;
+    const requestId = ++referralRequestIdRef.current;
+
     setReferralsLoading(true);
     try {
       const params = new URLSearchParams({
-        page: String(page),
+        page: String(currentPage),
         limit: "20",
       });
-      if (searchQuery) params.set("q", searchQuery);
-      if (statusFilter !== "ALL") params.set("status", statusFilter);
-      if (riskFilter !== "ALL") params.set("risk", riskFilter);
+      if (query) params.set("q", query);
+      if (status !== "ALL") params.set("status", status);
+      if (risk !== "ALL") params.set("risk", risk);
 
-      const res = await fetch(`/api/admin/referrals?${params.toString()}`);
+      const res = await fetch(`/api/admin/referrals?${params.toString()}`, {
+        signal: controller.signal,
+      });
       if (res.ok) {
         const json = await res.json();
-        setReferrals(json.items || []);
-        setTotalReferrals(json.total || 0);
+        if (requestId === referralRequestIdRef.current) {
+          setReferrals(json.items || []);
+          setTotalReferrals(json.total || 0);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.name === "AbortError") {
+        return; // Silent cancellation
+      }
       console.error("Failed to load referrals:", err);
     } finally {
-      setReferralsLoading(false);
+      if (requestId === referralRequestIdRef.current) {
+        setReferralsLoading(false);
+      }
     }
-  }, [page, searchQuery, statusFilter, riskFilter]);
+  }, [debouncedSearchQuery, statusFilter, riskFilter, page]);
 
-  // Fetch Payouts Table
+  // Fetch Payouts Table (independent of search)
   const fetchPayouts = useCallback(async () => {
     setPayoutsLoading(true);
     try {
@@ -133,7 +207,7 @@ export default function AdminReferralsPage() {
     }
   }, [payoutStatusFilter]);
 
-  // Fetch Settings
+  // Fetch Settings (independent of search)
   const fetchSettings = useCallback(async () => {
     setSettingsLoading(true);
     try {
@@ -150,12 +224,22 @@ export default function AdminReferralsPage() {
     }
   }, []);
 
+  // Separate, decoupled effects for independent resources:
+  // 1. Initial load for analytics and settings
   useEffect(() => {
     fetchAnalytics();
-    fetchReferrals();
-    fetchPayouts();
     fetchSettings();
-  }, [fetchAnalytics, fetchReferrals, fetchPayouts, fetchSettings]);
+  }, [fetchAnalytics, fetchSettings]);
+
+  // 2. Referrals table load (only responds to debounced search, filters, or page)
+  useEffect(() => {
+    fetchReferrals();
+  }, [fetchReferrals]);
+
+  // 3. Payouts table load (only responds to payoutStatusFilter)
+  useEffect(() => {
+    fetchPayouts();
+  }, [fetchPayouts]);
 
   // Handle Manual Referral Action
   const handleReferralAction = async (action: string) => {
@@ -415,7 +499,7 @@ export default function AdminReferralsPage() {
                 type="text"
                 placeholder="Search by code, inviter, or referred student..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none focus:border-blue-500"
               />
             </div>
@@ -424,7 +508,7 @@ export default function AdminReferralsPage() {
               {/* Status Filter */}
               <select
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
+                onChange={(e) => handleStatusFilterChange(e.target.value)}
                 className="px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-300 outline-none"
               >
                 <option value="ALL">All Statuses</option>
@@ -443,7 +527,7 @@ export default function AdminReferralsPage() {
               {/* Risk Filter */}
               <select
                 value={riskFilter}
-                onChange={(e) => setRiskFilter(e.target.value)}
+                onChange={(e) => handleRiskFilterChange(e.target.value)}
                 className="px-3 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-300 outline-none"
               >
                 <option value="ALL">All Risk Levels</option>

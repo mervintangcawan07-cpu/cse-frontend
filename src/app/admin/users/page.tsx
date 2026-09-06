@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import UserActionModal from "@/components/admin/UserActionModal";
 
@@ -53,11 +53,24 @@ export default function AdminUsersPage() {
   const [userPagination, setUserPagination] = useState(INITIAL_PAGINATION);
   const [logPagination, setLogPagination] = useState(INITIAL_PAGINATION);
 
+  // Cancellation and stale-response protection
+  const usersAbortRef = useRef<AbortController | null>(null);
+  const logsAbortRef = useRef<AbortController | null>(null);
+  const usersRequestIdRef = useRef<number>(0);
+  const logsRequestIdRef = useRef<number>(0);
+
   // Moderation Modal State
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
   const [modalMode, setModalMode] = useState<"BAN" | "UNBAN" | "RESET_PASSWORD" | null>(null);
 
   const fetchUsers = useCallback(async (query = "", filter = "ALL", page = 1) => {
+    if (usersAbortRef.current) {
+      usersAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    usersAbortRef.current = controller;
+    const requestId = ++usersRequestIdRef.current;
+
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -66,20 +79,34 @@ export default function AdminUsersPage() {
         page: String(page),
         limit: String(PAGE_SIZE),
       });
-      const res = await fetch(`/api/admin/users?${params.toString()}`);
+      const res = await fetch(`/api/admin/users?${params.toString()}`, {
+        signal: controller.signal,
+      });
       const data = await res.json();
-      if (res.ok && data.users) {
-        setUsers(data.users);
-        setUserPagination(data.pagination ?? INITIAL_PAGINATION);
+      if (requestId === usersRequestIdRef.current) {
+        if (res.ok && data.users) {
+          setUsers(data.users);
+          setUserPagination(data.pagination ?? INITIAL_PAGINATION);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.name === "AbortError") return;
       console.error("Failed to load users:", err);
     } finally {
-      setLoading(false);
+      if (requestId === usersRequestIdRef.current) {
+        setLoading(false);
+      }
     }
   }, []);
 
   const fetchLogs = useCallback(async (query = "", filter = "ALL", page = 1) => {
+    if (logsAbortRef.current) {
+      logsAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    logsAbortRef.current = controller;
+    const requestId = ++logsRequestIdRef.current;
+
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -89,18 +116,38 @@ export default function AdminUsersPage() {
         limit: String(PAGE_SIZE),
       });
       const res = await fetch(
-        `/api/admin/login-history?${params.toString()}`
+        `/api/admin/login-history?${params.toString()}`,
+        { signal: controller.signal }
       );
       const data = await res.json();
-      if (res.ok && data.history) {
-        setLogs(data.history);
-        setLogPagination(data.pagination ?? INITIAL_PAGINATION);
+      if (requestId === logsRequestIdRef.current) {
+        if (res.ok && data.history) {
+          setLogs(data.history);
+          setLogPagination(data.pagination ?? INITIAL_PAGINATION);
+        }
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.name === "AbortError") return;
       console.error("Failed to load login logs:", err);
     } finally {
-      setLoading(false);
+      if (requestId === logsRequestIdRef.current) {
+        setLoading(false);
+      }
     }
+  }, []);
+
+  // Cleanup in-flight requests on unmount
+  useEffect(() => {
+    return () => {
+      if (usersAbortRef.current) {
+        usersAbortRef.current.abort();
+        usersAbortRef.current = null;
+      }
+      if (logsAbortRef.current) {
+        logsAbortRef.current.abort();
+        logsAbortRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -188,7 +235,12 @@ export default function AdminUsersPage() {
       <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex bg-slate-100 p-1.5 rounded-2xl gap-1 text-xs font-bold w-full sm:w-auto">
           <button
-            onClick={() => { setActiveTab("USERS"); setSearchQuery(""); setStatusFilter("ALL"); }}
+            onClick={() => {
+              if (logsAbortRef.current) logsAbortRef.current.abort();
+              setActiveTab("USERS");
+              setSearchQuery("");
+              setStatusFilter("ALL");
+            }}
             className={`px-4 py-2 rounded-xl transition cursor-pointer ${
               activeTab === "USERS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
             }`}
@@ -196,7 +248,12 @@ export default function AdminUsersPage() {
             👥 User Accounts ({users.length})
           </button>
           <button
-            onClick={() => { setActiveTab("LOGIN_LOGS"); setSearchQuery(""); setStatusFilter("ALL"); }}
+            onClick={() => {
+              if (usersAbortRef.current) usersAbortRef.current.abort();
+              setActiveTab("LOGIN_LOGS");
+              setSearchQuery("");
+              setStatusFilter("ALL");
+            }}
             className={`px-4 py-2 rounded-xl transition cursor-pointer ${
               activeTab === "LOGIN_LOGS" ? "bg-white text-slate-900 shadow-sm font-black" : "text-slate-500 hover:text-slate-900"
             }`}
