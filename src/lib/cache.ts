@@ -17,6 +17,15 @@ export const CACHE_PROFILES = {
     "CDN-Cache-Control": "private, no-cache, no-store, max-age=0, must-revalidate",
     "Vercel-CDN-Cache-Control": "private, no-cache, no-store, max-age=0, must-revalidate",
   },
+  /**
+   * Slice 4B-2: Next.js Data Cache may cache database results.
+   * HTTP/CDN/browser response caches must NOT independently retain the JSON payload.
+   */
+  DATA_CACHE_ONLY: {
+    "Cache-Control": "private, no-cache, no-store, max-age=0, must-revalidate",
+    "CDN-Cache-Control": "no-store",
+    "Vercel-CDN-Cache-Control": "no-store",
+  },
 } as const;
 
 export type CacheProfile = keyof typeof CACHE_PROFILES;

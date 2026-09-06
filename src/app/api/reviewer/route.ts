@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
+import { getCachedReviewerNotes, revalidateReviewerCatalog } from "@/lib/cache/serverCache";
 
-// GET: Fetch all study notes
+// GET: Fetch all study notes via Authoritative Server Data Cache
 export async function GET() {
   try {
-    const notes = await prisma.studyNote.findMany({ orderBy: { createdAt: "desc" } });
+    const notes = await getCachedReviewerNotes();
     return cachedJsonResponse(
       { notes },
-      "STATIC_METADATA"
+      "DATA_CACHE_ONLY"
     );
   } catch (error) {
     console.error("[REVIEWER_NOTES_GET_ERROR]", error);
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
         videoUrl: videoUrl || null,
       },
     });
+    revalidateReviewerCatalog();
     return NextResponse.json({ note }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Failed to create note" }, { status: 500 });
@@ -63,7 +65,7 @@ export async function PUT(req: Request) {
         videoUrl: videoUrl || null,
       },
     });
-
+    revalidateReviewerCatalog();
     return NextResponse.json({ note });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update note" }, { status: 500 });
@@ -80,6 +82,7 @@ export async function DELETE(req: Request) {
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
 
     await prisma.studyNote.delete({ where: { id } });
+    revalidateReviewerCatalog();
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete note" }, { status: 500 });

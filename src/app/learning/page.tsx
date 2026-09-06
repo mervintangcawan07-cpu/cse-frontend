@@ -3,7 +3,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { fetchWithClientCache } from "@/lib/clientCache";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LearningHubPage() {
@@ -12,17 +11,46 @@ export default function LearningHubPage() {
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
 
   useEffect(() => {
-    Promise.all([
-      fetchWithClientCache<{ notes: any[] }>("/api/reviewer"),
-      fetchWithClientCache<{ handbooks: any[] }>("/api/reading-materials"),
-    ])
-      .then(([notesData, hbData]) => {
+    const controller = new AbortController();
+
+    async function loadStats() {
+      try {
+        const [notesRes, handbooksRes] = await Promise.all([
+          fetch("/api/reviewer", {
+            cache: "no-store",
+            signal: controller.signal,
+          }),
+          fetch("/api/reading-materials", {
+            cache: "no-store",
+            signal: controller.signal,
+          }),
+        ]);
+
+        if (!notesRes.ok || !handbooksRes.ok) {
+          throw new Error("Failed to load Learning Hub catalog stats.");
+        }
+
+        const [notesData, handbookData]: [
+          { notes?: unknown[] },
+          { handbooks?: unknown[] },
+        ] = await Promise.all([notesRes.json(), handbooksRes.json()]);
+
         setStats({
           notesCount: notesData.notes?.length || 0,
-          handbooksCount: hbData.handbooks?.length || 0,
+          handbooksCount: handbookData.handbooks?.length || 0,
         });
-      })
-      .catch(() => {});
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        console.error("[LEARNING_HUB_STATS_ERROR]", error);
+      }
+    }
+
+    void loadStats();
+
+    return () => controller.abort();
   }, []);
 
   return (

@@ -2,25 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
+import { getCachedReadingMaterials, revalidateReadingMaterialsCatalog } from "@/lib/cache/serverCache";
 
-// GET: Fetch all handbooks metadata
+// GET: Fetch all handbooks metadata via Authoritative Server Data Cache
 export async function GET() {
   try {
-    const handbooks = await prisma.handbook.findMany({
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        title: true,
-        category: true,
-        description: true,
-        pages: true,
-        fileName: true,
-        createdAt: true,
-      },
-    });
+    const handbooks = await getCachedReadingMaterials();
     return cachedJsonResponse(
       { handbooks },
-      "STATIC_METADATA"
+      "DATA_CACHE_ONLY"
     );
   } catch (error) {
     console.error("[READING_MATERIALS_GET_ERROR]", error);
@@ -52,7 +42,7 @@ export async function POST(req: Request) {
         fileName: fileName || "document.pdf",
       },
     });
-
+    revalidateReadingMaterialsCatalog();
     return NextResponse.json({ handbook }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Failed to create handbook" }, { status: 500 });
@@ -85,7 +75,7 @@ export async function PUT(req: Request) {
       where: { id },
       data: updateData,
     });
-
+    revalidateReadingMaterialsCatalog();
     return NextResponse.json({ handbook });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update handbook" }, { status: 500 });
@@ -102,6 +92,7 @@ export async function DELETE(req: Request) {
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
 
     await prisma.handbook.delete({ where: { id } });
+    revalidateReadingMaterialsCatalog();
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete handbook" }, { status: 500 });

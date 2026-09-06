@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PassageScanner from "@/components/PassageScanner";
-import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface DocumentItem {
   id: string;
@@ -24,20 +23,44 @@ export default function ReadingMaterialsPage() {
   const categories = ["All", "Constitutional Basis", "Ethical Standards", "Civil Service Rules", "General Knowledge"];
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchHandbooks() {
       try {
-        const data = await fetchWithClientCache<{ handbooks: DocumentItem[] }>("/api/reading-materials");
-        if (data && data.handbooks) {
-          setDocumentsList(data.handbooks);
-          if (data.handbooks.length > 0) setSelectedDoc(data.handbooks[0]);
+        const response = await fetch("/api/reading-materials", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load reading materials (${response.status})`);
         }
-      } catch (err) {
-        console.error(err);
+
+        const data: { handbooks?: DocumentItem[] } = await response.json();
+
+        if (data.handbooks) {
+          setDocumentsList(data.handbooks);
+
+          if (data.handbooks.length > 0) {
+            setSelectedDoc(data.handbooks[0]);
+          }
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        console.error(error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
-    fetchHandbooks();
+
+    void fetchHandbooks();
+
+    return () => controller.abort();
   }, []);
 
   const filteredDocs = documentsList.filter((doc) => {
