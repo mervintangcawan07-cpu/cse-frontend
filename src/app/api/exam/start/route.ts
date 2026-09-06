@@ -2,6 +2,11 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import {
+  EXAM_START_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_CATEGORY_QUOTAS: Record<string, number> = {
@@ -30,6 +35,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const userId = authenticatedUser.id;
+
+    const rateLimitKey = `exam:start:${userId}`;
+    const rateResult = await checkRateLimit(EXAM_START_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many exam start requests. Please wait a moment before starting another exam."
+      );
+    }
 
     const { searchParams } = new URL(request.url);
 

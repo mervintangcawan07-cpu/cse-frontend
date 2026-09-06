@@ -1,14 +1,21 @@
+import {
+  acquireDistributedLock,
+  releaseDistributedLock,
+  type LockResult,
+} from "@/lib/ratelimit";
+
+export type { LockResult };
+
 type RateLimitRecord = {
   count: number;
   resetTime: number;
 };
 
-// In-memory stores for rate limits and active concurrency locks
+// In-memory store for legacy rate limits
 const rateLimitMap = new Map<string, RateLimitRecord>();
-const activeRequestLocks = new Set<string>();
 
 // Cleanup expired entries every 5 minutes
-setInterval(() => {
+const cleanupTimer = setInterval(() => {
   const now = Date.now();
   for (const [key, record] of rateLimitMap.entries()) {
     if (now > record.resetTime) {
@@ -16,6 +23,10 @@ setInterval(() => {
     }
   }
 }, 5 * 60 * 1000);
+
+if (typeof cleanupTimer.unref === "function") {
+  cleanupTimer.unref();
+}
 
 /**
  * Checks sliding window rate limit (e.g. 3 attempts / min)
@@ -48,18 +59,20 @@ export function checkRateLimit(
 }
 
 /**
- * Enforces 1 active request at a time per key (for payments)
+ * Distributed concurrency lock (atomic Redis + owner-safe local fallback)
  */
-export function acquireLock(key: string): boolean {
-  if (activeRequestLocks.has(key)) {
-    return false;
-  }
-  activeRequestLocks.add(key);
-  return true;
+export async function acquireLock(
+  key: string,
+  ttlSeconds = 30
+): Promise<LockResult> {
+  return acquireDistributedLock(key, ttlSeconds);
 }
 
-export function releaseLock(key: string): void {
-  activeRequestLocks.delete(key);
+export async function releaseLock(
+  key: string,
+  token?: string | null
+): Promise<boolean> {
+  return releaseDistributedLock(key, token ?? null);
 }
 
 /**

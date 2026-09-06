@@ -27,7 +27,7 @@ export async function handleSudoElevation(req: NextRequest): Promise<NextRespons
   const userId = authResult.session.user.id;
   const email = authResult.session.user.email;
 
-  const rateLimit = checkSudoRateLimit(`${ip}:${userId}`);
+  const rateLimit = await checkSudoRateLimit(`${ip}:${userId}`);
   if (!rateLimit.allowed) {
     logger.warn(`Sudo Rate Limit Exceeded for Admin ID: ${userId}`, {
       request: { route: "/api/admin/auth/sudo", method: "POST", statusCode: 429 },

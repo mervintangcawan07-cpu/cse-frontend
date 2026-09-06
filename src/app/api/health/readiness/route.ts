@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/health/readiness/route.ts
+// Relative Path: src/app/api/health/readiness/route.ts
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -28,8 +28,37 @@ export async function GET() {
   }
 
   // 2. Check Essential Environment Secrets
-  const requiredEnvVars = ["DATABASE_URL", "JWT_SECRET"];
-  const missingEnvVars = requiredEnvVars.filter((key) => !process.env[key]);
+  // Always required basic runtime configuration
+  const basicEnvVars = ["DATABASE_URL", "JWT_SECRET"];
+  const missingEnvVars = basicEnvVars.filter((key) => !process.env[key]?.trim());
+
+  // Explicit runtime classification: Vercel Preview/Development vs Actual Production
+  const vercelEnv = process.env.VERCEL_ENV;
+  const isActualProduction = vercelEnv
+    ? vercelEnv === "production"
+    : process.env.NODE_ENV === "production";
+
+  if (isActualProduction) {
+    const productionOnlyEnvVars = [
+      "PAYMONGO_SECRET_KEY",
+      "PAYMONGO_WEBHOOK_SECRET",
+      "CRON_SECRET",
+    ];
+    for (const key of productionOnlyEnvVars) {
+      if (!process.env[key]?.trim()) {
+        missingEnvVars.push(key);
+      }
+    }
+
+    // Encryption requirement: ENCRYPTION_KEY_V1 OR ENCRYPTION_KEY (at least one must be present)
+    const hasEncryptionKey = Boolean(
+      process.env.ENCRYPTION_KEY_V1?.trim() || process.env.ENCRYPTION_KEY?.trim()
+    );
+
+    if (!hasEncryptionKey) {
+      missingEnvVars.push("ENCRYPTION_KEY_V1 or ENCRYPTION_KEY");
+    }
+  }
 
   if (missingEnvVars.length > 0) {
     isReady = false;

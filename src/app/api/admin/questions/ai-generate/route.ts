@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { StructuredQuestion } from "@/types/question";
+import {
+  AI_GENERATE_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
@@ -16,6 +21,16 @@ export async function POST(request: Request) {
       authentication.session.user.role !== "ADMIN"
     ) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
+    }
+
+    const adminId = authentication.session.user.id;
+    const rateLimitKey = `admin:ai-generate:${adminId}`;
+    const rateResult = await checkRateLimit(AI_GENERATE_LIMITER, rateLimitKey);
+    if (!rateResult.success) {
+      return createRateLimitResponse(
+        rateResult,
+        "Too many question generation requests. Please wait a moment before trying again."
+      );
     }
 
     const body = await request.json();

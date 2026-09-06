@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger/logger";
 import { SudoTicket } from "@/types/auth";
+import { SUDO_LIMITER } from "@/lib/ratelimit";
 
 function getSudoSecret(): string {
   const secret = process.env.SUDO_SECRET || process.env.JWT_SECRET;
@@ -18,18 +19,52 @@ const SUDO_TTL_MS = 10 * 60 * 1000;
 const MAX_SUDO_ATTEMPTS = 3;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 
-const attemptTracker = new Map<string, { count: number; resetAt: number }>();
+export const attemptTracker = new Map<string, { count: number; resetAt: number }>();
 
-export function checkSudoRateLimit(identifier: string): {
+export async function checkSudoRateLimit(identifier: string): Promise<{
   allowed: boolean;
   remainingAttempts: number;
   retryAfterSec?: number;
-} {
+}> {
+  const hashedIdentifier = crypto
+    .createHash("sha256")
+    .update(identifier)
+    .digest("hex")
+    .slice(0, 32);
+
+  // 1. Check Upstash Redis limiter if configured
+  if (SUDO_LIMITER) {
+    try {
+      const result = await SUDO_LIMITER.limit(hashedIdentifier);
+      if (!result.success) {
+        const now = Date.now();
+        const retryAfterSec = Math.max(1, Math.ceil((result.reset - now) / 1000));
+        return {
+          allowed: false,
+          remainingAttempts: 0,
+          retryAfterSec,
+        };
+      }
+      return {
+        allowed: true,
+        remainingAttempts: result.remaining,
+      };
+    } catch (error) {
+      logger.warn(
+        "[SUDO_RATELIMIT_FALLBACK] Upstash Redis unreachable for sudo rate limit, falling back to local memory:",
+        {
+          error: error instanceof Error ? error.message : String(error),
+        }
+      );
+    }
+  }
+
+  // 2. Local fallback memory tracking
   const now = Date.now();
-  const record = attemptTracker.get(identifier);
+  const record = attemptTracker.get(hashedIdentifier);
 
   if (!record || now > record.resetAt) {
-    attemptTracker.set(identifier, {
+    attemptTracker.set(hashedIdentifier, {
       count: 1,
       resetAt: now + RATE_LIMIT_WINDOW_MS,
     });
@@ -42,7 +77,7 @@ export function checkSudoRateLimit(identifier: string): {
   }
 
   record.count += 1;
-  attemptTracker.set(identifier, record);
+  attemptTracker.set(hashedIdentifier, record);
   return { allowed: true, remainingAttempts: MAX_SUDO_ATTEMPTS - record.count };
 }
 
