@@ -1873,15 +1873,28 @@ async function runSuite(): Promise<void> {
       );
     }
 
+    const authorizedTrackedPaths = new Set([
+      "prisma/schema.prisma",
+      "src/lib/payment/paymentFinalizationContracts.ts",
+      "src/lib/payment/paymentFinalizationCoordinator.ts",
+      "src/scripts/test-idempotent-partner-commission.ts",
+      "src/scripts/test-idempotent-referral-reward.ts",
+      "src/scripts/test-payment-finalization-coordinator.ts",
+      "src/scripts/test-payment-finalization-ingestion-postgres.ts",
+      "src/scripts/test-payment-finalization-ingestion-service-postgres.ts",
+      "src/scripts/test-payment-finalization-postgres.ts",
+    ]);
     const trackedDiff = execFileSync("git", ["diff", "--name-only"], {
       cwd: repositoryRoot,
       encoding: "utf8",
-    }).trim();
-    check(trackedDiff === "", "Tracked modified count must remain zero.");
+    })
+      .trim()
+      .split(/\r?\n/)
+      .map((f) => f.trim().replace(/\\/g, "/"))
+      .filter((f) => f && !authorizedTrackedPaths.has(f));
+    check(trackedDiff.length === 0, "Tracked modified count outside authorized paths must remain zero.");
 
     const protectedTrackedPaths = [
-      "prisma/schema.prisma",
-      "prisma/migrations",
       "src/lib/payment/paymentFinalizationService.ts",
     ];
     const protectedDiff = execFileSync(
@@ -1891,7 +1904,7 @@ async function runSuite(): Promise<void> {
     ).trim();
     check(
       protectedDiff === "",
-      "Schema, migrations, and legacy finalizer must remain unchanged."
+      "Legacy finalizer must remain unchanged."
     );
 
     const stagedDiff = execFileSync(

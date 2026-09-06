@@ -16,6 +16,16 @@ export const MANIFEST_VERSION = 1 as const;
 export const INTENT_VERSION = 1 as const;
 export const CANONICAL_VERSION = 1 as const;
 
+export const SUPPORTED_MANIFEST_REVISIONS = [1, 2] as const;
+export type SupportedManifestRevision = (typeof SUPPORTED_MANIFEST_REVISIONS)[number];
+
+export const SUPPORTED_REVISION_REASONS = [
+  "INITIAL_INGESTION",
+  "PROVIDER_FEE_ENRICHMENT",
+] as const;
+export type PaymentFinalizationManifestRevisionReason =
+  (typeof SUPPORTED_REVISION_REASONS)[number];
+
 export const SUPPORTED_CURRENCY = "PHP" as const;
 export type SupportedCurrency = typeof SUPPORTED_CURRENCY;
 
@@ -374,6 +384,39 @@ export interface PlannedManifest {
   readonly entitlementAfter: string | null;
   readonly manifestHash: string;
   readonly effects: readonly PlannedEffect[];
+}
+
+export interface EffectManifestSnapshot {
+  readonly effectType: PaymentFinalizationEffectType;
+  readonly effectKey: string;
+  readonly operationKey: string;
+  readonly status: string;
+  readonly intentVersion: number;
+  readonly intentHash: string;
+  readonly intent: Record<string, unknown>;
+}
+
+export interface PaymentFinalizationManifestSnapshot {
+  readonly manifestVersion: 1;
+  readonly manifestRevision: SupportedManifestRevision;
+  readonly transactionId: string;
+  readonly checkoutSessionId: string;
+  readonly userId: string;
+  readonly providerPaymentId: string | null;
+  readonly providerPaidAt: string | null;
+  readonly source: PaymentFinalizationSource;
+  readonly origin: PaymentFinalizationOrigin;
+  readonly planType: SupportedPlanType;
+  readonly currency: "PHP";
+  readonly purchaseAmountCentavos: number;
+  readonly feeKnowledge: PaymentFinalizationFeeKnowledge;
+  readonly feeAmountCentavos: number | null;
+  readonly feeObservedAt: string | null;
+  readonly verifiedAt: string;
+  readonly entitlementBefore: string | null;
+  readonly entitlementAfter: string | null;
+  readonly manifestHash: string;
+  readonly effects: readonly EffectManifestSnapshot[];
 }
 
 // ============================================================================

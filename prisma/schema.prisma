@@ -676,6 +676,11 @@ enum PaymentFinalizationFeeKnowledge {
   KNOWN
 }
 
+enum PaymentFinalizationManifestRevisionReason {
+  INITIAL_INGESTION
+  PROVIDER_FEE_ENRICHMENT
+}
+
 model Transaction {
   id                     String   @id @default(cuid())
   userId                 String
@@ -739,6 +744,7 @@ model PaymentFinalization {
 
   transaction Transaction                 @relation(fields: [transactionId], references: [id], onDelete: Restrict)
   effects     PaymentFinalizationEffect[]
+  revisions   PaymentFinalizationManifestRevision[]
 
   @@index([status, nextAttemptAt, createdAt])
   @@index([leaseExpiresAt])
@@ -783,6 +789,24 @@ model PaymentFinalizationEffect {
   @@index([referralId])
   @@index([partnerId])
   @@index([taxConfigId])
+}
+
+model PaymentFinalizationManifestRevision {
+  id                 String                                    @id @default(cuid())
+  finalizationId     String
+  manifestVersion    Int                                       @default(1)
+  manifestRevision   Int
+  manifestHash       String                                    @db.VarChar(64)
+  parentManifestHash String?                                   @db.VarChar(64)
+  revisionReason     PaymentFinalizationManifestRevisionReason
+  snapshot           Json
+  createdAt          DateTime                                  @default(now())
+
+  finalization PaymentFinalization @relation(fields: [finalizationId], references: [id], onDelete: Restrict)
+
+  @@index([finalizationId], map: "PFinManifestRevision_fin_id_idx")
+  @@unique([finalizationId, manifestRevision], map: "PFinManifestRevision_fin_rev_key")
+  @@unique([finalizationId, parentManifestHash], map: "PFinManifestRevision_parent_key")
 }
 
 model Flashcard {

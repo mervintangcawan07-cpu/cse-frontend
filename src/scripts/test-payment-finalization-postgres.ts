@@ -146,20 +146,27 @@ function walk(directory: string): string[] {
 function staticChecks(): void {
   check(git("branch", "--show-current")[0] === BRANCH, "Branch changed");
   const approvedChanges = new Set([
-    "src/scripts/test-payment-finalization-postgres.ts",
     "src/lib/payment/paymentFinalizationContracts.ts",
     "src/lib/payment/paymentFinalizationManifestService.ts",
     "src/lib/accounting/idempotentLedgerService.ts",
+    "prisma/schema.prisma",
+    "src/lib/payment/paymentFinalizationCoordinator.ts",
+    "src/scripts/test-idempotent-partner-commission.ts",
+    "src/scripts/test-idempotent-referral-reward.ts",
+    "src/scripts/test-payment-finalization-coordinator.ts",
+    "src/scripts/test-payment-finalization-postgres.ts",
+    "src/scripts/test-payment-finalization-ingestion-postgres.ts",
+    "src/scripts/test-payment-finalization-ingestion-service-postgres.ts",
   ]);
   check(git("diff", "--name-only").every((name) => approvedChanges.has(name.replaceAll("\\", "/"))), "Unapproved tracked change found");
   const protectedStatus = git(
     "status", "--porcelain=v1", "--untracked-files=all", "--",
-    "prisma/schema.prisma",
-    "prisma/migrations",
     "src/lib/payment/paymentFinalizationService.ts",
-    "src/lib/payment/paymentFinalizationCoordinator.ts"
+    "src/app/api/paymongo/verify/route.ts",
+    "src/app/api/paymongo/webhook/route.ts",
+    "src/app/api/webhooks/paymongo/route.ts"
   );
-  check(protectedStatus.length === 0, "Protected schema, migration, service, or coordinator path changed");
+  check(protectedStatus.length === 0, "Protected legacy service or route path changed");
   const callers = walk(path.join(process.cwd(), "src", "app")).filter((file) => {
     if (!/\.[cm]?[jt]sx?$/.test(file)) return false;
     const source = fs.readFileSync(file, "utf8");

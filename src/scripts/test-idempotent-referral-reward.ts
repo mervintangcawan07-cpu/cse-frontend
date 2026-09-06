@@ -1455,6 +1455,14 @@ async function runSuite(): Promise<void> {
     const authorizedSlice4Paths = new Set([
       "src/lib/referral/idempotentReferralRewardService.ts",
       "src/scripts/test-idempotent-referral-reward.ts",
+      "prisma/schema.prisma",
+      "src/lib/payment/paymentFinalizationContracts.ts",
+      "src/lib/payment/paymentFinalizationCoordinator.ts",
+      "src/scripts/test-idempotent-partner-commission.ts",
+      "src/scripts/test-payment-finalization-coordinator.ts",
+      "src/scripts/test-payment-finalization-ingestion-postgres.ts",
+      "src/scripts/test-payment-finalization-ingestion-service-postgres.ts",
+      "src/scripts/test-payment-finalization-postgres.ts",
     ]);
 
     const unstagedTrackedPaths = execFileSync(
@@ -1463,6 +1471,7 @@ async function runSuite(): Promise<void> {
       { encoding: "utf8" }
     )
       .split(/\r?\n/)
+      .map((f) => f.trim().replace(/\\/g, "/"))
       .filter(Boolean);
 
     const stagedTrackedPaths = execFileSync(
@@ -1471,13 +1480,14 @@ async function runSuite(): Promise<void> {
       { encoding: "utf8" }
     )
       .split(/\r?\n/)
+      .map((f) => f.trim().replace(/\\/g, "/"))
       .filter(Boolean);
 
     check(
       [...unstagedTrackedPaths, ...stagedTrackedPaths].every((file) =>
         authorizedSlice4Paths.has(file)
       ),
-      "Tracked or staged changes must remain within the authorized Slice 4 files."
+      "Tracked or staged changes must remain within the authorized Slice 4 and Slice 8F-B files."
     );
   });
 

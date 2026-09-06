@@ -6,6 +6,7 @@ import {
   Prisma,
   type PaymentFinalization,
   type PaymentFinalizationEffect,
+  type PaymentFinalizationManifestRevision,
   type Transaction,
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -47,6 +48,8 @@ import {
   buildPaymentFinalizationOperationKey,
   canonicalizeJson,
   computeSha256Hash,
+  type PaymentFinalizationManifestSnapshot,
+  type EffectManifestSnapshot,
 } from "@/lib/payment/paymentFinalizationContracts";
 
 const LEASE_DURATION_MS = 120_000;
@@ -101,6 +104,7 @@ export interface RecoverDueFinalizationsResult {
 type LoadedFinalization = PaymentFinalization & {
   readonly transaction: Transaction;
   readonly effects: PaymentFinalizationEffect[];
+  readonly revisions?: readonly PaymentFinalizationManifestRevision[];
 };
 
 type CoordinatorManualCode =
@@ -117,6 +121,7 @@ type CoordinatorManualCode =
   | "MAX_ATTEMPTS_EXCEEDED"
   | "INVALID_IMMUTABLE_INTENT"
   | "LIFECYCLE_INVALID"
+  | "REVISION_CHAIN_INVALID"
   | "COORDINATOR_UNCLASSIFIED_ERROR";
 
 type EffectGroup =
@@ -304,8 +309,8 @@ function originalIntentStatus(effect: PaymentFinalizationEffect): string {
 }
 
 function compareEffects(
-  left: PaymentFinalizationEffect,
-  right: PaymentFinalizationEffect
+  left: { readonly effectType: PaymentFinalizationEffect["effectType"]; readonly effectKey: string; readonly id?: string },
+  right: { readonly effectType: PaymentFinalizationEffect["effectType"]; readonly effectKey: string; readonly id?: string }
 ): number {
   const rank: Readonly<Record<PaymentFinalizationEffect["effectType"], number>> = {
     PAYMENT_LEDGER: 0,
@@ -319,7 +324,7 @@ function compareEffects(
   const rankDifference = rank[left.effectType] - rank[right.effectType];
   if (rankDifference !== 0) return rankDifference;
   const keyDifference = left.effectKey.localeCompare(right.effectKey);
-  return keyDifference !== 0 ? keyDifference : left.id.localeCompare(right.id);
+  return keyDifference !== 0 ? keyDifference : (left.id ?? "").localeCompare(right.id ?? "");
 }
 
 function expectedOperationKey(
@@ -545,14 +550,124 @@ function validateCrossIntent(
   }
 }
 
+function validateRevision2Chain(parent: LoadedFinalization): void {
+  const revisions = parent.revisions ?? [];
+  if (revisions.length < 2) {
+    fail("REVISION_CHAIN_INVALID", "Revision 2 execution requires complete R1 and R2 revision history.");
+  }
+  const r1 = revisions.find((r) => r.manifestRevision === 1);
+  const r2 = revisions.find((r) => r.manifestRevision === 2);
+  if (!r1 || !r2) {
+    fail("REVISION_CHAIN_INVALID", "Missing R1 or R2 revision archive record.");
+  }
+  if (r1.parentManifestHash !== null || r1.revisionReason !== "INITIAL_INGESTION") {
+    fail("REVISION_CHAIN_INVALID", "Genesis R1 archive metadata is invalid.");
+  }
+  if (r2.parentManifestHash !== r1.manifestHash || r2.revisionReason !== "PROVIDER_FEE_ENRICHMENT") {
+    fail("REVISION_CHAIN_INVALID", "R2 parent hash chain or reason is invalid.");
+  }
+
+  // Validate R1 snapshot intents and root manifest hash
+  const r1Snapshot = r1.snapshot as unknown as PaymentFinalizationManifestSnapshot;
+  const r1Effects = Array.isArray(r1Snapshot?.effects) ? (r1Snapshot.effects as readonly EffectManifestSnapshot[]) : [];
+  for (const eff of r1Effects) {
+    const computed = computeSha256Hash(canonicalizeJson(eff.intent));
+    if (computed !== eff.intentHash) {
+      fail("EFFECT_HASH_MISMATCH", "R1 archive effect intent hash does not match.");
+    }
+  }
+  const r1Ordered = [...r1Effects].sort(compareEffects);
+  const r1Summary = {
+    manifestVersion: r1Snapshot.manifestVersion,
+    manifestRevision: r1Snapshot.manifestRevision,
+    transactionId: r1Snapshot.transactionId,
+    checkoutSessionId: r1Snapshot.checkoutSessionId,
+    userId: r1Snapshot.userId,
+    providerPaymentId: r1Snapshot.providerPaymentId,
+    providerPaidAt: r1Snapshot.providerPaidAt,
+    source: r1Snapshot.source,
+    origin: r1Snapshot.origin,
+    planType: r1Snapshot.planType,
+    currency: r1Snapshot.currency,
+    purchaseAmountCentavos: r1Snapshot.purchaseAmountCentavos,
+    feeKnowledge: r1Snapshot.feeKnowledge,
+    feeAmountCentavos: r1Snapshot.feeAmountCentavos,
+    feeObservedAt: r1Snapshot.feeObservedAt,
+    verifiedAt: r1Snapshot.verifiedAt,
+    entitlementBefore: r1Snapshot.entitlementBefore,
+    entitlementAfter: r1Snapshot.entitlementAfter,
+    effects: r1Ordered.map((eff) => ({
+      effectType: eff.effectType,
+      effectKey: eff.effectKey,
+      operationKey: eff.operationKey,
+      status: eff.status,
+      intentVersion: eff.intentVersion,
+      intentHash: eff.intentHash,
+    })),
+  };
+  if (computeSha256Hash(canonicalizeJson(r1Summary)) !== r1.manifestHash) {
+    fail("MANIFEST_HASH_MISMATCH", "R1 archive root manifest hash does not match.");
+  }
+
+  // Validate R2 snapshot intents and root manifest hash
+  const r2Snapshot = r2.snapshot as unknown as PaymentFinalizationManifestSnapshot;
+  const r2Effects = Array.isArray(r2Snapshot?.effects) ? (r2Snapshot.effects as readonly EffectManifestSnapshot[]) : [];
+  for (const eff of r2Effects) {
+    const computed = computeSha256Hash(canonicalizeJson(eff.intent));
+    if (computed !== eff.intentHash) {
+      fail("EFFECT_HASH_MISMATCH", "R2 archive effect intent hash does not match.");
+    }
+  }
+  const r2Ordered = [...r2Effects].sort(compareEffects);
+  const r2Summary = {
+    manifestVersion: r2Snapshot.manifestVersion,
+    manifestRevision: r2Snapshot.manifestRevision,
+    transactionId: r2Snapshot.transactionId,
+    checkoutSessionId: r2Snapshot.checkoutSessionId,
+    userId: r2Snapshot.userId,
+    providerPaymentId: r2Snapshot.providerPaymentId,
+    providerPaidAt: r2Snapshot.providerPaidAt,
+    source: r2Snapshot.source,
+    origin: r2Snapshot.origin,
+    planType: r2Snapshot.planType,
+    currency: r2Snapshot.currency,
+    purchaseAmountCentavos: r2Snapshot.purchaseAmountCentavos,
+    feeKnowledge: r2Snapshot.feeKnowledge,
+    feeAmountCentavos: r2Snapshot.feeAmountCentavos,
+    feeObservedAt: r2Snapshot.feeObservedAt,
+    verifiedAt: r2Snapshot.verifiedAt,
+    entitlementBefore: r2Snapshot.entitlementBefore,
+    entitlementAfter: r2Snapshot.entitlementAfter,
+    effects: r2Ordered.map((eff) => ({
+      effectType: eff.effectType,
+      effectKey: eff.effectKey,
+      operationKey: eff.operationKey,
+      status: eff.status,
+      intentVersion: eff.intentVersion,
+      intentHash: eff.intentHash,
+    })),
+  };
+  if (computeSha256Hash(canonicalizeJson(r2Summary)) !== r2.manifestHash) {
+    fail("MANIFEST_HASH_MISMATCH", "R2 archive root manifest hash does not match.");
+  }
+
+  // Verify current projection matches R2 archive
+  if (parent.manifestHash !== r2.manifestHash) {
+    fail("MANIFEST_HASH_MISMATCH", "Current PaymentFinalization manifestHash does not match R2 archive manifestHash.");
+  }
+}
+
 function validateManifest(
   parent: LoadedFinalization
 ): readonly PaymentFinalizationEffect[] {
   if (
     parent.manifestVersion !== MANIFEST_VERSION ||
-    parent.manifestRevision !== 1
+    (parent.manifestRevision !== 1 && parent.manifestRevision !== 2)
   ) {
     fail("UNSUPPORTED_VERSION", "The manifest version or revision is unsupported.");
+  }
+  if (parent.manifestRevision === 2) {
+    validateRevision2Chain(parent);
   }
   if (!HASH_PATTERN.test(parent.manifestHash)) {
     fail("MANIFEST_HASH_MISMATCH", "The manifest hash representation is invalid.");
@@ -712,7 +827,7 @@ async function loadFinalization(
 ): Promise<LoadedFinalization | null> {
   return tx.paymentFinalization.findUnique({
     where: { id: finalizationId },
-    include: { transaction: true, effects: true },
+    include: { transaction: true, effects: true, revisions: true },
   });
 }
 
