@@ -1,11 +1,11 @@
 # GovStudyX Post-Launch Production Readiness Re-Audit
 
-**Audit Date:** September 6, 2026  
-**Auditor:** Antigravity Senior Engineering & Security Architecture Team  
-**Worktree:** `C:\Users\Administrator\govstudyx-readiness`  
-**Current Branch:** `readiness/post-launch-hardening`  
-**Baseline Commit:** `7bce0b0234d57fc806e20742f5b056617fc3fac2`  
-**Production Status:** Live in Production & Operational  
+**Audit Date:** September 6, 2026
+**Auditor:** Antigravity Senior Engineering & Security Architecture Team
+**Worktree:** `C:\Users\Administrator\govstudyx-readiness`
+**Current Branch:** `readiness/post-launch-hardening`
+**Baseline Commit:** `7bce0b0234d57fc806e20742f5b056617fc3fac2`
+**Production Status:** Live in Production & Operational
 
 ---
 
@@ -37,7 +37,7 @@ A comprehensive post-launch production readiness re-audit of the GovStudyX platf
    - The live PayMongo payment flow (`paymentFinalizationService.ts`) utilizes PostgreSQL transaction-scoped advisory locks (`pg_advisory_xact_lock`), status verification, and idempotent transaction upserts to guarantee that verified payments cannot be double-processed into subscriptions.
    - Downstream accounting side effects (ledger, referral, partner commission, and tax provisioning) are called outside the transaction in try/catches. The durable finalization recovery coordinator (P1-001) has been created to guarantee transactional recovery, and is **strictly dormant** with 0 application callers as instructed.
 4. **Dependency Health:**
-   - `npm audit` reports 10 vulnerabilities (2 moderate, 8 high). 
+   - `npm audit` reports 10 vulnerabilities (2 moderate, 8 high).
    - `npm audit fix --force` must **never** be executed: it attempts a breaking downgrade of Prisma from v7.9.1 to v6.19.3 and `@serwist/next` to v9.4.1. The majority of high-severity vulnerabilities (`deepmerge-ts`, `mysql2`, `fast-uri`, `js-yaml`) exist solely in devDependencies (`prisma`, `eslint`) with zero runtime exposure.
 5. **Parallel Safety with Performance Slice 4:**
    - Performance Slice 4 focuses strictly on cache architecture (`src/lib/cache.ts`, `src/lib/clientCache.ts`, read endpoints `/api/pricing`, `/api/csc`, `/api/reviewer`).
@@ -99,7 +99,7 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
 - **Status:** OPEN
 - **Severity:** P1
 - **Exact File / Route:** `src/app/api/exam/start/route.ts` (lines 206–224, 329–340), `src/app/mock-exam/take/page.tsx` (lines 20, 274, 733, 992, 1065–1081)
-- **Evidence:** 
+- **Evidence:**
   In `src/app/api/exam/start/route.ts`, the mapped question payload explicitly returns:
   ```typescript
   return {
@@ -117,7 +117,7 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
   ```
   `src/app/mock-exam/take/page.tsx` relies on `q.answerIndex` directly in the browser to compute whether answers are correct.
 - **Impact:** Any user taking a mock examination can open DevTools Network tab or inspect client state to see all 170 correct answers, complete explanations, and elimination strategies before answering questions, completely undermining the integrity of mock exams and scoring.
-- **Recommended Minimum Fix:** 
+- **Recommended Minimum Fix:**
   1. For standard/timed mock exams (`mode === 'TIMED'`), strip `answerIndex`, `explanation`, and all reasoning helper fields from the `/api/exam/start` response.
   2. Grade submissions authoritatively on the server via `/api/exam/submit`, which receives selected indices and compares them against database questions.
   3. Return explanations and answer keys only in the post-exam review/results payload (`/api/exam/results` or `/api/mock-exam/results`).
@@ -131,7 +131,7 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
 - **Status:** OPEN
 - **Severity:** P1
 - **Exact File / Route:** `src/lib/backup/backupStorage.ts` (lines 20–27, 48–53, 83–91)
-- **Evidence:** 
+- **Evidence:**
   1. In production/Vercel, backups are stored in `os.tmpdir()` (`/tmp`), which is ephemeral serverless storage wiped upon execution termination.
   2. To compensate, `saveBackup` executes:
      ```typescript
@@ -153,7 +153,7 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
 - **Status:** PARTIALLY RESOLVED / CONTAINED
 - **Severity:** P1
 - **Exact File / Route:** `src/lib/recovery/softDelete.ts` (lines 14–16, 50–55), `src/jobs/purgeExpiredRecords.ts` (lines 7–9), `src/app/api/admin/recovery/route.ts` (lines 122–138)
-- **Evidence:** 
+- **Evidence:**
   Source-level containment blocks physical user deletion with code `USER_HARD_PURGE_DISABLED_CODE` (HTTP 501). Database schema has been updated with `anonymizedAt` and `anonymizationVersion` (Slice A deployed in commit `a127e7c`). However, the actual tombstone/anonymization lifecycle engine (Slice B2) remains un-merged on branch `security/p0-002-b2-terminal-lifecycle`.
 - **Impact:** Expired soft-deleted users remain indefinitely in the database and trash bin without reaching terminal lifecycle. While financial ledgers are protected from foreign-key cascade destruction, data retention compliance cannot be fulfilled.
 - **Recommended Minimum Fix:** Complete review and merge of `security/p0-002-b2-terminal-lifecycle` to replace hard purge with irreversible pseudonymization/anonymization while preserving foreign keys to ledger and referral records.
@@ -167,10 +167,10 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
 - **Status:** PARTIALLY RESOLVED / OPERATIONALLY CONTAINED
 - **Severity:** P1
 - **Exact File / Route:** `src/lib/backup/backupRestore.ts` (lines 9–14, 44–46), `src/app/api/admin/backups/[id]/route.ts` (lines 71–80)
-- **Evidence:** 
+- **Evidence:**
   `P0_003_RESTORE_CONTAINMENT_ACTIVE = true` enforces fail-closed containment, returning `P0_003_RESTORE_DISABLED_CODE` (HTTP 503) whenever an admin attempts to trigger an application-level restore.
 - **Impact:** There is no tested or automated in-application database restore path. If production suffers data loss, recovery depends entirely on manual database administrator operations (e.g. pg_restore or cloud provider snapshot restore).
-- **Recommended Minimum Fix:** 
+- **Recommended Minimum Fix:**
   1. Formally document the operational disaster recovery runbook declaring that production database restores MUST be performed out-of-band via managed database snapshot / point-in-time recovery (PITR).
   2. Update admin UI to explicitly reflect that restore is an out-of-band infrastructure procedure rather than an in-app button.
 - **Regression Risk:** Low.
@@ -183,7 +183,7 @@ There are currently **zero uncontained P0 critical vulnerabilities** active in t
 - **Status:** PARTIALLY RESOLVED / DORMANT
 - **Severity:** P1
 - **Exact File / Route:** `src/lib/payment/paymentFinalizationCoordinator.ts`, `paymentFinalizationIngestionService.ts`, `paymentFinalizationManifestService.ts`, `paymentFinalizationRevisionService.ts`
-- **Evidence:** 
+- **Evidence:**
   The foundation for durable, exactly-once payment finalization was committed across `9c5901d` through `0884b25`. All tests in `test-payment-finalization-ingestion-service-postgres.ts` explicitly verify that there are **0 application callers** in production routes. The live path in `paymentFinalizationService.ts` still executes downstream accounting side effects outside the primary transaction in isolated try/catches.
 - **Impact:** If a process crashes or network times out between subscription extension and ledger/referral execution in the live path, downstream side effects are logged as errors but not automatically retried by the live endpoint.
 - **Recommended Minimum Fix:** Keep dormant as required by strict production rules until isolated PostgreSQL harnesses confirm 100% test pass rate, followed by a phased, approved activation plan.
@@ -349,7 +349,7 @@ Total: 10 vulnerabilities (0 Critical, 8 High, 2 Moderate, 0 Low, 0 Info)
 ### Safe Remediation Guidelines & Breaking-Change Risks
 
 > [!CAUTION]
-> **DO NOT RUN `npm audit fix --force`**  
+> **DO NOT RUN `npm audit fix --force`**
 > Running `npm audit fix --force` will downgrade `prisma` from `7.9.1` to `6.19.3` and `@serwist/next` from `9.5.12` to `9.4.1`. This would break Prisma 7 PostgreSQL driver adapter (`@prisma/adapter-pg`), break the Prisma schema, and invalidate service worker builds.
 
 **Recommended Safe Remediation Strategy:**
@@ -435,4 +435,3 @@ Resolve five non-breaking operational vulnerabilities (P2-001, P2-002, P2-003, P
 2. Unit and route integration tests verifying rate limiting triggers on threshold.
 3. Verification that `/api/health/readiness` returns 200 with valid environment and 503 when a required secret is missing.
 4. Final `git diff` review ensuring zero unintended changes.
-
