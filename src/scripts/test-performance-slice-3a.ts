@@ -13,12 +13,6 @@ function source(relativePath: string) {
   return readFileSync(join(process.cwd(), relativePath), "utf8");
 }
 
-function headSource(relativePath: string) {
-  return execFileSync("git", ["show", `HEAD:${relativePath}`], {
-    cwd: process.cwd(),
-    encoding: "utf8",
-  });
-}
 
 function changedFiles() {
   const tracked = execFileSync("git", ["diff", "--name-only"], {
@@ -191,9 +185,9 @@ assert.match(authContext, /Date\.now\(\) - lastSnapshotAtRef\.current/);
 assert.match(authContext, /Date\.now\(\) - lastAuthAttemptAtRef\.current/);
 assert.equal((authContext.match(/refreshIfStale\("visibility"\)/g) ?? []).length, 1);
 
-// A22: the root owner replaces, rather than adds to, the previously global Navbar request.
-const baselineNavbar = headSource("src/components/Navbar.tsx");
-assert.match(baselineNavbar, /fetch\("\/api\/auth\/me"\)/);
+// A22: the root AuthProvider replaces the previously global Navbar auth request.
+assert.doesNotMatch(navbar, /fetch\("\/api\/auth\/me"/);
+assert.match(navbar, /useAuth\(\)/);
 assert.match(layout, /<AuthProvider>[\s\S]*<Navbar \/>[\s\S]*\{children\}/);
 assert.equal((authContext.match(/refreshAuth\("initial"\)/g) ?? []).length, 1);
 assert.match(authContext, /isKickedSafePath/);
