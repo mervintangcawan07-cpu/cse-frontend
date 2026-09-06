@@ -1,14 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+
+const MAINTENANCE_POLL_INTERVAL_MS = 20000; // 20 seconds while visible
 
 export default function MaintenancePage() {
   const router = useRouter();
   const [message, setMessage] = useState("We are currently performing system upgrades and optimizations.");
   const [checking, setChecking] = useState(false);
 
-  const checkStatus = async () => {
+  const inFlightRef = useRef(false);
+  const lastFetchTimeRef = useRef(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const checkStatus = useCallback(async (isManual = false) => {
+    if (inFlightRef.current) return;
+    if (!isManual && typeof document !== "undefined" && document.hidden) return;
+    if (!isManual && typeof navigator !== "undefined" && !navigator.onLine) return;
+
+    inFlightRef.current = true;
     setChecking(true);
     try {
       const res = await fetch("/api/maintenance/status");
@@ -20,19 +31,66 @@ export default function MaintenancePage() {
       } else if (data.message) {
         setMessage(data.message);
       }
+      lastFetchTimeRef.current = Date.now();
     } catch (err) {
       console.error("Failed to check maintenance status:", err);
     } finally {
       setChecking(false);
+      inFlightRef.current = false;
     }
-  };
+  }, [router]);
 
   useEffect(() => {
-    checkStatus();
-    // Auto-check every 10 seconds
-    const interval = setInterval(checkStatus, 10000);
-    return () => clearInterval(interval);
-  }, []);
+    const resetTimer = () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
+
+      timerRef.current = setInterval(() => {
+        void checkStatus();
+      }, MAINTENANCE_POLL_INTERVAL_MS);
+    };
+
+    const handleVisibilityOrOnline = () => {
+      const isVisible = typeof document !== "undefined" && !document.hidden;
+      const isOnline = typeof navigator === "undefined" || navigator.onLine;
+
+      if (!isVisible || !isOnline) {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        return;
+      }
+
+      const now = Date.now();
+      const isStale = now - lastFetchTimeRef.current >= MAINTENANCE_POLL_INTERVAL_MS;
+      if (isStale) {
+        void checkStatus();
+      }
+      resetTimer();
+    };
+
+    void checkStatus();
+    resetTimer();
+
+    document.addEventListener("visibilitychange", handleVisibilityOrOnline);
+    window.addEventListener("online", handleVisibilityOrOnline);
+    window.addEventListener("offline", handleVisibilityOrOnline);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityOrOnline);
+      window.removeEventListener("online", handleVisibilityOrOnline);
+      window.removeEventListener("offline", handleVisibilityOrOnline);
+    };
+  }, [checkStatus]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
@@ -62,7 +120,7 @@ export default function MaintenancePage() {
 
         <div className="pt-2">
           <button
-            onClick={checkStatus}
+            onClick={() => void checkStatus(true)}
             disabled={checking}
             className="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-2xl shadow-lg transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
           >
