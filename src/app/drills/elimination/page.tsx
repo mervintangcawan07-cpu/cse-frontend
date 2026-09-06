@@ -2,9 +2,8 @@
 
 import { formatPromptHTML } from "@/lib/formatPrompt";
 import { cleanMathText } from "@/lib/sanitizeMath";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { getOfflineDrillById } from "@/lib/offline-storage";
 
 interface DrillQuestion {
   id: string;
@@ -14,6 +13,16 @@ interface DrillQuestion {
   answerIndex: number;
   explanation: string;
   eliminationNotes?: { [optionIndex: number]: string };
+}
+
+interface DrillApiQuestion {
+  id?: unknown;
+  category?: unknown;
+  prompt?: unknown;
+  options?: unknown;
+  answerIndex?: unknown;
+  explanation?: unknown;
+  eliminationNotes?: unknown;
 }
 
 interface QuestionRecord {
@@ -27,35 +36,6 @@ interface QuestionRecord {
   struckCorrect: boolean;
 }
 
-const SAMPLE_QUESTIONS: DrillQuestion[] = [
-  {
-    id: "1",
-    category: "Numerical Reasoning",
-    prompt: "What is 15% of 300?",
-    options: ["A. 45", "B. 3,000", "C. -15", "D. 90"],
-    answerIndex: 0,
-    explanation: "15% of 300 = 0.15 × 300 = 45.",
-    eliminationNotes: {
-      1: "3,000 is larger than 300. A percentage less than 100% cannot be larger than the original number.",
-      2: "-15 is negative. Taking a positive percentage of a positive number yields a positive result.",
-      3: "90 is 30% of 300 (double the requested 15%).",
-    },
-  },
-  {
-    id: "2",
-    category: "Verbal Ability",
-    prompt: "Which word is an antonym for 'BENEVOLENT'?",
-    options: ["A. Kind", "B. Malevolent", "C. Generous", "D. Helpful"],
-    answerIndex: 1,
-    explanation: "'Benevolent' means well-meaning and kindly. 'Malevolent' means wishing to do evil.",
-    eliminationNotes: {
-      0: "'Kind' is a synonym, not an antonym.",
-      2: "'Generous' is a positive attribute aligned with benevolent.",
-      3: "'Helpful' is another positive synonym.",
-    },
-  },
-];
-
 const STORAGE_SEEN_KEY = "cse_elimination_seen_ids";
 const STORAGE_CURRENT_SESSION = "cse_elimination_active_session";
 
@@ -67,121 +47,109 @@ export default function EliminationTrainerPage() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [history, setHistory] = useState<QuestionRecord[]>([]);
 
-  // 🔄 Load drill questions from browser cache or single API request
-  useEffect(() => {
-    loadDrillSession();
+  const requestDrillSession = useCallback(async (): Promise<DrillQuestion[]> => {
+    // Remove the legacy active-question payload without touching history or
+    // unrelated offline data. Cached question content is never an authority.
+    try {
+      sessionStorage.removeItem(STORAGE_CURRENT_SESSION);
+    } catch {
+      // Storage access can be unavailable; the server request remains authoritative.
+    }
+
+    const seenRaw = localStorage.getItem(STORAGE_SEEN_KEY) || "";
+    const res = await fetch(`/api/drills/elimination?seenIds=${encodeURIComponent(seenRaw)}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data?.error || "Failed to load elimination questions.");
+    }
+
+    if (!Array.isArray(data.drills)) {
+      throw new Error("Invalid elimination drill response.");
+    }
+
+    if (data.loopReset) {
+      localStorage.removeItem(STORAGE_SEEN_KEY);
+    }
+
+    return data.drills.map((item: DrillApiQuestion, idx: number) => {
+      const rawOptions = Array.isArray(item.options)
+        ? item.options.filter((option): option is string => typeof option === "string")
+        : [];
+      const formattedOptions = rawOptions.map((opt: string, optionIndex: number) => {
+        const prefix = `${String.fromCharCode(65 + optionIndex)}. `;
+        return /^(A|B|C|D)\. /.test(opt) ? opt : `${prefix}${opt}`;
+      });
+
+      const eliminationNotes =
+        item.eliminationNotes !== null && typeof item.eliminationNotes === "object"
+          ? (item.eliminationNotes as DrillQuestion["eliminationNotes"])
+          : {
+              0: "Incorrect distractor option.",
+              1: "Incorrect distractor option.",
+              2: "Incorrect distractor option.",
+              3: "Incorrect distractor option.",
+            };
+
+      return {
+        id: typeof item.id === "string" ? item.id : String(idx + 1),
+        category: typeof item.category === "string" ? item.category : "General Ability",
+        prompt: typeof item.prompt === "string" ? item.prompt : "",
+        options: formattedOptions,
+        answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
+        explanation:
+          typeof item.explanation === "string"
+            ? item.explanation
+            : "No detailed explanation provided.",
+        eliminationNotes,
+      };
+    });
   }, []);
 
-  const loadDrillSession = async (forceNew = false) => {
+  const loadDrillSession = useCallback(async () => {
     setLoading(true);
+    setLoadError(null);
+    setQuestions([]);
     setIsFinished(false);
     setCurrentIndex(0);
     setEliminatedIndices([]);
     setIsRevealed(false);
     setScore(0);
     setHistory([]);
-
-    // 1. Check browser cache (sessionStorage) for an active session
-    if (!forceNew) {
-      const cachedSession = sessionStorage.getItem(STORAGE_CURRENT_SESSION);
-      if (cachedSession) {
-        try {
-          const parsed = JSON.parse(cachedSession);
-          if (Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-            setQuestions(parsed.questions);
-            setLoading(false);
-            return;
-          }
-        } catch {
-          sessionStorage.removeItem(STORAGE_CURRENT_SESSION);
-        }
-      }
-    }
-
-    // 2. Fetch new 10-item set from API passing seen IDs
     try {
-      const seenRaw = localStorage.getItem(STORAGE_SEEN_KEY) || "";
-      const res = await fetch(`/api/drills/elimination?seenIds=${encodeURIComponent(seenRaw)}`);
-      const data = await res.json();
-
-      if (res.ok && data.drills && data.drills.length > 0) {
-        if (data.loopReset) {
-          localStorage.removeItem(STORAGE_SEEN_KEY);
-        }
-
-        const dbQuestions: DrillQuestion[] = data.drills.map((item: any, idx: number) => {
-          const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
-
-          const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
-            const prefix = `${String.fromCharCode(65 + oIdx)}. `;
-            return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
-              ? opt
-              : `${prefix}${opt}`;
-          });
-
-          return {
-            id: item.id || String(idx + 1),
-            category: item.category || "General Ability",
-            prompt: item.prompt,
-            options: formattedOptions,
-            answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
-            explanation: item.explanation || "No detailed explanation provided.",
-            eliminationNotes: item.eliminationNotes || {
-              0: "Incorrect distractor option.",
-              1: "Incorrect distractor option.",
-              2: "Incorrect distractor option.",
-              3: "Incorrect distractor option.",
-            },
-          };
-        });
-
-        setQuestions(dbQuestions);
-
-        // Cache 10-item session in sessionStorage
-        sessionStorage.setItem(
-          STORAGE_CURRENT_SESSION,
-          JSON.stringify({ questions: dbQuestions })
-        );
-      } else {
-        setQuestions(SAMPLE_QUESTIONS);
-      }
+      setQuestions(await requestDrillSession());
     } catch (err) {
-      console.error("Failed to load drill questions from API, trying offline cache:", err);
-      // 🔌 Offline Fallback: load from IndexedDB if available
-      try {
-        const offlineDrill = await getOfflineDrillById("elimination_trainer");
-        if (offlineDrill && Array.isArray(offlineDrill.questions) && offlineDrill.questions.length > 0) {
-          const offlineQuestions: DrillQuestion[] = offlineDrill.questions.map((item: any, idx: number) => {
-            const rawOptions: string[] = Array.isArray(item.options) ? item.options : [];
-            const formattedOptions = rawOptions.map((opt: string, oIdx: number) => {
-              const prefix = `${String.fromCharCode(65 + oIdx)}. `;
-              return opt.startsWith("A. ") || opt.startsWith("B. ") || opt.startsWith("C. ") || opt.startsWith("D. ")
-                ? opt
-                : `${prefix}${opt}`;
-            });
-            return {
-              id: item.id || String(idx + 1),
-              category: item.category || "General Ability",
-              prompt: item.prompt,
-              options: formattedOptions,
-              answerIndex: typeof item.answerIndex === "number" ? item.answerIndex : 0,
-              explanation: item.explanation || "No detailed explanation provided.",
-              eliminationNotes: item.eliminationNotes || {},
-            };
-          });
-          setQuestions(offlineQuestions);
-        } else {
-          setQuestions(SAMPLE_QUESTIONS);
-        }
-      } catch {
-        setQuestions(SAMPLE_QUESTIONS);
-      }
+      console.error("Failed to load elimination drill questions:", err);
+      setLoadError(err instanceof Error ? err.message : "Failed to load elimination questions.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [requestDrillSession]);
+
+  // Current server eligibility is authoritative for every new drill load.
+  useEffect(() => {
+    let active = true;
+
+    void requestDrillSession()
+      .then((dbQuestions) => {
+        if (active) setQuestions(dbQuestions);
+      })
+      .catch((err: unknown) => {
+        if (!active) return;
+        console.error("Failed to load elimination drill questions:", err);
+        setLoadError(err instanceof Error ? err.message : "Failed to load elimination questions.");
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [requestDrillSession]);
 
   const handleToggleEliminate = (index: number) => {
     if (isRevealed) return;
@@ -261,6 +229,41 @@ export default function EliminationTrainerPage() {
     return (
       <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
         Loading Elimination Trainer & Question Bank...
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="w-full max-w-3xl mx-auto py-16 px-4">
+        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 text-center text-white space-y-4">
+          <div className="text-4xl" aria-hidden="true">📭</div>
+          <h1 className="text-2xl font-black">
+            {loadError ? "Elimination Drill Unavailable" : "No Active Elimination Questions"}
+          </h1>
+          <p className="text-sm text-slate-300 max-w-xl mx-auto">
+            {loadError
+              ? "The current server-authorized drill pool could not be loaded. Cached questions were not used."
+              : "The Elimination Drill bank is currently empty. New questions will appear here after an administrator adds or restores eligible content."}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 pt-2">
+            {loadError && (
+              <button
+                type="button"
+                onClick={() => void loadDrillSession()}
+                className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black"
+              >
+                Retry Server Check
+              </button>
+            )}
+            <Link
+              href="/drills"
+              className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700"
+            >
+              Back to Strategy Drills
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
@@ -515,7 +518,7 @@ export default function EliminationTrainerPage() {
             {/* Action Buttons */}
             <div className="pt-2 flex flex-wrap justify-center gap-3">
               <button
-                onClick={() => loadDrillSession(true)}
+                onClick={() => void loadDrillSession()}
                 className="px-7 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition cursor-pointer flex items-center gap-2"
               >
                 <span>⚡ Start Next 10-Item Drill</span>

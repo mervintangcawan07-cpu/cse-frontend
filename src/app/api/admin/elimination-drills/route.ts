@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
+import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 
 interface IncomingQuestionPayload {
   prompt?: string;
@@ -40,28 +41,12 @@ export async function GET() {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
-    let drills = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        OR: [
-          { category: "Elimination Drill" },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
-      },
+    const drills = await prisma.question.findMany({
+      where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });
 
-    let isFallback = false;
-      if (drills.length === 0) {
-        drills = await prisma.question.findMany({
-          where: { deletedAt: null },
-          take: 50,
-          orderBy: { createdAt: "desc" },
-        });
-        isFallback = true;
-      }
-
-      return NextResponse.json({ success: true, drills, isFallback });
+    return NextResponse.json({ success: true, drills, count: drills.length });
   } catch (error: unknown) {
     console.error("[ADMIN_DRILL_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch drill questions." }, { status: 500 });
@@ -223,13 +208,7 @@ export async function DELETE(request: Request) {
 
     if (deleteAll) {
       const allDrillQuestions = await prisma.question.findMany({
-        where: {
-          deletedAt: null,
-          OR: [
-            { category: "Elimination Drill" },
-            { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-          ],
-        },
+        where: activeEliminationQuestionWhere(),
         select: { id: true },
       });
 

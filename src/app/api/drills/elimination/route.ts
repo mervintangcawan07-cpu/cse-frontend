@@ -1,6 +1,7 @@
 // Relative Path: src/app/api/drills/elimination/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,24 +13,10 @@ export async function GET(request: Request) {
     const seenIds = new Set(seenParam.split(",").filter(Boolean));
     const LIMIT = 10;
 
-    let allDrillQuestions = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        OR: [
-          { category: "Elimination Drill" },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
-      },
+    const allDrillQuestions = await prisma.question.findMany({
+      where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });
-
-    if (allDrillQuestions.length === 0) {
-      allDrillQuestions = await prisma.question.findMany({
-        where: { deletedAt: null },
-        take: 50,
-        orderBy: { createdAt: "desc" },
-      });
-    }
 
     if (allDrillQuestions.length === 0) {
       return NextResponse.json({ success: true, drills: [], loopReset: false });

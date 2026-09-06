@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 
 export async function GET(request: Request) {
   try {
@@ -10,7 +11,7 @@ export async function GET(request: Request) {
     const [totalUsers, paidUsers, totalQuestions, totalExams] = await Promise.all([
       prisma.user.count().catch(() => 0),
       prisma.user.count({ where: { isPaid: true } }).catch(() => 0),
-      prisma.question.count({ where: { deletedAt: null } }).catch(() => 0),
+      prisma.question.count({ where: activeOrdinaryQuestionWhere() }).catch(() => 0),
       prisma.examResult.count().catch(() => 0),
     ]);
 
