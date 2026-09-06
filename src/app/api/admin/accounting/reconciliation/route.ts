@@ -2,7 +2,6 @@
 import { NextResponse } from "next/server";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
-import { ReconciliationService } from "@/lib/accounting/reconciliationService";
 
 export async function GET(request: Request) {
   try {
@@ -42,17 +41,29 @@ export async function POST(request: Request) {
   try {
     const { user, errorResponse } = await requireAdminAuth(request);
     if (errorResponse) return errorResponse;
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    const results = await ReconciliationService.runBatchReconciliation();
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
-    return NextResponse.json({
-      success: true,
-      reconciledCount: results.length,
-      message: `Reconciliation completed for ${results.length} transactions!`,
-    });
-  } catch (error: any) {
+    return NextResponse.json(
+      {
+        success: false,
+        code: "LEGACY_RECONCILIATION_WRITE_DISABLED",
+        error:
+          "Legacy reconciliation writes are disabled pending durable reconciliation cutover.",
+      },
+      { status: 409 }
+    );
+  } catch (error) {
     console.error("[ADMIN_RECONCILIATION_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Reconciliation failed" }, { status: 500 });
+
+    return NextResponse.json(
+      { error: "Reconciliation request failed" },
+      { status: 500 }
+    );
   }
 }

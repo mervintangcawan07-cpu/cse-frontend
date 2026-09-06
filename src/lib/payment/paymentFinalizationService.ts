@@ -4,7 +4,6 @@ import { LedgerService } from "@/lib/accounting/ledgerService";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { ReferralService } from "@/lib/referral/referralService";
 import { TaxService } from "@/lib/accounting/taxService";
-import { ReconciliationService } from "@/lib/accounting/reconciliationService";
 
 export interface FinalizePaymentParams {
   userId: string;
@@ -288,12 +287,6 @@ export class PaymentFinalizationService {
       console.error("[PaymentFinalizationService] Tax evaluation warning:", taxErr);
     }
 
-    // 🔍 Auto-Reconciliation
-    try {
-      await ReconciliationService.reconcileTransaction(transaction.id);
-    } catch (reconErr) {
-      console.error("[PaymentFinalizationService] Reconciliation warning:", reconErr);
-    }
 
     console.log(
       `[PaymentFinalizationService] Successfully finalized payment for user ${userId}, txn ${transaction.id}, source ${source}`

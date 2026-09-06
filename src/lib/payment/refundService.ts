@@ -3,7 +3,6 @@ import { isExactPayMongoPaymentIdListRejection } from "@/lib/payment/refundHisto
 import { prisma } from "@/lib/prisma";
 import { LedgerService } from "@/lib/accounting/ledgerService";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
-import { ReconciliationService } from "@/lib/accounting/reconciliationService";
 
 export interface PayMongoRefundResource {
   id: string; // ref_...
@@ -1196,16 +1195,6 @@ export class RefundService {
         payment,
       });
 
-      // Post-commit Self-Healing Reconciliation
-      if (
-        outcome.status === "PROCESSED_FULL_REFUND" ||
-        outcome.status === "PROCESSED_PARTIAL_REFUND" ||
-        outcome.status === "ALREADY_PROCESSED"
-      ) {
-        await ReconciliationService.reconcileTransaction(transaction.id).catch((err) =>
-          console.error("[RefundService] Post-commit reconciliation warning:", err)
-        );
-      }
 
       return outcome;
     }
@@ -1304,12 +1293,6 @@ export class RefundService {
         }
       }
 
-      // Post-commit Self-Healing Reconciliation
-      if (lastOutcome.success) {
-        await ReconciliationService.reconcileTransaction(transaction.id).catch((err) =>
-          console.error("[RefundService] Post-commit reconciliation warning:", err)
-        );
-      }
 
       return lastOutcome;
     }
