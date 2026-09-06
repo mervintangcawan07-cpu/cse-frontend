@@ -73,6 +73,20 @@ export const SUPPORT_TICKET_LIMITER = createLimiter(
   `@ratelimit/${rateLimitEnvironment}/support_ticket`
 );
 
+// 🔒 9. AI Question Generation Limiter: 5 requests per 1 minute (Admin AI generation)
+export const AI_GENERATE_LIMITER = createLimiter(
+  5,
+  "1 m",
+  `@ratelimit/${rateLimitEnvironment}/ai_generate`
+);
+
+// 🔒 10. Exam Start Limiter: 10 requests per 1 minute (Mock / Custom quiz start)
+export const EXAM_START_LIMITER = createLimiter(
+  10,
+  "1 m",
+  `@ratelimit/${rateLimitEnvironment}/exam_start`
+);
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;

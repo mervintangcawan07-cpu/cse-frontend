@@ -16,22 +16,33 @@ const PREFIX = "enc:";
  */
 export function getKeyForVersion(version: string): Buffer {
   const envVarName = version === "v1" ? "ENCRYPTION_KEY_V1" : `ENCRYPTION_KEY_${version.toUpperCase()}`;
-  const rawKey =
-    process.env[envVarName]?.trim() ||
-    process.env.ENCRYPTION_KEY?.trim() ||
-    process.env.JWT_SECRET?.trim();
+  const versionedKey = process.env[envVarName]?.trim();
+  const legacyKey = process.env.ENCRYPTION_KEY?.trim();
 
-  if (!rawKey) {
-    if (process.env.NODE_ENV === "production") {
+  // In production, strictly require dedicated encryption key (ENCRYPTION_KEY_V1 or ENCRYPTION_KEY).
+  // JWT_SECRET MUST NOT be accepted as an encryption key fallback in production.
+  if (process.env.NODE_ENV === "production") {
+    const prodKey = versionedKey || legacyKey;
+    if (!prodKey) {
       throw new Error(
-        `Critical Security Error: Required encryption key (${envVarName}, ENCRYPTION_KEY, or JWT_SECRET) is not configured.`
+        `Critical Security Error: Required production encryption key (${envVarName} or ENCRYPTION_KEY) is not configured.`
       );
     }
+    return crypto.createHash("sha256").update(prodKey).digest();
+  }
+
+  // Non-production (development / test) resolution:
+  const nonProdKey =
+    versionedKey ||
+    legacyKey ||
+    process.env.JWT_SECRET?.trim();
+
+  if (!nonProdKey) {
     // Development/test fallback only when running in non-production environments
     return crypto.createHash("sha256").update("govstudyx_default_secure_encryption_key_2026").digest();
   }
 
-  return crypto.createHash("sha256").update(rawKey).digest();
+  return crypto.createHash("sha256").update(nonProdKey).digest();
 }
 
 export function isEncrypted(value: unknown): boolean {
