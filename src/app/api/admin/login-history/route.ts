@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import {
+  buildBoundedPage,
+  validateBoundedPaginationQuery,
+} from "@/lib/validation/schemas";
 
 export async function GET(request: Request) {
   try {
@@ -19,6 +23,14 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q") || "";
     const filter = searchParams.get("filter") || "ALL";
+    const paginationResult = validateBoundedPaginationQuery(searchParams);
+
+    if (!paginationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid pagination parameters.", details: paginationResult.errors },
+        { status: 400 }
+      );
+    }
 
     const whereCondition: any = {};
 
@@ -35,15 +47,22 @@ export async function GET(request: Request) {
 
     const history = await prisma.loginHistory.findMany({
       where: whereCondition,
-      orderBy: { createdAt: "desc" },
-      take: 100,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      skip: paginationResult.data.skip,
+      take: paginationResult.data.take,
     });
 
     const totalFailedAttempts = await prisma.loginHistory.count({
       where: { status: "FAILED" },
     });
 
-    return NextResponse.json({ history, totalFailedAttempts });
+    const page = buildBoundedPage(history, paginationResult.data);
+
+    return NextResponse.json({
+      history: page.items,
+      totalFailedAttempts,
+      pagination: page.pagination,
+    });
   } catch (error) {
     console.error("[LOGIN_HISTORY_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch login history" }, { status: 500 });

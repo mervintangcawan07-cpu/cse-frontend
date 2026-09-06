@@ -1,9 +1,11 @@
 // Relative Path: src/app/social/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+const SOCIAL_COUNTS_POLL_INTERVAL_MS = 30000; // 30 seconds while visible
 import ClassmatesSection from "@/components/social/ClassmatesSection";
 import MessagesSection from "@/components/social/MessagesSection";
 import StudyRoomsSection from "@/components/social/StudyRoomsSection";
@@ -97,7 +99,16 @@ export default function SocialDashboardPage() {
     }
   };
 
-  const fetchBadgeCounts = async () => {
+  const countsInFlightRef = useRef(false);
+  const lastCountsFetchTimeRef = useRef(0);
+  const countsTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const fetchBadgeCounts = useCallback(async (isManual = false) => {
+    if (countsInFlightRef.current) return;
+    if (!isManual && typeof document !== "undefined" && document.hidden) return;
+    if (!isManual && typeof navigator !== "undefined" && !navigator.onLine) return;
+
+    countsInFlightRef.current = true;
     try {
       const res = await fetch("/api/social/counts");
       if (res.ok) {
@@ -106,10 +117,13 @@ export default function SocialDashboardPage() {
           setCounts(data.counts);
         }
       }
+      lastCountsFetchTimeRef.current = Date.now();
     } catch (err) {
       console.error("Failed to fetch badge counts:", err);
+    } finally {
+      countsInFlightRef.current = false;
     }
-  };
+  }, []);
 
   useEffect(() => {
     async function checkAuthAndProfile() {
@@ -135,21 +149,64 @@ export default function SocialDashboardPage() {
     }
 
     checkAuthAndProfile();
-    fetchBadgeCounts();
-
-    // Smart 15s polling that pauses when window/tab is hidden
-    const interval = setInterval(() => {
-      if (typeof document !== "undefined" && !document.hidden) {
-        fetchBadgeCounts();
-      }
-    }, 15000);
-
-    return () => clearInterval(interval);
   }, [router]);
+
+  // Dedicated 30s visibility-aware and in-flight guarded polling loop for aggregate badge counts
+  useEffect(() => {
+    const resetTimer = () => {
+      if (countsTimerRef.current) {
+        clearInterval(countsTimerRef.current);
+        countsTimerRef.current = null;
+      }
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
+
+      countsTimerRef.current = setInterval(() => {
+        void fetchBadgeCounts();
+      }, SOCIAL_COUNTS_POLL_INTERVAL_MS);
+    };
+
+    const handleVisibilityOrOnline = () => {
+      const isVisible = typeof document !== "undefined" && !document.hidden;
+      const isOnline = typeof navigator === "undefined" || navigator.onLine;
+
+      if (!isVisible || !isOnline) {
+        if (countsTimerRef.current) {
+          clearInterval(countsTimerRef.current);
+          countsTimerRef.current = null;
+        }
+        return;
+      }
+
+      const now = Date.now();
+      const isStale = now - lastCountsFetchTimeRef.current >= SOCIAL_COUNTS_POLL_INTERVAL_MS;
+      if (isStale) {
+        void fetchBadgeCounts();
+      }
+      resetTimer();
+    };
+
+    void fetchBadgeCounts();
+    resetTimer();
+
+    document.addEventListener("visibilitychange", handleVisibilityOrOnline);
+    window.addEventListener("online", handleVisibilityOrOnline);
+    window.addEventListener("offline", handleVisibilityOrOnline);
+
+    return () => {
+      if (countsTimerRef.current) {
+        clearInterval(countsTimerRef.current);
+        countsTimerRef.current = null;
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityOrOnline);
+      window.removeEventListener("online", handleVisibilityOrOnline);
+      window.removeEventListener("offline", handleVisibilityOrOnline);
+    };
+  }, [fetchBadgeCounts]);
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto py-24 text-center font-bold text-slate-400 animate-pulse space-y-3">
+      <div className="w-full py-24 text-center font-bold text-slate-400 animate-pulse space-y-3">
         <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p className="text-xs uppercase tracking-widest text-slate-500">
           Loading Study Together Hub...
@@ -224,7 +281,7 @@ export default function SocialDashboardPage() {
     : { emoji: "🧑‍🎓", bg: "from-blue-600 to-indigo-500" };
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-3 sm:py-6 px-2 sm:px-4 md:px-6 space-y-3 sm:space-y-6 text-slate-900">
+    <div className="w-full py-3 sm:py-6 px-2 sm:px-4 md:px-6 lg:px-8 space-y-3 sm:space-y-6 text-slate-900">
       {/* MINIMIZED SLEEK TOP PROFILE & BRAND BAR */}
       <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white rounded-2xl sm:rounded-3xl p-3 sm:p-4 shadow-lg shadow-purple-600/10 relative">
         <div className="flex items-center justify-between gap-2">

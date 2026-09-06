@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import {
+  buildBoundedPage,
+  validateBoundedPaginationQuery,
+} from "@/lib/validation/schemas";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const authentication = await getAuthenticatedSessionResult();
     if (!authentication.authenticated && authentication.code === "NO_TOKEN") {
@@ -16,11 +20,26 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    const paginationResult = validateBoundedPaginationQuery(
+      new URL(request.url).searchParams
+    );
+
+    if (!paginationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid pagination parameters.", details: paginationResult.errors },
+        { status: 400 }
+      );
+    }
+
     const tickets = await prisma.supportTicket.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      skip: paginationResult.data.skip,
+      take: paginationResult.data.take,
     });
 
-    return NextResponse.json({ tickets });
+    const page = buildBoundedPage(tickets, paginationResult.data);
+
+    return NextResponse.json({ tickets: page.items, pagination: page.pagination });
   } catch (error) {
     console.error("[SUPPORT_TICKETS_GET]", error);
     return NextResponse.json({ error: "Failed to load tickets" }, { status: 500 });

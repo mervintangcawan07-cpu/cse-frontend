@@ -131,6 +131,16 @@ export async function GET(request: Request) {
         answerIndex: true,
         explanation: true,
         imageUrl: true,
+        stepByStep: true,
+        whyA: true,
+        whyB: true,
+        whyC: true,
+        whyD: true,
+        eliminationStrategy: true,
+        commonTrap: true,
+        examTip: true,
+        difficulty: true,
+        tags: true,
       },
     });
 
@@ -192,22 +202,25 @@ export async function GET(request: Request) {
             ? (q.options as string[])
             : ([q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean) as string[]);
 
-        const indexedOptions = resolvedOptions.map((opt: string, idx: number) => ({
-          text: opt,
-          isCorrect: idx === q.answerIndex,
-        }));
-
-        const shuffledOptions = shuffleArray(indexedOptions);
-
         return {
           id: q.id,
           category: q.category || "General",
           subtopic: q.subtopic || "General",
           prompt: q.prompt,
-          options: shuffledOptions.map((o) => o.text),
-          answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
+          options: resolvedOptions,
+          answerIndex: q.answerIndex,
           explanation: q.explanation || null,
           imageUrl: q.imageUrl || null,
+          stepByStep: q.stepByStep || null,
+          whyA: q.whyA || null,
+          whyB: q.whyB || null,
+          whyC: q.whyC || null,
+          whyD: q.whyD || null,
+          eliminationStrategy: q.eliminationStrategy || null,
+          commonTrap: q.commonTrap || null,
+          examTip: q.examTip || null,
+          difficulty: q.difficulty || "MEDIUM",
+          tags: q.tags || [],
         };
       });
 
@@ -306,29 +319,32 @@ export async function GET(request: Request) {
       finalExamQuestions.push(...shuffleArray(categoryPickedQuestions).slice(0, catQuota));
     }
 
-    // 4. Prepare options & shuffle option indices
+    // 4. Prepare options (canonical database order preserved)
     const preparedQuestions = finalExamQuestions.map((q: any) => {
       const resolvedOptions: string[] =
         Array.isArray(q.options) && q.options.length > 0
           ? (q.options as string[])
           : ([q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean) as string[]);
 
-      const indexedOptions = resolvedOptions.map((opt: string, idx: number) => ({
-        text: opt,
-        isCorrect: idx === q.answerIndex,
-      }));
-
-      const shuffledOptions = shuffleArray(indexedOptions);
-
       return {
         id: q.id,
         category: q.category || "General",
         subtopic: q.subtopic || "General",
         prompt: q.prompt,
-        options: shuffledOptions.map((o) => o.text),
-        answerIndex: shuffledOptions.findIndex((o) => o.isCorrect),
+        options: resolvedOptions,
+        answerIndex: q.answerIndex,
         explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
+        stepByStep: q.stepByStep || null,
+        whyA: q.whyA || null,
+        whyB: q.whyB || null,
+        whyC: q.whyC || null,
+        whyD: q.whyD || null,
+        eliminationStrategy: q.eliminationStrategy || null,
+        commonTrap: q.commonTrap || null,
+        examTip: q.examTip || null,
+        difficulty: q.difficulty || "MEDIUM",
+        tags: q.tags || [],
       };
     });
 

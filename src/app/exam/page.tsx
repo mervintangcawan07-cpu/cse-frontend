@@ -78,7 +78,7 @@ export default function ExamHubPage() {
 
   if (loadingUser) {
     return (
-      <div className="max-w-4xl mx-auto py-20 text-center font-bold text-slate-400 animate-pulse">
+      <div className="w-full py-20 text-center font-bold text-slate-400 animate-pulse">
         Loading Mock Exam Hub...
       </div>
     );
@@ -95,7 +95,7 @@ export default function ExamHubPage() {
   const recent3Attempts = allAttempts.slice(0, 3);
 
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4 space-y-6 text-slate-100">
+    <div className="w-full px-2 py-3 sm:px-4 sm:py-6 md:px-6 lg:px-8 space-y-4 sm:space-y-6 text-slate-100">
       {/* HEADER BANNER */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-xl">
         <div>

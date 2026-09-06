@@ -2,25 +2,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PracticeAndPrepPage() {
-  const [isPaid, setIsPaid] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.user) {
-          setIsPaid(data.user.isPaid || data.user.role === "ADMIN");
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const { user } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
+      <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
         {/* Top Banner Header - Seamlessly integrated */}
         <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-6 md:p-8 space-y-3 overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>

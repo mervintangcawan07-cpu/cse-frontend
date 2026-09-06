@@ -91,8 +91,8 @@ export default function ReviewerPage() {
       : studyNotes.filter((note) => note.category === selectedCategory);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-2 py-3 sm:px-4 sm:py-6 md:px-6">
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md overflow-hidden">
+    <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
+      <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
         {/* Header - Seamlessly integrated */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-4 sm:p-6 md:p-8 print:hidden">
           <div>
@@ -152,7 +152,7 @@ export default function ReviewerPage() {
                 return (
                   <div
                     key={note.id}
-                    className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 print:border-slate-300 print:shadow-none print:break-inside-avoid"
+                    className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-4 print:border-slate-300 print:shadow-none print:break-inside-avoid"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md print:bg-slate-100 print:text-slate-800">

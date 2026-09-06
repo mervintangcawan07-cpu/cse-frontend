@@ -1,7 +1,15 @@
 // Relative Path: src/app/api/admin/trash/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
-import { getTrashBinItems, restoreRecord, purgeExpiredRecords } from "@/lib/recovery/softDelete";
+import {
+  getTrashBinItems,
+  restoreRecord,
+  restoreBatchRecords,
+  restoreAllTrashQuestions,
+  permanentlyDeleteSelectedRecords,
+  purgeAllTrashQuestions,
+  purgeExpiredRecords,
+} from "@/lib/recovery/softDelete";
 import { SupportedEntityType } from "@/types/recovery";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +21,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (
-      !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
-    ) {
+    if (!authentication.authenticated || authentication.session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Access denied." }, { status: 403 });
     }
 
@@ -37,23 +41,46 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (
-      !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
-    ) {
+    if (!authentication.authenticated || authentication.session.user.role !== "ADMIN") {
       return NextResponse.json({ error: "Access denied." }, { status: 403 });
     }
 
+    const adminEmail = authentication.session.user.email || "admin";
     const body = await request.json();
-    const { action, entityType, entityId } = body;
+    const { action, entityType, entityId, items, confirmation } = body;
 
     if (action === "RESTORE" && entityType && entityId) {
       const result = await restoreRecord(
         entityType as SupportedEntityType,
         entityId,
-        authentication.session.user.email
+        adminEmail
       );
+      return NextResponse.json(result);
+    }
+
+    if (action === "RESTORE_SELECTED" && Array.isArray(items)) {
+      const result = await restoreBatchRecords(items, adminEmail);
+      return NextResponse.json(result);
+    }
+
+    if (action === "RESTORE_ALL_QUESTIONS") {
+      const result = await restoreAllTrashQuestions(adminEmail);
+      return NextResponse.json(result);
+    }
+
+    if (action === "PURGE_SELECTED" && Array.isArray(items)) {
+      const result = await permanentlyDeleteSelectedRecords(items, adminEmail);
+      return NextResponse.json(result);
+    }
+
+    if (action === "PURGE_ALL_QUESTIONS") {
+      if (confirmation !== "PURGE ALL") {
+        return NextResponse.json(
+          { error: "Confirmation mismatch. You must type 'PURGE ALL' to execute this action." },
+          { status: 400 }
+        );
+      }
+      const result = await purgeAllTrashQuestions(adminEmail);
       return NextResponse.json(result);
     }
 

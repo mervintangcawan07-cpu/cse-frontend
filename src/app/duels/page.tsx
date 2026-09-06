@@ -349,7 +349,7 @@ function DuelsArenaInner() {
   const oppName = isP1 ? match.player2Name || "Waiting..." : match.player1Name;
 
   return (
-    <div className="w-full max-w-2xl mx-auto py-4 sm:py-8 px-2 sm:px-4 font-sans space-y-4 sm:space-y-6 text-slate-100">
+    <div className="w-full max-w-4xl mx-auto py-4 sm:py-8 px-2 sm:px-4 md:px-6 font-sans space-y-4 sm:space-y-6 text-slate-100">
       {/* ARENA SCOREBOARD HEADER */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
         <div className="flex justify-between items-center text-xs font-bold">

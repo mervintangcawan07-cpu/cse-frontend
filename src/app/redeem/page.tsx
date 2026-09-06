@@ -1,18 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ConfettiCelebration from "@/components/common/ConfettiCelebration";
-
-interface UserSession {
-  id: string;
-  email: string;
-  name?: string | null;
-}
+import { useAuth } from "@/context/AuthContext";
 
 export default function RedeemVoucherPage() {
   const router = useRouter();
-  const [user, setUser] = useState<UserSession | null>(null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const { user, status: authStatus, refreshAuth } = useAuth();
+  const authLoading = authStatus === "loading";
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
@@ -20,16 +15,6 @@ export default function RedeemVoucherPage() {
     message: string;
     accessUntil?: string;
   } | null>(null);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.user) setUser(data.user);
-      })
-      .catch(() => {})
-      .finally(() => setAuthLoading(false));
-  }, []);
 
   // Smart auto-formatter for voucher codes (e.g. converts "pnp xkjz 9192" or "pnpxkjz9192" to "PNP-XKJZ-9192")
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +44,7 @@ export default function RedeemVoucherPage() {
         message: data.message || data.error,
         accessUntil: data.accessUntil,
       });
+      if (res.ok) await refreshAuth("entitlement");
     } catch {
       setResult({ success: false, message: "Network error. Please try again." });
     } finally {

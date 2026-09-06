@@ -2,7 +2,7 @@
 import { calculateReferralReward, formatCentavosToPesos, pesosToCentavos } from "../lib/referral/rewardCalculator";
 import { generateReferralCode, isValidReferralCodeFormat, normalizeReferralCode } from "../lib/referral/codeGenerator";
 import { evaluateReferralFraud } from "../lib/referral/fraudEngine";
-import { DEFAULT_REFERRAL_CONFIG } from "../lib/referral/config";
+import { DEFAULT_REFERRAL_CONFIG, USER_REFERRAL_ENABLED, isUserReferralEnabled } from "../lib/referral/config";
 
 let totalTests = 0;
 let passedTests = 0;
@@ -202,6 +202,40 @@ console.log("\n--- GROUP 8: FINANCIAL FORMATTER PRECISION ---");
 assert(formatCentavosToPesos(5980) === "₱59.80", "5980 centavos formats to '₱59.80'");
 assert(formatCentavosToPesos(29900) === "₱299.00", "29900 centavos formats to '₱299.00'");
 assert(pesosToCentavos(59.8) === 5980, "59.80 Pesos converts safely to 5980 integer centavos");
+
+// ================================================================
+// GROUP 9: NORMAL-USER REFERRAL FEATURE GATE (PHASE 4)
+// ================================================================
+console.log("\n--- GROUP 9: NORMAL-USER REFERRAL FEATURE GATE ---");
+
+assert(
+  USER_REFERRAL_ENABLED === false,
+  "Case 26: USER_REFERRAL_ENABLED is false by default in unconfigured environment"
+);
+assert(
+  isUserReferralEnabled(undefined) === false,
+  "Case 27: isUserReferralEnabled(undefined) defaults to false"
+);
+assert(
+  isUserReferralEnabled("") === false,
+  "Case 28: isUserReferralEnabled('') is false"
+);
+assert(
+  isUserReferralEnabled("false") === false,
+  "Case 29: isUserReferralEnabled('false') is false"
+);
+assert(
+  isUserReferralEnabled("TRUE") === false,
+  "Case 30: isUserReferralEnabled('TRUE') is false (strictly requires exact 'true')"
+);
+assert(
+  isUserReferralEnabled("1") === false,
+  "Case 31: isUserReferralEnabled('1') is false"
+);
+assert(
+  isUserReferralEnabled("true") === true,
+  "Case 32: isUserReferralEnabled('true') enables normal-user referral UI"
+);
 
 // ================================================================
 // SUMMARY REPORT

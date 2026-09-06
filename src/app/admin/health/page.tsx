@@ -1,8 +1,11 @@
 // Relative Path: src/app/admin/health/page.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+
+const HEALTH_DIAGNOSTICS_INTERVAL_MS = 15000; // 15 seconds while visible
+const OPERATIONAL_WORKER_INTERVAL_MS = 5000; // 5 seconds unchanged (operational cleanup task)
 
 interface LivenessResult {
   status: string;
@@ -69,6 +72,10 @@ export default function AdminHealthPage() {
   const [isLivePolling, setIsLivePolling] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
+  const readOnlyInFlightRef = useRef(false);
+  const lastReadOnlyFetchTimeRef = useRef(0);
+  const readOnlyTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const checkLiveness = useCallback(async () => {
     setLoadingLiveness(true);
     try {
@@ -128,29 +135,109 @@ export default function AdminHealthPage() {
     }
   }, []);
 
+  // Four confirmed read-only diagnostic endpoints (15s visible interval, suspended when hidden)
+  const fetchReadOnlyDiagnostics = useCallback(async (isManual = false) => {
+    if (readOnlyInFlightRef.current) return;
+    if (!isManual && typeof document !== "undefined" && document.hidden) return;
+    if (!isManual && typeof navigator !== "undefined" && !navigator.onLine) return;
+
+    readOnlyInFlightRef.current = true;
+    try {
+      await Promise.all([
+        checkLiveness(),
+        checkReadiness(),
+        checkStorage(),
+        checkHealthReport(),
+      ]);
+      lastReadOnlyFetchTimeRef.current = Date.now();
+      setLastUpdated(new Date());
+    } finally {
+      readOnlyInFlightRef.current = false;
+    }
+  }, [checkLiveness, checkReadiness, checkStorage, checkHealthReport]);
+
+  // Combined diagnostics trigger for manual refresh button
   const fetchAllDiagnostics = useCallback(async () => {
     await Promise.all([
-      checkLiveness(),
-      checkReadiness(),
-      checkStorage(),
-      checkHealthReport(),
+      fetchReadOnlyDiagnostics(true),
       checkWorkerSummary(),
     ]);
-    setLastUpdated(new Date());
-  }, [checkLiveness, checkReadiness, checkStorage, checkHealthReport, checkWorkerSummary]);
+  }, [fetchReadOnlyDiagnostics, checkWorkerSummary]);
 
-  // Initial load + 5-second live polling loop
+  // 15-second visibility-aware and in-flight-guarded live polling for read-only diagnostics
   useEffect(() => {
-    fetchAllDiagnostics();
+    if (!isLivePolling) {
+      if (readOnlyTimerRef.current) {
+        clearInterval(readOnlyTimerRef.current);
+        readOnlyTimerRef.current = null;
+      }
+      return;
+    }
+
+    const resetReadOnlyTimer = () => {
+      if (readOnlyTimerRef.current) {
+        clearInterval(readOnlyTimerRef.current);
+        readOnlyTimerRef.current = null;
+      }
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
+
+      readOnlyTimerRef.current = setInterval(() => {
+        void fetchReadOnlyDiagnostics();
+      }, HEALTH_DIAGNOSTICS_INTERVAL_MS);
+    };
+
+    const handleVisibilityOrOnline = () => {
+      const isVisible = typeof document !== "undefined" && !document.hidden;
+      const isOnline = typeof navigator === "undefined" || navigator.onLine;
+
+      if (!isVisible || !isOnline) {
+        if (readOnlyTimerRef.current) {
+          clearInterval(readOnlyTimerRef.current);
+          readOnlyTimerRef.current = null;
+        }
+        return;
+      }
+
+      const now = Date.now();
+      const isStale = now - lastReadOnlyFetchTimeRef.current >= HEALTH_DIAGNOSTICS_INTERVAL_MS;
+      if (isStale) {
+        void fetchReadOnlyDiagnostics();
+      }
+      resetReadOnlyTimer();
+    };
+
+    void fetchReadOnlyDiagnostics();
+    resetReadOnlyTimer();
+
+    document.addEventListener("visibilitychange", handleVisibilityOrOnline);
+    window.addEventListener("online", handleVisibilityOrOnline);
+    window.addEventListener("offline", handleVisibilityOrOnline);
+
+    return () => {
+      if (readOnlyTimerRef.current) {
+        clearInterval(readOnlyTimerRef.current);
+        readOnlyTimerRef.current = null;
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityOrOnline);
+      window.removeEventListener("online", handleVisibilityOrOnline);
+      window.removeEventListener("offline", handleVisibilityOrOnline);
+    };
+  }, [isLivePolling, fetchReadOnlyDiagnostics]);
+
+  // Operational background worker: per Slice 3B Refinement 1, operational cleanup request
+  // behavior remains on its original 5-second loop without visibility-gating
+  useEffect(() => {
+    void checkWorkerSummary();
 
     if (!isLivePolling) return;
 
-    const interval = setInterval(() => {
-      fetchAllDiagnostics();
-    }, 5000);
+    const workerInterval = setInterval(() => {
+      void checkWorkerSummary();
+    }, OPERATIONAL_WORKER_INTERVAL_MS);
 
-    return () => clearInterval(interval);
-  }, [isLivePolling, fetchAllDiagnostics]);
+    return () => clearInterval(workerInterval);
+  }, [isLivePolling, checkWorkerSummary]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-6 md:p-10 space-y-8 max-w-7xl mx-auto font-sans">
@@ -166,7 +253,7 @@ export default function AdminHealthPage() {
             {isLivePolling ? (
               <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/30">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                Live (5s)
+                Live (15s)
               </span>
             ) : (
               <span className="text-[10px] font-bold uppercase px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/30">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 interface NotificationItem {
   id: string;
@@ -11,6 +11,8 @@ interface NotificationItem {
   createdAt: string;
 }
 
+const NOTIFICATION_POLL_INTERVAL_MS = 60000; // 60 seconds while visible
+
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +20,18 @@ export default function NotificationBell() {
   const [selectedNotification, setSelectedNotification] = useState<NotificationItem | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const inFlightRef = useRef(false);
+  const lastFetchTimeRef = useRef(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async (isManual = false) => {
+    if (inFlightRef.current) return;
+    if (!isManual && typeof document !== "undefined" && document.hidden) return;
+    if (!isManual && typeof navigator !== "undefined" && !navigator.onLine) return;
+
+    inFlightRef.current = true;
     try {
       setLoading(true);
       const res = await fetch("/api/notifications");
@@ -28,20 +39,66 @@ export default function NotificationBell() {
       if (res.ok && Array.isArray(data.notifications)) {
         setNotifications(data.notifications);
       }
+      lastFetchTimeRef.current = Date.now();
     } catch (err) {
       console.error("Failed to load notifications:", err);
     } finally {
       setLoading(false);
+      inFlightRef.current = false;
     }
-  };
+  }, []);
 
   useEffect(() => {
-    fetchNotifications();
+    const resetTimer = () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      if (typeof document !== "undefined" && document.hidden) return;
+      if (typeof navigator !== "undefined" && !navigator.onLine) return;
 
-    // Refresh notifications every 60 seconds
-    const interval = setInterval(fetchNotifications, 60000);
-    return () => clearInterval(interval);
-  }, []);
+      timerRef.current = setInterval(() => {
+        void fetchNotifications();
+      }, NOTIFICATION_POLL_INTERVAL_MS);
+    };
+
+    const handleVisibilityOrOnline = () => {
+      const isVisible = typeof document !== "undefined" && !document.hidden;
+      const isOnline = typeof navigator === "undefined" || navigator.onLine;
+
+      if (!isVisible || !isOnline) {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+        return;
+      }
+
+      const now = Date.now();
+      const isStale = now - lastFetchTimeRef.current >= NOTIFICATION_POLL_INTERVAL_MS;
+      if (isStale) {
+        void fetchNotifications();
+      }
+      resetTimer();
+    };
+
+    void fetchNotifications();
+    resetTimer();
+
+    document.addEventListener("visibilitychange", handleVisibilityOrOnline);
+    window.addEventListener("online", handleVisibilityOrOnline);
+    window.addEventListener("offline", handleVisibilityOrOnline);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      document.removeEventListener("visibilitychange", handleVisibilityOrOnline);
+      window.removeEventListener("online", handleVisibilityOrOnline);
+      window.removeEventListener("offline", handleVisibilityOrOnline);
+    };
+  }, [fetchNotifications]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
