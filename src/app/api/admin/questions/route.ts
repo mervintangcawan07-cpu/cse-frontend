@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 
 export async function GET(request: Request) {
   try {
@@ -13,13 +14,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
-    const where: Prisma.QuestionWhereInput = {
-      deletedAt: null,
-      NOT: [
-        { category: "Elimination Drill" },
-        { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-      ],
-    };
+    const where: Prisma.QuestionWhereInput = activeOrdinaryQuestionWhere();
 
     if (category && category !== "All") {
       where.category = category;

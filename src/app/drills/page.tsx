@@ -2,43 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { saveDrillOffline, getOfflineDrillById, removeOfflineDrill } from "@/lib/offline-storage";
 
 export default function DrillsPage() {
-  const [eliminationSaved, setEliminationSaved] = useState(false);
-  const [eliminationSaving, setEliminationSaving] = useState(false);
-
-  async function handleSaveEliminationOffline() {
-    setEliminationSaving(true);
-    try {
-      // Check if already saved
-      const existing = await getOfflineDrillById("elimination_trainer");
-      if (existing) {
-        await removeOfflineDrill("elimination_trainer");
-        setEliminationSaved(false);
-        setEliminationSaving(false);
-        return;
-      }
-
-      // Fetch a fresh drill set to cache
-      const res = await fetch("/api/drills/elimination?seenIds=");
-      if (!res.ok) throw new Error("Network error");
-      const data = await res.json();
-      if (data.drills && data.drills.length > 0) {
-        await saveDrillOffline("elimination_trainer", {
-          label: "Option Elimination Trainer",
-          questions: data.drills,
-        });
-        setEliminationSaved(true);
-      }
-    } catch (err) {
-      console.warn("[OFFLINE_SAVE] Failed to save elimination drill offline:", err);
-    } finally {
-      setEliminationSaving(false);
-    }
-  }
-
   return (
     <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
       <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
@@ -85,39 +50,13 @@ export default function DrillsPage() {
               </ul>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/drills/elimination"
-                className="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition text-center shadow-md flex items-center justify-center gap-2"
-              >
-                <span>Launch Elimination Drill</span>
-                <span>⚡</span>
-              </Link>
-              <button
-                type="button"
-                onClick={() => void handleSaveEliminationOffline()}
-                disabled={eliminationSaving}
-                className={`w-full py-2.5 text-xs font-bold rounded-xl border transition flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed ${
-                  eliminationSaved
-                    ? "bg-emerald-50 border-emerald-300 text-emerald-700 hover:bg-red-50 hover:border-red-300 hover:text-red-600"
-                    : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700"
-                }`}
-              >
-                {eliminationSaving ? (
-                  <span>Saving…</span>
-                ) : eliminationSaved ? (
-                  <>
-                    <span>✓</span>
-                    <span>Saved Offline — Tap to Remove</span>
-                  </>
-                ) : (
-                  <>
-                    <span>⬇</span>
-                    <span>Save for Offline Practice</span>
-                  </>
-                )}
-              </button>
-            </div>
+            <Link
+              href="/drills/elimination"
+              className="w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition text-center shadow-md flex items-center justify-center gap-2"
+            >
+              <span>Launch Elimination Drill</span>
+              <span>⚡</span>
+            </Link>
           </div>
 
           {/* Module 2: Keyword Passage Scanner */}

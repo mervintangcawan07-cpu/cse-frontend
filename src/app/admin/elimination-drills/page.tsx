@@ -22,7 +22,6 @@ export default function AdminEliminationDrillsPage() {
   const [uploadMode, setUploadMode] = useState<"CSV_FILE" | "CSV_PASTE" | "JSON">("CSV_FILE");
   const [inputText, setInputText] = useState("");
   const [existingDrills, setExistingDrills] = useState<DrillItem[]>([]);
-  const [isFallback, setIsFallback] = useState(false);
   const [editingDrill, setEditingDrill] = useState<DrillItem | null>(null);
   const [editPrompt, setEditPrompt] = useState("");
   const [editCategory, setEditCategory] = useState("");
@@ -260,7 +259,7 @@ export default function AdminEliminationDrillsPage() {
 
   // 🗑 DELETE ALL DRILLS
   const handleDeleteAll = async () => {
-    if (!confirm("⚠️ WARNING: This will permanently delete ALL Elimination Drill questions from the database. Proceed?")) return;
+    if (!confirm("Move ALL active Elimination Drill questions to Trash? They remain recoverable under the current Trash retention policy.")) return;
 
     setDeleting(true);
     try {
@@ -269,7 +268,7 @@ export default function AdminEliminationDrillsPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setMessage({ type: "success", text: `✓ Deleted all ${data.deletedCount} drill questions.` });
+        setMessage({ type: "success", text: `✓ Moved all ${data.deletedCount} drill questions to Trash.` });
         fetchDrills();
       } else {
         setMessage({ type: "error", text: data.error || "Failed to clear drills." });
@@ -484,11 +483,6 @@ export default function AdminEliminationDrillsPage() {
           <h2 className="text-lg font-black text-white flex items-center gap-2">
             <span>📚</span>
             <span>Live Elimination Drill Question Bank ({existingDrills.length})</span>
-              {isFallback && (
-                <span className="text-[10px] font-black px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30 animate-pulse">
-                  ⚠️ Fallback Pool (Showing Main Question Bank Items)
-                </span>
-              )}
           </h2>
 
           <div className="flex items-center gap-2">

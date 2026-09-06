@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface BadgeEntry {
   id: string;
@@ -49,19 +48,36 @@ export default function BadgeDisplay({ compact = false }: BadgeDisplayProps) {
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetchWithClientCache<{ success?: boolean; all?: BadgeEntry[]; totalEarned: number; totalAvailable: number }>(
-      "/api/user/badges",
-      5 * 60 * 1000 // 5-minute cache with SWR background refresh
-    )
-      .then((data) => {
+    const controller = new AbortController();
+
+    fetch("/api/user/badges", { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((data: { success?: boolean; all?: BadgeEntry[]; totalEarned?: number; totalAvailable?: number } | null) => {
+        if (controller.signal.aborted) return;
         if (data?.success) {
           setBadges(data.all || []);
-          setTotalEarned(data.totalEarned);
-          setTotalAvailable(data.totalAvailable);
+          setTotalEarned(data.totalEarned ?? 0);
+          setTotalAvailable(data.totalAvailable ?? 0);
         }
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") {
+          return;
+        }
+        // Non-abort fetch error: gracefully continue
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   if (loading) {

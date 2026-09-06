@@ -172,6 +172,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setStatus("unauthenticated");
     setError(null);
     setKicked(false);
+
+    // 🛡️ Defense-in-depth: Remove legacy cached user badges from browser storage
+    try {
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        window.sessionStorage.removeItem("cse_cache_/api/user/badges");
+      }
+    } catch {
+      // Best-effort storage cleanup: never interfere with auth clearing if storage throws
+    }
   }, [cancelPendingActivityHeartbeat]);
 
   const pauseActivityHeartbeat = useCallback(() => {

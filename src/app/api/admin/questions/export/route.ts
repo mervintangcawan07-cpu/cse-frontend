@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { generateQuestionsCSV } from "@/lib/csvParser";
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import type { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
@@ -22,9 +24,7 @@ export async function GET(request: Request) {
     const category = searchParams.get("category");
     const subtopic = searchParams.get("subtopic");
 
-    const whereClause: any = {
-      deletedAt: null,
-    };
+    const whereClause: Prisma.QuestionWhereInput = activeOrdinaryQuestionWhere();
 
     if (category && category !== "All") {
       whereClause.category = { equals: category, mode: "insensitive" };

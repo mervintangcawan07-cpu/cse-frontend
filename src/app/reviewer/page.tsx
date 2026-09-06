@@ -5,8 +5,6 @@ import Link from "next/link";
 import { Printer } from "lucide-react";
 import ProTipBullets from "@/components/notes/ProTipBullets";
 import AudioSpeechButton from "@/components/common/AudioSpeechButton";
-import { fetchWithClientCache } from "@/lib/clientCache";
-
 
 interface StudyNote {
   id: string;
@@ -16,6 +14,11 @@ interface StudyNote {
   content: string[];
   tips?: string;
   videoUrl?: string;
+}
+
+interface Bookmark {
+  id: string;
+  targetType: string;
 }
 
 export default function ReviewerPage() {
@@ -33,31 +36,55 @@ export default function ReviewerPage() {
   ];
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchNotesAndBookmarks() {
       try {
-        const [notesData, bookmarkRes] = await Promise.all([
-          fetchWithClientCache<{ notes: StudyNote[] }>("/api/reviewer"),
-          fetch("/api/bookmarks"),
+        const [notesRes, bookmarkRes] = await Promise.all([
+          fetch("/api/reviewer", {
+            cache: "no-store",
+            signal: controller.signal,
+          }),
+          fetch("/api/bookmarks", {
+            signal: controller.signal,
+          }),
         ]);
 
-        if (notesData && notesData.notes) setStudyNotes(notesData.notes);
+        if (!notesRes.ok) {
+          throw new Error(`Failed to load reviewer notes (${notesRes.status})`);
+        }
+
+        const notesData: { notes?: StudyNote[] } = await notesRes.json();
+
+        if (notesData.notes) {
+          setStudyNotes(notesData.notes);
+        }
 
         if (bookmarkRes.ok) {
-          const bookmarkData = await bookmarkRes.json();
+          const bookmarkData: { bookmarks?: Bookmark[] } = await bookmarkRes.json();
           const ids = new Set<string>(
             bookmarkData.bookmarks
-              ?.filter((b: any) => b.targetType === "STUDY_NOTE")
-              .map((b: any) => b.id) || []
+              ?.filter((bookmark) => bookmark.targetType === "STUDY_NOTE")
+              .map((bookmark) => bookmark.id) || []
           );
           setBookmarkedIds(ids);
         }
-      } catch (err) {
-        console.error("Failed to load reviewer notes or bookmarks:", err);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        console.error("Failed to load reviewer notes or bookmarks:", error);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
-    fetchNotesAndBookmarks();
+
+    void fetchNotesAndBookmarks();
+
+    return () => controller.abort();
   }, []);
 
   const toggleBookmark = async (noteId: string) => {

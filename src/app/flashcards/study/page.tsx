@@ -27,6 +27,7 @@ export default function StudyFlashcardsPage() {
   const [allCards, setAllCards] = useState<Flashcard[]>([]);
   const [deck, setDeck] = useState<Flashcard[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -41,46 +42,17 @@ export default function StudyFlashcardsPage() {
       try {
         const res = await fetch("/api/flashcards");
         const data = await res.json();
-        if (res.ok && data.flashcards && data.flashcards.length > 0) {
-          setAllCards(data.flashcards);
-          setDeck(data.flashcards);
-        } else {
-          // Fallback sample cards if API returns empty
-          const fallback = [
-            {
-              id: "fb-1",
-              category: "General Information",
-              topic: "Constitution",
-              front: "What is the primary governing law of the Philippine Civil Service system?",
-              back: "Executive Order No. 292 (Administrative Code of 1987) and Article IX-B of the 1987 Constitution.",
-            },
-            {
-              id: "fb-2",
-              category: "Numerical Reasoning",
-              topic: "Percentages",
-              front: "What is 15% of ₱1,200?",
-              back: "₱180. (Formula: 1,200 × 0.15 = 180)",
-            },
-            {
-              id: "fb-3",
-              category: "Verbal Ability",
-              topic: "Idiomatic Expressions",
-              front: "What does the Filipino idiom 'Balat-sibuyas' mean?",
-              back: "Sensitive or easily offended (literally: onion-skinned).",
-            },
-            {
-              id: "fb-4",
-              category: "General Information",
-              topic: "RA 6713",
-              front: "What is Republic Act No. 6713 also known as?",
-              back: "Code of Conduct and Ethical Standards for Public Officials and Employees.",
-            },
-          ];
-          setAllCards(fallback);
-          setDeck(fallback);
+        if (!res.ok || !Array.isArray(data.flashcards)) {
+          throw new Error(data?.error || "Failed to load flashcards.");
         }
+
+        setAllCards(data.flashcards);
+        setDeck(data.flashcards);
       } catch (err) {
         console.error("Failed to fetch flashcards:", err);
+        setLoadError(true);
+        setAllCards([]);
+        setDeck([]);
       } finally {
         setLoading(false);
       }
@@ -206,13 +178,14 @@ export default function StudyFlashcardsPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={shuffleDeck}
+              disabled={deck.length === 0}
               className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold rounded-xl border border-slate-800 transition flex items-center gap-1.5 cursor-pointer"
             >
               <Shuffle className="w-3.5 h-3.5" />
               <span>Shuffle</span>
             </button>
             <span className="text-xs font-mono font-bold text-slate-400 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
-              Card {currentIndex + 1} of {deck.length}
+              Card {deck.length === 0 ? 0 : currentIndex + 1} of {deck.length}
             </span>
           </div>
         </div>
@@ -286,12 +259,16 @@ export default function StudyFlashcardsPage() {
           </div>
         ) : (
           <div className="p-12 text-center text-slate-500 bg-slate-900 rounded-3xl border border-slate-800">
-            No flashcards found in this category.
+            {loadError
+              ? "The active flashcard deck could not be loaded. No bundled cards were substituted."
+              : selectedCategory === "ALL"
+                ? "No active flashcards are available. Cards will appear after an administrator adds or restores them."
+                : "No active flashcards were found in this category."}
           </div>
         )}
 
         {/* Spaced Repetition Rating Buttons */}
-        {isFlipped ? (
+        {currentCard && (isFlipped ? (
           <div className="space-y-2 pt-2">
             <div className="text-center text-xs font-bold text-slate-400">
               Rate your recall difficulty:
@@ -348,7 +325,7 @@ export default function StudyFlashcardsPage() {
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
