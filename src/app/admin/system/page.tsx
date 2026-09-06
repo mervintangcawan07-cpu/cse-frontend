@@ -21,12 +21,28 @@ interface SupportTicket {
   createdAt: string;
 }
 
+interface PaginationMetadata {
+  page: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
+const PAGE_SIZE = 25;
+const INITIAL_PAGINATION: PaginationMetadata = {
+  page: 1,
+  pageSize: PAGE_SIZE,
+  hasPreviousPage: false,
+  hasNextPage: false,
+};
+
 export default function AdminSystemControlPage() {
   const [activeTab, setActiveTab] = useState<"FLAGS" | "TICKETS">("FLAGS");
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingKey, setUpdatingKey] = useState<string | null>(null);
+  const [ticketPagination, setTicketPagination] = useState(INITIAL_PAGINATION);
 
   // Default system feature flags to populate if empty
   const defaultFlags = [
@@ -36,7 +52,7 @@ export default function AdminSystemControlPage() {
     { key: "MAINTENANCE_BANNER", name: "System Maintenance Warning Banner", description: "Display scheduled maintenance alert on student dashboards." },
   ];
 
-  const loadData = async () => {
+  const loadData = async (page = 1) => {
     setLoading(true);
     try {
       if (activeTab === "FLAGS") {
@@ -46,10 +62,15 @@ export default function AdminSystemControlPage() {
           setFlags(data.flags);
         }
       } else {
-        const res = await fetch("/api/admin/support-tickets");
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(PAGE_SIZE),
+        });
+        const res = await fetch(`/api/admin/support-tickets?${params.toString()}`);
         const data = await res.json();
         if (res.ok && data.tickets) {
           setTickets(data.tickets);
+          setTicketPagination(data.pagination ?? INITIAL_PAGINATION);
         }
       }
     } catch (err) {
@@ -99,7 +120,7 @@ export default function AdminSystemControlPage() {
 
       if (res.ok) {
         alert("Support ticket updated successfully.");
-        loadData();
+        loadData(ticketPagination.page);
       } else {
         alert("Failed to update ticket.");
       }
@@ -272,6 +293,31 @@ export default function AdminSystemControlPage() {
                 </div>
               </div>
             ))
+          )}
+          {!loading && (
+            <div className="flex items-center justify-between border-t border-slate-200 pt-4 text-xs">
+              <span className="font-semibold text-slate-500">
+                Page {ticketPagination.page} · Up to {ticketPagination.pageSize} tickets
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => loadData(ticketPagination.page - 1)}
+                  disabled={!ticketPagination.hasPreviousPage || loading}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={() => loadData(ticketPagination.page + 1)}
+                  disabled={!ticketPagination.hasNextPage || loading}
+                  className="rounded-lg border border-slate-200 bg-white px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
           )}
         </div>
       )}

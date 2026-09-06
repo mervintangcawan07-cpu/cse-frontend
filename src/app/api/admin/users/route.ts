@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import {
+  buildBoundedPage,
+  validateBoundedPaginationQuery,
+} from "@/lib/validation/schemas";
 
 // 1. GET USERS WITH SEARCH & SUBSCRIPTION STATS
 export async function GET(request: Request) {
@@ -11,17 +15,31 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q") || "";
+    const filter = searchParams.get("filter") || "ALL";
+    const paginationResult = validateBoundedPaginationQuery(searchParams);
+
+    if (!paginationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid pagination parameters.", details: paginationResult.errors },
+        { status: 400 }
+      );
+    }
+
+    const where: Prisma.UserWhereInput = {};
+
+    if (query) {
+      where.OR = [
+        { email: { contains: query, mode: "insensitive" } },
+        { name: { contains: query, mode: "insensitive" } },
+      ];
+    }
+
+    if (filter === "PRO") where.isPaid = true;
+    if (filter === "BANNED") where.isBanned = true;
 
     const users = await prisma.user.findMany({
-      where: query
-        ? {
-            OR: [
-              { email: { contains: query, mode: "insensitive" } },
-              { name: { contains: query, mode: "insensitive" } },
-            ],
-          }
-        : undefined,
-      orderBy: { createdAt: "desc" },
+      where,
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       select: {
         id: true,
         email: true,
@@ -30,15 +48,20 @@ export async function GET(request: Request) {
         isPaid: true,
         planType: true,
         paidUntil: true,
+        isBanned: true,
+        banReason: true,
         createdAt: true,
         _count: {
           select: { results: true },
         },
       },
-      take: 100,
+      skip: paginationResult.data.skip,
+      take: paginationResult.data.take,
     });
 
-    return NextResponse.json({ users });
+    const page = buildBoundedPage(users, paginationResult.data);
+
+    return NextResponse.json({ users: page.items, pagination: page.pagination });
   } catch (error) {
     console.error("[ADMIN_USERS_GET]", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

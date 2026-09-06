@@ -27,6 +27,21 @@ interface LoginLog {
   createdAt: string;
 }
 
+interface PaginationMetadata {
+  page: number;
+  pageSize: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
+const PAGE_SIZE = 25;
+const INITIAL_PAGINATION: PaginationMetadata = {
+  page: 1,
+  pageSize: PAGE_SIZE,
+  hasPreviousPage: false,
+  hasNextPage: false,
+};
+
 export default function AdminUsersPage() {
   const [activeTab, setActiveTab] = useState<"USERS" | "LOGIN_LOGS">("USERS");
   const [users, setUsers] = useState<UserItem[]>([]);
@@ -35,18 +50,27 @@ export default function AdminUsersPage() {
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [userPagination, setUserPagination] = useState(INITIAL_PAGINATION);
+  const [logPagination, setLogPagination] = useState(INITIAL_PAGINATION);
 
   // Moderation Modal State
   const [selectedUser, setSelectedUser] = useState<UserItem | null>(null);
   const [modalMode, setModalMode] = useState<"BAN" | "UNBAN" | "RESET_PASSWORD" | null>(null);
 
-  const fetchUsers = useCallback(async (query = "") => {
+  const fetchUsers = useCallback(async (query = "", filter = "ALL", page = 1) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/admin/users?q=${encodeURIComponent(query)}`);
+      const params = new URLSearchParams({
+        q: query,
+        filter,
+        page: String(page),
+        limit: String(PAGE_SIZE),
+      });
+      const res = await fetch(`/api/admin/users?${params.toString()}`);
       const data = await res.json();
       if (res.ok && data.users) {
         setUsers(data.users);
+        setUserPagination(data.pagination ?? INITIAL_PAGINATION);
       }
     } catch (err) {
       console.error("Failed to load users:", err);
@@ -55,15 +79,22 @@ export default function AdminUsersPage() {
     }
   }, []);
 
-  const fetchLogs = useCallback(async (query = "", filter = "ALL") => {
+  const fetchLogs = useCallback(async (query = "", filter = "ALL", page = 1) => {
     try {
       setLoading(true);
+      const params = new URLSearchParams({
+        q: query,
+        filter,
+        page: String(page),
+        limit: String(PAGE_SIZE),
+      });
       const res = await fetch(
-        `/api/admin/login-history?q=${encodeURIComponent(query)}&filter=${encodeURIComponent(filter)}`
+        `/api/admin/login-history?${params.toString()}`
       );
       const data = await res.json();
       if (res.ok && data.history) {
         setLogs(data.history);
+        setLogPagination(data.pagination ?? INITIAL_PAGINATION);
       }
     } catch (err) {
       console.error("Failed to load login logs:", err);
@@ -74,18 +105,18 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     if (activeTab === "USERS") {
-      fetchUsers(searchQuery);
+      fetchUsers(searchQuery, statusFilter, 1);
     } else {
-      fetchLogs(searchQuery, statusFilter);
+      fetchLogs(searchQuery, statusFilter, 1);
     }
   }, [activeTab, fetchUsers, fetchLogs, statusFilter]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (activeTab === "USERS") {
-      fetchUsers(searchQuery);
+      fetchUsers(searchQuery, statusFilter, 1);
     } else {
-      fetchLogs(searchQuery, statusFilter);
+      fetchLogs(searchQuery, statusFilter, 1);
     }
   };
 
@@ -106,7 +137,7 @@ export default function AdminUsersPage() {
       });
 
       if (res.ok) {
-        fetchUsers(searchQuery);
+        fetchUsers(searchQuery, statusFilter, userPagination.page);
       } else {
         alert("Failed to update user access.");
       }
@@ -117,11 +148,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  const filteredUsers = users.filter((u) => {
-    if (statusFilter === "BANNED") return u.isBanned;
-    if (statusFilter === "PRO") return u.isPaid;
-    return true;
-  });
+  const filteredUsers = users;
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 space-y-6">
@@ -402,6 +429,66 @@ export default function AdminUsersPage() {
             </table>
           </div>
         )}
+
+        {!loading && activeTab === "USERS" && (
+          <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
+            <span className="font-semibold text-slate-500">
+              Page {userPagination.page} · Up to {userPagination.pageSize} users
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  fetchUsers(searchQuery, statusFilter, userPagination.page - 1)
+                }
+                disabled={!userPagination.hasPreviousPage || loading}
+                className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  fetchUsers(searchQuery, statusFilter, userPagination.page + 1)
+                }
+                disabled={!userPagination.hasNextPage || loading}
+                className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!loading && activeTab === "LOGIN_LOGS" && (
+          <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
+            <span className="font-semibold text-slate-500">
+              Page {logPagination.page} · Up to {logPagination.pageSize} login records
+            </span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  fetchLogs(searchQuery, statusFilter, logPagination.page - 1)
+                }
+                disabled={!logPagination.hasPreviousPage || loading}
+                className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  fetchLogs(searchQuery, statusFilter, logPagination.page + 1)
+                }
+                disabled={!logPagination.hasNextPage || loading}
+                className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Moderation Action Modal */}
@@ -410,7 +497,7 @@ export default function AdminUsersPage() {
         onClose={() => { setModalMode(null); setSelectedUser(null); }}
         user={selectedUser}
         mode={modalMode}
-        onSuccess={() => fetchUsers(searchQuery)}
+        onSuccess={() => fetchUsers(searchQuery, statusFilter, userPagination.page)}
       />
     </div>
   );
