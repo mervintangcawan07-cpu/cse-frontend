@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import CookieConsent from "@/components/common/CookieConsent";
 import { siteConfig } from "@/lib/config/site";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,13 +52,15 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <ThemeProvider>
-          {/* The global Navbar */}
-          <Navbar />
+          <AuthProvider>
+            {/* The global Navbar */}
+            <Navbar />
 
-          {/* Main page content wrapped in a subtle background */}
-          <main className="w-full flex-grow">
-            {children}
-          </main>
+            {/* Main page content wrapped in a subtle background */}
+            <main className="w-full flex-grow">
+              {children}
+            </main>
+          </AuthProvider>
 
           {/* Global Footer */}
           <Footer />

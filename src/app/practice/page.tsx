@@ -2,21 +2,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PracticeAndPrepPage() {
-  const [isPaid, setIsPaid] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.user) {
-          setIsPaid(data.user.isPaid || data.user.role === "ADMIN");
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const { user } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
 
   return (
     <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">

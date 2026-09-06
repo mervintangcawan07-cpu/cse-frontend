@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import LoadingButton from "@/components/common/LoadingButton";
 import { useDoubleSubmitPreventer } from "@/hooks/useDoubleSubmitPreventer";
 import { fetchWithTimeout } from "@/lib/fetchWithTimeout";
+import { useAuth } from "@/context/AuthContext";
 
 interface Plan {
   planType: string;
@@ -37,6 +38,11 @@ const FALLBACK_PLANS: Plan[] = [
 
 export default function UpgradePage() {
   const router = useRouter();
+  const {
+    clearAuth,
+    pauseActivityHeartbeat,
+    resumeActivityHeartbeat,
+  } = useAuth();
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [plans, setPlans] = useState<Plan[]>(FALLBACK_PLANS);
@@ -132,12 +138,19 @@ export default function UpgradePage() {
   } = useDoubleSubmitPreventer(executeUpgrade);
 
   const handleLogout = async () => {
+    pauseActivityHeartbeat();
     try {
-      await fetchWithTimeout("/api/auth/logout", {
+      const response = await fetchWithTimeout("/api/auth/logout", {
         method: "POST",
         timeout: 5000,
       });
+      if (response.ok) {
+        clearAuth();
+      } else {
+        resumeActivityHeartbeat();
+      }
     } catch (error) {
+      resumeActivityHeartbeat();
       console.error("Logout error:", error);
     } finally {
       router.push("/login");

@@ -5,19 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BadgeDisplay from "@/components/profile/BadgeDisplay";
 import { siteConfig } from "@/lib/config/site";
-
-interface UserProfile {
-  name: string;
-  email: string;
-  role: string;
-  isPaid: boolean;
-  paidUntil?: string | null;
-  planType?: string | null;
-}
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const { user, status: authStatus, refreshAuth } = useAuth();
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"account" | "achievements" | "subscription" | "faqs" | "about" | "terms">("account");
 
@@ -33,25 +25,14 @@ export default function ProfilePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
-    async function loadUser() {
-      try {
-        const res = await fetch("/api/auth/me");
-        const data = await res.json();
-
-        if (res.ok && data.user) {
-          setUser(data.user);
-          setName(data.user.name || "");
-        } else {
-          router.push("/login");
-        }
-      } catch (err) {
-        console.error("Failed to load user profile:", err);
-      } finally {
-        setLoading(false);
-      }
+    if (authStatus === "loading") return;
+    if (authStatus === "unauthenticated") {
+      router.push("/login");
+    } else if (user) {
+      setName(user.name || "");
     }
-    loadUser();
-  }, [router]);
+    setLoading(false);
+  }, [authStatus, router, user?.id, user?.name]);
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +62,7 @@ export default function ProfilePage() {
         setNewPassword("");
         setConfirmPassword("");
         if (data.user) {
-          setUser((prev) => (prev ? { ...prev, name: data.user.name } : null));
+          await refreshAuth("profile");
         }
       } else {
         setMessage({ type: "error", text: data.error || "Failed to update profile." });

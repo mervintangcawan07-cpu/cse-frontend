@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import QuestionReview from "@/components/question/QuestionReview";
 import { StructuredQuestion } from "@/types/question";
+import { useAuth } from "@/context/AuthContext";
 
 interface SampleChallengeQuestion extends StructuredQuestion {
   id: string;
@@ -192,6 +193,7 @@ const SAMPLE_QUESTIONS: SampleChallengeQuestion[] = [
 
 export default function LandingPage() {
   const router = useRouter();
+  const { user, status } = useAuth();
 
   // Mobile menu drawer
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -206,21 +208,10 @@ export default function LandingPage() {
 
   // Auto-redirect active logged-in users to Dashboard
   useEffect(() => {
-    async function checkActiveSession() {
-      try {
-        const res = await fetch("/api/auth/me");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.user) {
-            router.replace("/dashboard");
-          }
-        }
-      } catch {
-        // Stay on landing page
-      }
+    if (status === "authenticated" && user) {
+      router.replace("/dashboard");
     }
-    checkActiveSession();
-  }, [router]);
+  }, [router, status, user]);
 
   const activeQuestion = SAMPLE_QUESTIONS[currentChallengeIndex];
   const currentSelected = selectedAnswers[currentChallengeIndex];

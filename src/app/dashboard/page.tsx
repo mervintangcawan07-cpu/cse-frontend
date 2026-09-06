@@ -12,6 +12,7 @@ import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicat
 import PaymentConfirmationLoader from "@/components/common/PaymentConfirmationLoader";
 import WidgetErrorBoundary from "@/components/common/WidgetErrorBoundary";
 import dynamic from "next/dynamic";
+import { useAuth } from "@/context/AuthContext";
 
 const ScoreAnalyticsChart = dynamic(
   () => import("@/components/dashboard/ScoreAnalyticsChart"),
@@ -24,15 +25,6 @@ const ScoreAnalyticsChart = dynamic(
     ),
   }
 );
-
-interface UserProfile {
-  name: string;
-  email: string;
-  role: string;
-  isPaid: boolean;
-  paidUntil?: string | null;
-  planType?: string | null;
-}
 
 interface Plan {
   planType: string;
@@ -92,7 +84,7 @@ const DEFAULT_PLANS: Plan[] = [
 ];
 
 function DashboardContent() {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const { user, status: authStatus, refreshAuth } = useAuth();
   const [plans, setPlans] = useState<Plan[]>(DEFAULT_PLANS);
   const [analytics, setAnalytics] = useState<DetailedAnalytics | null>(null);
   const [analyticsError, setAnalyticsError] = useState(false);
@@ -133,6 +125,23 @@ function DashboardContent() {
 
   useEffect(() => {
     setChartMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (authStatus === "loading") return;
+
+    if (authStatus === "unauthenticated") {
+      router.push("/login");
+      setLoading(false);
+      return;
+    }
+
+    if (authStatus === "error" || !user) {
+      setLoading(false);
+      return;
+    }
+
+    let cancelled = false;
 
     async function checkAuthAndLoadDashboard() {
       if (paymentStatus === "success") {
@@ -147,59 +156,65 @@ function DashboardContent() {
       }
 
       try {
-        const userRes = await fetch("/api/auth/me");
-        const userData = await userRes.json();
+        const currentUser =
+          paymentStatus === "success"
+            ? await refreshAuth("entitlement")
+            : user;
 
-        if (userRes.ok && userData.user) {
-          setUser(userData.user);
-
-          // Graceful Error Recovery: Fetch independent datasets concurrently without all-or-nothing failure
-          const results = await Promise.allSettled([
-            fetch("/api/pricing", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)),
-            fetch("/api/analytics/dashboard").then((r) => (r.ok ? r.json() : null)),
-            fetch("/api/user/analytics/detailed").then((r) => (r.ok ? r.json() : null)),
-          ]);
-
-          // 1. Pricing plans
-          if (results[0].status === "fulfilled" && results[0].value?.plans) {
-            setPlans(results[0].value.plans);
-          }
-
-          // 2. Overview Dashboard Analytics (streaks, quick cards)
-          if (results[1].status === "fulfilled" && results[1].value) {
-            setDashAnalytics(results[1].value);
-          } else {
-            setDashAnalytics({
-              totalExams: 0,
-              averageScore: 0,
-              passReadinessScore: 0,
-              currentStreak: 1,
-              longestStreak: 1,
-              totalBookmarks: 0,
-              recommendation: "Focus on your daily practice question to build exam confidence.",
-              recentHistory: [],
-            });
-          }
-
-          // 3. Detailed Exam Statistics & Charts
-          if (results[2].status === "fulfilled" && results[2].value?.analytics) {
-            setAnalytics(results[2].value.analytics);
-            setAnalyticsError(false);
-          } else {
-            setAnalyticsError(true);
-          }
-        } else {
+        if (!currentUser) {
           router.push("/login");
+          return;
+        }
+
+        // Graceful Error Recovery: Fetch independent datasets concurrently without all-or-nothing failure
+        const results = await Promise.allSettled([
+          fetch("/api/pricing", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)),
+          fetch("/api/analytics/dashboard").then((r) => (r.ok ? r.json() : null)),
+          fetch("/api/user/analytics/detailed").then((r) => (r.ok ? r.json() : null)),
+        ]);
+
+        if (cancelled) return;
+
+        // 1. Pricing plans
+        if (results[0].status === "fulfilled" && results[0].value?.plans) {
+          setPlans(results[0].value.plans);
+        }
+
+        // 2. Overview Dashboard Analytics (streaks, quick cards)
+        if (results[1].status === "fulfilled" && results[1].value) {
+          setDashAnalytics(results[1].value);
+        } else {
+          setDashAnalytics({
+            totalExams: 0,
+            averageScore: 0,
+            passReadinessScore: 0,
+            currentStreak: 1,
+            longestStreak: 1,
+            totalBookmarks: 0,
+            recommendation: "Focus on your daily practice question to build exam confidence.",
+            recentHistory: [],
+          });
+        }
+
+        // 3. Detailed Exam Statistics & Charts
+        if (results[2].status === "fulfilled" && results[2].value?.analytics) {
+          setAnalytics(results[2].value.analytics);
+          setAnalyticsError(false);
+        } else {
+          setAnalyticsError(true);
         }
       } catch (err) {
         console.error("Dashboard auth check failed:", err);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
-    checkAuthAndLoadDashboard();
-  }, [paymentStatus, router]);
+    void checkAuthAndLoadDashboard();
+    return () => {
+      cancelled = true;
+    };
+  }, [authStatus, paymentStatus, refreshAuth, router, user?.id]);
 
   const handlePayMongoCheckout = async (planType: string) => {
     setCheckoutLoading(true);

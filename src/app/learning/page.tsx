@@ -4,21 +4,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchWithClientCache } from "@/lib/clientCache";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LearningHubPage() {
-  const [isPaid, setIsPaid] = useState(false);
+  const { user } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.user) {
-          setIsPaid(data.user.isPaid || data.user.role === "ADMIN");
-        }
-      })
-      .catch(() => {});
-
     Promise.all([
       fetchWithClientCache<{ notes: any[] }>("/api/reviewer"),
       fetchWithClientCache<{ handbooks: any[] }>("/api/reading-materials"),
