@@ -2368,7 +2368,7 @@ function runSourceIntegratedRouteTests(): void {
   );
   assert(
     checkoutPost.includes("acquireLock(lockKey)") &&
-      checkoutPost.includes("releaseLock(lockKey)") &&
+      checkoutPost.includes("lock.release()") &&
       checkoutPost.includes("{ status: 409 }"),
     "B2.5C-1: lock acquisition, release, and 409 in-flight protection remain intact"
   );
@@ -2708,4 +2708,7 @@ async function main(): Promise<void> {
   if (failed > 0) process.exit(1);
 }
 
-await main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

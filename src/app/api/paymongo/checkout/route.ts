@@ -34,7 +34,8 @@ export async function POST(request: Request) {
   const lockKey = `checkout:${clientIp}`;
 
   // 🔒 Enforce 1 active checkout request at a time per client IP
-  if (!acquireLock(lockKey)) {
+  const lock = await acquireLock(lockKey);
+  if (!lock.acquired) {
     return NextResponse.json(
       { error: "A payment transaction is already processing. Please wait..." },
       { status: 409 }
@@ -260,6 +261,6 @@ export async function POST(request: Request) {
     );
   } finally {
     // 🔓 Always release the concurrency lock after request processing completes
-    releaseLock(lockKey);
+    await lock.release();
   }
 }
