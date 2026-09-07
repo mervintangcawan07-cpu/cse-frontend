@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
-import { acquireLock, releaseLock, getClientIp } from "@/lib/rate-limit";
 import { getSiteUrl } from "@/lib/config/site";
 import {
+  acquireLock,
+  getClientIp,
   PAYMONGO_CHECKOUT_LIMITER,
   checkRateLimit,
   createRateLimitResponse,
