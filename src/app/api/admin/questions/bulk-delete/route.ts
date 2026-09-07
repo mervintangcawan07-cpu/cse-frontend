@@ -1,8 +1,9 @@
-﻿// Relative Path: src/app/api/admin/questions/bulk-delete/route.ts
+// Relative Path: src/app/api/admin/questions/bulk-delete/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { requireSudo } from "@/middleware/requireSudo";
+import { transitionalOrdinaryBankWhere } from "@/lib/contentEligibility";
 
 export const DELETE = requireSudo(async (request: NextRequest) => {
   try {
@@ -26,7 +27,10 @@ export const DELETE = requireSudo(async (request: NextRequest) => {
 
     // Soft delete all matching questions in a single query
     const result = await prisma.question.updateMany({
-      where: { id: { in: ids } },
+      where: {
+        id: { in: ids },
+        ...transitionalOrdinaryBankWhere(),
+      },
       data: {
         deletedAt: new Date(),
         deletedBy: authentication.session.user.id,

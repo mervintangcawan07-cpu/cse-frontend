@@ -6,6 +6,8 @@ import {
   restoreRecord,
   restoreBatchRecords,
   restoreAllTrashQuestions,
+  restoreAllTrashOrdinaryQuestions,
+  restoreAllTrashEliminationQuestions,
   permanentlyDeleteSelectedRecords,
   purgeAllTrashQuestions,
   purgeExpiredRecords,
@@ -63,9 +65,25 @@ export async function POST(request: Request) {
       return NextResponse.json(result);
     }
 
-    if (action === "RESTORE_ALL_QUESTIONS") {
-      const result = await restoreAllTrashQuestions(adminEmail);
+    if (action === "RESTORE_ALL_ORDINARY_QUESTIONS") {
+      const result = await restoreAllTrashOrdinaryQuestions(adminEmail);
       return NextResponse.json(result);
+    }
+
+    if (action === "RESTORE_ALL_ELIMINATION_QUESTIONS") {
+      const result = await restoreAllTrashEliminationQuestions(adminEmail);
+      return NextResponse.json(result);
+    }
+
+    // @deprecated - Ambiguous bulk restore disabled to prevent cross-bank contamination.
+    if (action === "RESTORE_ALL_QUESTIONS") {
+      return NextResponse.json(
+        {
+          error:
+            "RESTORE_ALL_QUESTIONS is disabled to prevent cross-bank contamination. Please use RESTORE_ALL_ORDINARY_QUESTIONS or RESTORE_ALL_ELIMINATION_QUESTIONS.",
+        },
+        { status: 400 }
+      );
     }
 
     if (action === "PURGE_SELECTED" && Array.isArray(items)) {

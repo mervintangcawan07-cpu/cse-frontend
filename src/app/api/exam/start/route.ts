@@ -7,6 +7,7 @@ import {
   checkRateLimit,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { ordinaryBankWhere } from "@/lib/contentEligibility";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_CATEGORY_QUOTAS: Record<string, number> = {
@@ -123,10 +124,7 @@ export async function GET(request: Request) {
       where: {
         deletedAt: null,
         category: { in: requiredCategories, mode: "insensitive" },
-        NOT: [
-          { category: { equals: "Elimination Drill", mode: "insensitive" } },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
+        ...ordinaryBankWhere(),
         // Pool filtering: MISTAKES_ONLY filter at DB level for efficiency
         ...(pool === "MISTAKES_ONLY" && mistakeQuestionIds.size > 0
           ? { id: { in: Array.from(mistakeQuestionIds) } }

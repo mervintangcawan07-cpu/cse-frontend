@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
 import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
-import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { activeOrdinaryQuestionWhere, isOrdinaryQuestion } from "@/lib/contentEligibility";
 
 export async function GET(request: Request) {
   try {
@@ -76,6 +76,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const isElimination = category?.toLowerCase() === "elimination drill" || subtopic?.toLowerCase().includes("elimination drill");
+    if (isElimination) {
+      return NextResponse.json(
+        { error: "Cannot create an Elimination Drill question in the Ordinary Question Bank. Please use the Admin Elimination Drill Bank." },
+        { status: 422 }
+      );
+    }
+
     const createdQuestion = await prisma.question.create({
       data: {
         category: category || "General",
@@ -100,6 +108,7 @@ export async function POST(request: Request) {
         difficulty,
         tags: Array.isArray(tags) ? tags : [],
         skillTested,
+        bankType: "ORDINARY" as any,
       },
     });
 
@@ -224,6 +233,13 @@ export async function DELETE(request: Request) {
     }
 
     for (const id of idsToDelete) {
+      const question = await prisma.question.findUnique({
+        where: { id },
+        select: { bankType: true, category: true, subtopic: true }
+      });
+      if (!question || !isOrdinaryQuestion(question)) {
+        return NextResponse.json({ error: `Question not found in Ordinary Question Bank.` }, { status: 404 });
+      }
       await softDeleteRecord("question", id, user.id);
     }
 

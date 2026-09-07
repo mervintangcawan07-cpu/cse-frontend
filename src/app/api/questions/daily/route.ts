@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { recordUserActivityStreak } from "@/lib/streakEngine";
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 
 function getTodayDateString(): string {
   // Use Philippines Time (UTC+8) for all examinees
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
 
     // 1. Fetch total count of active questions
     const totalQuestions = await prisma.question.count({
-      where: { deletedAt: null },
+      where: activeOrdinaryQuestionWhere(),
     });
 
     if (totalQuestions === 0) {
@@ -41,7 +42,7 @@ export async function GET(request: Request) {
     // 2. Select deterministic question for today
     const questionIndex = stringToHash(dateString) % totalQuestions;
     const todayQuestions = await prisma.question.findMany({
-      where: { deletedAt: null },
+      where: activeOrdinaryQuestionWhere(),
       skip: questionIndex,
       take: 1,
       select: {

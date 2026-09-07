@@ -9,6 +9,11 @@ import {
   SupportedEntityType,
   BatchOperationResult,
 } from "@/types/recovery";
+import {
+  isEliminationQuestion,
+  softDeletedOrdinaryQuestionWhere,
+  softDeletedEliminationQuestionWhere,
+} from "@/lib/contentEligibility";
 
 const DEFAULT_RETENTION_DAYS = 30;
 const USER_HARD_PURGE_DISABLED_CODE = "USER_HARD_PURGE_DISABLED";
@@ -143,11 +148,11 @@ export async function getTrashBinItems(
   // 2. Questions & Elimination Drill Questions
   const softDeletedQuestions = await prisma.question.findMany({
     where: { deletedAt: { not: null } },
-    select: { id: true, prompt: true, category: true, subtopic: true, deletedAt: true, deletedBy: true },
+    select: { id: true, prompt: true, category: true, subtopic: true, bankType: true, deletedAt: true, deletedBy: true },
   });
   for (const q of softDeletedQuestions) {
     if (q.deletedAt) {
-      const isElimination = q.category === "Elimination Drill" || q.subtopic.includes("Elimination Drill");
+      const isElimination = isEliminationQuestion(q);
       const prefix = isElimination ? "[Elimination Drill] " : "";
       items.push({
         id: q.id,
@@ -284,6 +289,7 @@ export async function restoreBatchRecords(
 
 /**
  * Restores all Question Bank records currently in the trash bin.
+ * @deprecated - Use restoreAllTrashOrdinaryQuestions or restoreAllTrashEliminationQuestions instead.
  */
 export async function restoreAllTrashQuestions(
   restoredBy: string = "admin"
@@ -301,6 +307,34 @@ export async function restoreAllTrashQuestions(
     success: true,
     restoredCount: res.count,
   };
+}
+
+export async function restoreAllTrashOrdinaryQuestions(
+  restoredBy: string = "admin"
+): Promise<{ success: boolean; restoredCount: number }> {
+  logger.info("RESTORE ALL TRASH ORDINARY QUESTIONS TRIGGERED", {
+    context: { restoredBy },
+  });
+
+  const res = await prisma.question.updateMany({
+    where: softDeletedOrdinaryQuestionWhere(),
+    data: { deletedAt: null, deletedBy: null },
+  });
+  return { success: true, restoredCount: res.count };
+}
+
+export async function restoreAllTrashEliminationQuestions(
+  restoredBy: string = "admin"
+): Promise<{ success: boolean; restoredCount: number }> {
+  logger.info("RESTORE ALL TRASH ELIMINATION QUESTIONS TRIGGERED", {
+    context: { restoredBy },
+  });
+
+  const res = await prisma.question.updateMany({
+    where: softDeletedEliminationQuestionWhere(),
+    data: { deletedAt: null, deletedBy: null },
+  });
+  return { success: true, restoredCount: res.count };
 }
 
 /**

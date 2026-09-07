@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { softDeleteRecord } from "@/lib/recovery/softDelete";
-import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
+import { activeEliminationQuestionWhere, isEliminationQuestion } from "@/lib/contentEligibility";
 
 interface IncomingQuestionPayload {
   prompt?: string;
@@ -87,6 +87,7 @@ export async function POST(request: Request) {
       answerIndex: number;
       explanation: string | null;
       imageUrl: string | null;
+      bankType?: any;
     }> = [];
     const validationErrors: string[] = [];
 
@@ -158,6 +159,7 @@ export async function POST(request: Request) {
         answerIndex: resolvedAnswerIdx,
         explanation: finalExplanation,
         imageUrl: q.imageUrl?.trim() || null,
+        bankType: "ELIMINATION" as any,
       });
     });
 
@@ -241,6 +243,13 @@ export async function DELETE(request: Request) {
     }
 
     for (const id of idsToDelete) {
+      const question = await prisma.question.findUnique({
+        where: { id },
+        select: { bankType: true, category: true, subtopic: true }
+      });
+      if (!question || !isEliminationQuestion(question)) {
+        return NextResponse.json({ error: "Question not found in Elimination Drill Bank." }, { status: 404 });
+      }
       await softDeleteRecord("question", id, authentication.session.user.id);
     }
 

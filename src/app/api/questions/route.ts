@@ -7,6 +7,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import Papa from "papaparse";
+import { ordinaryBankWhere, activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_SUBJECT_ORDER = [
@@ -38,11 +39,6 @@ export async function GET(request: Request) {
     const subtopic = searchParams.get("subtopic");
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
-
-    const NOT_ELIMINATION_DRILL: Prisma.QuestionWhereInput[] = [
-      { category: { equals: "Elimination Drill", mode: "insensitive" } },
-      { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-    ];
 
     // ------------------------------------------------------------------
     // 1. IDENTIFY MASTERED QUESTIONS (ANSWERED CORRECTLY AT LEAST ONCE)
@@ -97,14 +93,12 @@ export async function GET(request: Request) {
       const whereClause: Prisma.QuestionWhereInput = {
         deletedAt: null,
         category: { equals: category, mode: "insensitive" },
+        ...(!isEliminationQuery ? ordinaryBankWhere() : {}),
+        ...ordinaryBankWhere(),
       };
 
       if (subtopic && subtopic !== "All") {
         whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
-      }
-
-      if (!isEliminationQuery) {
-        whereClause.NOT = NOT_ELIMINATION_DRILL;
       }
 
       // ⚡ FAST BULK FETCH: Query all candidate questions for this category/subtopic in 1 SQL call
@@ -117,10 +111,9 @@ export async function GET(request: Request) {
         const catchAllWhere: Prisma.QuestionWhereInput = {
           deletedAt: null,
           category: { equals: category, mode: "insensitive" },
+          ...(!isEliminationQuery ? ordinaryBankWhere() : {}),
+          ...ordinaryBankWhere(),
         };
-        if (!isEliminationQuery) {
-          catchAllWhere.NOT = NOT_ELIMINATION_DRILL;
-        }
         const catchAllPool = await prisma.question.findMany({
           where: catchAllWhere,
         });
@@ -151,10 +144,7 @@ export async function GET(request: Request) {
     // ------------------------------------------------------------------
     // ⚡ SINGLE SQL QUERY: Retrieve all non-deleted, active questions at once
     const globalPool = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        NOT: NOT_ELIMINATION_DRILL,
-      },
+      where: activeOrdinaryQuestionWhere(),
     });
 
     const finalExamQuestions: any[] = [];
@@ -360,6 +350,7 @@ export async function POST(request: Request) {
           answerIndex,
           explanation,
           imageUrl,
+          bankType: "ORDINARY" as any,
         };
       })
       .filter((q) => q.prompt && q.category && q.options.length >= 2);
@@ -368,6 +359,23 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "No valid questions found after parsing fields." },
         { status: 400 }
+      );
+    }
+
+    // Reject elimination metadata
+    const eliminationRows = formattedData.filter(
+      (q) =>
+        q.category.toLowerCase() === "elimination drill" ||
+        q.subtopic.toLowerCase().includes("elimination drill")
+    );
+
+    if (eliminationRows.length > 0) {
+      return NextResponse.json(
+        {
+          error: `Ordinary Question Bank import rejected: ${eliminationRows.length} row(s) contain Elimination Drill classification metadata (category or subtopic). Please use the Admin Elimination Drill Bank uploader for those questions.`,
+          rejectedCount: eliminationRows.length,
+        },
+        { status: 422 }
       );
     }
 

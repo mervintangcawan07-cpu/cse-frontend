@@ -81,8 +81,26 @@ export async function POST(request: Request) {
         difficulty: q.difficulty || "MEDIUM",
         tags: tagsArr,
         skillTested: q.skillTested || null,
+        bankType: "ORDINARY" as any,
       };
     });
+
+    // Reject any row that carries elimination classification metadata through ordinary import
+    const eliminationRows = insertData.filter(
+      (q) =>
+        q.category.toLowerCase() === "elimination drill" ||
+        q.subtopic.toLowerCase().includes("elimination drill")
+    );
+
+    if (eliminationRows.length > 0) {
+      return NextResponse.json(
+        {
+          error: `Ordinary Question Bank import rejected: ${eliminationRows.length} row(s) contain Elimination Drill classification metadata (category or subtopic). Please use the Admin Elimination Drill Bank uploader for those questions.`,
+          rejectedCount: eliminationRows.length,
+        },
+        { status: 422 }
+      );
+    }
 
     // Bulk create questions inside database
     const created = await prisma.question.createMany({

@@ -253,34 +253,27 @@ export default function AdminTrashBinPage() {
     }
   };
 
-  // Restore all questions
-  const handleRestoreAllQuestions = async () => {
-    if (!confirm("Are you sure you want to restore all Question Bank records currently in Trash back to active status?")) {
+  // Restore all regular (ordinary) questions
+  const handleRestoreAllOrdinaryQuestions = async () => {
+    if (!confirm("Are you sure you want to restore all Regular (Ordinary) Question Bank records currently in Trash back to active status?")) {
       return;
     }
 
-    setProcessingAction("RESTORE_ALL_QUESTIONS");
+    setProcessingAction("RESTORE_ALL_ORDINARY_QUESTIONS");
     setActionMessage(null);
 
     try {
       const res = await fetch("/api/admin/trash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "RESTORE_ALL_QUESTIONS" }),
+        body: JSON.stringify({ action: "RESTORE_ALL_ORDINARY_QUESTIONS" }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setItems((prev) => prev.filter((i) => i.entityType !== "question"));
-        setSelectedIds((prev) => {
-          const next = new Set(prev);
-          for (const item of items) {
-            if (item.entityType === "question") next.delete(item.id);
-          }
-          return next;
-        });
+        await handleRefresh();
         setActionMessage({
           type: "success",
-          text: `✓ Successfully restored all ${data.restoredCount} Question(s) back to active Question Bank.`,
+          text: `✓ Successfully restored ${data.restoredCount} Regular Question(s) back to active Question Bank.`,
         });
       } else {
         setActionMessage({
@@ -289,7 +282,42 @@ export default function AdminTrashBinPage() {
         });
       }
     } catch {
-      setActionMessage({ type: "error", text: "✕ Failed to restore questions due to network error." });
+      setActionMessage({ type: "error", text: "✕ Failed to restore regular questions due to network error." });
+    } finally {
+      setProcessingAction(null);
+    }
+  };
+
+  // Restore all elimination drill questions
+  const handleRestoreAllEliminationQuestions = async () => {
+    if (!confirm("Are you sure you want to restore all Elimination Drill questions currently in Trash back to active status?")) {
+      return;
+    }
+
+    setProcessingAction("RESTORE_ALL_ELIMINATION_QUESTIONS");
+    setActionMessage(null);
+
+    try {
+      const res = await fetch("/api/admin/trash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "RESTORE_ALL_ELIMINATION_QUESTIONS" }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        await handleRefresh();
+        setActionMessage({
+          type: "success",
+          text: `✓ Successfully restored ${data.restoredCount} Elimination Drill Question(s) back to active Elimination Drill Bank.`,
+        });
+      } else {
+        setActionMessage({
+          type: "error",
+          text: `✕ Restore failed: ${data.error || "Unknown error"}`,
+        });
+      }
+    } catch {
+      setActionMessage({ type: "error", text: "✕ Failed to restore elimination drill questions due to network error." });
     } finally {
       setProcessingAction(null);
     }
@@ -459,15 +487,31 @@ export default function AdminTrashBinPage() {
               : `Delete Selected (${selectedIds.size})`}
           </button>
 
-          {/* Restore All Questions */}
+          {/* Restore All Regular Questions */}
           {questionCount > 0 && (
             <button
               type="button"
-              onClick={handleRestoreAllQuestions}
+              onClick={handleRestoreAllOrdinaryQuestions}
               disabled={processingAction !== null}
               className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
             >
-              Restore All Questions ({questionCount})
+              {processingAction === "RESTORE_ALL_ORDINARY_QUESTIONS"
+                ? "Restoring Regular..."
+                : "Restore All Regular Questions"}
+            </button>
+          )}
+
+          {/* Restore All Elimination Drill Questions */}
+          {questionCount > 0 && (
+            <button
+              type="button"
+              onClick={handleRestoreAllEliminationQuestions}
+              disabled={processingAction !== null}
+              className="px-3 py-1.5 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-bold rounded-xl transition border border-amber-200 dark:border-amber-800 disabled:opacity-40 cursor-pointer"
+            >
+              {processingAction === "RESTORE_ALL_ELIMINATION_QUESTIONS"
+                ? "Restoring Elimination..."
+                : "Restore All Elimination Drill Questions"}
             </button>
           )}
 

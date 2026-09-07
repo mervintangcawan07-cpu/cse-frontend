@@ -3,16 +3,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
+import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
+
 export async function GET() {
   try {
     const drillQuestions = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        OR: [
-          { category: "Elimination Drill" },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
-      },
+      where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });
 
