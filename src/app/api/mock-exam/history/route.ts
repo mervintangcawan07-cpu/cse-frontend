@@ -71,7 +71,7 @@ export async function GET() {
   } catch (error: any) {
     console.error("[MOCK_EXAM_HISTORY_FETCH_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to fetch mock exam history.", details: error?.message },
+      { error: "Failed to fetch mock exam history." },
       { status: 500 }
     );
   }

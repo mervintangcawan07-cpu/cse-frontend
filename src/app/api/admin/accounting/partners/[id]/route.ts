@@ -61,6 +61,6 @@ export async function PUT(
     });
   } catch (error: any) {
     console.error("[ADMIN_PARTNER_PUT_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to update partner" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update partner" }, { status: 500 });
   }
 }

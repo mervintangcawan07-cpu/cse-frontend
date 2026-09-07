@@ -43,7 +43,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("Failed to delete post:", error);
     return NextResponse.json(
-      { error: "Failed to delete post", details: error?.message },
+      { error: "Failed to delete post" },
       { status: 500 }
     );
   }

@@ -117,7 +117,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("[EXAMS_HISTORY_GET_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to fetch exam history", details: error?.message },
+      { error: "Failed to fetch exam history" },
       { status: 500 }
     );
   }

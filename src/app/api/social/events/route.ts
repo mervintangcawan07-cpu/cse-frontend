@@ -55,7 +55,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, events: formattedEvents });
   } catch (error: any) {
     console.error("[EVENTS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch study events", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch study events" }, { status: 500 });
   }
 }
 
@@ -100,6 +100,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, event, message: "Study event scheduled!" });
   } catch (error: any) {
     console.error("[EVENTS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create event", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create event" }, { status: 500 });
   }
 }

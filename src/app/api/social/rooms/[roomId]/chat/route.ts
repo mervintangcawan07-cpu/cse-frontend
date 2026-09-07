@@ -63,7 +63,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[ROOM_CHAT_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch room messages", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch room messages" }, { status: 500 });
   }
 }
 
@@ -145,7 +145,7 @@ export async function POST(
     });
   } catch (error: any) {
     console.error("[ROOM_CHAT_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to send room message", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send room message" }, { status: 500 });
   }
 }
 
@@ -207,7 +207,7 @@ export async function PATCH(
     return NextResponse.json({ success: true, message: newPinnedStatus ? "Message pinned" : "Message unpinned" });
   } catch (error: any) {
     console.error("[ROOM_CHAT_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to pin message", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to pin message" }, { status: 500 });
   }
 }
 
@@ -261,6 +261,6 @@ export async function DELETE(
     return NextResponse.json({ success: true, message: "Room message deleted" });
   } catch (error: any) {
     console.error("[ROOM_CHAT_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete room message", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete room message" }, { status: 500 });
   }
 }

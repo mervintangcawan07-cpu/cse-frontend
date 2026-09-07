@@ -87,6 +87,6 @@ export async function GET() {
     });
   } catch (error: any) {
     console.error("[SOCIAL_COUNTS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch counts", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch counts" }, { status: 500 });
   }
 }

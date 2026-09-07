@@ -30,7 +30,7 @@ export async function GET() {
   } catch (error: unknown) {
     const err = error as Error;
     console.error("[TRASH_GET_ERROR]", err);
-    return NextResponse.json({ error: "Failed to fetch trash bin items", details: err?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch trash bin items" }, { status: 500 });
   }
 }
 
@@ -102,6 +102,6 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     const err = error as Error;
     console.error("[TRASH_POST_ERROR]", err);
-    return NextResponse.json({ error: "Failed to process trash action", details: err?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to process trash action" }, { status: 500 });
   }
 }

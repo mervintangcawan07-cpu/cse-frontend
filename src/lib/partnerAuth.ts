@@ -74,23 +74,23 @@ export async function verifyPartnerJWT(token: string): Promise<{ partnerId: stri
  * Server-Side Authentication: Retrieves and validates partner session against live database.
  */
 export async function getAuthenticatedPartner(req?: Request): Promise<AuthenticatedPartner | null> {
-  try {
-    let token: string | undefined;
+  let token: string | undefined;
 
-    // 1. Check cookies
-    const cookieStore = await cookies();
-    token = cookieStore.get("cse_partner_session")?.value;
+  // 1. Check cookies
+  const cookieStore = await cookies();
+  token = cookieStore.get("cse_partner_session")?.value;
 
-    // 2. Fallback to Authorization header
-    if (!token && req) {
-      const authHeader = req.headers.get("authorization");
-      if (authHeader && authHeader.startsWith("Bearer ")) {
-        token = authHeader.substring(7);
-      }
+  // 2. Fallback to Authorization header
+  if (!token && req) {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.substring(7);
     }
+  }
 
-    if (!token) return null;
+  if (!token) return null;
 
+  try {
     const payload = await verifyPartnerJWT(token);
     if (!payload?.partnerId) return null;
 

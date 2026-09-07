@@ -275,6 +275,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
     console.error("[ADMIN_ADJUSTMENTS_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to create adjustment" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create adjustment" }, { status: 500 });
   }
 }

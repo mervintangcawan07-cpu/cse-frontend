@@ -373,7 +373,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("[CATEGORY_SUBTOPIC_SMART_EXAM_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to assemble categorized exam pool", details: error?.message },
+      { error: "Failed to assemble categorized exam pool" },
       { status: 500 }
     );
   }

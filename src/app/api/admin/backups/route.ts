@@ -42,8 +42,8 @@ export async function GET() {
       auditLogs,
     });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Failed to fetch backups";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[ADMIN_BACKUPS_GET_ERROR]", error);
+    return NextResponse.json({ error: "Failed to fetch backups" }, { status: 500 });
   }
 }
 
@@ -69,7 +69,7 @@ export async function POST() {
       backup: result,
     });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Failed to trigger manual backup";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[ADMIN_BACKUPS_POST_ERROR]", error);
+    return NextResponse.json({ error: "Failed to trigger manual backup" }, { status: 500 });
   }
 }

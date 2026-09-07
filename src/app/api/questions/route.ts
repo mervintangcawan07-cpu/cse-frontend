@@ -253,7 +253,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("[QUESTIONS_FETCH_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to fetch questions.", details: error?.message },
+      { error: "Failed to fetch questions." },
       { status: 500 }
     );
   }
@@ -384,7 +384,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[POST_QUESTIONS_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to create/upload questions", details: error?.message },
+      { error: "Failed to create/upload questions" },
       { status: 500 }
     );
   }

@@ -122,7 +122,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[ROOM_DETAIL_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch room details", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch room details" }, { status: 500 });
   }
 }
 
@@ -179,7 +179,7 @@ export async function PATCH(
     return NextResponse.json({ success: true, room: updatedRoom, message: "Room updated successfully" });
   } catch (error: any) {
     console.error("[ROOM_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update room", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update room" }, { status: 500 });
   }
 }
 
@@ -223,7 +223,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("[ROOM_DELETE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to delete study room", details: error?.message },
+      { error: "Failed to delete study room" },
       { status: 500 }
     );
   }

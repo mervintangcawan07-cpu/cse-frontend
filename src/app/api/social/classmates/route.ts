@@ -239,7 +239,7 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("[CLASSMATES_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch classmate data", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch classmate data" }, { status: 500 });
   }
 }
 
@@ -298,6 +298,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, relation });
   } catch (error: any) {
     console.error("[CLASSMATES_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to send classmate request", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send classmate request" }, { status: 500 });
   }
 }

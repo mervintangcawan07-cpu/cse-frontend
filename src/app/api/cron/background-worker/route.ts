@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("[CRON_BACKGROUND_WORKER_ERROR]", error);
     return NextResponse.json(
-      { error: "Background worker execution failed", details: error?.message },
+      { error: "Background worker execution failed" },
       { status: 500 }
     );
   }

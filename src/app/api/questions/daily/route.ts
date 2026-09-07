@@ -133,7 +133,7 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("[DAILY_QUESTION_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch daily question", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch daily question" }, { status: 500 });
   }
 }
 
@@ -262,6 +262,6 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error("[DAILY_QUESTION_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to submit daily question", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to submit daily question" }, { status: 500 });
   }
 }

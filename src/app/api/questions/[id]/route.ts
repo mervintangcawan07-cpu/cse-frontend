@@ -60,7 +60,7 @@ export async function PUT(
   } catch (error: any) {
     console.error("[UPDATE_QUESTION_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to update question in database", details: error?.message },
+      { error: "Failed to update question in database" },
       { status: 500 }
     );
   }
@@ -99,7 +99,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("[DELETE_QUESTION_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to delete question from database", details: error?.message },
+      { error: "Failed to delete question from database" },
       { status: 500 }
     );
   }

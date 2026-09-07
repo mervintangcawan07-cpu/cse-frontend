@@ -92,7 +92,7 @@ export async function PATCH(
     return NextResponse.json({ success: true, participant: updated });
   } catch (error: any) {
     console.error("[ROOM_PARTICIPANT_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update participant", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update participant" }, { status: 500 });
   }
 }
 
@@ -159,6 +159,6 @@ export async function DELETE(
     return NextResponse.json({ success: true, message: "Participant removed from room" });
   } catch (error: any) {
     console.error("[ROOM_PARTICIPANT_KICK_ERROR]", error);
-    return NextResponse.json({ error: "Failed to remove participant", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to remove participant" }, { status: 500 });
   }
 }

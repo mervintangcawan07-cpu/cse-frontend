@@ -181,7 +181,7 @@ export async function POST(request: Request) {
     const err = error as Error;
     console.error("[ADMIN_DRILL_BULK_UPLOAD_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to save questions to database.", details: err?.message },
+      { error: "Failed to save questions to database." },
       { status: 500 }
     );
   }
@@ -253,7 +253,7 @@ export async function DELETE(request: Request) {
     const err = error as Error;
     console.error("[ADMIN_DRILL_DELETE_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to delete drill questions.", details: err?.message },
+      { error: "Failed to delete drill questions." },
       { status: 500 }
     );
   }
@@ -298,7 +298,7 @@ export async function PUT(request: Request) {
     const err = error as Error;
     console.error("[ADMIN_DRILL_PUT_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to update question.", details: err?.message },
+      { error: "Failed to update question." },
       { status: 500 }
     );
   }

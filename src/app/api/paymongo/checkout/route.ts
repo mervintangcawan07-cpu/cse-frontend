@@ -219,9 +219,17 @@ export async function POST(request: Request) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("[PayMongo API Error]:", JSON.stringify(data, null, 2));
+      const primaryError = data?.errors?.[0];
+      const errorCode = primaryError?.code || "UNKNOWN_ERROR";
+      const errorDetail = primaryError?.detail || "API Error";
+      const errorSubCode = primaryError?.sub_code ? ` sub_code=${primaryError.sub_code}` : "";
+      const errorPointer = primaryError?.source?.pointer ? ` pointer=${primaryError.source.pointer}` : "";
+
+      console.error(
+        `[PAYMONGO_API_ERROR] status=${response.status} code=${errorCode}${errorSubCode}${errorPointer} detail="${errorDetail}"`
+      );
       return NextResponse.json(
-        { error: `PayMongo rejected request: ${data?.errors?.[0]?.detail || "API Error"}` },
+        { error: `PayMongo rejected request: ${errorDetail}` },
         { status: response.status }
       );
     }
@@ -257,7 +265,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal Server Error" },
+      { error: "Failed to initiate checkout session. Please try again." },
       { status: 500 }
     );
   } finally {

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 
     if (!backupResult.success || !backupResult.backupId) {
       return NextResponse.json(
-        { error: "Daily cron backup failed.", details: backupResult.error },
+        { error: "Daily cron backup failed." },
         { status: 500 }
       );
     }
@@ -50,7 +50,6 @@ export async function GET(request: NextRequest) {
       retention: retentionResult,
     });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Cron execution failed.";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ error: "Cron execution failed." }, { status: 500 });
   }
 }

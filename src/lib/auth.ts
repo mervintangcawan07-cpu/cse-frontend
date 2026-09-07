@@ -67,6 +67,9 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
     }
     return payload as JWTPayload;
   } catch (error) {
+    if ((error as { code?: string })?.code === "ERR_JWT_EXPIRED") {
+      return null;
+    }
     console.error("[verifyJWT Error]:", error);
     return null;
   }

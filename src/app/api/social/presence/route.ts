@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[PRESENCE_UPDATE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to update presence status", details: error?.message },
+      { error: "Failed to update presence status" },
       { status: 500 }
     );
   }

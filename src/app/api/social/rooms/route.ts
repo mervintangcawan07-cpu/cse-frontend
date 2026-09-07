@@ -65,7 +65,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, rooms: formattedRooms });
   } catch (error: any) {
     console.error("[ROOMS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch study rooms", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch study rooms" }, { status: 500 });
   }
 }
 
@@ -116,6 +116,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, room, message: "Study Room created successfully!" });
   } catch (error: any) {
     console.error("[ROOMS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create study room", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create study room" }, { status: 500 });
   }
 }

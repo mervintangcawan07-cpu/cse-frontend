@@ -61,6 +61,6 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error("[ADMIN_TAXES_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to create tax config" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create tax config" }, { status: 500 });
   }
 }

@@ -83,7 +83,7 @@ export async function GET(request: Request) {
     const err = error as Error;
     console.error("Failed to fetch elimination drills:", err);
     return NextResponse.json(
-      { error: "Failed to fetch elimination drills", details: err?.message },
+      { error: "Failed to fetch elimination drills" },
       { status: 500 }
     );
   }
