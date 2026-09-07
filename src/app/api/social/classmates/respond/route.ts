@@ -74,6 +74,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid action specified" }, { status: 400 });
   } catch (error: any) {
     console.error("[CLASSMATE_RESPOND_ERROR]", error);
-    return NextResponse.json({ error: "Failed to respond to classmate request", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to respond to classmate request" }, { status: 500 });
   }
 }

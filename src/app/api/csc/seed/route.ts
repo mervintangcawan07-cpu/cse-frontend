@@ -99,7 +99,7 @@ export async function GET() {
   } catch (error: any) {
     console.error("[CSC_SEED_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to seed CSC data", details: error?.message },
+      { error: "Failed to seed CSC data" },
       { status: 500 }
     );
   }

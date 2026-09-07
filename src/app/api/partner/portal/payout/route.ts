@@ -225,13 +225,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
     console.error("[PARTNER_PORTAL_PAYOUT_ERROR]", error);
-    const clientMessage =
-      error?.message &&
-      !error.message.startsWith("Critical") &&
-      !error.message.includes("prisma") &&
-      !error.message.includes("crypto")
-        ? error.message
-        : "Failed to submit payout request";
-    return NextResponse.json({ error: clientMessage }, { status: 400 });
+    return NextResponse.json(
+      { error: "Failed to process payout request." },
+      { status: 500 }
+    );
   }
 }

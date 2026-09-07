@@ -108,7 +108,7 @@ export async function GET() {
   } catch (error: any) {
     console.error("[STUDY_PROFILE_GET_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to fetch study profile", details: error?.message },
+      { error: "Failed to fetch study profile" },
       { status: 500 }
     );
   }
@@ -319,7 +319,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[STUDY_PROFILE_SAVE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to save study profile", details: error?.message },
+      { error: "Failed to save study profile" },
       { status: 500 }
     );
   }

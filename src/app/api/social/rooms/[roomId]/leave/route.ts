@@ -59,7 +59,7 @@ async function handleLeaveRoom(
   } catch (error: any) {
     console.error("[ROOM_LEAVE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to leave room", details: error?.message },
+      { error: "Failed to leave room" },
       { status: 500 }
     );
   }

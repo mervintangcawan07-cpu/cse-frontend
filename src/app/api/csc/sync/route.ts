@@ -20,6 +20,7 @@ export async function POST(request: Request) {
     const result = await runCSCSynchronization(isAdmin);
     return NextResponse.json(result);
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("[CSC_SYNC_ERROR]", err);
+    return NextResponse.json({ error: "CSC synchronization failed" }, { status: 500 });
   }
 }

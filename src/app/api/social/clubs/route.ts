@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, clubs: formattedClubs });
   } catch (error: any) {
     console.error("[CLUBS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch study clubs", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch study clubs" }, { status: 500 });
   }
 }
 
@@ -90,6 +90,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, club, message: "Study club created!" });
   } catch (error: any) {
     console.error("[CLUBS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create study club", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create study club" }, { status: 500 });
   }
 }

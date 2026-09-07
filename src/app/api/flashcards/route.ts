@@ -24,7 +24,7 @@ export async function GET() {
     const message = error instanceof Error ? error.message : undefined;
     console.error("[FLASHCARDS_FETCH_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to load flashcards.", details: message },
+      { error: "Failed to load flashcards." },
       { status: 500 }
     );
   }

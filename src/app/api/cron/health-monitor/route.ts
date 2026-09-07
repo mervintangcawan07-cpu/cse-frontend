@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("[CRON_HEALTH_MONITOR_ERROR]", error);
     return NextResponse.json(
-      { error: "Internal server error during health check", details: error?.message },
+      { error: "Internal server error during health check" },
       { status: 500 }
     );
   }

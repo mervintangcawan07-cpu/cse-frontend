@@ -93,7 +93,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[ROOM_TOPIC_SEARCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to search question bank", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to search question bank" }, { status: 500 });
   }
 }
 
@@ -205,7 +205,7 @@ export async function POST(
     });
   } catch (error: any) {
     console.error("[ROOM_TOPIC_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update study topic", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update study topic" }, { status: 500 });
   }
 }
 
@@ -244,6 +244,6 @@ export async function DELETE(
     });
   } catch (error: any) {
     console.error("[ROOM_TOPIC_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to remove study topic", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to remove study topic" }, { status: 500 });
   }
 }

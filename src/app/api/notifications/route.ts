@@ -61,7 +61,7 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("[NOTIFICATIONS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch notifications", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 });
   }
 }
 
@@ -102,7 +102,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ success: true, message: "Notification marked as read" });
   } catch (error: any) {
     console.error("[NOTIFICATIONS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update notification", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update notification" }, { status: 500 });
   }
 }
 
@@ -144,6 +144,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Invalid delete parameters" }, { status: 400 });
   } catch (error: any) {
     console.error("[NOTIFICATIONS_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete notifications", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete notifications" }, { status: 500 });
   }
 }

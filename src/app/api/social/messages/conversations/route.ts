@@ -79,7 +79,7 @@ export async function GET() {
     return NextResponse.json({ success: true, conversations: formatted });
   } catch (error: any) {
     console.error("[CONVERSATIONS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch conversations", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch conversations" }, { status: 500 });
   }
 }
 
@@ -147,6 +147,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, conversationId: newConversation.id });
   } catch (error: any) {
     console.error("[CONVERSATIONS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create conversation", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create conversation" }, { status: 500 });
   }
 }

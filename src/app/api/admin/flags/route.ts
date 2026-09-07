@@ -85,7 +85,7 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("[ADMIN_FLAGS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch flags", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch flags" }, { status: 500 });
   }
 }
 
@@ -134,6 +134,6 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error: any) {
     console.error("[ADMIN_FLAGS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to process flag action", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to process flag action" }, { status: 500 });
   }
 }

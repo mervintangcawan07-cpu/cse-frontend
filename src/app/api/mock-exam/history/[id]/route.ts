@@ -76,7 +76,7 @@ export async function GET(
   } catch (error: any) {
     console.error("[EXAM_REVIEW_FETCH_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to load exam review history.", details: error?.message },
+      { error: "Failed to load exam review history." },
       { status: 500 }
     );
   }

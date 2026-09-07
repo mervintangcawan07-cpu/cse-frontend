@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, flag });
   } catch (error: any) {
     console.error("[FLAG_QUESTION_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to submit flag", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to submit flag" }, { status: 500 });
   }
 }
 
@@ -72,6 +72,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("[FLAG_QUESTION_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to retract flag", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to retract flag" }, { status: 500 });
   }
 }

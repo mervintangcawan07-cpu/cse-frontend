@@ -94,7 +94,7 @@ export async function POST(
   } catch (error: any) {
     console.error("Failed to toggle reaction:", error);
     return NextResponse.json(
-      { error: "Failed to toggle reaction", details: error?.message },
+      { error: "Failed to toggle reaction" },
       { status: 500 }
     );
   }

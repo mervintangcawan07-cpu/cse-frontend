@@ -125,7 +125,7 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error("Failed to fetch study posts:", error);
     return NextResponse.json(
-      { error: "Failed to fetch study posts", details: error?.message },
+      { error: "Failed to fetch study posts" },
       { status: 500 }
     );
   }
@@ -221,7 +221,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("Failed to create study post:", error);
     return NextResponse.json(
-      { error: "Failed to create study post", details: error?.message },
+      { error: "Failed to create study post" },
       { status: 500 }
     );
   }

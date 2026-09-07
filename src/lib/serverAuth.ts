@@ -135,22 +135,22 @@ export async function authenticateSessionToken(
 export async function getAuthenticatedSessionResult(
   req?: Request
 ): Promise<AuthenticatedSessionResult> {
-  try {
-    let token: string | undefined;
+  let token: string | undefined;
 
-    const cookieStore = await cookies();
-    token = cookieStore.get("cse_session")?.value;
+  const cookieStore = await cookies();
+  token = cookieStore.get("cse_session")?.value;
 
-    if (!token && req) {
-      const authHeader = req.headers.get("authorization");
-      if (authHeader?.startsWith("Bearer ")) {
-        token = authHeader.substring(7);
-      }
+  if (!token && req) {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      token = authHeader.substring(7);
     }
+  }
 
-    if (!token) return { authenticated: false, code: "NO_TOKEN" };
+  if (!token) return { authenticated: false, code: "NO_TOKEN" };
 
-    return authenticateSessionTokenResult(token, {
+  try {
+    return await authenticateSessionTokenResult(token, {
       verifyToken: verifyJWT,
       findUserById: findAuthenticatedUserRecord,
     });

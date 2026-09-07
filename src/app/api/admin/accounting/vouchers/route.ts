@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/admin/accounting/vouchers/route.ts
+// Relative Path: src/app/api/admin/accounting/vouchers/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
@@ -129,7 +129,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("[ADMIN_VOUCHER_BATCH_CREATE_ERROR]", error);
     return NextResponse.json(
-      { error: error.message || "Failed to create voucher batch." },
+      { error: "Failed to create voucher batch." },
       { status: 500 }
     );
   }

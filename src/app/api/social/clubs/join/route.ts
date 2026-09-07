@@ -69,6 +69,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error: any) {
     console.error("[CLUB_JOIN_LEAVE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update club membership", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update club membership" }, { status: 500 });
   }
 }

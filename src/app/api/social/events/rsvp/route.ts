@@ -57,6 +57,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, message: `RSVP status set to ${status}` });
   } catch (error: any) {
     console.error("[EVENT_RSVP_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update RSVP status", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update RSVP status" }, { status: 500 });
   }
 }

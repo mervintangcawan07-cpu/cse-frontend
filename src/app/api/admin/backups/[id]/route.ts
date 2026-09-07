@@ -81,8 +81,8 @@ export async function POST(
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Action failed";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[ADMIN_BACKUP_ACTION_ERROR]", error);
+    return NextResponse.json({ error: "Failed to process backup action" }, { status: 500 });
   }
 }
 
@@ -131,7 +131,7 @@ export async function DELETE(
       message: `Backup '${backup.filename}' deleted successfully.`,
     });
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Delete failed";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("[ADMIN_BACKUP_DELETE_ERROR]", error);
+    return NextResponse.json({ error: "Failed to delete backup" }, { status: 500 });
   }
 }

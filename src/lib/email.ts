@@ -73,6 +73,7 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
     console.log(`[DEV MODE - NO RESEND KEY] Verification Link for ${toEmail}:`);
     console.log(verifyLink);
     console.log("------------------------------------");
+    console.warn("[VERIFICATION_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
 
@@ -101,7 +102,7 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
     if (error) {
       console.error("Resend Verification Email Error:", error);
     } else {
-      console.log(`Verification email sent via Resend to ${toEmail} (ID: ${data?.id})`);
+      console.log(`Verification email dispatched via Resend (ID: ${data?.id})`);
     }
   } catch (err) {
     console.error("Failed to dispatch verification email via Resend:", err);
@@ -120,6 +121,7 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
     console.log(`[DEV MODE - NO RESEND KEY] Reset Password Link for ${toEmail}:`);
     console.log(resetLink);
     console.log("------------------------------------");
+    console.warn("[PASSWORD_RESET_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
 
@@ -151,7 +153,7 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
     if (error) {
       console.error("Resend Password Reset Error:", error);
     } else {
-      console.log(`Password reset email sent via Resend to ${toEmail} (ID: ${data?.id})`);
+      console.log(`Password reset email dispatched via Resend (ID: ${data?.id})`);
     }
   } catch (err) {
     console.error("Failed to dispatch password reset email via Resend:", err);
@@ -234,6 +236,7 @@ export async function sendPartnerCommissionAlertEmail(params: {
 
   if (!resend) {
     console.log(`[DEV MODE - PARTNER COMMISSION ALERT] Partner: ${params.partnerName}, Commission: ₱${cleanCommission}`);
+    console.warn("[PARTNER_COMMISSION_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
 
@@ -302,6 +305,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
 
   if (!resend) {
     console.log(`[DEV MODE - PARTNER PAYOUT] Partner: ${params.partnerName}, Amount: ₱${cleanAmount}`);
+    console.warn("[PARTNER_PAYOUT_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
 

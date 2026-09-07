@@ -105,7 +105,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[MESSAGES_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch messages", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch messages" }, { status: 500 });
   }
 }
 
@@ -207,7 +207,7 @@ export async function POST(
     });
   } catch (error: any) {
     console.error("[MESSAGES_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to send message", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
   }
 }
 
@@ -269,6 +269,6 @@ export async function DELETE(
     return NextResponse.json({ success: true, message: "Conversation deleted successfully" });
   } catch (error: any) {
     console.error("[MESSAGES_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete message or conversation", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete message or conversation" }, { status: 500 });
   }
 }

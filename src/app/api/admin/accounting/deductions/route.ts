@@ -297,6 +297,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
     console.error("[ADMIN_DEDUCTIONS_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to record deduction" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to record deduction" }, { status: 500 });
   }
 }

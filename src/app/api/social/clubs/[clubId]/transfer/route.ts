@@ -95,7 +95,7 @@ export async function POST(
   } catch (error: any) {
     console.error("[CLUB_TRANSFER_OWNERSHIP_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to transfer club ownership", details: error?.message },
+      { error: "Failed to transfer club ownership" },
       { status: 500 }
     );
   }

@@ -68,6 +68,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, roomId: room.id, message: "Joined Study Room!" });
   } catch (error: any) {
     console.error("[ROOM_JOIN_ERROR]", error);
-    return NextResponse.json({ error: "Failed to join room", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to join room" }, { status: 500 });
   }
 }

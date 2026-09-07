@@ -75,6 +75,6 @@ export async function POST(
     });
   } catch (error: any) {
     console.error("[CLUB_INVITE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to send club invites", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to send club invites" }, { status: 500 });
   }
 }

@@ -66,7 +66,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[CLUB_MEMBERS_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch club members", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch club members" }, { status: 500 });
   }
 }
 
@@ -140,7 +140,7 @@ export async function PATCH(
     });
   } catch (error: any) {
     console.error("[CLUB_MEMBERS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update member role", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update member role" }, { status: 500 });
   }
 }
 
@@ -227,7 +227,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("[CLUB_MEMBER_REMOVE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to remove member", details: error?.message },
+      { error: "Failed to remove member" },
       { status: 500 }
     );
   }

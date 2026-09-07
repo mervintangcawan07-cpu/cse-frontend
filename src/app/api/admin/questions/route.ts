@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     const err = error as Error;
     console.error("[QUESTIONS_GET_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to fetch questions.", details: err?.message },
+      { error: "Failed to fetch questions." },
       { status: 500 }
     );
   }
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     const err = error as Error;
     console.error("[QUESTIONS_POST_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to create question.", details: err?.message },
+      { error: "Failed to create question." },
       { status: 500 }
     );
   }
@@ -190,7 +190,7 @@ export async function PUT(request: Request) {
     const err = error as Error;
     console.error("[QUESTIONS_PUT_ERROR]", err);
     return NextResponse.json(
-      { error: "Failed to update question.", details: err?.message },
+      { error: "Failed to update question." },
       { status: 500 }
     );
   }
@@ -235,6 +235,6 @@ export async function DELETE(request: Request) {
   } catch (error: unknown) {
     const err = error as Error;
     console.error("[QUESTIONS_DELETE_ERROR]", err);
-    return NextResponse.json({ error: "Failed to soft-delete question(s).", details: err?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to soft-delete question(s)." }, { status: 500 });
   }
 }

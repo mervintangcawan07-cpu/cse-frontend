@@ -93,7 +93,7 @@ export async function GET(
     });
   } catch (error: any) {
     console.error("[CLUB_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch study club", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch study club" }, { status: 500 });
   }
 }
 
@@ -137,7 +137,7 @@ export async function DELETE(
   } catch (error: any) {
     console.error("[CLUB_DELETE_ERROR]", error);
     return NextResponse.json(
-      { error: "Failed to delete study club", details: error?.message },
+      { error: "Failed to delete study club" },
       { status: 500 }
     );
   }

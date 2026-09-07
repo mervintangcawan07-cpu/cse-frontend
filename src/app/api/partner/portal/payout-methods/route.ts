@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error("[PARTNER_PAYOUT_METHODS_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to add payout method" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to add payout method" }, { status: 500 });
   }
 }
 
@@ -101,7 +101,7 @@ export async function PATCH(request: Request) {
     });
   } catch (error: any) {
     console.error("[PARTNER_PAYOUT_METHODS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to set default method" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to set default method" }, { status: 500 });
   }
 }
 

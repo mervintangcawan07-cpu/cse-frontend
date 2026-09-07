@@ -140,7 +140,7 @@ export async function GET(request: Request) {
     });
   } catch (error: any) {
     console.error("[USER_MISTAKES_GET_ERROR]", error);
-    return NextResponse.json({ error: "Failed to fetch mistakes notebook", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch mistakes notebook" }, { status: 500 });
   }
 }
 
@@ -242,7 +242,7 @@ export async function POST(request: Request) {
     });
   } catch (error: any) {
     console.error("[USER_MISTAKES_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to process mistake practice", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to process mistake practice" }, { status: 500 });
   }
 }
 
@@ -273,6 +273,6 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Invalid delete parameters" }, { status: 400 });
   } catch (error: any) {
     console.error("[USER_MISTAKES_DELETE_ERROR]", error);
-    return NextResponse.json({ error: "Failed to delete mistake entry", details: error?.message }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete mistake entry" }, { status: 500 });
   }
 }

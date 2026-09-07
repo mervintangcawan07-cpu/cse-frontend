@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
     console.error("[ADMIN_PERIODS_POST_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to create period" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create period" }, { status: 500 });
   }
 }
 
@@ -164,6 +164,6 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
     console.error("[ADMIN_PERIODS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: error.message || "Failed to update period" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update period" }, { status: 500 });
   }
 }

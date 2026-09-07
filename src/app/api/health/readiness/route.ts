@@ -23,7 +23,7 @@ export async function GET() {
     isReady = false;
     checks.database = {
       status: "DOWN",
-      error: err?.message || "Failed to query database",
+      error: "Database connectivity check failed",
     };
   }
 
