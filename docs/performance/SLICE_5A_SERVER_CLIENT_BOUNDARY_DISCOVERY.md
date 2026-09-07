@@ -91,7 +91,7 @@ The GovStudyX production codebase incorporates cumulative hardening across four 
   - Added authoritative Next.js Data Cache tags for Reviewer (`StudyNote`) and Reading Materials (`Handbook`) catalogs.
   - Preserved the stable handbook binary streaming route (`/api/reading-materials/file?id=<handbookId>`) using weak ETag validation, ETags derived from handbook identity/update state, `If-None-Match`, metadata-only validation when possible, `304 Not Modified` on unchanged resources, private browser revalidation, and CDN `no-store`.
   - Enforced elimination drill content eligibility using the production predicate: `deletedAt === null` AND (`category` equals `"Elimination Drill"` case-insensitively OR `subtopic` contains `"Elimination Drill"` case-insensitively). The public route does not fall back to ordinary Question Bank questions or bundled sample content.
-  - Enforced flashcard eligibility (filtering deleted/unverified content, handling legitimate empty banks).
+  - Enforced active flashcard eligibility using `deletedAt: null`, with no auto-seeded or bundled current flashcard fallback and legitimate empty banks.
   - Guaranteed Trash / restore / purge referential integrity.
 
 ---
