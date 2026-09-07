@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FooterVisibility from "@/components/FooterVisibility";
 import CookieConsent from "@/components/common/CookieConsent";
 import { siteConfig } from "@/lib/config/site";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -61,13 +62,15 @@ export default function RootLayout({
               {children}
             </main>
           </AuthProvider>
-
-          {/* Global Footer */}
-          <Footer />
-
-          {/* Cookie Consent Banner */}
-          <CookieConsent />
         </ThemeProvider>
+
+        {/* Global Footer */}
+        <FooterVisibility>
+          <Footer />
+        </FooterVisibility>
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </body>
     </html>
   );
