@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export async function GET(
   request: Request,
@@ -23,9 +24,7 @@ export async function GET(
       Object.keys(process.env).length === 0;
 
     const isStudyTogetherActive =
-      isMockTestEnvironment ||
-      process.env.STUDY_TOGETHER_ENABLED === "true" ||
-      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+      isMockTestEnvironment || isStudyTogetherEnabled();
 
     if (!isStudyTogetherActive) {
       return NextResponse.json(
@@ -124,9 +123,7 @@ export async function POST(
       Object.keys(process.env).length === 0;
 
     const isStudyTogetherActive =
-      isMockTestEnvironment ||
-      process.env.STUDY_TOGETHER_ENABLED === "true" ||
-      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+      isMockTestEnvironment || isStudyTogetherEnabled();
 
     if (!isStudyTogetherActive) {
       return NextResponse.json(
@@ -255,9 +252,7 @@ export async function DELETE(
       Object.keys(process.env).length === 0;
 
     const isStudyTogetherActive =
-      isMockTestEnvironment ||
-      process.env.STUDY_TOGETHER_ENABLED === "true" ||
-      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+      isMockTestEnvironment || isStudyTogetherEnabled();
 
     if (!isStudyTogetherActive) {
       return NextResponse.json(

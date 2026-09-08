@@ -36,9 +36,7 @@ async function runGatingTestSuite() {
   );
 
   // Without environment variables set, functions must return false
-  delete process.env.STUDY_TOGETHER_ENABLED;
   delete process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED;
-  delete process.env.DUEL_ENABLED;
   delete process.env.NEXT_PUBLIC_DUEL_ENABLED;
 
   assert.strictEqual(
@@ -132,8 +130,8 @@ async function runGatingTestSuite() {
   // SECTION 3: WAVE 1 REVERSIBILITY (STUDY TOGETHER ONLY)
   // -------------------------------------------------------------------------
   console.log("Testing Section 3: Wave 1 Reversibility (STUDY_TOGETHER_ENABLED=true, DUEL_ENABLED=false)...");
-  process.env.STUDY_TOGETHER_ENABLED = "true";
-  delete process.env.DUEL_ENABLED;
+  process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED = "true";
+  delete process.env.NEXT_PUBLIC_DUEL_ENABLED;
 
   assert.strictEqual(isStudyTogetherEnabled(), true, "Study Together must be enabled");
   assert.strictEqual(isDuelEnabled(), false, "Duels must remain disabled");
@@ -166,8 +164,8 @@ async function runGatingTestSuite() {
   // SECTION 4: WAVE 2 REVERSIBILITY (DUEL ONLY)
   // -------------------------------------------------------------------------
   console.log("Testing Section 4: Wave 2 Reversibility (STUDY_TOGETHER_ENABLED=false, DUEL_ENABLED=true)...");
-  delete process.env.STUDY_TOGETHER_ENABLED;
-  process.env.DUEL_ENABLED = "true";
+  delete process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED;
+  process.env.NEXT_PUBLIC_DUEL_ENABLED = "true";
 
   assert.strictEqual(isStudyTogetherEnabled(), false, "Study Together must be disabled");
   assert.strictEqual(isDuelEnabled(), true, "Duels must be enabled");
@@ -199,8 +197,8 @@ async function runGatingTestSuite() {
   // SECTION 5: FULL ACTIVATION (BOTH ENABLED)
   // -------------------------------------------------------------------------
   console.log("Testing Section 5: Full Launch Reversibility (Both enabled)...");
-  process.env.STUDY_TOGETHER_ENABLED = "true";
-  process.env.DUEL_ENABLED = "true";
+  process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED = "true";
+  process.env.NEXT_PUBLIC_DUEL_ENABLED = "true";
 
   assert.strictEqual(isStudyTogetherEnabled(), true);
   assert.strictEqual(isDuelEnabled(), true);
@@ -221,8 +219,8 @@ async function runGatingTestSuite() {
   assert.notStrictEqual(fullDuelApi.status, 503);
 
   // Restore env to clean default OFF state
-  delete process.env.STUDY_TOGETHER_ENABLED;
-  delete process.env.DUEL_ENABLED;
+  delete process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED;
+  delete process.env.NEXT_PUBLIC_DUEL_ENABLED;
   console.log("✓ Section 5 Passed: Full activation allows both features cleanly; env restored to OFF.\n");
 
   // -------------------------------------------------------------------------

@@ -3,6 +3,7 @@ import { findBankQuestions } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { isDuelEnabled } from "@/lib/config/features";
 
 export async function POST() {
   try {
@@ -12,9 +13,7 @@ export async function POST() {
       Object.keys(process.env).length === 0;
 
     const isDuelActive =
-      isMockTestEnvironment ||
-      process.env.DUEL_ENABLED === "true" ||
-      process.env.NEXT_PUBLIC_DUEL_ENABLED === "true";
+      isMockTestEnvironment || isDuelEnabled();
 
     if (!isDuelActive) {
       return NextResponse.json(

@@ -50,10 +50,8 @@ Both features are controlled independently. When the environment variables are a
 
 | Environment Variable | Scope | Description | Default |
 |---|---|---|---|
-| `STUDY_TOGETHER_ENABLED` | Server | Enables Study Together rooms, voice, whiteboard, and chat | `false` |
-| `NEXT_PUBLIC_STUDY_TOGETHER_ENABLED` | Client / Browser | Enables client UI links and components for Study Together | `false` |
-| `DUEL_ENABLED` | Server | Enables 1v1 duel matchmaking, challenges, and answers | `false` |
-| `NEXT_PUBLIC_DUEL_ENABLED` | Client / Browser | Enables client UI cards and buttons for 1v1 Duels | `false` |
+| `NEXT_PUBLIC_STUDY_TOGETHER_ENABLED` | Deployment / Server + Client UI | Controls Study Together pre-launch availability; server/proxy/API enforcement remains authoritative | `false` |
+| `NEXT_PUBLIC_DUEL_ENABLED` | Deployment / Server + Client UI | Controls Duel pre-launch availability; server/proxy/API enforcement remains authoritative | `false` |
 
 Central configuration module: [`src/lib/config/features.ts`](../../src/lib/config/features.ts)
 
@@ -66,9 +64,8 @@ To activate the Study Together Hub while keeping 1v1 Duels completely disabled:
 
 1. In `.env` (or production hosting dashboard e.g., Vercel, Railway, AWS):
    ```bash
-   STUDY_TOGETHER_ENABLED="true"
    NEXT_PUBLIC_STUDY_TOGETHER_ENABLED="true"
-   # Leave DUEL_ENABLED unset or "false"
+   # Leave NEXT_PUBLIC_DUEL_ENABLED unset or "false"
    ```
 2. Restart or redeploy the application.
 3. Verify:
@@ -82,8 +79,7 @@ To activate 1v1 Duels while keeping Study Together completely disabled:
 
 1. In `.env`:
    ```bash
-   # Leave STUDY_TOGETHER_ENABLED unset or "false"
-   DUEL_ENABLED="true"
+   # Leave NEXT_PUBLIC_STUDY_TOGETHER_ENABLED unset or "false"
    NEXT_PUBLIC_DUEL_ENABLED="true"
    ```
 2. Restart or redeploy the application.
@@ -98,9 +94,7 @@ To enable both features simultaneously:
 
 1. In `.env`:
    ```bash
-   STUDY_TOGETHER_ENABLED="true"
    NEXT_PUBLIC_STUDY_TOGETHER_ENABLED="true"
-   DUEL_ENABLED="true"
    NEXT_PUBLIC_DUEL_ENABLED="true"
    ```
 2. Restart or redeploy the application.
@@ -139,9 +133,7 @@ If any performance bottleneck, LiveKit connection surge, or game-state synchroni
 
 1. **Remove or reset the variables:**
    ```bash
-   STUDY_TOGETHER_ENABLED="false"
    NEXT_PUBLIC_STUDY_TOGETHER_ENABLED="false"
-   DUEL_ENABLED="false"
    NEXT_PUBLIC_DUEL_ENABLED="false"
    ```
 2. **Redeploy / restart server process.**
@@ -158,4 +150,3 @@ If any performance bottleneck, LiveKit connection surge, or game-state synchroni
 - **No Data Deletion:** Pre-existing study rooms, matches, messages, and player records remain intact.
 - **Question Bank Isolation:** Question bank isolation tests pass 63/63 (`npx tsx src/scripts/test-question-bank-isolation.ts`). Elimination Drills and standard exams are completely decoupled from Duel/Social gating.
 - **Authentication & RBAC:** Session cookies, JWT verification, and administrative routing remain intact and untouched.
-
