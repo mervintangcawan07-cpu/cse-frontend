@@ -1,0 +1,2 @@
+ALTER TABLE "Question"
+ALTER COLUMN "bankType" SET NOT NULL;
