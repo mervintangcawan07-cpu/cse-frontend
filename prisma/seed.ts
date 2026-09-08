@@ -109,7 +109,7 @@ async function main() {
       where: { prompt: q.prompt },
     });
     if (!existing) {
-      await prisma.question.create({ data: q });
+      await prisma.question.create({ data: { ...q, bankType: "ORDINARY" } });
     }
   }
   console.log("✓ Question bank verified!");

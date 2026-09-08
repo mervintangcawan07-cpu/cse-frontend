@@ -1,6 +1,6 @@
 // Relative Path: src/app/api/drills/elimination/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { findBankQuestions } from "@/lib/questionBank";
 import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const seenIds = new Set(seenParam.split(",").filter(Boolean));
     const LIMIT = 10;
 
-    const allDrillQuestions = await prisma.question.findMany({
+    const allDrillQuestions = await findBankQuestions({
       where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });

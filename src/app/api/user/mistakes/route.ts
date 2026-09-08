@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere, isEliminationQuestion } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/user/mistakes/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -16,6 +18,7 @@ export async function GET(request: Request) {
 
     const whereClause: any = {
       userId,
+      question: { deletedAt: null },
     };
 
     if (status === "ACTIVE") {
@@ -26,6 +29,7 @@ export async function GET(request: Request) {
 
     if (category && category !== "All") {
       whereClause.question = {
+        ...whereClause.question,
         category,
       };
     }
@@ -47,6 +51,8 @@ export async function GET(request: Request) {
         question: {
           select: {
             id: true,
+            deletedAt: true,
+            bankType: true,
             category: true,
             subtopic: true,
             prompt: true,
@@ -72,19 +78,22 @@ export async function GET(request: Request) {
         },
       },
       orderBy: { lastAttemptAt: "desc" },
-    });
+    }).then(rows => rows.flatMap(mistake => {
+      const { deletedAt, ...question } = mistake.question;
+      return deletedAt !== null || isEliminationQuestion(question) ? [] : [{ ...mistake, question }];
+    }));
 
     // Compute summary stats across all user mistakes
     const allUserMistakes = await prisma.userMistake.findMany({
-      where: { userId },
+      where: { userId, question: { deletedAt: null } },
       select: {
         id: true,
         isMastered: true,
         incorrectCount: true,
         correctCount: true,
-        question: { select: { category: true } },
+        question: { select: { category: true, subtopic: true, bankType: true, deletedAt: true } },
       },
-    });
+    }).then(rows => rows.filter(mistake => mistake.question.deletedAt === null && !isEliminationQuestion(mistake.question)));
 
     const totalRecorded = allUserMistakes.length;
     const activeCount = allUserMistakes.filter((m) => !m.isMastered).length;
@@ -157,8 +166,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Question ID is required" }, { status: 400 });
     }
 
-    const question = await prisma.question.findUnique({
-      where: { id: questionId },
+    const [question] = await findBankQuestions({
+      where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere([questionId])),
+      take: 1,
       select: {
         id: true,
         answerIndex: true,

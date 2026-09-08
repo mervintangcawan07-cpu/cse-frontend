@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { countBankQuestions, findBankQuestions } from "@/lib/questionBank";
 // Relative Path: src/app/api/questions/daily/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -22,6 +24,25 @@ function stringToHash(str: string): number {
   return Math.abs(hash);
 }
 
+async function selectDailyQuestion(dateString: string) {
+  // Both requests use the same normalized predicate and stable row ordering.
+  const where = activeOrdinaryQuestionWhere();
+  const totalQuestions = await countBankQuestions(where);
+  if (!totalQuestions) return null;
+  const [question] = await findBankQuestions({
+    where,
+    orderBy: { id: "asc" },
+    skip: stringToHash(dateString) % totalQuestions,
+    take: 1,
+    select: {
+      id: true, category: true, subtopic: true, prompt: true,
+      options: true, optionA: true, optionB: true, optionC: true, optionD: true,
+      answerIndex: true, explanation: true, imageUrl: true,
+    },
+  });
+  return question ?? null;
+}
+
 export async function GET(request: Request) {
   try {
     const authenticatedUser = await getAuthenticatedUser();
@@ -29,40 +50,9 @@ export async function GET(request: Request) {
 
     const dateString = getTodayDateString();
 
-    // 1. Fetch total count of active questions
-    const totalQuestions = await prisma.question.count({
-      where: { deletedAt: null },
-    });
-
-    if (totalQuestions === 0) {
-      return NextResponse.json({ error: "No active questions available" }, { status: 404 });
-    }
-
-    // 2. Select deterministic question for today
-    const questionIndex = stringToHash(dateString) % totalQuestions;
-    const todayQuestions = await prisma.question.findMany({
-      where: { deletedAt: null },
-      skip: questionIndex,
-      take: 1,
-      select: {
-        id: true,
-        category: true,
-        subtopic: true,
-        prompt: true,
-        options: true,
-        optionA: true,
-        optionB: true,
-        optionC: true,
-        optionD: true,
-        answerIndex: true,
-        explanation: true,
-        imageUrl: true,
-      },
-    });
-
-    const question = todayQuestions[0];
+    const question = await selectDailyQuestion(dateString);
     if (!question) {
-      return NextResponse.json({ error: "Question not found" }, { status: 404 });
+      return NextResponse.json({ error: "No active questions available" }, { status: 404 });
     }
 
     const options =
@@ -173,18 +163,12 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // Verify question and evaluate answer
-    const question = await prisma.question.findUnique({
-      where: { id: questionId },
-      select: {
-        id: true,
-        answerIndex: true,
-        explanation: true,
-      },
-    });
-
-    if (!question) {
-      return NextResponse.json({ error: "Question not found" }, { status: 404 });
+    const question = await selectDailyQuestion(dateString);
+    if (!question || question.id !== questionId) {
+      return NextResponse.json(
+        { error: "This is not the current active Daily Question. Refresh the challenge and try again." },
+        { status: 422 }
+      );
     }
 
     const isCorrect = selectedIndex === question.answerIndex;

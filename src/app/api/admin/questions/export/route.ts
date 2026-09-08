@@ -1,7 +1,7 @@
 // Relative Path: src/app/api/admin/questions/export/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
-import { prisma } from "@/lib/prisma";
+import { andQuestionWhere, findBankQuestions, questionTextWhere } from "@/lib/questionBank";
 import { generateQuestionsCSV } from "@/lib/csvParser";
 import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 import type { Prisma } from "@prisma/client";
@@ -24,17 +24,17 @@ export async function GET(request: Request) {
     const category = searchParams.get("category");
     const subtopic = searchParams.get("subtopic");
 
-    const whereClause: Prisma.QuestionWhereInput = activeOrdinaryQuestionWhere();
+    let whereClause: Prisma.Sql = activeOrdinaryQuestionWhere();
 
     if (category && category !== "All") {
-      whereClause.category = { equals: category, mode: "insensitive" };
+      whereClause = andQuestionWhere(whereClause, questionTextWhere("category", category));
     }
 
     if (subtopic && subtopic !== "All") {
-      whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+      whereClause = andQuestionWhere(whereClause, questionTextWhere("subtopic", subtopic));
     }
 
-    const questions = await prisma.question.findMany({
+    const questions = await findBankQuestions({
       where: whereClause,
       orderBy: [{ category: "asc" }, { createdAt: "desc" }],
     });

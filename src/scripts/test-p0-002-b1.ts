@@ -629,7 +629,8 @@ function runSourceIntegratedRouteTests(): void {
       examStart.includes("shuffleArray") &&
       examStart.includes("prisma.examResult.findMany") &&
       examStart.includes("prisma.userMistake.findMany") &&
-      examStart.includes("prisma.question.findMany") &&
+      examStart.includes("findBankQuestions") &&
+      examStart.includes("activeOrdinaryQuestionWhere()") &&
       examStart.includes("answerIndex: shuffledOptions.findIndex") &&
       examStart.includes("explanation: q.explanation || null"),
     "B2.2 exam start preserves selection, randomization, history, mistake, answer, and explanation behavior"
@@ -1761,14 +1762,16 @@ function runSourceIntegratedRouteTests(): void {
   assert(
     roomTopicGet.includes("room.participants.some") &&
       roomTopicGet.includes("!room.isPublic && !isMemberOrHost") &&
-      roomTopicGet.includes("Prisma.QuestionWhereInput") &&
-      roomTopicGet.includes("deletedAt: null") &&
-      roomTopicGet.includes("prisma.question.findMany") &&
-      roomTopicGet.includes("prisma.question.count") &&
+      roomTopicGet.includes("Prisma.Sql") &&
+      roomTopicGet.includes("activeOrdinaryQuestionWhere()") &&
+      roomTopicGet.includes("findBankQuestions") &&
+      roomTopicGet.includes("countBankQuestions") &&
       roomTopicGet.includes("skip,") &&
       roomTopicGet.includes("take: limit") &&
       roomTopicPost.includes("room.hostId !== userId") &&
-      roomTopicPost.includes("prisma.question.findUnique") &&
+      roomTopicPost.includes("findBankQuestions") &&
+      roomTopicPost.includes("activeOrdinaryQuestionWhere()") &&
+      roomTopicPost.includes("questionIdsWhere([questionId])") &&
       roomTopicPost.includes('topicType === "IMAGE"') &&
       roomTopicPost.includes("imageUrl.length > 7.5 * 1024 * 1024") &&
       roomTopicPost.includes("prisma.studyRoom.update") &&

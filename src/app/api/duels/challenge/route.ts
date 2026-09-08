@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { findBankQuestions } from "@/lib/questionBank";
 // Relative Path: src/app/api/duels/challenge/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -33,7 +35,7 @@ export async function POST(request: Request) {
     }
 
     // Pick 5 rapid-fire questions across subjects
-    const rawQuestions = await prisma.question.findMany({ take: 20 });
+    const rawQuestions = await findBankQuestions({ where: activeOrdinaryQuestionWhere(), take: 20 });
     const shuffled = [...rawQuestions].sort(() => Math.random() - 0.5).slice(0, 5);
     const formattedQuestions = shuffled.map((q) => {
       const indexedOptions = q.options.map((opt, idx) => ({

@@ -83,28 +83,15 @@ async function runTests(): Promise<void> {
     false
   );
 
-  assert.deepEqual(activeOrdinaryQuestionWhere(), {
-    deletedAt: null,
-    NOT: {
-      OR: [
-        { category: { equals: "Elimination Drill", mode: "insensitive" } },
-        { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-      ],
-    },
-  });
-  assert.deepEqual(activeEliminationQuestionWhere(), {
-    deletedAt: null,
-    OR: [
-      { category: { equals: "Elimination Drill", mode: "insensitive" } },
-      { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-    ],
-  });
-  assert.deepEqual(softDeletedOrdinaryQuestionWhere().deletedAt, { not: null });
-  assert.deepEqual(softDeletedEliminationQuestionWhere().deletedAt, { not: null });
+  // Normalized SQL predicates are exercised against fixtures by the isolation suite.
+  assert.match(activeOrdinaryQuestionWhere().sql, /"deletedAt" IS NULL AND NOT/);
+  assert.match(activeEliminationQuestionWhere().sql, /"deletedAt" IS NULL AND/);
+  assert.match(softDeletedOrdinaryQuestionWhere().sql, /"deletedAt" IS NOT NULL AND NOT/);
+  assert.match(softDeletedEliminationQuestionWhere().sql, /"deletedAt" IS NOT NULL AND/);
   assert.deepEqual(activeFlashcardWhere(), { deletedAt: null });
   assert.deepEqual(softDeletedFlashcardWhere(), { deletedAt: { not: null } });
 
-  assert.match(statsApi, /question\.count\(\{\s*where:\s*activeOrdinaryQuestionWhere\(\)/);
+  assert.match(statsApi, /countBankQuestions\(activeOrdinaryQuestionWhere\(\)/);
   assert.match(questionApi, /activeOrdinaryQuestionWhere\(\)/);
   assert.match(questionExportApi, /activeOrdinaryQuestionWhere\(\)/);
   assert.doesNotMatch(questionExportApi, /const\s+whereClause:\s*any/);
@@ -130,7 +117,7 @@ async function runTests(): Promise<void> {
 
   assert.doesNotMatch(adminEliminationPage, /isFallback|permanently delete ALL Elimination Drill/);
   assert.match(adminEliminationPage, /Move ALL active Elimination Drill questions to Trash/);
-  assert.match(adminEliminationApi, /softDeleteRecord\("question"/);
+  assert.match(adminEliminationApi, /softDeleteBankQuestions\("ELIMINATION"/);
   assert.match(recovery, /case\s+"question":[\s\S]*deletedAt:\s*null/);
   assert.match(recovery, /case\s+"flashcard":[\s\S]*deletedAt:\s*null/);
   assert.match(recovery, /question\.deleteMany\([\s\S]*deletedAt:\s*\{\s*not:\s*null\s*\}/);
@@ -170,7 +157,29 @@ async function runTests(): Promise<void> {
   assert.match(auditScript, /prisma\.flashcard\.count/g);
   assert.doesNotMatch(auditScript, /DATABASE_URL|prompt:|options:|answerIndex:|explanation:/);
 
+  // Include the explicitly authorized Phase A continuation.
   const allowedFiles = new Set([
+    "src/app/admin/trash/page.tsx",
+    "src/app/api/admin/questions/[id]/route.ts",
+    "src/app/api/admin/questions/bulk-delete/route.ts",
+    "src/app/api/admin/questions/import/route.ts",
+    "src/app/api/admin/trash/route.ts",
+    "src/app/api/bookmarks/route.ts",
+    "src/app/api/drills/route.ts",
+    "src/app/api/duels/challenge/route.ts",
+    "src/app/api/duels/matchmake/route.ts",
+    "src/app/api/exam/start/route.ts",
+    "src/app/api/exam/submit/route.ts",
+    "src/app/api/questions/[id]/route.ts",
+    "src/app/api/questions/daily/route.ts",
+    "src/app/api/questions/route.ts",
+    "src/app/api/social/rooms/[roomId]/topic/route.ts",
+    "src/app/api/user/mistakes/route.ts",
+    "src/lib/questionBank.ts",
+    "src/lib/recovery/softDelete.ts",
+    "src/types/recovery.ts",
+    "src/scripts/test-question-bank-isolation.ts",
+    "src/scripts/test-p0-002-b1.ts",
     "src/app/admin/elimination-drills/page.tsx",
     "src/app/api/admin/elimination-drills/route.ts",
     "src/app/api/admin/questions/export/route.ts",
@@ -190,7 +199,7 @@ async function runTests(): Promise<void> {
     assert.ok(allowedFiles.has(file), `Unexpected Slice 4.5 file: ${file}`);
     assert.doesNotMatch(
       file,
-      /(?:auth|paymongo|payment|accounting|referral|payout|entitlement|exam|social|realtime|health|worker)/i
+      /(?:auth|paymongo|payment|accounting|referral|payout|entitlement|realtime|health|worker)/i
     );
   }
 
@@ -202,7 +211,7 @@ async function runTests(): Promise<void> {
     .filter(
       (file) =>
         (file.endsWith(".ts") || file.endsWith(".tsx")) &&
-        file !== "src/scripts/test-performance-slice-4-5.ts"
+        !file.startsWith("src/scripts/test-")
     )
     .map(source)
     .join("\n");

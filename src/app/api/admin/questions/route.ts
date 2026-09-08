@@ -1,10 +1,10 @@
 // Relative Path: src/app/api/admin/questions/route.ts
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { softDeleteRecord } from "@/lib/recovery/softDelete";
+import { andQuestionWhere, findBankQuestions, questionTextWhere, softDeleteBankQuestions, updateBankQuestion } from "@/lib/questionBank";
 import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
-import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { activeOrdinaryQuestionWhere, assertQuestionBankMetadata, questionBankErrorResponse } from "@/lib/contentEligibility";
 
 export async function GET(request: Request) {
   try {
@@ -14,13 +14,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
-    const where: Prisma.QuestionWhereInput = activeOrdinaryQuestionWhere();
+    let where: Prisma.Sql = activeOrdinaryQuestionWhere();
 
     if (category && category !== "All") {
-      where.category = category;
+      where = andQuestionWhere(where, questionTextWhere("category", category, false, false));
     }
 
-    const questions = await prisma.question.findMany({
+    const questions = await findBankQuestions({
       where,
       orderBy: { createdAt: "desc" },
     });
@@ -31,6 +31,8 @@ export async function GET(request: Request) {
       count: questions.length,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[QUESTIONS_GET_ERROR]", err);
     return NextResponse.json(
@@ -76,8 +78,11 @@ export async function POST(request: Request) {
       );
     }
 
+    assertQuestionBankMetadata({ category: category || "General", subtopic: subtopic || "General" }, "ORDINARY");
+
     const createdQuestion = await prisma.question.create({
       data: {
+        bankType: "ORDINARY",
         category: category || "General",
         subtopic: subtopic || "General",
         prompt,
@@ -108,6 +113,8 @@ export async function POST(request: Request) {
       question: createdQuestion,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[QUESTIONS_POST_ERROR]", err);
     return NextResponse.json(
@@ -154,9 +161,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    const updatedQuestion = await prisma.question.update({
-      where: { id },
-      data: {
+    const updatedQuestion = await updateBankQuestion("ORDINARY", id, {
         category: category || "General",
         subtopic: subtopic || "General",
         prompt,
@@ -179,7 +184,6 @@ export async function PUT(request: Request) {
         difficulty,
         tags: Array.isArray(tags) ? tags : [],
         skillTested,
-      },
     });
 
     return NextResponse.json({
@@ -187,6 +191,8 @@ export async function PUT(request: Request) {
       question: updatedQuestion,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[QUESTIONS_PUT_ERROR]", err);
     return NextResponse.json(
@@ -223,16 +229,16 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "No question ID(s) provided for deletion." }, { status: 400 });
     }
 
-    for (const id of idsToDelete) {
-      await softDeleteRecord("question", id, user.id);
-    }
+    const deletedCount = await softDeleteBankQuestions("ORDINARY", idsToDelete, user.id);
 
     return NextResponse.json({
       success: true,
-      deletedCount: idsToDelete.length,
-      message: `Successfully moved ${idsToDelete.length} question(s) to Trash Bin.`,
+      deletedCount,
+      message: `Successfully moved ${deletedCount} question(s) to Trash Bin.`,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[QUESTIONS_DELETE_ERROR]", err);
     return NextResponse.json({ error: "Failed to soft-delete question(s)." }, { status: 500 });

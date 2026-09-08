@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, orQuestionWhere, questionIdsWhere, questionTextWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/exam/start/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -119,19 +121,13 @@ export async function GET(request: Request) {
     }
 
     // 3. Fetch ALL matching non-deleted questions in one DB query
-    const allQuestions = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        category: { in: requiredCategories, mode: "insensitive" },
-        NOT: [
-          { category: { equals: "Elimination Drill", mode: "insensitive" } },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
-        // Pool filtering: MISTAKES_ONLY filter at DB level for efficiency
+    const allQuestions = await findBankQuestions({
+      where: andQuestionWhere(
+        activeOrdinaryQuestionWhere(),
+        orQuestionWhere(...requiredCategories.map(category => questionTextWhere("category", category))),
         ...(pool === "MISTAKES_ONLY" && mistakeQuestionIds.size > 0
-          ? { id: { in: Array.from(mistakeQuestionIds) } }
-          : {}),
-      },
+          ? [questionIdsWhere(Array.from(mistakeQuestionIds))] : []),
+      ),
       select: {
         id: true,
         category: true,

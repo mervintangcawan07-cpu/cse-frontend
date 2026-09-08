@@ -1,3 +1,4 @@
+import { countBankQuestions } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
@@ -11,7 +12,7 @@ export async function GET(request: Request) {
     const [totalUsers, paidUsers, totalQuestions, totalExams] = await Promise.all([
       prisma.user.count().catch(() => 0),
       prisma.user.count({ where: { isPaid: true } }).catch(() => 0),
-      prisma.question.count({ where: activeOrdinaryQuestionWhere() }).catch(() => 0),
+      countBankQuestions(activeOrdinaryQuestionWhere()).catch(() => 0),
       prisma.examResult.count().catch(() => 0),
     ]);
 
