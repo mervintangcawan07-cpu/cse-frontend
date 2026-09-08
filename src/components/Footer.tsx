@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/lib/config/site";
+import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 
 export default function Footer() {
   return (
@@ -61,11 +62,13 @@ export default function Footer() {
                   Recall Flashcards
                 </Link>
               </li>
-              <li>
-                <Link href="/social" className="hover:text-blue-400 transition">
-                  Study Together Hub 👥
-                </Link>
-              </li>
+              {STUDY_TOGETHER_ENABLED && (
+                <li>
+                  <Link href="/social" className="hover:text-blue-400 transition">
+                    Study Together Hub 👥
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/pricing" className="hover:text-blue-400 transition">
                   PRO Passes &amp; Pricing

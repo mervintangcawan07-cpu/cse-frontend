@@ -2,11 +2,20 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export async function POST(request: Request) {
   try {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const body = await request.json();

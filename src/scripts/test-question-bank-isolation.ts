@@ -158,6 +158,12 @@ const mocks: Record<string, any> = {
   "@/lib/streakEngine": { recordUserActivityStreak: async () => ({ currentStreak: 1 }) },
   "@/lib/badges": { evaluateAndAwardBadges: async () => [] },
   "@/lib/notifications": { createNotification: async () => undefined },
+  "@/lib/config/features": {
+    isStudyTogetherEnabled: () => true,
+    isDuelEnabled: () => true,
+    STUDY_TOGETHER_ENABLED: true,
+    DUEL_ENABLED: true,
+  },
   "@/lib/logger/logger": { logger: quiet },
   "@/lib/cache": { CACHE_PROFILES: { PUBLIC: {} }, cachedJsonResponse: (data: any) => Response.json(data) },
   "next/server": { NextResponse: Response, NextRequest: Request },

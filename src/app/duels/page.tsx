@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ChallengeDuelModal from "@/components/social/ChallengeDuelModal";
+import { DUEL_ENABLED } from "@/lib/config/features";
 
 interface Question {
   id: string;
@@ -446,6 +447,41 @@ function DuelsArenaInner() {
 }
 
 export default function DuelsArenaPage() {
+  if (!DUEL_ENABLED) {
+    return (
+      <div className="max-w-xl mx-auto py-16 px-4 text-center">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-10 shadow-xl space-y-5">
+          <div className="w-16 h-16 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center text-3xl mx-auto">
+            ⚔️
+          </div>
+          <div>
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/20">
+              Pre-Launch Feature
+            </span>
+            <h1 className="text-2xl font-black text-white mt-3">1v1 Study Duels</h1>
+            <p className="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">
+              1v1 Study Duels is currently in pre-launch preparation and temporarily unavailable. Please check back soon as we finalize competitive features!
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/dashboard"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition"
+            >
+              Return to Dashboard
+            </Link>
+            <Link
+              href="/practice"
+              className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700 transition"
+            >
+              Go to Practice &amp; Prep
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Suspense
       fallback={

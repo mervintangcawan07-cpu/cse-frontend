@@ -20,6 +20,7 @@ import { ResolvedPresence } from "@/lib/social/presence";
 import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
 import { HubNavIcons, SocialTab } from "@/components/social/HubNavIcons";
 import { StudyCommonsSection } from "@/components/social/commons/StudyCommonsSection";
+import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 
 
 const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
@@ -40,7 +41,7 @@ const PRESENCE_CHOICES = [
   { id: "OFFLINE", label: "Invisible", desc: "Appear offline", dot: "bg-slate-500", emoji: "⚪" },
 ];
 
-export default function SocialDashboardPage() {
+function SocialDashboardInner() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [studyProfile, setStudyProfile] = useState<any>(null);
@@ -504,4 +505,37 @@ export default function SocialDashboardPage() {
       />
     </div>
   );
+}
+
+export default function SocialDashboardPage() {
+  if (!STUDY_TOGETHER_ENABLED) {
+    return (
+      <div className="max-w-xl mx-auto py-16 px-4 text-center">
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-10 shadow-xl space-y-5">
+          <div className="w-16 h-16 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center text-3xl mx-auto">
+            👥
+          </div>
+          <div>
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">
+              Pre-Launch Feature
+            </span>
+            <h1 className="text-2xl font-black text-white mt-3">Study Together Hub</h1>
+            <p className="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">
+              Study Together (collaborative rooms, voice, whiteboard, and community study) is currently in pre-launch preparation and temporarily unavailable. Please check back soon!
+            </p>
+          </div>
+          <div className="pt-2">
+            <Link
+              href="/dashboard"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition inline-block"
+            >
+              Return to Dashboard
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <SocialDashboardInner />;
 }

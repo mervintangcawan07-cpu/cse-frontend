@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { PublicProfileCardModal } from "@/components/social/profile/PublicProfileCardModal";
 import { PresenceBadge } from "@/components/social/presence/PresenceBadge";
+import { DUEL_ENABLED } from "@/lib/config/features";
 
 const AVATAR_MAP: Record<string, { emoji: string; bg: string }> = {
   "avatar-owl": { emoji: "🦉", bg: "from-amber-600 to-yellow-500" },
@@ -381,29 +382,31 @@ export default function ClassmatesSection() {
                       View Profile
                     </button>
                     <div className="flex items-center gap-1.5">
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          try {
-                            const res = await fetch("/api/duels/challenge", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ targetUserId: c.user.id }),
-                            });
-                            const data = await res.json();
-                            if (res.ok && data.match) {
-                              window.location.href = `/duels?matchId=${data.match.id}`;
-                            } else {
-                              alert(data.error || "Failed to challenge classmate.");
+                      {DUEL_ENABLED && (
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              const res = await fetch("/api/duels/challenge", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ targetUserId: c.user.id }),
+                              });
+                              const data = await res.json();
+                              if (res.ok && data.match) {
+                                window.location.href = `/duels?matchId=${data.match.id}`;
+                              } else {
+                                alert(data.error || "Failed to challenge classmate.");
+                              }
+                            } catch (err) {
+                              alert("Failed to send challenge.");
                             }
-                          } catch (err) {
-                            alert("Failed to send challenge.");
-                          }
-                        }}
-                        className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black rounded-lg transition cursor-pointer"
-                      >
-                        ⚔️ Duel
-                      </button>
+                          }}
+                          className="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-[10px] font-black rounded-lg transition cursor-pointer"
+                        >
+                          ⚔️ Duel
+                        </button>
+                      )}
                       <button
                         onClick={() => respondRelation(c.relationId, "REMOVE")}
                         disabled={actionLoadingId === c.relationId}

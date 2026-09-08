@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
+import { isStudyTogetherEnabled, isDuelEnabled } from "@/lib/config/features";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -38,6 +39,35 @@ export async function proxy(request: NextRequest) {
         },
       },
     );
+  }
+
+  // Authoritative Pre-Launch Feature Gating: Study Together & 1v1 Duels
+  if (!isStudyTogetherEnabled()) {
+    if (pathname === "/api/social/rooms" || pathname.startsWith("/api/social/rooms/")) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+    if (pathname === "/social" || pathname.startsWith("/social/")) {
+      const redirectUrl = new URL("/dashboard", request.url);
+      redirectUrl.searchParams.set("notice", "feature_unavailable");
+      return NextResponse.redirect(redirectUrl);
+    }
+  }
+
+  if (!isDuelEnabled()) {
+    if (pathname === "/api/duels" || pathname.startsWith("/api/duels/")) {
+      return NextResponse.json(
+        { error: "Duels are temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+    if (pathname === "/duels" || pathname.startsWith("/duels/")) {
+      const redirectUrl = new URL("/dashboard", request.url);
+      redirectUrl.searchParams.set("notice", "feature_unavailable");
+      return NextResponse.redirect(redirectUrl);
+    }
   }
 
   // 1. Static files, Next internals, public assets, API routes, and webhooks bypass proxy

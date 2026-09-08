@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { USER_REFERRAL_ENABLED } from "@/lib/referral/config";
+import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
@@ -59,7 +60,9 @@ export default function Navbar() {
     { label: "Dashboard", href: "/dashboard" },
     { label: "Practice & Prep", href: "/practice" },
     { label: "Learning Hub", href: "/learning" },
-    { label: "Study Together 👥", href: "/social" },
+    ...(STUDY_TOGETHER_ENABLED
+      ? [{ label: "Study Together 👥", href: "/social" }]
+      : []),
     ...(USER_REFERRAL_ENABLED
       ? [{ label: "Referrals 🎁", href: "/referrals" }]
       : []),
