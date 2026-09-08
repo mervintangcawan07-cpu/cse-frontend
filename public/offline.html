@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline | GovStudyX</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      padding: 2.5rem 2rem;
+      max-width: 28rem;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      background-color: #0f172a;
+      padding: 0.375rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #334155;
+    }
+    .icon-wrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 9999px;
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      margin-bottom: 1.25rem;
+    }
+    .brand {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+    p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #94a3b8;
+      margin-bottom: 1.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+    .btn:hover {
+      background-color: #1d4ed8;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .status {
+      margin-top: 1.25rem;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="alert" aria-live="polite">
+    <div class="brand">GovStudyX</div>
+    <div class="icon-wrapper" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+        <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+        <line x1="12" y1="20" x2="12.01" y2="20"></line>
+      </svg>
+    </div>
+    <h1>You're offline</h1>
+    <p>
+      An internet connection is required to securely load this page and synchronize your account.
+    </p>
+    <button class="btn" type="button" onclick="window.location.reload()">
+      Try Again
+    </button>
+    <div class="status" id="connection-status">
+      Waiting for internet connection...
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var statusEl = document.getElementById("connection-status");
+      function updateStatus() {
+        if (!statusEl) return;
+        if (navigator.onLine) {
+          statusEl.textContent = "Connection restored. Click 'Try Again' to reconnect.";
+          statusEl.style.color = "#34d399";
+        } else {
+          statusEl.textContent = "Waiting for internet connection...";
+          statusEl.style.color = "#64748b";
+        }
+      }
+      window.addEventListener("online", updateStatus);
+      window.addEventListener("offline", updateStatus);
+      updateStatus();
+    })();
+  </script>
+</body>
+</html>
