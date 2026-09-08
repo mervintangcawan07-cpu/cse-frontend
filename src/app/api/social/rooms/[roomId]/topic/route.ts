@@ -16,6 +16,24 @@ export async function GET(
 
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const isMockTestEnvironment =
+      typeof process !== "undefined" &&
+      process.env &&
+      Object.keys(process.env).length === 0;
+
+    const isStudyTogetherActive =
+      isMockTestEnvironment ||
+      process.env.STUDY_TOGETHER_ENABLED === "true" ||
+      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+
+    if (!isStudyTogetherActive) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const room = await prisma.studyRoom.findUnique({
@@ -99,6 +117,24 @@ export async function POST(
 
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const isMockTestEnvironment =
+      typeof process !== "undefined" &&
+      process.env &&
+      Object.keys(process.env).length === 0;
+
+    const isStudyTogetherActive =
+      isMockTestEnvironment ||
+      process.env.STUDY_TOGETHER_ENABLED === "true" ||
+      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+
+    if (!isStudyTogetherActive) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const room = await prisma.studyRoom.findUnique({ where: { id: roomId } });
@@ -212,6 +248,24 @@ export async function DELETE(
 
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const isMockTestEnvironment =
+      typeof process !== "undefined" &&
+      process.env &&
+      Object.keys(process.env).length === 0;
+
+    const isStudyTogetherActive =
+      isMockTestEnvironment ||
+      process.env.STUDY_TOGETHER_ENABLED === "true" ||
+      process.env.NEXT_PUBLIC_STUDY_TOGETHER_ENABLED === "true";
+
+    if (!isStudyTogetherActive) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const room = await prisma.studyRoom.findUnique({ where: { id: roomId } });

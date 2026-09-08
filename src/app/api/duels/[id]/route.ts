@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { isDuelEnabled } from "@/lib/config/features";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isDuelEnabled()) {
+      return NextResponse.json(
+        { error: "Duels are temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const { id } = await params;
     const match = await prisma.duelMatch.findUnique({
       where: { id },
@@ -27,6 +35,13 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!isDuelEnabled()) {
+      return NextResponse.json(
+        { error: "Duels are temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

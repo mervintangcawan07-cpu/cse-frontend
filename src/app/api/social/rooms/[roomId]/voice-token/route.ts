@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { AccessToken } from "livekit-server-sdk";
+import { isStudyTogetherEnabled } from "@/lib/config/features";
 import {
   VOICE_TOKEN_LIMITER,
   checkRateLimit,
@@ -16,6 +17,13 @@ export async function GET(
   try {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
 
     const rateResult = await checkRateLimit(
       VOICE_TOKEN_LIMITER,

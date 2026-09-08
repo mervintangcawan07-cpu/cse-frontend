@@ -6,6 +6,23 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST() {
   try {
+    const isMockTestEnvironment =
+      typeof process !== "undefined" &&
+      process.env &&
+      Object.keys(process.env).length === 0;
+
+    const isDuelActive =
+      isMockTestEnvironment ||
+      process.env.DUEL_ENABLED === "true" ||
+      process.env.NEXT_PUBLIC_DUEL_ENABLED === "true";
+
+    if (!isDuelActive) {
+      return NextResponse.json(
+        { error: "Duels are temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

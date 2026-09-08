@@ -3,6 +3,7 @@
 
 import React from "react";
 import { SocialTab } from "./HubNavIcons";
+import { DUEL_ENABLED } from "@/lib/config/features";
 
 interface HubModuleCardsProps {
   counts: {
@@ -34,15 +35,17 @@ export const HubModuleCards: React.FC<HubModuleCardsProps> = ({
     },
     {
       tab: "CLASSMATES" as SocialTab,
-      title: "Classmates & 1v1 Duels",
+      title: DUEL_ENABLED ? "Classmates & 1v1 Duels" : "Classmates & Study Buddies",
       icon: "🧑‍🎓",
       iconBg: "bg-emerald-50 text-emerald-600 border-emerald-100",
-      badge: counts.pendingClassmates > 0 ? `${counts.pendingClassmates} Pending` : "1v1 Duels Ready",
+      badge: counts.pendingClassmates > 0 ? `${counts.pendingClassmates} Pending` : (DUEL_ENABLED ? "1v1 Duels Ready" : "Study Buddies"),
       badgeStyle: counts.pendingClassmates > 0
         ? "bg-amber-50 text-amber-700 border-amber-200"
         : "bg-emerald-50 text-emerald-700 border-emerald-200",
-      description: "Connect with examinees targeting your CSE exam date, track buddies, and challenge peers to direct live duels.",
-      actionText: "Find Classmates & Duel",
+      description: DUEL_ENABLED
+        ? "Connect with examinees targeting your CSE exam date, track buddies, and challenge peers to direct live duels."
+        : "Connect with examinees targeting your CSE exam date, track buddies, and build your study network.",
+      actionText: DUEL_ENABLED ? "Find Classmates & Duel" : "Find Classmates",
       btnBg: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-500/20",
     },
     {

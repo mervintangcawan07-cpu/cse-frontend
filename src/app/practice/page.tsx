@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { DUEL_ENABLED } from "@/lib/config/features";
 
 export default function PracticeAndPrepPage() {
   const { user } = useAuth();
@@ -145,7 +146,15 @@ export default function PracticeAndPrepPage() {
             </p>
           </div>
           <div className="pt-2 relative z-10">
-            {isPaid ? (
+            {!DUEL_ENABLED ? (
+              <button
+                type="button"
+                disabled
+                className="w-full py-3 bg-slate-100 text-slate-400 font-bold text-xs text-center rounded-xl cursor-not-allowed border border-slate-200"
+              >
+                ⏳ Coming Soon in Pre-Launch
+              </button>
+            ) : isPaid ? (
               <Link
                 href="/duels"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center rounded-xl transition shadow-lg shadow-amber-500/20"

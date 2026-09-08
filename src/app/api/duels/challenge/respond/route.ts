@@ -3,9 +3,17 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
+import { isDuelEnabled } from "@/lib/config/features";
 
 export async function POST(request: Request) {
   try {
+    if (!isDuelEnabled()) {
+      return NextResponse.json(
+        { error: "Duels are temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = user.id;

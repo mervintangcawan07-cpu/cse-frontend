@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export interface DrawPoint {
   x: number;
@@ -233,6 +234,13 @@ export async function GET(
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
 
@@ -288,6 +296,13 @@ export async function POST(
   try {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
 
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);
@@ -347,6 +362,13 @@ export async function DELETE(
   try {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
 
     const resolvedParams = await params;
     const roomId = String(resolvedParams.roomId);

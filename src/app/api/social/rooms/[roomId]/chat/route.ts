@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export async function GET(
   request: Request,
@@ -13,6 +14,14 @@ export async function GET(
 
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const participant = await prisma.studyRoomParticipant.findUnique({
@@ -77,6 +86,14 @@ export async function POST(
 
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    if (!isStudyTogetherEnabled()) {
+      return NextResponse.json(
+        { error: "Study Together is temporarily unavailable." },
+        { status: 503, headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const userId = authenticatedUser.id;
 
     const room = await prisma.studyRoom.findUnique({
