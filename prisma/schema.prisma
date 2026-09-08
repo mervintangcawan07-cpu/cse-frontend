@@ -412,6 +412,11 @@ model ExamCategoryResult {
   @@index([category])
 }
 
+enum QuestionBankType {
+  ORDINARY
+  ELIMINATION
+}
+
 model Question {
   id       String @id @default(cuid())
   category String
@@ -450,11 +455,13 @@ model Question {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   deletedBy String?
+  bankType  QuestionBankType?
 
   @@index([category, subtopic])
   @@index([subtopic])
   @@index([difficulty])
   @@index([deletedAt])
+  @@index([bankType])
 }
 
 model DailyQuestionAttempt {
