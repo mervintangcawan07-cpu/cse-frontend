@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger/logger";
 import {
   activeEliminationQuestionWhere, activeOrdinaryQuestionWhere,
-  assertQuestionBankMetadata, QuestionBankError, questionBankOf, type QuestionBank,
+  assertQuestionBankMetadata, QuestionBankError, type QuestionBank,
 } from "@/lib/contentEligibility";
 
 type ScalarSelect = Partial<Record<Prisma.QuestionScalarFieldEnum, boolean>>;
@@ -79,7 +79,7 @@ export async function updateBankQuestion(bank: QuestionBank, id: string, data: P
     select: { id: true, category: true, subtopic: true, bankType: true, updatedAt: true },
   });
   if (!current) throw new QuestionBankError("Active question not found in this bank.", 404);
-  if (questionBankOf(current) !== bank) {
+  if (current.bankType !== bank) {
     throw new QuestionBankError("Active question not found in this bank.", 404);
   }
   const category = data.category === undefined ? current.category : data.category;

@@ -552,15 +552,20 @@ async function main() {
     }
   }
 
-  await test("Phase B2: Updates on legacy NULL rows claim explicit bankType", async () => {
-    // Dedicated compatibility regression: simulate pre-backfill NULL rows.
+  await test("Phase B4D: Updates reject rows without explicit bankType ownership", async () => {
+    // Defensive regression:
+    // production Question.bankType is non-nullable, but if malformed/legacy
+    // data is ever encountered, mutation must fail closed rather than infer
+    // ownership from category/subtopic metadata.
     storeRow("question", { ...fixture("o1"), bankType: null });
-    storeRow("question", { ...fixture("e1", " \tELIMINATION DRILL\u00a0", "General"), bankType: null });
-    // o1 starts with bankType = null
+    storeRow("question", {
+      ...fixture("e1", " \tELIMINATION DRILL\u00a0", "General"),
+      bankType: null,
+    });
+
     const beforeO1 = rows("question").find((r: any) => r.id === "o1");
     assert.equal(beforeO1.bankType, null);
 
-    // Update o1 via admin/questions PUT
     const resUpdateO1 = await invoke("admin/questions", "PUT", {
       id: "o1",
       category: "Numerical Reasoning",
@@ -568,29 +573,30 @@ async function main() {
       prompt: "Updated o1 prompt",
       options: ["Correct", "Wrong", "C", "D"],
       answerIndex: 0,
-      bankType: "ELIMINATION", // Hostile client attempt
+      bankType: "ELIMINATION",
     });
-    assert.equal(resUpdateO1.status, 200);
-    const afterO1 = rows("question").find((r: any) => r.id === "o1");
-    assert.equal(afterO1.bankType, "ORDINARY");
-    assert.equal(afterO1.prompt, "Updated o1 prompt");
 
-    // e1 starts with bankType = null
+    assert.equal(resUpdateO1.status, 404);
+
+    const afterO1 = rows("question").find((r: any) => r.id === "o1");
+    assert.equal(afterO1.bankType, null);
+    assert.notEqual(afterO1.prompt, "Updated o1 prompt");
+
     const beforeE1 = rows("question").find((r: any) => r.id === "e1");
     assert.equal(beforeE1.bankType, null);
 
-    // Update e1 via admin/elimination-drills PUT
     const resUpdateE1 = await invoke("admin/elimination-drills", "PUT", {
       id: "e1",
       prompt: "Updated e1 prompt",
-      bankType: "ORDINARY", // Hostile client attempt
+      bankType: "ORDINARY",
     });
-    assert.equal(resUpdateE1.status, 200);
-    const afterE1 = rows("question").find((r: any) => r.id === "e1");
-    assert.equal(afterE1.bankType, "ELIMINATION");
-    assert.equal(afterE1.prompt, "Updated e1 prompt");
-  });
 
+    assert.equal(resUpdateE1.status, 404);
+
+    const afterE1 = rows("question").find((r: any) => r.id === "e1");
+    assert.equal(afterE1.bankType, null);
+    assert.notEqual(afterE1.prompt, "Updated e1 prompt");
+  });
   await test("Phase B4C: Trash classification uses explicit bankType on persisted rows", async () => {
     db.exec('DELETE FROM "Question"');
     // Store soft-deleted questions with various combinations
