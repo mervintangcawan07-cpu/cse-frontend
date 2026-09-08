@@ -2,8 +2,8 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
-import { softDeleteRecord } from "@/lib/recovery/softDelete";
-import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
+import { findBankQuestions, softDeleteBankQuestions, updateBankQuestion } from "@/lib/questionBank";
+import { activeEliminationQuestionWhere, eliminationImportMetadata, questionBankErrorResponse } from "@/lib/contentEligibility";
 
 interface IncomingQuestionPayload {
   prompt?: string;
@@ -41,13 +41,15 @@ export async function GET() {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
 
-    const drills = await prisma.question.findMany({
+    const drills = await findBankQuestions({
       where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });
 
     return NextResponse.json({ success: true, drills, count: drills.length });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     console.error("[ADMIN_DRILL_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch drill questions." }, { status: 500 });
   }
@@ -140,11 +142,7 @@ export async function POST(request: Request) {
         finalExplanation = baseExplanation ? `${baseExplanation}\n\n${breakdownStr}` : breakdownStr;
       }
 
-      const rawCategory = q.category?.trim() || "Elimination Drill";
-      const rawSubtopic = (q.subtopic || q.tags || "Speed Drill").trim();
-      const subtopicTagged = rawSubtopic.toLowerCase().includes("elimination drill")
-        ? rawSubtopic
-        : `${rawSubtopic} (Elimination Drill)`;
+      const { category: rawCategory, subtopic: subtopicTagged } = eliminationImportMetadata(q.category, q.subtopic, q.tags);
 
       formattedToInsert.push({
         prompt: promptText,
@@ -178,6 +176,8 @@ export async function POST(request: Request) {
       errors: validationErrors,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[ADMIN_DRILL_BULK_UPLOAD_ERROR]", err);
     return NextResponse.json(
@@ -207,19 +207,12 @@ export async function DELETE(request: Request) {
     const deleteAll = searchParams.get("all") === "true";
 
     if (deleteAll) {
-      const allDrillQuestions = await prisma.question.findMany({
-        where: activeEliminationQuestionWhere(),
-        select: { id: true },
-      });
-
-      for (const q of allDrillQuestions) {
-        await softDeleteRecord("question", q.id, authentication.session.user.id);
-      }
+      const deletedCount = await softDeleteBankQuestions("ELIMINATION", undefined, authentication.session.user.id);
 
       return NextResponse.json({
         success: true,
-        deletedCount: allDrillQuestions.length,
-        message: `Soft-deleted all ${allDrillQuestions.length} elimination drill questions.`,
+        deletedCount,
+        message: `Soft-deleted all ${deletedCount} elimination drill questions.`,
       });
     }
 
@@ -240,16 +233,16 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "No question ID(s) provided for deletion." }, { status: 400 });
     }
 
-    for (const id of idsToDelete) {
-      await softDeleteRecord("question", id, authentication.session.user.id);
-    }
+    const deletedCount = await softDeleteBankQuestions("ELIMINATION", idsToDelete, authentication.session.user.id);
 
     return NextResponse.json({
       success: true,
-      deletedCount: idsToDelete.length,
-      message: `Successfully soft-deleted ${idsToDelete.length} drill question(s).`,
+      deletedCount,
+      message: `Successfully soft-deleted ${deletedCount} drill question(s).`,
     });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[ADMIN_DRILL_DELETE_ERROR]", err);
     return NextResponse.json(
@@ -281,20 +274,19 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Missing question ID for update." }, { status: 400 });
     }
 
-    const updated = await prisma.question.update({
-      where: { id },
-      data: {
+    const updated = await updateBankQuestion("ELIMINATION", id, {
         ...(prompt !== undefined && { prompt }),
         ...(category !== undefined && { category }),
         ...(subtopic !== undefined && { subtopic }),
         ...(options !== undefined && { options }),
         ...(answerIndex !== undefined && { answerIndex: Number(answerIndex) }),
         ...(explanation !== undefined && { explanation }),
-      },
     });
 
     return NextResponse.json({ success: true, question: updated });
   } catch (error: unknown) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     const err = error as Error;
     console.error("[ADMIN_DRILL_PUT_ERROR]", err);
     return NextResponse.json(

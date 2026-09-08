@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere, assertOrdinaryQuestionBatch, isEliminationQuestion, questionBankErrorResponse } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere, questionTextWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/questions/route.ts
 import { NextResponse } from "next/server";
 import {
@@ -39,10 +41,9 @@ export async function GET(request: Request) {
     const limitParam = searchParams.get("limit");
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
-    const NOT_ELIMINATION_DRILL: Prisma.QuestionWhereInput[] = [
-      { category: { equals: "Elimination Drill", mode: "insensitive" } },
-      { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-    ];
+    if (isEliminationQuestion({ category: category || "", subtopic: subtopic || "" })) {
+      return NextResponse.json({ success: true, questions: [] });
+    }
 
     // ------------------------------------------------------------------
     // 1. IDENTIFY MASTERED QUESTIONS (ANSWERED CORRECTLY AT LEAST ONCE)
@@ -70,8 +71,8 @@ export async function GET(request: Request) {
       });
 
       if (pastAnswerMap.size > 0) {
-        const pastQuestions = await prisma.question.findMany({
-          where: { id: { in: Array.from(pastAnswerMap.keys()) } },
+        const pastQuestions = await findBankQuestions({
+          where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(Array.from(pastAnswerMap.keys()))),
           select: { id: true, answerIndex: true },
         });
 
@@ -90,38 +91,24 @@ export async function GET(request: Request) {
     // 2. SINGLE CATEGORY / SUBTOPIC DRILL MODE
     // ------------------------------------------------------------------
     if (category && category !== "All") {
-      const isEliminationQuery =
-        category.toLowerCase() === "elimination drill" ||
-        (subtopic && subtopic.toLowerCase().includes("elimination drill"));
-
-      const whereClause: Prisma.QuestionWhereInput = {
-        deletedAt: null,
-        category: { equals: category, mode: "insensitive" },
-      };
-
+      let whereClause: Prisma.Sql = andQuestionWhere(
+        activeOrdinaryQuestionWhere(), questionTextWhere("category", category)
+      );
       if (subtopic && subtopic !== "All") {
-        whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
-      }
-
-      if (!isEliminationQuery) {
-        whereClause.NOT = NOT_ELIMINATION_DRILL;
+        whereClause = andQuestionWhere(whereClause, questionTextWhere("subtopic", subtopic));
       }
 
       // ⚡ FAST BULK FETCH: Query all candidate questions for this category/subtopic in 1 SQL call
-      const allCategoryPool = await prisma.question.findMany({
+      const allCategoryPool = await findBankQuestions({
         where: whereClause,
       });
 
       if (allCategoryPool.length === 0) {
         // Catch-all fallback
-        const catchAllWhere: Prisma.QuestionWhereInput = {
-          deletedAt: null,
-          category: { equals: category, mode: "insensitive" },
-        };
-        if (!isEliminationQuery) {
-          catchAllWhere.NOT = NOT_ELIMINATION_DRILL;
-        }
-        const catchAllPool = await prisma.question.findMany({
+        const catchAllWhere = andQuestionWhere(
+          activeOrdinaryQuestionWhere(), questionTextWhere("category", category)
+        );
+        const catchAllPool = await findBankQuestions({
           where: catchAllWhere,
         });
         return NextResponse.json({
@@ -150,11 +137,8 @@ export async function GET(request: Request) {
     // 3. FULL MOCK EXAM MODE ("All"): SINGLE BULK QUERY + IN-MEMORY ALLOCATION
     // ------------------------------------------------------------------
     // ⚡ SINGLE SQL QUERY: Retrieve all non-deleted, active questions at once
-    const globalPool = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        NOT: NOT_ELIMINATION_DRILL,
-      },
+    const globalPool = await findBankQuestions({
+      where: activeOrdinaryQuestionWhere(),
     });
 
     const finalExamQuestions: any[] = [];
@@ -172,7 +156,7 @@ export async function GET(request: Request) {
       const subtopicMap = new Map<string, typeof globalPool>();
       for (const q of subjectPool) {
         const sub = q.subtopic?.trim() || "General";
-        if (sub && !sub.toLowerCase().includes("elimination drill")) {
+        if (sub) {
           if (!subtopicMap.has(sub)) subtopicMap.set(sub, []);
           subtopicMap.get(sub)!.push(q);
         }
@@ -251,6 +235,8 @@ export async function GET(request: Request) {
       questions: finalExamQuestions.slice(0, 170),
     });
   } catch (error: any) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     console.error("[QUESTIONS_FETCH_ERROR]", error);
     return NextResponse.json(
       { error: "Failed to fetch questions." },
@@ -371,6 +357,8 @@ export async function POST(request: Request) {
       );
     }
 
+    assertOrdinaryQuestionBatch(formattedData);
+
     // 3. Batch insert questions into Database
     const createdCount = await prisma.question.createMany({
       data: formattedData as any,
@@ -382,6 +370,8 @@ export async function POST(request: Request) {
       count: createdCount.count,
     });
   } catch (error: any) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     console.error("[POST_QUESTIONS_ERROR]", error);
     return NextResponse.json(
       { error: "Failed to create/upload questions" },

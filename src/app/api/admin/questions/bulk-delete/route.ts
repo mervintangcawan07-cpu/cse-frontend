@@ -1,7 +1,8 @@
 ﻿// Relative Path: src/app/api/admin/questions/bulk-delete/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
-import { prisma } from "@/lib/prisma";
+import { softDeleteBankQuestions } from "@/lib/questionBank";
+import { questionBankErrorResponse } from "@/lib/contentEligibility";
 import { requireSudo } from "@/middleware/requireSudo";
 
 export const DELETE = requireSudo(async (request: NextRequest) => {
@@ -24,17 +25,12 @@ export const DELETE = requireSudo(async (request: NextRequest) => {
       return NextResponse.json({ error: "No question IDs provided" }, { status: 400 });
     }
 
-    // Soft delete all matching questions in a single query
-    const result = await prisma.question.updateMany({
-      where: { id: { in: ids } },
-      data: {
-        deletedAt: new Date(),
-        deletedBy: authentication.session.user.id,
-      },
-    });
+    const count = await softDeleteBankQuestions("ORDINARY", ids, authentication.session.user.id);
 
-    return NextResponse.json({ success: true, count: result.count });
+    return NextResponse.json({ success: true, count });
   } catch (error) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return new NextResponse(bankError.body, { status: bankError.status, headers: bankError.headers });
     console.error("[BULK_DELETE_QUESTIONS_ERROR]", error);
     return NextResponse.json({ error: "Failed to soft-delete questions" }, { status: 500 });
   }

@@ -1,3 +1,4 @@
+import { countBankQuestions } from "@/lib/questionBank";
 import { prisma } from "@/lib/prisma";
 import {
   activeEliminationQuestionWhere,
@@ -23,11 +24,11 @@ async function runStorageAudit(): Promise<void> {
   ] = await Promise.all([
     prisma.question.count(),
     prisma.question.count({ where: { deletedAt: null } }),
-    prisma.question.count({ where: activeOrdinaryQuestionWhere() }),
-    prisma.question.count({ where: activeEliminationQuestionWhere() }),
+    countBankQuestions(activeOrdinaryQuestionWhere()),
+    countBankQuestions(activeEliminationQuestionWhere()),
     prisma.question.count({ where: { deletedAt: { not: null } } }),
-    prisma.question.count({ where: softDeletedOrdinaryQuestionWhere() }),
-    prisma.question.count({ where: softDeletedEliminationQuestionWhere() }),
+    countBankQuestions(softDeletedOrdinaryQuestionWhere()),
+    countBankQuestions(softDeletedEliminationQuestionWhere()),
     prisma.flashcard.count(),
     prisma.flashcard.count({ where: activeFlashcardWhere() }),
     prisma.flashcard.count({ where: softDeletedFlashcardWhere() }),

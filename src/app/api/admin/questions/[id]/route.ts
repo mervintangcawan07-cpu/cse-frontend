@@ -2,7 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { requireSudo } from "@/middleware/requireSudo";
-import { softDeleteRecord } from "@/lib/recovery/softDelete";
+import { softDeleteBankQuestions } from "@/lib/questionBank";
+import { questionBankErrorResponse } from "@/lib/contentEligibility";
 
 export const DELETE = requireSudo(async (
   req: NextRequest,
@@ -22,10 +23,12 @@ export const DELETE = requireSudo(async (
     }
 
     const { id } = await params;
-    await softDeleteRecord("question", id, authentication.session.user.id);
+    await softDeleteBankQuestions("ORDINARY", [id], authentication.session.user.id);
 
     return NextResponse.json({ success: true, message: "Question soft-deleted successfully." });
   } catch (error) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return new NextResponse(bankError.body, { status: bankError.status, headers: bankError.headers });
     console.error("[SINGLE_QUESTION_DELETE_ERROR]", error);
     return NextResponse.json({ error: "Failed to delete question" }, { status: 500 });
   }

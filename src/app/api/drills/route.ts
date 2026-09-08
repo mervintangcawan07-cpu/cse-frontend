@@ -1,18 +1,13 @@
 // Relative Path: src/app/api/drills/route.ts
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { findBankQuestions } from "@/lib/questionBank";
+import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 
 export async function GET() {
   try {
-    const drillQuestions = await prisma.question.findMany({
-      where: {
-        deletedAt: null,
-        OR: [
-          { category: "Elimination Drill" },
-          { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-        ],
-      },
+    const drillQuestions = await findBankQuestions({
+      where: activeEliminationQuestionWhere(),
       orderBy: { createdAt: "desc" },
     });
 

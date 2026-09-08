@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -34,14 +36,14 @@ export async function POST(request: Request) {
 
     const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
 
-    if (!Array.isArray(answers)) {
+    if (!Array.isArray(answers) || answers.some(answer => !answer || typeof answer.questionId !== "string" || !answer.questionId)) {
       return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
     }
 
     // 1. Fetch full questions from DB to build complete review snapshot
     const questionIds = answers.map((a) => a.questionId);
-    const dbQuestions = await prisma.question.findMany({
-      where: { id: { in: questionIds } },
+    const dbQuestions = await findBankQuestions({
+      where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(questionIds)),
       select: {
         id: true,
         category: true,
@@ -67,6 +69,13 @@ export async function POST(request: Request) {
         tags: true,
       },
     });
+
+    if (dbQuestions.length !== new Set(questionIds).size) {
+      return NextResponse.json(
+        { error: "One or more submitted questions are no longer active ordinary questions. No exam result was saved." },
+        { status: 422 }
+      );
+    }
 
     const questionMap = new Map(dbQuestions.map((q) => [q.id, q]));
 

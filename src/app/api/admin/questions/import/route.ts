@@ -1,3 +1,4 @@
+import { assertOrdinaryQuestionBatch, questionBankErrorResponse } from "@/lib/contentEligibility";
 import { NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -84,6 +85,8 @@ export async function POST(request: Request) {
       };
     });
 
+    assertOrdinaryQuestionBatch(insertData);
+
     // Bulk create questions inside database
     const created = await prisma.question.createMany({
       data: insertData,
@@ -104,6 +107,8 @@ export async function POST(request: Request) {
       count: created.count,
     });
   } catch (error) {
+    const bankError = questionBankErrorResponse(error);
+    if (bankError) return bankError;
     console.error("Bulk import questions error:", error);
     return NextResponse.json({ error: "Failed to process question import" }, { status: 500 });
   }

@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { findBankQuestions } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -34,7 +36,7 @@ export async function POST() {
     }
 
     // 2. No open match: Pick 5 rapid-fire questions across subjects
-    const rawQuestions = await prisma.question.findMany({
+    const rawQuestions = await findBankQuestions({ where: activeOrdinaryQuestionWhere(),
       take: 20,
     });
 

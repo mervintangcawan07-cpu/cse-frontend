@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { andQuestionWhere, countBankQuestions, findBankQuestions, orQuestionWhere, questionIdsWhere, questionTextWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/social/rooms/[roomId]/topic/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -40,31 +42,21 @@ export async function GET(
     const limit = Math.min(30, Math.max(1, parseInt(searchParams.get("limit") || "10", 10)));
     const skip = (page - 1) * limit;
 
-    const whereClause: Prisma.QuestionWhereInput = {
-      deletedAt: null,
-      NOT: [
-        { category: { equals: "Elimination Drill", mode: "insensitive" } },
-        { subtopic: { contains: "Elimination Drill", mode: "insensitive" } },
-      ],
-    };
-
+    let whereClause: Prisma.Sql = activeOrdinaryQuestionWhere();
     if (category && category !== "All") {
-      whereClause.category = { equals: category, mode: "insensitive" };
+      whereClause = andQuestionWhere(whereClause, questionTextWhere("category", category));
     }
-
     if (subtopic && subtopic !== "All") {
-      whereClause.subtopic = { equals: subtopic, mode: "insensitive" };
+      whereClause = andQuestionWhere(whereClause, questionTextWhere("subtopic", subtopic));
     }
-
     if (search) {
-      whereClause.OR = [
-        { prompt: { contains: search, mode: "insensitive" } },
-        { subtopic: { contains: search, mode: "insensitive" } },
-      ];
+      whereClause = andQuestionWhere(whereClause, orQuestionWhere(
+        questionTextWhere("prompt", search, true), questionTextWhere("subtopic", search, true)
+      ));
     }
 
     const [questions, totalCount] = await Promise.all([
-      prisma.question.findMany({
+      findBankQuestions({
         where: whereClause,
         select: {
           id: true,
@@ -78,7 +70,7 @@ export async function GET(
         skip,
         take: limit,
       }),
-      prisma.question.count({ where: whereClause }),
+      countBankQuestions(whereClause),
     ]);
 
     return NextResponse.json({
@@ -130,8 +122,9 @@ export async function POST(
         return NextResponse.json({ error: "questionId is required for QUESTION topic type" }, { status: 400 });
       }
 
-      const question = await prisma.question.findUnique({
-        where: { id: questionId },
+      const [question] = await findBankQuestions({
+        where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere([questionId])),
+        take: 1,
         select: {
           id: true,
           category: true,

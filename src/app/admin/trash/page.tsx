@@ -70,6 +70,7 @@ export default function AdminTrashBinPage() {
   const filteredItems = items.filter((item) => {
     if (filter === "ALL") return true;
     if (filter === "QUESTION") return item.entityType === "question";
+    if (filter === "ORDINARY" || filter === "ELIMINATION") return item.entityType === "question" && item.questionBank === filter;
     if (filter === "USER") return item.entityType === "user";
     if (filter === "FLASHCARD") return item.entityType === "flashcard";
     if (filter === "SYSTEMSETTING") return item.entityType === "systemSetting";
@@ -77,6 +78,8 @@ export default function AdminTrashBinPage() {
   });
 
   const questionCount = items.filter((i) => i.entityType === "question").length;
+  const ordinaryCount = items.filter(i => i.entityType === "question" && i.questionBank === "ORDINARY").length;
+  const eliminationCount = items.filter(i => i.entityType === "question" && i.questionBank === "ELIMINATION").length;
 
   // Selection handlers
   const handleToggleSelect = (id: string) => {
@@ -253,43 +256,33 @@ export default function AdminTrashBinPage() {
     }
   };
 
-  // Restore all questions
-  const handleRestoreAllQuestions = async () => {
-    if (!confirm("Are you sure you want to restore all Question Bank records currently in Trash back to active status?")) {
-      return;
-    }
-
-    setProcessingAction("RESTORE_ALL_QUESTIONS");
+  const handleRestoreAllQuestions = async (bank: "ORDINARY" | "ELIMINATION") => {
+    const label = bank === "ORDINARY" ? "ordinary questions" : "Elimination Drill questions";
+    if (!confirm("Restore all " + label + " currently in Trash?")) return;
+    const action = bank === "ORDINARY" ? "RESTORE_ALL_ORDINARY_QUESTIONS" : "RESTORE_ALL_ELIMINATION_QUESTIONS";
+    setProcessingAction(action);
     setActionMessage(null);
-
     try {
       const res = await fetch("/api/admin/trash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "RESTORE_ALL_QUESTIONS" }),
+        body: JSON.stringify({ action }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setItems((prev) => prev.filter((i) => i.entityType !== "question"));
-        setSelectedIds((prev) => {
+        setItems(prev => prev.filter(item => item.entityType !== "question" || item.questionBank !== bank));
+        setSelectedIds(prev => {
           const next = new Set(prev);
-          for (const item of items) {
-            if (item.entityType === "question") next.delete(item.id);
-          }
+          items.filter(item => item.entityType === "question" && item.questionBank === bank).forEach(item => next.delete(item.id));
           return next;
         });
-        setActionMessage({
-          type: "success",
-          text: `✓ Successfully restored all ${data.restoredCount} Question(s) back to active Question Bank.`,
-        });
+        await handleRefresh();
+        setActionMessage({ type: "success", text: "Restored " + data.restoredCount + " " + label + "." });
       } else {
-        setActionMessage({
-          type: "error",
-          text: `✕ Restore failed: ${data.error || "Unknown error"}`,
-        });
+        setActionMessage({ type: "error", text: data.error || "Restore failed." });
       }
     } catch {
-      setActionMessage({ type: "error", text: "✕ Failed to restore questions due to network error." });
+      setActionMessage({ type: "error", text: "Failed to restore questions due to network error." });
     } finally {
       setProcessingAction(null);
     }
@@ -393,6 +386,8 @@ export default function AdminTrashBinPage() {
         {[
           { label: "All Items", value: "ALL" },
           { label: "Questions & Drills", value: "QUESTION" },
+          { label: "Ordinary Questions", value: "ORDINARY" },
+          { label: "Elimination Drills", value: "ELIMINATION" },
           { label: "Users", value: "USER" },
           { label: "Flashcards", value: "FLASHCARD" },
         ].map((tab) => (
@@ -460,14 +455,26 @@ export default function AdminTrashBinPage() {
           </button>
 
           {/* Restore All Questions */}
-          {questionCount > 0 && (
+          {ordinaryCount > 0 && (
             <button
               type="button"
-              onClick={handleRestoreAllQuestions}
+              onClick={() => handleRestoreAllQuestions("ORDINARY")}
               disabled={processingAction !== null}
               className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
             >
-              Restore All Questions ({questionCount})
+              Restore All Ordinary ({ordinaryCount})
+            </button>
+          )}
+
+          {/* Restore All Elimination Questions */}
+          {eliminationCount > 0 && (
+            <button
+              type="button"
+              onClick={() => handleRestoreAllQuestions("ELIMINATION")}
+              disabled={processingAction !== null}
+              className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
+            >
+              Restore All Elimination ({eliminationCount})
             </button>
           )}
 

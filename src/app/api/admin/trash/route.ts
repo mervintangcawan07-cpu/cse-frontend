@@ -5,7 +5,7 @@ import {
   getTrashBinItems,
   restoreRecord,
   restoreBatchRecords,
-  restoreAllTrashQuestions,
+  restoreAllTrashQuestionsInBank,
   permanentlyDeleteSelectedRecords,
   purgeAllTrashQuestions,
   purgeExpiredRecords,
@@ -63,9 +63,14 @@ export async function POST(request: Request) {
       return NextResponse.json(result);
     }
 
-    if (action === "RESTORE_ALL_QUESTIONS") {
-      const result = await restoreAllTrashQuestions(adminEmail);
+    if (action === "RESTORE_ALL_ORDINARY_QUESTIONS" || action === "RESTORE_ALL_ELIMINATION_QUESTIONS") {
+      const bank = action === "RESTORE_ALL_ORDINARY_QUESTIONS" ? "ORDINARY" : "ELIMINATION";
+      const result = await restoreAllTrashQuestionsInBank(bank, adminEmail);
       return NextResponse.json(result);
+    }
+
+    if (action === "RESTORE_ALL_QUESTIONS") {
+      return NextResponse.json({ error: "Choose RESTORE_ALL_ORDINARY_QUESTIONS or RESTORE_ALL_ELIMINATION_QUESTIONS." }, { status: 400 });
     }
 
     if (action === "PURGE_SELECTED" && Array.isArray(items)) {

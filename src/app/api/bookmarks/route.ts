@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -32,8 +34,8 @@ export async function GET() {
 
     // Fetch corresponding entities from DB in parallel
     const [questions, studyNotes] = await Promise.all([
-      prisma.question.findMany({
-        where: { id: { in: questionIds } },
+      findBankQuestions({
+        where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(questionIds)),
       }),
       prisma.studyNote.findMany({
         where: { id: { in: studyNoteIds } },

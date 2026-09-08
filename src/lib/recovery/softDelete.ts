@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import { questionBankOf, QuestionBankError, softDeletedOrdinaryQuestionWhere, softDeletedEliminationQuestionWhere, type QuestionBank } from "@/lib/contentEligibility";
 // Relative Path: src/lib/recovery/softDelete.ts
 
 import { prisma } from "@/lib/prisma";
@@ -147,11 +149,13 @@ export async function getTrashBinItems(
   });
   for (const q of softDeletedQuestions) {
     if (q.deletedAt) {
-      const isElimination = q.category === "Elimination Drill" || q.subtopic.includes("Elimination Drill");
+      const questionBank = questionBankOf(q);
+      const isElimination = questionBank === "ELIMINATION";
       const prefix = isElimination ? "[Elimination Drill] " : "";
       items.push({
         id: q.id,
         entityType: "question",
+        questionBank,
         displayName: `${prefix}${(q.prompt || `Question ${q.id}`).slice(0, 50)}`,
         deletedAt: q.deletedAt,
         deletedBy: q.deletedBy || "admin",
@@ -282,25 +286,21 @@ export async function restoreBatchRecords(
   };
 }
 
-/**
- * Restores all Question Bank records currently in the trash bin.
- */
-export async function restoreAllTrashQuestions(
+/** The old ambiguous operation fails closed, including non-route callers. */
+export async function restoreAllTrashQuestions(): Promise<{ success: boolean; restoredCount: number }> {
+  throw new QuestionBankError("Choose ordinary or Elimination Drill restore-all explicitly.", 400);
+}
+
+export async function restoreAllTrashQuestionsInBank(
+  bank: QuestionBank,
   restoredBy: string = "admin"
 ): Promise<{ success: boolean; restoredCount: number }> {
-  logger.info("RESTORE ALL TRASH QUESTIONS TRIGGERED", {
-    context: { restoredBy },
-  });
-
-  const res = await prisma.question.updateMany({
-    where: { deletedAt: { not: null } },
-    data: { deletedAt: null, deletedBy: null },
-  });
-
-  return {
-    success: true,
-    restoredCount: res.count,
-  };
+  const where = bank === "ORDINARY" ? softDeletedOrdinaryQuestionWhere() : softDeletedEliminationQuestionWhere();
+  logger.info("RESTORE ALL TRASH QUESTIONS IN BANK", { context: { bank, restoredBy } });
+  const restoredCount = await prisma.$executeRaw(Prisma.sql`
+    UPDATE "Question" SET "deletedAt" = NULL, "deletedBy" = NULL, "updatedAt" = ${new Date()} WHERE ${where}
+  `);
+  return { success: true, restoredCount };
 }
 
 /**

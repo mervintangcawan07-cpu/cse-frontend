@@ -6,6 +6,8 @@ export interface TrashItem {
   id: string;
   entityType: SupportedEntityType;
   displayName: string;
+  /** Logical ownership inferred from legacy Question metadata during Phase A. */
+  questionBank?: "ORDINARY" | "ELIMINATION";
   deletedAt: Date;
   deletedBy: string;
   daysRemaining: number;
