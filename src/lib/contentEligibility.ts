@@ -107,13 +107,13 @@ export function eliminationQuestionClassificationWhere(): Prisma.Sql {
   return Prisma.sql`(translate(btrim("category", ${CATEGORY_WHITESPACE}), ${upper}, ${lower}) = ${label} OR strpos(translate("subtopic", ${upper}, ${lower}), ${label}) > 0)`;
 }
 
-// Canonical transitional SQL predicates: explicit bankType wins; NULL falls back to legacy
+// Canonical database SQL predicates: persisted Question rows use explicit bankType ownership.
 export function ordinaryQuestionWhere(): Prisma.Sql {
-  return Prisma.sql`("bankType" = 'ORDINARY' OR ("bankType" IS NULL AND NOT ${eliminationQuestionClassificationWhere()}))`;
+  return Prisma.sql`"bankType" = 'ORDINARY'`;
 }
 
 export function eliminationQuestionWhere(): Prisma.Sql {
-  return Prisma.sql`("bankType" = 'ELIMINATION' OR ("bankType" IS NULL AND ${eliminationQuestionClassificationWhere()}))`;
+  return Prisma.sql`"bankType" = 'ELIMINATION'`;
 }
 
 export function activeOrdinaryQuestionWhere(): Prisma.Sql {

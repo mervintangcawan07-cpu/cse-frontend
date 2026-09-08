@@ -209,12 +209,12 @@ function fixture(id: string, category = "Numerical Reasoning", subtopic = "Perce
 }
 function reset() {
   db.exec('DELETE FROM "Question"'); tables = {}; logs.length = 0; role = "ADMIN"; updateRace = undefined;
-  ordinaryIds.forEach(id => storeRow("question", fixture(id)));
-  storeRow("question", fixture("e1", " \tELIMINATION DRILL\u00a0", "General"));
-  storeRow("question", fixture("e2", "Numerical Reasoning", "Speed (eLiMiNaTiOn DrIlL)"));
-  storeRow("question", fixture("e3", "\ufeffElimination Drill\u3000"));
-  storeRow("question", fixture("do", "Numerical Reasoning", "Percentages", new Date()));
-  storeRow("question", fixture("de", "General", "Elimination Drill", new Date()));
+  ordinaryIds.forEach(id => storeRow("question", { ...fixture(id), bankType: "ORDINARY" }));
+  storeRow("question", { ...fixture("e1", " \tELIMINATION DRILL\u00a0", "General"), bankType: "ELIMINATION" });
+  storeRow("question", { ...fixture("e2", "Numerical Reasoning", "Speed (eLiMiNaTiOn DrIlL)"), bankType: "ELIMINATION" });
+  storeRow("question", { ...fixture("e3", "\ufeffElimination Drill\u3000"), bankType: "ELIMINATION" });
+  storeRow("question", { ...fixture("do", "Numerical Reasoning", "Percentages", new Date()), bankType: "ORDINARY" });
+  storeRow("question", { ...fixture("de", "General", "Elimination Drill", new Date()), bankType: "ELIMINATION" });
   tables.user = [{ id: "target", role: "USER" }];
   tables.studyRoom = [{ id: "room", hostId: "u1", isPublic: false, participants: [] }];
 }
@@ -245,7 +245,7 @@ async function main() {
     whitespace.forEach(w => cases.push([w + "eLiMiNaTiOn DrIlL" + w, "", true]));
     for (const [index, [category, subtopic, expected]] of cases.entries()) {
       assert.equal(eligibility.isEliminationQuestion({ category, subtopic }), expected);
-      for (const deleted of [false, true]) storeRow("question", fixture(String(index) + "-" + deleted, category, subtopic, deleted ? new Date() : null));
+      for (const deleted of [false, true]) storeRow("question", { ...fixture(String(index) + "-" + deleted, category, subtopic, deleted ? new Date() : null), bankType: expected ? "ELIMINATION" : "ORDINARY" });
     }
     for (const [name, isE, deleted] of [["activeOrdinaryQuestionWhere", false, false], ["activeEliminationQuestionWhere", true, false], ["softDeletedOrdinaryQuestionWhere", false, true], ["softDeletedEliminationQuestionWhere", true, true]] as const) {
       const actual = await bank.findBankQuestions({ where: eligibility[name]() });
@@ -493,7 +493,7 @@ async function main() {
     assert.equal(eligibility.questionBankOf({ bankType: null, category: "Elimination Drill", subtopic: "Speed" }), "ELIMINATION");
   });
 
-  await test("Phase B2: SQL helpers honor explicit bankType and legacy NULL fallback", async () => {
+  await test("Phase B4C: SQL helpers require explicit bankType and exclude legacy NULL rows", async () => {
     db.exec('DELETE FROM "Question"');
     // Store 5 representative rows:
     storeRow("question", { ...fixture("s1", "Math", "Algebra"), bankType: "ORDINARY" });
@@ -504,11 +504,11 @@ async function main() {
 
     // Test activeOrdinaryQuestionWhere: s1, s2 (explicit ORDINARY) and s4 (legacy ordinary NULL)
     const ordinaryRows = await bank.findBankQuestions({ where: eligibility.activeOrdinaryQuestionWhere() });
-    assert.deepEqual(ordinaryRows.map((r: any) => r.id).sort(), ["s1", "s2", "s4"].sort());
+    assert.deepEqual(ordinaryRows.map((r: any) => r.id).sort(), ["s1", "s2"].sort());
 
     // Test activeEliminationQuestionWhere: s3 (explicit ELIMINATION) and s5 (legacy elimination NULL)
     const eliminationRows = await bank.findBankQuestions({ where: eligibility.activeEliminationQuestionWhere() });
-    assert.deepEqual(eliminationRows.map((r: any) => r.id).sort(), ["s3", "s5"].sort());
+    assert.deepEqual(eliminationRows.map((r: any) => r.id).sort(), ["s3"].sort());
 
     // Test softDeletedOrdinaryQuestionWhere and softDeletedEliminationQuestionWhere
     db.exec('DELETE FROM "Question"');
@@ -519,10 +519,10 @@ async function main() {
     storeRow("question", { ...fixture("ds5", "Elimination Drill", "Speed", new Date()), bankType: null });
 
     const deletedOrdinaryRows = await bank.findBankQuestions({ where: eligibility.softDeletedOrdinaryQuestionWhere() });
-    assert.deepEqual(deletedOrdinaryRows.map((r: any) => r.id).sort(), ["ds1", "ds2", "ds4"].sort());
+    assert.deepEqual(deletedOrdinaryRows.map((r: any) => r.id).sort(), ["ds1", "ds2"].sort());
 
     const deletedEliminationRows = await bank.findBankQuestions({ where: eligibility.softDeletedEliminationQuestionWhere() });
-    assert.deepEqual(deletedEliminationRows.map((r: any) => r.id).sort(), ["ds3", "ds5"].sort());
+    assert.deepEqual(deletedEliminationRows.map((r: any) => r.id).sort(), ["ds3"].sort());
   });
 
   for (const [path, expectedBank] of [
@@ -553,6 +553,9 @@ async function main() {
   }
 
   await test("Phase B2: Updates on legacy NULL rows claim explicit bankType", async () => {
+    // Dedicated compatibility regression: simulate pre-backfill NULL rows.
+    storeRow("question", { ...fixture("o1"), bankType: null });
+    storeRow("question", { ...fixture("e1", " \tELIMINATION DRILL\u00a0", "General"), bankType: null });
     // o1 starts with bankType = null
     const beforeO1 = rows("question").find((r: any) => r.id === "o1");
     assert.equal(beforeO1.bankType, null);
@@ -588,14 +591,14 @@ async function main() {
     assert.equal(afterE1.prompt, "Updated e1 prompt");
   });
 
-  await test("Phase B2: Trash classification uses explicit bankType when present and preserves legacy fallback", async () => {
+  await test("Phase B4C: Trash classification uses explicit bankType on persisted rows", async () => {
     db.exec('DELETE FROM "Question"');
     // Store soft-deleted questions with various combinations
     storeRow("question", { ...fixture("t1", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
     storeRow("question", { ...fixture("t2", "Elimination Drill", "Speed", new Date()), bankType: "ORDINARY" });
     storeRow("question", { ...fixture("t3", "Math", "Algebra", new Date()), bankType: "ELIMINATION" });
-    storeRow("question", { ...fixture("t4", "Math", "Algebra", new Date()), bankType: null });
-    storeRow("question", { ...fixture("t5", "Elimination Drill", "Speed", new Date()), bankType: null });
+    storeRow("question", { ...fixture("t4", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("t5", "Elimination Drill", "Speed", new Date()), bankType: "ELIMINATION" });
 
     const trash = await recovery.getTrashBinItems();
     const map = new Map(trash.map((i: any) => [i.id, i.questionBank]));
@@ -607,13 +610,13 @@ async function main() {
     assert.equal(map.get("t5"), "ELIMINATION"); // Legacy NULL fallback
   });
 
-  await test("Phase B2: RESTORE_ALL restores explicit and legacy rows for targeted bank only", async () => {
+  await test("Phase B4C: RESTORE_ALL restores explicit rows for targeted bank only", async () => {
     db.exec('DELETE FROM "Question"');
     storeRow("question", { ...fixture("r1", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
     storeRow("question", { ...fixture("r2", "Elimination Drill", "Speed", new Date()), bankType: "ORDINARY" });
     storeRow("question", { ...fixture("r3", "Math", "Algebra", new Date()), bankType: "ELIMINATION" });
-    storeRow("question", { ...fixture("r4", "Math", "Algebra", new Date()), bankType: null });
-    storeRow("question", { ...fixture("r5", "Elimination Drill", "Speed", new Date()), bankType: null });
+    storeRow("question", { ...fixture("r4", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("r5", "Elimination Drill", "Speed", new Date()), bankType: "ELIMINATION" });
 
     // Restore all ordinary questions: r1, r2, r4 should be restored; r3, r5 should remain deleted
     const resOrd = await invoke("admin/trash", "POST", { action: "RESTORE_ALL_ORDINARY_QUESTIONS" });

@@ -1,4 +1,4 @@
-import { activeOrdinaryQuestionWhere, isEliminationQuestion } from "@/lib/contentEligibility";
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/user/mistakes/route.ts
 import { NextResponse } from "next/server";
@@ -80,7 +80,7 @@ export async function GET(request: Request) {
       orderBy: { lastAttemptAt: "desc" },
     }).then(rows => rows.flatMap(mistake => {
       const { deletedAt, ...question } = mistake.question;
-      return deletedAt !== null || isEliminationQuestion(question) ? [] : [{ ...mistake, question }];
+      return deletedAt !== null || question.bankType !== "ORDINARY" ? [] : [{ ...mistake, question }];
     }));
 
     // Compute summary stats across all user mistakes
@@ -93,7 +93,7 @@ export async function GET(request: Request) {
         correctCount: true,
         question: { select: { category: true, subtopic: true, bankType: true, deletedAt: true } },
       },
-    }).then(rows => rows.filter(mistake => mistake.question.deletedAt === null && !isEliminationQuestion(mistake.question)));
+    }).then(rows => rows.filter(mistake => mistake.question.deletedAt === null && mistake.question.bankType === "ORDINARY"));
 
     const totalRecorded = allUserMistakes.length;
     const activeCount = allUserMistakes.filter((m) => !m.isMastered).length;

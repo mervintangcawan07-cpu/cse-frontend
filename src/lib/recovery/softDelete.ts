@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { questionBankOf, QuestionBankError, softDeletedOrdinaryQuestionWhere, softDeletedEliminationQuestionWhere, type QuestionBank } from "@/lib/contentEligibility";
+import { QuestionBankError, softDeletedOrdinaryQuestionWhere, softDeletedEliminationQuestionWhere, type QuestionBank } from "@/lib/contentEligibility";
 // Relative Path: src/lib/recovery/softDelete.ts
 
 import { prisma } from "@/lib/prisma";
@@ -149,7 +149,7 @@ export async function getTrashBinItems(
   });
   for (const q of softDeletedQuestions) {
     if (q.deletedAt) {
-      const questionBank = questionBankOf(q);
+      const questionBank = q.bankType;
       const isElimination = questionBank === "ELIMINATION";
       const prefix = isElimination ? "[Elimination Drill] " : "";
       items.push({
