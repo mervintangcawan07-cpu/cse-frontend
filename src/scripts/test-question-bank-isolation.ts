@@ -460,6 +460,182 @@ async function main() {
     noQuestionWrites(); assert.equal(logs.filter(l => l.kind === "query").length, 0);
     role = "USER"; assert.equal((await invoke("admin/questions", "POST", payload)).status, 403);
   });
+
+  // -------------------------------------------------------------
+  // PHASE B2 — EXPLICIT BANK OWNERSHIP TESTS
+  // -------------------------------------------------------------
+
+  await test("Phase B2: 4 fundamental states in JS classifier and questionBankOf", async () => {
+    // State 1: ORDINARY + ordinary metadata
+    assert.equal(eligibility.isEliminationQuestion({ bankType: "ORDINARY", category: "Math", subtopic: "Algebra" }), false);
+    assert.equal(eligibility.questionBankOf({ bankType: "ORDINARY", category: "Math", subtopic: "Algebra" }), "ORDINARY");
+
+    // State 2: ORDINARY + elimination-like metadata (explicit ownership beats metadata!)
+    assert.equal(eligibility.isEliminationQuestion({ bankType: "ORDINARY", category: "Elimination Drill", subtopic: "Speed" }), false);
+    assert.equal(eligibility.questionBankOf({ bankType: "ORDINARY", category: "Elimination Drill", subtopic: "Speed" }), "ORDINARY");
+
+    // State 3: ELIMINATION + ordinary-like metadata (explicit ownership beats metadata!)
+    assert.equal(eligibility.isEliminationQuestion({ bankType: "ELIMINATION", category: "Math", subtopic: "Algebra" }), true);
+    assert.equal(eligibility.questionBankOf({ bankType: "ELIMINATION", category: "Math", subtopic: "Algebra" }), "ELIMINATION");
+
+    // State 4a: NULL + ordinary metadata (legacy fallback)
+    assert.equal(eligibility.isEliminationQuestion({ bankType: null, category: "Math", subtopic: "Algebra" }), false);
+    assert.equal(eligibility.questionBankOf({ bankType: null, category: "Math", subtopic: "Algebra" }), "ORDINARY");
+
+    // State 4b: NULL + elimination metadata (legacy fallback)
+    assert.equal(eligibility.isEliminationQuestion({ bankType: null, category: "Elimination Drill", subtopic: "Speed" }), true);
+    assert.equal(eligibility.questionBankOf({ bankType: null, category: "Elimination Drill", subtopic: "Speed" }), "ELIMINATION");
+  });
+
+  await test("Phase B2: SQL helpers and Prisma filters honor explicit bankType and legacy NULL fallback", async () => {
+    db.exec('DELETE FROM "Question"');
+    // Store 5 representative rows:
+    storeRow("question", { ...fixture("s1", "Math", "Algebra"), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("s2", "Elimination Drill", "Speed"), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("s3", "Math", "Algebra"), bankType: "ELIMINATION" });
+    storeRow("question", { ...fixture("s4", "Math", "Algebra"), bankType: null });
+    storeRow("question", { ...fixture("s5", "Elimination Drill", "Speed"), bankType: null });
+
+    // Test activeOrdinaryQuestionWhere: s1, s2 (explicit ORDINARY) and s4 (legacy ordinary NULL)
+    const ordinaryRows = await bank.findBankQuestions({ where: eligibility.activeOrdinaryQuestionWhere() });
+    assert.deepEqual(ordinaryRows.map((r: any) => r.id).sort(), ["s1", "s2", "s4"].sort());
+
+    // Test activeEliminationQuestionWhere: s3 (explicit ELIMINATION) and s5 (legacy elimination NULL)
+    const eliminationRows = await bank.findBankQuestions({ where: eligibility.activeEliminationQuestionWhere() });
+    assert.deepEqual(eliminationRows.map((r: any) => r.id).sort(), ["s3", "s5"].sort());
+
+    // Test softDeletedOrdinaryQuestionWhere and softDeletedEliminationQuestionWhere
+    db.exec('DELETE FROM "Question"');
+    storeRow("question", { ...fixture("ds1", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("ds2", "Elimination Drill", "Speed", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("ds3", "Math", "Algebra", new Date()), bankType: "ELIMINATION" });
+    storeRow("question", { ...fixture("ds4", "Math", "Algebra", new Date()), bankType: null });
+    storeRow("question", { ...fixture("ds5", "Elimination Drill", "Speed", new Date()), bankType: null });
+
+    const deletedOrdinaryRows = await bank.findBankQuestions({ where: eligibility.softDeletedOrdinaryQuestionWhere() });
+    assert.deepEqual(deletedOrdinaryRows.map((r: any) => r.id).sort(), ["ds1", "ds2", "ds4"].sort());
+
+    const deletedEliminationRows = await bank.findBankQuestions({ where: eligibility.softDeletedEliminationQuestionWhere() });
+    assert.deepEqual(deletedEliminationRows.map((r: any) => r.id).sort(), ["ds3", "ds5"].sort());
+  });
+
+  await test("Phase B2: Server-owned writes enforce explicit bankType", async () => {
+    // 1. admin/questions POST sets bankType = "ORDINARY", ignores any client override attempt
+    const res1 = await invoke("admin/questions", "POST", { ...payload, bankType: "ELIMINATION" });
+    assert.equal(res1.status, 200);
+    const q1 = rows("question").find((r: any) => r.id === res1.body.question.id);
+    assert.equal(q1.bankType, "ORDINARY");
+
+    // 2. questions POST sets bankType = "ORDINARY"
+    const res2 = await invoke("questions", "POST", { questions: [{ ...payload, bankType: "ELIMINATION" }] });
+    assert.equal(res2.status, 200);
+    const q2 = rows("question").find((r: any) => r.prompt === payload.prompt);
+    assert.equal(q2.bankType, "ORDINARY");
+
+    // 3. admin/questions/import POST sets bankType = "ORDINARY"
+    const res3 = await invoke("admin/questions/import", "POST", [{ ...payload, bankType: "ELIMINATION" }]);
+    assert.equal(res3.status, 200);
+
+    // 4. admin/elimination-drills POST sets bankType = "ELIMINATION"
+    const res4 = await invoke("admin/elimination-drills", "POST", {
+      questions: [{
+        prompt: "Elimination drill test item",
+        category: "Elimination Drill",
+        subtopic: "Speed",
+        options: ["Option A", "Option B", "Option C", "Option D"],
+        answerIndex: 0,
+        bankType: "ORDINARY", // Hostile attempt to override
+      }],
+    });
+    assert.equal(res4.status, 200);
+    const q4 = rows("question").find((r: any) => r.prompt === "Elimination drill test item");
+    assert.equal(q4.bankType, "ELIMINATION");
+  });
+
+  await test("Phase B2: Updates on legacy NULL rows claim explicit bankType", async () => {
+    // o1 starts with bankType = null
+    const beforeO1 = rows("question").find((r: any) => r.id === "o1");
+    assert.equal(beforeO1.bankType, null);
+
+    // Update o1 via admin/questions PUT
+    const resUpdateO1 = await invoke("admin/questions", "PUT", {
+      id: "o1",
+      category: "Numerical Reasoning",
+      subtopic: "Percentages",
+      prompt: "Updated o1 prompt",
+      options: ["Correct", "Wrong", "C", "D"],
+      answerIndex: 0,
+      bankType: "ELIMINATION", // Hostile client attempt
+    });
+    assert.equal(resUpdateO1.status, 200);
+    const afterO1 = rows("question").find((r: any) => r.id === "o1");
+    assert.equal(afterO1.bankType, "ORDINARY");
+    assert.equal(afterO1.prompt, "Updated o1 prompt");
+
+    // e1 starts with bankType = null
+    const beforeE1 = rows("question").find((r: any) => r.id === "e1");
+    assert.equal(beforeE1.bankType, null);
+
+    // Update e1 via admin/elimination-drills PUT
+    const resUpdateE1 = await invoke("admin/elimination-drills", "PUT", {
+      id: "e1",
+      prompt: "Updated e1 prompt",
+      bankType: "ORDINARY", // Hostile client attempt
+    });
+    assert.equal(resUpdateE1.status, 200);
+    const afterE1 = rows("question").find((r: any) => r.id === "e1");
+    assert.equal(afterE1.bankType, "ELIMINATION");
+    assert.equal(afterE1.prompt, "Updated e1 prompt");
+  });
+
+  await test("Phase B2: Trash classification uses explicit bankType when present and preserves legacy fallback", async () => {
+    db.exec('DELETE FROM "Question"');
+    // Store soft-deleted questions with various combinations
+    storeRow("question", { ...fixture("t1", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("t2", "Elimination Drill", "Speed", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("t3", "Math", "Algebra", new Date()), bankType: "ELIMINATION" });
+    storeRow("question", { ...fixture("t4", "Math", "Algebra", new Date()), bankType: null });
+    storeRow("question", { ...fixture("t5", "Elimination Drill", "Speed", new Date()), bankType: null });
+
+    const trash = await recovery.getTrashBinItems();
+    const map = new Map(trash.map((i: any) => [i.id, i.questionBank]));
+
+    assert.equal(map.get("t1"), "ORDINARY");
+    assert.equal(map.get("t2"), "ORDINARY"); // Explicit bankType beats metadata!
+    assert.equal(map.get("t3"), "ELIMINATION"); // Explicit bankType beats metadata!
+    assert.equal(map.get("t4"), "ORDINARY"); // Legacy NULL fallback
+    assert.equal(map.get("t5"), "ELIMINATION"); // Legacy NULL fallback
+  });
+
+  await test("Phase B2: RESTORE_ALL restores explicit and legacy rows for targeted bank only", async () => {
+    db.exec('DELETE FROM "Question"');
+    storeRow("question", { ...fixture("r1", "Math", "Algebra", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("r2", "Elimination Drill", "Speed", new Date()), bankType: "ORDINARY" });
+    storeRow("question", { ...fixture("r3", "Math", "Algebra", new Date()), bankType: "ELIMINATION" });
+    storeRow("question", { ...fixture("r4", "Math", "Algebra", new Date()), bankType: null });
+    storeRow("question", { ...fixture("r5", "Elimination Drill", "Speed", new Date()), bankType: null });
+
+    // Restore all ordinary questions: r1, r2, r4 should be restored; r3, r5 should remain deleted
+    const resOrd = await invoke("admin/trash", "POST", { action: "RESTORE_ALL_ORDINARY_QUESTIONS" });
+    assert.equal(resOrd.status, 200);
+    assert.equal(resOrd.body.restoredCount, 3);
+
+    const afterOrd = rows("question");
+    assert.equal(afterOrd.find((r: any) => r.id === "r1").deletedAt, null);
+    assert.equal(afterOrd.find((r: any) => r.id === "r2").deletedAt, null);
+    assert.notEqual(afterOrd.find((r: any) => r.id === "r3").deletedAt, null);
+    assert.equal(afterOrd.find((r: any) => r.id === "r4").deletedAt, null);
+    assert.notEqual(afterOrd.find((r: any) => r.id === "r5").deletedAt, null);
+
+    // Restore all elimination questions: r3, r5 should be restored
+    const resElim = await invoke("admin/trash", "POST", { action: "RESTORE_ALL_ELIMINATION_QUESTIONS" });
+    assert.equal(resElim.status, 200);
+    assert.equal(resElim.body.restoredCount, 2);
+
+    const afterElim = rows("question");
+    assert.equal(afterElim.find((r: any) => r.id === "r3").deletedAt, null);
+    assert.equal(afterElim.find((r: any) => r.id === "r5").deletedAt, null);
+  });
   db.close();
   console.log("QUESTION BANK ISOLATION: " + passed + " passed, " + failed + " failed.");
   if (failed) process.exitCode = 1;

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger/logger";
 import {
   activeEliminationQuestionWhere, activeOrdinaryQuestionWhere,
-  assertQuestionBankMetadata, QuestionBankError, type QuestionBank,
+  assertQuestionBankMetadata, QuestionBankError, questionBankOf, type QuestionBank,
 } from "@/lib/contentEligibility";
 
 type ScalarSelect = Partial<Record<Prisma.QuestionScalarFieldEnum, boolean>>;
@@ -76,18 +76,26 @@ export async function updateBankQuestion(bank: QuestionBank, id: string, data: P
   if (typeof id !== "string" || !id) throw new QuestionBankError("Question ID is required.", 400);
   const current = await prisma.question.findFirst({
     where: { id, deletedAt: null },
-    select: { id: true, category: true, subtopic: true, updatedAt: true },
+    select: { id: true, category: true, subtopic: true, bankType: true, updatedAt: true },
   });
   if (!current) throw new QuestionBankError("Active question not found in this bank.", 404);
-  try { assertQuestionBankMetadata(current, bank); }
-  catch { throw new QuestionBankError("Active question not found in this bank.", 404); }
+  if (questionBankOf(current) !== bank) {
+    throw new QuestionBankError("Active question not found in this bank.", 404);
+  }
   const category = data.category === undefined ? current.category : data.category;
   const subtopic = data.subtopic === undefined ? current.subtopic : data.subtopic;
   if (typeof category !== "string" || typeof subtopic !== "string") throw new QuestionBankError("Category and subtopic must be strings.", 400);
-  assertQuestionBankMetadata({ category, subtopic }, bank);
+  assertQuestionBankMetadata({ category, subtopic, bankType: bank }, bank);
   try {
     // The exact classified metadata/version must still match at mutation time.
-    return await prisma.question.update({ where: { ...current, deletedAt: null }, data });
+    // Explicitly claim/preserve bankType as server-owned bank ("ORDINARY" or "ELIMINATION").
+    return await prisma.question.update({
+      where: { ...current, deletedAt: null },
+      data: {
+        ...data,
+        bankType: bank,
+      },
+    });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       throw new QuestionBankError("Question changed or is no longer active. Refresh and try again.", 409);

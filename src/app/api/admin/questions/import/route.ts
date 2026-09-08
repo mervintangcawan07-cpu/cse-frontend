@@ -60,6 +60,7 @@ export async function POST(request: Request) {
         : [];
 
       return {
+        bankType: "ORDINARY" as const,
         category: q.category || "General",
         subtopic: q.subtopic || "General",
         prompt: q.prompt,

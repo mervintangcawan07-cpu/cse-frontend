@@ -78,6 +78,7 @@ export async function POST(request: Request) {
     }
 
     const formattedToInsert: Array<{
+      bankType: "ELIMINATION";
       prompt: string;
       category: string;
       subtopic: string;
@@ -145,6 +146,7 @@ export async function POST(request: Request) {
       const { category: rawCategory, subtopic: subtopicTagged } = eliminationImportMetadata(q.category, q.subtopic, q.tags);
 
       formattedToInsert.push({
+        bankType: "ELIMINATION" as const,
         prompt: promptText,
         category: rawCategory,
         subtopic: subtopicTagged,

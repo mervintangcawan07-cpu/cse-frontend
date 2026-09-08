@@ -1,9 +1,11 @@
 import { countBankQuestions } from "@/lib/questionBank";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
   activeEliminationQuestionWhere,
   activeFlashcardWhere,
   activeOrdinaryQuestionWhere,
+  eliminationQuestionClassificationWhere,
   softDeletedEliminationQuestionWhere,
   softDeletedFlashcardWhere,
   softDeletedOrdinaryQuestionWhere,
@@ -18,6 +20,11 @@ async function runStorageAudit(): Promise<void> {
     questionSoftDeletedTotal,
     questionSoftDeletedOrdinary,
     questionSoftDeletedElimination,
+    explicitOrdinary,
+    explicitElimination,
+    totalNull,
+    legacyNullOrdinary,
+    legacyNullElimination,
     flashcardTotal,
     flashcardActive,
     flashcardSoftDeleted,
@@ -29,6 +36,11 @@ async function runStorageAudit(): Promise<void> {
     prisma.question.count({ where: { deletedAt: { not: null } } }),
     countBankQuestions(softDeletedOrdinaryQuestionWhere()),
     countBankQuestions(softDeletedEliminationQuestionWhere()),
+    countBankQuestions(Prisma.sql`"bankType" = 'ORDINARY'`),
+    countBankQuestions(Prisma.sql`"bankType" = 'ELIMINATION'`),
+    countBankQuestions(Prisma.sql`"bankType" IS NULL`),
+    countBankQuestions(Prisma.sql`"bankType" IS NULL AND NOT ${eliminationQuestionClassificationWhere()}`),
+    countBankQuestions(Prisma.sql`"bankType" IS NULL AND ${eliminationQuestionClassificationWhere()}`),
     prisma.flashcard.count(),
     prisma.flashcard.count({ where: activeFlashcardWhere() }),
     prisma.flashcard.count({ where: softDeletedFlashcardWhere() }),
@@ -45,6 +57,13 @@ async function runStorageAudit(): Promise<void> {
           softDeletedTotal: questionSoftDeletedTotal,
           softDeletedOrdinary: questionSoftDeletedOrdinary,
           softDeletedElimination: questionSoftDeletedElimination,
+          transitional: {
+            explicitOrdinary,
+            explicitElimination,
+            totalNull,
+            legacyNullOrdinary,
+            legacyNullElimination,
+          },
         },
         flashcard: {
           total: flashcardTotal,

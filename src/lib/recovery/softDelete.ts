@@ -145,7 +145,7 @@ export async function getTrashBinItems(
   // 2. Questions & Elimination Drill Questions
   const softDeletedQuestions = await prisma.question.findMany({
     where: { deletedAt: { not: null } },
-    select: { id: true, prompt: true, category: true, subtopic: true, deletedAt: true, deletedBy: true },
+    select: { id: true, prompt: true, category: true, subtopic: true, bankType: true, deletedAt: true, deletedBy: true },
   });
   for (const q of softDeletedQuestions) {
     if (q.deletedAt) {

@@ -82,6 +82,7 @@ export async function POST(request: Request) {
 
     const createdQuestion = await prisma.question.create({
       data: {
+        bankType: "ORDINARY",
         category: category || "General",
         subtopic: subtopic || "General",
         prompt,

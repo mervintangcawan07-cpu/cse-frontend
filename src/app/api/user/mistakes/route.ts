@@ -52,6 +52,7 @@ export async function GET(request: Request) {
           select: {
             id: true,
             deletedAt: true,
+            bankType: true,
             category: true,
             subtopic: true,
             prompt: true,
@@ -90,7 +91,7 @@ export async function GET(request: Request) {
         isMastered: true,
         incorrectCount: true,
         correctCount: true,
-        question: { select: { category: true, subtopic: true, deletedAt: true } },
+        question: { select: { category: true, subtopic: true, bankType: true, deletedAt: true } },
       },
     }).then(rows => rows.filter(mistake => mistake.question.deletedAt === null && !isEliminationQuestion(mistake.question)));
 

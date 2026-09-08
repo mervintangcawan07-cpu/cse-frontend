@@ -335,6 +335,7 @@ export async function POST(request: Request) {
         }
 
         return {
+          bankType: "ORDINARY" as const,
           category,
           subtopic,
           prompt,
