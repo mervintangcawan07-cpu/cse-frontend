@@ -487,7 +487,7 @@ async function main() {
     assert.equal(eligibility.questionBankOf({ bankType: null, category: "Elimination Drill", subtopic: "Speed" }), "ELIMINATION");
   });
 
-  await test("Phase B2: SQL helpers and Prisma filters honor explicit bankType and legacy NULL fallback", async () => {
+  await test("Phase B2: SQL helpers honor explicit bankType and legacy NULL fallback", async () => {
     db.exec('DELETE FROM "Question"');
     // Store 5 representative rows:
     storeRow("question", { ...fixture("s1", "Math", "Algebra"), bankType: "ORDINARY" });
@@ -519,38 +519,32 @@ async function main() {
     assert.deepEqual(deletedEliminationRows.map((r: any) => r.id).sort(), ["ds3", "ds5"].sort());
   });
 
-  await test("Phase B2: Server-owned writes enforce explicit bankType", async () => {
-    // 1. admin/questions POST sets bankType = "ORDINARY", ignores any client override attempt
-    const res1 = await invoke("admin/questions", "POST", { ...payload, bankType: "ELIMINATION" });
-    assert.equal(res1.status, 200);
-    const q1 = rows("question").find((r: any) => r.id === res1.body.question.id);
-    assert.equal(q1.bankType, "ORDINARY");
-
-    // 2. questions POST sets bankType = "ORDINARY"
-    const res2 = await invoke("questions", "POST", { questions: [{ ...payload, bankType: "ELIMINATION" }] });
-    assert.equal(res2.status, 200);
-    const q2 = rows("question").find((r: any) => r.prompt === payload.prompt);
-    assert.equal(q2.bankType, "ORDINARY");
-
-    // 3. admin/questions/import POST sets bankType = "ORDINARY"
-    const res3 = await invoke("admin/questions/import", "POST", [{ ...payload, bankType: "ELIMINATION" }]);
-    assert.equal(res3.status, 200);
-
-    // 4. admin/elimination-drills POST sets bankType = "ELIMINATION"
-    const res4 = await invoke("admin/elimination-drills", "POST", {
-      questions: [{
-        prompt: "Elimination drill test item",
-        category: "Elimination Drill",
-        subtopic: "Speed",
-        options: ["Option A", "Option B", "Option C", "Option D"],
-        answerIndex: 0,
-        bankType: "ORDINARY", // Hostile attempt to override
-      }],
-    });
-    assert.equal(res4.status, 200);
-    const q4 = rows("question").find((r: any) => r.prompt === "Elimination drill test item");
-    assert.equal(q4.bankType, "ELIMINATION");
-  });
+  for (const [path, expectedBank] of [
+    ["admin/questions", "ORDINARY"],
+    ["admin/questions/import", "ORDINARY"],
+    ["questions", "ORDINARY"],
+    ["admin/elimination-drills", "ELIMINATION"],
+  ] as const) {
+    for (const clientBankType of [undefined, null, "INVALID_BANK_TYPE", "ORDINARY", "ELIMINATION"]) {
+      await test("Phase B4B: " + path + " stores " + expectedBank + " with client bankType " + String(clientBankType), async () => {
+        const before = rows("question");
+        const existingIds = new Set(before.map(q => q.id));
+        const question = {
+          ...payload,
+          ...(clientBankType !== undefined && { bankType: clientBankType }),
+        };
+        const data = path === "admin/questions" ? question
+          : path === "admin/questions/import" ? [question] : { questions: [question] };
+        const result = await invoke(path, "POST", data);
+        assert.equal(result.status, 200);
+        const added = rows("question").filter(q => !existingIds.has(q.id));
+        assert.equal(added.length, 1);
+        assert.equal(added[0].bankType, expectedBank);
+        assert.equal(added[0].prompt, payload.prompt);
+        assert.deepEqual(rows("question").filter(q => existingIds.has(q.id)), before);
+      });
+    }
+  }
 
   await test("Phase B2: Updates on legacy NULL rows claim explicit bankType", async () => {
     // o1 starts with bankType = null

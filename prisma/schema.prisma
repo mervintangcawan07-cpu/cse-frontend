@@ -455,7 +455,7 @@ model Question {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   deletedBy String?
-  bankType  QuestionBankType?
+  bankType  QuestionBankType
 
   @@index([category, subtopic])
   @@index([subtopic])

@@ -132,37 +132,13 @@ export function softDeletedEliminationQuestionWhere(): Prisma.Sql {
   return Prisma.sql`("deletedAt" IS NOT NULL AND ${eliminationQuestionWhere()})`;
 }
 
-// Canonical transitional Prisma ORM filters:
+// Prisma ORM filters use required ownership; transitional SQL/JS fallbacks remain above.
 export function ordinaryQuestionPrismaWhere(): Prisma.QuestionWhereInput {
-  return {
-    OR: [
-      { bankType: "ORDINARY" },
-      {
-        bankType: null,
-        NOT: {
-          OR: [
-            { category: { equals: ELIMINATION_LABEL, mode: "insensitive" } },
-            { subtopic: { contains: ELIMINATION_LABEL, mode: "insensitive" } },
-          ],
-        },
-      },
-    ],
-  };
+  return { bankType: "ORDINARY" };
 }
 
 export function eliminationQuestionPrismaWhere(): Prisma.QuestionWhereInput {
-  return {
-    OR: [
-      { bankType: "ELIMINATION" },
-      {
-        bankType: null,
-        OR: [
-          { category: { equals: ELIMINATION_LABEL, mode: "insensitive" } },
-          { subtopic: { contains: ELIMINATION_LABEL, mode: "insensitive" } },
-        ],
-      },
-    ],
-  };
+  return { bankType: "ELIMINATION" };
 }
 
 export function activeOrdinaryQuestionPrismaWhere(): Prisma.QuestionWhereInput {
