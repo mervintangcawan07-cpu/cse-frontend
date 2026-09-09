@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
 interface Flashcard {
   id: string;
@@ -14,6 +16,10 @@ interface Flashcard {
 
 export default function FlashcardsPage() {
   const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+  const [isRedirectingToUpgrade, setIsRedirectingToUpgrade] = useState(false);
+
   const [allCards, setAllCards] = useState<Flashcard[]>([]);
   const [shuffledDeck, setShuffledDeck] = useState<Flashcard[] | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,10 +30,33 @@ export default function FlashcardsPage() {
   const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      router.replace("/login");
+      return;
+    }
+
+    if (!isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+
+    let active = true;
+
     async function loadFlashcards() {
       try {
         const res = await fetch("/api/flashcards");
+        if (!active) return;
+
+        if (res.status === 402) {
+          setIsRedirectingToUpgrade(true);
+          router.replace("/upgrade");
+          return;
+        }
+
         const data = await res.json();
+        if (!active) return;
 
         if (res.ok && data.flashcards) {
           setAllCards(data.flashcards);
@@ -35,13 +64,18 @@ export default function FlashcardsPage() {
           router.push("/dashboard");
         }
       } catch (err) {
+        if (!active) return;
         console.error("Failed to fetch flashcards:", err);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     }
     loadFlashcards();
-  }, [router]);
+
+    return () => {
+      active = false;
+    };
+  }, [status, isPaid, router]);
 
   // Derived filtered cards without cascading effect renders
   const activeCards = shuffledDeck || allCards;
@@ -118,6 +152,42 @@ export default function FlashcardsPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleNext, handlePrev]);
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access flashcards."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (!isPaid || isRedirectingToUpgrade) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to upgrade..."
+          subtitle="Interactive Flashcards require an active Pro subscription."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (

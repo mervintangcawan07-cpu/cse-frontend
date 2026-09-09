@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 import {
   RotateCw,
   Shuffle,
@@ -24,6 +26,10 @@ interface Flashcard {
 
 export default function StudyFlashcardsPage() {
   const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+  const [isRedirectingToUpgrade, setIsRedirectingToUpgrade] = useState(false);
+
   const [allCards, setAllCards] = useState<Flashcard[]>([]);
   const [deck, setDeck] = useState<Flashcard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,10 +44,34 @@ export default function StudyFlashcardsPage() {
 
   // Fetch real flashcards from DB
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      router.replace("/login");
+      return;
+    }
+
+    if (!isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+
+    let active = true;
+
     async function loadFlashcards() {
       try {
         const res = await fetch("/api/flashcards");
+        if (!active) return;
+
+        if (res.status === 402) {
+          setIsRedirectingToUpgrade(true);
+          router.replace("/upgrade");
+          return;
+        }
+
         const data = await res.json();
+        if (!active) return;
+
         if (!res.ok || !Array.isArray(data.flashcards)) {
           throw new Error(data?.error || "Failed to load flashcards.");
         }
@@ -49,16 +79,23 @@ export default function StudyFlashcardsPage() {
         setAllCards(data.flashcards);
         setDeck(data.flashcards);
       } catch (err) {
+        if (!active) return;
         console.error("Failed to fetch flashcards:", err);
         setLoadError(true);
         setAllCards([]);
         setDeck([]);
       } finally {
-        setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
     loadFlashcards();
-  }, []);
+
+    return () => {
+      active = false;
+    };
+  }, [status, isPaid, router]);
 
   // Category filter
   useEffect(() => {
@@ -154,6 +191,48 @@ export default function StudyFlashcardsPage() {
   const currentCard = deck[currentIndex];
   const categories = ["ALL", ...Array.from(new Set(allCards.map((c) => c.category)))];
   const masteredPercentage = deck.length > 0 ? Math.round((masteredIds.size / deck.length) * 100) : 0;
+
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <DatabaseLoadingIndicator
+            title="Verifying access..."
+            subtitle="Checking account subscription and permissions."
+            skeletonCount={3}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <DatabaseLoadingIndicator
+            title="Redirecting to login..."
+            subtitle="Please sign in to access flashcards study mode."
+            skeletonCount={2}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (!isPaid || isRedirectingToUpgrade) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <DatabaseLoadingIndicator
+            title="Redirecting to upgrade..."
+            subtitle="Flashcards study mode requires an active Pro subscription."
+            skeletonCount={2}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
