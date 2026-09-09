@@ -1,11 +1,15 @@
-﻿{
+{
   "name": "GovStudyX",
   "short_name": "GovStudyX",
   "description": "Comprehensive practice drills and mock exams for Civil Service Exam preparation.",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0f172a",
+  "lang": "en",
+  "categories": ["education"],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

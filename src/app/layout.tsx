@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  applicationName: "GovStudyX",
   title: {
     default: `${siteConfig.name} - ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
@@ -28,6 +29,11 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   manifest: "/manifest.json",
   metadataBase: new URL(siteConfig.url),
+  appleWebApp: {
+    capable: true,
+    title: "GovStudyX",
+    statusBarStyle: "default",
+  },
 };
 
 export const viewport: Viewport = {

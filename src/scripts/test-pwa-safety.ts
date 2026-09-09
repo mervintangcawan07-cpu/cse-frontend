@@ -220,10 +220,61 @@ async function runTests() {
   assert.match(offlineHtmlSource, /window\.location\.reload\(\)/, "public/offline.html must provide a reload button");
   assert.doesNotMatch(offlineHtmlSource, /localStorage|sessionStorage|indexedDB|fetch\s*\(|axios/i, "public/offline.html must not access application storage or invoke APIs");
 
-  console.log("\n✅ ALL 16 PWA-1B SAFETY & REGISTRATION TESTS PASSED.");
+  // 17. Manifest existence and JSON validity
+  console.log("✓ Test 17: public/manifest.json exists and parses as valid JSON");
+  assert.equal(existsSync(join(process.cwd(), "public/manifest.json")), true, "public/manifest.json must exist");
+  const manifestRaw = readSource("public/manifest.json");
+  let manifest: any;
+  try {
+    manifest = JSON.parse(manifestRaw);
+  } catch (e) {
+    assert.fail(`public/manifest.json must be valid JSON: ${e}`);
+  }
+
+  // 18. Manifest root identity & scope preservation
+  console.log("✓ Test 18: manifest identity strictly matches root without tracking params");
+  assert.equal(manifest.id, "/", "manifest.id must be strictly '/'");
+  assert.equal(manifest.start_url, "/", "manifest.start_url must be strictly '/'");
+  assert.equal(manifest.scope, "/", "manifest.scope must be strictly '/'");
+
+  // 19. Required fields & display mode
+  console.log("✓ Test 19: manifest required installability fields and categories");
+  assert.equal(manifest.name, "GovStudyX", "manifest.name must be 'GovStudyX'");
+  assert.equal(manifest.short_name, "GovStudyX", "manifest.short_name must be 'GovStudyX'");
+  assert.equal(manifest.display, "standalone", "manifest.display must be 'standalone'");
+  assert.equal(manifest.display_override, undefined, "manifest.display_override must not be set in PWA-2A");
+  assert.deepEqual(manifest.categories, ["education"], "manifest.categories must be ['education']");
+  assert.equal(manifest.lang, "en", "manifest.lang must be 'en'");
+
+  // 20. Manifest icon compliance & maskable protection
+  console.log("✓ Test 20: manifest contains required icon sizes without premature maskable marking");
+  assert.ok(Array.isArray(manifest.icons), "manifest.icons must be an array");
+  const sizes = manifest.icons.map((i: any) => i.sizes);
+  assert.ok(sizes.includes("192x192"), "manifest.icons must include 192x192 icon");
+  assert.ok(sizes.includes("512x512"), "manifest.icons must include 512x512 icon");
+  assert.doesNotMatch(
+    manifestRaw,
+    /maskable/i,
+    "manifest icons must NOT be marked maskable in PWA-2A until artwork safe-zones are verified"
+  );
+
+  // 21. Root layout platform metadata
+  console.log("✓ Test 21: layout.tsx includes applicationName and appleWebApp metadata");
+  assert.match(
+    layoutSrc,
+    /applicationName:\s*["']GovStudyX["']/,
+    "src/app/layout.tsx must configure applicationName: 'GovStudyX'"
+  );
+  assert.match(
+    layoutSrc,
+    /appleWebApp:\s*\{[\s\S]*?capable:\s*true[\s\S]*?title:\s*["']GovStudyX["'][\s\S]*?statusBarStyle:\s*["']default["'][\s\S]*?\}/,
+    "src/app/layout.tsx must configure appleWebApp with capable: true, title: 'GovStudyX', and statusBarStyle: 'default'"
+  );
+
+  console.log("\n✅ ALL 21 PWA-2A SAFETY, REGISTRATION & METADATA TESTS PASSED.");
 }
 
 runTests().catch((err) => {
-  console.error("\n❌ PWA-1B Safety Test Failed:\n", err);
+  console.error("\n❌ PWA-2A Safety Test Failed:\n", err);
   process.exit(1);
 });
