@@ -4,6 +4,9 @@ import { formatPromptHTML } from "@/lib/formatPrompt";
 import { cleanMathText } from "@/lib/sanitizeMath";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
 interface DrillQuestion {
   id: string;
@@ -39,7 +42,19 @@ interface QuestionRecord {
 const STORAGE_SEEN_KEY = "cse_elimination_seen_ids";
 const STORAGE_CURRENT_SESSION = "cse_elimination_active_session";
 
+class Entitlement402Error extends Error {
+  constructor(message = "Payment required. Active PRO subscription required.") {
+    super(message);
+    this.name = "Entitlement402Error";
+  }
+}
+
 export default function EliminationTrainerPage() {
+  const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+  const [isRedirectingToUpgrade, setIsRedirectingToUpgrade] = useState(false);
+
   const [questions, setQuestions] = useState<DrillQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [eliminatedIndices, setEliminatedIndices] = useState<number[]>([]);
@@ -61,6 +76,12 @@ export default function EliminationTrainerPage() {
 
     const seenRaw = localStorage.getItem(STORAGE_SEEN_KEY) || "";
     const res = await fetch(`/api/drills/elimination?seenIds=${encodeURIComponent(seenRaw)}`);
+
+    if (res.status === 402) {
+      router.replace("/upgrade");
+      throw new Entitlement402Error();
+    }
+
     const data = await res.json();
 
     if (!res.ok) {
@@ -107,9 +128,12 @@ export default function EliminationTrainerPage() {
         eliminationNotes,
       };
     });
-  }, []);
+  }, [router]);
 
   const loadDrillSession = useCallback(async () => {
+    if (status !== "authenticated" || !isPaid) {
+      return;
+    }
     setLoading(true);
     setLoadError(null);
     setQuestions([]);
@@ -120,36 +144,58 @@ export default function EliminationTrainerPage() {
     setScore(0);
     setHistory([]);
     try {
-      setQuestions(await requestDrillSession());
+      const q = await requestDrillSession();
+      setQuestions(q);
+      setLoading(false);
     } catch (err) {
+      if (err instanceof Entitlement402Error) {
+        setIsRedirectingToUpgrade(true);
+        return;
+      }
       console.error("Failed to load elimination drill questions:", err);
       setLoadError(err instanceof Error ? err.message : "Failed to load elimination questions.");
-    } finally {
       setLoading(false);
     }
-  }, [requestDrillSession]);
+  }, [status, isPaid, requestDrillSession]);
 
   // Current server eligibility is authoritative for every new drill load.
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      router.replace("/login");
+      return;
+    }
+
+    if (!isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+
     let active = true;
 
     void requestDrillSession()
       .then((dbQuestions) => {
-        if (active) setQuestions(dbQuestions);
+        if (active) {
+          setQuestions(dbQuestions);
+          setLoading(false);
+        }
       })
       .catch((err: unknown) => {
         if (!active) return;
+        if (err instanceof Entitlement402Error) {
+          setIsRedirectingToUpgrade(true);
+          return;
+        }
         console.error("Failed to load elimination drill questions:", err);
         setLoadError(err instanceof Error ? err.message : "Failed to load elimination questions.");
-      })
-      .finally(() => {
-        if (active) setLoading(false);
+        setLoading(false);
       });
 
     return () => {
       active = false;
     };
-  }, [requestDrillSession]);
+  }, [status, isPaid, router, requestDrillSession]);
 
   const handleToggleEliminate = (index: number) => {
     if (isRevealed) return;
@@ -224,6 +270,42 @@ export default function EliminationTrainerPage() {
     localStorage.setItem(STORAGE_SEEN_KEY, Array.from(existingSeenIds).join(","));
     sessionStorage.removeItem(STORAGE_CURRENT_SESSION);
   };
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access strategy drills."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (!isPaid || isRedirectingToUpgrade) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to upgrade..."
+          subtitle="Strategy & Technique Drills require an active Pro subscription."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (

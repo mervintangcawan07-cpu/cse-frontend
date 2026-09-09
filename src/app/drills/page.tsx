@@ -1,9 +1,68 @@
 // Relative Path: src/app/drills/page.tsx
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
 export default function DrillsPage() {
+  const router = useRouter();
+  const { user, status } = useAuth();
+
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !user) {
+      router.replace("/login");
+      return;
+    }
+
+    if (!isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+  }, [status, user, isPaid, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated" || !user) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access strategy drills."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (!isPaid) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to upgrade..."
+          subtitle="Strategy & Technique Drills require an active Pro subscription."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
       <div className="bg-white rounded-none border-x-0 sm:rounded-2xl sm:border lg:rounded-3xl border-slate-200/90 shadow-md overflow-hidden">
