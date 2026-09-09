@@ -70,7 +70,31 @@ export default function PracticeAndPrepPage() {
           </div>
         </div>
 
-        {/* CARD 2: SMART MISTAKE NOTEBOOK (BALIK-ARAL) */}
+        {/* CARD 2: CUSTOM PRACTICE QUIZ BUILDER */}
+        <div className="bg-white border border-violet-200/90 p-6 rounded-3xl shadow-md space-y-4 text-slate-900 flex flex-col justify-between relative overflow-hidden group hover:border-violet-400 hover:shadow-lg transition-all duration-300 sm:col-span-2 lg:col-span-1">
+          <div className="relative z-10">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-violet-50 text-violet-700 rounded-md border border-violet-200">
+                Custom Builder
+              </span>
+              <span className="text-xs font-bold text-violet-700">🎛️ Configurable</span>
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Custom Practice Quiz</h2>
+            <p className="text-xs text-slate-600 leading-relaxed mt-2 font-medium">
+              <strong className="text-violet-700 font-bold">Your quiz, your rules!</strong> Choose your topics, item count (10–170), question pool (All, Unattempted, or Mistakes), and mode (Timed or Self-Paced).
+            </p>
+          </div>
+          <div className="pt-2 relative z-10">
+            <Link
+              href="/practice/custom"
+              className="inline-block w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-violet-600/30"
+            >
+              Build Custom Quiz 🎛️
+            </Link>
+          </div>
+        </div>
+
+        {/* CARD 3: SMART MISTAKE NOTEBOOK (BALIK-ARAL) */}
         <div className="bg-white text-slate-900 p-6 rounded-3xl border border-rose-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-rose-400 hover:shadow-lg transition-all duration-300">
           <div className="relative z-10">
             <div className="flex justify-between items-center">
@@ -96,7 +120,7 @@ export default function PracticeAndPrepPage() {
           </div>
         </div>
 
-        {/* CARD 3: SPECIALIZED STRATEGY & TECHNIQUE DRILLS */}
+        {/* CARD 4: SPECIALIZED STRATEGY & TECHNIQUE DRILLS */}
         <div className="bg-white text-slate-900 p-6 rounded-3xl border border-emerald-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-400 hover:shadow-lg transition-all duration-300">
           <div className="relative z-10">
             <div className="flex justify-between items-center">
@@ -131,7 +155,7 @@ export default function PracticeAndPrepPage() {
           </div>
         </div>
 
-        {/* CARD 4: 1v1 STUDY DUELS */}
+        {/* CARD 5: 1v1 STUDY DUELS */}
         <div className="bg-white border border-amber-200/90 p-6 rounded-3xl shadow-md space-y-4 text-slate-900 flex flex-col justify-between relative overflow-hidden group hover:border-amber-400 hover:shadow-lg transition-all duration-300">
           <div className="relative z-10">
             <div className="flex justify-between items-center">
@@ -169,30 +193,6 @@ export default function PracticeAndPrepPage() {
                 🔒 Unlock 1v1 Duels
               </Link>
             )}
-          </div>
-        </div>
-
-        {/* CARD 5: CUSTOM PRACTICE QUIZ BUILDER */}
-        <div className="bg-white border border-violet-200/90 p-6 rounded-3xl shadow-md space-y-4 text-slate-900 flex flex-col justify-between relative overflow-hidden group hover:border-violet-400 hover:shadow-lg transition-all duration-300 sm:col-span-2 lg:col-span-1">
-          <div className="relative z-10">
-            <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-violet-50 text-violet-700 rounded-md border border-violet-200">
-                Custom Builder
-              </span>
-              <span className="text-xs font-bold text-violet-700">🎛️ Configurable</span>
-            </div>
-            <h2 className="text-xl font-extrabold text-slate-900 mt-3">Custom Practice Quiz</h2>
-            <p className="text-xs text-slate-600 leading-relaxed mt-2 font-medium">
-              <strong className="text-violet-700 font-bold">Your quiz, your rules!</strong> Choose your topics, item count (10–170), question pool (All, Unattempted, or Mistakes), and mode (Timed or Self-Paced).
-            </p>
-          </div>
-          <div className="pt-2 relative z-10">
-            <Link
-              href="/practice/custom"
-              className="inline-block w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-violet-600/30"
-            >
-              Build Custom Quiz 🎛️
-            </Link>
           </div>
         </div>
       </div>
