@@ -3,6 +3,8 @@ import { andQuestionWhere, findBankQuestions, orQuestionWhere, questionIdsWhere,
 // Relative Path: src/app/api/exam/start/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { isAccountAuthorizedFor } from "@/lib/accountLifecycle";
+import { CACHE_PROFILES } from "@/lib/cache";
 import { prisma } from "@/lib/prisma";
 import {
   EXAM_START_LIMITER,
@@ -34,7 +36,7 @@ export async function GET(request: Request) {
   try {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: CACHE_PROFILES.PRIVATE });
     }
     const userId = authenticatedUser.id;
 
@@ -49,17 +51,125 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
 
-    // --- Original param ---
-    const selectedCategory = searchParams.get("category") || "All";
+    // Raw presence check for the four custom quiz builder parameters
+    const hasItemCount = searchParams.has("itemCount");
+    const hasCategories = searchParams.has("categories");
+    const hasPool = searchParams.has("pool");
+    const hasMode = searchParams.has("mode");
 
-    // --- Custom Quiz Builder params ---
-    const itemCountParam = searchParams.get("itemCount");
-    const categoriesParam = searchParams.get("categories"); // comma-separated or null
-    const pool = (searchParams.get("pool") || "ALL").toUpperCase(); // ALL | UNATTEMPTED | MISTAKES_ONLY
-    const mode = (searchParams.get("mode") || "TIMED").toUpperCase(); // TIMED | SELF_PACED
-    const isCustom = Boolean(itemCountParam || categoriesParam || pool !== "ALL" || mode !== "TIMED");
+    const customParamCount =
+      (hasItemCount ? 1 : 0) +
+      (hasCategories ? 1 : 0) +
+      (hasPool ? 1 : 0) +
+      (hasMode ? 1 : 0);
 
-    const targetItemCount = itemCountParam ? Math.min(Math.max(parseInt(itemCountParam, 10) || 20, 1), 170) : null;
+    let isCustom = false;
+    let targetItemCount: number | null = null;
+    let pool = "ALL";
+    let mode = "TIMED";
+    let selectedCategory = "All";
+    let requiredCategories: string[] = ALL_CATEGORIES;
+
+    // Classification Rule A: 0 of 4 custom parameters -> Standard Mock Exam (Requires PRO)
+    if (customParamCount === 0) {
+      if (!isAccountAuthorizedFor(authenticatedUser, "PRO")) {
+        return NextResponse.json(
+          { error: "Payment required. Active PRO subscription required." },
+          { status: 402, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
+      selectedCategory = searchParams.get("category") || "All";
+      if (selectedCategory === "All") {
+        requiredCategories = ALL_CATEGORIES;
+      } else {
+        requiredCategories = [selectedCategory];
+      }
+    }
+    // Classification Rule B: 1 to 3 custom parameters -> Malformed partial custom request (HTTP 400)
+    else if (customParamCount < 4) {
+      return NextResponse.json(
+        {
+          error:
+            "Invalid custom quiz configuration: all four custom parameters (itemCount, categories, pool, mode) must be provided.",
+        },
+        { status: 400, headers: CACHE_PROFILES.PRIVATE }
+      );
+    }
+    // Classification Rule C: All 4 custom parameters present -> Strict validation -> Allowed for free authenticated users
+    else {
+      const itemCountRaw = searchParams.get("itemCount") ?? "";
+      const categoriesRaw = searchParams.get("categories") ?? "";
+      const poolRaw = searchParams.get("pool") ?? "";
+      const modeRaw = searchParams.get("mode") ?? "";
+
+      // 1. Validate itemCount: decimal integer only between 1 and 170
+      if (!/^\d+$/.test(itemCountRaw)) {
+        return NextResponse.json(
+          { error: "Invalid itemCount: must be a decimal integer between 1 and 170." },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+      const parsedItemCount = parseInt(itemCountRaw, 10);
+      if (parsedItemCount < 1 || parsedItemCount > 170) {
+        return NextResponse.json(
+          { error: "Invalid itemCount: must be between 1 and 170." },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
+      // 2. Validate categories: non-empty comma-separated list of supported builder categories
+      if (!categoriesRaw.trim()) {
+        return NextResponse.json(
+          { error: "Invalid categories: at least one valid category must be selected." },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+      const rawCategoryList = categoriesRaw.split(",");
+      const validatedCategories: string[] = [];
+      for (const cat of rawCategoryList) {
+        const trimmed = cat.trim();
+        if (!trimmed) {
+          return NextResponse.json(
+            { error: "Invalid categories: empty category entries are not allowed." },
+            { status: 400, headers: CACHE_PROFILES.PRIVATE }
+          );
+        }
+        if (!ALL_CATEGORIES.includes(trimmed)) {
+          return NextResponse.json(
+            { error: `Invalid categories: unsupported category "${trimmed}".` },
+            { status: 400, headers: CACHE_PROFILES.PRIVATE }
+          );
+        }
+        if (!validatedCategories.includes(trimmed)) {
+          validatedCategories.push(trimmed);
+        }
+      }
+
+      // 3. Validate pool: exactly ALL, UNATTEMPTED, or MISTAKES_ONLY
+      const VALID_POOLS = ["ALL", "UNATTEMPTED", "MISTAKES_ONLY"];
+      if (!VALID_POOLS.includes(poolRaw)) {
+        return NextResponse.json(
+          { error: `Invalid pool: must be one of ${VALID_POOLS.join(", ")}.` },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
+      // 4. Validate mode: exactly TIMED or SELF_PACED
+      const VALID_MODES = ["TIMED", "SELF_PACED"];
+      if (!VALID_MODES.includes(modeRaw)) {
+        return NextResponse.json(
+          { error: `Invalid mode: must be one of ${VALID_MODES.join(", ")}.` },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
+      isCustom = true;
+      targetItemCount = parsedItemCount;
+      pool = poolRaw;
+      mode = modeRaw;
+      requiredCategories = validatedCategories;
+    }
 
     // 1. Gather question IDs from user history for pool filtering
     const userResults = await prisma.examResult.findMany({
@@ -106,19 +216,7 @@ export async function GET(request: Request) {
       mistakes.forEach((m) => mistakeQuestionIds.add(m.questionId));
     }
 
-    // 2. Determine active categories
-    let requiredCategories: string[];
-    if (isCustom && categoriesParam) {
-      requiredCategories = categoriesParam
-        .split(",")
-        .map((c) => c.trim())
-        .filter((c) => ALL_CATEGORIES.includes(c));
-      if (requiredCategories.length === 0) requiredCategories = ALL_CATEGORIES;
-    } else if (selectedCategory === "All") {
-      requiredCategories = ALL_CATEGORIES;
-    } else {
-      requiredCategories = [selectedCategory];
-    }
+    // 2. Questions query matching determined categories
 
     // 3. Fetch ALL matching non-deleted questions in one DB query
     const allQuestions = await findBankQuestions({
@@ -361,16 +459,19 @@ export async function GET(request: Request) {
     // Final cap at 170 items
     const cappedExam = preparedQuestions.slice(0, 170);
 
-    return NextResponse.json({
-      success: true,
-      totalItems: cappedExam.length,
-      questions: cappedExam,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        totalItems: cappedExam.length,
+        questions: cappedExam,
+      },
+      { headers: CACHE_PROFILES.PRIVATE }
+    );
   } catch (error: any) {
     console.error("[CATEGORY_SUBTOPIC_SMART_EXAM_ERROR]", error);
     return NextResponse.json(
       { error: "Failed to assemble categorized exam pool" },
-      { status: 500 }
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
     );
   }
 }

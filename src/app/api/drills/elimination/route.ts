@@ -2,12 +2,23 @@
 import { NextResponse } from "next/server";
 import { findBankQuestions } from "@/lib/questionBank";
 import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
+import { requireProAuth } from "@/lib/serverAuth";
+import { CACHE_PROFILES } from "@/lib/cache";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(request: Request) {
   try {
+    const { user, errorResponse } = await requireProAuth(request);
+    if (errorResponse) {
+      const data = await errorResponse.json();
+      return NextResponse.json(data, {
+        status: errorResponse.status,
+        headers: CACHE_PROFILES.PRIVATE,
+      });
+    }
+
     const { searchParams } = new URL(request.url);
     const seenParam = searchParams.get("seenIds") || "";
     const seenIds = new Set(seenParam.split(",").filter(Boolean));
@@ -19,7 +30,7 @@ export async function GET(request: Request) {
     });
 
     if (allDrillQuestions.length === 0) {
-      return NextResponse.json({ success: true, drills: [], loopReset: false });
+      return NextResponse.json({ success: true, drills: [], loopReset: false }, { headers: CACHE_PROFILES.PRIVATE });
     }
 
     let candidatePool = allDrillQuestions.filter((q) => !seenIds.has(q.id));
@@ -78,13 +89,13 @@ export async function GET(request: Request) {
       success: true,
       drills: finalDrills,
       loopReset,
-    });
+    }, { headers: CACHE_PROFILES.PRIVATE });
   } catch (error: unknown) {
     const err = error as Error;
     console.error("Failed to fetch elimination drills:", err);
     return NextResponse.json(
       { error: "Failed to fetch elimination drills" },
-      { status: 500 }
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
     );
   }
 }

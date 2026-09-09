@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireAdminAuth } from "@/lib/serverAuth";
+import { requireAdminAuth, requireProAuth } from "@/lib/serverAuth";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 import { getCachedReviewerNotes, revalidateReviewerCatalog } from "@/lib/cache/serverCache";
 
 // GET: Fetch all study notes via Authoritative Server Data Cache
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { user, errorResponse } = await requireProAuth(req);
+    if (errorResponse) {
+      const data = await errorResponse.json();
+      return NextResponse.json(data, {
+        status: errorResponse.status,
+        headers: CACHE_PROFILES.PRIVATE,
+      });
+    }
+
     const notes = await getCachedReviewerNotes();
     return cachedJsonResponse(
       { notes },
