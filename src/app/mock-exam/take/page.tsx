@@ -206,39 +206,13 @@ function TakeExamPageInner() {
   useEffect(() => {
     async function initExam() {
       try {
-        const [questionsRes, bookmarkRes] = await Promise.allSettled([
-          fetch("/api/questions").then((r) => (r.ok ? r.json() : null)),
-          fetch("/api/bookmarks").then((r) => (r.ok ? r.json() : null)),
-        ]);
+        const bookmarkRes = await fetch("/api/bookmarks")
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
 
-        if (questionsRes.status === "fulfilled" && questionsRes.value?.questions) {
-          // Standard official CSE category normalization & deduplication
-          const categoryMap = new Map<string, string>();
-          questionsRes.value.questions.forEach((q: Question) => {
-            const raw = q.category?.trim();
-            if (raw && !raw.toLowerCase().includes("elimination drill")) {
-              const lower = raw.toLowerCase();
-              if (!categoryMap.has(lower)) {
-                if (lower.includes("verbal")) categoryMap.set(lower, "Verbal Ability");
-                else if (lower.includes("numerical")) categoryMap.set(lower, "Numerical Reasoning");
-                else if (lower.includes("analytical")) categoryMap.set(lower, "Analytical Reasoning");
-                else if (lower.includes("general")) categoryMap.set(lower, "General Information");
-                else if (lower.includes("clerical")) categoryMap.set(lower, "Clerical Ability");
-                else {
-                  categoryMap.set(lower, raw.charAt(0).toUpperCase() + raw.slice(1));
-                }
-              }
-            }
-          });
-          const catList = Array.from(new Set(categoryMap.values()));
-          if (catList.length > 0) {
-            setCategories(catList);
-          }
-        }
-
-        if (bookmarkRes.status === "fulfilled" && bookmarkRes.value?.bookmarks) {
+        if (bookmarkRes?.bookmarks) {
           const ids = new Set<string>(
-            bookmarkRes.value.bookmarks
+            bookmarkRes.bookmarks
               .filter((b: any) => b.targetType === "QUESTION" || !b.targetType)
               .map((b: any) => b.id)
           );

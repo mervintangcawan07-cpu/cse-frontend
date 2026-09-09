@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 import {
   getAuthenticatedSessionResult,
   getAuthenticatedUser,
+  requireProAuth,
 } from "@/lib/serverAuth";
+import { CACHE_PROFILES } from "@/lib/cache";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import Papa from "papaparse";
@@ -29,9 +31,19 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export async function GET(request: Request) {
   try {
-    const user = await getAuthenticatedUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { user, errorResponse } = await requireProAuth(request);
+    if (errorResponse || !user) {
+      if (errorResponse) {
+        const data = await errorResponse.json();
+        return NextResponse.json(data, {
+          status: errorResponse.status,
+          headers: CACHE_PROFILES.PRIVATE,
+        });
+      }
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401, headers: CACHE_PROFILES.PRIVATE }
+      );
     }
     const userId = user.id;
 
@@ -42,7 +54,10 @@ export async function GET(request: Request) {
     const requestedLimit = limitParam ? parseInt(limitParam, 10) : 170;
 
     if (isEliminationQuestion({ category: category || "", subtopic: subtopic || "" })) {
-      return NextResponse.json({ success: true, questions: [] });
+      return NextResponse.json(
+        { success: true, questions: [] },
+        { headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     // ------------------------------------------------------------------
@@ -111,10 +126,13 @@ export async function GET(request: Request) {
         const catchAllPool = await findBankQuestions({
           where: catchAllWhere,
         });
-        return NextResponse.json({
-          success: true,
-          questions: shuffleArray(catchAllPool).slice(0, requestedLimit),
-        });
+        return NextResponse.json(
+          {
+            success: true,
+            questions: shuffleArray(catchAllPool).slice(0, requestedLimit),
+          },
+          { headers: CACHE_PROFILES.PRIVATE }
+        );
       }
 
       // In-Memory Prioritization: Unmastered first, then Mastered recycling
@@ -127,10 +145,13 @@ export async function GET(request: Request) {
         picked.push(...shuffleArray(mastered).slice(0, needed));
       }
 
-      return NextResponse.json({
-        success: true,
-        questions: picked.slice(0, requestedLimit),
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          questions: picked.slice(0, requestedLimit),
+        },
+        { headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     // ------------------------------------------------------------------
@@ -230,17 +251,26 @@ export async function GET(request: Request) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
-      questions: finalExamQuestions.slice(0, 170),
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        questions: finalExamQuestions.slice(0, 170),
+      },
+      { headers: CACHE_PROFILES.PRIVATE }
+    );
   } catch (error: any) {
     const bankError = questionBankErrorResponse(error);
-    if (bankError) return bankError;
+    if (bankError) {
+      const data = await bankError.json();
+      return NextResponse.json(data, {
+        status: bankError.status,
+        headers: CACHE_PROFILES.PRIVATE,
+      });
+    }
     console.error("[QUESTIONS_FETCH_ERROR]", error);
     return NextResponse.json(
       { error: "Failed to fetch questions." },
-      { status: 500 }
+      { status: 500, headers: CACHE_PROFILES.PRIVATE }
     );
   }
 }
