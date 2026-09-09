@@ -6,52 +6,61 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LearningHubPage() {
-  const { user } = useAuth();
+  const { user, status } = useAuth();
   const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
   const [stats, setStats] = useState({ notesCount: 0, handbooksCount: 0 });
 
   useEffect(() => {
+    if (status === "loading") return;
+
     const controller = new AbortController();
 
     async function loadStats() {
-      try {
-        const [notesRes, handbooksRes] = await Promise.all([
-          fetch("/api/reviewer", {
+      // 1. Reading Materials stats (available to all users)
+      void (async () => {
+        try {
+          const res = await fetch("/api/reading-materials", {
             cache: "no-store",
             signal: controller.signal,
-          }),
-          fetch("/api/reading-materials", {
-            cache: "no-store",
-            signal: controller.signal,
-          }),
-        ]);
-
-        if (!notesRes.ok || !handbooksRes.ok) {
-          throw new Error("Failed to load Learning Hub catalog stats.");
+          });
+          if (!res.ok) return;
+          const data: { handbooks?: unknown[] } = await res.json();
+          if (!controller.signal.aborted) {
+            setStats((prev) => ({ ...prev, handbooksCount: data.handbooks?.length || 0 }));
+          }
+        } catch (err) {
+          if (err instanceof DOMException && err.name === "AbortError") return;
+          console.error("[LEARNING_HUB_HANDBOOKS_ERROR]", err);
         }
+      })();
 
-        const [notesData, handbookData]: [
-          { notes?: unknown[] },
-          { handbooks?: unknown[] },
-        ] = await Promise.all([notesRes.json(), handbooksRes.json()]);
-
-        setStats({
-          notesCount: notesData.notes?.length || 0,
-          handbooksCount: handbookData.handbooks?.length || 0,
-        });
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return;
-        }
-
-        console.error("[LEARNING_HUB_STATS_ERROR]", error);
+      // 2. Reviewer stats (only for authenticated Paid/Admin users)
+      if (status === "authenticated" && isPaid) {
+        void (async () => {
+          try {
+            const res = await fetch("/api/reviewer", {
+              cache: "no-store",
+              signal: controller.signal,
+            });
+            if (!res.ok) return;
+            const data: { notes?: unknown[] } = await res.json();
+            if (!controller.signal.aborted) {
+              setStats((prev) => ({ ...prev, notesCount: data.notes?.length || 0 }));
+            }
+          } catch (err) {
+            if (err instanceof DOMException && err.name === "AbortError") return;
+            console.error("[LEARNING_HUB_NOTES_ERROR]", err);
+          }
+        })();
+      } else {
+        setStats((prev) => (prev.notesCount === 0 ? prev : { ...prev, notesCount: 0 }));
       }
     }
 
     void loadStats();
 
     return () => controller.abort();
-  }, []);
+  }, [status, isPaid]);
 
   return (
     <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">
@@ -96,7 +105,7 @@ export default function LearningHubPage() {
               </Link>
             ) : (
               <Link
-                href="/dashboard"
+                href="/upgrade"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
               >
                 🔒 Unlock Flashcards
@@ -120,21 +129,12 @@ export default function LearningHubPage() {
             </p>
           </div>
           <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/bookmarks"
-                className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-emerald-600/30"
-              >
-                View Bookmarks 🔖
-              </Link>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
-              >
-                🔒 Unlock Bookmarks
-              </Link>
-            )}
+            <Link
+              href="/bookmarks"
+              className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-emerald-600/30"
+            >
+              View Bookmarks 🔖
+            </Link>
           </div>
         </div>
 
@@ -162,7 +162,7 @@ export default function LearningHubPage() {
               </Link>
             ) : (
               <Link
-                href="/dashboard"
+                href="/upgrade"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
               >
                 🔒 Unlock Study Notes
@@ -186,21 +186,12 @@ export default function LearningHubPage() {
             </p>
           </div>
           <div className="pt-2 relative z-10">
-            {isPaid ? (
-              <Link
-                href="/reading-materials"
-                className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-purple-600/30"
-              >
-                Open PDF Reader 📖
-              </Link>
-            ) : (
-              <Link
-                href="/dashboard"
-                className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
-              >
-                🔒 Unlock Handbooks
-              </Link>
-            )}
+            <Link
+              href="/reading-materials"
+              className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-purple-600/30"
+            >
+              Open PDF Reader 📖
+            </Link>
           </div>
         </div>
       </div>
