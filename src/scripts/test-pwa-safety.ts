@@ -1,5 +1,5 @@
 // Relative Path: src/scripts/test-pwa-safety.ts
-// Automated safety and boundary test suite for GovStudyX PWA-1A.
+// Automated safety, boundary, and controlled registration test suite for GovStudyX PWA-1B.
 
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -25,90 +25,146 @@ function findFilesInDir(dir: string, extensions: string[]): string[] {
 }
 
 async function runTests() {
-  console.log("▶ Running GovStudyX PWA-1A Safety Tests...\n");
+  console.log("▶ Running GovStudyX PWA-1B Safety & Registration Tests...\n");
 
   // 1. File existence
-  console.log("✓ Test 1: Required PWA-1A files exist");
+  console.log("✓ Test 1: Required PWA files exist");
   assert.equal(existsSync(join(process.cwd(), "public/sw.js")), true, "public/sw.js must exist");
   assert.equal(existsSync(join(process.cwd(), "public/offline.html")), true, "public/offline.html must exist");
+  assert.equal(existsSync(join(process.cwd(), "src/components/pwa/ServiceWorkerRegister.tsx")), true, "ServiceWorkerRegister.tsx must exist");
 
   const swSource = readSource("public/sw.js");
   const offlineHtmlSource = readSource("public/offline.html");
   const nextConfigSrc = readSource("next.config.ts");
+  const registerSrc = readSource("src/components/pwa/ServiceWorkerRegister.tsx");
+  const layoutSrc = readSource("src/app/layout.tsx");
 
-  // 2. Registration absence
-  console.log("✓ Test 2: Service Worker registration is completely absent");
+  // 2. Exactly one controlled registration in runtime code
+  console.log("✓ Test 2: Exactly one controlled Service Worker registration exists in runtime code");
   const sourceFiles = [
     ...findFilesInDir(join(process.cwd(), "src"), [".ts", ".tsx", ".js", ".jsx", ".mjs"]),
     ...findFilesInDir(join(process.cwd(), "public"), [".html", ".js"]),
   ].filter((p) => !p.endsWith("test-pwa-safety.ts"));
 
+  const filesWithRegister: string[] = [];
   for (const file of sourceFiles) {
     const content = readFileSync(file, "utf8");
-    assert.doesNotMatch(
-      content,
-      /navigator\.serviceWorker\.register/i,
-      `Service worker registration found in ${file}. PWA-1A must remain inert.`
-    );
+    if (/navigator\s*\.\s*serviceWorker\s*\.\s*register/i.test(content)) {
+      filesWithRegister.push(file.replace(/\\/g, "/"));
+    }
   }
 
-  // 3. Service-worker forbidden constructs
-  console.log("✓ Test 3: sw.js does not contain skipWaiting or clients.claim");
-  assert.doesNotMatch(
-    swSource,
-    /skipWaiting\s*\(/i,
-    "public/sw.js must not invoke skipWaiting() in PWA-1A"
+  assert.equal(
+    filesWithRegister.length,
+    1,
+    `Expected exactly 1 runtime file with navigator.serviceWorker.register, found: ${filesWithRegister.join(", ")}`
   );
-  assert.doesNotMatch(
-    swSource,
-    /clients\.claim\s*\(/i,
-    "public/sw.js must not invoke clients.claim() in PWA-1A"
+  assert.ok(
+    filesWithRegister[0].endsWith("src/components/pwa/ServiceWorkerRegister.tsx"),
+    `Registration must only exist in ServiceWorkerRegister.tsx, found in: ${filesWithRegister[0]}`
   );
 
-  // 4. API safety boundary
-  console.log("✓ Test 4: sw.js enforces broad /api boundary");
+  // 3. Exact registration arguments
+  console.log("✓ Test 3: Registration arguments strictly match approved specification");
+  assert.match(
+    registerSrc,
+    /navigator\s*\.\s*serviceWorker\s*\.\s*register\(\s*["']\/sw\.js["']\s*,\s*\{[\s\S]*?scope:\s*["']\/["'][\s\S]*?updateViaCache:\s*["']none["'][\s\S]*?\}\s*\)/,
+    "Registration must specify script '/sw.js', scope '/', and updateViaCache 'none'"
+  );
+  assert.doesNotMatch(
+    registerSrc,
+    /type:\s*["']module["']/,
+    "ServiceWorkerRegister must not use type: 'module' (sw.js is a classic worker)"
+  );
+
+  // 4. Production gate requirement
+  console.log("✓ Test 4: Service worker registration is strictly gated to production");
+  assert.match(
+    registerSrc,
+    /process\.env\.NODE_ENV\s*!==\s*["']production["'][\s\S]*?return/,
+    "ServiceWorkerRegister must return immediately when NODE_ENV is not production"
+  );
+
+  // 5. Load-timing & lifecycle safety
+  console.log("✓ Test 5: Registration occurs post-load with proper listener cleanup");
+  assert.match(
+    registerSrc,
+    /document\.readyState\s*===\s*["']complete["']/,
+    "ServiceWorkerRegister must check document.readyState === 'complete'"
+  );
+  assert.match(
+    registerSrc,
+    /window\.addEventListener\(\s*["']load["']/,
+    "ServiceWorkerRegister must attach load event listener when document is not yet complete"
+  );
+  assert.match(
+    registerSrc,
+    /window\.removeEventListener\(\s*["']load["']/,
+    "ServiceWorkerRegister must clean up the load event listener in effect teardown"
+  );
+
+  // 6. Forbidden lifecycle actions in registration component
+  console.log("✓ Test 6: Registration component contains zero aggressive activation or reload logic");
+  assert.doesNotMatch(registerSrc, /skipWaiting\s*\(/i, "Registration must not invoke skipWaiting()");
+  assert.doesNotMatch(registerSrc, /clients\.claim\s*\(/i, "Registration must not invoke clients.claim()");
+  assert.doesNotMatch(registerSrc, /postMessage\s*\(/i, "Registration must not send postMessage to workers");
+  assert.doesNotMatch(registerSrc, /controllerchange/i, "Registration must not listen for controllerchange");
+  assert.doesNotMatch(registerSrc, /(?:window\.)?location\.reload\s*\(/i, "Registration must not trigger location.reload()");
+  assert.doesNotMatch(registerSrc, /unregister\s*\(/i, "Registration must not call unregister()");
+  assert.doesNotMatch(registerSrc, /setInterval\s*\(/i, "Registration must not set polling intervals");
+
+  // 7. Root layout integration
+  console.log("✓ Test 7: Root layout imports and mounts ServiceWorkerRegister as Server Component boundary");
+  assert.doesNotMatch(
+    layoutSrc,
+    /^["']use client["']/m,
+    "src/app/layout.tsx must remain a Server Component"
+  );
+  assert.match(
+    layoutSrc,
+    /import\s+ServiceWorkerRegister\s+from\s+["']@\/components\/pwa\/ServiceWorkerRegister["']/,
+    "src/app/layout.tsx must import ServiceWorkerRegister"
+  );
+  assert.match(
+    layoutSrc,
+    /<ServiceWorkerRegister\s*\/>/,
+    "src/app/layout.tsx must mount <ServiceWorkerRegister />"
+  );
+
+  // 8. Service worker forbidden constructs
+  console.log("✓ Test 8: sw.js does not contain skipWaiting or clients.claim");
+  assert.doesNotMatch(swSource, /skipWaiting\s*\(/i, "public/sw.js must not invoke skipWaiting()");
+  assert.doesNotMatch(swSource, /clients\.claim\s*\(/i, "public/sw.js must not invoke clients.claim()");
+
+  // 9. API safety boundary in sw.js
+  console.log("✓ Test 9: sw.js enforces broad /api boundary");
   assert.match(
     swSource,
     /url\.pathname\s*===\s*["']\/api["']\s*\|\|\s*url\.pathname\.startsWith\(\s*["']\/api\/["']\s*\)/,
     "public/sw.js must explicitly bypass /api and /api/* routes"
   );
 
-  // 5. Non-GET safety
-  console.log("✓ Test 5: sw.js excludes non-GET requests before any handling");
+  // 10. Non-GET & cross-origin safety in sw.js
+  console.log("✓ Test 10: sw.js excludes non-GET and cross-origin requests before any handling");
   assert.match(
     swSource,
     /request\.method\s*!==\s*["']GET["'][\s\S]*?return;/,
     "public/sw.js must immediately return on non-GET requests without calling respondWith"
   );
-
-  // 6. Cross-origin safety
-  console.log("✓ Test 6: sw.js leaves cross-origin requests untouched");
   assert.match(
     swSource,
     /url\.origin\s*!==\s*self\.location\.origin[\s\S]*?return;/,
     "public/sw.js must immediately return on cross-origin requests"
   );
 
-  // 7. Next.js internal data & RSC safety
-  console.log("✓ Test 7: sw.js bypasses Next.js internal data and RSC requests");
-  assert.match(
-    swSource,
-    /_next\/data/,
-    "public/sw.js must exclude /_next/data/ requests"
-  );
-  assert.match(
-    swSource,
-    /_rsc/,
-    "public/sw.js must exclude _rsc query parameter requests"
-  );
-  assert.match(
-    swSource,
-    /headers\.get\(\s*["']RSC["']\s*\)/,
-    "public/sw.js must exclude requests with RSC header"
-  );
+  // 11. Next.js internal data & RSC safety in sw.js
+  console.log("✓ Test 11: sw.js bypasses Next.js internal data and RSC requests");
+  assert.match(swSource, /_next\/data/, "public/sw.js must exclude /_next/data/ requests");
+  assert.match(swSource, /_rsc/, "public/sw.js must exclude _rsc query parameter requests");
+  assert.match(swSource, /headers\.get\(\s*["']RSC["']\s*\)/, "public/sw.js must exclude requests with RSC header");
 
-  // 8. Offline cache scope
-  console.log("✓ Test 8: sw.js only precaches /offline.html");
+  // 12. Offline cache scope in sw.js
+  console.log("✓ Test 12: sw.js only precaches /offline.html");
   assert.match(
     swSource,
     /const\s+OFFLINE_URL\s*=\s*["']\/offline\.html["']/,
@@ -128,26 +184,14 @@ async function runTests() {
     "public/sw.js must not precache root, dashboard, api, static chunks, or manifest"
   );
 
-  // 9. Navigation behavior: network-first with offline fallback, no cache persistence
-  console.log("✓ Test 9: sw.js navigation behavior is network-first with offline fallback only");
-  assert.match(
-    swSource,
-    /request\.mode\s*===\s*["']navigate["']/,
-    "public/sw.js must gate respondWith to navigation mode"
-  );
-  assert.match(
-    swSource,
-    /fetch\(\s*request\s*\)\.catch/,
-    "public/sw.js must attempt network fetch first for navigation"
-  );
-  assert.doesNotMatch(
-    swSource,
-    /caches\.put|cache\.put/,
-    "public/sw.js must not store navigation responses into CacheStorage"
-  );
+  // 13. Navigation behavior in sw.js
+  console.log("✓ Test 13: sw.js navigation behavior is network-first with offline fallback only");
+  assert.match(swSource, /request\.mode\s*===\s*["']navigate["']/, "public/sw.js must gate respondWith to navigation mode");
+  assert.match(swSource, /fetch\(\s*request\s*\)\.catch/, "public/sw.js must attempt network fetch first for navigation");
+  assert.doesNotMatch(swSource, /caches\.put|cache\.put/, "public/sw.js must not store navigation responses into CacheStorage");
 
-  // 10. Sensitive-token scan
-  console.log("✓ Test 10: sw.js contains zero application-specific sensitive targets");
+  // 14. Sensitive-token scan in sw.js
+  console.log("✓ Test 14: sw.js contains zero application-specific sensitive targets");
   const sensitiveTokens = [
     "answerIndex",
     "examQuestions",
@@ -161,53 +205,25 @@ async function runTests() {
   ];
   for (const token of sensitiveTokens) {
     const regex = new RegExp(`\\b${token}\\b`, "i");
-    assert.doesNotMatch(
-      swSource,
-      regex,
-      `public/sw.js must not contain sensitive token: "${token}"`
-    );
+    assert.doesNotMatch(swSource, regex, `public/sw.js must not contain sensitive token: "${token}"`);
   }
 
-  // 11. Header rule in next.config.ts
-  console.log("✓ Test 11: next.config.ts contains exact /sw.js no-cache header rule");
-  assert.match(
-    nextConfigSrc,
-    /source:\s*["']\/sw\.js["']/,
-    "next.config.ts must define an exact source rule for /sw.js"
-  );
-  assert.match(
-    nextConfigSrc,
-    /no-cache,\s*no-store,\s*must-revalidate/,
-    "next.config.ts must configure Cache-Control: no-cache, no-store, must-revalidate for /sw.js"
-  );
+  // 15. Header rule in next.config.ts
+  console.log("✓ Test 15: next.config.ts contains exact /sw.js no-cache header rule");
+  assert.match(nextConfigSrc, /source:\s*["']\/sw\.js["']/, "next.config.ts must define an exact source rule for /sw.js");
+  assert.match(nextConfigSrc, /no-cache,\s*no-store,\s*must-revalidate/, "next.config.ts must configure Cache-Control: no-cache, no-store, must-revalidate for /sw.js");
 
-  // 12. Offline HTML self-containment
-  console.log("✓ Test 12: public/offline.html is static and self-contained");
-  assert.doesNotMatch(
-    offlineHtmlSource,
-    /<script[^>]+src=/i,
-    "public/offline.html must not load external scripts"
-  );
-  assert.doesNotMatch(
-    offlineHtmlSource,
-    /<link[^>]+rel=["']stylesheet["']/i,
-    "public/offline.html must not load external stylesheets"
-  );
-  assert.match(
-    offlineHtmlSource,
-    /window\.location\.reload\(\)/,
-    "public/offline.html must provide a reload button"
-  );
-  assert.doesNotMatch(
-    offlineHtmlSource,
-    /localStorage|sessionStorage|indexedDB|fetch\s*\(|axios/i,
-    "public/offline.html must not access application storage or invoke APIs"
-  );
+  // 16. Offline HTML self-containment
+  console.log("✓ Test 16: public/offline.html is static and self-contained");
+  assert.doesNotMatch(offlineHtmlSource, /<script[^>]+src=/i, "public/offline.html must not load external scripts");
+  assert.doesNotMatch(offlineHtmlSource, /<link[^>]+rel=["']stylesheet["']/i, "public/offline.html must not load external stylesheets");
+  assert.match(offlineHtmlSource, /window\.location\.reload\(\)/, "public/offline.html must provide a reload button");
+  assert.doesNotMatch(offlineHtmlSource, /localStorage|sessionStorage|indexedDB|fetch\s*\(|axios/i, "public/offline.html must not access application storage or invoke APIs");
 
-  console.log("\n✅ ALL 12 PWA-1A SAFETY TESTS PASSED.");
+  console.log("\n✅ ALL 16 PWA-1B SAFETY & REGISTRATION TESTS PASSED.");
 }
 
 runTests().catch((err) => {
-  console.error("\n❌ PWA-1A Safety Test Failed:\n", err);
+  console.error("\n❌ PWA-1B Safety Test Failed:\n", err);
   process.exit(1);
 });

@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FooterVisibility from "@/components/FooterVisibility";
 import CookieConsent from "@/components/common/CookieConsent";
+import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 import { siteConfig } from "@/lib/config/site";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
@@ -71,6 +72,9 @@ export default function RootLayout({
 
         {/* Cookie Consent Banner */}
         <CookieConsent />
+
+        {/* PWA Service Worker Registration */}
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
