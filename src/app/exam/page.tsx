@@ -33,7 +33,7 @@ export default function ExamHubPage() {
           if (data.user) {
             const isPaid = data.user.isPaid || data.user.role === "ADMIN";
             if (!isPaid) {
-              router.push("/dashboard");
+              router.push("/upgrade");
               return;
             }
             router.replace("/mock-exam/take");
