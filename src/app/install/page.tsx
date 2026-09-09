@@ -6,7 +6,7 @@ import { Zap, ShieldCheck, Laptop, ArrowLeft, BookOpen } from "lucide-react";
 import InstallAppClient from "@/components/pwa/InstallAppClient";
 
 export const metadata: Metadata = {
-  title: "Install GovStudyX | GovStudyX",
+  title: "Install GovStudyX",
   description:
     "Install GovStudyX on your phone or computer for quick access to Civil Service Exam review tools.",
   alternates: {
