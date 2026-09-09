@@ -61,7 +61,7 @@ export default function PracticeAndPrepPage() {
               </>
             ) : (
               <Link
-                href="/dashboard"
+                href="/upgrade"
                 className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition text-center"
               >
                 🔒 Unlock Mock Exam
@@ -122,7 +122,7 @@ export default function PracticeAndPrepPage() {
               </Link>
             ) : (
               <Link
-                href="/dashboard"
+                href="/upgrade"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
               >
                 🔒 Unlock Strategy Drills
@@ -163,7 +163,7 @@ export default function PracticeAndPrepPage() {
               </Link>
             ) : (
               <Link
-                href="/dashboard"
+                href="/upgrade"
                 className="inline-block w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs text-center rounded-xl transition"
               >
                 🔒 Unlock 1v1 Duels
