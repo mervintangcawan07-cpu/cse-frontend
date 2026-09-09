@@ -4,6 +4,7 @@ import LandingNav from "@/components/landing/LandingNav";
 import SampleChallengeSection from "@/components/landing/SampleChallengeSection";
 import PricingSection from "@/components/landing/PricingSection";
 import FaqSection from "@/components/landing/FaqSection";
+import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 
 const scopeCategories = [
   {
@@ -124,6 +125,10 @@ export default function LandingPage() {
             >
               Explore PRO Plans
             </a>
+            <InstallEntryLink
+              label="Install GovStudyX"
+              className="w-full sm:w-auto px-6 py-4 font-bold text-sm text-blue-700 bg-blue-50/80 hover:bg-blue-100 rounded-2xl border border-blue-200/80 shadow-xs transition text-center inline-flex items-center justify-center gap-2"
+            />
           </div>
 
           {/* Trust Highlights */}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 
 export default function LandingNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,6 +39,10 @@ export default function LandingNav() {
 
         {/* Action Buttons */}
         <div className="hidden sm:flex items-center gap-3">
+          <InstallEntryLink
+            label="Install App"
+            className="px-3.5 py-2 font-bold text-xs text-blue-600 bg-blue-50/80 hover:bg-blue-100 rounded-xl border border-blue-200/60 transition inline-flex items-center gap-1.5"
+          />
           <Link
             href="/login"
             className="px-4 py-2 font-bold text-xs text-slate-700 hover:text-blue-600 transition"
@@ -81,6 +86,11 @@ export default function LandingNav() {
             <a href="#faqs" onClick={() => setMobileMenuOpen(false)} className="py-1 hover:text-blue-600">FAQs</a>
           </div>
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2.5">
+            <InstallEntryLink
+              label="Install GovStudyX"
+              onNavigate={() => setMobileMenuOpen(false)}
+              className="w-full text-center py-2.5 font-bold text-xs text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl border border-blue-200/60 inline-flex items-center justify-center gap-2"
+            />
             <Link
               href="/login"
               onClick={() => setMobileMenuOpen(false)}
