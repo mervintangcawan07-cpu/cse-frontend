@@ -1,5 +1,5 @@
 // Relative Path: src/scripts/test-pwa-safety.ts
-// Automated safety, boundary, and controlled registration test suite for GovStudyX PWA-1B.
+// Automated safety, boundary, and controlled registration test suite for GovStudyX PWA-2D.
 
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -7,6 +7,18 @@ import { join } from "node:path";
 
 function readSource(relativePath: string): string {
   return readFileSync(join(process.cwd(), relativePath), "utf8");
+}
+
+function readPngDimensions(filePath: string): { width: number; height: number } {
+  const buf = readFileSync(filePath);
+  assert.equal(
+    buf.subarray(0, 8).toString("hex"),
+    "89504e470d0a1a0a",
+    `${filePath} must have valid PNG magic bytes`
+  );
+  const width = buf.readUInt32BE(16);
+  const height = buf.readUInt32BE(20);
+  return { width, height };
 }
 
 function findFilesInDir(dir: string, extensions: string[]): string[] {
@@ -25,7 +37,7 @@ function findFilesInDir(dir: string, extensions: string[]): string[] {
 }
 
 async function runTests() {
-  console.log("▶ Running GovStudyX PWA-1B Safety & Registration Tests...\n");
+  console.log("▶ Running GovStudyX PWA-2D Safety & Registration Tests...\n");
 
   // 1. File existence
   console.log("✓ Test 1: Required PWA files exist");
@@ -245,21 +257,88 @@ async function runTests() {
   assert.equal(manifest.display_override, undefined, "manifest.display_override must not be set in PWA-2A");
   assert.deepEqual(manifest.categories, ["education"], "manifest.categories must be ['education']");
   assert.equal(manifest.lang, "en", "manifest.lang must be 'en'");
+  assert.equal(manifest.description, "Comprehensive practice drills and mock exams for Civil Service Exam preparation.");
+  assert.equal(manifest.background_color, "#ffffff");
+  assert.equal(manifest.theme_color, "#0f172a");
 
-  // 20. Manifest icon compliance & maskable protection
-  console.log("✓ Test 20: manifest contains required icon sizes without premature maskable marking");
+  // 20. Manifest icon compliance & distinct purpose declarations
+  console.log("✓ Test 20: manifest contains exactly four distinct icon definitions with proper purpose separation");
   assert.ok(Array.isArray(manifest.icons), "manifest.icons must be an array");
-  const sizes = manifest.icons.map((i: any) => i.sizes);
-  assert.ok(sizes.includes("192x192"), "manifest.icons must include 192x192 icon");
-  assert.ok(sizes.includes("512x512"), "manifest.icons must include 512x512 icon");
+  assert.equal(manifest.icons.length, 4, "manifest.icons must contain exactly four icon entries");
+
+  // Standard 192 icon
+  const std192 = manifest.icons.find((i: any) => i.src === "/icons/icon-192x192.png");
+  assert.ok(std192, "Standard 192 icon entry (/icons/icon-192x192.png) must exist");
+  assert.equal(std192.sizes, "192x192", "Standard 192 icon sizes must be '192x192'");
+  assert.equal(std192.type, "image/png", "Standard 192 icon type must be 'image/png'");
+  assert.equal(std192.purpose, "any", "Standard 192 icon purpose must be 'any'");
+
+  // Standard 512 icon
+  const std512 = manifest.icons.find((i: any) => i.src === "/icons/icon-512x512.png");
+  assert.ok(std512, "Standard 512 icon entry (/icons/icon-512x512.png) must exist");
+  assert.equal(std512.sizes, "512x512", "Standard 512 icon sizes must be '512x512'");
+  assert.equal(std512.type, "image/png", "Standard 512 icon type must be 'image/png'");
+  assert.equal(std512.purpose, "any", "Standard 512 icon purpose must be 'any'");
+
+  // Maskable 192 icon
+  const mask192 = manifest.icons.find((i: any) => i.src === "/icons/icon-maskable-192x192.png");
+  assert.ok(mask192, "Maskable 192 icon entry (/icons/icon-maskable-192x192.png) must exist");
+  assert.equal(mask192.sizes, "192x192", "Maskable 192 icon sizes must be '192x192'");
+  assert.equal(mask192.type, "image/png", "Maskable 192 icon type must be 'image/png'");
+  assert.equal(mask192.purpose, "maskable", "Maskable 192 icon purpose must be 'maskable'");
+
+  // Maskable 512 icon
+  const mask512 = manifest.icons.find((i: any) => i.src === "/icons/icon-maskable-512x512.png");
+  assert.ok(mask512, "Maskable 512 icon entry (/icons/icon-maskable-512x512.png) must exist");
+  assert.equal(mask512.sizes, "512x512", "Maskable 512 icon sizes must be '512x512'");
+  assert.equal(mask512.type, "image/png", "Maskable 512 icon type must be 'image/png'");
+  assert.equal(mask512.purpose, "maskable", "Maskable 512 icon purpose must be 'maskable'");
+
+  // Distinct paths between standard and maskable icons
+  assert.notEqual(std192.src, mask192.src, "Standard 192 and maskable 192 paths must be distinct");
+  assert.notEqual(std512.src, mask512.src, "Standard 512 and maskable 512 paths must be distinct");
+
+  // No combined-purpose declarations
+  for (const icon of manifest.icons) {
+    assert.doesNotMatch(
+      icon.purpose,
+      /any\s+maskable|maskable\s+any/i,
+      `Icon ${icon.src} must not declare combined "any maskable" purpose`
+    );
+  }
   assert.doesNotMatch(
     manifestRaw,
-    /maskable/i,
-    "manifest icons must NOT be marked maskable in PWA-2A until artwork safe-zones are verified"
+    /any\s+maskable|maskable\s+any/i,
+    "manifest.json must not contain any combined 'any maskable' purpose declarations"
   );
 
-  // 21. Root layout platform metadata
-  console.log("✓ Test 21: layout.tsx includes applicationName and appleWebApp metadata");
+  // 21. Manifest icon disk existence and real image dimensions
+  console.log("✓ Test 21: all four manifest icon files exist on disk with valid PNG headers and exact dimensions");
+  const iconFiles = [
+    { src: "/icons/icon-192x192.png", expectedWidth: 192, expectedHeight: 192 },
+    { src: "/icons/icon-512x512.png", expectedWidth: 512, expectedHeight: 512 },
+    { src: "/icons/icon-maskable-192x192.png", expectedWidth: 192, expectedHeight: 192 },
+    { src: "/icons/icon-maskable-512x512.png", expectedWidth: 512, expectedHeight: 512 },
+  ];
+
+  for (const icon of iconFiles) {
+    const diskPath = join(process.cwd(), "public", icon.src.replace(/^\//, ""));
+    assert.equal(existsSync(diskPath), true, `Manifest icon file must exist on disk: ${diskPath}`);
+    const dims = readPngDimensions(diskPath);
+    assert.equal(
+      dims.width,
+      icon.expectedWidth,
+      `${icon.src} width must be ${icon.expectedWidth}, got ${dims.width}`
+    );
+    assert.equal(
+      dims.height,
+      icon.expectedHeight,
+      `${icon.src} height must be ${icon.expectedHeight}, got ${dims.height}`
+    );
+  }
+
+  // 22. Root layout platform metadata
+  console.log("✓ Test 22: layout.tsx includes applicationName and appleWebApp metadata");
   assert.match(
     layoutSrc,
     /applicationName:\s*["']GovStudyX["']/,
@@ -271,10 +350,10 @@ async function runTests() {
     "src/app/layout.tsx must configure appleWebApp with capable: true, title: 'GovStudyX', and statusBarStyle: 'default'"
   );
 
-  console.log("\n✅ ALL 21 PWA-2A SAFETY, REGISTRATION & METADATA TESTS PASSED.");
+  console.log("\n✅ ALL 22 PWA-2D SAFETY, REGISTRATION & METADATA TESTS PASSED.");
 }
 
 runTests().catch((err) => {
-  console.error("\n❌ PWA-2A Safety Test Failed:\n", err);
+  console.error("\n❌ PWA-2D Safety Test Failed:\n", err);
   process.exit(1);
 });
