@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
 interface BookmarkedItem {
   bookmarkId: string;
@@ -10,6 +12,7 @@ interface BookmarkedItem {
   id: string;
   category: string;
   bookmarkedAt: string;
+  isLocked?: boolean;
 
   // Question Fields
   prompt?: string;
@@ -26,6 +29,9 @@ interface BookmarkedItem {
 
 export default function BookmarksPage() {
   const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+
   const [bookmarks, setBookmarks] = useState<BookmarkedItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<"ALL" | "QUESTION" | "STUDY_NOTE">("ALL");
@@ -33,26 +39,50 @@ export default function BookmarksPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
 
-  const loadBookmarks = async () => {
-    try {
-      const res = await fetch("/api/bookmarks");
-      const data = await res.json();
-
-      if (res.ok && data.bookmarks) {
-        setBookmarks(data.bookmarks);
-      } else if (res.status === 401) {
-        router.push("/login");
-      }
-    } catch (err) {
-      console.error("Failed to fetch bookmarks:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    loadBookmarks();
-  }, []);
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      router.replace("/login");
+      return;
+    }
+
+    const controller = new AbortController();
+
+    async function loadBookmarks() {
+      try {
+        const res = await fetch("/api/bookmarks", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (controller.signal.aborted) return;
+
+        if (res.status === 401) {
+          router.replace("/login");
+          return;
+        }
+
+        const data = await res.json();
+        if (controller.signal.aborted) return;
+
+        if (res.ok && data.bookmarks) {
+          setBookmarks(data.bookmarks);
+        }
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to fetch bookmarks:", err);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadBookmarks();
+
+    return () => controller.abort();
+  }, [status, isPaid, router]);
 
   const handleRemoveBookmark = async (bookmarkId: string) => {
     try {
@@ -95,6 +125,30 @@ export default function BookmarksPage() {
 
     return matchesType && matchesCategory && matchesSearch;
   });
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access bookmarks."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -306,25 +360,48 @@ export default function BookmarksPage() {
                       <div className="space-y-3">
                         <div>
                           <h2 className="text-base font-extrabold text-white">{item.title}</h2>
-                          <p className="text-xs text-slate-400 mt-0.5">{item.summary}</p>
                         </div>
 
-                        {item.content && (
-                          <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
-                            {item.content.map((bullet, bIdx) => (
-                              <p key={bIdx} className="leading-relaxed font-medium">
-                                {bullet}
-                              </p>
-                            ))}
-                          </div>
-                        )}
+                        {isPaid && !item.isLocked ? (
+                          <>
+                            {item.summary && (
+                              <p className="text-xs text-slate-400 mt-0.5">{item.summary}</p>
+                            )}
 
-                        {item.tips && (
-                          <div className="p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl text-xs text-indigo-300">
-                            <span className="font-extrabold uppercase text-[10px] text-indigo-400 block">
-                              💡 Exam Tip:
-                            </span>
-                            <p className="font-medium leading-relaxed">{item.tips}</p>
+                            {item.content && (
+                              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
+                                {item.content.map((bullet, bIdx) => (
+                                  <p key={bIdx} className="leading-relaxed font-medium">
+                                    {bullet}
+                                  </p>
+                                ))}
+                              </div>
+                            )}
+
+                            {item.tips && (
+                              <div className="p-3 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl text-xs text-indigo-300">
+                                <span className="font-extrabold uppercase text-[10px] text-indigo-400 block">
+                                  💡 Exam Tip:
+                                </span>
+                                <p className="font-medium leading-relaxed">{item.tips}</p>
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
+                              <span>⭐</span>
+                              <span>Premium Study Note</span>
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed">
+                              This saved Study Note requires an active Pro subscription to read.
+                            </p>
+                            <Link
+                              href="/upgrade"
+                              className="inline-block px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow-md"
+                            >
+                              Upgrade to Read →
+                            </Link>
                           </div>
                         )}
                       </div>

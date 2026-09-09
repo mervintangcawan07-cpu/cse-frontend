@@ -2,6 +2,7 @@ import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
 import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { isAccountAuthorizedFor } from "@/lib/accountLifecycle";
 import { prisma } from "@/lib/prisma";
 
 // Helper for Session Authentication
@@ -12,10 +13,12 @@ async function getAuthUserId() {
 // 1. GET ALL BOOKMARKED QUESTIONS & STUDY NOTES FOR CURRENT USER
 export async function GET() {
   try {
-    const userId = await getAuthUserId();
-    if (!userId) {
+    const user = await getAuthenticatedUser();
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const userId = user.id;
+    const canReadStudyNotes = isAccountAuthorizedFor(user, "PRO");
 
     // Fetch all user bookmarks
     const bookmarks = await prisma.bookmark.findMany({
@@ -32,14 +35,23 @@ export async function GET() {
       .filter((b) => b.targetType === "STUDY_NOTE")
       .map((b) => b.targetId);
 
-    // Fetch corresponding entities from DB in parallel
+    // Fetch corresponding entities from DB in parallel with least privilege
     const [questions, studyNotes] = await Promise.all([
       findBankQuestions({
         where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(questionIds)),
       }),
-      prisma.studyNote.findMany({
-        where: { id: { in: studyNoteIds } },
-      }),
+      canReadStudyNotes
+        ? prisma.studyNote.findMany({
+            where: { id: { in: studyNoteIds } },
+          })
+        : prisma.studyNote.findMany({
+            where: { id: { in: studyNoteIds } },
+            select: {
+              id: true,
+              category: true,
+              title: true,
+            },
+          }),
     ]);
 
     // Combine bookmark metadata with actual entity details
@@ -61,10 +73,24 @@ export async function GET() {
         if (type === "STUDY_NOTE") {
           const note = studyNotes.find((n) => n.id === b.targetId);
           if (!note) return null;
+
+          if (!canReadStudyNotes) {
+            return {
+              bookmarkId: b.id,
+              targetType: "STUDY_NOTE",
+              bookmarkedAt: b.createdAt,
+              id: note.id,
+              category: note.category,
+              title: note.title,
+              isLocked: true,
+            };
+          }
+
           return {
             bookmarkId: b.id,
             targetType: "STUDY_NOTE",
             bookmarkedAt: b.createdAt,
+            isLocked: false,
             ...note,
           };
         }
