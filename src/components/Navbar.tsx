@@ -10,6 +10,7 @@ import ThemeToggle from "@/components/common/ThemeToggle";
 import { USER_REFERRAL_ENABLED } from "@/lib/referral/config";
 import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 import { useAuth } from "@/context/AuthContext";
+import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -109,6 +110,12 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            {user && (
+              <InstallEntryLink
+                label="Install App"
+                className="px-3 py-1.5 rounded-xl text-xs font-bold transition text-blue-400 hover:text-blue-300 hover:bg-slate-900 border border-blue-500/20 hover:border-blue-500/30 inline-flex items-center gap-1.5"
+              />
+            )}
           </nav>
         </div>
 
@@ -329,6 +336,13 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              {user && (
+                <InstallEntryLink
+                  label="Install GovStudyX"
+                  onNavigate={() => setMobileMenuOpen(false)}
+                  className="px-3.5 py-2 rounded-xl text-xs font-bold transition text-blue-400 hover:text-blue-300 hover:bg-slate-900 border border-blue-500/20 hover:border-blue-500/40 inline-flex items-center gap-2"
+                />
+              )}
             </nav>
           </div>
 
