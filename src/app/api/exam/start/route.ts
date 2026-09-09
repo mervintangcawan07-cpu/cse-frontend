@@ -118,6 +118,17 @@ export async function GET(request: Request) {
         );
       }
 
+      // Entitlement authorization: Free practice quizzes capped at 20 items
+      if (parsedItemCount > 20 && !isAccountAuthorizedFor(authenticatedUser, "PRO")) {
+        return NextResponse.json(
+          {
+            error:
+              "Payment required. Free practice quizzes are limited to 20 items. Upgrade to Pro for up to 170 items.",
+          },
+          { status: 402, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
       // 2. Validate categories: non-empty comma-separated list of supported builder categories
       if (!categoriesRaw.trim()) {
         return NextResponse.json(
@@ -332,12 +343,15 @@ export async function GET(request: Request) {
         };
       });
 
-      return NextResponse.json({
-        success: true,
-        totalItems: preparedQuestions.length,
-        questions: preparedQuestions,
-        meta: { mode, pool, isCustom: true },
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          totalItems: preparedQuestions.length,
+          questions: preparedQuestions,
+          meta: { mode, pool, isCustom: true },
+        },
+        { headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     // --- Standard Full Exam path (unchanged behavior) ---
