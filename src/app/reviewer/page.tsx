@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Printer } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 import ProTipBullets from "@/components/notes/ProTipBullets";
 import AudioSpeechButton from "@/components/common/AudioSpeechButton";
 
@@ -22,6 +25,11 @@ interface Bookmark {
 }
 
 export default function ReviewerPage() {
+  const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+  const [isRedirectingToUpgrade, setIsRedirectingToUpgrade] = useState(false);
+
   const [studyNotes, setStudyNotes] = useState<StudyNote[]>([]);
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -36,6 +44,18 @@ export default function ReviewerPage() {
   ];
 
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status !== "authenticated") {
+      router.replace("/login");
+      return;
+    }
+
+    if (!isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+
     const controller = new AbortController();
 
     async function fetchNotesAndBookmarks() {
@@ -50,11 +70,20 @@ export default function ReviewerPage() {
           }),
         ]);
 
+        if (controller.signal.aborted) return;
+
+        if (notesRes.status === 402) {
+          setIsRedirectingToUpgrade(true);
+          router.replace("/upgrade");
+          return;
+        }
+
         if (!notesRes.ok) {
           throw new Error(`Failed to load reviewer notes (${notesRes.status})`);
         }
 
         const notesData: { notes?: StudyNote[] } = await notesRes.json();
+        if (controller.signal.aborted) return;
 
         if (notesData.notes) {
           setStudyNotes(notesData.notes);
@@ -62,6 +91,8 @@ export default function ReviewerPage() {
 
         if (bookmarkRes.ok) {
           const bookmarkData: { bookmarks?: Bookmark[] } = await bookmarkRes.json();
+          if (controller.signal.aborted) return;
+
           const ids = new Set<string>(
             bookmarkData.bookmarks
               ?.filter((bookmark) => bookmark.targetType === "STUDY_NOTE")
@@ -70,6 +101,9 @@ export default function ReviewerPage() {
           setBookmarkedIds(ids);
         }
       } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
         if (error instanceof DOMException && error.name === "AbortError") {
           return;
         }
@@ -85,7 +119,7 @@ export default function ReviewerPage() {
     void fetchNotesAndBookmarks();
 
     return () => controller.abort();
-  }, []);
+  }, [status, isPaid, router]);
 
   const toggleBookmark = async (noteId: string) => {
     try {
@@ -116,6 +150,42 @@ export default function ReviewerPage() {
     selectedCategory === "All"
       ? studyNotes
       : studyNotes.filter((note) => note.category === selectedCategory);
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access study notes and reviewer."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (!isPaid || isRedirectingToUpgrade) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to upgrade..."
+          subtitle="Study Notes & Reviewer require an active Pro subscription."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-0 py-2 sm:px-3 sm:py-4 lg:px-6">

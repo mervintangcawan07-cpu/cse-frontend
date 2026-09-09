@@ -1,6 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { isAccountAuthorizedFor } from "@/lib/accountLifecycle";
 
-export default function LessonPage() {
+export default async function LessonPage() {
+  const user = await getAuthenticatedUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (!isAccountAuthorizedFor(user, "PRO")) {
+    redirect("/upgrade");
+  }
   return (
     <div className="w-full max-w-5xl mx-auto py-3 sm:py-6 md:py-10 px-2 sm:px-4 md:px-6 space-y-4 sm:space-y-8">
       {/* Breadcrumb Navigation */}
