@@ -11,6 +11,7 @@ import QuestionResultBanner from "@/components/question/QuestionResultBanner";
 import ExplanationPanel from "@/components/question/ExplanationPanel";
 import { queueOfflineSubmission } from "@/lib/offline-storage";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { useAuth } from "@/context/AuthContext";
 
 interface Question {
   id: string;
@@ -46,6 +47,58 @@ function TakeExamPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isOnline } = useOfflineSync();
+  const { user, status } = useAuth();
+
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+
+  // Classify Custom Practice vs Standard Mock parameters
+  const hasItemCount = searchParams.has("itemCount");
+  const hasCategories = searchParams.has("categories");
+  const hasPool = searchParams.has("pool");
+  const hasMode = searchParams.has("mode");
+
+  const hasAnyCustomParam =
+    hasItemCount || hasCategories || hasPool || hasMode;
+
+  const hasAllCustomParams =
+    hasItemCount && hasCategories && hasPool && hasMode;
+
+  const itemCountVal = (searchParams.get("itemCount") || "").trim();
+  const categoriesVal = (searchParams.get("categories") || "").trim();
+  const poolVal = (searchParams.get("pool") || "").trim();
+  const modeVal = (searchParams.get("mode") || "").trim();
+
+  const isCompleteNonEmptyCustom =
+    hasAllCustomParams &&
+    itemCountVal !== "" &&
+    categoriesVal !== "" &&
+    poolVal !== "" &&
+    modeVal !== "";
+
+  const isPartialOrEmptyCustom =
+    hasAnyCustomParam && !isCompleteNonEmptyCustom;
+
+  // Page-level Premium and Parameter Validation Guard
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !user) {
+      router.replace("/login");
+      return;
+    }
+
+    // Partial or empty custom config -> redirect to custom quiz builder
+    if (isPartialOrEmptyCustom) {
+      router.replace("/practice/custom");
+      return;
+    }
+
+    // Authenticated free user attempting Standard Mock Exam -> redirect to upgrade
+    if (!hasAnyCustomParam && !isPaid) {
+      router.replace("/upgrade");
+      return;
+    }
+  }, [status, user, isPaid, isPartialOrEmptyCustom, hasAnyCustomParam, router]);
 
   // Data States
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -371,7 +424,12 @@ function TakeExamPageInner() {
     const pool = searchParams.get("pool");
     const mode = searchParams.get("mode");
 
-    if (itemCount && categories && pool && mode) {
+    if (
+      itemCount?.trim() &&
+      categories?.trim() &&
+      pool?.trim() &&
+      mode?.trim()
+    ) {
       setIsCustomQuiz(true);
       const modeLabel = mode === "SELF_PACED" ? "Self-Paced" : "Timed";
       setCustomQuizLabel(`${itemCount}-item ${modeLabel} Quiz`);
@@ -430,6 +488,12 @@ function TakeExamPageInner() {
       const res = await fetch(
         `/api/exam/start?category=${encodeURIComponent(selectedCategory)}`
       );
+
+      if (res.status === 402) {
+        router.push("/upgrade");
+        return;
+      }
+
       const data = await res.json();
 
       if (res.ok && data.questions && data.questions.length > 0) {
@@ -504,6 +568,54 @@ function TakeExamPageInner() {
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
+
+  if (status === "loading") {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Verifying access..."
+          subtitle="Checking account subscription and permissions."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated" || !user) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to login..."
+          subtitle="Please sign in to access mock exams."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (isPartialOrEmptyCustom) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to custom quiz builder..."
+          subtitle="Incomplete or invalid quiz configuration detected."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
+
+  if (!hasAnyCustomParam && !isPaid) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Redirecting to upgrade..."
+          subtitle="Standard Practice Mock Exams require an active Pro subscription."
+          skeletonCount={2}
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (
