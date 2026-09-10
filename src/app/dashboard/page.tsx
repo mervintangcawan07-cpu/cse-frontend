@@ -13,6 +13,10 @@ import PaymentConfirmationLoader from "@/components/common/PaymentConfirmationLo
 import WidgetErrorBoundary from "@/components/common/WidgetErrorBoundary";
 import dynamic from "next/dynamic";
 import { useAuth } from "@/context/AuthContext";
+import {
+  PROMO_PRICING_DISPLAY,
+  getPromoReferencePrice,
+} from "@/config/promoPricingDisplay";
 
 const ScoreAnalyticsChart = dynamic(
   () => import("@/components/dashboard/ScoreAnalyticsChart"),
@@ -412,30 +416,44 @@ function DashboardContent() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 relative z-10">
-            {plans.map((p) => (
-              <button
-                key={p.planType}
-                onClick={() => setSelectedPlan(p.planType)}
-                className={`p-3.5 sm:p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
-                  selectedPlan === p.planType
-                    ? "bg-amber-500/10 border-amber-500 text-white shadow-lg shadow-amber-500/10"
-                    : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:border-slate-500"
-                }`}
-              >
-                {p.planType === "6_MONTHS" && (
-                  <span className="absolute -top-3 right-4 px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase shadow-md">
-                    Most Popular
-                  </span>
-                )}
-                <div>
-                  <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
-                  <span className="text-xl sm:text-2xl font-black text-amber-400">₱{p.price}</span>
-                  <span className="text-[11px] text-slate-400 block mt-1">
-                    Valid for {p.durationDays} days
-                  </span>
-                </div>
-              </button>
-            ))}
+            {plans.map((p) => {
+              const promoRefPrice = getPromoReferencePrice(p.planType);
+
+              return (
+                <button
+                  key={p.planType}
+                  onClick={() => setSelectedPlan(p.planType)}
+                  className={`p-3.5 sm:p-5 rounded-2xl border text-left transition relative flex flex-col justify-between cursor-pointer ${
+                    selectedPlan === p.planType
+                      ? "bg-amber-500/10 border-amber-500 text-white shadow-lg shadow-amber-500/10"
+                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:border-slate-500"
+                  }`}
+                >
+                  {p.planType === "6_MONTHS" && (
+                    <span className="absolute -top-3 right-4 px-2.5 py-0.5 bg-amber-500 text-slate-950 font-black text-[9px] rounded-full uppercase shadow-md">
+                      Most Popular
+                    </span>
+                  )}
+                  <div>
+                    <span className="text-[10px] font-bold uppercase text-slate-400 block">{p.name}</span>
+                    {promoRefPrice && (
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-xs font-semibold text-slate-400 line-through">
+                          ₱{promoRefPrice}
+                        </span>
+                        <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          {PROMO_PRICING_DISPLAY.badgeText}
+                        </span>
+                      </div>
+                    )}
+                    <span className="text-xl sm:text-2xl font-black text-amber-400">₱{p.price}</span>
+                    <span className="text-[11px] text-slate-400 block mt-1">
+                      Valid for {p.durationDays} days
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
           <button

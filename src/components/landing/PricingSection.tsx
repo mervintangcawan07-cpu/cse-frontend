@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import {
+  PROMO_PRICING_DISPLAY,
+  getPromoReferencePrice,
+} from "@/config/promoPricingDisplay";
 
 const DEFAULT_PRICING_PLANS = [
   {
@@ -111,34 +115,49 @@ export default function PricingSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {pricingPlans.map((plan, idx) => (
-            <div
-              key={idx}
-              className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between space-y-6 relative transition ${
-                plan.popular
-                  ? "bg-gradient-to-b from-blue-50/50 to-indigo-50/50 border-2 border-blue-600 shadow-xl"
-                  : "bg-white border-slate-200/90 shadow-sm hover:shadow-md"
-              }`}
-            >
-              {plan.popular && (
-                <span className="absolute -top-3 right-6 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] rounded-full uppercase shadow-xs">
-                  Most Popular
-                </span>
-              )}
+          {pricingPlans.map((plan, idx) => {
+            const promoRefPrice = getPromoReferencePrice(plan.planType);
 
-              <div className="space-y-3">
-                <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
-                  {plan.name}
-                </span>
-                <div className="text-3xl sm:text-4xl font-black text-slate-900">
-                  {plan.price}{" "}
-                  <span className="text-xs font-semibold text-slate-500">
-                    / {plan.duration}
+            return (
+              <div
+                key={idx}
+                className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between space-y-6 relative transition ${
+                  plan.popular
+                    ? "bg-gradient-to-b from-blue-50/50 to-indigo-50/50 border-2 border-blue-600 shadow-xl"
+                    : "bg-white border-slate-200/90 shadow-sm hover:shadow-md"
+                }`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-3 right-6 px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-[10px] rounded-full uppercase shadow-xs">
+                    Most Popular
                   </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                  {plan.description}
-                </p>
+                )}
+
+                <div className="space-y-3">
+                  <span className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                    {plan.name}
+                  </span>
+
+                  {promoRefPrice && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-slate-400 line-through">
+                        ₱{promoRefPrice}
+                      </span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-100 text-rose-700">
+                        {PROMO_PRICING_DISPLAY.badgeText}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="text-3xl sm:text-4xl font-black text-slate-900">
+                    {plan.price}{" "}
+                    <span className="text-xs font-semibold text-slate-500">
+                      / {plan.duration}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    {plan.description}
+                  </p>
 
                 <div className="pt-3 border-t border-slate-100 space-y-2 text-xs font-medium text-slate-700">
                   <div className="flex items-center gap-2">
@@ -171,7 +190,8 @@ export default function PricingSection() {
                 Get Started Now
               </Link>
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
     </section>
