@@ -1,17 +1,24 @@
+// Relative Path: src/lib/streakEngine.ts
 import { prisma } from "@/lib/prisma";
+import type { Prisma, PrismaClient } from "@prisma/client";
 
-export async function recordUserActivityStreak(userId: string) {
+type StreakDbClient = PrismaClient | Prisma.TransactionClient;
+
+export async function recordUserActivityStreak(
+  userId: string,
+  tx: StreakDbClient = prisma
+) {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const existingStreak = await prisma.userStreak.findUnique({
+    const existingStreak = await tx.userStreak.findUnique({
       where: { userId },
     });
 
     if (!existingStreak) {
       // First activity recorded
-      return await prisma.userStreak.create({
+      return await tx.userStreak.create({
         data: {
           userId,
           currentStreak: 1,
@@ -34,7 +41,7 @@ export async function recordUserActivityStreak(userId: string) {
 
       // Create a streak milestone notification if hitting key targets
       if ([3, 7, 14, 30, 60, 100].includes(newCurrent)) {
-        await prisma.notification.create({
+        await tx.notification.create({
           data: {
             userId,
             title: "🔥 Streak Milestone Reached!",
@@ -44,7 +51,7 @@ export async function recordUserActivityStreak(userId: string) {
         });
       }
 
-      return await prisma.userStreak.update({
+      return await tx.userStreak.update({
         where: { userId },
         data: {
           currentStreak: newCurrent,
@@ -54,7 +61,7 @@ export async function recordUserActivityStreak(userId: string) {
       });
     } else if (diffInDays > 1) {
       // Streak broken -> reset to 1
-      return await prisma.userStreak.update({
+      return await tx.userStreak.update({
         where: { userId },
         data: {
           currentStreak: 1,
@@ -67,6 +74,14 @@ export async function recordUserActivityStreak(userId: string) {
     return existingStreak;
   } catch (error) {
     console.error("Error recording user streak:", error);
+
+    // If running within an explicit interactive transaction (e.g. ENTITLEMENT-1E3B exam submission),
+    // propagate the failure so the surrounding prisma.$transaction rolls back atomically.
+    // Ordinary legacy callers using the default global prisma client retain previous best-effort null return.
+    if (tx !== prisma) {
+      throw error;
+    }
+
     return null;
   }
 }

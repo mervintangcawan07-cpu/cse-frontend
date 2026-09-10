@@ -1,5 +1,4 @@
-import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
-import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
+// Relative Path: src/app/api/exam/submit/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -10,6 +9,9 @@ import {
   checkRateLimit,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { verifyExamAttemptToken } from "@/lib/examAttemptToken";
+import { validateAndCanonicalizeSubmission } from "@/lib/examSubmissionIntegrity";
+import { applyUserMistakeBatch } from "@/lib/userMistakeBatch";
 
 interface SubmittedAnswer {
   questionId: string;
@@ -33,17 +35,106 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+    const { answers, attemptToken } = body as {
+      answers?: SubmittedAnswer[];
+      attemptToken?: string;
+      totalItems?: number;
+    };
 
-    const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
-
-    if (!Array.isArray(answers) || answers.some(answer => !answer || typeof answer.questionId !== "string" || !answer.questionId)) {
-      return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
+    // Phase 5: Require attemptToken to be a non-empty string
+    if (typeof attemptToken !== "string" || !attemptToken.trim()) {
+      return NextResponse.json(
+        { error: "Missing exam attempt token", code: "MISSING_ATTEMPT_TOKEN" },
+        { status: 400 }
+      );
     }
 
-    // 1. Fetch full questions from DB to build complete review snapshot
-    const questionIds = answers.map((a) => a.questionId);
-    const dbQuestions = await findBankQuestions({
-      where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(questionIds)),
+    // Cryptographically verify the attempt token
+    const verifiedAttempt = await verifyExamAttemptToken(attemptToken);
+    if (!verifiedAttempt) {
+      return NextResponse.json(
+        { error: "Invalid or expired exam attempt token", code: "INVALID_ATTEMPT_TOKEN" },
+        { status: 400 }
+      );
+    }
+
+    // User binding: token must match authenticated user
+    if (verifiedAttempt.userId !== authenticatedUser.id) {
+      return NextResponse.json(
+        { error: "Exam attempt token does not match authenticated user", code: "ATTEMPT_USER_MISMATCH" },
+        { status: 403 }
+      );
+    }
+
+    // Phase 6 & 7: Ordered manifest and canonical answer validation
+    const validation = validateAndCanonicalizeSubmission({
+      verifiedAttempt,
+      answers,
+    });
+
+    if (!validation.valid) {
+      return NextResponse.json(
+        { error: validation.error, code: validation.code },
+        { status: 400 }
+      );
+    }
+
+    const { canonicalAnswers, submissionHash: currentSubmissionHash } = validation;
+
+    // Phase 8: Early idempotency check
+    const existingResult = await prisma.examResult.findUnique({
+      where: { attemptId: verifiedAttempt.attemptId },
+    });
+
+    if (existingResult) {
+      if (existingResult.userId !== authenticatedUser.id) {
+        return NextResponse.json(
+          { error: "Forbidden", code: "ATTEMPT_USER_MISMATCH" },
+          { status: 403 }
+        );
+      }
+
+      if (!existingResult.submissionHash) {
+        console.error(
+          `[EXAM_SUBMIT_INTEGRITY] Existing attempt has null submissionHash for attemptId: ${verifiedAttempt.attemptId}`
+        );
+        return NextResponse.json(
+          { error: "Attempt integrity check failed", code: "ATTEMPT_INTEGRITY_ERROR" },
+          { status: 500 }
+        );
+      }
+
+      if (existingResult.submissionHash === currentSubmissionHash) {
+        // Identical retry: evaluate badges (idempotent, awaited) and return existing result
+        await evaluateAndAwardBadges(userId);
+
+        const streakRecord = await prisma.userStreak.findUnique({ where: { userId } }).catch(() => null);
+
+        return NextResponse.json({
+          success: true,
+          result: existingResult,
+          streak: streakRecord?.currentStreak || 1,
+          idempotentReplay: true,
+        });
+      }
+
+      // Conflicting retry: same attemptId but altered answers / different fingerprint
+      return NextResponse.json(
+        {
+          error: "Conflicting attempt submission",
+          code: "SUBMISSION_FINGERPRINT_MISMATCH",
+        },
+        { status: 409 }
+      );
+    }
+
+    // Phase 9: Question retrieval & soft-delete compatibility
+    // Fetch exact verifiedAttempt.questionIds from Question table.
+    // Soft-deleted questions (deletedAt !== null) remain valid for active 24h attempts.
+    const dbQuestions = await prisma.question.findMany({
+      where: {
+        id: { in: verifiedAttempt.questionIds },
+      },
       select: {
         id: true,
         category: true,
@@ -70,50 +161,34 @@ export async function POST(request: Request) {
       },
     });
 
-    if (dbQuestions.length !== new Set(questionIds).size) {
+    if (dbQuestions.length !== verifiedAttempt.questionIds.length) {
       return NextResponse.json(
-        { error: "One or more submitted questions are no longer active ordinary questions. No exam result was saved." },
+        {
+          error: "One or more exam questions are no longer available in the question bank.",
+          code: "ATTEMPT_QUESTION_UNAVAILABLE",
+        },
         { status: 422 }
       );
     }
 
     const questionMap = new Map(dbQuestions.map((q) => [q.id, q]));
 
-    // 2. Grade answers strictly on the server & build details snapshot
+    // Phase 10: Server-authoritative grading
     let correct = 0;
     let incorrect = 0;
     let skipped = 0;
     const detailsSnapshot: any[] = [];
 
-    for (const ans of answers) {
+    for (const ans of canonicalAnswers) {
       const q = questionMap.get(ans.questionId);
       if (!q) {
         skipped++;
         continue;
       }
 
-      // Resolve submitted answer index (0, 1, 2, 3)
-      let userIdx: number | null = null;
-
-      if (typeof ans.selectedIndex === "number" && ans.selectedIndex >= 0) {
-        userIdx = ans.selectedIndex;
-      } else if (typeof ans.selectedOption === "number" && ans.selectedOption >= 0) {
-        userIdx = ans.selectedOption;
-      } else if (typeof ans.selectedOption === "string" && ans.selectedOption.trim() !== "") {
-        const val = ans.selectedOption.trim();
-        const letterIdx = ["A", "B", "C", "D"].indexOf(val.toUpperCase());
-        if (letterIdx !== -1) {
-          userIdx = letterIdx;
-        } else if (!isNaN(Number(val))) {
-          userIdx = Number(val);
-        } else if (Array.isArray(q.options)) {
-          userIdx = q.options.indexOf(val);
-        }
-      }
-
-      if (userIdx === null || userIdx < 0) {
+      if (ans.selectedIndex === -1) {
         skipped++;
-      } else if (userIdx === q.answerIndex) {
+      } else if (ans.selectedIndex === q.answerIndex) {
         correct++;
       } else {
         incorrect++;
@@ -133,7 +208,7 @@ export async function POST(request: Request) {
         prompt: q.prompt,
         options: resolvedOptions,
         answerIndex: q.answerIndex,
-        selectedIndex: userIdx,
+        selectedIndex: ans.selectedIndex >= 0 ? ans.selectedIndex : null,
         explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
         stepByStep: q.stepByStep || null,
@@ -149,76 +224,123 @@ export async function POST(request: Request) {
       });
     }
 
-    // Calculate score percentage
-    const itemsCount = totalItems || answers.length;
+    // Calculate score percentage using authoritative itemCount
+    const itemsCount = verifiedAttempt.itemCount;
     const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
-
-    // 3. Save verified result with full detailsJson snapshot (ALL EXAMS KEPT FOR PROGRESSION LOGS)
-    const result = await prisma.examResult.create({
-      data: {
-        userId,
-        score,
-        totalItems: itemsCount,
-        correct,
-        incorrect,
-        skipped,
-        detailsJson: JSON.stringify(detailsSnapshot),
-      },
-    });
 
     // 4. Ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral) in a single transactional batch
     const incorrectItems = detailsSnapshot.filter(
       (item) => item.selectedIndex !== null && item.selectedIndex !== item.answerIndex
     );
 
-    if (incorrectItems.length > 0) {
-      try {
-        const now = new Date();
-        const upsertOperations = incorrectItems.map((item) =>
-          prisma.userMistake.upsert({
-            where: {
-              userId_questionId: {
-                userId,
-                questionId: item.id,
+    // Phase 11: Atomic core interactive transaction
+    let commitResult: {
+      result: any;
+      updatedStreak: any;
+    };
+
+    try {
+      commitResult = await prisma.$transaction(async (tx) => {
+        // 1. Create ExamResult with attemptId, submissionHash, examType, and itemCount
+        const createdResult = await tx.examResult.create({
+          data: {
+            userId,
+            score,
+            totalItems: itemsCount,
+            correct,
+            incorrect,
+            skipped,
+            examType: verifiedAttempt.examType,
+            attemptId: verifiedAttempt.attemptId,
+            submissionHash: currentSubmissionHash,
+            detailsJson: JSON.stringify(detailsSnapshot),
+          },
+        });
+
+        // 2. Batch ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral)
+        if (incorrectItems.length > 0) {
+          await applyUserMistakeBatch(tx, userId, incorrectItems);
+        }
+
+        // 3. User streak update within the interactive transaction
+        const updatedStreak = await recordUserActivityStreak(userId, tx);
+
+        // 4. Clean up active exam draft within the transaction
+        await tx.examDraft.deleteMany({
+          where: { userId },
+        });
+
+        return {
+          result: createdResult,
+          updatedStreak,
+        };
+      });
+    } catch (txError: any) {
+      // Phase 12: Handle concurrent same-attempt race condition (Prisma P2002)
+      const isUniqueViolation =
+        txError?.code === "P2002" ||
+        (typeof txError?.message === "string" && txError.message.includes("Unique constraint failed"));
+
+      if (isUniqueViolation) {
+        const concurrentResult = await prisma.examResult.findUnique({
+          where: { attemptId: verifiedAttempt.attemptId },
+        });
+
+        if (concurrentResult) {
+          if (concurrentResult.userId !== authenticatedUser.id) {
+            return NextResponse.json(
+              { error: "Forbidden", code: "ATTEMPT_USER_MISMATCH" },
+              { status: 403 }
+            );
+          }
+
+          if (!concurrentResult.submissionHash) {
+            console.error(
+              `[EXAM_SUBMIT_INTEGRITY] Concurrent attempt has null submissionHash for attemptId: ${verifiedAttempt.attemptId}`
+            );
+            return NextResponse.json(
+              { error: "Attempt integrity check failed", code: "ATTEMPT_INTEGRITY_ERROR" },
+              { status: 500 }
+            );
+          }
+
+          if (concurrentResult.submissionHash === currentSubmissionHash) {
+            // Identical retry: DO NOT mutate streak, evaluate badges (idempotent, awaited) and return existing result
+            await evaluateAndAwardBadges(userId);
+
+            const streakRecord = await prisma.userStreak.findUnique({ where: { userId } }).catch(() => null);
+            return NextResponse.json({
+              success: true,
+              result: concurrentResult,
+              streak: streakRecord?.currentStreak || 1,
+              idempotentReplay: true,
+            });
+          } else {
+            return NextResponse.json(
+              {
+                error: "Conflicting attempt submission",
+                code: "SUBMISSION_FINGERPRINT_MISMATCH",
               },
-            },
-            create: {
-              userId,
-              questionId: item.id,
-              userAnswer: item.selectedIndex,
-              incorrectCount: 1,
-              isMastered: false,
-              lastAttemptAt: now,
-            },
-            update: {
-              userAnswer: item.selectedIndex,
-              incorrectCount: { increment: 1 },
-              isMastered: false,
-              lastAttemptAt: now,
-            },
-          })
-        );
-        await prisma.$transaction(upsertOperations);
-      } catch (e) {
-        console.error("[MISTAKE_BATCH_UPSERT_ERROR]", e);
+              { status: 409 }
+            );
+          }
+        }
       }
+
+      console.error("[EXAM_SUBMIT_TX_ERROR]", txError);
+      return NextResponse.json(
+        { error: "Failed to process exam result" },
+        { status: 500 }
+      );
     }
 
-    // Record active study streak
-    const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);
-
-    // Evaluate and award badges (fire-and-forget, non-blocking)
-    evaluateAndAwardBadges(userId).catch(() => null);
-
-    // Clear active exam draft
-    await prisma.examDraft.deleteMany({
-      where: { userId },
-    }).catch(() => null);
+    // Phase 13: Badge evaluation happens AFTER the core transaction commits (idempotent, awaited)
+    await evaluateAndAwardBadges(userId);
 
     return NextResponse.json({
       success: true,
-      result,
-      streak: updatedStreak?.currentStreak || 1,
+      result: commitResult.result,
+      streak: commitResult.updatedStreak?.currentStreak || 1,
     });
   } catch (error) {
     console.error("Exam submission error:", error);

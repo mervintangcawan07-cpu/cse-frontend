@@ -226,9 +226,16 @@ function TakeExamPageInner() {
           try {
             const parsed = JSON.parse(saved);
             if (parsed.examQuestions && parsed.examQuestions.length > 0) {
-              setSavedSessionData(parsed);
-              setExamMode(parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
-              if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
+              if (typeof parsed.attemptToken === "string" && parsed.attemptToken.trim()) {
+                setSavedSessionData(parsed);
+                setExamMode(parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
+                if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
+              } else {
+                // Strict 1E3B: Discard legacy token-less session and require fresh start
+                console.warn("[EXAM_SESSION] Discarded legacy token-less saved exam session.");
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                setSavedSessionData(null);
+              }
             }
           } catch (e) {
             console.error("Error parsing saved exam session:", e);
@@ -385,7 +392,15 @@ function TakeExamPageInner() {
 
   // Resume Saved Session Handler
   function handleResumeSavedSession() {
-    if (!savedSessionData) return;
+    if (
+      !savedSessionData ||
+      typeof savedSessionData.attemptToken !== "string" ||
+      !savedSessionData.attemptToken.trim()
+    ) {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      setSavedSessionData(null);
+      return;
+    }
     setExamQuestions(savedSessionData.examQuestions);
     setSelectedAnswers(savedSessionData.selectedAnswers || {});
     setCheckedAnswers(savedSessionData.checkedAnswers || {});
@@ -393,11 +408,7 @@ function TakeExamPageInner() {
     setCurrentIndex(savedSessionData.currentIndex || 0);
     setTimerMinutes(savedSessionData.timerMinutes || 0);
     setTimeLeft(savedSessionData.timeLeft || 0);
-    setAttemptToken(
-      typeof savedSessionData.attemptToken === "string"
-        ? savedSessionData.attemptToken
-        : null
-    );
+    setAttemptToken(savedSessionData.attemptToken);
     setGuidedFinished(false);
     setIsSetupPhase(false);
   }

@@ -122,6 +122,15 @@ export async function syncPendingSubmissions(): Promise<number> {
   const remaining: PendingSubmission[] = [];
 
   for (const submission of pending) {
+    // 1. Guard against legacy token-less queued submissions (pre-1E3A)
+    const token = (submission.payload as any)?.attemptToken;
+    if (typeof token !== "string" || !token.trim()) {
+      console.warn(
+        `[OFFLINE_SYNC] Dropping legacy submission ${submission.submissionId}: missing attemptToken.`
+      );
+      continue; // Terminal: drop from queue without sending to server
+    }
+
     try {
       const res = await fetch("/api/exam/submit", {
         method: "POST",
@@ -130,14 +139,26 @@ export async function syncPendingSubmissions(): Promise<number> {
       });
 
       if (res.ok) {
-        // Confirmed success — remove from queue
+        // Confirmed success (2xx, including HTTP 200 for idempotent replays) — remove from queue
         successCount++;
       } else {
-        // Server error (4xx/5xx) — retain for retry
-        console.warn(
-          `[OFFLINE_SYNC] Server rejected submission ${submission.submissionId} (status ${res.status}). Retaining in queue.`
-        );
-        remaining.push(submission);
+        const status = res.status;
+        const isTerminal =
+          status === 400 || status === 403 || status === 409 || status === 422;
+
+        if (isTerminal) {
+          // Terminal client / business error — discard from queue to prevent infinite retry loop
+          console.warn(
+            `[OFFLINE_SYNC] Server rejected submission ${submission.submissionId} with terminal status ${status}. Discarding from queue.`
+          );
+          // Do NOT push to remaining
+        } else {
+          // Retryable error (401 unauthorized/expired session, 429 rate limit, 5xx server failure)
+          console.warn(
+            `[OFFLINE_SYNC] Server returned retryable status ${status} for submission ${submission.submissionId}. Retaining in queue.`
+          );
+          remaining.push(submission);
+        }
       }
     } catch (err) {
       // Network error — retain for retry

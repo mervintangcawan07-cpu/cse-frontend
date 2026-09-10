@@ -384,6 +384,9 @@ model ExamResult {
   examType     String  @default("FULL_MOCK")
   passed       Boolean @default(false)
 
+  attemptId      String?  @unique
+  submissionHash String?
+
   detailsJson String?  @db.Text
   createdAt   DateTime @default(now())
 
