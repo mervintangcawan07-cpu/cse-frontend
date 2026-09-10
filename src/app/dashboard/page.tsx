@@ -296,81 +296,93 @@ function DashboardContent() {
       <ResumeExamBanner />
 
       {/* WELCOME HERO HEADER */}
-      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-xl shadow-blue-600/15 space-y-4 z-30 overflow-hidden">
-        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none z-0">
+      <div className="relative bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white p-3.5 sm:p-5 md:p-6 lg:p-7 rounded-2xl sm:rounded-3xl shadow-xl shadow-blue-600/15 z-30">
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl overflow-hidden pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative z-10 flex flex-col xl:flex-row justify-between items-start xl:items-center gap-5 w-full">
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1 bg-white/20 text-white rounded-full border border-white/30 shadow-inner backdrop-blur-md">
-                {isPaid ? "✨ PRO Examinee Access" : "Free Preview Account"}
+        <div className="relative z-10 flex flex-col gap-3 sm:gap-4 w-full">
+          {/* Top Row: Subscription Badges & Notification Bell */}
+          <div className="flex items-center justify-between gap-2 w-full">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap min-w-0">
+              <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-0.5 sm:py-1 bg-white/20 text-white rounded-full border border-white/30 shadow-inner backdrop-blur-md whitespace-nowrap">
+                {isPaid ? "\u2728 PRO Examinee Access" : "Free Preview Account"}
               </span>
 
               {isPaid && daysRemaining !== null && (
-                <span className="text-[10px] sm:text-[11px] font-black px-3 py-1 bg-amber-400 text-slate-950 rounded-full shadow-md font-bold">
-                  ⏳ {daysRemaining} Days Remaining
+                <span className="text-[10px] sm:text-[11px] font-black px-2.5 sm:px-3 py-0.5 sm:py-1 bg-amber-400 text-slate-950 rounded-full shadow-md whitespace-nowrap font-bold">
+                  \u23F3 {daysRemaining} Days Remaining
                 </span>
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mt-2.5 tracking-tight text-white">
-              Welcome back, {user?.name || "Reviewee"}!
-            </h1>
-            <p className="text-blue-100 text-xs sm:text-sm mt-1 max-w-xl font-medium leading-relaxed">
-              Monitor your real-time civil service test readiness, study streaks, and high-frequency exam categories.
-            </p>
+            <div className="shrink-0">
+              <NotificationBell />
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full xl:w-auto relative z-20 mt-2 xl:mt-0">
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <NotificationBell />
-
-              <Link
-                href="/mistakes"
-                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white border border-white/20 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 backdrop-blur-md whitespace-nowrap shadow-sm"
-              >
-                <span>📕</span>
-                <span>Mistakes</span>
-              </Link>
-
-              <Link
-                href="/readiness-card"
-                className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs rounded-2xl transition flex items-center justify-center gap-1.5 shadow-md whitespace-nowrap"
-              >
-                <span>🏆</span>
-                <span>Flex Card</span>
-              </Link>
+          {/* Main Hero Content & Action Controls */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-5 lg:gap-6">
+            {/* User Greeting & Description */}
+            <div className="space-y-1 max-w-xl min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white break-words">
+                Welcome back, {user?.name || "Reviewee"}!
+              </h1>
+              <p className="text-blue-100 text-xs sm:text-sm font-medium leading-relaxed">
+                <span className="hidden sm:inline">
+                  Monitor your real-time civil service test readiness, study streaks, and high-frequency exam categories.
+                </span>
+                <span className="sm:hidden">
+                  Track your Civil Service readiness and study progress.
+                </span>
+              </p>
             </div>
 
-            {isPaid ? (
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                {daysRemaining !== null && (
+            {/* Action Controls: Primary CTA + Compact Secondary Pills */}
+            <div className="flex flex-col gap-2 w-full lg:w-72 shrink-0">
+              {/* Primary CTA: Practice Center */}
+              <Link
+                href="/practice"
+                className="w-full py-2.5 px-4 bg-slate-950 hover:bg-slate-900 active:scale-[0.99] text-white font-black text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-xl transition flex items-center justify-center gap-2 whitespace-nowrap min-h-[46px]"
+              >
+                <span>{"\u26A1"}</span>
+                <span>Practice Center</span>
+              </Link>
+
+              {/* Secondary Controls: Flex Card & Extend (or Upgrade) */}
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <Link
+                  href="/readiness-card"
+                  className={`py-2 px-3 bg-amber-400 hover:bg-amber-300 active:scale-[0.99] text-slate-950 font-bold text-xs rounded-xl sm:rounded-2xl transition flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap text-center min-h-[44px] ${
+                    isPaid && daysRemaining === null ? "col-span-2" : "col-span-1"
+                  }`}
+                >
+                  <span className="text-sm">{"\uD83C\uDFC6"}</span>
+                  <span>Flex Card</span>
+                </Link>
+
+                {isPaid ? (
+                  daysRemaining !== null ? (
+                    <button
+                      onClick={() => handlePayMongoCheckout("6_MONTHS")}
+                      className="col-span-1 py-2 px-3 bg-white/15 hover:bg-white/25 active:scale-[0.99] text-white border border-white/20 font-bold text-xs rounded-xl sm:rounded-2xl transition cursor-pointer flex items-center justify-center gap-1.5 backdrop-blur-md whitespace-nowrap text-center min-h-[44px]"
+                    >
+                      <span className="text-sm">{"\uD83D\uDD04"}</span>
+                      <span>Extend</span>
+                    </button>
+                  ) : null
+                ) : (
                   <button
-                    onClick={() => handlePayMongoCheckout("6_MONTHS")}
-                    className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white border border-white/20 font-bold text-xs rounded-2xl transition cursor-pointer text-center backdrop-blur-md"
+                    onClick={() => handlePayMongoCheckout(selectedPlan)}
+                    className="col-span-1 py-2 px-3 bg-amber-400 hover:bg-amber-300 active:scale-[0.99] text-slate-950 font-bold text-xs rounded-xl sm:rounded-2xl transition cursor-pointer flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap text-center min-h-[44px]"
                   >
-                    🔄 Extend
+                    <span className="text-sm">{"\uD83D\uDD12"}</span>
+                    <span>Upgrade</span>
                   </button>
                 )}
-                <Link
-                  href="/practice"
-                  className="flex-1 sm:flex-initial px-5 py-2.5 bg-slate-950 hover:bg-slate-900 text-white font-black text-xs rounded-2xl shadow-xl transition flex items-center justify-center gap-1.5 whitespace-nowrap"
-                >
-                  <span>⚡</span>
-                  <span>Practice Center</span>
-                </Link>
               </div>
-            ) : (
-              <button
-                onClick={() => handlePayMongoCheckout(selectedPlan)}
-                className="w-full sm:w-auto px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs rounded-2xl shadow-lg shadow-amber-500/20 transition cursor-pointer whitespace-nowrap text-center"
-              >
-                🔒 Upgrade to PRO
-              </button>
-            )}
+            </div>
           </div>
         </div>
       </div>
