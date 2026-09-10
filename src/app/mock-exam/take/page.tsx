@@ -16,9 +16,10 @@ import { useAuth } from "@/context/AuthContext";
 interface Question {
   id: string;
   category: string;
+  subtopic?: string;
   prompt: string;
   options: string[];
-  answerIndex: number;
+  answerIndex?: number;
   explanation?: string;
   imageUrl?: string;
   stepByStep?: string | null;
@@ -252,10 +253,30 @@ function TakeExamPageInner() {
 
   // 2. Auto-Save Active Exam State to LocalStorage
   useEffect(() => {
-    if (!isSetupPhase && examQuestions.length > 0 && !submitting && !guidedFinished) {
+    if (
+      !isSetupPhase &&
+      examQuestions.length > 0 &&
+      !submitting &&
+      !guidedFinished &&
+      !offlineBanner
+    ) {
+      const questionsToPersist =
+        examMode === "GUIDED_REVIEW"
+          ? examQuestions
+          : examQuestions.map((q) => ({
+              id: q.id,
+              category: q.category,
+              subtopic: q.subtopic,
+              prompt: q.prompt,
+              options: q.options,
+              imageUrl: q.imageUrl || null,
+              difficulty: q.difficulty,
+              tags: q.tags,
+            }));
+
       const activeSession = {
         examMode,
-        examQuestions,
+        examQuestions: questionsToPersist,
         selectedAnswers,
         checkedAnswers,
         currentIndex,
@@ -265,7 +286,7 @@ function TakeExamPageInner() {
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     }
-  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished, attemptToken]);
+  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished, attemptToken, offlineBanner]);
 
   // Toggle Bookmark Handler
   const toggleBookmark = async (questionId: string) => {
@@ -299,24 +320,7 @@ function TakeExamPageInner() {
     if (examMode === "GUIDED_REVIEW") return; // Safety guard: Guided Review NEVER submits to server
     setSubmitting(true);
 
-    let correctCount = 0;
-    let incorrectCount = 0;
-    let skippedCount = 0;
-
-    examQuestions.forEach((q, idx) => {
-      const selected = selectedAnswers[idx];
-      if (selected === undefined) {
-        skippedCount++;
-      } else if (selected === q.answerIndex) {
-        correctCount++;
-      } else {
-        incorrectCount++;
-      }
-    });
-
     const totalItems = examQuestions.length;
-    const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
-    const finalScore = Math.round(scorePercentage);
 
     const formattedAnswers = examQuestions.map((q, idx) => {
       const selectedIdx = selectedAnswers[idx];
@@ -333,8 +337,9 @@ function TakeExamPageInner() {
       ...(attemptToken ? { attemptToken } : {}),
     };
 
-    // 🌐 Offline-Aware Submission: queue if offline or if network request fails
-    let submittedOnline = false;
+    // 🌐 Offline-Aware Submission: queue if offline, network error, or retryable HTTP status
+    let shouldQueueForRetry = false;
+
     if (isOnline) {
       try {
         const res = await fetch("/api/exam/submit", {
@@ -342,40 +347,77 @@ function TakeExamPageInner() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(submissionPayload),
         });
+
         if (res.ok) {
-          submittedOnline = true;
+          const data = await res.json().catch(() => null);
+          if (
+            data?.success === true &&
+            typeof data?.result?.id === "string" &&
+            data.result.id.trim().length > 0
+          ) {
+            // Confirmed successful server submission (initial or idempotent replay)
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            localStorage.removeItem("cse_latest_review");
+            router.push(`/mock-exam/results?id=${encodeURIComponent(data.result.id.trim())}`);
+            return;
+          } else {
+            // CORRECTION 2: HTTP 2xx but malformed success payload (missing success or result.id).
+            // Do NOT queue as offline. Stop submission, retain active session, alert user.
+            console.error("[EXAM_SUBMIT] Malformed 2xx response from server:", data);
+            alert("Unexpected server response while submitting exam. Please check your Exam History before retrying.");
+            setSubmitting(false);
+            return;
+          }
         } else {
-          console.warn(`[EXAM_SUBMIT] Server responded with ${res.status}. Queueing for offline sync.`);
+          // CORRECTION 1: Server returned non-2xx status.
+          const status = res.status;
+          const isTerminal =
+            status === 400 || status === 403 || status === 409 || status === 422;
+
+          if (isTerminal) {
+            // Terminal rejection: DO NOT queue, DO NOT clear session, DO NOT show offline banner
+            const errData = await res.json().catch(() => null);
+            const errMsg = errData?.error || `Exam submission rejected by server (HTTP ${status}).`;
+            console.warn(`[EXAM_SUBMIT] Terminal rejection ${status}:`, errMsg);
+            alert(errMsg);
+            setSubmitting(false);
+            return;
+          } else {
+            // Retryable error (401, 429, 5xx, etc.) -> may queue for offline sync
+            console.warn(`[EXAM_SUBMIT] Server returned retryable status ${status}. Queueing for offline sync.`);
+            shouldQueueForRetry = true;
+          }
         }
       } catch (err) {
+        // Network fetch failure -> queue for offline sync
         console.error("Network error submitting exam. Queueing for offline sync:", err);
+        shouldQueueForRetry = true;
       }
+    } else {
+      // Device is already offline -> queue for offline sync
+      shouldQueueForRetry = true;
     }
 
-    if (!submittedOnline) {
-      // Queue for automatic retry when back online
+    if (shouldQueueForRetry) {
+      let queuedSuccessfully = false;
       try {
         await queueOfflineSubmission(submissionPayload);
-        setOfflineBanner(true);
+        queuedSuccessfully = true;
       } catch (queueErr) {
         console.error("Failed to queue offline submission:", queueErr);
+        alert("Unable to save offline submission. Please keep this window open until connection is restored.");
+        setSubmitting(false);
+        return;
+      }
+
+      // ONLY after successful queue persistence:
+      if (queuedSuccessfully) {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        localStorage.removeItem("cse_latest_review");
+        setSubmitting(false);
+        setOfflineBanner(true);
       }
     }
-
-    const reviewData = {
-      questions: examQuestions,
-      selectedAnswers,
-      score: finalScore,
-      correct: correctCount,
-      incorrect: incorrectCount,
-      skipped: skippedCount,
-    };
-    localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
-
-    // Clear active session from storage on exam completion
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
-
-    router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router, isOnline, examMode, attemptToken]);
 
   // Timer Logic
@@ -539,9 +581,23 @@ function TakeExamPageInner() {
 
   // Save for Later Handler
   function handleSaveAndExit() {
+    const questionsToPersist =
+      examMode === "GUIDED_REVIEW"
+        ? examQuestions
+        : examQuestions.map((q) => ({
+            id: q.id,
+            category: q.category,
+            subtopic: q.subtopic,
+            prompt: q.prompt,
+            options: q.options,
+            imageUrl: q.imageUrl || null,
+            difficulty: q.difficulty,
+            tags: q.tags,
+          }));
+
     const activeSession = {
       examMode,
-      examQuestions,
+      examQuestions: questionsToPersist,
       selectedAnswers,
       checkedAnswers,
       currentIndex,
@@ -827,6 +883,56 @@ function TakeExamPageInner() {
                 : "Start 170-Item Exam"}
             </span>
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // PHASE 1.5: OFFLINE SUBMISSION PENDING SCREEN
+  if (offlineBanner) {
+    return (
+      <div className="w-full max-w-2xl mx-auto py-8 sm:py-12 px-4 space-y-6">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 text-center">
+          <div className="w-16 h-16 bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-inner">
+            📶
+          </div>
+
+          <div className="space-y-2">
+            <span className="text-xs font-black uppercase text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-3 py-1 rounded-full border border-amber-500/20">
+              Offline Submission Queued
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
+              Exam Saved Offline
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium max-w-md mx-auto leading-relaxed">
+              Exam saved offline. Your submission is queued and will be graded securely when your device reconnects. Your score and detailed review will be available after synchronization.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-left space-y-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200">
+              <span>ℹ️</span>
+              <span>Automatic Background Sync</span>
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Once back online, our system will automatically process your answers, update your streaks, and add any missed questions to your Balik-Aral notebook.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <Link
+              href="/dashboard"
+              className="flex-1 py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm rounded-xl transition text-center shadow-md cursor-pointer"
+            >
+              Back to Dashboard
+            </Link>
+            <Link
+              href="/mock-exam/history"
+              className="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold text-sm rounded-xl transition text-center cursor-pointer"
+            >
+              View Exam History
+            </Link>
+          </div>
         </div>
       </div>
     );
