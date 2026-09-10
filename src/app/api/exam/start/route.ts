@@ -11,6 +11,7 @@ import {
   checkRateLimit,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { signExamAttemptToken } from "@/lib/examAttemptToken";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_CATEGORY_QUOTAS: Record<string, number> = {
@@ -343,11 +344,22 @@ export async function GET(request: Request) {
         };
       });
 
+      let attemptToken: string | null = null;
+      if (preparedQuestions.length > 0) {
+        const tokenResult = await signExamAttemptToken({
+          userId: authenticatedUser.id,
+          examType: "CUSTOM_PRACTICE",
+          questionIds: preparedQuestions.map((q: any) => q.id),
+        });
+        attemptToken = tokenResult.attemptToken;
+      }
+
       return NextResponse.json(
         {
           success: true,
           totalItems: preparedQuestions.length,
           questions: preparedQuestions,
+          attemptToken,
           meta: { mode, pool, isCustom: true },
         },
         { headers: CACHE_PROFILES.PRIVATE }
@@ -473,11 +485,22 @@ export async function GET(request: Request) {
     // Final cap at 170 items
     const cappedExam = preparedQuestions.slice(0, 170);
 
+    let attemptToken: string | null = null;
+    if (cappedExam.length > 0) {
+      const tokenResult = await signExamAttemptToken({
+        userId: authenticatedUser.id,
+        examType: "FULL_MOCK",
+        questionIds: cappedExam.map((q: any) => q.id),
+      });
+      attemptToken = tokenResult.attemptToken;
+    }
+
     return NextResponse.json(
       {
         success: true,
         totalItems: cappedExam.length,
         questions: cappedExam,
+        attemptToken,
       },
       { headers: CACHE_PROFILES.PRIVATE }
     );
