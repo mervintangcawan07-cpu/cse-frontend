@@ -11,6 +11,7 @@ import {
   checkRateLimit,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { signExamAttemptToken } from "@/lib/examAttemptToken";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_CATEGORY_QUOTAS: Record<string, number> = {
@@ -115,6 +116,17 @@ export async function GET(request: Request) {
         return NextResponse.json(
           { error: "Invalid itemCount: must be between 1 and 170." },
           { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
+
+      // Entitlement authorization: Free practice quizzes capped at 20 items
+      if (parsedItemCount > 20 && !isAccountAuthorizedFor(authenticatedUser, "PRO")) {
+        return NextResponse.json(
+          {
+            error:
+              "Payment required. Free practice quizzes are limited to 20 items. Upgrade to Pro for up to 170 items.",
+          },
+          { status: 402, headers: CACHE_PROFILES.PRIVATE }
         );
       }
 
@@ -332,12 +344,26 @@ export async function GET(request: Request) {
         };
       });
 
-      return NextResponse.json({
-        success: true,
-        totalItems: preparedQuestions.length,
-        questions: preparedQuestions,
-        meta: { mode, pool, isCustom: true },
-      });
+      let attemptToken: string | null = null;
+      if (preparedQuestions.length > 0) {
+        const tokenResult = await signExamAttemptToken({
+          userId: authenticatedUser.id,
+          examType: "CUSTOM_PRACTICE",
+          questionIds: preparedQuestions.map((q: any) => q.id),
+        });
+        attemptToken = tokenResult.attemptToken;
+      }
+
+      return NextResponse.json(
+        {
+          success: true,
+          totalItems: preparedQuestions.length,
+          questions: preparedQuestions,
+          attemptToken,
+          meta: { mode, pool, isCustom: true },
+        },
+        { headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     // --- Standard Full Exam path (unchanged behavior) ---
@@ -459,11 +485,22 @@ export async function GET(request: Request) {
     // Final cap at 170 items
     const cappedExam = preparedQuestions.slice(0, 170);
 
+    let attemptToken: string | null = null;
+    if (cappedExam.length > 0) {
+      const tokenResult = await signExamAttemptToken({
+        userId: authenticatedUser.id,
+        examType: "FULL_MOCK",
+        questionIds: cappedExam.map((q: any) => q.id),
+      });
+      attemptToken = tokenResult.attemptToken;
+    }
+
     return NextResponse.json(
       {
         success: true,
         totalItems: cappedExam.length,
         questions: cappedExam,
+        attemptToken,
       },
       { headers: CACHE_PROFILES.PRIVATE }
     );

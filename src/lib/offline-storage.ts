@@ -75,6 +75,7 @@ export interface PendingSubmission {
       selectedIndex: number;
       selectedOption: string;
     }>;
+    attemptToken?: string | null;
   };
 }
 

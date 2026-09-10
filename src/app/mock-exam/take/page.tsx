@@ -132,6 +132,7 @@ function TakeExamPageInner() {
   const [selectedAnswers, setSelectedAnswers] = useState<{ [key: number]: number }>({});
   const [fontSize, setFontSize] = useState<"sm" | "md" | "lg">("md");
   const [isFocusMode, setIsFocusMode] = useState(false);
+  const [attemptToken, setAttemptToken] = useState<string | null>(null);
 
 
   // Load saved font size preference
@@ -253,10 +254,11 @@ function TakeExamPageInner() {
         currentIndex,
         timerMinutes,
         timeLeft,
+        attemptToken,
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     }
-  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished]);
+  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished, attemptToken]);
 
   // Toggle Bookmark Handler
   const toggleBookmark = async (questionId: string) => {
@@ -318,7 +320,11 @@ function TakeExamPageInner() {
       };
     });
 
-    const submissionPayload = { totalItems, answers: formattedAnswers };
+    const submissionPayload = {
+      totalItems,
+      answers: formattedAnswers,
+      ...(attemptToken ? { attemptToken } : {}),
+    };
 
     // 🌐 Offline-Aware Submission: queue if offline or if network request fails
     let submittedOnline = false;
@@ -363,7 +369,7 @@ function TakeExamPageInner() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
 
     router.push("/mock-exam/results");
-  }, [examQuestions, selectedAnswers, submitting, router, isOnline, examMode]);
+  }, [examQuestions, selectedAnswers, submitting, router, isOnline, examMode, attemptToken]);
 
   // Timer Logic
   useEffect(() => {
@@ -387,6 +393,11 @@ function TakeExamPageInner() {
     setCurrentIndex(savedSessionData.currentIndex || 0);
     setTimerMinutes(savedSessionData.timerMinutes || 0);
     setTimeLeft(savedSessionData.timeLeft || 0);
+    setAttemptToken(
+      typeof savedSessionData.attemptToken === "string"
+        ? savedSessionData.attemptToken
+        : null
+    );
     setGuidedFinished(false);
     setIsSetupPhase(false);
   }
@@ -421,6 +432,7 @@ function TakeExamPageInner() {
   ) {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
+    setAttemptToken(null);
     setStartingExam(true);
 
     const isTimed = mode === "TIMED";
@@ -435,6 +447,9 @@ function TakeExamPageInner() {
 
       if (res.ok && data.questions && data.questions.length > 0) {
         setExamQuestions(data.questions);
+        setAttemptToken(
+          typeof data.attemptToken === "string" ? data.attemptToken : null
+        );
         setCurrentIndex(0);
         setSelectedAnswers({});
         setTimeLeft(mins * 60);
@@ -456,6 +471,7 @@ function TakeExamPageInner() {
   async function handleStartExam() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
+    setAttemptToken(null);
     setStartingExam(true);
 
     try {
@@ -472,6 +488,9 @@ function TakeExamPageInner() {
 
       if (res.ok && data.questions && data.questions.length > 0) {
         setExamQuestions(data.questions);
+        setAttemptToken(
+          typeof data.attemptToken === "string" ? data.attemptToken : null
+        );
         setCurrentIndex(0);
         setSelectedAnswers({});
         const effectiveTimer = examMode === "GUIDED_REVIEW" ? 0 : timerMinutes;
@@ -517,6 +536,7 @@ function TakeExamPageInner() {
       currentIndex,
       timerMinutes,
       timeLeft,
+      attemptToken,
     };
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     router.push("/dashboard");
@@ -530,6 +550,7 @@ function TakeExamPageInner() {
     setCheckedAnswers({});
     setCurrentIndex(0);
     setSavedSessionData(null);
+    setAttemptToken(null);
     setIsSetupPhase(true);
     setIsPauseModalOpen(false);
     router.push("/dashboard");
@@ -643,6 +664,7 @@ function TakeExamPageInner() {
                 onClick={() => {
                   localStorage.removeItem(LOCAL_STORAGE_KEY);
                   setSavedSessionData(null);
+                  setAttemptToken(null);
                 }}
                 className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition cursor-pointer"
               >

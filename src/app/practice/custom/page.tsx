@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const CATEGORIES = [
   { id: "Verbal Ability", label: "Verbal Ability", icon: "📝", color: "blue" },
@@ -29,6 +30,9 @@ const MODE_OPTIONS: { id: Mode; label: string; desc: string; icon: string }[] = 
 
 export default function CustomQuizBuilderPage() {
   const router = useRouter();
+  const { user, status } = useAuth();
+  const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([...CATEGORIES.map((c) => c.id)]);
   const [itemCount, setItemCount] = useState<number>(20);
   const [customCount, setCustomCount] = useState<string>("");
@@ -47,10 +51,30 @@ export default function CustomQuizBuilderPage() {
 
   const handleLaunch = async () => {
     setError(null);
+
+    if (status === "loading") {
+      setError("Verifying account permissions, please wait...");
+      return;
+    }
+
+    if (status === "unauthenticated" || !user) {
+      setError("You must be logged in to start a quiz.");
+      router.push("/login");
+      return;
+    }
+
     if (resolvedItemCount < 1 || resolvedItemCount > 170) {
       setError("Item count must be between 1 and 170.");
       return;
     }
+
+    if (!isPaid && resolvedItemCount > 20) {
+      setError(
+        "Free practice quizzes are limited to 20 items. Upgrade to Pro for up to 170 items."
+      );
+      return;
+    }
+
     if (selectedCategories.length === 0) {
       setError("Please select at least one category.");
       return;
@@ -146,30 +170,52 @@ export default function CustomQuizBuilderPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
           <div>
             <h2 className="text-base font-black text-white">Number of Questions</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Choose a preset or enter a custom count (1–170).</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {status !== "loading" && !isPaid
+                ? "Free accounts can practice up to 20 questions per quiz. Upgrade to Pro for up to 170 questions."
+                : "Choose a preset or enter a custom count (1–170)."}
+            </p>
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
-            {ITEM_COUNTS.map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => { setItemCount(n); setCustomCount(""); }}
-                className={`px-5 py-2.5 rounded-xl border text-sm font-bold transition cursor-pointer ${
-                  itemCount === n && !customCount
-                    ? "bg-violet-600 border-violet-500 text-white shadow-md"
-                    : "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-600"
-                }`}
-              >
-                {n}
-              </button>
-            ))}
+            {ITEM_COUNTS.map((n) => {
+              const isLocked = status !== "loading" && !isPaid && n > 20;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => {
+                    if (isLocked) {
+                      router.push("/upgrade");
+                      return;
+                    }
+                    setItemCount(n);
+                    setCustomCount("");
+                  }}
+                  className={`px-4 py-2.5 rounded-xl border text-sm font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                    itemCount === n && !customCount
+                      ? "bg-violet-600 border-violet-500 text-white shadow-md"
+                      : isLocked
+                      ? "bg-slate-950/40 border-slate-800 text-slate-400 hover:border-amber-500/50 hover:text-amber-300"
+                      : "bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-600"
+                  }`}
+                  title={isLocked ? "Upgrade to Pro for 30+ items" : undefined}
+                >
+                  <span>{n}</span>
+                  {isLocked && (
+                    <span className="text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 bg-amber-500/20 text-amber-300 rounded border border-amber-500/30">
+                      🔒 PRO
+                    </span>
+                  )}
+                </button>
+              );
+            })}
 
             <div className="flex items-center gap-2 ml-1">
               <input
                 type="number"
                 min={1}
-                max={170}
+                max={status !== "loading" && !isPaid ? 20 : 170}
                 placeholder="Custom"
                 value={customCount}
                 onChange={(e) => { setCustomCount(e.target.value); setItemCount(0); }}
@@ -297,10 +343,14 @@ export default function CustomQuizBuilderPage() {
           <button
             type="button"
             onClick={handleLaunch}
-            disabled={launching}
+            disabled={launching || status === "loading"}
             className="w-full py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-black text-sm rounded-2xl transition shadow-2xl shadow-violet-600/30 cursor-pointer disabled:opacity-60"
           >
-            {launching ? "Preparing Your Quiz..." : `🚀 Launch Custom Quiz — ${resolvedItemCount} Items`}
+            {status === "loading"
+              ? "Loading Account..."
+              : launching
+              ? "Preparing Your Quiz..."
+              : `🚀 Launch Custom Quiz — ${resolvedItemCount} Items`}
           </button>
         </div>
       </div>
