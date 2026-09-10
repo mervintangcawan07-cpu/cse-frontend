@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import {
+  PROMO_PRICING_DISPLAY,
+  getPromoReferencePrice,
+} from "@/config/promoPricingDisplay";
 
 interface Plan {
   planType: string;
@@ -122,6 +126,7 @@ export default function PricingPage() {
         <div className="grid md:grid-cols-3 gap-6">
           {plans.map((plan) => {
             const recommended = plan.planType === "6_MONTHS";
+            const promoRefPrice = getPromoReferencePrice(plan.planType);
 
             return (
               <div
@@ -149,6 +154,23 @@ export default function PricingPage() {
                 </h2>
 
                 <div className="my-6">
+                  {promoRefPrice && (
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-sm font-bold text-slate-400 line-through">
+                        ₱{promoRefPrice}
+                      </span>
+                      <span
+                        className={
+                          recommended
+                            ? "px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                            : "px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-100 text-rose-700"
+                        }
+                      >
+                        {PROMO_PRICING_DISPLAY.badgeText}
+                      </span>
+                    </div>
+                  )}
+
                   <span
                     className={
                       recommended

@@ -80,6 +80,19 @@ export default function CSCCountdownWidget() {
     );
   }
 
+  const isMonthView = timeLeft.days >= 30;
+  const displayMetrics = isMonthView
+    ? {
+        unit1: { value: Math.floor(timeLeft.days / 30), label: Math.floor(timeLeft.days / 30) === 1 ? "Month" : "Months" },
+        unit2: { value: timeLeft.days % 30, label: (timeLeft.days % 30) === 1 ? "Day" : "Days" },
+        unit3: { value: timeLeft.hours, label: timeLeft.hours === 1 ? "Hour" : "Hours" },
+      }
+    : {
+        unit1: { value: timeLeft.days, label: timeLeft.days === 1 ? "Day" : "Days" },
+        unit2: { value: timeLeft.hours, label: timeLeft.hours === 1 ? "Hour" : "Hours" },
+        unit3: { value: timeLeft.minutes, label: timeLeft.minutes === 1 ? "Minute" : "Minutes" },
+      };
+
   return (
     <div className="bg-white border border-slate-200/80 text-slate-900 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md space-y-4 sm:space-y-5 relative">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -101,22 +114,18 @@ export default function CSCCountdownWidget() {
         </span>
       </div>
 
-      <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center pt-1">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center pt-1">
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-amber-500 block leading-tight">{timeLeft.days}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">Days</span>
+          <span className="text-xl sm:text-3xl font-black text-amber-500 block leading-tight">{displayMetrics.unit1.value}</span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit1.label}</span>
         </div>
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{timeLeft.hours}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">Hours</span>
+          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{displayMetrics.unit2.value}</span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit2.label}</span>
         </div>
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{timeLeft.minutes}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">Mins</span>
-        </div>
-        <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-blue-600 block leading-tight">{timeLeft.seconds}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">Secs</span>
+          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{displayMetrics.unit3.value}</span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit3.label}</span>
         </div>
       </div>
 

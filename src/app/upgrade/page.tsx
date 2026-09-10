@@ -7,6 +7,10 @@ import LoadingButton from "@/components/common/LoadingButton";
 import { useDoubleSubmitPreventer } from "@/hooks/useDoubleSubmitPreventer";
 import { fetchWithTimeout } from "@/lib/fetchWithTimeout";
 import { useAuth } from "@/context/AuthContext";
+import {
+  PROMO_PRICING_DISPLAY,
+  getPromoReferencePrice,
+} from "@/config/promoPricingDisplay";
 
 interface Plan {
   planType: string;
@@ -88,6 +92,8 @@ export default function UpgradePage() {
   const selected =
     plans.find((plan) => plan.planType === selectedPlan) ??
     FALLBACK_PLANS[1];
+
+  const selectedPromoRefPrice = getPromoReferencePrice(selected.planType);
 
   const executeUpgrade = async () => {
     setErrorMsg(null);
@@ -184,31 +190,46 @@ export default function UpgradePage() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          {plans.map((plan) => (
-            <button
-              key={plan.planType}
-              type="button"
-              onClick={() => setSelectedPlan(plan.planType)}
-              disabled={loading}
-              className={
-                selectedPlan === plan.planType
-                  ? "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-slate-900"
-                  : "p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300"
-              }
-            >
-              <span className="block text-xs font-bold">
-                {plan.name}
-              </span>
+          {plans.map((plan) => {
+            const promoRefPrice = getPromoReferencePrice(plan.planType);
 
-              <span className="block text-lg font-black mt-1">
-                ₱{plan.price}
-              </span>
+            return (
+              <button
+                key={plan.planType}
+                type="button"
+                onClick={() => setSelectedPlan(plan.planType)}
+                disabled={loading}
+                className={
+                  selectedPlan === plan.planType
+                    ? "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-slate-900"
+                    : "p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300"
+                }
+              >
+                <span className="block text-xs font-bold">
+                  {plan.name}
+                </span>
 
-              <span className="block text-[10px] text-slate-500">
-                {plan.durationDays} days
-              </span>
-            </button>
-          ))}
+                {promoRefPrice && (
+                  <span className="inline-flex items-center justify-center gap-1 mt-1">
+                    <span className="text-xs font-semibold text-slate-400 line-through">
+                      ₱{promoRefPrice}
+                    </span>
+                    <span className="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-rose-100 text-rose-700">
+                      {PROMO_PRICING_DISPLAY.badgeText}
+                    </span>
+                  </span>
+                )}
+
+                <span className="block text-lg font-black mt-1">
+                  ₱{plan.price}
+                </span>
+
+                <span className="block text-[10px] text-slate-500">
+                  {plan.durationDays} days
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-3 text-left">
@@ -217,9 +238,21 @@ export default function UpgradePage() {
               {selected.name}
             </span>
 
-            <span className="text-2xl font-extrabold text-slate-900">
-              ₱{selected.price}
-            </span>
+            <div className="text-right">
+              {selectedPromoRefPrice && (
+                <div className="flex items-center justify-end gap-1.5 mb-0.5">
+                  <span className="text-xs font-bold text-slate-400 line-through">
+                    ₱{selectedPromoRefPrice}
+                  </span>
+                  <span className="px-1.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-rose-100 text-rose-700">
+                    {PROMO_PRICING_DISPLAY.badgeText}
+                  </span>
+                </div>
+              )}
+              <span className="text-2xl font-extrabold text-slate-900">
+                ₱{selected.price}
+              </span>
+            </div>
           </div>
 
           <ul className="text-xs text-slate-600 space-y-2 pt-2 border-t border-slate-200 font-medium">
