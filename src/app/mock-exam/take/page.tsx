@@ -52,6 +52,126 @@ const DEFAULT_CATEGORIES = [
   "Clerical Ability",
 ];
 
+/**
+ * Advisory Client-Side JWT Expiration Parser
+ *
+ * NOTE: This is an unauthenticated client UX helper for advisory expiry checks ONLY.
+ * It is NOT cryptographic verification and does NOT verify the HMAC signature.
+ * Cryptographic verification is enforced solely by server-side endpoints
+ * (/api/exam/submit, /api/exam/guided-review/check).
+ */
+function parseJwtAdvisoryExp(token: string): number | null {
+  if (typeof token !== "string" || !token.trim()) return null;
+  try {
+    const parts = token.trim().split(".");
+    if (parts.length !== 3) return null;
+    const base64Url = parts[1];
+    if (!base64Url || typeof base64Url !== "string") return null;
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+    const jsonStr =
+      typeof atob === "function"
+        ? atob(padded)
+        : Buffer.from(padded, "base64").toString("utf-8");
+    const payload = JSON.parse(jsonStr);
+    if (!payload || typeof payload !== "object") return null;
+    if (typeof payload.exp !== "number" || !Number.isInteger(payload.exp)) return null;
+    return payload.exp;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Evaluates whether a saved Standard Mock Exam session in localStorage is eligible
+ * for client-side resume grace when the user's PRO entitlement has lapsed.
+ *
+ * This is a CLIENT UX decision only to bypass the /upgrade redirect for active
+ * in-flight sessions. It MUST NOT be treated as server authorization.
+ */
+function isResumeGraceEligible(
+  sessionInput: unknown,
+  nowUnix = Math.floor(Date.now() / 1000)
+): boolean {
+  if (!sessionInput) return false;
+  let parsed: any;
+  if (typeof sessionInput === "string") {
+    try {
+      parsed = JSON.parse(sessionInput);
+    } catch {
+      return false;
+    }
+  } else if (typeof sessionInput === "object") {
+    parsed = sessionInput;
+  } else {
+    return false;
+  }
+
+  if (!parsed || typeof parsed !== "object") return false;
+  if (!Array.isArray(parsed.examQuestions) || parsed.examQuestions.length === 0) return false;
+
+  // Strict examMode recognition: explicit GUIDED_REVIEW, explicit SIMULATION, or legitimate legacy omission
+  let mode: "GUIDED_REVIEW" | "SIMULATION";
+  if (parsed.examMode === "GUIDED_REVIEW") {
+    mode = "GUIDED_REVIEW";
+  } else if (
+    parsed.examMode === "SIMULATION" ||
+    parsed.examMode === undefined ||
+    parsed.examMode === null
+  ) {
+    mode = "SIMULATION";
+  } else {
+    return false;
+  }
+
+  // Safe questions required for BOTH modes: scan ALL TEN sensitive fields
+  const hasLegacyAnswers = parsed.examQuestions.some(
+    (q: any) =>
+      q.answerIndex !== undefined ||
+      q.explanation !== undefined ||
+      q.stepByStep !== undefined ||
+      q.whyA !== undefined ||
+      q.whyB !== undefined ||
+      q.whyC !== undefined ||
+      q.whyD !== undefined ||
+      q.eliminationStrategy !== undefined ||
+      q.commonTrap !== undefined ||
+      q.examTip !== undefined
+  );
+  if (hasLegacyAnswers) return false;
+
+  if (mode === "GUIDED_REVIEW") {
+    // 1. Must possess a non-empty guidedReviewToken
+    if (typeof parsed.guidedReviewToken !== "string" || !parsed.guidedReviewToken.trim()) {
+      return false;
+    }
+    // 2. Cross-mode attemptToken must strictly be null or undefined
+    if (parsed.attemptToken !== undefined && parsed.attemptToken !== null) {
+      return false;
+    }
+    // 3. Advisory expiry check on guidedReviewToken
+    const exp = parseJwtAdvisoryExp(parsed.guidedReviewToken);
+    if (exp === null || exp <= nowUnix) return false;
+
+    return true;
+  } else {
+    // SIMULATION
+    // 1. Must possess a non-empty attemptToken
+    if (typeof parsed.attemptToken !== "string" || !parsed.attemptToken.trim()) {
+      return false;
+    }
+    // 2. Cross-mode guidedReviewToken must strictly be null or undefined
+    if (parsed.guidedReviewToken !== undefined && parsed.guidedReviewToken !== null) {
+      return false;
+    }
+    // 3. Advisory expiry check on attemptToken
+    const exp = parseJwtAdvisoryExp(parsed.attemptToken);
+    if (exp === null || exp <= nowUnix) return false;
+
+    return true;
+  }
+}
+
 function TakeExamPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -59,6 +179,7 @@ function TakeExamPageInner() {
   const { user, status } = useAuth();
 
   const isPaid = Boolean(user?.isPaid || user?.role === "ADMIN");
+  const [hasResumeGrace, setHasResumeGrace] = useState(false);
 
   // Classify Custom Practice vs Standard Mock parameters
   const hasItemCount = searchParams.has("itemCount");
@@ -103,9 +224,16 @@ function TakeExamPageInner() {
     }
 
     // Authenticated free user attempting Standard Mock Exam -> redirect to upgrade
+    // (unless an eligible pre-existing saved Standard Mock session qualifies for resume grace)
     if (!hasAnyCustomParam && !isPaid) {
-      router.replace("/upgrade");
-      return;
+      const saved =
+        typeof window !== "undefined"
+          ? localStorage.getItem(LOCAL_STORAGE_KEY)
+          : null;
+      if (!isResumeGraceEligible(saved)) {
+        router.replace("/upgrade");
+        return;
+      }
     }
   }, [status, user, isPaid, isPartialOrEmptyCustom, hasAnyCustomParam, router]);
 
@@ -310,6 +438,13 @@ function TakeExamPageInner() {
   useEffect(() => {
     async function initExam() {
       try {
+        // Check for active unfinished exam session in local storage
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        const graceEligible = isResumeGraceEligible(saved);
+        if (graceEligible) {
+          setHasResumeGrace(true);
+        }
+
         const bookmarkRes = await fetch("/api/bookmarks")
           .then((r) => (r.ok ? r.json() : null))
           .catch(() => null);
@@ -323,8 +458,6 @@ function TakeExamPageInner() {
           setBookmarkedIds(ids);
         }
 
-        // Check for active unfinished exam session in local storage
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           try {
             const parsed = JSON.parse(saved);
@@ -590,6 +723,19 @@ function TakeExamPageInner() {
   // Resume Saved Session Handler
   function handleResumeSavedSession() {
     if (!savedSessionData) return;
+
+    // Strict 1E5A: Revalidate grace immediately prior to restoring session state for unpaid users
+    if (!isPaid) {
+      if (!isResumeGraceEligible(savedSessionData)) {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        setSavedSessionData(null);
+        setHasResumeGrace(false);
+        setAttemptToken(null);
+        setGuidedReviewToken(null);
+        router.replace("/upgrade");
+        return;
+      }
+    }
 
     if (savedSessionData.examMode === "GUIDED_REVIEW") {
       if (
@@ -866,7 +1012,7 @@ function TakeExamPageInner() {
     );
   }
 
-  if (!hasAnyCustomParam && !isPaid) {
+  if (!hasAnyCustomParam && !isPaid && !hasResumeGrace) {
     return (
       <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
         <DatabaseLoadingIndicator
@@ -931,6 +1077,10 @@ function TakeExamPageInner() {
                   localStorage.removeItem(LOCAL_STORAGE_KEY);
                   setSavedSessionData(null);
                   setAttemptToken(null);
+                  if (!isPaid) {
+                    setHasResumeGrace(false);
+                    router.replace("/upgrade");
+                  }
                 }}
                 className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition cursor-pointer"
               >
