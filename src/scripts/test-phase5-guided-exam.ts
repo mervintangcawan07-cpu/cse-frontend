@@ -1,4 +1,4 @@
-﻿import assert from "assert";
+import assert from "assert";
 
 let passedTests = 0;
 let totalTests = 0;
@@ -143,7 +143,7 @@ test("2.1 Server grading evaluates userIdx === q.answerIndex with zero index dis
 // Group 3: Guided Review Question Delivery & Educational Fields
 console.log("\n--- Group 3: Guided Review Question Delivery ---");
 
-test("3.1 Delivery payload contains all populated pedagogical reasoning fields", () => {
+test("3.1 Delivery payload contains safe fields and strictly excludes answerIndex and all rationales", () => {
   const rawDbQuestion = {
     id: "q-pedagogy-1",
     category: "Verbal Ability",
@@ -165,56 +165,83 @@ test("3.1 Delivery payload contains all populated pedagogical reasoning fields",
     tags: ["subject-verb-agreement", "grammar"],
   };
 
-  const prepared = {
+  const prepared: Record<string, unknown> = {
     id: rawDbQuestion.id,
     category: rawDbQuestion.category,
     subtopic: rawDbQuestion.subtopic,
     prompt: rawDbQuestion.prompt,
     options: rawDbQuestion.options,
-    answerIndex: rawDbQuestion.answerIndex,
-    explanation: rawDbQuestion.explanation,
-    imageUrl: rawDbQuestion.imageUrl,
-    stepByStep: rawDbQuestion.stepByStep,
-    whyA: rawDbQuestion.whyA,
-    whyB: rawDbQuestion.whyB,
-    whyC: rawDbQuestion.whyC,
-    whyD: rawDbQuestion.whyD,
-    eliminationStrategy: rawDbQuestion.eliminationStrategy,
-    commonTrap: rawDbQuestion.commonTrap,
-    examTip: rawDbQuestion.examTip,
     difficulty: rawDbQuestion.difficulty,
     tags: rawDbQuestion.tags,
+    imageUrl: rawDbQuestion.imageUrl,
   };
 
-  assert.strictEqual(prepared.stepByStep, rawDbQuestion.stepByStep);
-  assert.strictEqual(prepared.whyA, rawDbQuestion.whyA);
-  assert.strictEqual(prepared.whyB, rawDbQuestion.whyB);
-  assert.strictEqual(prepared.whyC, rawDbQuestion.whyC);
-  assert.strictEqual(prepared.whyD, rawDbQuestion.whyD);
-  assert.strictEqual(prepared.eliminationStrategy, rawDbQuestion.eliminationStrategy);
-  assert.strictEqual(prepared.commonTrap, rawDbQuestion.commonTrap);
-  assert.strictEqual(prepared.examTip, rawDbQuestion.examTip);
+  assert.strictEqual(prepared.id, rawDbQuestion.id);
+  assert.strictEqual(prepared.category, rawDbQuestion.category);
+  assert.strictEqual(prepared.subtopic, rawDbQuestion.subtopic);
+  assert.strictEqual(prepared.prompt, rawDbQuestion.prompt);
+  assert.deepStrictEqual(prepared.options, rawDbQuestion.options);
   assert.strictEqual(prepared.difficulty, "HARD");
   assert.deepStrictEqual(prepared.tags, ["subject-verb-agreement", "grammar"]);
+
+  // Must exclude all sensitive pre-check fields
+  assert.strictEqual(prepared.answerIndex, undefined);
+  assert.strictEqual(prepared.explanation, undefined);
+  assert.strictEqual(prepared.stepByStep, undefined);
+  assert.strictEqual(prepared.whyA, undefined);
+  assert.strictEqual(prepared.whyB, undefined);
+  assert.strictEqual(prepared.whyC, undefined);
+  assert.strictEqual(prepared.whyD, undefined);
+  assert.strictEqual(prepared.eliminationStrategy, undefined);
+  assert.strictEqual(prepared.commonTrap, undefined);
+  assert.strictEqual(prepared.examTip, undefined);
 });
 
 // Group 4: Guided Review Local Evaluation & Locking
 console.log("\n--- Group 4: Guided Review Local Evaluation & Locking ---");
 
-test("4.1 Local evaluation checks selectedIndex === q.answerIndex without network call", () => {
+test("4.1 Evaluation is performed via server-authoritative check contract returning { isCorrect, correctIndex, rationale }", () => {
   const currentQ = {
-    id: "q-local-1",
+    id: "q-server-1",
     options: ["20", "25", "30", "35"],
-    answerIndex: 1,
+    // Safe client question: NO answerIndex or rationales
   };
 
-  const selectedIndex = 1;
-  const isCorrect = selectedIndex === currentQ.answerIndex;
-  assert.strictEqual(isCorrect, true);
+  // Authoritative server check simulation
+  const serverCheck = (questionId: string, selectedIndex: number) => {
+    const dbQuestion = {
+      id: "q-server-1",
+      answerIndex: 1,
+      explanation: "25 is 5 squared.",
+    };
+    if (questionId !== dbQuestion.id) throw new Error("Question not found");
+    const isCorrect = selectedIndex === dbQuestion.answerIndex;
+    return {
+      isCorrect,
+      correctIndex: dbQuestion.answerIndex,
+      rationale: {
+        explanation: dbQuestion.explanation,
+        stepByStep: null,
+        whyA: null,
+        whyB: null,
+        whyC: null,
+        whyD: null,
+        eliminationStrategy: null,
+        commonTrap: null,
+        examTip: null,
+      },
+    };
+  };
 
-  const wrongIndex = 0;
-  const isWrong = wrongIndex === currentQ.answerIndex;
-  assert.strictEqual(isWrong, false);
+  const correctResponse = serverCheck(currentQ.id, 1);
+  assert.strictEqual(correctResponse.isCorrect, true);
+  assert.strictEqual(correctResponse.correctIndex, 1);
+  assert.strictEqual(correctResponse.rationale.explanation, "25 is 5 squared.");
+
+  const incorrectResponse = serverCheck(currentQ.id, 0);
+  assert.strictEqual(incorrectResponse.isCorrect, false);
+  assert.strictEqual(incorrectResponse.correctIndex, 1);
+  assert.strictEqual(incorrectResponse.rationale.explanation, "25 is 5 squared.");
 });
 
 test("4.2 Checking an answer permanently locks choice selection for that question", () => {
@@ -336,12 +363,22 @@ test("5.4 handleSubmitExam has explicit safety guard blocking Guided Review Mode
 // Group 6: Local Session Persistence & Summary Calculations
 console.log("\n--- Group 6: Local Session Persistence & Summary Calculations ---");
 
-test("6.1 Active session serialization persists examMode and checkedAnswers", () => {
+test("6.1 Active session serialization persists examMode, checkedAnswers, guidedFeedbackByQuestionId with zero answerIndex in examQuestions", () => {
   const activeSession = {
     examMode: "GUIDED_REVIEW",
-    examQuestions: [{ id: "q1", answerIndex: 0 }],
+    guidedReviewToken: "mock.token.jwt",
+    examQuestions: [
+      { id: "q1", prompt: "Question 1", options: ["A", "B"] },
+    ],
     selectedAnswers: { 0: 0 },
     checkedAnswers: { 0: true },
+    guidedFeedbackByQuestionId: {
+      q1: {
+        isCorrect: true,
+        correctIndex: 0,
+        explanation: "Rationale for Q1",
+      },
+    },
     currentIndex: 0,
     timerMinutes: 0,
     timeLeft: 0,
@@ -351,24 +388,22 @@ test("6.1 Active session serialization persists examMode and checkedAnswers", ()
   const deserialized = JSON.parse(serialized);
 
   assert.strictEqual(deserialized.examMode, "GUIDED_REVIEW");
+  assert.strictEqual(deserialized.guidedReviewToken, "mock.token.jwt");
   assert.deepStrictEqual(deserialized.checkedAnswers, { "0": true });
   assert.deepStrictEqual(deserialized.selectedAnswers, { "0": 0 });
+  assert.strictEqual(deserialized.guidedFeedbackByQuestionId["q1"].isCorrect, true);
+  assert.strictEqual(deserialized.guidedFeedbackByQuestionId["q1"].correctIndex, 0);
+  assert.strictEqual(deserialized.examQuestions[0].answerIndex, undefined);
 });
 
-test("6.2 Study summary metrics calculate reviewed, correct, incorrect, and accuracy strictly over checked questions", () => {
+test("6.2 Study summary metrics calculate reviewed, correct, incorrect, and accuracy strictly from guidedFeedbackByQuestionId", () => {
   const examQuestions = [
-    { id: "q1", answerIndex: 0 },
-    { id: "q2", answerIndex: 1 },
-    { id: "q3", answerIndex: 2 },
-    { id: "q4", answerIndex: 3 },
+    { id: "q1" },
+    { id: "q2" },
+    { id: "q3" },
+    { id: "q4" },
   ];
 
-  const selectedAnswers: Record<number, number> = {
-    0: 0,
-    1: 1,
-    2: 0,
-    3: 3,
-  };
   const checkedAnswers: Record<number, boolean> = {
     0: true,
     1: true,
@@ -376,13 +411,23 @@ test("6.2 Study summary metrics calculate reviewed, correct, incorrect, and accu
     3: true,
   };
 
+  const guidedFeedbackByQuestionId: Record<string, { isCorrect: boolean; correctIndex: number }> = {
+    q1: { isCorrect: true, correctIndex: 0 },
+    q2: { isCorrect: true, correctIndex: 1 },
+    q3: { isCorrect: false, correctIndex: 2 },
+    q4: { isCorrect: true, correctIndex: 3 },
+  };
+
   const totalCount = examQuestions.length;
   const checkedIndices = Object.keys(checkedAnswers).map(Number);
   const correctCount = checkedIndices.filter(
-    (idx) => selectedAnswers[idx] === examQuestions[idx]?.answerIndex
+    (idx) => guidedFeedbackByQuestionId[examQuestions[idx]?.id]?.isCorrect === true
   ).length;
   const incorrectCount = checkedIndices.filter(
-    (idx) => selectedAnswers[idx] !== undefined && selectedAnswers[idx] !== examQuestions[idx]?.answerIndex
+    (idx) => {
+      const q = examQuestions[idx];
+      return q ? guidedFeedbackByQuestionId[q.id]?.isCorrect === false : false;
+    }
   ).length;
   const accuracyPercent = checkedIndices.length > 0
     ? Math.round((correctCount / checkedIndices.length) * 100)

@@ -19,9 +19,19 @@ interface Question {
   subtopic?: string;
   prompt: string;
   options: string[];
-  answerIndex?: number;
-  explanation?: string;
   imageUrl?: string;
+  difficulty?: string;
+  tags?: string[];
+}
+
+interface GuidedFeedback {
+  questionId: string;
+  selectedIndex: number;
+  isCorrect: boolean;
+  answerIndex: number;
+  correctLetter: string;
+  correctText: string;
+  explanation?: string | null;
   stepByStep?: string | null;
   whyA?: string | null;
   whyB?: string | null;
@@ -30,8 +40,6 @@ interface Question {
   eliminationStrategy?: string | null;
   commonTrap?: string | null;
   examTip?: string | null;
-  difficulty?: string;
-  tags?: string[];
 }
 
 const LOCAL_STORAGE_KEY = "cse_active_exam_session";
@@ -119,6 +127,11 @@ function TakeExamPageInner() {
   const [examMode, setExamMode] = useState<"SIMULATION" | "GUIDED_REVIEW">("SIMULATION");
   const [checkedAnswers, setCheckedAnswers] = useState<{ [key: number]: boolean }>({});
   const [guidedFinished, setGuidedFinished] = useState(false);
+  const [guidedReviewToken, setGuidedReviewToken] = useState<string | null>(null);
+  const [guidedFeedbackByQuestionId, setGuidedFeedbackByQuestionId] = useState<
+    Record<string, GuidedFeedback>
+  >({});
+  const [checkingAnswer, setCheckingAnswer] = useState(false);
 
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -149,6 +162,98 @@ function TakeExamPageInner() {
     localStorage.setItem("cse_exam_font_size", size);
   };
 
+  function handleSelectOption(optionIndex: number) {
+    if (examMode === "GUIDED_REVIEW" && (checkedAnswers[currentIndex] || checkingAnswer)) {
+      return; // Locked after checking or while check request is in-flight
+    }
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [currentIndex]: optionIndex,
+    }));
+  }
+
+  const handleCheckAnswer = useCallback(async () => {
+    if (examMode !== "GUIDED_REVIEW") return;
+    if (checkingAnswer) return;
+
+    const questionIndex = currentIndex;
+    const currentQ = examQuestions[questionIndex];
+    if (!currentQ) return;
+    const questionId = currentQ.id;
+    const selectedIdx = selectedAnswers[questionIndex];
+
+    if (selectedIdx === undefined) return;
+    if (checkedAnswers[questionIndex]) return;
+
+    if (!guidedReviewToken || !guidedReviewToken.trim()) {
+      alert("Missing or invalid review session credential. Please restart your Guided Review session.");
+      return;
+    }
+
+    if (!isOnline) {
+      alert("You are currently offline. Please reconnect to check your answer.");
+      return;
+    }
+
+    setCheckingAnswer(true);
+
+    try {
+      const res = await fetch("/api/exam/guided-review/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guidedReviewToken: guidedReviewToken.trim(),
+          questionId,
+          selectedIndex: selectedIdx,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json().catch(() => null);
+        if (
+          data &&
+          data.success === true &&
+          data.questionId === questionId &&
+          data.selectedIndex === selectedIdx &&
+          typeof data.isCorrect === "boolean" &&
+          Number.isInteger(data.answerIndex)
+        ) {
+          // Valid authoritative check response
+          setGuidedFeedbackByQuestionId((prev) => ({
+            ...prev,
+            [questionId]: data as GuidedFeedback,
+          }));
+          setCheckedAnswers((prev) => ({
+            ...prev,
+            [questionIndex]: true,
+          }));
+        } else {
+          console.error("[GUIDED_CHECK] Malformed success payload from server:", data);
+          alert("Unexpected server response while checking answer. Selection has been preserved.");
+        }
+      } else {
+        const errData = await res.json().catch(() => null);
+        const errMsg = errData?.error || `Server returned error status ${res.status}.`;
+        console.warn(`[GUIDED_CHECK] Server check error ${res.status}:`, errMsg);
+        alert(errMsg);
+      }
+    } catch (err) {
+      console.error("[GUIDED_CHECK] Network fetch failure:", err);
+      alert("Network error checking answer. Please check your connection and try again.");
+    } finally {
+      setCheckingAnswer(false);
+    }
+  }, [
+    examMode,
+    checkingAnswer,
+    currentIndex,
+    examQuestions,
+    selectedAnswers,
+    checkedAnswers,
+    guidedReviewToken,
+    isOnline,
+  ]);
+
   // Keyboard Shortcuts (A/B/C/D, 1/2/3/4, ArrowRight, ArrowLeft, F/B)
   useEffect(() => {
     if (isSetupPhase || isPauseModalOpen || submitting) return;
@@ -178,11 +283,8 @@ function TakeExamPageInner() {
       } else if (e.key === "Enter") {
         e.preventDefault();
         if (examMode === "GUIDED_REVIEW" && !checkedAnswers[currentIndex]) {
-          if (selectedAnswers[currentIndex] !== undefined) {
-            setCheckedAnswers((prev) => ({
-              ...prev,
-              [currentIndex]: true,
-            }));
+          if (selectedAnswers[currentIndex] !== undefined && !checkingAnswer) {
+            void handleCheckAnswer();
           }
         } else {
           setCurrentIndex((prev) => Math.min(examQuestions.length - 1, prev + 1));
@@ -202,7 +304,7 @@ function TakeExamPageInner() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex, examMode, checkedAnswers, selectedAnswers]);
+  }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex, examMode, checkedAnswers, selectedAnswers, handleCheckAnswer, checkingAnswer]);
 
   // 1. Load Initial Categories, Bookmarks & Check for In-Progress Session
   useEffect(() => {
@@ -227,15 +329,54 @@ function TakeExamPageInner() {
           try {
             const parsed = JSON.parse(saved);
             if (parsed.examQuestions && parsed.examQuestions.length > 0) {
-              if (typeof parsed.attemptToken === "string" && parsed.attemptToken.trim()) {
-                setSavedSessionData(parsed);
-                setExamMode(parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
-                if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
+              const mode = parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION";
+
+              if (mode === "GUIDED_REVIEW") {
+                // Scan ALL TEN sensitive fields
+                const hasLegacyAnswers = parsed.examQuestions.some(
+                  (q: any) =>
+                    q.answerIndex !== undefined ||
+                    q.explanation !== undefined ||
+                    q.stepByStep !== undefined ||
+                    q.whyA !== undefined ||
+                    q.whyB !== undefined ||
+                    q.whyC !== undefined ||
+                    q.whyD !== undefined ||
+                    q.eliminationStrategy !== undefined ||
+                    q.commonTrap !== undefined ||
+                    q.examTip !== undefined
+                );
+
+                const lacksGuidedToken =
+                  typeof parsed.guidedReviewToken !== "string" || !parsed.guidedReviewToken.trim();
+
+                const hasAttemptToken =
+                  typeof parsed.attemptToken === "string" && parsed.attemptToken.trim().length > 0;
+
+                if (hasLegacyAnswers || lacksGuidedToken || hasAttemptToken) {
+                  console.warn("[EXAM_SESSION] Discarding legacy/unsafe Guided Review saved session.");
+                  localStorage.removeItem(LOCAL_STORAGE_KEY);
+                  setSavedSessionData(null);
+                } else {
+                  setSavedSessionData(parsed);
+                  setExamMode("GUIDED_REVIEW");
+                  if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
+                  if (parsed.guidedFeedbackByQuestionId) {
+                    setGuidedFeedbackByQuestionId(parsed.guidedFeedbackByQuestionId);
+                  }
+                }
               } else {
-                // Strict 1E3B: Discard legacy token-less session and require fresh start
-                console.warn("[EXAM_SESSION] Discarded legacy token-less saved exam session.");
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-                setSavedSessionData(null);
+                // SIMULATION
+                if (typeof parsed.attemptToken === "string" && parsed.attemptToken.trim()) {
+                  setSavedSessionData(parsed);
+                  setExamMode("SIMULATION");
+                  if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
+                } else {
+                  // Strict 1E3B: Discard legacy token-less session and require fresh start
+                  console.warn("[EXAM_SESSION] Discarded legacy token-less saved exam session.");
+                  localStorage.removeItem(LOCAL_STORAGE_KEY);
+                  setSavedSessionData(null);
+                }
               }
             }
           } catch (e) {
@@ -260,19 +401,16 @@ function TakeExamPageInner() {
       !guidedFinished &&
       !offlineBanner
     ) {
-      const questionsToPersist =
-        examMode === "GUIDED_REVIEW"
-          ? examQuestions
-          : examQuestions.map((q) => ({
-              id: q.id,
-              category: q.category,
-              subtopic: q.subtopic,
-              prompt: q.prompt,
-              options: q.options,
-              imageUrl: q.imageUrl || null,
-              difficulty: q.difficulty,
-              tags: q.tags,
-            }));
+      const questionsToPersist = examQuestions.map((q) => ({
+        id: q.id,
+        category: q.category,
+        subtopic: q.subtopic,
+        prompt: q.prompt,
+        options: q.options,
+        imageUrl: q.imageUrl || null,
+        difficulty: q.difficulty,
+        tags: q.tags,
+      }));
 
       const activeSession = {
         examMode,
@@ -282,11 +420,28 @@ function TakeExamPageInner() {
         currentIndex,
         timerMinutes,
         timeLeft,
-        attemptToken,
+        attemptToken: examMode === "GUIDED_REVIEW" ? null : attemptToken,
+        guidedReviewToken: examMode === "GUIDED_REVIEW" ? guidedReviewToken : null,
+        guidedFeedbackByQuestionId: examMode === "GUIDED_REVIEW" ? guidedFeedbackByQuestionId : {},
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     }
-  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished, attemptToken, offlineBanner]);
+  }, [
+    isSetupPhase,
+    examMode,
+    examQuestions,
+    selectedAnswers,
+    checkedAnswers,
+    currentIndex,
+    timerMinutes,
+    timeLeft,
+    submitting,
+    guidedFinished,
+    attemptToken,
+    guidedReviewToken,
+    guidedFeedbackByQuestionId,
+    offlineBanner,
+  ]);
 
   // Toggle Bookmark Handler
   const toggleBookmark = async (questionId: string) => {
@@ -434,25 +589,52 @@ function TakeExamPageInner() {
 
   // Resume Saved Session Handler
   function handleResumeSavedSession() {
-    if (
-      !savedSessionData ||
-      typeof savedSessionData.attemptToken !== "string" ||
-      !savedSessionData.attemptToken.trim()
-    ) {
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-      setSavedSessionData(null);
-      return;
+    if (!savedSessionData) return;
+
+    if (savedSessionData.examMode === "GUIDED_REVIEW") {
+      if (
+        typeof savedSessionData.guidedReviewToken !== "string" ||
+        !savedSessionData.guidedReviewToken.trim()
+      ) {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        setSavedSessionData(null);
+        return;
+      }
+      setExamQuestions(savedSessionData.examQuestions);
+      setSelectedAnswers(savedSessionData.selectedAnswers || {});
+      setCheckedAnswers(savedSessionData.checkedAnswers || {});
+      setGuidedFeedbackByQuestionId(savedSessionData.guidedFeedbackByQuestionId || {});
+      setExamMode("GUIDED_REVIEW");
+      setCurrentIndex(savedSessionData.currentIndex || 0);
+      setTimerMinutes(0);
+      setTimeLeft(0);
+      setGuidedReviewToken(savedSessionData.guidedReviewToken.trim());
+      setAttemptToken(null);
+      setGuidedFinished(false);
+      setIsSetupPhase(false);
+    } else {
+      // SIMULATION
+      if (
+        typeof savedSessionData.attemptToken !== "string" ||
+        !savedSessionData.attemptToken.trim()
+      ) {
+        localStorage.removeItem(LOCAL_STORAGE_KEY);
+        setSavedSessionData(null);
+        return;
+      }
+      setExamQuestions(savedSessionData.examQuestions);
+      setSelectedAnswers(savedSessionData.selectedAnswers || {});
+      setCheckedAnswers(savedSessionData.checkedAnswers || {});
+      setGuidedFeedbackByQuestionId({});
+      setExamMode("SIMULATION");
+      setCurrentIndex(savedSessionData.currentIndex || 0);
+      setTimerMinutes(savedSessionData.timerMinutes || 0);
+      setTimeLeft(savedSessionData.timeLeft || 0);
+      setAttemptToken(savedSessionData.attemptToken.trim());
+      setGuidedReviewToken(null);
+      setGuidedFinished(false);
+      setIsSetupPhase(false);
     }
-    setExamQuestions(savedSessionData.examQuestions);
-    setSelectedAnswers(savedSessionData.selectedAnswers || {});
-    setCheckedAnswers(savedSessionData.checkedAnswers || {});
-    setExamMode(savedSessionData.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
-    setCurrentIndex(savedSessionData.currentIndex || 0);
-    setTimerMinutes(savedSessionData.timerMinutes || 0);
-    setTimeLeft(savedSessionData.timeLeft || 0);
-    setAttemptToken(savedSessionData.attemptToken);
-    setGuidedFinished(false);
-    setIsSetupPhase(false);
   }
 
   // 4. Auto-start custom quiz if URL params are present
@@ -486,6 +668,10 @@ function TakeExamPageInner() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
     setAttemptToken(null);
+    setGuidedReviewToken(null);
+    setGuidedFeedbackByQuestionId({});
+    setCheckedAnswers({});
+    setSelectedAnswers({});
     setStartingExam(true);
 
     const isTimed = mode === "TIMED";
@@ -525,11 +711,17 @@ function TakeExamPageInner() {
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
     setAttemptToken(null);
+    setGuidedReviewToken(null);
+    setGuidedFeedbackByQuestionId({});
+    setCheckedAnswers({});
+    setSelectedAnswers({});
     setStartingExam(true);
+
+    const experience = examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION";
 
     try {
       const res = await fetch(
-        `/api/exam/start?category=${encodeURIComponent(selectedCategory)}`
+        `/api/exam/start?category=${encodeURIComponent(selectedCategory)}&experience=${experience}`
       );
 
       if (res.status === 402) {
@@ -539,17 +731,41 @@ function TakeExamPageInner() {
 
       const data = await res.json();
 
-      if (res.ok && data.questions && data.questions.length > 0) {
-        setExamQuestions(data.questions);
-        setAttemptToken(
-          typeof data.attemptToken === "string" ? data.attemptToken : null
-        );
-        setCurrentIndex(0);
-        setSelectedAnswers({});
-        const effectiveTimer = examMode === "GUIDED_REVIEW" ? 0 : timerMinutes;
-        if (examMode === "GUIDED_REVIEW") setTimerMinutes(0);
-        setTimeLeft(effectiveTimer * 60);
-        setIsSetupPhase(false);
+      if (res.ok && Array.isArray(data.questions) && data.questions.length > 0) {
+        if (examMode === "GUIDED_REVIEW") {
+          if (typeof data.guidedReviewToken === "string" && data.guidedReviewToken.trim() && data.attemptToken === null) {
+            setExamQuestions(data.questions);
+            setGuidedReviewToken(data.guidedReviewToken.trim());
+            setAttemptToken(null);
+            setGuidedFeedbackByQuestionId({});
+            setCheckedAnswers({});
+            setSelectedAnswers({});
+            setCurrentIndex(0);
+            setTimerMinutes(0);
+            setTimeLeft(0);
+            setIsSetupPhase(false);
+          } else {
+            console.error("[GUIDED_REVIEW_START] Missing or invalid guided review token:", data);
+            alert("Unable to start Guided Review: missing session credential.");
+          }
+        } else {
+          // SIMULATION
+          if (typeof data.attemptToken === "string" && data.attemptToken.trim() && data.guidedReviewToken === null) {
+            setExamQuestions(data.questions);
+            setAttemptToken(data.attemptToken.trim());
+            setGuidedReviewToken(null);
+            setGuidedFeedbackByQuestionId({});
+            setCheckedAnswers({});
+            setSelectedAnswers({});
+            setCurrentIndex(0);
+            const effectiveTimer = timerMinutes;
+            setTimeLeft(effectiveTimer * 60);
+            setIsSetupPhase(false);
+          } else {
+            console.error("[EXAM_START] Missing or invalid exam attempt token:", data);
+            alert("Unable to start exam: missing exam attempt token.");
+          }
+        }
       } else {
         alert("Unable to generate exam questions. Please try again.");
       }
@@ -561,39 +777,18 @@ function TakeExamPageInner() {
     }
   }
 
-  function handleSelectOption(optionIndex: number) {
-    if (examMode === "GUIDED_REVIEW" && checkedAnswers[currentIndex]) {
-      return; // Locked after checking
-    }
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [currentIndex]: optionIndex,
-    }));
-  }
-
-  const handleCheckAnswer = useCallback(() => {
-    if (selectedAnswers[currentIndex] === undefined) return;
-    setCheckedAnswers((prev) => ({
-      ...prev,
-      [currentIndex]: true,
-    }));
-  }, [selectedAnswers, currentIndex]);
-
   // Save for Later Handler
   function handleSaveAndExit() {
-    const questionsToPersist =
-      examMode === "GUIDED_REVIEW"
-        ? examQuestions
-        : examQuestions.map((q) => ({
-            id: q.id,
-            category: q.category,
-            subtopic: q.subtopic,
-            prompt: q.prompt,
-            options: q.options,
-            imageUrl: q.imageUrl || null,
-            difficulty: q.difficulty,
-            tags: q.tags,
-          }));
+    const questionsToPersist = examQuestions.map((q) => ({
+      id: q.id,
+      category: q.category,
+      subtopic: q.subtopic,
+      prompt: q.prompt,
+      options: q.options,
+      imageUrl: q.imageUrl || null,
+      difficulty: q.difficulty,
+      tags: q.tags,
+    }));
 
     const activeSession = {
       examMode,
@@ -603,7 +798,9 @@ function TakeExamPageInner() {
       currentIndex,
       timerMinutes,
       timeLeft,
-      attemptToken,
+      attemptToken: examMode === "GUIDED_REVIEW" ? null : attemptToken,
+      guidedReviewToken: examMode === "GUIDED_REVIEW" ? guidedReviewToken : null,
+      guidedFeedbackByQuestionId: examMode === "GUIDED_REVIEW" ? guidedFeedbackByQuestionId : {},
     };
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     router.push("/dashboard");
@@ -615,9 +812,11 @@ function TakeExamPageInner() {
     setExamQuestions([]);
     setSelectedAnswers({});
     setCheckedAnswers({});
+    setGuidedFeedbackByQuestionId({});
     setCurrentIndex(0);
     setSavedSessionData(null);
     setAttemptToken(null);
+    setGuidedReviewToken(null);
     setIsSetupPhase(true);
     setIsPauseModalOpen(false);
     router.push("/dashboard");
@@ -954,12 +1153,14 @@ function TakeExamPageInner() {
   if (guidedFinished) {
     const totalCount = examQuestions.length;
     const checkedIndices = Object.keys(checkedAnswers).map(Number);
-    const correctCount = checkedIndices.filter(
-      (idx) => selectedAnswers[idx] === examQuestions[idx]?.answerIndex
-    ).length;
-    const incorrectCount = checkedIndices.filter(
-      (idx) => selectedAnswers[idx] !== undefined && selectedAnswers[idx] !== examQuestions[idx]?.answerIndex
-    ).length;
+    const correctCount = checkedIndices.filter((idx) => {
+      const qId = examQuestions[idx]?.id;
+      return qId && guidedFeedbackByQuestionId[qId]?.isCorrect === true;
+    }).length;
+    const incorrectCount = checkedIndices.filter((idx) => {
+      const qId = examQuestions[idx]?.id;
+      return qId && guidedFeedbackByQuestionId[qId]?.isCorrect === false;
+    }).length;
     const accuracyPercent = checkedIndices.length > 0
       ? Math.round((correctCount / checkedIndices.length) * 100)
       : 0;
@@ -1017,6 +1218,11 @@ function TakeExamPageInner() {
             <button
               onClick={() => {
                 setGuidedFinished(false);
+                setGuidedFeedbackByQuestionId({});
+                setCheckedAnswers({});
+                setSelectedAnswers({});
+                setGuidedReviewToken(null);
+                setAttemptToken(null);
                 setIsSetupPhase(true);
               }}
               className="flex-1 py-3 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 font-bold text-sm rounded-xl transition cursor-pointer"
@@ -1214,7 +1420,8 @@ function TakeExamPageInner() {
             const letterLabel = ["A", "B", "C", "D"][idx] || String(idx + 1);
             const isGuided = examMode === "GUIDED_REVIEW";
             const isChecked = isGuided && !!checkedAnswers[currentIndex];
-            const isCorrect = currentQ.answerIndex === idx;
+            const feedback = currentQ ? guidedFeedbackByQuestionId[currentQ.id] : undefined;
+            const isCorrect = isGuided ? feedback?.answerIndex === idx : false;
 
             let optionStyle = isSelected
               ? "border-blue-600 bg-blue-50/50 text-blue-900 font-bold"
@@ -1233,7 +1440,7 @@ function TakeExamPageInner() {
             return (
               <button
                 key={idx}
-                disabled={isChecked}
+                disabled={isChecked || checkingAnswer}
                 onClick={() => handleSelectOption(idx)}
                 className={`w-full text-left p-4 rounded-2xl border transition flex items-center justify-between cursor-pointer ${
                   fontSize === "sm" ? "text-xs sm:text-sm" : fontSize === "lg" ? "text-base sm:text-lg" : "text-sm"
@@ -1278,35 +1485,46 @@ function TakeExamPageInner() {
               <button
                 type="button"
                 onClick={handleCheckAnswer}
-                disabled={selectedAnswers[currentIndex] === undefined}
+                disabled={selectedAnswers[currentIndex] === undefined || checkingAnswer}
                 className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-sm rounded-2xl shadow-md transition cursor-pointer flex items-center justify-center gap-2"
               >
                 <span>🔍</span>
-                <span>{selectedAnswers[currentIndex] === undefined ? "Select an answer above to check" : "Check Answer"}</span>
+                <span>
+                  {checkingAnswer
+                    ? "Checking Answer with Server..."
+                    : selectedAnswers[currentIndex] === undefined
+                    ? "Select an answer above to check"
+                    : "Check Answer"}
+                </span>
               </button>
-            ) : (
-              <div className="space-y-4">
-                <QuestionResultBanner
-                  isCorrect={selectedAnswers[currentIndex] === currentQ?.answerIndex}
-                  correctLetter={["A", "B", "C", "D"][currentQ?.answerIndex ?? 0] || "A"}
-                  correctText={currentQ?.options[currentQ?.answerIndex ?? 0] || ""}
-                  isSkipped={selectedAnswers[currentIndex] === undefined}
-                />
-                <ExplanationPanel
-                  explanation={currentQ?.explanation}
-                  stepByStep={currentQ?.stepByStep}
-                  whyA={currentQ?.whyA}
-                  whyB={currentQ?.whyB}
-                  whyC={currentQ?.whyC}
-                  whyD={currentQ?.whyD}
-                  eliminationStrategy={currentQ?.eliminationStrategy}
-                  commonTrap={currentQ?.commonTrap}
-                  examTip={currentQ?.examTip}
-                  options={currentQ?.options}
-                  correctIndex={currentQ?.answerIndex}
-                />
-              </div>
-            )}
+            ) : (() => {
+              const currentFeedback = currentQ ? guidedFeedbackByQuestionId[currentQ.id] : undefined;
+              if (!currentFeedback) return null;
+
+              return (
+                <div className="space-y-4">
+                  <QuestionResultBanner
+                    isCorrect={currentFeedback.isCorrect}
+                    correctLetter={currentFeedback.correctLetter}
+                    correctText={currentFeedback.correctText}
+                    isSkipped={selectedAnswers[currentIndex] === undefined}
+                  />
+                  <ExplanationPanel
+                    explanation={currentFeedback.explanation || undefined}
+                    stepByStep={currentFeedback.stepByStep}
+                    whyA={currentFeedback.whyA}
+                    whyB={currentFeedback.whyB}
+                    whyC={currentFeedback.whyC}
+                    whyD={currentFeedback.whyD}
+                    eliminationStrategy={currentFeedback.eliminationStrategy}
+                    commonTrap={currentFeedback.commonTrap}
+                    examTip={currentFeedback.examTip}
+                    options={currentQ?.options}
+                    correctIndex={currentFeedback.answerIndex}
+                  />
+                </div>
+              );
+            })()}
           </div>
         )}
 

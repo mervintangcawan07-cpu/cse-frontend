@@ -12,6 +12,7 @@ import {
   createRateLimitResponse,
 } from "@/lib/ratelimit";
 import { signExamAttemptToken } from "@/lib/examAttemptToken";
+import { signGuidedReviewToken } from "@/lib/guidedReviewToken";
 
 // Official Civil Service Exam Category Breakdown (Total = 170)
 const CSE_CATEGORY_QUOTAS: Record<string, number> = {
@@ -70,6 +71,7 @@ export async function GET(request: Request) {
     let mode = "TIMED";
     let selectedCategory = "All";
     let requiredCategories: string[] = ALL_CATEGORIES;
+    let experience: "SIMULATION" | "GUIDED_REVIEW" = "SIMULATION";
 
     // Classification Rule A: 0 of 4 custom parameters -> Standard Mock Exam (Requires PRO)
     if (customParamCount === 0) {
@@ -78,6 +80,20 @@ export async function GET(request: Request) {
           { error: "Payment required. Active PRO subscription required." },
           { status: 402, headers: CACHE_PROFILES.PRIVATE }
         );
+      }
+
+      const experienceRaw = searchParams.get("experience");
+      if (experienceRaw !== null) {
+        if (experienceRaw === "SIMULATION") {
+          experience = "SIMULATION";
+        } else if (experienceRaw === "GUIDED_REVIEW") {
+          experience = "GUIDED_REVIEW";
+        } else {
+          return NextResponse.json(
+            { error: "Invalid experience: must be SIMULATION or GUIDED_REVIEW." },
+            { status: 400, headers: CACHE_PROFILES.PRIVATE }
+          );
+        }
       }
 
       selectedCategory = searchParams.get("category") || "All";
@@ -99,6 +115,15 @@ export async function GET(request: Request) {
     }
     // Classification Rule C: All 4 custom parameters present -> Strict validation -> Allowed for free authenticated users
     else {
+      if (searchParams.has("experience")) {
+        return NextResponse.json(
+          {
+            error:
+              "Invalid custom quiz configuration: experience parameter is not supported for Custom Practice.",
+          },
+          { status: 400, headers: CACHE_PROFILES.PRIVATE }
+        );
+      }
       const itemCountRaw = searchParams.get("itemCount") ?? "";
       const categoriesRaw = searchParams.get("categories") ?? "";
       const poolRaw = searchParams.get("pool") ?? "";
@@ -443,7 +468,7 @@ export async function GET(request: Request) {
       finalExamQuestions.push(...shuffleArray(categoryPickedQuestions).slice(0, catQuota));
     }
 
-    // 4. Prepare options (canonical database order preserved)
+    // 4. Prepare options (canonical database order preserved, pre-submit safe fields only)
     const preparedQuestions = finalExamQuestions.map((q: any) => {
       const resolvedOptions: string[] =
         Array.isArray(q.options) && q.options.length > 0
@@ -456,17 +481,7 @@ export async function GET(request: Request) {
         subtopic: q.subtopic || "General",
         prompt: q.prompt,
         options: resolvedOptions,
-        answerIndex: q.answerIndex,
-        explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
-        stepByStep: q.stepByStep || null,
-        whyA: q.whyA || null,
-        whyB: q.whyB || null,
-        whyC: q.whyC || null,
-        whyD: q.whyD || null,
-        eliminationStrategy: q.eliminationStrategy || null,
-        commonTrap: q.commonTrap || null,
-        examTip: q.examTip || null,
         difficulty: q.difficulty || "MEDIUM",
         tags: q.tags || [],
       };
@@ -476,13 +491,23 @@ export async function GET(request: Request) {
     const cappedExam = preparedQuestions.slice(0, 170);
 
     let attemptToken: string | null = null;
+    let guidedReviewToken: string | null = null;
+
     if (cappedExam.length > 0) {
-      const tokenResult = await signExamAttemptToken({
-        userId: authenticatedUser.id,
-        examType: "FULL_MOCK",
-        questionIds: cappedExam.map((q: any) => q.id),
-      });
-      attemptToken = tokenResult.attemptToken;
+      if (experience === "GUIDED_REVIEW") {
+        const tokenResult = await signGuidedReviewToken({
+          userId: authenticatedUser.id,
+          questionIds: cappedExam.map((q: any) => q.id),
+        });
+        guidedReviewToken = tokenResult.guidedReviewToken;
+      } else {
+        const tokenResult = await signExamAttemptToken({
+          userId: authenticatedUser.id,
+          examType: "FULL_MOCK",
+          questionIds: cappedExam.map((q: any) => q.id),
+        });
+        attemptToken = tokenResult.attemptToken;
+      }
     }
 
     return NextResponse.json(
@@ -491,6 +516,7 @@ export async function GET(request: Request) {
         totalItems: cappedExam.length,
         questions: cappedExam,
         attemptToken,
+        guidedReviewToken,
       },
       { headers: CACHE_PROFILES.PRIVATE }
     );

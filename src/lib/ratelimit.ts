@@ -95,6 +95,13 @@ export const SUDO_LIMITER = createLimiter(
   `@ratelimit/${rateLimitEnvironment}/sudo`
 );
 
+// 🔒 12. Guided Check Limiter: 120 requests per 1 minute (Per-question Guided Review checks)
+export const GUIDED_CHECK_LIMITER = createLimiter(
+  120,
+  "1 m",
+  `@ratelimit/${rateLimitEnvironment}/guided_check`
+);
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;

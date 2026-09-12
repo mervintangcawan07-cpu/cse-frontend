@@ -305,19 +305,18 @@ async function main() {
   const simMapMatches = [...takePageSource.matchAll(simMapRegex)];
   assert.ok(simMapMatches.length >= 2, "Must find at least 2 Simulation questionsToPersist mappings in take/page.tsx");
 
-  runTest("18. Submitted Simulation active session storage isolates Simulation from Guided Review", () => {
+  runTest("18. Active session storage persists safe questions without answerIndex for both modes", () => {
     assert(
       takePageSource.includes("questionsToPersist"),
       "take page must define questionsToPersist helper for session storage"
     );
     assert(
-      takePageSource.includes('examMode === "GUIDED_REVIEW"') && takePageSource.includes("questionsToPersist"),
-      "take page must distinguish guided review vs simulation for session questions"
+      takePageSource.includes("examQuestions: questionsToPersist"),
+      "take page must persist sanitized questionsToPersist"
     );
-    // Guided Review branch retains full question objects for local pedagogical review
     assert(
-      /examMode\s*===\s*"GUIDED_REVIEW"\s*\?\s*examQuestions/.test(takePageSource),
-      "Guided Review branch must preserve full questions locally"
+      takePageSource.includes("guidedFeedbackByQuestionId"),
+      "take page must store guided feedback separately"
     );
   });
 
@@ -469,34 +468,41 @@ async function main() {
     );
   });
 
-  runTest("27. FULL_MOCK HTTP response has NOT been modified in 1E4A (Guided Review compatibility)", () => {
-    // Assert FULL_MOCK path in start/route.ts still includes answerIndex
+  runTest("27. FULL_MOCK HTTP response excludes all ten sensitive answer/rationale fields in 1E4B", () => {
+    // Assert FULL_MOCK path in start/route.ts excludes all ten sensitive fields
     const fullMockStartIndex = startRouteSource.indexOf("// --- Standard Full Exam path");
     assert(fullMockStartIndex !== -1, "Standard Full Exam path must be present");
     const fullMockBlock = startRouteSource.slice(fullMockStartIndex);
 
-    assert(
-      fullMockBlock.includes("answerIndex: q.answerIndex"),
-      "FULL_MOCK must temporarily retain answerIndex for Guided Review compatibility in 1E4A"
-    );
-    assert(
-      fullMockBlock.includes("explanation: q.explanation || null"),
-      "FULL_MOCK must temporarily retain explanation for Guided Review compatibility in 1E4A"
-    );
-    assert(
-      fullMockBlock.includes("stepByStep: q.stepByStep || null"),
-      "FULL_MOCK must temporarily retain stepByStep for Guided Review compatibility in 1E4A"
-    );
+    const sensitiveFields = [
+      "answerIndex",
+      "explanation",
+      "stepByStep",
+      "whyA",
+      "whyB",
+      "whyC",
+      "whyD",
+      "eliminationStrategy",
+      "commonTrap",
+      "examTip",
+    ];
+
+    for (const field of sensitiveFields) {
+      assert(
+        !fullMockBlock.includes(`${field}:`),
+        `FULL_MOCK must exclude ${field} in production response serializer`
+      );
+    }
   });
 
-  runTest("28. Existing Guided Review local evaluation and locking behavior remains present in take page", () => {
+  runTest("28. Existing Guided Review locking behavior remains present in take page with authoritative feedback", () => {
     assert(
       takePageSource.includes("if (examMode === \"GUIDED_REVIEW\") return; // Safety guard: Guided Review NEVER submits to server"),
       "Safety guard preventing Guided Review from submitting must remain intact"
     );
     assert(
-      takePageSource.includes("currentQ.answerIndex === idx"),
-      "Guided Review option styling based on answerIndex must remain intact"
+      takePageSource.includes("feedback?.answerIndex === idx"),
+      "Guided Review option styling based on authoritative feedback answerIndex must be present"
     );
     assert(
       takePageSource.includes("<ExplanationPanel"),
