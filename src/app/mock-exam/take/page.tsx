@@ -438,11 +438,17 @@ function TakeExamPageInner() {
   useEffect(() => {
     async function initExam() {
       try {
-        // Check for active unfinished exam session in local storage
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        const graceEligible = isResumeGraceEligible(saved);
-        if (graceEligible) {
-          setHasResumeGrace(true);
+        let saved: string | null = null;
+
+        // 1E5B: Standard Mock only. A complete Custom Practice URL must not read
+        // saved state or evaluate resume grace from a prior Standard Mock sitting.
+        if (!isCompleteNonEmptyCustom) {
+          // Check for active unfinished exam session in local storage
+          saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+          const graceEligible = isResumeGraceEligible(saved);
+          if (graceEligible) {
+            setHasResumeGrace(true);
+          }
         }
 
         const bookmarkRes = await fetch("/api/bookmarks")
@@ -458,7 +464,7 @@ function TakeExamPageInner() {
           setBookmarkedIds(ids);
         }
 
-        if (saved) {
+        if (!isCompleteNonEmptyCustom && saved) {
           try {
             const parsed = JSON.parse(saved);
             if (parsed.examQuestions && parsed.examQuestions.length > 0) {
@@ -811,6 +817,7 @@ function TakeExamPageInner() {
     pool: string,
     mode: string
   ) {
+    setExamMode("SIMULATION");
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
     setAttemptToken(null);
@@ -818,6 +825,7 @@ function TakeExamPageInner() {
     setGuidedFeedbackByQuestionId({});
     setCheckedAnswers({});
     setSelectedAnswers({});
+    setGuidedFinished(false);
     setStartingExam(true);
 
     const isTimed = mode === "TIMED";
@@ -830,11 +838,19 @@ function TakeExamPageInner() {
       const res = await fetch(`/api/exam/start?${params.toString()}`);
       const data = await res.json();
 
-      if (res.ok && data.questions && data.questions.length > 0) {
+      if (
+        res.ok &&
+        Array.isArray(data.questions) &&
+        data.questions.length > 0 &&
+        typeof data.attemptToken === "string" &&
+        data.attemptToken.trim().length > 0
+      ) {
+        setExamMode("SIMULATION");
         setExamQuestions(data.questions);
-        setAttemptToken(
-          typeof data.attemptToken === "string" ? data.attemptToken : null
-        );
+        setAttemptToken(data.attemptToken.trim());
+        setGuidedReviewToken(null);
+        setGuidedFeedbackByQuestionId({});
+        setCheckedAnswers({});
         setCurrentIndex(0);
         setSelectedAnswers({});
         setTimeLeft(mins * 60);
@@ -854,6 +870,12 @@ function TakeExamPageInner() {
 
   // 5. Start New Smart Exam Session (Spaced Repetition Engine)
   async function handleStartExam() {
+    // 1E5B: Fail closed if invoked in complete Custom Practice context
+    if (isCompleteNonEmptyCustom) {
+      console.warn("[EXAM_START] Refusing Standard Mock start in complete Custom Practice context.");
+      return;
+    }
+
     localStorage.removeItem(LOCAL_STORAGE_KEY);
     setSavedSessionData(null);
     setAttemptToken(null);
@@ -1036,6 +1058,22 @@ function TakeExamPageInner() {
     );
   }
 
+  // 1E5B: Dedicated Custom Practice loading guard.
+  // A complete Custom Practice request must NEVER render Standard Mock setup controls
+  // (Simulation/Guided selector, category selector, timer, or Standard Start button)
+  // while its custom quiz request is in flight.
+  if (isCompleteNonEmptyCustom && isSetupPhase) {
+    return (
+      <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
+        <DatabaseLoadingIndicator
+          title="Generating Custom Practice Quiz..."
+          subtitle="Assembling tailored questions based on your custom quiz configuration."
+          skeletonCount={3}
+        />
+      </div>
+    );
+  }
+
   // PHASE 1: SETUP SCREEN
   if (isSetupPhase) {
     return (
@@ -1109,7 +1147,10 @@ function TakeExamPageInner() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setExamMode("SIMULATION")}
+                  onClick={() => {
+                    if (isCompleteNonEmptyCustom) return;
+                    setExamMode("SIMULATION");
+                  }}
                   className={`p-3.5 rounded-2xl border text-left transition cursor-pointer ${
                     examMode === "SIMULATION"
                       ? "border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20"
@@ -1129,6 +1170,7 @@ function TakeExamPageInner() {
                 <button
                   type="button"
                   onClick={() => {
+                    if (isCompleteNonEmptyCustom) return;
                     setExamMode("GUIDED_REVIEW");
                     setTimerMinutes(0);
                   }}
