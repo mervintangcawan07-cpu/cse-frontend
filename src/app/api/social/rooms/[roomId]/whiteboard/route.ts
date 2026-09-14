@@ -228,7 +228,7 @@ function hasWhiteboardDrawingAuthority(authorization: WhiteboardAuthorization): 
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const authenticatedUser = await getAuthenticatedUser();
@@ -291,7 +291,7 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const authenticatedUser = await getAuthenticatedUser();
@@ -357,7 +357,7 @@ export async function POST(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const authenticatedUser = await getAuthenticatedUser();

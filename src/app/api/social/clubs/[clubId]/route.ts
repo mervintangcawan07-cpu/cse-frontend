@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -99,7 +99,7 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;

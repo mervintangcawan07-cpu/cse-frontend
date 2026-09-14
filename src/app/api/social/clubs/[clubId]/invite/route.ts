@@ -6,7 +6,7 @@ import { createNotification } from "@/lib/notifications";
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;

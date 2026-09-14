@@ -6,7 +6,7 @@ import { createNotification } from "@/lib/notifications";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -72,7 +72,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -146,7 +146,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ clubId: string }> | { clubId: string } }
+  { params }: { params: Promise<{ clubId: string }> }
 ) {
   try {
     const resolvedParams = await params;
