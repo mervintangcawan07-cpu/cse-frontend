@@ -9,7 +9,7 @@ import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -108,7 +108,7 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const resolvedParams = await params;
@@ -237,7 +237,7 @@ export async function POST(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const resolvedParams = await params;

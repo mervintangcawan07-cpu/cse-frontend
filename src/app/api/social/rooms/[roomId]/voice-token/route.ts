@@ -12,7 +12,7 @@ import {
 
 export async function GET(
   req: Request,
-  context: { params: Promise<{ roomId: string }> | { roomId: string } }
+  context: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const authenticatedUser = await getAuthenticatedUser();

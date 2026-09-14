@@ -7,7 +7,7 @@ import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   try {
     const resolvedParams = await params;

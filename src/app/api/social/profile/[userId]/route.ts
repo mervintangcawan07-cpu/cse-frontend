@@ -6,7 +6,7 @@ import { resolveUserPresence } from "@/lib/social/presence";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ userId: string }> | { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const resolvedParams = await params;

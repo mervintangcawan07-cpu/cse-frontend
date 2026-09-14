@@ -6,7 +6,7 @@ import { isStudyTogetherEnabled } from "@/lib/config/features";
 
 async function handleLeaveRoom(
   request: Request,
-  params: Promise<{ roomId: string }> | { roomId: string }
+  params: Promise<{ roomId: string }>
 ) {
   try {
     const resolvedParams = await params;
@@ -76,14 +76,14 @@ async function handleLeaveRoom(
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   return handleLeaveRoom(request, params);
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ roomId: string }> | { roomId: string } }
+  { params }: { params: Promise<{ roomId: string }> }
 ) {
   return handleLeaveRoom(request, params);
 }
