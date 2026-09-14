@@ -68,6 +68,8 @@ export async function POST(request: Request) {
         password: hashedPassword,
         passwordResetToken: null,
         passwordResetExpires: null,
+        activeSessionId: null,
+        lastActiveAt: null,
       },
     });
 
@@ -75,7 +77,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid or expired password reset token" }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true, message: "Password reset successful! You can now log in." });
+    const response = NextResponse.json({
+      success: true,
+      message: "Password reset successful! You can now log in.",
+    });
+
+    response.cookies.set("cse_session", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("Reset password error:", error);
     return NextResponse.json({ error: "Failed to reset password" }, { status: 500 });
