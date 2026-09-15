@@ -467,7 +467,7 @@ function runSourceIntegratedRouteTests(): void {
     ["src/app/api/duels/challenge/respond/route.ts", ["getAuthenticatedUser"]],
     ["src/app/api/duels/challenge/route.ts", ["getAuthenticatedUser"]],
     ["src/app/api/duels/matchmake/route.ts", ["getAuthenticatedUser"]],
-    ["src/app/api/flashcards/route.ts", ["getAuthenticatedSessionResult"]],
+    ["src/app/api/flashcards/route.ts", ["requireProAuth"]],
     ["src/app/api/notifications/read-all/route.ts", ["getAuthenticatedUser"]],
     ["src/app/api/notifications/route.ts", ["getAuthenticatedUser"]],
     ["src/app/api/questions/[id]/route.ts", ["getAuthenticatedSessionResult"]],
@@ -536,13 +536,14 @@ function runSourceIntegratedRouteTests(): void {
   const detailedAnalytics =
     b21RouteSources.get("src/app/api/user/analytics/detailed/route.ts") || "";
   assert(
-    flashcards.includes("Unauthorized: Please log in.") &&
-      flashcards.includes("Unauthorized: Session invalid.") &&
+    flashcards.includes("requireProAuth(request)") &&
+      flashcards.includes("if (errorResponse)") &&
+      flashcards.includes("status: errorResponse.status") &&
       support.includes('{ error: "Unauthorized" }') &&
       support.includes('{ error: "Invalid session" }') &&
       detailedAnalytics.includes('{ error: "Unauthorized" }') &&
       detailedAnalytics.includes('{ error: "Invalid session" }'),
-    "B2.1 route-specific missing-token and invalid-session responses remain intact"
+    "B2.1 flashcards delegates auth and entitlement failures to requireProAuth while support and analytics preserve route-owned auth responses"
   );
 
   const aiExplain = b21RouteSources.get("src/app/api/ai/explain-mistake/route.ts") || "";
@@ -624,6 +625,12 @@ function runSourceIntegratedRouteTests(): void {
   );
 
   const examStart = b22RouteSources.get("src/app/api/exam/start/route.ts") || "";
+  const preparedQuestionsStart = examStart.indexOf("const preparedQuestions =");
+  const attemptTokenStart = examStart.indexOf("let attemptToken");
+  const preparedQuestionsSource =
+    preparedQuestionsStart >= 0 && attemptTokenStart > preparedQuestionsStart
+      ? examStart.slice(preparedQuestionsStart, attemptTokenStart)
+      : "";
   assert(
     examStart.includes("CSE_CATEGORY_QUOTAS") &&
       examStart.includes("shuffleArray") &&
@@ -631,15 +638,45 @@ function runSourceIntegratedRouteTests(): void {
       examStart.includes("prisma.userMistake.findMany") &&
       examStart.includes("findBankQuestions") &&
       examStart.includes("activeOrdinaryQuestionWhere()") &&
-      examStart.includes("answerIndex: shuffledOptions.findIndex") &&
-      examStart.includes("explanation: q.explanation || null"),
-    "B2.2 exam start preserves selection, randomization, history, mistake, answer, and explanation behavior"
+      preparedQuestionsStart >= 0 &&
+      attemptTokenStart > preparedQuestionsStart &&
+      preparedQuestionsSource.includes("prompt: q.prompt") &&
+      preparedQuestionsSource.includes("options: resolvedOptions") &&
+      !preparedQuestionsSource.includes("answerIndex") &&
+      !preparedQuestionsSource.includes("explanation") &&
+      examStart.includes("signExamAttemptToken") &&
+      examStart.includes("questions: cappedExam"),
+    "B2.2 exam start preserves selection while shielding answers and explanations pre-submit and issuing signed attempt tokens"
   );
+  const standardMockStart = examStart.indexOf("customParamCount === 0");
+  const partialCustomStart = examStart.indexOf("customParamCount < 4");
+  const standardMockSection =
+    standardMockStart >= 0 && partialCustomStart > standardMockStart
+      ? examStart.slice(standardMockStart, partialCustomStart)
+      : "";
   assert(
-    !/requireProAuth|isPaid|paidUntil|planType|Payment required|status:\s*402/.test(
-      examStart
-    ),
-    "B2.2 exam start does not introduce PRO, payment, or plan authorization"
+    examStart.includes("customParamCount === 0") &&
+      examStart.includes('isAccountAuthorizedFor(authenticatedUser, "PRO")') &&
+      standardMockStart >= 0 &&
+      partialCustomStart > standardMockStart &&
+      (standardMockSection.match(
+        /isAccountAuthorizedFor\(authenticatedUser,\s*"PRO"\)/g
+      ) || []).length === 1 &&
+      examStart.includes("Payment required. Active PRO subscription required.") &&
+      examStart.includes("status: 402") &&
+      examStart.includes("customParamCount < 4") &&
+      !examStart.includes("requireProAuth") &&
+      appearsBefore(
+        examStart,
+        "customParamCount === 0",
+        'isAccountAuthorizedFor(authenticatedUser, "PRO")'
+      ) &&
+      appearsBefore(
+        examStart,
+        'isAccountAuthorizedFor(authenticatedUser, "PRO")',
+        "customParamCount < 4"
+      ),
+    "B2.2 exam start requires PRO for standard mock exams while keeping Custom Practice outside the global PRO guard"
   );
 
   const examSubmit = b22RouteSources.get("src/app/api/exam/submit/route.ts") || "";
@@ -647,18 +684,26 @@ function runSourceIntegratedRouteTests(): void {
     appearsBefore(examSubmit, "await getAuthenticatedUser()", "await request.json()") &&
       examSubmit.includes("EXAM_SUBMIT_LIMITER") &&
       examSubmit.includes("checkRateLimit") &&
-      examSubmit.includes("userIdx === q.answerIndex") &&
-      examSubmit.includes("prisma.examResult.create") &&
-      examSubmit.includes("prisma.userMistake.upsert") &&
-      examSubmit.includes("prisma.$transaction(upsertOperations)") &&
-      examSubmit.includes("recordUserActivityStreak(userId)") &&
+      examSubmit.includes("ans.selectedIndex === q.answerIndex") &&
+      examSubmit.includes("prisma.$transaction(async (tx) =>") &&
+      examSubmit.includes("tx.examResult.create") &&
+      examSubmit.includes("applyUserMistakeBatch(tx, userId, incorrectItems)") &&
+      examSubmit.includes("recordUserActivityStreak(userId, tx)") &&
       examSubmit.includes("evaluateAndAwardBadges(userId)") &&
-      examSubmit.includes("prisma.examDraft.deleteMany"),
+      examSubmit.includes("tx.examDraft.deleteMany"),
     "B2.2 exam submit preserves rate limiting, grading, writes, transaction, streak, badge, and cleanup behavior"
   );
   assert(
-    !/idempotenc|replay|attemptId|examAttempt/i.test(examSubmit),
-    "B2.2 exam submit adds no replay, idempotency, or attempt-ownership mechanism"
+    examSubmit.includes("verifyExamAttemptToken") &&
+      examSubmit.includes("verifiedAttempt.userId !== authenticatedUser.id") &&
+      examSubmit.includes("ATTEMPT_USER_MISMATCH") &&
+      examSubmit.includes("validateAndCanonicalizeSubmission") &&
+      examSubmit.includes("where: { attemptId: verifiedAttempt.attemptId }") &&
+      examSubmit.includes("existingResult.submissionHash === currentSubmissionHash") &&
+      examSubmit.includes("idempotentReplay: true") &&
+      examSubmit.includes("SUBMISSION_FINGERPRINT_MISMATCH") &&
+      examSubmit.includes("P2002"),
+    "B2.2 exam submit enforces signed attempt verification, user binding, submission fingerprinting, and idempotent replay protection"
   );
 
   const mockExamHistoryById =
@@ -787,12 +832,13 @@ function runSourceIntegratedRouteTests(): void {
     adminElimination.includes(
       'authentication.session.user.email !== "mervintangcawan07@gmail.com"'
     ) &&
-      adminTrash.includes(
-        'authentication.session.user.email !== "mervintangcawan07@gmail.com"'
-      ) &&
       adminElimination.includes("Access denied. Admin privileges required.") &&
-      adminTrash.includes('{ error: "Access denied." }'),
-    "B2.3 preserves canonical designated-email authorization and exact access-denied bodies"
+      adminTrash.includes('authentication.session.user.role !== "ADMIN"') &&
+      adminTrash.includes('{ error: "Access denied." }') &&
+      !adminTrash.includes(
+        'authentication.session.user.email !== "mervintangcawan07@gmail.com"'
+      ),
+    "B2.3 preserves elimination designated-email fallback while trash uses canonical ADMIN RBAC and exact denial bodies"
   );
 
   const adminBackupsById =
