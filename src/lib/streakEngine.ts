@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma, PrismaClient } from "@prisma/client";
 
+export async function recordUserActivityStreak(userId: string) {
 type StreakDbClient = PrismaClient | Prisma.TransactionClient;
 
 export async function recordUserActivityStreak(
@@ -12,12 +13,14 @@ export async function recordUserActivityStreak(
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const existingStreak = await prisma.userStreak.findUnique({
     const existingStreak = await tx.userStreak.findUnique({
       where: { userId },
     });
 
     if (!existingStreak) {
       // First activity recorded
+      return await prisma.userStreak.create({
       return await tx.userStreak.create({
         data: {
           userId,
@@ -41,6 +44,7 @@ export async function recordUserActivityStreak(
 
       // Create a streak milestone notification if hitting key targets
       if ([3, 7, 14, 30, 60, 100].includes(newCurrent)) {
+        await prisma.notification.create({
         await tx.notification.create({
           data: {
             userId,
@@ -51,6 +55,7 @@ export async function recordUserActivityStreak(
         });
       }
 
+      return await prisma.userStreak.update({
       return await tx.userStreak.update({
         where: { userId },
         data: {
@@ -61,6 +66,7 @@ export async function recordUserActivityStreak(
       });
     } else if (diffInDays > 1) {
       // Streak broken -> reset to 1
+      return await prisma.userStreak.update({
       return await tx.userStreak.update({
         where: { userId },
         data: {

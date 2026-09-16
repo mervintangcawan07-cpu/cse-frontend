@@ -1,3 +1,5 @@
+import { activeOrdinaryQuestionWhere } from "@/lib/contentEligibility";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/questionBank";
 // Relative Path: src/app/api/exam/submit/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
@@ -41,6 +43,7 @@ export async function POST(request: Request) {
       totalItems?: number;
     };
 
+    const { answers, totalItems }: { answers: SubmittedAnswer[]; totalItems: number } = body;
     // Phase 5: Require attemptToken to be a non-empty string
     if (typeof attemptToken !== "string" || !attemptToken.trim()) {
       return NextResponse.json(
@@ -49,6 +52,8 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!Array.isArray(answers) || answers.some(answer => !answer || typeof answer.questionId !== "string" || !answer.questionId)) {
+      return NextResponse.json({ error: "Invalid answers payload" }, { status: 400 });
     // Cryptographically verify the attempt token
     const verifiedAttempt = await verifyExamAttemptToken(attemptToken);
     if (!verifiedAttempt) {
@@ -58,6 +63,10 @@ export async function POST(request: Request) {
       );
     }
 
+    // 1. Fetch full questions from DB to build complete review snapshot
+    const questionIds = answers.map((a) => a.questionId);
+    const dbQuestions = await findBankQuestions({
+      where: andQuestionWhere(activeOrdinaryQuestionWhere(), questionIdsWhere(questionIds)),
     // User binding: token must match authenticated user
     if (verifiedAttempt.userId !== authenticatedUser.id) {
       return NextResponse.json(
@@ -161,8 +170,10 @@ export async function POST(request: Request) {
       },
     });
 
+    if (dbQuestions.length !== new Set(questionIds).size) {
     if (dbQuestions.length !== verifiedAttempt.questionIds.length) {
       return NextResponse.json(
+        { error: "One or more submitted questions are no longer active ordinary questions. No exam result was saved." },
         {
           error: "One or more exam questions are no longer available in the question bank.",
           code: "ATTEMPT_QUESTION_UNAVAILABLE",
@@ -173,12 +184,14 @@ export async function POST(request: Request) {
 
     const questionMap = new Map(dbQuestions.map((q) => [q.id, q]));
 
+    // 2. Grade answers strictly on the server & build details snapshot
     // Phase 10: Server-authoritative grading
     let correct = 0;
     let incorrect = 0;
     let skipped = 0;
     const detailsSnapshot: any[] = [];
 
+    for (const ans of answers) {
     for (const ans of canonicalAnswers) {
       const q = questionMap.get(ans.questionId);
       if (!q) {
@@ -186,8 +199,29 @@ export async function POST(request: Request) {
         continue;
       }
 
+      // Resolve submitted answer index (0, 1, 2, 3)
+      let userIdx: number | null = null;
+
+      if (typeof ans.selectedIndex === "number" && ans.selectedIndex >= 0) {
+        userIdx = ans.selectedIndex;
+      } else if (typeof ans.selectedOption === "number" && ans.selectedOption >= 0) {
+        userIdx = ans.selectedOption;
+      } else if (typeof ans.selectedOption === "string" && ans.selectedOption.trim() !== "") {
+        const val = ans.selectedOption.trim();
+        const letterIdx = ["A", "B", "C", "D"].indexOf(val.toUpperCase());
+        if (letterIdx !== -1) {
+          userIdx = letterIdx;
+        } else if (!isNaN(Number(val))) {
+          userIdx = Number(val);
+        } else if (Array.isArray(q.options)) {
+          userIdx = q.options.indexOf(val);
+        }
+      }
+
+      if (userIdx === null || userIdx < 0) {
       if (ans.selectedIndex === -1) {
         skipped++;
+      } else if (userIdx === q.answerIndex) {
       } else if (ans.selectedIndex === q.answerIndex) {
         correct++;
       } else {
@@ -208,6 +242,7 @@ export async function POST(request: Request) {
         prompt: q.prompt,
         options: resolvedOptions,
         answerIndex: q.answerIndex,
+        selectedIndex: userIdx,
         selectedIndex: ans.selectedIndex >= 0 ? ans.selectedIndex : null,
         explanation: q.explanation || null,
         imageUrl: q.imageUrl || null,
@@ -224,15 +259,39 @@ export async function POST(request: Request) {
       });
     }
 
+    // Calculate score percentage
+    const itemsCount = totalItems || answers.length;
     // Calculate score percentage using authoritative itemCount
     const itemsCount = verifiedAttempt.itemCount;
     const score = itemsCount > 0 ? Math.round((correct / itemsCount) * 100) : 0;
+
+    // 3. Save verified result with full detailsJson snapshot (ALL EXAMS KEPT FOR PROGRESSION LOGS)
+    const result = await prisma.examResult.create({
+      data: {
+        userId,
+        score,
+        totalItems: itemsCount,
+        correct,
+        incorrect,
+        skipped,
+        detailsJson: JSON.stringify(detailsSnapshot),
+      },
+    });
 
     // 4. Ingest incorrect questions into the Smart Mistake Notebook (Balik-Aral) in a single transactional batch
     const incorrectItems = detailsSnapshot.filter(
       (item) => item.selectedIndex !== null && item.selectedIndex !== item.answerIndex
     );
 
+    if (incorrectItems.length > 0) {
+      try {
+        const now = new Date();
+        const upsertOperations = incorrectItems.map((item) =>
+          prisma.userMistake.upsert({
+            where: {
+              userId_questionId: {
+                userId,
+                questionId: item.id,
     // Phase 11: Atomic core interactive transaction
     let commitResult: {
       result: any;
@@ -321,6 +380,26 @@ export async function POST(request: Request) {
                 error: "Conflicting attempt submission",
                 code: "SUBMISSION_FINGERPRINT_MISMATCH",
               },
+            },
+            create: {
+              userId,
+              questionId: item.id,
+              userAnswer: item.selectedIndex,
+              incorrectCount: 1,
+              isMastered: false,
+              lastAttemptAt: now,
+            },
+            update: {
+              userAnswer: item.selectedIndex,
+              incorrectCount: { increment: 1 },
+              isMastered: false,
+              lastAttemptAt: now,
+            },
+          })
+        );
+        await prisma.$transaction(upsertOperations);
+      } catch (e) {
+        console.error("[MISTAKE_BATCH_UPSERT_ERROR]", e);
               { status: 409 }
             );
           }
@@ -334,11 +413,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Record active study streak
+    const updatedStreak = await recordUserActivityStreak(userId).catch(() => null);
     // Phase 13: Badge evaluation happens AFTER the core transaction commits (idempotent, awaited)
     await evaluateAndAwardBadges(userId);
 
+    // Evaluate and award badges (fire-and-forget, non-blocking)
+    evaluateAndAwardBadges(userId).catch(() => null);
+
+    // Clear active exam draft
+    await prisma.examDraft.deleteMany({
+      where: { userId },
+    }).catch(() => null);
+
     return NextResponse.json({
       success: true,
+      result,
+      streak: updatedStreak?.currentStreak || 1,
       result: commitResult.result,
       streak: commitResult.updatedStreak?.currentStreak || 1,
     });

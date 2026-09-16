@@ -29,6 +29,8 @@ interface GuidedFeedback {
   selectedIndex: number;
   isCorrect: boolean;
   answerIndex: number;
+  explanation?: string;
+  imageUrl?: string;
   correctLetter: string;
   correctText: string;
   explanation?: string | null;
@@ -40,6 +42,8 @@ interface GuidedFeedback {
   eliminationStrategy?: string | null;
   commonTrap?: string | null;
   examTip?: string | null;
+  difficulty?: string;
+  tags?: string[];
 }
 
 const LOCAL_STORAGE_KEY = "cse_active_exam_session";
@@ -226,6 +230,8 @@ function TakeExamPageInner() {
     // Authenticated free user attempting Standard Mock Exam -> redirect to upgrade
     // (unless an eligible pre-existing saved Standard Mock session qualifies for resume grace)
     if (!hasAnyCustomParam && !isPaid) {
+      router.replace("/upgrade");
+      return;
       const saved =
         typeof window !== "undefined"
           ? localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -411,6 +417,11 @@ function TakeExamPageInner() {
       } else if (e.key === "Enter") {
         e.preventDefault();
         if (examMode === "GUIDED_REVIEW" && !checkedAnswers[currentIndex]) {
+          if (selectedAnswers[currentIndex] !== undefined) {
+            setCheckedAnswers((prev) => ({
+              ...prev,
+              [currentIndex]: true,
+            }));
           if (selectedAnswers[currentIndex] !== undefined && !checkingAnswer) {
             void handleCheckAnswer();
           }
@@ -432,6 +443,7 @@ function TakeExamPageInner() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex, examMode, checkedAnswers, selectedAnswers]);
   }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex, examMode, checkedAnswers, selectedAnswers, handleCheckAnswer, checkingAnswer]);
 
   // 1. Load Initial Categories, Bookmarks & Check for In-Progress Session
@@ -464,10 +476,16 @@ function TakeExamPageInner() {
           setBookmarkedIds(ids);
         }
 
+        // Check for active unfinished exam session in local storage
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
         if (!isCompleteNonEmptyCustom && saved) {
           try {
             const parsed = JSON.parse(saved);
             if (parsed.examQuestions && parsed.examQuestions.length > 0) {
+              setSavedSessionData(parsed);
+              setExamMode(parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
+              if (parsed.checkedAnswers) setCheckedAnswers(parsed.checkedAnswers);
               const mode = parsed.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION";
 
               if (mode === "GUIDED_REVIEW") {
@@ -533,6 +551,7 @@ function TakeExamPageInner() {
 
   // 2. Auto-Save Active Exam State to LocalStorage
   useEffect(() => {
+    if (!isSetupPhase && examQuestions.length > 0 && !submitting && !guidedFinished) {
     if (
       !isSetupPhase &&
       examQuestions.length > 0 &&
@@ -553,18 +572,21 @@ function TakeExamPageInner() {
 
       const activeSession = {
         examMode,
+        examQuestions,
         examQuestions: questionsToPersist,
         selectedAnswers,
         checkedAnswers,
         currentIndex,
         timerMinutes,
         timeLeft,
+        attemptToken,
         attemptToken: examMode === "GUIDED_REVIEW" ? null : attemptToken,
         guidedReviewToken: examMode === "GUIDED_REVIEW" ? guidedReviewToken : null,
         guidedFeedbackByQuestionId: examMode === "GUIDED_REVIEW" ? guidedFeedbackByQuestionId : {},
       };
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(activeSession));
     }
+  }, [isSetupPhase, examMode, examQuestions, selectedAnswers, checkedAnswers, currentIndex, timerMinutes, timeLeft, submitting, guidedFinished, attemptToken]);
   }, [
     isSetupPhase,
     examMode,
@@ -614,7 +636,24 @@ function TakeExamPageInner() {
     if (examMode === "GUIDED_REVIEW") return; // Safety guard: Guided Review NEVER submits to server
     setSubmitting(true);
 
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let skippedCount = 0;
+
+    examQuestions.forEach((q, idx) => {
+      const selected = selectedAnswers[idx];
+      if (selected === undefined) {
+        skippedCount++;
+      } else if (selected === q.answerIndex) {
+        correctCount++;
+      } else {
+        incorrectCount++;
+      }
+    });
+
     const totalItems = examQuestions.length;
+    const scorePercentage = totalItems > 0 ? (correctCount / totalItems) * 100 : 0;
+    const finalScore = Math.round(scorePercentage);
 
     const formattedAnswers = examQuestions.map((q, idx) => {
       const selectedIdx = selectedAnswers[idx];
@@ -631,6 +670,8 @@ function TakeExamPageInner() {
       ...(attemptToken ? { attemptToken } : {}),
     };
 
+    // 🌐 Offline-Aware Submission: queue if offline or if network request fails
+    let submittedOnline = false;
     // 🌐 Offline-Aware Submission: queue if offline, network error, or retryable HTTP status
     let shouldQueueForRetry = false;
 
@@ -643,6 +684,7 @@ function TakeExamPageInner() {
         });
 
         if (res.ok) {
+          submittedOnline = true;
           const data = await res.json().catch(() => null);
           if (
             data?.success === true &&
@@ -663,6 +705,7 @@ function TakeExamPageInner() {
             return;
           }
         } else {
+          console.warn(`[EXAM_SUBMIT] Server responded with ${res.status}. Queueing for offline sync.`);
           // CORRECTION 1: Server returned non-2xx status.
           const status = res.status;
           const isTerminal =
@@ -692,10 +735,13 @@ function TakeExamPageInner() {
       shouldQueueForRetry = true;
     }
 
+    if (!submittedOnline) {
+      // Queue for automatic retry when back online
     if (shouldQueueForRetry) {
       let queuedSuccessfully = false;
       try {
         await queueOfflineSubmission(submissionPayload);
+        setOfflineBanner(true);
         queuedSuccessfully = true;
       } catch (queueErr) {
         console.error("Failed to queue offline submission:", queueErr);
@@ -712,6 +758,21 @@ function TakeExamPageInner() {
         setOfflineBanner(true);
       }
     }
+
+    const reviewData = {
+      questions: examQuestions,
+      selectedAnswers,
+      score: finalScore,
+      correct: correctCount,
+      incorrect: incorrectCount,
+      skipped: skippedCount,
+    };
+    localStorage.setItem("cse_latest_review", JSON.stringify(reviewData));
+
+    // Clear active session from storage on exam completion
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+
+    router.push("/mock-exam/results");
   }, [examQuestions, selectedAnswers, submitting, router, isOnline, examMode, attemptToken]);
 
   // Timer Logic
@@ -729,6 +790,20 @@ function TakeExamPageInner() {
   // Resume Saved Session Handler
   function handleResumeSavedSession() {
     if (!savedSessionData) return;
+    setExamQuestions(savedSessionData.examQuestions);
+    setSelectedAnswers(savedSessionData.selectedAnswers || {});
+    setCheckedAnswers(savedSessionData.checkedAnswers || {});
+    setExamMode(savedSessionData.examMode === "GUIDED_REVIEW" ? "GUIDED_REVIEW" : "SIMULATION");
+    setCurrentIndex(savedSessionData.currentIndex || 0);
+    setTimerMinutes(savedSessionData.timerMinutes || 0);
+    setTimeLeft(savedSessionData.timeLeft || 0);
+    setAttemptToken(
+      typeof savedSessionData.attemptToken === "string"
+        ? savedSessionData.attemptToken
+        : null
+    );
+    setGuidedFinished(false);
+    setIsSetupPhase(false);
 
     // Strict 1E5A: Revalidate grace immediately prior to restoring session state for unpaid users
     if (!isPaid) {
@@ -838,6 +913,7 @@ function TakeExamPageInner() {
       const res = await fetch(`/api/exam/start?${params.toString()}`);
       const data = await res.json();
 
+      if (res.ok && data.questions && data.questions.length > 0) {
       if (
         res.ok &&
         Array.isArray(data.questions) &&
@@ -847,6 +923,9 @@ function TakeExamPageInner() {
       ) {
         setExamMode("SIMULATION");
         setExamQuestions(data.questions);
+        setAttemptToken(
+          typeof data.attemptToken === "string" ? data.attemptToken : null
+        );
         setAttemptToken(data.attemptToken.trim());
         setGuidedReviewToken(null);
         setGuidedFeedbackByQuestionId({});
@@ -889,6 +968,7 @@ function TakeExamPageInner() {
 
     try {
       const res = await fetch(
+        `/api/exam/start?category=${encodeURIComponent(selectedCategory)}`
         `/api/exam/start?category=${encodeURIComponent(selectedCategory)}&experience=${experience}`
       );
 
@@ -899,6 +979,17 @@ function TakeExamPageInner() {
 
       const data = await res.json();
 
+      if (res.ok && data.questions && data.questions.length > 0) {
+        setExamQuestions(data.questions);
+        setAttemptToken(
+          typeof data.attemptToken === "string" ? data.attemptToken : null
+        );
+        setCurrentIndex(0);
+        setSelectedAnswers({});
+        const effectiveTimer = examMode === "GUIDED_REVIEW" ? 0 : timerMinutes;
+        if (examMode === "GUIDED_REVIEW") setTimerMinutes(0);
+        setTimeLeft(effectiveTimer * 60);
+        setIsSetupPhase(false);
       if (res.ok && Array.isArray(data.questions) && data.questions.length > 0) {
         if (examMode === "GUIDED_REVIEW") {
           if (typeof data.guidedReviewToken === "string" && data.guidedReviewToken.trim() && data.attemptToken === null) {
@@ -945,6 +1036,13 @@ function TakeExamPageInner() {
     }
   }
 
+  function handleSelectOption(optionIndex: number) {
+    if (examMode === "GUIDED_REVIEW" && checkedAnswers[currentIndex]) {
+      return; // Locked after checking
+    }
+    setSelectedAnswers((prev) => ({
+      ...prev,
+      [currentIndex]: optionIndex,
   // Save for Later Handler
   function handleSaveAndExit() {
     const questionsToPersist = examQuestions.map((q) => ({
@@ -957,15 +1055,28 @@ function TakeExamPageInner() {
       difficulty: q.difficulty,
       tags: q.tags,
     }));
+  }
 
+  const handleCheckAnswer = useCallback(() => {
+    if (selectedAnswers[currentIndex] === undefined) return;
+    setCheckedAnswers((prev) => ({
+      ...prev,
+      [currentIndex]: true,
+    }));
+  }, [selectedAnswers, currentIndex]);
+
+  // Save for Later Handler
+  function handleSaveAndExit() {
     const activeSession = {
       examMode,
+      examQuestions,
       examQuestions: questionsToPersist,
       selectedAnswers,
       checkedAnswers,
       currentIndex,
       timerMinutes,
       timeLeft,
+      attemptToken,
       attemptToken: examMode === "GUIDED_REVIEW" ? null : attemptToken,
       guidedReviewToken: examMode === "GUIDED_REVIEW" ? guidedReviewToken : null,
       guidedFeedbackByQuestionId: examMode === "GUIDED_REVIEW" ? guidedFeedbackByQuestionId : {},
@@ -1034,6 +1145,7 @@ function TakeExamPageInner() {
     );
   }
 
+  if (!hasAnyCustomParam && !isPaid) {
   if (!hasAnyCustomParam && !isPaid && !hasResumeGrace) {
     return (
       <div className="max-w-2xl mx-auto py-12 px-4 space-y-6">
@@ -1147,6 +1259,7 @@ function TakeExamPageInner() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
+                  onClick={() => setExamMode("SIMULATION")}
                   onClick={() => {
                     if (isCompleteNonEmptyCustom) return;
                     setExamMode("SIMULATION");
@@ -1345,6 +1458,12 @@ function TakeExamPageInner() {
   if (guidedFinished) {
     const totalCount = examQuestions.length;
     const checkedIndices = Object.keys(checkedAnswers).map(Number);
+    const correctCount = checkedIndices.filter(
+      (idx) => selectedAnswers[idx] === examQuestions[idx]?.answerIndex
+    ).length;
+    const incorrectCount = checkedIndices.filter(
+      (idx) => selectedAnswers[idx] !== undefined && selectedAnswers[idx] !== examQuestions[idx]?.answerIndex
+    ).length;
     const correctCount = checkedIndices.filter((idx) => {
       const qId = examQuestions[idx]?.id;
       return qId && guidedFeedbackByQuestionId[qId]?.isCorrect === true;
@@ -1612,6 +1731,7 @@ function TakeExamPageInner() {
             const letterLabel = ["A", "B", "C", "D"][idx] || String(idx + 1);
             const isGuided = examMode === "GUIDED_REVIEW";
             const isChecked = isGuided && !!checkedAnswers[currentIndex];
+            const isCorrect = currentQ.answerIndex === idx;
             const feedback = currentQ ? guidedFeedbackByQuestionId[currentQ.id] : undefined;
             const isCorrect = isGuided ? feedback?.answerIndex === idx : false;
 
@@ -1632,6 +1752,7 @@ function TakeExamPageInner() {
             return (
               <button
                 key={idx}
+                disabled={isChecked}
                 disabled={isChecked || checkingAnswer}
                 onClick={() => handleSelectOption(idx)}
                 className={`w-full text-left p-4 rounded-2xl border transition flex items-center justify-between cursor-pointer ${
@@ -1677,10 +1798,12 @@ function TakeExamPageInner() {
               <button
                 type="button"
                 onClick={handleCheckAnswer}
+                disabled={selectedAnswers[currentIndex] === undefined}
                 disabled={selectedAnswers[currentIndex] === undefined || checkingAnswer}
                 className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-sm rounded-2xl shadow-md transition cursor-pointer flex items-center justify-center gap-2"
               >
                 <span>🔍</span>
+                <span>{selectedAnswers[currentIndex] === undefined ? "Select an answer above to check" : "Check Answer"}</span>
                 <span>
                   {checkingAnswer
                     ? "Checking Answer with Server..."
@@ -1689,6 +1812,29 @@ function TakeExamPageInner() {
                     : "Check Answer"}
                 </span>
               </button>
+            ) : (
+              <div className="space-y-4">
+                <QuestionResultBanner
+                  isCorrect={selectedAnswers[currentIndex] === currentQ?.answerIndex}
+                  correctLetter={["A", "B", "C", "D"][currentQ?.answerIndex ?? 0] || "A"}
+                  correctText={currentQ?.options[currentQ?.answerIndex ?? 0] || ""}
+                  isSkipped={selectedAnswers[currentIndex] === undefined}
+                />
+                <ExplanationPanel
+                  explanation={currentQ?.explanation}
+                  stepByStep={currentQ?.stepByStep}
+                  whyA={currentQ?.whyA}
+                  whyB={currentQ?.whyB}
+                  whyC={currentQ?.whyC}
+                  whyD={currentQ?.whyD}
+                  eliminationStrategy={currentQ?.eliminationStrategy}
+                  commonTrap={currentQ?.commonTrap}
+                  examTip={currentQ?.examTip}
+                  options={currentQ?.options}
+                  correctIndex={currentQ?.answerIndex}
+                />
+              </div>
+            )}
             ) : (() => {
               const currentFeedback = currentQ ? guidedFeedbackByQuestionId[currentQ.id] : undefined;
               if (!currentFeedback) return null;

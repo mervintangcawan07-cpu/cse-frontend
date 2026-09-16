@@ -139,9 +139,15 @@ export async function syncPendingSubmissions(): Promise<number> {
       });
 
       if (res.ok) {
+        // Confirmed success — remove from queue
         // Confirmed success (2xx, including HTTP 200 for idempotent replays) — remove from queue
         successCount++;
       } else {
+        // Server error (4xx/5xx) — retain for retry
+        console.warn(
+          `[OFFLINE_SYNC] Server rejected submission ${submission.submissionId} (status ${res.status}). Retaining in queue.`
+        );
+        remaining.push(submission);
         const status = res.status;
         const isTerminal =
           status === 400 || status === 403 || status === 409 || status === 422;
