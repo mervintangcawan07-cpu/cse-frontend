@@ -17,6 +17,8 @@ export const NotificationSystem: React.FC<NotificationSystemProps> = ({
 
   useEffect(() => {
     if (typeof window !== "undefined" && "Notification" in window) {
+      // Synchronize state with the browser Notification permission after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPushPermission(Notification.permission);
     }
   }, []);

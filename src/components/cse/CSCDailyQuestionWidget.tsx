@@ -31,7 +31,6 @@ export default function CSCDailyQuestionWidget() {
   const [communityStats, setCommunityStats] = useState<CommunityStats | null>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [streakEarned, setStreakEarned] = useState<number | null>(null);
 
   const fetchDailyQuestion = async () => {
     try {
@@ -54,7 +53,9 @@ export default function CSCDailyQuestionWidget() {
   };
 
   useEffect(() => {
-    fetchDailyQuestion();
+    // Mount synchronizes the daily-question widget with server state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchDailyQuestion();
   }, []);
 
   const handleSubmit = async () => {
@@ -88,7 +89,6 @@ export default function CSCDailyQuestionWidget() {
             : null
         );
         setCommunityStats(data.communityStats);
-        setStreakEarned(data.streak);
       }
     } catch (err) {
       console.error("Failed to submit daily question:", err);

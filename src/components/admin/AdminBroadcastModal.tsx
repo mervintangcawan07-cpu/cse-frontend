@@ -39,7 +39,9 @@ export default function AdminBroadcastModal() {
 
   useEffect(() => {
     if (isOpen) {
-      fetchAnnouncements();
+      // Opening the modal synchronizes the announcement list with server state.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void fetchAnnouncements();
     }
   }, [isOpen, fetchAnnouncements]);
 
@@ -67,7 +69,7 @@ export default function AdminBroadcastModal() {
       } else {
         setStatus(`✕ ${data.error || "Failed to send announcement"}`);
       }
-    } catch (err) {
+    } catch {
       setStatus("✕ Error sending announcement");
     } finally {
       setSubmitting(false);
