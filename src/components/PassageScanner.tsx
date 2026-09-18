@@ -7,14 +7,15 @@ interface PassageScannerProps {
   text: string;
 }
 
+const keywordTestRegex = new RegExp(KEYWORD_REGEX.source);
+
 export default function PassageScanner({ text }: PassageScannerProps) {
   const parts = text.split(KEYWORD_REGEX);
 
   return (
     <div className="leading-relaxed text-slate-200 text-sm md:text-base">
       {parts.map((part, index) => {
-        const isKeyword = KEYWORD_REGEX.test(part);
-        KEYWORD_REGEX.lastIndex = 0; // Reset regex index state
+        const isKeyword = keywordTestRegex.test(part);
 
         if (isKeyword) {
           return (

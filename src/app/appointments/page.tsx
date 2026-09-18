@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
 interface Slot {
@@ -30,11 +30,7 @@ export default function AppointmentsPage() {
   const [purpose, setPurpose] = useState("APPLICATION_FILING");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
-
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     try {
       const res = await fetch("/api/csc/appointments");
       const data = await res.json();
@@ -47,7 +43,13 @@ export default function AppointmentsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Initial data fetch: fetchAppointments is asynchronous and only updates state after network response
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchAppointments();
+  }, [fetchAppointments]);
 
   const handleBookSlot = async (slotId: string) => {
     setBookingSlotId(slotId);
@@ -62,11 +64,11 @@ export default function AppointmentsPage() {
 
       if (res.ok && data.success) {
         setMessage("🎉 Appointment slot successfully booked!");
-        fetchAppointments();
+        void fetchAppointments();
       } else {
         setMessage(`❌ Booking failed: ${data.error || "Slot unavailable"}`);
       }
-    } catch (err) {
+    } catch {
       setMessage("❌ Connection error while booking.");
     } finally {
       setBookingSlotId(null);

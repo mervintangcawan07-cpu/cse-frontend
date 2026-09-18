@@ -227,13 +227,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refreshAuth]);
 
   useEffect(() => {
+    const requestGate = requestGateRef.current;
     mountedRef.current = true;
     void refreshAuth("initial");
 
     return () => {
       mountedRef.current = false;
       cancelPendingActivityHeartbeat();
-      requestGateRef.current.invalidate();
+      requestGate.invalidate();
     };
   }, [cancelPendingActivityHeartbeat, refreshAuth]);
 
@@ -303,6 +304,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (kicked && !isKickedSafePath(pathname)) {
+      // Full document navigation is intentional here to ensure a clean client state reset for forced-session recovery and security.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.href = "/login?kicked=true";
     }
   }, [kicked, pathname]);

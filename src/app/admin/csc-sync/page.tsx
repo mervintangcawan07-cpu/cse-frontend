@@ -1,17 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+interface SyncStatus {
+  nextSchedule?: {
+    title?: string | null;
+  } | null;
+  announcements?: unknown[];
+}
 
 export default function AdminCSCSyncPage() {
-  const [syncStatus, setSyncStatus] = useState<any>(null);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    loadSyncData();
-  }, []);
-
-  const loadSyncData = async () => {
+  const loadSyncData = useCallback(async () => {
     try {
       const res = await fetch("/api/csc/public-info");
       const data = await res.json();
@@ -19,7 +22,13 @@ export default function AdminCSCSyncPage() {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Initial data fetch: loadSyncData is asynchronous and only updates state after network response
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadSyncData();
+  }, [loadSyncData]);
 
   const handleManualSync = async () => {
     setSyncing(true);
@@ -30,11 +39,11 @@ export default function AdminCSCSyncPage() {
 
       if (res.ok && data.success) {
         setMessage(`✅ Sync completed! Updated ${data.recordsUpdated} record(s).`);
-        loadSyncData();
+        void loadSyncData();
       } else {
         setMessage(`❌ Sync notice: ${data.error || "CSC site offline. Retaining local cached state."}`);
       }
-    } catch (err: any) {
+    } catch {
       setMessage("❌ Connection error.");
     } finally {
       setSyncing(false);
@@ -49,11 +58,11 @@ export default function AdminCSCSyncPage() {
       const data = await res.json();
       if (res.ok && data.success) {
         setMessage(`✅ 2026 Civil Service Exam timetable seeded successfully!`);
-        loadSyncData();
+        void loadSyncData();
       } else {
         setMessage(`❌ Seed error: ${data.error || "Failed to seed schedule."}`);
       }
-    } catch (err: any) {
+    } catch {
       setMessage("❌ Connection error.");
     } finally {
       setSyncing(false);

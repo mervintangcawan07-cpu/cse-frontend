@@ -90,7 +90,7 @@ export default function PricingPage() {
       const data = await res.json();
 
       if (res.ok && data.checkoutUrl) {
-        window.location.href = data.checkoutUrl;
+        window.location.assign(data.checkoutUrl);
         return;
       }
 
