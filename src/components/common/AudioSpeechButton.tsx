@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import React, { useState, useEffect } from "react";
-import { Volume2, VolumeX, Loader2 } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 
 interface AudioSpeechButtonProps {
   textToSpeak: string;
@@ -14,6 +14,8 @@ export default function AudioSpeechButton({ textToSpeak, label = "Listen" }: Aud
 
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      // Synchronize support state with the browser Speech Synthesis API after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSupported(true);
     }
   }, []);

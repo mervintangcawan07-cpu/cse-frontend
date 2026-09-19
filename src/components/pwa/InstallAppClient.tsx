@@ -47,8 +47,6 @@ export default function InstallAppClient() {
   const [installState, setInstallState] = useState<InstallState>("detecting");
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [isStandalone, setIsStandalone] = useState(false);
-  const [isIos, setIsIos] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
 
   useEffect(() => {
@@ -60,7 +58,8 @@ export default function InstallAppClient() {
       (navigator as NavigatorWithStandalone).standalone === true;
 
     if (isChromiumStandalone || isIosStandalone) {
-      setIsStandalone(true);
+      // Synchronize install state with browser standalone status after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInstallState("installed");
       return;
     }
@@ -70,8 +69,6 @@ export default function InstallAppClient() {
     const isIosDevice =
       /iPad|iPhone|iPod/.test(ua) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-    setIsIos(isIosDevice);
 
     if (isIosDevice) {
       setInstallState("ios");
@@ -90,7 +87,6 @@ export default function InstallAppClient() {
     // 4. appinstalled Listener
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
-      setIsStandalone(true);
       setInstallState("installed");
       setIsInstalling(false);
     };
@@ -143,7 +139,7 @@ export default function InstallAppClient() {
   };
 
   // Render: Already Installed State
-  if (isStandalone || installState === "installed") {
+  if (installState === "installed") {
     return (
       <div className="w-full bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 text-center space-y-4 shadow-sm dark:bg-emerald-950/20 dark:border-emerald-500/30">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
