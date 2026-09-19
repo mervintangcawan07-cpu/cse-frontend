@@ -41,7 +41,9 @@ export default function AdminReadingMaterialsPage() {
   };
 
   useEffect(() => {
-    loadHandbooks();
+    // Initial mount synchronizes the handbook list with server state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadHandbooks();
   }, []);
 
   const resetForm = () => {

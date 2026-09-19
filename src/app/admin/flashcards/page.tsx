@@ -42,7 +42,9 @@ export default function AdminFlashcardsPage() {
   }, []);
 
   useEffect(() => {
-    fetchFlashcards();
+    // Initial mount synchronizes the flashcard list with server state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchFlashcards();
   }, [fetchFlashcards]);
 
   // Delete Single Flashcard
@@ -64,7 +66,7 @@ export default function AdminFlashcardsPage() {
       } else {
         setStatusMessage({ type: "error", text: data.error || "Failed to delete flashcard." });
       }
-    } catch (error) {
+    } catch {
       setStatusMessage({ type: "error", text: "Network error while deleting flashcard." });
     } finally {
       setDeletingId(null);
@@ -97,7 +99,7 @@ export default function AdminFlashcardsPage() {
       } else {
         setStatusMessage({ type: "error", text: data.error || "Failed to delete all flashcards." });
       }
-    } catch (error) {
+    } catch {
       setStatusMessage({ type: "error", text: "Network error while deleting all flashcards." });
     } finally {
       setDeletingAll(false);

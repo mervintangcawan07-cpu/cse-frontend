@@ -66,7 +66,9 @@ export default function AdminFlagsPage() {
   }, [statusFilter, router]);
 
   useEffect(() => {
-    fetchFlags();
+    // Synchronize the flag queue with server state when the active filter changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchFlags();
   }, [fetchFlags]);
 
   const handleAction = async (questionId: string, action: string) => {

@@ -75,7 +75,9 @@ export default function AdminBackupsPage() {
   }, []);
 
   useEffect(() => {
-    fetchBackups();
+    // Initial mount synchronizes backup and health data with server state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchBackups();
   }, [fetchBackups]);
 
   const handleCreateBackup = async () => {
