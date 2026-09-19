@@ -44,7 +44,9 @@ export default function AdminReviewerPage() {
   };
 
   useEffect(() => {
-    loadNotes();
+    // Synchronize reviewer notes with the server when the admin page mounts.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadNotes();
   }, []);
 
   const resetForm = () => {

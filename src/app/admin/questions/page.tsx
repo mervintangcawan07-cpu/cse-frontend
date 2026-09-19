@@ -64,8 +64,10 @@ export default function AdminQuestionsPage() {
     }
   };
 
-  useEffect(() => {
-    loadQuestions();
+    useEffect(() => {
+    // Synchronize the admin question list with the server when the page mounts.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadQuestions();
   }, []);
 
   // Update question in state after successful edit

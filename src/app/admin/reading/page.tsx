@@ -36,8 +36,10 @@ export default function AdminReadingPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchModules();
+    useEffect(() => {
+    // Synchronize reading modules with the server when the admin page mounts.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchModules();
   }, []);
 
   const resetForm = () => {

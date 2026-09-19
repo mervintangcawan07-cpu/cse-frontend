@@ -73,7 +73,8 @@ export default function MaintenancePage() {
       }
       resetTimer();
     };
-
+    // Synchronize maintenance status with the server when the page mounts.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void checkStatus();
     resetTimer();
 

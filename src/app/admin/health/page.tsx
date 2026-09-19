@@ -227,7 +227,9 @@ export default function AdminHealthPage() {
 
   // Operational background worker: per Slice 3B Refinement 1, operational cleanup request
   // behavior remains on its original 5-second loop without visibility-gating
-  useEffect(() => {
+   useEffect(() => {
+    // Synchronize the operational worker summary with the server on effect start.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void checkWorkerSummary();
 
     if (!isLivePolling) return;
