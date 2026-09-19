@@ -61,6 +61,14 @@ function getDarkEmailFooter(): string {
   `;
 }
 
+function isLocalDevelopment(): boolean {
+  return (
+    process.env.NODE_ENV === "development" &&
+    !process.env.VERCEL &&
+    !process.env.VERCEL_ENV
+  );
+}
+
 /**
  * 📧 Send Account Email Verification Link via Resend
  */
@@ -69,10 +77,12 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
   const resend = getResendClient();
 
   if (!resend) {
-    console.log("------------------------------------");
-    console.log(`[DEV MODE - NO RESEND KEY] Verification Link for ${toEmail}:`);
-    console.log(verifyLink);
-    console.log("------------------------------------");
+    if (isLocalDevelopment()) {
+      console.log("------------------------------------");
+      console.log(`[DEV MODE - NO RESEND KEY] Verification Link for ${toEmail}:`);
+      console.log(verifyLink);
+      console.log("------------------------------------");
+    }
     console.warn("[VERIFICATION_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }
@@ -117,10 +127,12 @@ export async function sendPasswordResetEmail(toEmail: string, token: string) {
   const resend = getResendClient();
 
   if (!resend) {
-    console.log("------------------------------------");
-    console.log(`[DEV MODE - NO RESEND KEY] Reset Password Link for ${toEmail}:`);
-    console.log(resetLink);
-    console.log("------------------------------------");
+    if (isLocalDevelopment()) {
+      console.log("------------------------------------");
+      console.log(`[DEV MODE - NO RESEND KEY] Reset Password Link for ${toEmail}:`);
+      console.log(resetLink);
+      console.log("------------------------------------");
+    }
     console.warn("[PASSWORD_RESET_EMAIL_NOT_SENT] Email delivery is not configured.");
     return;
   }

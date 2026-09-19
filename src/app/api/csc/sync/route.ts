@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { runCSCSynchronization } from "@/lib/cscSyncEngine";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { isValidCronSecret } from "@/lib/cronAuth";
 
 export async function POST(request: Request) {
   try {
     const authHeader = request.headers.get("authorization");
-    const isCronKeyValid = authHeader === `Bearer ${process.env.CRON_SECRET_KEY}`;
+    // Canonical production cron secret: CRON_SECRET (with fallback to legacy CRON_SECRET_KEY)
+    const configuredSecret = (process.env.CRON_SECRET || process.env.CRON_SECRET_KEY)?.trim();
+    const isCronKeyValid = isValidCronSecret(authHeader, configuredSecret);
 
     let isAdmin = false;
     if (!isCronKeyValid) {
@@ -19,7 +22,7 @@ export async function POST(request: Request) {
 
     const result = await runCSCSynchronization(isAdmin);
     return NextResponse.json(result);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("[CSC_SYNC_ERROR]", err);
     return NextResponse.json({ error: "CSC synchronization failed" }, { status: 500 });
   }
