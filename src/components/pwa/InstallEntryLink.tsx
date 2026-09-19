@@ -42,12 +42,12 @@ export default function InstallEntryLink({
       typeof navigator !== "undefined" &&
       (navigator as NavigatorWithStandalone).standalone === true;
 
-    if (isChromiumStandalone || isIosStandalone) {
-      setCanShow(false);
+        if (isChromiumStandalone || isIosStandalone) {
       return;
     }
 
-    // Normal browser context: allow rendering the install discovery entry
+        // Show the install entry only after browser standalone detection completes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCanShow(true);
 
     // 2. Hide immediately if the app becomes installed in this browser session
