@@ -105,16 +105,23 @@ export async function GET(req: Request) {
     }
 
     let contentType = "application/pdf";
-    const lowerName = handbook.fileName.toLowerCase();
+    let disposition = "inline";
+    const rawFileName = handbook.fileName || "document.pdf";
+    const lowerName = rawFileName.toLowerCase();
 
-    if (lowerName.endsWith(".doc")) {
-      contentType = "application/msword";
-    } else if (lowerName.endsWith(".docx")) {
+    if (lowerName.endsWith(".docx")) {
       contentType =
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      disposition = "attachment";
     } else if (lowerName.endsWith(".txt")) {
-      contentType = "text/plain";
+      contentType = "text/plain; charset=utf-8";
+      disposition = "attachment";
+    } else {
+      contentType = "application/pdf";
+      disposition = "inline";
     }
+
+    const sanitizedFileName = rawFileName.replace(/[\r\n"\\/]/g, "_").trim() || "document.pdf";
 
     const base64Data = handbook.fileData.replace(/^data:[^;]+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");
@@ -123,7 +130,8 @@ export async function GET(req: Request) {
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Content-Disposition": `inline; filename="${handbook.fileName || "document"}"`,
+        "Content-Disposition": `${disposition}; filename="${sanitizedFileName}"`,
+        "X-Content-Type-Options": "nosniff",
         ETag: etag,
         ...BINARY_BROWSER_CACHE_HEADERS,
       },

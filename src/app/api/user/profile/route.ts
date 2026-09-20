@@ -26,15 +26,28 @@ export async function PUT(request: Request) {
     const updateData: { name?: string; password?: string } = {};
 
     // 1. Handle Name Update
-    if (name && name.trim() !== "") {
+    if (name !== undefined) {
+      if (typeof name !== "string" || name.trim().length === 0 || name.trim().length > 100) {
+        return NextResponse.json(
+          { error: "Name must be between 1 and 100 characters long." },
+          { status: 400 }
+        );
+      }
       updateData.name = name.trim();
     }
 
     // 2. Handle Password Change
-    if (newPassword) {
-      if (!currentPassword) {
+    if (newPassword !== undefined) {
+      if (!currentPassword || typeof currentPassword !== "string") {
         return NextResponse.json(
           { error: "Current password is required to set a new password." },
+          { status: 400 }
+        );
+      }
+
+      if (typeof newPassword !== "string" || newPassword.length < 8 || newPassword.length > 128) {
+        return NextResponse.json(
+          { error: "New password must be between 8 and 128 characters long." },
           { status: 400 }
         );
       }
@@ -43,13 +56,6 @@ export async function PUT(request: Request) {
       if (!isPasswordValid) {
         return NextResponse.json(
           { error: "Incorrect current password." },
-          { status: 400 }
-        );
-      }
-
-      if (newPassword.length < 8) {
-        return NextResponse.json(
-          { error: "New password must be at least 8 characters long." },
           { status: 400 }
         );
       }

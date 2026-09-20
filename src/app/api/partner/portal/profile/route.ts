@@ -54,6 +54,15 @@ export async function GET(request: Request) {
   }
 }
 
+function isValidHttpUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export async function PUT(request: Request) {
   try {
     const { partner, errorResponse } = await requirePartnerAuth(request);
@@ -63,17 +72,64 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const { contactName, contactPhone, tagline, description, facebookUrl, websiteUrl } = body;
 
+    const data: Record<string, string> = {};
+
+    if (contactName !== undefined) {
+      if (typeof contactName !== "string" || contactName.trim().length > 100) {
+        return NextResponse.json({ error: "Contact name must not exceed 100 characters" }, { status: 400 });
+      }
+      data.contactName = contactName.trim();
+    }
+
+    if (contactPhone !== undefined) {
+      if (typeof contactPhone !== "string" || contactPhone.trim().length > 30) {
+        return NextResponse.json({ error: "Contact phone must not exceed 30 characters" }, { status: 400 });
+      }
+      data.contactPhone = contactPhone.trim();
+    }
+
+    if (tagline !== undefined) {
+      if (typeof tagline !== "string" || tagline.trim().length > 200) {
+        return NextResponse.json({ error: "Tagline must not exceed 200 characters" }, { status: 400 });
+      }
+      data.tagline = tagline.trim();
+    }
+
+    if (description !== undefined) {
+      if (typeof description !== "string" || description.trim().length > 2000) {
+        return NextResponse.json({ error: "Description must not exceed 2000 characters" }, { status: 400 });
+      }
+      data.description = description.trim();
+    }
+
+    if (facebookUrl !== undefined) {
+      const trimmedFb = typeof facebookUrl === "string" ? facebookUrl.trim() : "";
+      if (trimmedFb !== "") {
+        if (trimmedFb.length > 500 || !isValidHttpUrl(trimmedFb)) {
+          return NextResponse.json({ error: "Facebook URL must be a valid HTTP(S) URL and under 500 characters" }, { status: 400 });
+        }
+        data.facebookUrl = trimmedFb;
+      } else {
+        data.facebookUrl = "";
+      }
+    }
+
+    if (websiteUrl !== undefined) {
+      const trimmedWeb = typeof websiteUrl === "string" ? websiteUrl.trim() : "";
+      if (trimmedWeb !== "") {
+        if (trimmedWeb.length > 500 || !isValidHttpUrl(trimmedWeb)) {
+          return NextResponse.json({ error: "Website URL must be a valid HTTP(S) URL and under 500 characters" }, { status: 400 });
+        }
+        data.websiteUrl = trimmedWeb;
+      } else {
+        data.websiteUrl = "";
+      }
+    }
+
     // Financial rates and terms are strictly protected and cannot be modified by partner
     const updated = await prisma.partner.update({
       where: { id: partner.id },
-      data: {
-        contactName: contactName !== undefined ? String(contactName).trim() : undefined,
-        contactPhone: contactPhone !== undefined ? String(contactPhone).trim() : undefined,
-        tagline: tagline !== undefined ? String(tagline).trim() : undefined,
-        description: description !== undefined ? String(description).trim() : undefined,
-        facebookUrl: facebookUrl !== undefined ? String(facebookUrl).trim() : undefined,
-        websiteUrl: websiteUrl !== undefined ? String(websiteUrl).trim() : undefined,
-      },
+      data,
     });
 
     return NextResponse.json({

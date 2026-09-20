@@ -147,13 +147,20 @@ export async function POST(
       return NextResponse.json({ error: "Message content cannot be empty" }, { status: 400 });
     }
 
+    const trimmedContent = content.trim();
+    if (trimmedContent.length > 2000) {
+      return NextResponse.json({ error: "Message content must not exceed 2000 characters" }, { status: 400 });
+    }
+
+    const safeReplyToId = replyToId && typeof replyToId === "string" && replyToId.trim().length <= 100 ? replyToId.trim() : null;
+
     const message = await prisma.directMessage.create({
       data: {
         conversationId,
         senderId: userId,
-        content: content.trim(),
+        content: trimmedContent,
         state: "SENT",
-        replyToId: replyToId ? String(replyToId) : null,
+        replyToId: safeReplyToId,
       },
       include: {
         sender: {

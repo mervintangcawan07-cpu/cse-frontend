@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { formatPromptHTML } from "@/lib/formatPrompt";
 
 export interface StudyPostItem {
   id: string;
@@ -258,10 +257,9 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
       )}
 
       {/* Content */}
-      <div
-        className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal whitespace-pre-line"
-        dangerouslySetInnerHTML={{ __html: formatPromptHTML(post.content) }}
-      />
+      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal whitespace-pre-line">
+        {post.content}
+      </p>
 
       {/* 🔒 Spoiler Solution Box */}
       {post.hasSpoiler && post.spoilerContent && (
@@ -281,10 +279,9 @@ export const StudyPostCard: React.FC<StudyPostCardProps> = ({ post, onDelete }) 
           </div>
 
           {showSpoiler && (
-            <div
-              className="pt-2 text-xs text-amber-950 font-medium leading-relaxed border-t border-amber-500/20 whitespace-pre-line animate-in fade-in duration-150"
-              dangerouslySetInnerHTML={{ __html: formatPromptHTML(post.spoilerContent) }}
-            />
+            <p className="pt-2 text-xs text-amber-950 font-medium leading-relaxed border-t border-amber-500/20 whitespace-pre-line animate-in fade-in duration-150">
+              {post.spoilerContent}
+            </p>
           )}
         </div>
       )}

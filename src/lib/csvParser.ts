@@ -326,10 +326,13 @@ export function downloadCSVTemplate() {
     "vocabulary;analogy;semantic relationship",
   ];
 
-  const csvContent = Papa.unparse({
-    fields: headers,
-    data: [sample1, sample2],
-  });
+  const csvContent = Papa.unparse(
+    {
+      fields: headers,
+      data: [sample1, sample2],
+    },
+    { escapeFormulae: true }
+  );
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -387,10 +390,13 @@ export function downloadStandardCSVTemplate() {
     "RA 6713;Code of Conduct;Civil Service Ethics",
   ];
 
-  const csvContent = Papa.unparse({
-    fields: headers,
-    data: [sample1, sample2],
-  });
+  const csvContent = Papa.unparse(
+    {
+      fields: headers,
+      data: [sample1, sample2],
+    },
+    { escapeFormulae: true }
+  );
 
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -441,5 +447,5 @@ export function generateQuestionsCSV(questions: StructuredQuestion[]): string {
     };
   });
 
-  return Papa.unparse(rows);
+  return Papa.unparse(rows, { escapeFormulae: true });
 }

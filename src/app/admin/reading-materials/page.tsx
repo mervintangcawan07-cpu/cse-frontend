@@ -69,8 +69,15 @@ export default function AdminReadingMaterialsPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 15 * 1024 * 1024) {
-        alert("File size exceeds 15MB limit.");
+      if (file.size > 3 * 1024 * 1024) {
+        alert("File size exceeds 3MB limit.");
+        e.target.value = "";
+        return;
+      }
+      const lower = file.name.toLowerCase();
+      if (!lower.endsWith(".pdf") && !lower.endsWith(".docx") && !lower.endsWith(".txt")) {
+        alert("Invalid file type. Only .pdf, .docx, and .txt files are supported.");
+        e.target.value = "";
         return;
       }
       setFileName(file.name);
@@ -91,7 +98,7 @@ export default function AdminReadingMaterialsPage() {
     }
 
     if (!isEdit && !fileData) {
-      return alert("Please select a document file (.pdf, .doc, .docx).");
+      return alert("Please select a document file (.pdf, .docx, .txt).");
     }
 
     setSubmitting(true);
@@ -140,6 +147,7 @@ export default function AdminReadingMaterialsPage() {
         <div>
           <h1 className="text-2xl font-black">Admin Handbooks & Documents Manager</h1>
           <p className="text-slate-400 text-xs mt-1">Upload PDF or Word documents for read-only student viewing.</p>
+          <p className="text-slate-400 text-xs mt-1">Upload PDF, DOCX, or TXT documents (max 3MB) for student viewing.</p>
         </div>
         <div className="flex gap-2">
           {editingHandbookId && (
@@ -171,11 +179,11 @@ export default function AdminReadingMaterialsPage() {
 
           <div>
             <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
-              {editingHandbookId ? "Replace File (Optional: .pdf, .doc, .docx)" : "Select File (.pdf, .doc, .docx)"}
+              {editingHandbookId ? "Replace File (Optional: .pdf, .docx, .txt - max 3MB)" : "Select File (.pdf, .docx, .txt - max 3MB)"}
             </label>
             <input
               type="file"
-              accept=".pdf,.doc,.docx,.txt"
+              accept=".pdf,.docx,.txt"
               onChange={handleFileChange}
               className="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
             />

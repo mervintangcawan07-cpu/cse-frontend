@@ -23,12 +23,13 @@ export function sanitizeHTML(html: string): string {
   if (!html) return "";
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
     .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
     .replace(/<embed\b[^>]*>/gi, "")
-    .replace(/\son\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
-    .replace(/href\s*=\s*['"]\s*javascript:[^'"]*['"]/gi, 'href="#"')
-    .replace(/src\s*=\s*['"]\s*javascript:[^'"]*['"]/gi, 'src=""');
+    .replace(/(?:[\s/]|^)on[a-zA-Z]+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
+    .replace(/(?:href|src|action|formaction)\s*=\s*(?:'[\s]*(?:javascript|vbscript|data):[^']*'|"[\s]*(?:javascript|vbscript|data):[^"]*"|[^\s>]+)/gi, "")
+    .replace(/<\/?(?:applet|meta|link|base|form|input|button|textarea|select|details|dialog)\b[^>]*>/gi, "");
 }
 
 /**
@@ -73,24 +74,44 @@ function isTableCandidate(line: string, nextLine?: string, prevLine?: string, in
 /**
  * Utility to convert raw question prompt text into clean, styled HTML elements.
  * Uncluttered design optimized for high contrast in both Light and Dark mode.
- * Enforces strict XSS prevention by escaping text before wrapping in safe HTML nodes.
+ * Enforces strict XSS prevention: all untrusted text is escaped before wrapping in safe HTML nodes.
  */
 export function formatPromptHTML(rawPromptText: string): string {
   if (!rawPromptText) return "";
 
-  let promptText = cleanMathText(rawPromptText);
+  const promptText = cleanMathText(rawPromptText);
 
-  // Auto-enhance questions containing Pie Charts, Line Graphs, Bar Charts, or Data Tables into SVGs
-  promptText = autoEnhanceDataInterpretation(promptText);
+  // Auto-enhance questions containing Pie Charts, Line Graphs, Bar Charts into SVGs
+  const enhanced = autoEnhanceDataInterpretation(promptText);
 
-  if (
-    promptText.includes("<svg") ||
-    promptText.includes("<table") ||
-    promptText.includes("rounded-2xl") ||
-    promptText.includes("📑")
-  ) {
-    return sanitizeHTML(promptText);
+  let chartPrefix = "";
+  let textToFormat = promptText;
+
+  if (enhanced !== promptText) {
+    const textIdx = enhanced.lastIndexOf(promptText);
+    if (textIdx !== -1) {
+      chartPrefix = enhanced.substring(0, textIdx).trim();
+      textToFormat = promptText;
+    } else {
+      chartPrefix = enhanced;
+      textToFormat = "";
+    }
   }
+
+  const formattedBody = formatStructuredPromptLines(textToFormat);
+
+  if (chartPrefix) {
+    return `${sanitizeHTML(chartPrefix)}${formattedBody}`;
+  }
+
+  return formattedBody;
+}
+
+/**
+ * Formats untrusted text lines by escaping raw text and generating controlled GovStudyX markup.
+ */
+function formatStructuredPromptLines(promptText: string): string {
+  if (!promptText) return "";
 
   const lines = promptText.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
   const htmlParts: string[] = [];
@@ -146,17 +167,14 @@ export function formatPromptHTML(rawPromptText: string): string {
         );
       } else {
         if (isPassageItem(rawLine)) {
-          // Clean, unboxed passage options
           htmlParts.push(
             `<p class="my-1.5 pl-2 text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed font-mono">${escapedLine}</p>`
           );
         } else if (isQuestionDirective(rawLine) || lines.length === 1 || i === lines.length - 1) {
-          // Main Question Prompt: Clean, prominent text with a subtle left indigo accent bar
           htmlParts.push(
             `<div class="my-3.5 pl-3 py-1 border-l-3 border-indigo-500 text-slate-900 dark:text-white font-bold text-sm leading-relaxed">${escapedLine}</div>`
           );
         } else {
-          // Context / Reading passage paragraph
           htmlParts.push(
             `<p class="my-2 text-xs font-normal text-slate-700 dark:text-slate-300 leading-relaxed">${escapedLine}</p>`
           );

@@ -64,18 +64,31 @@ export async function POST(request: Request) {
       );
     }
 
-    const { subject, message } = await request.json();
+    const body = await request.json();
+    const { subject, message } = body;
 
-    if (!subject || !message) {
-      return NextResponse.json({ error: "Subject and message are required" }, { status: 400 });
+    if (typeof subject !== "string" || !subject.trim()) {
+      return NextResponse.json({ error: "Subject is required" }, { status: 400 });
+    }
+    const trimmedSubject = subject.trim();
+    if (trimmedSubject.length > 200) {
+      return NextResponse.json({ error: "Subject must not exceed 200 characters" }, { status: 400 });
+    }
+
+    if (typeof message !== "string" || !message.trim()) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 });
+    }
+    const trimmedMessage = message.trim();
+    if (trimmedMessage.length > 5000) {
+      return NextResponse.json({ error: "Message must not exceed 5000 characters" }, { status: 400 });
     }
 
     const newTicket = await prisma.supportTicket.create({
       data: {
         userId,
         userEmail,
-        subject,
-        message,
+        subject: trimmedSubject,
+        message: trimmedMessage,
         status: "OPEN",
       },
     });

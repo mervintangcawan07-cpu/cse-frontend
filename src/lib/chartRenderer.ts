@@ -21,6 +21,16 @@ const PALETTE = [
   "#6366f1", // Indigo
 ];
 
+function escapeHTML(str: unknown): string {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 /**
  * 🥧 Renders an SVG Pie / Donut Chart with slice labels & legend
  */
@@ -87,6 +97,7 @@ export function renderPieChartSVG(title: string, data: Array<{ label: string; va
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${color}"></span>
           <span class="text-slate-200 font-medium">${item.label}</span>
+          <span class="text-slate-200 font-medium">${escapeHTML(item.label)}</span>
         </div>
         <span class="font-bold text-white font-mono ml-2">${pct}</span>
       </div>`
@@ -98,6 +109,7 @@ export function renderPieChartSVG(title: string, data: Array<{ label: string; va
   return `
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>🥧</span><span>${title}</span></div>` : ""}
+      ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>🥧</span><span>${escapeHTML(title)}</span></div>` : ""}
       <div class="flex flex-col sm:flex-row items-center gap-4">
         <div class="shrink-0 w-full sm:w-auto flex justify-center">
           <svg viewBox="0 0 ${width * 0.6} ${height}" class="w-56 h-56 max-w-full">
@@ -168,7 +180,7 @@ export function renderLineGraphSVG(
       `<line x1="${xPos}" y1="${padTop + chartH}" x2="${xPos}" y2="${padTop + chartH + 4}" stroke="#64748b" stroke-width="1.5" />`
     );
     xLabelsSvg.push(
-      `<text x="${xPos}" y="${padTop + chartH + 18}" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">${label}</text>`
+      `<text x="${xPos}" y="${padTop + chartH + 18}" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">${escapeHTML(label)}</text>`
     );
   });
 
@@ -202,6 +214,7 @@ export function renderLineGraphSVG(
       `<div class="flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700">
         <span class="w-3 h-1.5 rounded-full" style="background-color: ${color}"></span>
         <span class="text-slate-200">${s.name}</span>
+        <span class="text-slate-200">${escapeHTML(s.name)}</span>
       </div>`
     );
   });
@@ -210,6 +223,7 @@ export function renderLineGraphSVG(
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
         ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📈</span><span>${title}</span></div>` : ""}
+        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📈</span><span>${escapeHTML(title)}</span></div>` : ""}
         <div class="flex flex-wrap items-center gap-2">
           ${legendItems.join("")}
         </div>
@@ -276,7 +290,7 @@ export function renderGroupedBarChartSVG(
     const groupStartX = groupCenterX - totalBarsWidth / 2;
 
     barsSvg.push(
-      `<text x="${groupCenterX}" y="${padTop + chartH + 20}" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">${cat.name}</text>`
+      `<text x="${groupCenterX}" y="${padTop + chartH + 20}" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">${escapeHTML(cat.name)}</text>`
     );
 
     allKeys.forEach((key, kIdx) => {
@@ -308,6 +322,7 @@ export function renderGroupedBarChartSVG(
       `<div class="flex items-center gap-1.5 text-xs font-semibold px-2 py-1 rounded bg-slate-800/80 border border-slate-700">
         <span class="w-3 h-3 rounded-sm" style="background-color: ${color}"></span>
         <span class="text-slate-200">${key}</span>
+        <span class="text-slate-200">${escapeHTML(key)}</span>
       </div>`
     );
   });
@@ -327,12 +342,14 @@ export function renderGroupedBarChartSVG(
           <tr class="bg-slate-800/90 text-amber-300 font-bold uppercase tracking-wider border-b border-slate-700">
             <th class="p-2 border-r border-slate-700 last:border-r-0">Category / Entity</th>
             ${allKeys.map((k) => `<th class="p-2 border-r border-slate-700 last:border-r-0">${k}</th>`).join("")}
+            ${allKeys.map((k) => `<th class="p-2 border-r border-slate-700 last:border-r-0">${escapeHTML(k)}</th>`).join("")}
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-800">
           ${tableRows.map((row) => `
             <tr class="hover:bg-slate-800/40 transition text-slate-200">
               ${row.map((cell, idx) => `<td class="p-2 border-r border-slate-800 last:border-r-0 ${idx === 0 ? "font-bold text-white" : "font-mono"}">${cell}</td>`).join("")}
+              ${row.map((cell, idx) => `<td class="p-2 border-r border-slate-800 last:border-r-0 ${idx === 0 ? "font-bold text-white" : "font-mono"}">${escapeHTML(cell)}</td>`).join("")}
             </tr>
           `).join("")}
         </tbody>
@@ -344,6 +361,7 @@ export function renderGroupedBarChartSVG(
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
         ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📊</span><span>${title}</span></div>` : ""}
+        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📊</span><span>${escapeHTML(title)}</span></div>` : ""}
         <div class="flex flex-wrap items-center gap-2">
           ${legendItems.join("")}
         </div>
@@ -369,12 +387,15 @@ export function renderFindingsCardHTML(title: string, findings: Array<{ num: str
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
         <span>📑</span><span>${title}</span>
+        <span>📑</span><span>${escapeHTML(title)}</span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         ${findings.map((f) => `
           <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-start gap-2.5">
             <span class="px-2 py-0.5 rounded-md bg-indigo-600/30 text-indigo-400 font-black text-xs shrink-0 border border-indigo-500/30">#${f.num}</span>
             <p class="text-xs text-slate-200 leading-relaxed font-medium">${f.text}</p>
+            <span class="px-2 py-0.5 rounded-md bg-indigo-600/30 text-indigo-400 font-black text-xs shrink-0 border border-indigo-500/30">#${escapeHTML(f.num)}</span>
+            <p class="text-xs text-slate-200 leading-relaxed font-medium">${escapeHTML(f.text)}</p>
           </div>
         `).join("")}
       </div>
@@ -513,6 +534,9 @@ export function autoEnhanceDataInterpretation(text: string): string {
                     <td class="p-2 border-r border-slate-800 font-bold text-white">${row[0]}</td>
                     <td class="p-2 border-r border-slate-800 font-mono">${row[1]}</td>
                     <td class="p-2 font-mono text-emerald-400 font-bold">${row[2]}</td>
+                    <td class="p-2 border-r border-slate-800 font-bold text-white">${escapeHTML(row[0])}</td>
+                    <td class="p-2 border-r border-slate-800 font-mono">${escapeHTML(row[1])}</td>
+                    <td class="p-2 font-mono text-emerald-400 font-bold">${escapeHTML(row[2])}</td>
                   </tr>
                 `
                   )

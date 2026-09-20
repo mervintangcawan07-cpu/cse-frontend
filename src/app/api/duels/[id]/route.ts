@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { DuelStatus } from "@prisma/client";
 import { isDuelEnabled } from "@/lib/config/features";
+
+interface DuelQuestionItem {
+  options?: unknown[];
+  answerIndex?: number;
+}
 
 export async function GET(
   request: Request,
@@ -52,12 +58,46 @@ export async function POST(
     const match = await prisma.duelMatch.findUnique({ where: { id } });
     if (!match) return NextResponse.json({ error: "Match not found" }, { status: 404 });
 
-    const questions: any[] = match.questions as any[];
-    const currentQ = questions[questionIndex];
-    const isCorrect = currentQ && selectedIndex === currentQ.answerIndex;
-
     const isP1 = userId === match.player1Id;
     const isP2 = userId === match.player2Id;
+    if (!isP1 && !isP2) {
+      return NextResponse.json({ error: "Access denied: You are not a participant in this match" }, { status: 403 });
+    }
+
+    if (match.status === DuelStatus.FINISHED || match.status === DuelStatus.DECLINED) {
+      return NextResponse.json({ error: "Match has already ended" }, { status: 400 });
+    }
+
+    const questions: DuelQuestionItem[] = Array.isArray(match.questions) ? (match.questions as DuelQuestionItem[]) : [];
+    if (questions.length === 0) {
+      return NextResponse.json({ error: "Match has no questions" }, { status: 400 });
+    }
+
+    if (
+      typeof questionIndex !== "number" ||
+      !Number.isInteger(questionIndex) ||
+      questionIndex < 0 ||
+      questionIndex >= questions.length
+    ) {
+      return NextResponse.json({ error: "Invalid questionIndex" }, { status: 400 });
+    }
+
+    const currentQ = questions[questionIndex];
+    if (!currentQ) {
+      return NextResponse.json({ error: "Question not found" }, { status: 404 });
+    }
+
+    const optionsCount = Array.isArray(currentQ.options) ? currentQ.options.length : 4;
+    if (
+      typeof selectedIndex !== "number" ||
+      !Number.isInteger(selectedIndex) ||
+      selectedIndex < 0 ||
+      selectedIndex >= optionsCount
+    ) {
+      return NextResponse.json({ error: "Invalid selectedIndex" }, { status: 400 });
+    }
+
+    const isCorrect = selectedIndex === currentQ.answerIndex;
 
     let p1Score = match.p1Score;
     let p2Score = match.p2Score;
@@ -72,12 +112,13 @@ export async function POST(
       if (isCorrect) p2Score += 20;
     }
 
-    let status = match.status;
+    let status: DuelStatus = match.status;
     let winnerId = match.winnerId;
 
-    // Finish match if both players complete 5 rounds or timer ends
-    if (p1Current >= 5 && (p2Current >= 5 || !match.player2Id)) {
-      status = "FINISHED";
+    const totalQuestions = questions.length || 5;
+    // Finish match if both players complete all rounds or timer ends
+    if (p1Current >= totalQuestions && (p2Current >= totalQuestions || !match.player2Id)) {
+      status = DuelStatus.FINISHED;
       if (p1Score > p2Score) winnerId = match.player1Id;
       else if (p2Score > p1Score) winnerId = match.player2Id;
       else winnerId = "DRAW";

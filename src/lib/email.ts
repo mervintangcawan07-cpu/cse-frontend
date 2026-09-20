@@ -27,6 +27,19 @@ export function getReplyToEmail(): string {
 }
 
 /**
+ * Escapes untrusted text or URL values for safe insertion into HTML email templates.
+ */
+export function escapeHtml(str: unknown): string {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/**
  * Safely initialize Resend client on demand
  */
 function getResendClient() {
@@ -73,14 +86,17 @@ function isLocalDevelopment(): boolean {
  * 📧 Send Account Email Verification Link via Resend
  */
 export async function sendVerificationEmail(toEmail: string, token: string) {
-  const verifyLink = `${getBaseUrl()}/verify-email?token=${token}`;
+  const url = new URL("/verify-email", getBaseUrl());
+  url.searchParams.set("token", token);
+  const rawVerifyLink = url.toString();
+  const verifyLink = escapeHtml(rawVerifyLink);
   const resend = getResendClient();
 
   if (!resend) {
     if (isLocalDevelopment()) {
       console.log("------------------------------------");
       console.log(`[DEV MODE - NO RESEND KEY] Verification Link for ${toEmail}:`);
-      console.log(verifyLink);
+      console.log(rawVerifyLink);
       console.log("------------------------------------");
     }
     console.warn("[VERIFICATION_EMAIL_NOT_SENT] Email delivery is not configured.");
@@ -123,14 +139,17 @@ export async function sendVerificationEmail(toEmail: string, token: string) {
  * 🔒 Send Password Reset Link via Resend
  */
 export async function sendPasswordResetEmail(toEmail: string, token: string) {
-  const resetLink = `${getBaseUrl()}/reset-password?token=${token}`;
+  const url = new URL("/reset-password", getBaseUrl());
+  url.searchParams.set("token", token);
+  const rawResetLink = url.toString();
+  const resetLink = escapeHtml(rawResetLink);
   const resend = getResendClient();
 
   if (!resend) {
     if (isLocalDevelopment()) {
       console.log("------------------------------------");
       console.log(`[DEV MODE - NO RESEND KEY] Reset Password Link for ${toEmail}:`);
-      console.log(resetLink);
+      console.log(rawResetLink);
       console.log("------------------------------------");
     }
     console.warn("[PASSWORD_RESET_EMAIL_NOT_SENT] Email delivery is not configured.");
@@ -185,10 +204,14 @@ export async function sendPartnerCommissionAlertEmail(params: {
   dashboardUrl?: string;
 }) {
   const resend = getResendClient();
-  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/dashboard`;
-  const cleanCommission = params.commissionPesos.replace(/^₱\s*/, "");
-  const cleanPurchase = params.purchasePesos.replace(/^₱\s*/, "");
-  const channelLabel =
+  const rawDashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/dashboard`;
+  const parsedDashboard = new URL(rawDashboardUrl, getBaseUrl());
+  const dashboardUrl = escapeHtml(parsedDashboard.toString());
+  const cleanCommission = escapeHtml(params.commissionPesos.replace(/^₱\s*/, ""));
+  const cleanPurchase = escapeHtml(params.purchasePesos.replace(/^₱\s*/, ""));
+  const partnerName = escapeHtml(params.partnerName);
+  const planType = escapeHtml(params.planType.replace("_", " "));
+  const channelLabel = escapeHtml(
     params.campaignSource === "youtube"
       ? "📹 YouTube"
       : params.campaignSource === "tiktok"
@@ -199,7 +222,8 @@ export async function sendPartnerCommissionAlertEmail(params: {
       ? "💬 Messenger"
       : params.campaignSource === "email"
       ? "📧 Email"
-      : "🌐 Direct";
+      : "🌐 Direct"
+  );
 
   const html = `
     <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
@@ -207,13 +231,13 @@ export async function sendPartnerCommissionAlertEmail(params: {
         <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">💰 New Commission Earned!</h2>
         <p style="margin: 6px 0 0; color: #d1fae5; font-size: 13px;">GovStudyX Partner Program</p>
       </div>
-      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong>,</p>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${partnerName}</strong>,</p>
       <p style="font-size: 14px; color: #94a3b8;">A student just upgraded their GovStudyX account through your referral! Here are your real-time earnings:</p>
       <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin: 20px 0;">
         <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
           <tr>
             <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Plan Purchased</td>
-            <td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-weight: bold; border-bottom: 1px solid #334155;">${params.planType.replace("_", " ")}</td>
+            <td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-weight: bold; border-bottom: 1px solid #334155;">${planType}</td>
           </tr>
           <tr>
             <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Student Payment</td>
@@ -277,14 +301,19 @@ export async function sendPartnerPayoutProcessedEmail(params: {
   dashboardUrl?: string;
 }) {
   const resend = getResendClient();
-  const dashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/payouts`;
-  const cleanAmount = params.amountPesos.replace(/^₱\s*/, "");
-  const methodLabel =
+  const rawDashboardUrl = params.dashboardUrl || `${getBaseUrl()}/partner-portal/payouts`;
+  const parsedDashboard = new URL(rawDashboardUrl, getBaseUrl());
+  const dashboardUrl = escapeHtml(parsedDashboard.toString());
+  const cleanAmount = escapeHtml(params.amountPesos.replace(/^₱\s*/, ""));
+  const partnerName = escapeHtml(params.partnerName);
+  const methodLabel = escapeHtml(
     params.payoutMethod === "GCASH"
       ? "GCash"
       : params.payoutMethod === "MAYA"
       ? "Maya"
-      : "Bank Transfer";
+      : "Bank Transfer"
+  );
+  const transactionRef = params.transactionRef ? escapeHtml(params.transactionRef) : undefined;
 
   const html = `
     <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
@@ -292,7 +321,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
         <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">💸 Payout Processed!</h2>
         <p style="margin: 6px 0 0; color: #e0f2fe; font-size: 13px;">GovStudyX Partner Program — Commission Payout</p>
       </div>
-      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong>,</p>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${partnerName}</strong>,</p>
       <p style="font-size: 14px; color: #94a3b8;">Great news! Your commission payout request has been processed and disbursed.</p>
       <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin: 20px 0;">
         <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
@@ -304,7 +333,7 @@ export async function sendPartnerPayoutProcessedEmail(params: {
             <td style="padding: 8px 0; color: #64748b; border-bottom: 1px solid #334155;">Payout Method</td>
             <td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-weight: bold; border-bottom: 1px solid #334155;">${methodLabel}</td>
           </tr>
-          ${params.transactionRef ? `<tr><td style="padding: 8px 0; color: #64748b;">Reference No.</td><td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-family: monospace;">${params.transactionRef}</td></tr>` : ""}
+          ${transactionRef ? `<tr><td style="padding: 8px 0; color: #64748b;">Reference No.</td><td style="padding: 8px 0; color: #f1f5f9; text-align: right; font-family: monospace;">${transactionRef}</td></tr>` : ""}
         </table>
       </div>
       <div style="margin: 24px 0;">
@@ -344,7 +373,11 @@ export async function sendPartnerSetupEmail(params: {
   setupToken: string;
 }): Promise<"SENT" | "FAILED"> {
   const resend = getResendClient();
-  const setupUrl = `${getBaseUrl()}/partner-portal/setup?token=${params.setupToken}`;
+  const url = new URL("/partner-portal/setup", getBaseUrl());
+  url.searchParams.set("token", params.setupToken);
+  const setupUrl = escapeHtml(url.toString());
+  const partnerName = escapeHtml(params.partnerName);
+  const partnerId = escapeHtml(params.partnerId);
 
   const html = `
     <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
@@ -352,8 +385,8 @@ export async function sendPartnerSetupEmail(params: {
         <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🎓 GovStudyX Partner Portal Invitation</h2>
         <p style="margin: 6px 0 0; color: #d1fae5; font-size: 13px;">Official Educational Partner Ecosystem</p>
       </div>
-      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong>,</p>
-      <p style="font-size: 14px; color: #94a3b8;">You have been registered as an official partner on GovStudyX. Your unique Partner ID is <strong style="color: #34d399; font-family: monospace;">${params.partnerId}</strong>.</p>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${partnerName}</strong>,</p>
+      <p style="font-size: 14px; color: #94a3b8;">You have been registered as an official partner on GovStudyX. Your unique Partner ID is <strong style="color: #34d399; font-family: monospace;">${partnerId}</strong>.</p>
       <p style="font-size: 14px; color: #94a3b8;">Please click the button below to set your secure password and activate your partner portal account:</p>
       <div style="margin: 24px 0;">
         <a href="${setupUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Activate Partner Account</a>
@@ -401,7 +434,11 @@ export async function sendPartnerPasswordResetEmail(params: {
   resetToken: string;
 }) {
   const resend = getResendClient();
-  const resetUrl = `${getBaseUrl()}/partner-portal/reset-password?token=${params.resetToken}`;
+  const url = new URL("/partner-portal/reset-password", getBaseUrl());
+  url.searchParams.set("token", params.resetToken);
+  const resetUrl = escapeHtml(url.toString());
+  const partnerName = escapeHtml(params.partnerName);
+  const partnerId = escapeHtml(params.partnerId);
 
   const html = `
     <div style="font-family: sans-serif; padding: 24px; background-color: #0f172a; color: #f1f5f9; border-radius: 16px; max-width: 560px;">
@@ -409,7 +446,7 @@ export async function sendPartnerPasswordResetEmail(params: {
         <h2 style="margin: 0; color: #ffffff; font-size: 20px; font-weight: 900;">🔒 Partner Password Reset</h2>
         <p style="margin: 6px 0 0; color: #d1fae5; font-size: 13px;">GovStudyX Partner Portal</p>
       </div>
-      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${params.partnerName}</strong> (${params.partnerId}),</p>
+      <p style="font-size: 14px; color: #cbd5e1;">Hi <strong>${partnerName}</strong> (${partnerId}),</p>
       <p style="font-size: 14px; color: #94a3b8;">A password reset was requested for your partner account. Click the button below to create a new password:</p>
       <div style="margin: 24px 0;">
         <a href="${resetUrl}" style="display: inline-block; padding: 14px 28px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; text-decoration: none; font-weight: 900; border-radius: 12px; font-size: 14px;">Reset Password</a>

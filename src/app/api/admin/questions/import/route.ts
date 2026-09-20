@@ -24,10 +24,26 @@ export async function POST(request: Request) {
     let validQuestions: any[] = [];
 
     // Parse incoming CSV text, Multipart Form Data, or JSON payloads
-    if (contentType.includes("text/csv") || contentType.includes("multipart/form-data")) {
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await request.formData();
+      let fileContent = "";
+      for (const value of formData.values()) {
+        if (typeof value === "string") {
+          fileContent = value;
+          break;
+        } else if (value && typeof (value as any).text === "function") {
+          fileContent = await (value as any).text();
+          break;
+        }
+      }
+      if (!fileContent.trim()) {
+        return NextResponse.json({ error: "No file content found in multipart form data" }, { status: 400 });
+      }
+      validQuestions = parseCSVToQuestions(fileContent);
+    } else if (contentType.includes("text/csv") || contentType.includes("text/plain")) {
       const csvText = await request.text();
       validQuestions = parseCSVToQuestions(csvText);
-    } else {
+    } else if (contentType.includes("application/json") || contentType === "") {
       const body = await request.json();
       if (typeof body.csvText === "string") {
         validQuestions = parseCSVToQuestions(body.csvText);
@@ -38,6 +54,8 @@ export async function POST(request: Request) {
       } else {
         validQuestions = parseCSVToQuestions(Papa.unparse([body]));
       }
+    } else {
+      return NextResponse.json({ error: "Unsupported media type" }, { status: 415 });
     }
 
     if (!Array.isArray(validQuestions) || validQuestions.length === 0) {

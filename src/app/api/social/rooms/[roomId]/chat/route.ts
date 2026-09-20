@@ -130,11 +130,16 @@ export async function POST(
       return NextResponse.json({ error: "Message content cannot be empty" }, { status: 400 });
     }
 
+    const trimmedContent = content.trim();
+    if (trimmedContent.length > 2000) {
+      return NextResponse.json({ error: "Message content must not exceed 2000 characters" }, { status: 400 });
+    }
+
     const message = await prisma.studyRoomMessage.create({
       data: {
         roomId,
         senderId: userId,
-        content: content.trim(),
+        content: trimmedContent,
       },
       include: {
         sender: {
