@@ -599,6 +599,15 @@ export class RefundService {
           };
         }
 
+        // 🔒 1b. ACQUIRE CHECKOUT-SESSION ADVISORY LOCK (Aligns with PaymentFinalizationService lock)
+        if (currentTxn.checkoutSessionId) {
+          await tx.$queryRaw`
+            SELECT pg_advisory_xact_lock(
+              hashtextextended(${currentTxn.checkoutSessionId}, 0)
+            )::text AS lock_result
+          `;
+        }
+
         // 🛡️ 3. DURABLE REFUND-ID IDEMPOTENCY CHECK (First Before Mismatch Validations)
         const existingCanonicalLeg = await tx.financialLedgerEntry.findFirst({
           where: {

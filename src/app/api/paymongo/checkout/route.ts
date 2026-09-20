@@ -210,6 +210,8 @@ export async function POST(request: Request) {
               planType,
               partnerCode: matchedPartnerCode || "",
               campaignSource,
+              expectedAmountCentavos: String(amountInCentavos),
+              expectedCurrency: "PHP",
             },
           },
         },

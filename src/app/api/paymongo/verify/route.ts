@@ -72,6 +72,19 @@ export async function POST() {
       );
     }
 
+    // 🔒 Mode Check: Reject test-mode checkout sessions in production
+    if (process.env.NODE_ENV === "production" && checkoutData?.attributes?.livemode === false) {
+      cookieStore.delete("cse_checkout_id");
+      cookieStore.delete("cse_checkout_plan");
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Test mode checkout sessions cannot be verified in production.",
+        },
+        { status: 403 }
+      );
+    }
+
     const payments = checkoutData?.attributes?.payments || [];
     const paymentIntentStatus = checkoutData?.attributes?.payment_intent?.attributes?.status;
 
@@ -103,6 +116,20 @@ export async function POST() {
       const campaignSource = checkoutData?.attributes?.metadata?.campaignSource || "direct";
       const paymentIntentId = checkoutData?.attributes?.payment_intent?.id;
 
+      const providerCurrency = (
+        checkoutData?.attributes?.line_items?.[0]?.currency ||
+        checkoutData?.attributes?.currency ||
+        "PHP"
+      ).toUpperCase();
+
+      const expectedAmountCentavos = checkoutMetadata?.expectedAmountCentavos
+        ? Number(checkoutMetadata.expectedAmountCentavos)
+        : undefined;
+
+      const expectedCurrency = checkoutMetadata?.expectedCurrency
+        ? String(checkoutMetadata.expectedCurrency).toUpperCase()
+        : undefined;
+
       const { PaymentFinalizationService } = await import("@/lib/payment/paymentFinalizationService");
       const finalization = await PaymentFinalizationService.finalizeVerifiedPayment({
         userId,
@@ -114,6 +141,9 @@ export async function POST() {
         campaignSource,
         paymentIntentId,
         source: "VERIFY_POLL",
+        expectedAmountCentavos,
+        expectedCurrency,
+        providerCurrency,
       });
 
       cookieStore.delete("cse_checkout_id");
@@ -129,8 +159,10 @@ export async function POST() {
     }
 
     return NextResponse.json({ success: false, message: "Payment pending or unpaid." });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[VERIFY_CATCH_ERROR]", error);
-    return NextResponse.json({ error: "Verification failed" }, { status: 500 });
+    const msg = error instanceof Error ? error.message : "Verification failed";
+    const isConflict = msg.includes("TERMINAL_STATE_CONFLICT");
+    return NextResponse.json({ error: msg }, { status: isConflict ? 409 : 500 });
   }
 }

@@ -16,6 +16,9 @@ export interface FinalizePaymentParams {
   paymentIntentId?: string;
   receiptUrl?: string;
   source: "WEBHOOK" | "VERIFY_POLL";
+  expectedAmountCentavos?: number;
+  expectedCurrency?: string;
+  providerCurrency?: string;
 }
 
 export interface FinalizePaymentResult {
@@ -46,16 +49,79 @@ export class PaymentFinalizationService {
       paymentIntentId,
       receiptUrl,
       source,
+      expectedAmountCentavos,
+      expectedCurrency,
+      providerCurrency,
     } = params;
 
     if (!["1_MONTH", "6_MONTHS", "1_YEAR"].includes(planType)) {
       throw new Error("Unsupported pricing plan.");
     }
 
+    // 🔒 1. CURRENCY VALIDATION
+    const effectiveCurrency = (providerCurrency || "PHP").toUpperCase();
+    if (effectiveCurrency !== "PHP") {
+      throw new Error(`Unsupported currency: ${effectiveCurrency}. Only PHP is supported.`);
+    }
+
+    if (expectedCurrency && expectedCurrency.toUpperCase() !== "PHP") {
+      throw new Error(`Invalid expected currency snapshot: ${expectedCurrency}.`);
+    }
+
     const normalizedAmountCentavos = Math.max(0, purchaseAmountCentavos);
     const amountPesos = Math.round(normalizedAmountCentavos / 100);
 
     // 1. ATOMIC TRANSACTION: Check if already finalized, update User and Transaction
+    // 🔒 2. EXACT AMOUNT RECONCILIATION
+    if (expectedAmountCentavos !== undefined && !isNaN(expectedAmountCentavos)) {
+      if (normalizedAmountCentavos !== expectedAmountCentavos) {
+        throw new Error(
+          `Amount reconciliation failed: expected ${expectedAmountCentavos} centavos, received ${normalizedAmountCentavos} centavos.`
+        );
+      }
+    } else {
+      // Legacy checkout session without snapshot metadata:
+      // Perform strict server-side expected-price reconstruction
+      console.warn(
+        `[PaymentFinalizationService] LEGACY_CHECKOUT_WITHOUT_AMOUNT_SNAPSHOT: Checkout ${checkoutSessionId} lacks snapshot metadata. Reconstructing expected price.`
+      );
+
+      const pricingPlan = await prisma.pricingPlan.findUnique({
+        where: { planType },
+      });
+
+      const defaultPrices: Record<string, number> = {
+        "1_MONTH": 9900,
+        "6_MONTHS": 19900,
+        "1_YEAR": 29900,
+      };
+
+      const baseAmountCentavos = pricingPlan ? pricingPlan.price * 100 : defaultPrices[planType];
+
+      let expectedCentavos = baseAmountCentavos;
+      if (partnerCode) {
+        try {
+          const partner = await PartnerService.resolvePartnerByCodeOrSlug(partnerCode);
+          if (partner && partner.discountPercent && partner.discountPercent > 0) {
+            const discountMultiplier = (100 - partner.discountPercent) / 100;
+            expectedCentavos = Math.max(100, Math.round(baseAmountCentavos * discountMultiplier));
+          }
+        } catch (partnerErr) {
+          console.warn(
+            "[PaymentFinalizationService] Partner code resolution error during fallback price check:",
+            partnerErr
+          );
+        }
+      }
+
+      if (normalizedAmountCentavos !== expectedCentavos && normalizedAmountCentavos !== baseAmountCentavos) {
+        throw new Error(
+          `Legacy amount reconciliation failed: expected ${expectedCentavos} (or base ${baseAmountCentavos}) centavos, received ${normalizedAmountCentavos} centavos.`
+        );
+      }
+    }
+
+    // 3. ATOMIC TRANSACTION: Check if already finalized, update User and Transaction
     const transactionResult = await prisma.$transaction(async (tx) => {
       // 🔒 Acquire transaction-scoped advisory lock on checkoutSessionId to serialize concurrent finalization
       await tx.$queryRaw`
@@ -76,18 +142,19 @@ export class PaymentFinalizationService {
         where: { checkoutSessionId },
       });
 
-      if (existingTxn && existingTxn.userId !== userId) {
-        throw new Error("Checkout ownership mismatch.");
-      }
+      if (existingTxn) {
+        if (existingTxn.userId !== userId) {
+          throw new Error("Checkout ownership mismatch.");
+        }
 
-      if (existingTxn && existingTxn.status === "PAID") {
-        // Already finalized. Never extend entitlement again, but allow
-        // late PayMongo fee enrichment when the original finalization
-        // did not yet contain the provider fee.
-        const currentUser = await tx.user.findUnique({
-          where: { id: userId },
-          select: { paidUntil: true },
-        });
+        if (existingTxn.status === "PAID") {
+          // Already finalized. Never extend entitlement again, but allow
+          // late PayMongo fee enrichment when the original finalization
+          // did not yet contain the provider fee.
+          const currentUser = await tx.user.findUnique({
+            where: { id: userId },
+            select: { paidUntil: true },
+          });
 
         const existingFeeCentavos = existingTxn.feeAmountCentavos || 0;
         const incomingFeeCentavos = Math.max(0, feeAmountCentavos || 0);
@@ -134,6 +201,36 @@ export class PaymentFinalizationService {
           paidUntil: currentUser?.paidUntil || null,
         };
       }
+
+      // 🔒 Terminal or non-PAID state encountered (e.g. REFUNDED, PARTIALLY_REFUNDED, VOIDED)
+      console.warn(
+        `[PaymentFinalizationService] TERMINAL_PAYMENT_STATE_REPLAY_ATTEMPT: Checkout ${checkoutSessionId} for user ${userId} has non-PAID status ${existingTxn.status}. Rejecting finalization.`
+      );
+
+      try {
+        await tx.accountingAuditLog.create({
+          data: {
+            action: "TERMINAL_PAYMENT_STATE_REPLAY_ATTEMPT",
+            targetType: "TRANSACTION",
+            targetId: existingTxn.id,
+            reason: `Stale paid event received for transaction with status ${existingTxn.status}`,
+            metadata: {
+              checkoutSessionId,
+              userId,
+              currentStatus: existingTxn.status,
+              incomingAmountCentavos: normalizedAmountCentavos,
+              source,
+            },
+          },
+        });
+      } catch (auditErr) {
+        console.error("[PaymentFinalizationService] Audit log creation failed:", auditErr);
+      }
+
+      throw new Error(
+        `TERMINAL_STATE_CONFLICT: Transaction ${existingTxn.id} already in status ${existingTxn.status}`
+      );
+    }
 
       // Fetch user to compute single renewal extension
       const user = await tx.user.findUnique({
