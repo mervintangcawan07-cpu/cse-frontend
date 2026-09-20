@@ -1,9 +1,10 @@
 // Relative Path: src/app/api/drills/elimination/route.ts
 import { NextResponse } from "next/server";
-import { findBankQuestions } from "@/lib/questionBank";
+import { findBankQuestions, PUBLIC_QUESTION_SELECT, toPublicQuestion } from "@/lib/questionBank";
 import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 import { requireProAuth } from "@/lib/serverAuth";
 import { CACHE_PROFILES } from "@/lib/cache";
+import { signDrillSessionToken } from "@/lib/drillSessionToken";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,12 +12,18 @@ export const revalidate = 0;
 export async function GET(request: Request) {
   try {
     const { user, errorResponse } = await requireProAuth(request);
-    if (errorResponse) {
-      const data = await errorResponse.json();
-      return NextResponse.json(data, {
-        status: errorResponse.status,
-        headers: CACHE_PROFILES.PRIVATE,
-      });
+    if (errorResponse || !user) {
+      if (errorResponse) {
+        const data = await errorResponse.json();
+        return NextResponse.json(data, {
+          status: errorResponse.status,
+          headers: CACHE_PROFILES.PRIVATE,
+        });
+      }
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401, headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -26,11 +33,15 @@ export async function GET(request: Request) {
 
     const allDrillQuestions = await findBankQuestions({
       where: activeEliminationQuestionWhere(),
+      select: PUBLIC_QUESTION_SELECT,
       orderBy: { createdAt: "desc" },
     });
 
     if (allDrillQuestions.length === 0) {
-      return NextResponse.json({ success: true, drills: [], loopReset: false }, { headers: CACHE_PROFILES.PRIVATE });
+      return NextResponse.json(
+        { success: true, drills: [], drillSessionToken: null, loopReset: false },
+        { headers: CACHE_PROFILES.PRIVATE }
+      );
     }
 
     let candidatePool = allDrillQuestions.filter((q) => !seenIds.has(q.id));
@@ -85,9 +96,20 @@ export async function GET(request: Request) {
 
     const finalDrills = selectedQuestions.sort(() => Math.random() - 0.5).slice(0, LIMIT);
 
+    let drillSessionToken: string | null = null;
+    if (finalDrills.length > 0) {
+      const tokenRes = await signDrillSessionToken({
+        userId: user.id,
+        questionIds: finalDrills.map((q) => q.id),
+        drillMode: "ELIMINATION",
+      });
+      drillSessionToken = tokenRes.drillSessionToken;
+    }
+
     return NextResponse.json({
       success: true,
-      drills: finalDrills,
+      drills: finalDrills.map(toPublicQuestion),
+      drillSessionToken,
       loopReset,
     }, { headers: CACHE_PROFILES.PRIVATE });
   } catch (error: unknown) {

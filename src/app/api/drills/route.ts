@@ -1,6 +1,6 @@
 // Relative Path: src/app/api/drills/route.ts
 import { NextResponse } from "next/server";
-import { findBankQuestions } from "@/lib/questionBank";
+import { findBankQuestions, PUBLIC_QUESTION_SELECT, toPublicQuestion } from "@/lib/questionBank";
 import { activeEliminationQuestionWhere } from "@/lib/contentEligibility";
 import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
 import { requireProAuth } from "@/lib/serverAuth";
@@ -18,13 +18,14 @@ export async function GET(request: Request) {
 
     const drillQuestions = await findBankQuestions({
       where: activeEliminationQuestionWhere(),
+      select: PUBLIC_QUESTION_SELECT,
       orderBy: { createdAt: "desc" },
     });
 
     return cachedJsonResponse(
       {
         success: true,
-        drills: drillQuestions,
+        drills: drillQuestions.map(toPublicQuestion),
         count: drillQuestions.length,
       },
       "PRIVATE"

@@ -3,7 +3,9 @@ import { findBankQuestions } from "@/lib/questionBank";
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { createNotification } from "@/lib/notifications";
 import { isDuelEnabled } from "@/lib/config/features";
+import { sanitizeDuelMatchForPlayer } from "@/lib/duels/sanitize";
 
 export async function POST() {
   try {
@@ -49,6 +51,7 @@ export async function POST() {
       });
 
       return NextResponse.json({ success: true, match: updatedMatch, playerRole: "P2" });
+      return NextResponse.json({ success: true, match: sanitizeDuelMatchForPlayer(updatedMatch), playerRole: "P2" });
     }
 
     // 2. No open match: Pick 5 rapid-fire questions across subjects
@@ -85,6 +88,7 @@ export async function POST() {
     });
 
     return NextResponse.json({ success: true, match: newMatch, playerRole: "P1" });
+    return NextResponse.json({ success: true, match: sanitizeDuelMatchForPlayer(newMatch), playerRole: "P1" });
   } catch (error: any) {
     console.error("[DUEL_MATCHMAKE_ERROR]", error);
     return NextResponse.json({ error: "Failed to create duel match." }, { status: 500 });

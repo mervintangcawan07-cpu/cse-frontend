@@ -3,6 +3,7 @@ import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { DuelStatus } from "@prisma/client";
 import { isDuelEnabled } from "@/lib/config/features";
+import { sanitizeDuelMatchForPlayer } from "@/lib/duels/sanitize";
 
 interface DuelQuestionItem {
   options?: unknown[];
@@ -30,7 +31,7 @@ export async function GET(
       return NextResponse.json({ error: "Match not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, match });
+    return NextResponse.json({ success: true, match: sanitizeDuelMatchForPlayer(match) });
   } catch (error) {
     return NextResponse.json({ error: "Failed to poll match state" }, { status: 500 });
   }
@@ -53,7 +54,8 @@ export async function POST(
 
     const userId = user.id;
     const { id } = await params;
-    const { questionIndex, selectedIndex } = await request.json();
+    const body = await request.json().catch(() => ({}));
+    const { questionIndex, selectedIndex } = body;
 
     const match = await prisma.duelMatch.findUnique({ where: { id } });
     if (!match) return NextResponse.json({ error: "Match not found" }, { status: 404 });
@@ -82,6 +84,15 @@ export async function POST(
       return NextResponse.json({ error: "Invalid questionIndex" }, { status: 400 });
     }
 
+    // Expected current index validation
+    const expectedCurrentIndex = isP1 ? match.p1Current : match.p2Current;
+    if (questionIndex !== expectedCurrentIndex) {
+      return NextResponse.json(
+        { error: "Question index does not match expected round or has already been answered" },
+        { status: 409 }
+      );
+    }
+
     const currentQ = questions[questionIndex];
     if (!currentQ) {
       return NextResponse.json({ error: "Question not found" }, { status: 404 });
@@ -91,53 +102,68 @@ export async function POST(
     if (
       typeof selectedIndex !== "number" ||
       !Number.isInteger(selectedIndex) ||
-      selectedIndex < 0 ||
-      selectedIndex >= optionsCount
+      (selectedIndex !== -1 && (selectedIndex < 0 || selectedIndex >= optionsCount))
     ) {
       return NextResponse.json({ error: "Invalid selectedIndex" }, { status: 400 });
     }
 
-    const isCorrect = selectedIndex === currentQ.answerIndex;
-
-    let p1Score = match.p1Score;
-    let p2Score = match.p2Score;
-    let p1Current = match.p1Current;
-    let p2Current = match.p2Current;
-
-    if (isP1) {
-      p1Current = Math.max(p1Current, questionIndex + 1);
-      if (isCorrect) p1Score += 20;
-    } else if (isP2) {
-      p2Current = Math.max(p2Current, questionIndex + 1);
-      if (isCorrect) p2Score += 20;
-    }
-
-    let status: DuelStatus = match.status;
-    let winnerId = match.winnerId;
-
+    const isCorrect = selectedIndex !== -1 && selectedIndex === currentQ.answerIndex;
+    const scoreIncrement = isCorrect ? 20 : 0;
+    const nextIndex = questionIndex + 1;
     const totalQuestions = questions.length || 5;
-    // Finish match if both players complete all rounds or timer ends
-    if (p1Current >= totalQuestions && (p2Current >= totalQuestions || !match.player2Id)) {
-      status = DuelStatus.FINISHED;
-      if (p1Score > p2Score) winnerId = match.player1Id;
-      else if (p2Score > p1Score) winnerId = match.player2Id;
-      else winnerId = "DRAW";
-    }
 
-    const updated = await prisma.duelMatch.update({
-      where: { id },
-      data: {
-        p1Score,
-        p2Score,
-        p1Current,
-        p2Current,
-        status,
-        winnerId,
-      },
+    // Concurrency / replay safe atomic transaction
+    const finalMatch = await prisma.$transaction(async (tx) => {
+      const updateResult = await tx.duelMatch.updateMany({
+        where: {
+          id,
+          ...(isP1 ? { p1Current: questionIndex } : { p2Current: questionIndex }),
+          status: { notIn: [DuelStatus.FINISHED, DuelStatus.DECLINED] },
+        },
+        data: {
+          ...(isP1
+            ? { p1Current: nextIndex, p1Score: { increment: scoreIncrement } }
+            : { p2Current: nextIndex, p2Score: { increment: scoreIncrement } }),
+        },
+      });
+
+      if (updateResult.count === 0) {
+        throw new Error("CONCURRENT_UPDATE_CONFLICT");
+      }
+
+      const current = await tx.duelMatch.findUnique({ where: { id } });
+      if (!current) throw new Error("MATCH_NOT_FOUND");
+
+      if (current.p1Current >= totalQuestions && (current.p2Current >= totalQuestions || !current.player2Id)) {
+        let winnerId = "DRAW";
+        if (current.p1Score > current.p2Score) winnerId = current.player1Id;
+        else if (current.p2Score > current.p1Score) winnerId = current.player2Id!;
+
+        return await tx.duelMatch.update({
+          where: { id },
+          data: {
+            status: DuelStatus.FINISHED,
+            winnerId,
+          },
+        });
+      }
+
+      return current;
     });
 
-    return NextResponse.json({ success: true, match: updated, isCorrect });
-  } catch (error) {
+    return NextResponse.json({
+      success: true,
+      match: sanitizeDuelMatchForPlayer(finalMatch),
+      isCorrect,
+      correctIndex: currentQ.answerIndex,
+    });
+  } catch (error: any) {
+    if (error?.message === "CONCURRENT_UPDATE_CONFLICT") {
+      return NextResponse.json(
+        { error: "Conflict: Round has already been processed" },
+        { status: 409 }
+      );
+    }
     return NextResponse.json({ error: "Failed to submit answer" }, { status: 500 });
   }
 }

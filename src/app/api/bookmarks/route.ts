@@ -11,13 +11,31 @@ async function getAuthUserId() {
 }
 
 // 1. GET ALL BOOKMARKED QUESTIONS & STUDY NOTES FOR CURRENT USER
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const userId = user.id;
+
+    const { searchParams } = new URL(request.url);
+    const idsOnly = searchParams.get("idsOnly") === "true";
+
+    if (idsOnly) {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: { userId },
+        select: { targetId: true, targetType: true },
+      });
+      const questionIds = bookmarks
+        .filter((b) => b.targetType === "QUESTION" || !b.targetType)
+        .map((b) => b.targetId);
+      return NextResponse.json({
+        success: true,
+        questionIds,
+      });
+    }
+
     const canReadStudyNotes = isAccountAuthorizedFor(user, "PRO");
 
     // Fetch all user bookmarks

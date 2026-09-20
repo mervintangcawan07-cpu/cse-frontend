@@ -5,6 +5,7 @@ import {
   activeEliminationQuestionWhere, activeOrdinaryQuestionWhere,
   assertQuestionBankMetadata, QuestionBankError, type QuestionBank,
 } from "@/lib/contentEligibility";
+import type { PublicQuestion } from "@/types/question";
 
 type ScalarSelect = Partial<Record<Prisma.QuestionScalarFieldEnum, boolean>>;
 type SelectedQuestion<S> = S extends ScalarSelect
@@ -121,4 +122,37 @@ export async function softDeleteBankQuestions(bank: QuestionBank, ids: string[] 
     context: { entityType: "question", bank, ids: uniqueIds, deletedBy, deletedCount },
   });
   return deletedCount;
+}
+
+export const PUBLIC_QUESTION_SELECT = {
+  id: true,
+  category: true,
+  subtopic: true,
+  prompt: true,
+  options: true,
+  optionA: true,
+  optionB: true,
+  optionC: true,
+  optionD: true,
+  imageUrl: true,
+  difficulty: true,
+  tags: true,
+} as const;
+
+export function toPublicQuestion(q: any): PublicQuestion {
+  const resolvedOptions: string[] =
+    Array.isArray(q.options) && q.options.length > 0
+      ? (q.options as string[])
+      : ([q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean) as string[]);
+
+  return {
+    id: q.id,
+    category: q.category || "General",
+    subtopic: q.subtopic || null,
+    prompt: q.prompt,
+    options: resolvedOptions,
+    imageUrl: q.imageUrl || null,
+    difficulty: q.difficulty || null,
+    tags: Array.isArray(q.tags) ? q.tags : [],
+  };
 }

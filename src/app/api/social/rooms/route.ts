@@ -44,7 +44,7 @@ export async function GET(request: Request) {
     const rooms = await prisma.studyRoom.findMany({
       where: whereClause,
       include: {
-        host: { select: { id: true, name: true, email: true } },
+        host: { select: { id: true, name: true } },
         participants: {
           include: {
             user: { select: { id: true, name: true, isPaid: true } },

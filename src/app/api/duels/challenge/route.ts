@@ -6,6 +6,7 @@ import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 import { isDuelEnabled } from "@/lib/config/features";
+import { sanitizeDuelMatchForPlayer } from "@/lib/duels/sanitize";
 
 export async function POST(request: Request) {
   try {
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      match,
+      match: sanitizeDuelMatchForPlayer(match),
       playerRole: "P1",
     });
   } catch (error: any) {

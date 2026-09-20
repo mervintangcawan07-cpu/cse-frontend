@@ -451,11 +451,13 @@ function TakeExamPageInner() {
           }
         }
 
-        const bookmarkRes = await fetch("/api/bookmarks")
+        const bookmarkRes = await fetch("/api/bookmarks?idsOnly=true")
           .then((r) => (r.ok ? r.json() : null))
           .catch(() => null);
 
-        if (bookmarkRes?.bookmarks) {
+        if (bookmarkRes?.questionIds && Array.isArray(bookmarkRes.questionIds)) {
+          setBookmarkedIds(new Set<string>(bookmarkRes.questionIds));
+        } else if (bookmarkRes?.bookmarks) {
           const ids = new Set<string>(
             bookmarkRes.bookmarks
               .filter((b: any) => b.targetType === "QUESTION" || !b.targetType)

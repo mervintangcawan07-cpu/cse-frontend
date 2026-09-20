@@ -40,3 +40,28 @@ export interface StructuredQuestion {
 }
 
 export type QuestionReviewMode = "INTERACTIVE" | "REVIEW" | "PREVIEW";
+
+export interface PublicQuestion {
+  id: string;
+  category: string;
+  subtopic: string | null;
+  prompt: string;
+  options: string[];
+  imageUrl?: string | null;
+  difficulty?: string | null;
+  tags?: string[];
+}
+
+export interface EliminationEvaluationResult {
+  success: boolean;
+  struckCorrect: boolean;
+  correctAnswerIndex: number;
+  explanation: string | null;
+  eliminationStrategy?: string | null;
+  stepByStep?: string | StepSolutionItem[] | null;
+  whyA?: string | null;
+  whyB?: string | null;
+  whyC?: string | null;
+  whyD?: string | null;
+  commonTrap?: string | null;
+}

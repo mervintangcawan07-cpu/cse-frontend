@@ -64,7 +64,7 @@ export async function GET() {
     isReady = false;
     checks.environment = {
       status: "DOWN",
-      error: `Missing configuration keys: ${missingEnvVars.join(", ")}`,
+      error: "System configuration incomplete",
     };
   } else {
     checks.environment = { status: "UP" };
@@ -73,7 +73,7 @@ export async function GET() {
   const durationMs = Math.round(performance.now() - startTime);
 
   if (!isReady) {
-    logger.error("Readiness Probe Health Check Failed", undefined, { checks, durationMs });
+    logger.error("Readiness Probe Health Check Failed", undefined, { checks, missingEnvVars, durationMs });
     return NextResponse.json(
       {
         status: "DOWN",

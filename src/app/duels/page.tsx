@@ -11,7 +11,7 @@ interface Question {
   category: string;
   prompt: string;
   options: string[];
-  answerIndex: number;
+  answerIndex?: number;
   explanation?: string;
 }
 
@@ -41,6 +41,7 @@ function DuelsArenaInner() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answeredRound, setAnsweredRound] = useState(false);
+  const [roundFeedback, setRoundFeedback] = useState<{ isCorrect: boolean; correctIndex?: number } | null>(null);
   const [roundTimeLeft, setRoundTimeLeft] = useState(10); // 10 seconds per round
 
   // 0. Load Current User & Auto-Join URL matchId if present
@@ -83,6 +84,7 @@ function DuelsArenaInner() {
         setCurrentIndex(0);
         setSelectedOption(null);
         setAnsweredRound(false);
+        setRoundFeedback(null);
         setRoundTimeLeft(10);
       } else {
         alert(data.error || "Matchmaking failed. Try again.");
@@ -150,6 +152,12 @@ function DuelsArenaInner() {
       const data = await res.json();
       if (res.ok && data.match) {
         setMatch(data.match);
+        if (typeof data.isCorrect === "boolean") {
+          setRoundFeedback({
+            isCorrect: data.isCorrect,
+            correctIndex: typeof data.correctIndex === "number" ? data.correctIndex : undefined,
+          });
+        }
       }
     } catch (err) {
       console.error("Error submitting duel answer:", err);
@@ -161,6 +169,7 @@ function DuelsArenaInner() {
         setCurrentIndex((prev) => prev + 1);
         setSelectedOption(null);
         setAnsweredRound(false);
+        setRoundFeedback(null);
         setRoundTimeLeft(10);
       }
     }, 1500);
@@ -408,7 +417,7 @@ function DuelsArenaInner() {
           <div className="space-y-3">
             {currentQ.options.map((opt, idx) => {
               const isSelected = selectedOption === idx;
-              const isCorrect = idx === currentQ.answerIndex;
+              const isCorrect = roundFeedback?.correctIndex === idx;
 
               let style = "bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700";
 

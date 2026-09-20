@@ -4,6 +4,7 @@ import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { createNotification } from "@/lib/notifications";
 import { isDuelEnabled } from "@/lib/config/features";
+import { sanitizeDuelMatchForPlayer } from "@/lib/duels/sanitize";
 
 export async function POST(request: Request) {
   try {
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        match: updatedMatch,
+        match: sanitizeDuelMatchForPlayer(updatedMatch),
         playerRole: userId === match.player1Id ? "P1" : "P2",
       });
     }
@@ -85,7 +86,7 @@ export async function POST(request: Request) {
         }).catch(() => null);
       }
 
-      return NextResponse.json({ success: true, match: updatedMatch });
+      return NextResponse.json({ success: true, match: sanitizeDuelMatchForPlayer(updatedMatch) });
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

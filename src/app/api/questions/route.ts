@@ -1,5 +1,5 @@
 import { activeOrdinaryQuestionWhere, assertOrdinaryQuestionBatch, isEliminationQuestion, questionBankErrorResponse } from "@/lib/contentEligibility";
-import { andQuestionWhere, findBankQuestions, questionIdsWhere, questionTextWhere } from "@/lib/questionBank";
+import { andQuestionWhere, findBankQuestions, questionIdsWhere, questionTextWhere, PUBLIC_QUESTION_SELECT, toPublicQuestion } from "@/lib/questionBank";
 // Relative Path: src/app/api/questions/route.ts
 import { NextResponse } from "next/server";
 import {
@@ -116,6 +116,7 @@ export async function GET(request: Request) {
       // ⚡ FAST BULK FETCH: Query all candidate questions for this category/subtopic in 1 SQL call
       const allCategoryPool = await findBankQuestions({
         where: whereClause,
+        select: PUBLIC_QUESTION_SELECT,
       });
 
       if (allCategoryPool.length === 0) {
@@ -125,11 +126,12 @@ export async function GET(request: Request) {
         );
         const catchAllPool = await findBankQuestions({
           where: catchAllWhere,
+          select: PUBLIC_QUESTION_SELECT,
         });
         return NextResponse.json(
           {
             success: true,
-            questions: shuffleArray(catchAllPool).slice(0, requestedLimit),
+            questions: shuffleArray(catchAllPool).slice(0, requestedLimit).map(toPublicQuestion),
           },
           { headers: CACHE_PROFILES.PRIVATE }
         );
@@ -148,7 +150,7 @@ export async function GET(request: Request) {
       return NextResponse.json(
         {
           success: true,
-          questions: picked.slice(0, requestedLimit),
+          questions: picked.slice(0, requestedLimit).map(toPublicQuestion),
         },
         { headers: CACHE_PROFILES.PRIVATE }
       );
@@ -160,6 +162,7 @@ export async function GET(request: Request) {
     // ⚡ SINGLE SQL QUERY: Retrieve all non-deleted, active questions at once
     const globalPool = await findBankQuestions({
       where: activeOrdinaryQuestionWhere(),
+      select: PUBLIC_QUESTION_SELECT,
     });
 
     const finalExamQuestions: any[] = [];
@@ -254,7 +257,7 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         success: true,
-        questions: finalExamQuestions.slice(0, 170),
+        questions: finalExamQuestions.slice(0, 170).map(toPublicQuestion),
       },
       { headers: CACHE_PROFILES.PRIVATE }
     );

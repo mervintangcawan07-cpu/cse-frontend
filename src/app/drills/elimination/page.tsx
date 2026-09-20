@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicator";
 
+import type { EliminationEvaluationResult } from "@/types/question";
+
 interface DrillQuestion {
   id: string;
   category: string;
@@ -64,6 +66,9 @@ export default function EliminationTrainerPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [history, setHistory] = useState<QuestionRecord[]>([]);
+  const [drillSessionToken, setDrillSessionToken] = useState<string | null>(null);
+  const [evaluations, setEvaluations] = useState<Record<string, EliminationEvaluationResult>>({});
+  const [evaluating, setEvaluating] = useState(false);
 
   const requestDrillSession = useCallback(async (): Promise<DrillQuestion[]> => {
     // Remove the legacy active-question payload without touching history or
@@ -94,6 +99,10 @@ export default function EliminationTrainerPage() {
 
     if (data.loopReset) {
       localStorage.removeItem(STORAGE_SEEN_KEY);
+    }
+
+    if (typeof data.drillSessionToken === "string") {
+      setDrillSessionToken(data.drillSessionToken);
     }
 
     return data.drills.map((item: DrillApiQuestion, idx: number) => {
@@ -143,6 +152,9 @@ export default function EliminationTrainerPage() {
     setIsRevealed(false);
     setScore(0);
     setHistory([]);
+    setDrillSessionToken(null);
+    setEvaluations({});
+    setEvaluating(false);
     try {
       const q = await requestDrillSession();
       setQuestions(q);
@@ -197,8 +209,43 @@ export default function EliminationTrainerPage() {
     };
   }, [status, isPaid, router, requestDrillSession]);
 
+  const executeEvaluation = async (indices: number[]) => {
+    if (isRevealed || evaluating || !drillSessionToken) return;
+    const currentQ = questions[currentIndex];
+    if (!currentQ) return;
+
+    setEvaluating(true);
+    try {
+      const res = await fetch("/api/drills/elimination/check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          drillSessionToken,
+          questionId: currentQ.id,
+          eliminatedIndices: indices,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setEvaluations((prev) => ({ ...prev, [currentQ.id]: data }));
+        if (!data.struckCorrect) {
+          setScore((prev) => prev + 1);
+        }
+        setIsRevealed(true);
+      } else {
+        console.error("Evaluation check failed:", data?.error);
+      }
+    } catch (err) {
+      console.error("Evaluation error:", err);
+    } finally {
+      setEvaluating(false);
+    }
+  };
+
   const handleToggleEliminate = (index: number) => {
     if (isRevealed) return;
+    if (isRevealed || evaluating) return;
 
     if (eliminatedIndices.includes(index)) {
       setEliminatedIndices(eliminatedIndices.filter((i) => i !== index));
@@ -215,6 +262,7 @@ export default function EliminationTrainerPage() {
             setScore((prev) => prev + 1);
           }
           setIsRevealed(true);
+          void executeEvaluation(nextIndices);
         }
       }
     }
@@ -229,22 +277,24 @@ export default function EliminationTrainerPage() {
       setScore((prev) => prev + 1);
     }
     setIsRevealed(true);
+    if (isRevealed || evaluating) return;
+    void executeEvaluation(eliminatedIndices);
   };
 
   // 🚀 Local State Navigation: ZERO DB calls on "Next Question"
   const handleNextQuestion = () => {
     const currentQ = questions[currentIndex];
-    const struckCorrect = eliminatedIndices.includes(currentQ.answerIndex);
+    const evalResult = currentQ ? evaluations[currentQ.id] : undefined;
 
     const record: QuestionRecord = {
       id: currentQ.id,
       category: currentQ.category,
       prompt: currentQ.prompt,
       options: currentQ.options,
-      answerIndex: currentQ.answerIndex,
-      explanation: currentQ.explanation,
+      answerIndex: evalResult?.correctAnswerIndex ?? 0,
+      explanation: evalResult?.explanation ?? "No detailed explanation provided.",
       eliminatedIndices: [...eliminatedIndices],
-      struckCorrect,
+      struckCorrect: evalResult?.struckCorrect ?? false,
     };
 
     const nextHistory = [...history, record];
@@ -351,7 +401,10 @@ export default function EliminationTrainerPage() {
   }
 
   const currentQ = questions[currentIndex];
-  const currentStruckCorrect = currentQ ? eliminatedIndices.includes(currentQ.answerIndex) : false;
+  const currentEval = currentQ ? evaluations[currentQ.id] : undefined;
+  const currentStruckCorrect = currentEval ? currentEval.struckCorrect : false;
+  const currentCorrectIndex = currentEval ? currentEval.correctAnswerIndex : -1;
+  const currentExplanation = currentEval ? currentEval.explanation : "";
   const accuracyPercent = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
 
   return (
@@ -362,6 +415,7 @@ export default function EliminationTrainerPage() {
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-amber-500/20 text-amber-400 rounded-full border border-amber-500/30">
               Option Elimination Trainer
+              ⚡ Practice Module
             </span>
             {!isFinished && questions.length > 0 && (
               <span className="text-xs text-slate-400 font-bold">
@@ -412,7 +466,7 @@ export default function EliminationTrainerPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {currentQ.options.map((opt, idx) => {
               const isEliminated = eliminatedIndices.includes(idx);
-              const isCorrectAnswer = idx === currentQ.answerIndex;
+              const isCorrectAnswer = isRevealed && idx === currentCorrectIndex;
 
               let cardStyle = "bg-slate-50 border-slate-200 text-slate-800 hover:border-slate-400";
 
@@ -434,7 +488,7 @@ export default function EliminationTrainerPage() {
                 <button
                   key={idx}
                   onClick={() => handleToggleEliminate(idx)}
-                  disabled={isRevealed}
+                  disabled={isRevealed || evaluating}
                   className={`p-4 rounded-2xl font-bold text-xs text-left transition border flex items-center justify-between ${cardStyle}`}
                 >
                   <span>{opt}</span>
@@ -461,6 +515,7 @@ export default function EliminationTrainerPage() {
                   </div>
                   <p className="text-xs text-rose-800 leading-relaxed font-medium">
                     You eliminated <strong>{cleanMathText(currentQ.options[currentQ.answerIndex] || "")}</strong>, which was the correct answer. In this drill, always strike out <em>wrong options (distractors)</em> to keep the correct answer safe!
+                    You eliminated <strong>{cleanMathText(currentCorrectIndex >= 0 ? currentQ.options[currentCorrectIndex] || "" : "")}</strong>, which was the correct answer. In this drill, always strike out <em>wrong options (distractors)</em> to keep the correct answer safe!
                   </p>
                 </div>
               ) : (
@@ -471,6 +526,7 @@ export default function EliminationTrainerPage() {
                   </div>
                   <p className="text-xs text-emerald-800 leading-relaxed font-medium">
                     Great test instinct! You successfully avoided striking out the correct answer (<strong>{cleanMathText(currentQ.options[currentQ.answerIndex] || "")}</strong>) and discarded wrong distractors.
+                    Great test instinct! You successfully avoided striking out the correct answer (<strong>{cleanMathText(currentCorrectIndex >= 0 ? currentQ.options[currentCorrectIndex] || "" : "")}</strong>) and discarded wrong distractors.
                   </p>
                 </div>
               )}
@@ -483,12 +539,14 @@ export default function EliminationTrainerPage() {
                   </span>
                   <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20 break-words max-w-full sm:max-w-[65%]">
                     Correct Answer: {cleanMathText(currentQ.options[currentQ.answerIndex] || "")}
+                    Correct Answer: {cleanMathText(currentCorrectIndex >= 0 ? currentQ.options[currentCorrectIndex] || "" : "")}
                   </span>
                 </div>
 
                 <p className="text-xs text-slate-300 leading-relaxed font-medium whitespace-pre-line">
                   <strong className="text-white">Overall Explanation: </strong>
                   {currentQ.explanation}
+                  {currentExplanation || "No detailed explanation provided."}
                 </p>
               </div>
             </div>
@@ -510,10 +568,13 @@ export default function EliminationTrainerPage() {
             ) : (
               <button
                 onClick={handleRevealEarly}
-                disabled={eliminatedIndices.length === 0}
-                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition disabled:opacity-40 cursor-pointer"
+                disabled={eliminatedIndices.length === 0 || evaluating}
+                className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition disabled:opacity-40 cursor-pointer flex items-center gap-2"
               >
-                Reveal Answer & Notes
+                {evaluating && (
+                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                )}
+                {evaluating ? "Evaluating..." : "Reveal Answer & Notes"}
               </button>
             )}
           </div>
