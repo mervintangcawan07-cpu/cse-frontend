@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import { getAuthenticatedSession } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { signJWT } from "@/lib/auth";
 
 export async function PUT(request: Request) {
   try {
@@ -23,7 +25,8 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    const updateData: { name?: string; password?: string } = {};
+    const updateData: { name?: string; password?: string; activeSessionId?: string } = {};
+    let newSessionId: string | null = null;
 
     // 1. Handle Name Update
     if (name !== undefined) {
@@ -60,6 +63,8 @@ export async function PUT(request: Request) {
         );
       }
 
+      newSessionId = crypto.randomUUID();
+      updateData.activeSessionId = newSessionId;
       updateData.password = await bcrypt.hash(newPassword, 10);
     }
 
@@ -90,11 +95,34 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
-      message: "Profile updated successfully!",
+      message: newSessionId
+        ? "Profile and password updated successfully."
+        : "Profile updated successfully!",
       user: updatedUser,
     });
+
+    if (newSessionId) {
+      const updatedToken = await signJWT({
+        userId: updatedUser.id,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        isPaid: updatedUser.isPaid,
+        activeSessionId: newSessionId,
+        sessionId: newSessionId,
+      });
+
+      response.cookies.set("cse_session", updatedToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60, // 7 days
+      });
+    }
+
+    return response;
   } catch (error) {
     console.error("[PROFILE_UPDATE_ERROR]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

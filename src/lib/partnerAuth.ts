@@ -54,7 +54,7 @@ export async function signPartnerJWT(partnerId: string, emailOrCode: string): Pr
 /**
  * Verifies a Partner JWT token.
  */
-export async function verifyPartnerJWT(token: string): Promise<{ partnerId: string; role: string } | null> {
+export async function verifyPartnerJWT(token: string): Promise<{ partnerId: string; role: string; iat?: number } | null> {
   try {
     const secretKey = getPartnerSecretKey();
     const { payload } = await jwtVerify(token, secretKey);
@@ -64,6 +64,7 @@ export async function verifyPartnerJWT(token: string): Promise<{ partnerId: stri
     return {
       partnerId: String(payload.partnerId),
       role: String(payload.role),
+      iat: typeof payload.iat === "number" ? payload.iat : undefined,
     };
   } catch {
     return null;
@@ -112,11 +113,21 @@ export async function getAuthenticatedPartner(req?: Request): Promise<Authentica
         holdingPeriodDays: true,
         badgeText: true,
         tagline: true,
+        updatedAt: true,
       },
     });
 
     if (!partner || partner.status !== "ACTIVE") {
       return null;
+    }
+
+    if (payload.iat && partner.updatedAt) {
+      const issuedAtSeconds = payload.iat;
+      const passwordUpdatedSeconds = Math.floor(new Date(partner.updatedAt).getTime() / 1000);
+      // If token was issued before the most recent password update, reject session
+      if (issuedAtSeconds < passwordUpdatedSeconds) {
+        return null;
+      }
     }
 
     return partner;

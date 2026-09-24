@@ -10,6 +10,8 @@ import {
   getClientIp,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import crypto from "crypto";
+import { logger } from "@/lib/logger/logger";
 
 export async function GET(request: Request) {
   try {
@@ -31,9 +33,14 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Setup token is required." }, { status: 400 });
     }
 
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
     const partner = await prisma.partner.findFirst({
       where: {
-        setupToken: token,
+        OR: [
+          { setupToken: hashedToken },
+          { setupToken: token },
+        ],
         setupTokenExpires: { gt: new Date() },
       },
       select: {
@@ -63,7 +70,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error("[PARTNER_SETUP_GET_ERROR]", error);
+    logger.error("[PARTNER_SETUP_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to verify setup token" }, { status: 500 });
   }
 }
@@ -98,8 +105,22 @@ export async function POST(request: Request) {
       );
     }
 
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const existingPartner = await prisma.partner.findFirst({
+      where: {
+        OR: [
+          { setupToken: hashedToken },
+          { setupToken: token },
+        ],
+        setupTokenExpires: { gt: new Date() },
+      },
+      select: { setupToken: true },
+    });
+
+    const tokenToConsume = existingPartner?.setupToken || token;
+
     const res = await PartnerService.activatePartnerWithSetupToken({
-      token,
+      token: tokenToConsume,
       password,
     });
 
@@ -125,7 +146,7 @@ export async function POST(request: Request) {
       partnerId: displayId,
     });
   } catch (error) {
-    console.error("[PARTNER_SETUP_POST_ERROR]", error);
+    logger.error("[PARTNER_SETUP_POST_ERROR]", error);
     return NextResponse.json({ error: "Failed to activate partner account" }, { status: 500 });
   }
 }

@@ -102,6 +102,16 @@ export const GUIDED_CHECK_LIMITER = createLimiter(
   `@ratelimit/${rateLimitEnvironment}/guided_check`
 );
 
+// 🔒 13. Voucher Redeem Limiter: 5 requests per 60 seconds (Institutional voucher redemption)
+export const VOUCHER_REDEEM_LIMITER = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(5, "60 s"),
+      analytics: true,
+      prefix: "ratelimit:voucher",
+    })
+  : null;
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;
@@ -139,11 +149,25 @@ export async function checkRateLimit(
  * Extracts client IP address from Next.js request headers.
  */
 export function getClientIp(req: Request): string {
+  // 1. Edge-verified Cloudflare connecting IP
+  const cfIp = req.headers.get("cf-connecting-ip");
+  if (cfIp) return cfIp.trim();
+
+  // 2. Edge-verified Vercel incoming IP
+  const vercelIp = req.headers.get("x-vercel-ip") || req.headers.get("x-real-ip");
+  if (vercelIp) return vercelIp.trim();
+
+  // 3. Fallback to X-Forwarded-For (standard proxy chain)
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) {
-    return forwarded.split(",")[0].trim();
+    const ips = forwarded.split(",").map((ip) => ip.trim()).filter(Boolean);
+    if (ips.length > 0) {
+      return ips[0];
+    }
   }
-  return req.headers.get("x-real-ip") || "127.0.0.1";
+
+  // 4. Default fallback for local development / testing
+  return "127.0.0.1";
 }
 
 /**

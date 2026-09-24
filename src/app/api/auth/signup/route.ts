@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { sendVerificationEmail } from "@/lib/email";
@@ -28,6 +29,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
+    if (typeof password !== "string" || password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long." },
+        { status: 400 }
+      );
+    }
+
     const formattedEmail = String(email).toLowerCase().trim();
 
     // Check if user already exists
@@ -47,16 +55,30 @@ export async function POST(request: Request) {
     const verificationExpires = new Date(Date.now() + 24 * 3600 * 1000);
 
     // Create the user with verification fields
-    const newUser = await prisma.user.create({
-      data: {
-        name: String(name).trim(),
-        email: formattedEmail,
-        password: hashedPassword,
-        isEmailVerified: false,
-        emailVerificationToken: verificationToken,
-        emailVerificationExpires: verificationExpires,
-      },
-    });
+    let newUser;
+    try {
+      newUser = await prisma.user.create({
+        data: {
+          name: String(name).trim(),
+          email: formattedEmail,
+          password: hashedPassword,
+          isEmailVerified: false,
+          emailVerificationToken: verificationToken,
+          emailVerificationExpires: verificationExpires,
+        },
+      });
+    } catch (createError) {
+      if (
+        createError instanceof Prisma.PrismaClientKnownRequestError &&
+        createError.code === "P2002"
+      ) {
+        return NextResponse.json(
+          { error: "An account with this email address already exists." },
+          { status: 409 }
+        );
+      }
+      throw createError;
+    }
 
     // 🎁 1. Referral & Partner Attribution
     try {

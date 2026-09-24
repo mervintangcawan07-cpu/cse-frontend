@@ -20,46 +20,71 @@ export async function POST(request: Request) {
     }
     const userId = authentication.session.user.id;
 
+    const contentLength = Number(request.headers.get("content-length") || 0);
+    const MAX_IMPORT_BYTES = 5 * 1024 * 1024; // 5 MB ceiling
+
+    if (contentLength > MAX_IMPORT_BYTES) {
+      return NextResponse.json(
+        { error: "Import file exceeds maximum allowed size of 5MB." },
+        { status: 413 }
+      );
+    }
+
     const contentType = request.headers.get("content-type") || "";
     let validQuestions: any[] = [];
 
     // Parse incoming CSV text, Multipart Form Data, or JSON payloads
-    if (contentType.includes("multipart/form-data")) {
-      const formData = await request.formData();
-      let fileContent = "";
-      for (const value of formData.values()) {
-        if (typeof value === "string") {
-          fileContent = value;
-          break;
-        } else if (value && typeof (value as any).text === "function") {
-          fileContent = await (value as any).text();
-          break;
+    try {
+      if (contentType.includes("multipart/form-data")) {
+        const formData = await request.formData();
+        let fileContent = "";
+        for (const value of formData.values()) {
+          if (typeof value === "string") {
+            fileContent = value;
+            break;
+          } else if (value && typeof (value as any).text === "function") {
+            fileContent = await (value as any).text();
+            break;
+          }
         }
-      }
-      if (!fileContent.trim()) {
-        return NextResponse.json({ error: "No file content found in multipart form data" }, { status: 400 });
-      }
-      validQuestions = parseCSVToQuestions(fileContent);
-    } else if (contentType.includes("text/csv") || contentType.includes("text/plain")) {
-      const csvText = await request.text();
-      validQuestions = parseCSVToQuestions(csvText);
-    } else if (contentType.includes("application/json") || contentType === "") {
-      const body = await request.json();
-      if (typeof body.csvText === "string") {
-        validQuestions = parseCSVToQuestions(body.csvText);
-      } else if (Array.isArray(body)) {
-        validQuestions = parseCSVToQuestions(Papa.unparse(body));
-      } else if (body.questions && Array.isArray(body.questions)) {
-        validQuestions = parseCSVToQuestions(Papa.unparse(body.questions));
+        if (!fileContent.trim()) {
+          return NextResponse.json({ error: "No file content found in multipart form data" }, { status: 400 });
+        }
+        validQuestions = parseCSVToQuestions(fileContent);
+      } else if (contentType.includes("text/csv") || contentType.includes("text/plain")) {
+        const csvText = await request.text();
+        validQuestions = parseCSVToQuestions(csvText);
+      } else if (contentType.includes("application/json") || contentType === "") {
+        const body = await request.json();
+        if (typeof body.csvText === "string") {
+          validQuestions = parseCSVToQuestions(body.csvText);
+        } else if (Array.isArray(body)) {
+          validQuestions = parseCSVToQuestions(Papa.unparse(body));
+        } else if (body.questions && Array.isArray(body.questions)) {
+          validQuestions = parseCSVToQuestions(Papa.unparse(body.questions));
+        } else {
+          validQuestions = parseCSVToQuestions(Papa.unparse([body]));
+        }
       } else {
-        validQuestions = parseCSVToQuestions(Papa.unparse([body]));
+        return NextResponse.json({ error: "Unsupported media type" }, { status: 415 });
       }
-    } else {
-      return NextResponse.json({ error: "Unsupported media type" }, { status: 415 });
+    } catch (parseError: any) {
+      console.error("[QUESTION_IMPORT_PARSE_ERROR]", parseError);
+      return NextResponse.json(
+        { error: "Failed to parse question import data. Please verify file format." },
+        { status: 400 }
+      );
     }
 
     if (!Array.isArray(validQuestions) || validQuestions.length === 0) {
       return NextResponse.json({ error: "No valid questions passed validation rules" }, { status: 400 });
+    }
+
+    if (validQuestions.length > 1000) {
+      return NextResponse.json(
+        { error: "Batch exceeds limit of 1,000 questions per import operation." },
+        { status: 400 }
+      );
     }
 
     // Format for Prisma insert

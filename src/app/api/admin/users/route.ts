@@ -6,6 +6,7 @@ import {
   buildBoundedPage,
   validateBoundedPaginationQuery,
 } from "@/lib/validation/schemas";
+import { logger } from "@/lib/logger/logger";
 
 // 1. GET USERS WITH SEARCH & SUBSCRIPTION STATS
 export async function GET(request: Request) {
@@ -63,7 +64,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ users: page.items, pagination: page.pagination });
   } catch (error) {
-    console.error("[ADMIN_USERS_GET]", error);
+    logger.error("[ADMIN_USERS_GET]", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -164,7 +165,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json({ success: true, user: transactionResult.user });
   } catch (error) {
-    console.error("[ADMIN_USERS_PATCH]", error);
+    logger.error("[ADMIN_USERS_PATCH]", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

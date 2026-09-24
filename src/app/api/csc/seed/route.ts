@@ -1,7 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json({ error: "Seeding disabled in production." }, { status: 403 });
+  }
+
+  const { user, errorResponse } = await requireAdminAuth(request);
+  if (errorResponse) return errorResponse;
+
   try {
     // 1. Seed Official Upcoming Civil Service Exam Schedule (CSE-PPT)
     const examSchedule = await prisma.cSCExamSchedule.upsert({

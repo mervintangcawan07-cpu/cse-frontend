@@ -9,6 +9,7 @@ import {
   createRateLimitResponse,
 } from "@/lib/ratelimit";
 import { isAccountOperational } from "@/lib/accountLifecycle";
+import { logger } from "@/lib/logger/logger";
 
 export async function POST(request: Request) {
   try {
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
     const resetExpires = new Date(Date.now() + 3600 * 1000);
 
     const tokenUpdate = await prisma.user.updateMany({
@@ -66,7 +68,7 @@ export async function POST(request: Request) {
         deletedAt: null,
       },
       data: {
-        passwordResetToken: resetToken,
+        passwordResetToken: hashedResetToken,
         passwordResetExpires: resetExpires,
       },
     });
@@ -79,7 +81,7 @@ export async function POST(request: Request) {
 
     return genericSuccessResponse;
   } catch (error) {
-    console.error("Forgot password error:", error);
+    logger.error("Forgot password error:", error);
     return NextResponse.json({
       success: true,
       message: "If an account exists with this email, a reset link has been sent.",

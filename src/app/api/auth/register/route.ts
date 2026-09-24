@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
   AUTH_LIMITER,
@@ -22,15 +23,24 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, email, password, referralCode } = body;
 
-    if (!email || !password) {
+    const cleanEmail = String(email || "").trim().toLowerCase();
+
+    if (!cleanEmail || !password) {
       return NextResponse.json(
         { error: "Email and password are required." },
         { status: 400 }
       );
     }
 
+    if (typeof password !== "string" || password.length < 8) {
+      return NextResponse.json(
+        { error: "Password must be at least 8 characters long." },
+        { status: 400 }
+      );
+    }
+
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: cleanEmail },
     });
 
     if (existingUser) {
@@ -42,22 +52,36 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role: "USER",
-        isPaid: false,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        isPaid: true,
-      },
-    });
+    let user;
+    try {
+      user = await prisma.user.create({
+        data: {
+          name: typeof name === "string" ? name.trim() : null,
+          email: cleanEmail,
+          password: hashedPassword,
+          role: "USER",
+          isPaid: false,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          isPaid: true,
+        },
+      });
+    } catch (createError) {
+      if (
+        createError instanceof Prisma.PrismaClientKnownRequestError &&
+        createError.code === "P2002"
+      ) {
+        return NextResponse.json(
+          { error: "An account with this email address already exists." },
+          { status: 409 }
+        );
+      }
+      throw createError;
+    }
 
     // 🎁 Referral & Partner Attribution
     try {

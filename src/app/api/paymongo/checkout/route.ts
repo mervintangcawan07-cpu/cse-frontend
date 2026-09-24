@@ -242,6 +242,7 @@ export async function POST(request: Request) {
     if (checkoutSessionId) {
       cookieStore.set("cse_checkout_id", checkoutSessionId, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         path: "/",
         maxAge: 86400,
         sameSite: "lax",
@@ -249,6 +250,7 @@ export async function POST(request: Request) {
 
       cookieStore.set("cse_checkout_plan", planType, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         path: "/",
         maxAge: 86400,
         sameSite: "lax",

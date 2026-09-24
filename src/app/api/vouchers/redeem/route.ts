@@ -2,12 +2,24 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuthUser } from "@/lib/serverAuth";
+import {
+  VOUCHER_REDEEM_LIMITER,
+  checkRateLimit,
+  createRateLimitResponse,
+  getClientIp,
+} from "@/lib/ratelimit";
 
 export async function POST(request: Request) {
   try {
     const { user, errorResponse } = await requireAuthUser(request);
     if (errorResponse) return errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+
+    const identifier = user?.id ? `voucher:user:${user.id}` : `voucher:ip:${getClientIp(request)}`;
+    const rateResult = await checkRateLimit(VOUCHER_REDEEM_LIMITER, identifier);
+    if (!rateResult.success) {
+      return createRateLimitResponse(rateResult, "Too many voucher redemption attempts. Please wait a minute.");
+    }
 
     const body = await request.json();
     const { code } = body;

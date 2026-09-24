@@ -63,6 +63,7 @@ In 2 short, encouraging sentences, pinpoint the exact logical trap or misconcept
             body: JSON.stringify({
               contents: [{ parts: [{ text: aiPrompt }] }],
             }),
+            signal: AbortSignal.timeout(20000),
           }
         );
 
@@ -72,8 +73,12 @@ In 2 short, encouraging sentences, pinpoint the exact logical trap or misconcept
         if (aiExplanation) {
           return NextResponse.json({ success: true, explanation: aiExplanation });
         }
-      } catch (geminiErr) {
-        console.error("Gemini API error, executing fallback:", geminiErr);
+      } catch (geminiErr: any) {
+        if (geminiErr?.name === "TimeoutError" || geminiErr?.name === "AbortError") {
+          console.warn("[GEMINI_TIMEOUT_FALLBACK] AI explanation timed out after 20s, falling back to local engine.");
+        } else {
+          console.error("Gemini API error, executing fallback:", geminiErr);
+        }
       }
     }
 
@@ -83,7 +88,13 @@ In 2 short, encouraging sentences, pinpoint the exact logical trap or misconcept
     }`;
 
     return NextResponse.json({ success: true, explanation: fallback });
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+      return NextResponse.json(
+        { error: "AI explanation request timed out. Please try again." },
+        { status: 504 }
+      );
+    }
     console.error("AI Explain Mistake Error:", error);
     return NextResponse.json({ error: "Failed to generate AI analysis" }, { status: 500 });
   }

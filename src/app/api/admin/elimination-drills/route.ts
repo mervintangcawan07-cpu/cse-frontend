@@ -35,8 +35,7 @@ export async function GET() {
 
     if (
       !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+      authentication.session.user.role !== "ADMIN"
     ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
@@ -64,8 +63,7 @@ export async function POST(request: Request) {
 
     if (
       !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+      authentication.session.user.role !== "ADMIN"
     ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
@@ -198,8 +196,7 @@ export async function DELETE(request: Request) {
 
     if (
       !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+      authentication.session.user.role !== "ADMIN"
     ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }
@@ -263,8 +260,7 @@ export async function PUT(request: Request) {
 
     if (
       !authentication.authenticated ||
-      (authentication.session.user.role !== "ADMIN" &&
-        authentication.session.user.email !== "mervintangcawan07@gmail.com")
+      authentication.session.user.role !== "ADMIN"
     ) {
       return NextResponse.json({ error: "Access denied. Admin privileges required." }, { status: 403 });
     }

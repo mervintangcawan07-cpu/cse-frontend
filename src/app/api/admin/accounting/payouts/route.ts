@@ -9,6 +9,7 @@ import { sendPartnerPayoutProcessedEmail } from "@/lib/email";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { getSiteUrl } from "@/lib/config/site";
+import { logger } from "@/lib/logger/logger";
 
 export async function GET(request: Request) {
   try {
@@ -100,7 +101,7 @@ export async function GET(request: Request) {
       payouts: combined,
     });
   } catch (error) {
-    console.error("[ADMIN_ACCOUNTING_PAYOUTS_GET_ERROR]", error);
+    logger.error("[ADMIN_ACCOUNTING_PAYOUTS_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch payouts" }, { status: 500 });
   }
 }
@@ -344,7 +345,7 @@ export async function PATCH(request: Request) {
             payoutMethod: String(txResult.partnerPayout!.method),
             transactionRef: transactionRef || undefined,
             dashboardUrl: `${getSiteUrl()}/partner-portal/payouts`,
-          }).catch((err) => console.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));
+          }).catch((err) => logger.error("[PARTNER_PAYOUT_EMAIL_ERROR]", err));
         }
       }
     }
@@ -354,7 +355,7 @@ export async function PATCH(request: Request) {
       message: `Payout successfully updated: ${action}`,
     });
   } catch (error) {
-    console.error("[ADMIN_ACCOUNTING_PAYOUTS_PATCH_ERROR]", error);
+    logger.error("[ADMIN_ACCOUNTING_PAYOUTS_PATCH_ERROR]", error);
     return NextResponse.json({ error: "Failed to process payout" }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { logger } from "@/lib/logger/logger";
 
 export interface ParsedPayMongoSignature {
   timestamp: string;
@@ -270,11 +271,15 @@ export async function handlePaymongoWebhook(request: Request): Promise<NextRespo
     // Unhandled event types from allowlist
     return NextResponse.json({ received: true, ignored: true }, { status: 200 });
   } catch (error: unknown) {
-    console.error("[PayMongo Webhook Error]:", error);
+    logger.error("[PayMongo Webhook Error]", error);
     const message = error instanceof Error ? error.message : String(error);
     const isConflict = message.includes("TERMINAL_STATE_CONFLICT");
     return NextResponse.json(
-      { error: message },
+      {
+        error: isConflict
+          ? "Payment is already in a terminal state."
+          : "Internal error processing payment webhook.",
+      },
       { status: isConflict ? 409 : 500 }
     );
   }

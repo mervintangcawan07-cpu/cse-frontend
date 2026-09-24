@@ -24,6 +24,16 @@ interface Bookmark {
   targetType: string;
 }
 
+const isSafeUrl = (url?: string | null) => {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+};
+
 export default function ReviewerPage() {
   const router = useRouter();
   const { user, status } = useAuth();
@@ -289,7 +299,7 @@ export default function ReviewerPage() {
                     {note.tips && <ProTipBullets proTip={note.tips} />}
 
                     {/* VIDEO EXPLANATION BUTTON */}
-                    {note.videoUrl && (
+                    {note.videoUrl && isSafeUrl(note.videoUrl) && (
                       <div className="pt-1">
                         <a
                           href={note.videoUrl}

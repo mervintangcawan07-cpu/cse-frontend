@@ -6,6 +6,7 @@ import {
   checkRateLimit,
   createRateLimitResponse,
 } from "@/lib/ratelimit";
+import { logger } from "@/lib/logger/logger";
 
 export async function POST() {
   try {
@@ -41,6 +42,7 @@ export async function POST() {
 
     const response = await fetch(`https://api.paymongo.com/v1/checkout_sessions/${checkoutSessionId}`, {
       headers: { Authorization: `Basic ${authHeader}` },
+      signal: AbortSignal.timeout(10000),
     });
 
     const data = await response.json();
@@ -160,9 +162,22 @@ export async function POST() {
 
     return NextResponse.json({ success: false, message: "Payment pending or unpaid." });
   } catch (error: unknown) {
-    console.error("[VERIFY_CATCH_ERROR]", error);
-    const msg = error instanceof Error ? error.message : "Verification failed";
+    if (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) {
+      return NextResponse.json(
+        { error: "Payment verification timed out. Please retry." },
+        { status: 504 }
+      );
+    }
+    logger.error("[VERIFY_CATCH_ERROR]", error);
+    const msg = error instanceof Error ? error.message : "";
     const isConflict = msg.includes("TERMINAL_STATE_CONFLICT");
-    return NextResponse.json({ error: msg }, { status: isConflict ? 409 : 500 });
+    return NextResponse.json(
+      {
+        error: isConflict
+          ? "Payment is already in a terminal state."
+          : "Payment verification failed. Please try again or contact support.",
+      },
+      { status: isConflict ? 409 : 500 }
+    );
   }
 }

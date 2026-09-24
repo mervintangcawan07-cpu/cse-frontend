@@ -1,7 +1,7 @@
 // Relative Path: src/app/api/partner/portal/security/route.ts
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { requirePartnerAuth } from "@/lib/partnerAuth";
+import { requirePartnerAuth, signPartnerJWT } from "@/lib/partnerAuth";
 import { prisma } from "@/lib/prisma";
 import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 
@@ -87,6 +87,7 @@ export async function POST(request: Request) {
         passwordHash,
         tempPasswordHash: null,
         mustChangePassword: false,
+        updatedAt: new Date(),
       },
     });
 
@@ -96,10 +97,23 @@ export async function POST(request: Request) {
       reason: "User initiated password update from Security tab",
     });
 
-    return NextResponse.json({
+    const displayId = partner.partnerId || partner.code;
+    const updatedToken = await signPartnerJWT(partner.id, displayId);
+
+    const response = NextResponse.json({
       success: true,
       message: "Password updated successfully!",
     });
+
+    response.cookies.set("cse_partner_session", updatedToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error("[PARTNER_SECURITY_POST_ERROR]", error);
     return NextResponse.json({ error: "Failed to update password" }, { status: 500 });

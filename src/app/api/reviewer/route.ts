@@ -30,6 +30,19 @@ export async function GET(req: Request) {
   }
 }
 
+function isValidVideoUrl(url: unknown): boolean {
+  if (url === null || url === undefined || url === "") return true;
+  if (typeof url !== "string") return false;
+  const trimmed = url.trim();
+  if (trimmed === "") return true;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 // POST: Create a new study note
 export async function POST(req: Request) {
   try {
@@ -37,6 +50,14 @@ export async function POST(req: Request) {
     if (errorResponse) return errorResponse;
 
     const { category, title, summary, content, tips, videoUrl } = await req.json();
+
+    if (!isValidVideoUrl(videoUrl)) {
+      return NextResponse.json(
+        { error: "Invalid video URL. Only HTTP and HTTPS links are allowed." },
+        { status: 400 }
+      );
+    }
+
     const note = await prisma.studyNote.create({
       data: {
         category,
@@ -44,7 +65,7 @@ export async function POST(req: Request) {
         summary,
         content: Array.isArray(content) ? content : [content],
         tips,
-        videoUrl: videoUrl || null,
+        videoUrl: typeof videoUrl === "string" && videoUrl.trim() ? videoUrl.trim() : null,
       },
     });
     revalidateReviewerCatalog();
@@ -63,6 +84,13 @@ export async function PUT(req: Request) {
     const { id, category, title, summary, content, tips, videoUrl } = await req.json();
     if (!id) return NextResponse.json({ error: "Note ID required" }, { status: 400 });
 
+    if (!isValidVideoUrl(videoUrl)) {
+      return NextResponse.json(
+        { error: "Invalid video URL. Only HTTP and HTTPS links are allowed." },
+        { status: 400 }
+      );
+    }
+
     const note = await prisma.studyNote.update({
       where: { id },
       data: {
@@ -71,7 +99,7 @@ export async function PUT(req: Request) {
         summary,
         content: Array.isArray(content) ? content : [content],
         tips,
-        videoUrl: videoUrl || null,
+        videoUrl: typeof videoUrl === "string" && videoUrl.trim() ? videoUrl.trim() : null,
       },
     });
     revalidateReviewerCatalog();

@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyJWT } from "@/lib/auth";
+import { verifyPartnerJWT } from "@/lib/partnerAuth";
 import { isStudyTogetherEnabled, isDuelEnabled } from "@/lib/config/features";
 
 export async function proxy(request: NextRequest) {
@@ -84,7 +85,35 @@ export async function proxy(request: NextRequest) {
   const token = request.cookies.get("cse_session")?.value;
   const session = token ? await verifyJWT(token) : null;
 
-  // 3. Admin Routes Protection (/admin and /admin/*)
+  // 3. Partner Portal Protection (/partner-portal and /partner-portal/*)
+  if (pathname.startsWith("/partner-portal")) {
+    const isPublicPartnerRoute =
+      pathname === "/partner-portal/login" ||
+      pathname === "/partner-portal/setup" ||
+      pathname === "/partner-portal/forgot-password" ||
+      pathname === "/partner-portal/reset-password";
+
+    const partnerToken = request.cookies.get("cse_partner_session")?.value;
+    const partnerSession = partnerToken ? await verifyPartnerJWT(partnerToken) : null;
+
+    if (isPublicPartnerRoute) {
+      if (pathname === "/partner-portal/login" && partnerSession) {
+        return NextResponse.redirect(new URL("/partner-portal/dashboard", request.url));
+      }
+      return NextResponse.next();
+    }
+
+    // Protected partner routes (e.g., /dashboard, /commissions, /payouts, etc.)
+    if (!partnerSession) {
+      return NextResponse.redirect(
+        new URL(`/partner-portal/login?redirect=${encodeURIComponent(pathname)}`, request.url)
+      );
+    }
+
+    return NextResponse.next();
+  }
+
+  // 4. Admin Routes Protection (/admin and /admin/*)
   if (pathname.startsWith("/admin")) {
     if (!session) {
       const loginUrl = new URL("/login", request.url);
@@ -100,7 +129,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 4. Protected User Routes
+  // 5. Protected User Routes
   const protectedUserPrefixes = [
     "/dashboard",
     "/practice",
@@ -127,7 +156,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 5. Auth pages (redirect to dashboard if already logged in)
+  // 6. Auth pages (redirect to dashboard if already logged in)
   if ((pathname === "/login" || pathname === "/register" || pathname === "/signup") && session) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
@@ -155,5 +184,6 @@ export const config = {
     "/login",
     "/register",
     "/signup",
+    "/partner-portal/:path*",
   ],
 };

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireProAuth } from "@/lib/serverAuth";
 import {
   buildHandbookBinaryEtag,
   matchesEtag,
@@ -32,6 +33,9 @@ import {
  */
 export async function GET(req: Request) {
   try {
+    const { user, errorResponse } = await requireProAuth(req);
+    if (errorResponse) return errorResponse;
+
     const id = new URL(req.url).searchParams.get("id");
     if (!id) {
       return new NextResponse("Missing document ID", {

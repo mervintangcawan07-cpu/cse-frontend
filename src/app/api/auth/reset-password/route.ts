@@ -8,6 +8,8 @@ import {
   createRateLimitResponse,
 } from "@/lib/ratelimit";
 import { isAccountOperational } from "@/lib/accountLifecycle";
+import crypto from "crypto";
+import { logger } from "@/lib/logger/logger";
 
 export async function POST(request: Request) {
   try {
@@ -34,9 +36,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Password must be at least 8 characters long" }, { status: 400 });
     }
 
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(String(token))
+      .digest("hex");
+
     const user = await prisma.user.findFirst({
       where: {
-        passwordResetToken: token,
+        OR: [
+          { passwordResetToken: hashedToken },
+          { passwordResetToken: token },
+        ],
         passwordResetExpires: { gt: new Date() },
       },
     });
@@ -54,6 +64,7 @@ export async function POST(request: Request) {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const matchingResetToken = user.passwordResetToken || hashedToken;
 
     const passwordUpdate = await prisma.user.updateMany({
       where: {
@@ -61,7 +72,7 @@ export async function POST(request: Request) {
         role: "USER",
         isBanned: false,
         deletedAt: null,
-        passwordResetToken: token,
+        passwordResetToken: matchingResetToken,
         passwordResetExpires: { gt: new Date() },
       },
       data: {
@@ -90,7 +101,7 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
-    console.error("Reset password error:", error);
+    logger.error("Reset password error:", error);
     return NextResponse.json({ error: "Failed to reset password" }, { status: 500 });
   }
 }

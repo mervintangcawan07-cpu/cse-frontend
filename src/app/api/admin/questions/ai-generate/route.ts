@@ -117,6 +117,7 @@ Return a valid JSON array of objects with the following schema:
             temperature: 0.3,
           },
         }),
+        signal: AbortSignal.timeout(20000),
       }
     );
 
@@ -168,7 +169,13 @@ Return a valid JSON array of objects with the following schema:
       questions: sanitizedQuestions,
       count: sanitizedQuestions.length,
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+      return NextResponse.json(
+        { error: "AI question generation timed out. Please retry." },
+        { status: 504 }
+      );
+    }
     console.error("AI Generate Questions error:", error);
     return NextResponse.json({ error: "Failed to generate questions via Gemini AI" }, { status: 500 });
   }

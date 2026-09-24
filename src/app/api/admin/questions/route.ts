@@ -42,6 +42,73 @@ export async function GET(request: Request) {
   }
 }
 
+function validateQuestionPayload(payload: {
+  prompt: unknown;
+  options: unknown;
+  answerIndex: unknown;
+  explanation?: unknown;
+  category?: unknown;
+  subtopic?: unknown;
+}): { valid: true; parsedAnswerIndex: number } | { valid: false; error: string } {
+  const { prompt, options, answerIndex, explanation, category, subtopic } = payload;
+
+  if (typeof prompt !== "string" || !prompt.trim()) {
+    return { valid: false, error: "Prompt is required and must be a non-empty string." };
+  }
+  if (prompt.length > 10000) {
+    return { valid: false, error: "Prompt exceeds maximum length of 10,000 characters." };
+  }
+
+  if (!Array.isArray(options) || options.length < 2 || options.length > 10) {
+    return { valid: false, error: "Options must be an array containing between 2 and 10 items." };
+  }
+
+  for (let i = 0; i < options.length; i++) {
+    const opt = options[i];
+    if (typeof opt !== "string" || !opt.trim()) {
+      return { valid: false, error: `Option at index ${i} must be a non-empty string.` };
+    }
+    if (opt.length > 2000) {
+      return { valid: false, error: `Option at index ${i} exceeds maximum length of 2,000 characters.` };
+    }
+  }
+
+  const parsedAnswerIndex = Number(answerIndex);
+  if (
+    !Number.isInteger(parsedAnswerIndex) ||
+    parsedAnswerIndex < 0 ||
+    parsedAnswerIndex >= options.length
+  ) {
+    return {
+      valid: false,
+      error: `answerIndex must be a valid integer between 0 and ${options.length - 1}.`,
+    };
+  }
+
+  if (explanation !== null && explanation !== undefined) {
+    if (typeof explanation !== "string") {
+      return { valid: false, error: "Explanation must be a string." };
+    }
+    if (explanation.length > 10000) {
+      return { valid: false, error: "Explanation exceeds maximum length of 10,000 characters." };
+    }
+  }
+
+  if (category !== null && category !== undefined) {
+    if (typeof category !== "string" || category.length > 255) {
+      return { valid: false, error: "Category must be a string not exceeding 255 characters." };
+    }
+  }
+
+  if (subtopic !== null && subtopic !== undefined) {
+    if (typeof subtopic !== "string" || subtopic.length > 255) {
+      return { valid: false, error: "Subtopic must be a string not exceeding 255 characters." };
+    }
+  }
+
+  return { valid: true, parsedAnswerIndex };
+}
+
 export async function POST(request: Request) {
   try {
     const { user, errorResponse } = await requireAdminAuth(request);
@@ -71,11 +138,17 @@ export async function POST(request: Request) {
       skillTested = null,
     } = body;
 
-    if (!prompt || !options || options.length < 2) {
-      return NextResponse.json(
-        { error: "Prompt and at least 2 options are required." },
-        { status: 400 }
-      );
+    const validation = validateQuestionPayload({
+      prompt,
+      options,
+      answerIndex,
+      explanation,
+      category,
+      subtopic,
+    });
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     assertQuestionBankMetadata({ category: category || "General", subtopic: subtopic || "General" }, "ORDINARY");
@@ -85,14 +158,14 @@ export async function POST(request: Request) {
         bankType: "ORDINARY",
         category: category || "General",
         subtopic: subtopic || "General",
-        prompt,
+        prompt: prompt.trim(),
         imageUrl,
         options,
         optionA: options[0] || null,
         optionB: options[1] || null,
         optionC: options[2] || null,
         optionD: options[3] || null,
-        answerIndex,
+        answerIndex: validation.parsedAnswerIndex,
         explanation,
         stepByStep,
         whyA,
@@ -154,24 +227,37 @@ export async function PUT(request: Request) {
       skillTested = null,
     } = body;
 
-    if (!id || !prompt || !options || options.length < 2) {
+    if (!id || typeof id !== "string") {
       return NextResponse.json(
-        { error: "Question ID, prompt, and at least 2 options are required." },
+        { error: "Question ID is required." },
         { status: 400 }
       );
+    }
+
+    const validation = validateQuestionPayload({
+      prompt,
+      options,
+      answerIndex,
+      explanation,
+      category,
+      subtopic,
+    });
+
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     const updatedQuestion = await updateBankQuestion("ORDINARY", id, {
         category: category || "General",
         subtopic: subtopic || "General",
-        prompt,
+        prompt: prompt.trim(),
         imageUrl,
         options,
         optionA: options[0] || null,
         optionB: options[1] || null,
         optionC: options[2] || null,
         optionD: options[3] || null,
-        answerIndex,
+        answerIndex: validation.parsedAnswerIndex,
         explanation,
         stepByStep,
         whyA,
