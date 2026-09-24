@@ -1,0 +1,21 @@
+﻿{
+  "$schema": "https://unpkg.com/knip@5/overview/config.json",
+  "next": {
+    "entry": [
+      "src/proxy.ts",
+      "src/app/**/{page,layout,loading,error,not-found,global-error,route,default,template}.{ts,tsx}"
+    ]
+  },
+  "project": ["src/**/*.{ts,tsx}"],
+  "ignore": [
+    "public/sw.js",
+    "src/scripts/**",
+    "prisma.integration.config.ts"
+  ],
+  "ignoreDependencies": [
+    "@tailwindcss/postcss",
+    "tailwindcss",
+    "tsx",
+    "dotenv"
+  ]
+}
