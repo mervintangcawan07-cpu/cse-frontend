@@ -10,7 +10,18 @@ if (!rawConnectionString) {
 }
 
 const databaseUrl = new URL(rawConnectionString);
-databaseUrl.searchParams.set("sslmode", "verify-full");
+
+// 🛡️ Local development & remote PgBouncer safety:
+// Only enforce verify-full SSL when connecting to remote hosts without an explicit sslmode.
+// For local Postgres (localhost / 127.0.0.1 / ::1), preserve unencrypted or local SSL settings.
+const isLocalhost =
+  databaseUrl.hostname === "localhost" ||
+  databaseUrl.hostname === "127.0.0.1" ||
+  databaseUrl.hostname === "::1";
+
+if (!isLocalhost && !databaseUrl.searchParams.has("sslmode")) {
+  databaseUrl.searchParams.set("sslmode", "verify-full");
+}
 
 const connectionString = databaseUrl.toString();
 
@@ -21,15 +32,30 @@ const globalForPrisma = globalThis as unknown as {
 
 // ⚡ NEON + VERCEL SERVERLESS OPTIMIZATION:
 // In Vercel serverless environments, each ephemeral lambda instance is single-threaded.
-// Setting max to 1 (or PG_POOL_MAX) and shortening timeouts avoids connection multiplication and UI hangs.
+// Setting max to 1 (or PG_POOL_MAX) avoids connection explosion on Neon PgBouncer.
+// In development, allow up to 10 connections for concurrent requests.
+const isProduction = process.env.NODE_ENV === "production";
+const defaultMax = isProduction ? 1 : 10;
+const poolMax = process.env.PG_POOL_MAX
+  ? parseInt(process.env.PG_POOL_MAX, 10)
+  : defaultMax;
+
 const pool =
   globalForPrisma.pool ??
   new Pool({
     connectionString,
-    max: process.env.PG_POOL_MAX ? parseInt(process.env.PG_POOL_MAX, 10) : 1,
+    max: poolMax,
     idleTimeoutMillis: 10000, // Return idle connections quickly to Neon PgBouncer
     connectionTimeoutMillis: 5000, // 5s fast timeout to prevent UI hanging during cold starts
+    allowExitOnIdle: true, // Allow Node.js processes to terminate cleanly without hanging on idle pool
   });
+
+// Catch idle socket resets from PgBouncer without crashing the process
+pool.on("error", (err) => {
+  if (process.env.NODE_ENV === "development") {
+    console.warn("[PG_POOL_WARN] Unexpected error on idle client:", err.message);
+  }
+});
 
 const adapter = new PrismaPg(pool);
 

@@ -70,11 +70,11 @@ model User {
   activeSessionId          String?
   lastActiveAt             DateTime?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  deletedBy String?
-  anonymizedAt          DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  deletedAt            DateTime?
+  deletedBy            String?
+  anonymizedAt         DateTime?
   anonymizationVersion Int?
 
   results               ExamResult[]
@@ -384,7 +384,7 @@ model ExamResult {
   examType     String  @default("FULL_MOCK")
   passed       Boolean @default(false)
 
-  attemptId      String?  @unique
+  attemptId      String? @unique
   submissionHash String?
 
   detailsJson String?  @db.Text
@@ -454,12 +454,13 @@ model Question {
   flags                 QuestionFlag[]
   activeInStudyRooms    StudyRoom[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
   deletedAt DateTime?
   deletedBy String?
   bankType  QuestionBankType
 
+  @@index([bankType, deletedAt, category, subtopic])
   @@index([category, subtopic])
   @@index([subtopic])
   @@index([difficulty])
@@ -630,6 +631,7 @@ model Notification {
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, isRead])
   @@index([isRead])
+  @@index([createdAt])
 }
 
 model ActivityLog {
@@ -697,22 +699,22 @@ model Transaction {
   user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   checkoutSessionId      String   @unique
   paymentIntentId        String?
-  amount                 Int      // amount in pesos or centavos as stored
-  grossAmountCentavos    Int?     // authoritative gross list price in centavos
+  amount                 Int // amount in pesos or centavos as stored
+  grossAmountCentavos    Int? // authoritative gross list price in centavos
   discountAmountCentavos Int?     @default(0) // discount applied in centavos
   feeAmountCentavos      Int?     @default(0) // PayMongo processing fee in centavos
-  netSettlementCentavos  Int?     // net proceeds received in centavos
+  netSettlementCentavos  Int? // net proceeds received in centavos
   planType               String
   status                 String
   receiptUrl             String?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
 
-  referralReward    ReferralReward?
-  partnerCommission PartnerCommission?
+  referralReward      ReferralReward?
+  partnerCommission   PartnerCommission?
   paymentFinalization PaymentFinalization?
-  ledgerEntries     FinancialLedgerEntry[]
-  taxRecords        TaxRecord[]
+  ledgerEntries       FinancialLedgerEntry[]
+  taxRecords          TaxRecord[]
 
   @@index([userId])
   @@index([status])
@@ -720,39 +722,39 @@ model Transaction {
 }
 
 model PaymentFinalization {
-  id                     String                               @id @default(cuid())
-  transactionId          String                               @unique
-  checkoutSessionId      String                               @unique
-  providerPaymentId      String?                              @unique
+  id                     String                          @id @default(cuid())
+  transactionId          String                          @unique
+  checkoutSessionId      String                          @unique
+  providerPaymentId      String?                         @unique
   providerPaidAt         DateTime?
   source                 PaymentFinalizationSource
-  origin                 PaymentFinalizationOrigin            @default(NEW_PAYMENT)
-  status                 PaymentFinalizationStatus            @default(PENDING)
-  manifestVersion        Int                                  @default(1)
-  manifestRevision       Int                                  @default(1)
-  manifestHash           String                               @db.VarChar(64)
+  origin                 PaymentFinalizationOrigin       @default(NEW_PAYMENT)
+  status                 PaymentFinalizationStatus       @default(PENDING)
+  manifestVersion        Int                             @default(1)
+  manifestRevision       Int                             @default(1)
+  manifestHash           String                          @db.VarChar(64)
   planType               String
-  currency               String                               @default("PHP")
+  currency               String                          @default("PHP")
   purchaseAmountCentavos Int
-  feeKnowledge           PaymentFinalizationFeeKnowledge      @default(UNKNOWN)
+  feeKnowledge           PaymentFinalizationFeeKnowledge @default(UNKNOWN)
   feeAmountCentavos      Int?
   feeObservedAt          DateTime?
   entitlementBefore      DateTime?
   entitlementAfter       DateTime?
-  verifiedAt             DateTime                             @default(now())
-  attemptCount           Int                                  @default(0)
+  verifiedAt             DateTime                        @default(now())
+  attemptCount           Int                             @default(0)
   lastAttemptAt          DateTime?
-  nextAttemptAt          DateTime                             @default(now())
-  leaseOwner             String?                              @db.VarChar(64)
+  nextAttemptAt          DateTime                        @default(now())
+  leaseOwner             String?                         @db.VarChar(64)
   leaseExpiresAt         DateTime?
-  lastErrorCode          String?                              @db.VarChar(64)
-  lastErrorMessage       String?                              @db.VarChar(500)
-  manualReviewReasonCode String?                              @db.VarChar(64)
+  lastErrorCode          String?                         @db.VarChar(64)
+  lastErrorMessage       String?                         @db.VarChar(500)
+  manualReviewReasonCode String?                         @db.VarChar(64)
   completedAt            DateTime?
-  createdAt              DateTime                             @default(now())
-  updatedAt              DateTime                             @updatedAt
+  createdAt              DateTime                        @default(now())
+  updatedAt              DateTime                        @updatedAt
 
-  transaction Transaction                 @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+  transaction Transaction                           @relation(fields: [transactionId], references: [id], onDelete: Restrict)
   effects     PaymentFinalizationEffect[]
   revisions   PaymentFinalizationManifestRevision[]
 
@@ -761,36 +763,36 @@ model PaymentFinalization {
 }
 
 model PaymentFinalizationEffect {
-  id                     String                            @id @default(cuid())
+  id                     String                          @id @default(cuid())
   finalizationId         String
   effectType             PaymentFinalizationEffectType
-  effectKey              String                            @db.VarChar(191)
-  operationKey           String                            @unique @db.VarChar(255)
-  status                 PaymentFinalizationEffectStatus  @default(PENDING)
-  intentVersion          Int                               @default(1)
+  effectKey              String                          @db.VarChar(191)
+  operationKey           String                          @unique @db.VarChar(255)
+  status                 PaymentFinalizationEffectStatus @default(PENDING)
+  intentVersion          Int                             @default(1)
   intent                 Json
-  intentHash             String                            @db.VarChar(64)
+  intentHash             String                          @db.VarChar(64)
   referralId             String?
   partnerId              String?
   taxConfigId            String?
-  attemptCount           Int                               @default(0)
+  attemptCount           Int                             @default(0)
   lastAttemptAt          DateTime?
-  nextAttemptAt          DateTime                          @default(now())
-  lastErrorCode          String?                           @db.VarChar(64)
-  lastErrorMessage       String?                           @db.VarChar(500)
-  manualReviewReasonCode String?                           @db.VarChar(64)
+  nextAttemptAt          DateTime                        @default(now())
+  lastErrorCode          String?                         @db.VarChar(64)
+  lastErrorMessage       String?                         @db.VarChar(500)
+  manualReviewReasonCode String?                         @db.VarChar(64)
   completedAt            DateTime?
-  createdAt              DateTime                          @default(now())
-  updatedAt              DateTime                          @updatedAt
+  createdAt              DateTime                        @default(now())
+  updatedAt              DateTime                        @updatedAt
 
-  finalization        PaymentFinalization   @relation(fields: [finalizationId], references: [id], onDelete: Restrict)
-  referral            Referral?             @relation(fields: [referralId], references: [id], onDelete: Restrict)
-  partner             Partner?              @relation(fields: [partnerId], references: [id], onDelete: Restrict)
-  taxConfig           TaxConfiguration?     @relation(fields: [taxConfigId], references: [id], onDelete: Restrict)
-  ledgerEntries       FinancialLedgerEntry[]
-  referralReward      ReferralReward?
-  partnerCommission   PartnerCommission?
-  taxRecord           TaxRecord?
+  finalization         PaymentFinalization    @relation(fields: [finalizationId], references: [id], onDelete: Restrict)
+  referral             Referral?              @relation(fields: [referralId], references: [id], onDelete: Restrict)
+  partner              Partner?               @relation(fields: [partnerId], references: [id], onDelete: Restrict)
+  taxConfig            TaxConfiguration?      @relation(fields: [taxConfigId], references: [id], onDelete: Restrict)
+  ledgerEntries        FinancialLedgerEntry[]
+  referralReward       ReferralReward?
+  partnerCommission    PartnerCommission?
+  taxRecord            TaxRecord?
   reconciliationRecord ReconciliationRecord?
 
   @@unique([finalizationId, effectType, effectKey], map: "PaymentFinalizationEffect_finalization_effect_key")
@@ -814,9 +816,9 @@ model PaymentFinalizationManifestRevision {
 
   finalization PaymentFinalization @relation(fields: [finalizationId], references: [id], onDelete: Restrict)
 
-  @@index([finalizationId], map: "PFinManifestRevision_fin_id_idx")
   @@unique([finalizationId, manifestRevision], map: "PFinManifestRevision_fin_rev_key")
   @@unique([finalizationId, parentManifestHash], map: "PFinManifestRevision_parent_key")
+  @@index([finalizationId], map: "PFinManifestRevision_fin_id_idx")
 }
 
 model Flashcard {
@@ -865,7 +867,9 @@ model DuelMatch {
   updatedAt        DateTime   @updatedAt
 
   @@index([status, createdAt(sort: Desc)])
+  @@index([status, player2Id])
   @@index([player1Id])
+  @@index([player2Id])
   @@index([challengedUserId])
 }
 
@@ -1093,14 +1097,14 @@ model StudyPost {
   isAnonymous    Boolean        @default(false)
   isPinned       Boolean        @default(false)
   pinnedAt       DateTime?
-  
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  deletedAt      DateTime?
 
-  author         User                 @relation("UserStudyPosts", fields: [authorId], references: [id], onDelete: Cascade)
-  comments       StudyPostComment[]
-  reactions      StudyPostReaction[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  author    User                @relation("UserStudyPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  comments  StudyPostComment[]
+  reactions StudyPostReaction[]
 
   @@index([authorId])
   @@index([topic])
@@ -1110,19 +1114,19 @@ model StudyPost {
 }
 
 model StudyPostComment {
-  id          String    @id @default(cuid())
+  id          String  @id @default(cuid())
   postId      String
   authorId    String
-  content     String    @db.Text
-  isAnonymous Boolean   @default(false)
-  isAccepted  Boolean   @default(false)
+  content     String  @db.Text
+  isAnonymous Boolean @default(false)
+  isAccepted  Boolean @default(false)
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
-  post        StudyPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author      User      @relation("UserStudyPostComments", fields: [authorId], references: [id], onDelete: Cascade)
+  post   StudyPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User      @relation("UserStudyPostComments", fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([postId, createdAt(sort: Asc)])
   @@index([authorId])
@@ -1135,10 +1139,10 @@ model StudyPostReaction {
   userId       String
   reactionType StudyReactionType
 
-  createdAt    DateTime          @default(now())
+  createdAt DateTime @default(now())
 
-  post         StudyPost         @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user         User              @relation("UserStudyPostReactions", fields: [userId], references: [id], onDelete: Cascade)
+  post StudyPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User      @relation("UserStudyPostReactions", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId, reactionType])
   @@index([postId])
@@ -1251,9 +1255,9 @@ model Referral {
   referralCodeId      String
   status              ReferralStatus    @default(PENDING_PREMIUM)
   qualifyingPaymentId String?           @unique
-  qualifyingAmount    Int?              // in centavos (e.g. 29900 = ₱299.00)
-  effectiveRate       Float?            // e.g. 20.0
-  rewardAmount        Int?              // in centavos (e.g. 5980 = ₱59.80)
+  qualifyingAmount    Int? // in centavos (e.g. 29900 = ₱299.00)
+  effectiveRate       Float? // e.g. 20.0
+  rewardAmount        Int? // in centavos (e.g. 5980 = ₱59.80)
   holdingUntil        DateTime?
   riskLevel           ReferralRiskLevel @default(LOW_RISK)
   riskNotes           String?           @db.Text
@@ -1262,14 +1266,15 @@ model Referral {
   availableAt         DateTime?
   updatedAt           DateTime          @updatedAt
 
-  inviter      User            @relation("InvitedReferrals", fields: [inviterId], references: [id], onDelete: Cascade)
-  referredUser User            @relation("ReceivedReferral", fields: [referredUserId], references: [id], onDelete: Cascade)
-  referralCode ReferralCode    @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
-  reward       ReferralReward?
+  inviter                    User                        @relation("InvitedReferrals", fields: [inviterId], references: [id], onDelete: Cascade)
+  referredUser               User                        @relation("ReceivedReferral", fields: [referredUserId], references: [id], onDelete: Cascade)
+  referralCode               ReferralCode                @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+  reward                     ReferralReward?
   paymentFinalizationEffects PaymentFinalizationEffect[]
 
   @@index([inviterId, status])
   @@index([status])
+  @@index([holdingUntil])
   @@index([createdAt(sort: Desc)])
   @@index([riskLevel])
 }
@@ -1283,8 +1288,8 @@ model ReferralReward {
   finalizationEffectId   String?            @unique
   purchaseAmountCentavos Int
   rewardType             ReferralRewardType @default(PERCENTAGE)
-  effectiveRate          Float              // e.g. 20.0 (immutable rate at creation)
-  rewardAmountCentavos   Int                // e.g. 5980 (immutable calculated amount in centavos)
+  effectiveRate          Float // e.g. 20.0 (immutable rate at creation)
+  rewardAmountCentavos   Int // e.g. 5980 (immutable calculated amount in centavos)
   currency               String             @default("PHP")
   status                 RewardLedgerStatus @default(PENDING)
   holdingUntil           DateTime?
@@ -1294,10 +1299,10 @@ model ReferralReward {
   createdAt              DateTime           @default(now())
   updatedAt              DateTime           @updatedAt
 
-  referral     Referral     @relation(fields: [referralId], references: [id], onDelete: Cascade)
-  inviter      User         @relation("EarnedRewards", fields: [inviterId], references: [id], onDelete: Cascade)
-  referredUser User         @relation("GeneratedRewards", fields: [referredUserId], references: [id], onDelete: Cascade)
-  transaction  Transaction  @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  referral           Referral                   @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  inviter            User                       @relation("EarnedRewards", fields: [inviterId], references: [id], onDelete: Cascade)
+  referredUser       User                       @relation("GeneratedRewards", fields: [referredUserId], references: [id], onDelete: Cascade)
+  transaction        Transaction                @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   finalizationEffect PaymentFinalizationEffect? @relation(fields: [finalizationEffectId], references: [id], onDelete: Restrict)
 
   @@index([inviterId, status])
@@ -1309,7 +1314,7 @@ model ReferralReward {
 model ReferralPayout {
   id                     String       @id @default(cuid())
   userId                 String
-  amountCentavos         Int          // e.g. 15000 = ₱150.00
+  amountCentavos         Int // e.g. 15000 = ₱150.00
   currency               String       @default("PHP")
   method                 PayoutMethod @default(GCASH)
   accountNumberEncrypted String
@@ -1475,31 +1480,30 @@ enum ReconciliationStatus {
 }
 
 model FinancialLedgerEntry {
-  id              String                   @id @default(cuid())
-  entryNumber     String                   @unique // e.g. LED-000001
-  transactionId   String?
-  transactionType FinancialTransactionType
-  accountCategory AccountCategory
-  entryType       LedgerEntryType
-  amountCentavos  Int
-  currency        String                   @default("PHP")
-  sourceEntity    String                   // e.g. Transaction, ReferralReward, PartnerCommission, ReferralPayout, PartnerPayout, FinancialAdjustment, TaxRecord
-  sourceId        String
-  operationKey    String?                  @db.VarChar(255)
+  id                   String                   @id @default(cuid())
+  entryNumber          String                   @unique // e.g. LED-000001
+  transactionId        String?
+  transactionType      FinancialTransactionType
+  accountCategory      AccountCategory
+  entryType            LedgerEntryType
+  amountCentavos       Int
+  currency             String                   @default("PHP")
+  sourceEntity         String // e.g. Transaction, ReferralReward, PartnerCommission, ReferralPayout, PartnerPayout, FinancialAdjustment, TaxRecord
+  sourceId             String
+  operationKey         String?                  @db.VarChar(255)
   finalizationEffectId String?
-  description     String                   @db.Text
-  effectiveDate   DateTime                 @default(now())
-  periodId        String?
-  createdBy       String?
-  createdAt       DateTime                 @default(now())
+  description          String                   @db.Text
+  effectiveDate        DateTime                 @default(now())
+  periodId             String?
+  createdBy            String?
+  createdAt            DateTime                 @default(now())
 
-  transaction      Transaction?      @relation(fields: [transactionId], references: [id], onDelete: SetNull)
-  accountingPeriod AccountingPeriod? @relation(fields: [periodId], references: [id], onDelete: SetNull)
+  transaction        Transaction?               @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  accountingPeriod   AccountingPeriod?          @relation(fields: [periodId], references: [id], onDelete: SetNull)
   finalizationEffect PaymentFinalizationEffect? @relation(fields: [finalizationEffectId], references: [id], onDelete: Restrict)
 
   @@unique([operationKey, entryType])
   @@unique([finalizationEffectId, entryType])
-
   @@index([transactionType])
   @@index([accountCategory])
   @@index([effectiveDate(sort: Desc)])
@@ -1512,17 +1516,17 @@ model Partner {
   id                      String                 @id @default(cuid())
   partnerId               String?                @unique // e.g. PT-000123
   code                    String                 @unique // e.g. PTR-FB-CSEPH
-  slug                    String?                // e.g. "cse-philippines", "prof-juan-cse"
+  slug                    String? // e.g. "cse-philippines", "prof-juan-cse"
   name                    String
-  passwordHash            String?                // For dedicated partner portal login
-  tempPasswordHash        String?                // Temporary password fallback
+  passwordHash            String? // For dedicated partner portal login
+  tempPasswordHash        String? // Temporary password fallback
   mustChangePassword      Boolean                @default(false)
   setupToken              String?                @unique // Secure one-time onboarding token
   setupTokenExpires       DateTime?
   resetToken              String?                @unique // Secure password reset token
   resetTokenExpires       DateTime?
   type                    PartnerType            @default(FACEBOOK_PAGE)
-  tagline                 String?                // e.g. "Official Partner for Civil Service Review 2026"
+  tagline                 String? // e.g. "Official Partner for Civil Service Review 2026"
   badgeText               String?                @default("Official Partner")
   description             String?                @db.Text
   discountPercent         Float?                 @default(0.0) // Optional discount given to referred students
@@ -1549,11 +1553,11 @@ model Partner {
   createdAt               DateTime               @default(now())
   updatedAt               DateTime               @updatedAt
 
-  rateHistory    PartnerRateHistory[]
-  attributions   PartnerAttribution[]
-  commissions    PartnerCommission[]
-  payouts        PartnerPayout[]
-  payoutProfiles PartnerPayoutProfile[]
+  rateHistory                PartnerRateHistory[]
+  attributions               PartnerAttribution[]
+  commissions                PartnerCommission[]
+  payouts                    PartnerPayout[]
+  payoutProfiles             PartnerPayoutProfile[]
   paymentFinalizationEffects PaymentFinalizationEffect[]
 
   @@index([partnerId])
@@ -1585,9 +1589,10 @@ model PartnerPayoutProfile {
 }
 
 model PartnerSequence {
-  id         String   @id @default("PARTNER_SEQ")
-  currentVal Int      @default(0)
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default("PARTNER_ID_SEQ")
+  currentVal   Int      @default(100)
+  currentValue Int      @default(100)
+  updatedAt    DateTime @updatedAt
 }
 
 model PartnerRateHistory {
@@ -1612,7 +1617,7 @@ model PartnerAttribution {
   id             String   @id @default(cuid())
   referredUserId String   @unique
   partnerId      String
-  campaignSource String?  // e.g. "youtube", "tiktok", "fbgroup", "direct"
+  campaignSource String? // e.g. "youtube", "tiktok", "fbgroup", "direct"
   attributedAt   DateTime @default(now())
   expiresAt      DateTime
   isLocked       Boolean  @default(true)
@@ -1637,7 +1642,7 @@ model PartnerCommission {
   commissionAmountCentavos Int
   currency                 String                 @default("PHP")
   status                   RewardLedgerStatus     @default(PENDING)
-  campaignSource           String?                // Sub-channel attribution (e.g. "youtube")
+  campaignSource           String? // Sub-channel attribution (e.g. "youtube")
   holdingUntil             DateTime?
   availableAt              DateTime?
   reversedAt               DateTime?
@@ -1645,8 +1650,8 @@ model PartnerCommission {
   createdAt                DateTime               @default(now())
   updatedAt                DateTime               @updatedAt
 
-  partner     Partner     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
-  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  partner            Partner                    @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  transaction        Transaction                @relation(fields: [transactionId], references: [id], onDelete: Cascade)
   finalizationEffect PaymentFinalizationEffect? @relation(fields: [finalizationEffectId], references: [id], onDelete: Restrict)
 
   @@index([partnerId, status])
@@ -1682,7 +1687,7 @@ model PartnerPayout {
 
 model TaxConfiguration {
   id                        String              @id @default(cuid())
-  name                      String              // e.g. "VAT Provision Estimate"
+  name                      String // e.g. "VAT Provision Estimate"
   taxType                   TaxType             @default(OTHER_TAX)
   rate                      Float               @default(0.0) // percentage
   fixedAmountCentavos       Int?                @default(0)
@@ -1696,7 +1701,7 @@ model TaxConfiguration {
   createdAt                 DateTime            @default(now())
   updatedAt                 DateTime            @updatedAt
 
-  taxRecords TaxRecord[]
+  taxRecords                 TaxRecord[]
   paymentFinalizationEffects PaymentFinalizationEffect[]
 
   @@index([status])
@@ -1719,8 +1724,8 @@ model TaxRecord {
   effectiveDate         DateTime            @default(now())
   createdAt             DateTime            @default(now())
 
-  taxConfig   TaxConfiguration @relation(fields: [taxConfigId], references: [id], onDelete: Cascade)
-  transaction Transaction?     @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  taxConfig          TaxConfiguration           @relation(fields: [taxConfigId], references: [id], onDelete: Cascade)
+  transaction        Transaction?               @relation(fields: [transactionId], references: [id], onDelete: SetNull)
   finalizationEffect PaymentFinalizationEffect? @relation(fields: [finalizationEffectId], references: [id], onDelete: Restrict)
 
   @@index([taxConfigId])
@@ -1755,7 +1760,7 @@ model FinancialAdjustment {
   adjustmentNumber String          @unique // e.g. ADJ-0001
   amountCentavos   Int
   direction        LedgerEntryType // DEBIT or CREDIT
-  category         String          // e.g. "CORRECTION_PAYMENT_FEE", "MANUAL_REVERSAL"
+  category         String // e.g. "CORRECTION_PAYMENT_FEE", "MANUAL_REVERSAL"
   reason           String          @db.Text
   reference        String?
   status           String          @default("APPROVED") // PENDING_APPROVAL, APPROVED, REJECTED
@@ -1810,7 +1815,7 @@ model AccountingAuditLog {
 
 model ReconciliationRecord {
   id                   String               @id @default(cuid())
-  sourceType           String               // PAYMONGO_CHECKOUT, PAYMONGO_PAYMENT, INTERNAL_TRANSACTION, REFERRAL_REWARD, PARTNER_COMMISSION, PAYOUT
+  sourceType           String // PAYMONGO_CHECKOUT, PAYMONGO_PAYMENT, INTERNAL_TRANSACTION, REFERRAL_REWARD, PARTNER_COMMISSION, PAYOUT
   sourceId             String
   matchedTransactionId String?
   finalizationEffectId String?              @unique
@@ -1850,15 +1855,15 @@ model PartnerApplication {
   email            String
   phone            String?
   type             PartnerType       @default(CONTENT_CREATOR)
-  socialUrl        String            // Facebook Page, YouTube, TikTok channel URL
-  audienceSize     String?           // e.g. "10,000 - 50,000 followers"
-  proposedSlug     String?           // e.g. "prof-juan"
+  socialUrl        String // Facebook Page, YouTube, TikTok channel URL
+  audienceSize     String? // e.g. "10,000 - 50,000 followers"
+  proposedSlug     String? // e.g. "prof-juan"
   pitchReason      String?           @db.Text
   status           ApplicationStatus @default(PENDING)
   adminNotes       String?           @db.Text
   reviewedBy       String?
   reviewedAt       DateTime?
-  createdPartnerId String?           // Populated upon approval
+  createdPartnerId String? // Populated upon approval
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 
@@ -1884,22 +1889,22 @@ enum VoucherCodeStatus {
 
 /// A batch of pre-generated one-time access voucher codes sold to a school or institution.
 model InstitutionalVoucherBatch {
-  id               String        @id @default(cuid())
-  batchRef         String        @unique // e.g. "BATCH-PNP-2026-001"
-  institutionName  String        // e.g. "PNP Regional Training Center – Davao"
-  contactName      String?
-  contactEmail     String?
-  planType         String        @default("ANNUAL") // matches Transaction.planType values
-  durationDays     Int           @default(365)      // access duration per code
-  totalCodes       Int
-  redeemedCount    Int           @default(0)
-  pricePerCodeCentavos Int       @default(0) // 0 = sponsored / free batch
-  status           VoucherStatus @default(ACTIVE)
-  notes            String?       @db.Text
-  expiresAt        DateTime?     // batch-level expiry; individual codes inherit this
-  createdBy        String?       // admin user id
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  id                   String        @id @default(cuid())
+  batchRef             String        @unique // e.g. "BATCH-PNP-2026-001"
+  institutionName      String // e.g. "PNP Regional Training Center – Davao"
+  contactName          String?
+  contactEmail         String?
+  planType             String        @default("ANNUAL") // matches Transaction.planType values
+  durationDays         Int           @default(365) // access duration per code
+  totalCodes           Int
+  redeemedCount        Int           @default(0)
+  pricePerCodeCentavos Int           @default(0) // 0 = sponsored / free batch
+  status               VoucherStatus @default(ACTIVE)
+  notes                String?       @db.Text
+  expiresAt            DateTime? // batch-level expiry; individual codes inherit this
+  createdBy            String? // admin user id
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
 
   codes InstitutionalVoucherCode[]
 
@@ -1910,14 +1915,14 @@ model InstitutionalVoucherBatch {
 
 /// A single one-time-use voucher code within an InstitutionalVoucherBatch.
 model InstitutionalVoucherCode {
-  id           String            @id @default(cuid())
-  batchId      String
-  code         String            @unique // e.g. "PNP-XKJZ-9192"
-  status       VoucherCodeStatus @default(UNUSED)
-  redeemedBy   String?           // User.id who redeemed
-  redeemedAt   DateTime?
-  accessUntil  DateTime?         // computed on redemption: now() + batch.durationDays
-  createdAt    DateTime          @default(now())
+  id          String            @id @default(cuid())
+  batchId     String
+  code        String            @unique // e.g. "PNP-XKJZ-9192"
+  status      VoucherCodeStatus @default(UNUSED)
+  redeemedBy  String? // User.id who redeemed
+  redeemedAt  DateTime?
+  accessUntil DateTime? // computed on redemption: now() + batch.durationDays
+  createdAt   DateTime          @default(now())
 
   batch InstitutionalVoucherBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
 
@@ -1940,7 +1945,6 @@ model FinancialIdempotencyKey {
   @@index([createdAt])
 }
 
-
 /// Durable state machine for admin-initiated PayMongo refund execution.
 /// FinancialIdempotencyKey continues to provide client-request replay protection;
 /// this model tracks the external financial mutation lifecycle itself.
@@ -1957,36 +1961,36 @@ enum RefundOperationStatus {
 }
 
 model RefundOperation {
-  id                    String                @id @default(cuid())
-  transactionId         String
-  actorId               String
-  idempotencyKey        String
-  requestHash           String
+  id             String @id @default(cuid())
+  transactionId  String
+  actorId        String
+  idempotencyKey String
+  requestHash    String
 
   /// Stable server-derived key reused for every retry of the same PayMongo POST.
-  paymongoIdempotencyKey String               @unique
+  paymongoIdempotencyKey String @unique
 
-  paymentId             String
-  refundId              String?               @unique
+  paymentId String
+  refundId  String? @unique
 
-  amountCentavos        Int
-  reason                String
-  paymongoReason        String
+  amountCentavos Int
+  reason         String
+  paymongoReason String
 
-  status                RefundOperationStatus @default(RESERVED)
-  providerStatus        String?
+  status         RefundOperationStatus @default(RESERVED)
+  providerStatus String?
 
-  attemptCount          Int                   @default(0)
-  lastAttemptAt         DateTime?
-  submittedAt           DateTime?
-  completedAt           DateTime?
+  attemptCount  Int       @default(0)
+  lastAttemptAt DateTime?
+  submittedAt   DateTime?
+  completedAt   DateTime?
 
-  lastHttpStatus        Int?
-  lastErrorCode         String?
-  lastErrorMessage      String?               @db.Text
+  lastHttpStatus   Int?
+  lastErrorCode    String?
+  lastErrorMessage String? @db.Text
 
-  createdAt             DateTime              @default(now())
-  updatedAt             DateTime              @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([actorId, idempotencyKey])
   @@index([transactionId, status])
