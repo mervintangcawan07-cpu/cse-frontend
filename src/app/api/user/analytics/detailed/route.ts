@@ -18,6 +18,7 @@ export async function GET() {
     // Fetch real exam attempt results for this user from Neon DB (excluding heavy detailsJson)
     const results = await prisma.examResult.findMany({
       where: { userId },
+      take: 100,
       select: {
         id: true,
         score: true,

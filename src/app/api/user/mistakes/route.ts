@@ -4,6 +4,8 @@ import { andQuestionWhere, findBankQuestions, questionIdsWhere } from "@/lib/que
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { extractPagination } from "@/lib/pagination";
+import { checkRateLimit, createRateLimitResponse, GENERAL_API_LIMITER } from "@/lib/ratelimit";
 
 export async function GET(request: Request) {
   try {
@@ -44,9 +46,13 @@ export async function GET(request: Request) {
       };
     }
 
+    const { take, skip } = extractPagination(request.url, 50, 100);
+
     // Fetch user mistakes with full question details
     const mistakes = await prisma.userMistake.findMany({
       where: whereClause,
+      take: take,
+      skip: skip,
       include: {
         question: {
           select: {
@@ -86,6 +92,7 @@ export async function GET(request: Request) {
     // Compute summary stats across all user mistakes
     const allUserMistakes = await prisma.userMistake.findMany({
       where: { userId, question: { deletedAt: null } },
+      take: 100,
       select: {
         id: true,
         isMastered: true,
@@ -158,6 +165,11 @@ export async function POST(request: Request) {
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = user.id;
+
+    const rateLimitResult = await checkRateLimit(GENERAL_API_LIMITER, `mistakes:${userId}`);
+    if (!rateLimitResult.success) {
+      return createRateLimitResponse(rateLimitResult);
+    }
 
     const body = await request.json();
     const { questionId, selectedIndex, action } = body;
@@ -261,6 +273,11 @@ export async function DELETE(request: Request) {
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const userId = user.id;
+
+    const rateLimitResult = await checkRateLimit(GENERAL_API_LIMITER, `mistakes:${userId}`);
+    if (!rateLimitResult.success) {
+      return createRateLimitResponse(rateLimitResult);
+    }
 
     const { searchParams } = new URL(request.url);
     const questionId = searchParams.get("questionId");

@@ -68,6 +68,7 @@ export async function GET(request: Request) {
     try {
       const pastResults: any[] = await (prisma.examResult as any).findMany({
         where: { userId },
+        take: 100,
       });
 
       const pastAnswerMap = new Map<string, number[]>();

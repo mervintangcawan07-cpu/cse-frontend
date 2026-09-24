@@ -15,6 +15,7 @@ export async function GET() {
     const [results, streakData, bookmarksCount] = await Promise.all([
       prisma.examResult.findMany({
         where: { userId },
+        take: 100,
         select: {
           id: true,
           score: true,

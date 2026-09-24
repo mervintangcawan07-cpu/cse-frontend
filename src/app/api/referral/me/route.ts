@@ -1,10 +1,13 @@
 // Relative Path: src/app/api/referral/me/route.ts
 import { NextResponse } from "next/server";
-import { requireAuthUser } from "@/lib/serverAuth";
+import { requireAuthUser, getAuthenticatedUser } from "@/lib/serverAuth";
 import { ReferralService } from "@/lib/referral/referralService";
 
 export async function GET(request: Request) {
   try {
+    const authUser = await getAuthenticatedUser();
+    if (!authUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     const { user, errorResponse } = await requireAuthUser(request);
     if (errorResponse) return errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

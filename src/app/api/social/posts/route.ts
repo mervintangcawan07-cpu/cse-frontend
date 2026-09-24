@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { extractPagination } from "@/lib/pagination";
+import { checkRateLimit, createRateLimitResponse, GENERAL_API_LIMITER } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +16,7 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const topic = searchParams.get("topic") || "ALL"; // 'ALL', 'QUESTION_HELP', 'EXAM_INTEL', 'MINDSET_VENT', 'STUDY_HACKS'
-    const limit = Math.min(parseInt(searchParams.get("limit") || "25", 10), 50);
+    const { take, skip } = extractPagination(request.url, 20, 50);
 
     const whereClause: any = {
       deletedAt: null,
@@ -26,6 +28,8 @@ export async function GET(request: Request) {
 
     const posts = await prisma.studyPost.findMany({
       where: whereClause,
+      take: take,
+      skip: skip,
       include: {
         author: {
           select: {
@@ -61,7 +65,6 @@ export async function GET(request: Request) {
         { isPinned: "desc" },
         { createdAt: "desc" },
       ],
-      take: limit,
     });
 
     const formattedPosts = posts.map((post) => {
@@ -137,6 +140,11 @@ export async function POST(request: Request) {
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const authorId = authenticatedUser.id;
+
+    const rateLimitResult = await checkRateLimit(GENERAL_API_LIMITER, `posts:${authorId}`);
+    if (!rateLimitResult.success) {
+      return createRateLimitResponse(rateLimitResult);
+    }
 
     const body = await request.json();
     const { topic, title, content, hasSpoiler, spoilerContent, isAnonymous } = body;

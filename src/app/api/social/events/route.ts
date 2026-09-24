@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/events/route.ts
+// Relative Path: src/app/api/social/events/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -26,6 +26,7 @@ export async function GET(request: Request) {
 
     const events = await prisma.studyEvent.findMany({
       where: whereClause,
+      take: 50,
       include: {
         host: { select: { id: true, name: true, isPaid: true } },
         rsvps: { select: { id: true, userId: true, status: true } },

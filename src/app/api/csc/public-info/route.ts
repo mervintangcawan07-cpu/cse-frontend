@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cachedJsonResponse, CACHE_PROFILES } from "@/lib/cache";
+import { CACHE_PROFILES } from "@/lib/cache";
 
 export async function GET() {
   try {
@@ -53,14 +53,19 @@ export async function GET() {
       }
     }
 
-    return cachedJsonResponse(
+    return NextResponse.json(
       {
         success: true,
         nextSchedule,
         announcements,
         downloads,
       },
-      "STATIC_METADATA"
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "public, s-maxage=600, stale-while-revalidate=1200",
+        },
+      }
     );
   } catch (error: any) {
     console.error("[CSC_PUBLIC_INFO_GET_ERROR]", error);

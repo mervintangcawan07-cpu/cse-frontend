@@ -9,6 +9,8 @@ import {
   canResendPartnerSetupLink,
 } from "@/lib/accounting/partnerService";
 import { formatCentavosToPesos } from "@/lib/accounting/money";
+import { handleAccountingError } from "@/lib/errors/apiErrorHandler";
+import { extractPagination } from "@/lib/pagination";
 
 export async function GET(request: Request) {
   try {
@@ -19,6 +21,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status") || undefined;
     const type = searchParams.get("type") || undefined;
     const q = searchParams.get("q") || undefined;
+    const { take, skip } = extractPagination(request.url, 50, 100);
 
     const where: any = {};
     if (status && status !== "ALL") where.status = status;
@@ -33,6 +36,8 @@ export async function GET(request: Request) {
 
     const partners = await prisma.partner.findMany({
       where,
+      take: take,
+      skip: skip,
       orderBy: { createdAt: "desc" },
       include: {
         commissions: { select: { purchaseAmountCentavos: true, commissionAmountCentavos: true, status: true } },
@@ -96,9 +101,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let user: any;
   try {
-    const { user, errorResponse } = await requireAdminAuth(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requireAdminAuth(request);
+    user = authResult.user;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
@@ -172,11 +179,6 @@ export async function POST(request: Request) {
       },
     });
   } catch (error: unknown) {
-    console.error("[ADMIN_PARTNERS_POST_ERROR]", error);
-    if (error instanceof PartnerOnboardingError) {
-      const status = error.code === "MISSING_EMAIL" ? 400 : 409;
-      return NextResponse.json({ error: error.message }, { status });
-    }
     const errorCode = (error as { code?: string })?.code;
     if (errorCode === "P2002" || errorCode === "P2034") {
       return NextResponse.json(
@@ -184,9 +186,6 @@ export async function POST(request: Request) {
         { status: 409 }
       );
     }
-    return NextResponse.json(
-      { error: "Failed to create partner." },
-      { status: 500 }
-    );
+    return handleAccountingError("ADMIN_PARTNERS_POST", error, { actorId: user?.id });
   }
 }

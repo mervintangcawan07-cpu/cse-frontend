@@ -11,6 +11,7 @@ export async function GET(request: Request) {
 
     const [taxConfigs, taxRecords] = await Promise.all([
       prisma.taxConfiguration.findMany({
+        take: 50,
         orderBy: { createdAt: "desc" },
       }),
       prisma.taxRecord.findMany({

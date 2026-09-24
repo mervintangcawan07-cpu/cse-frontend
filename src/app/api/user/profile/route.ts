@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { getAuthenticatedSession } from "@/lib/serverAuth";
+import { getAuthenticatedSession, getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { signJWT } from "@/lib/auth";
 
 export async function PUT(request: Request) {
   try {
+    const userAuth = await getAuthenticatedUser();
+    if (!userAuth) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const authenticatedSession = await getAuthenticatedSession(request);
     if (!authenticatedSession) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

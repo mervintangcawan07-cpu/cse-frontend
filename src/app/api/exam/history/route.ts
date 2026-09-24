@@ -66,16 +66,18 @@ export async function GET(request: Request) {
         }
       }
     } else {
-      // Unbounded backward-compatible query for legacy callers without pagination parameters
+      // Bounded backward-compatible query for legacy callers without pagination parameters
       try {
         history = await prisma.examResult.findMany({
           where: { userId },
+          take: 50,
           orderBy: { createdAt: "desc" },
         });
       } catch (dbErr) {
         if ((prisma as any).examAttempt) {
           history = await (prisma as any).examAttempt.findMany({
             where: { userId },
+            take: 50,
             orderBy: { createdAt: "desc" },
           });
         }

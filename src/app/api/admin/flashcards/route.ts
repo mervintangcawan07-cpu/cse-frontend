@@ -22,6 +22,7 @@ export async function GET() {
 
     const flashcards = await prisma.flashcard.findMany({
       where: { deletedAt: null },
+      take: 100,
       orderBy: { createdAt: "desc" },
     });
 

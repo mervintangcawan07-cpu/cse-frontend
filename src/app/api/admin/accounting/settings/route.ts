@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const { user, errorResponse } = await requireAdminAuth(request);
     if (errorResponse) return errorResponse;
 
-    const settingsRows = await prisma.financialSetting.findMany();
+    const settingsRows = await prisma.financialSetting.findMany({ take: 50 });
     const configMap = new Map(settingsRows.map((r) => [r.key, r.value]));
 
     const config: FinancialSettingsConfig = {

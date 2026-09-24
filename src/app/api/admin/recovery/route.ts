@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/admin/recovery/route.ts
+// Relative Path: src/app/api/admin/recovery/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedSessionResult } from "@/lib/serverAuth";
@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
         isBanned: true,
         banReason: { startsWith: "[SOFT_DELETED]" },
       },
+      take: 50,
       select: {
         id: true,
         email: true,

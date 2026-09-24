@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
-export async function GET() {
-  try {
-    return NextResponse.json({
-      maintenanceMode: false,
-      allowedRoles: ["ADMIN"],
-    });
-  } catch (error) {
-    console.error("[ADMIN_MAINTENANCE_ERROR]", error);
-    return NextResponse.json(
-      { maintenanceMode: false, allowedRoles: ["ADMIN"], error: "Failed to read maintenance configuration." },
-      { status: 500 }
-    );
-  }
+export async function GET(request: Request) {
+  const { user, errorResponse } = await requireAdminAuth(request);
+  if (errorResponse) return errorResponse;
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  return NextResponse.json({
+    status: "operational",
+    maintenance: false,
+    maintenanceMode: false,
+    allowedRoles: ["ADMIN"],
+  });
 }

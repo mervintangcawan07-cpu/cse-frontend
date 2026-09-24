@@ -34,6 +34,7 @@ export async function GET() {
     // 3. Fetch Exam Results Summary
     const results = await prisma.examResult.findMany({
       where: { userId },
+      take: 100,
       select: {
         score: true,
         totalItems: true,

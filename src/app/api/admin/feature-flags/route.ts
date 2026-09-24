@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   try {
     const flags = await prisma.featureFlag.findMany({
+      take: 100,
       orderBy: { key: "asc" },
     });
     return NextResponse.json({ flags });

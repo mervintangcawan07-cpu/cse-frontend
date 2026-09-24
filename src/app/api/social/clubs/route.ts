@@ -1,4 +1,4 @@
-﻿// Relative Path: src/app/api/social/clubs/route.ts
+// Relative Path: src/app/api/social/clubs/route.ts
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
@@ -29,6 +29,7 @@ export async function GET(request: Request) {
 
     const clubs = await prisma.studyClub.findMany({
       where: whereClause,
+      take: 50,
       include: {
         owner: { select: { id: true, name: true, isPaid: true } },
         members: { select: { id: true, userId: true, role: true } },

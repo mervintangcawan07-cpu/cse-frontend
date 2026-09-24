@@ -112,6 +112,13 @@ export const VOUCHER_REDEEM_LIMITER = redis
     })
   : null;
 
+// 🔒 14. General API Mutation Limiter: 60 requests per 1 minute (Bookmarks, Posts, Comments, Mistakes)
+export const GENERAL_API_LIMITER = createLimiter(
+  60,
+  "1 m",
+  `@ratelimit/${rateLimitEnvironment}/general_api`
+);
+
 export interface RateLimitCheckResult {
   success: boolean;
   limit: number;

@@ -28,6 +28,7 @@ export async function GET() {
           { userEmail },
         ],
       },
+      take: 50,
       orderBy: { createdAt: "desc" },
     });
 

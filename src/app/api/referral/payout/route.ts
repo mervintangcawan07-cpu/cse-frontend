@@ -4,12 +4,15 @@ import { requireAuthUser } from "@/lib/serverAuth";
 import { ReferralService } from "@/lib/referral/referralService";
 import { getClientIp, checkRateLimit, AUTH_LIMITER, createRateLimitResponse } from "@/lib/ratelimit";
 import { PayoutMethod } from "@/lib/referral/types";
-import { IdempotencyService, IdempotencyDomainError } from "@/lib/accounting/idempotencyService";
+import { IdempotencyService } from "@/lib/accounting/idempotencyService";
+import { handleAccountingError } from "@/lib/errors/apiErrorHandler";
 
 export async function POST(request: Request) {
+  let user: any;
   try {
-    const { user, errorResponse } = await requireAuthUser(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requireAuthUser(request);
+    user = authResult.user;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const idempotencyKey = IdempotencyService.parseAndValidateIdempotencyKey(request);
@@ -169,13 +172,6 @@ export async function POST(request: Request) {
       }
     );
   } catch (error: any) {
-    if (error instanceof IdempotencyDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    console.error("[REFERRAL_PAYOUT_POST_ERROR]", error);
-    return NextResponse.json(
-      { error: "Failed to process payout request." },
-      { status: 500 }
-    );
+    return handleAccountingError("REFERRAL_PAYOUT_POST", error, { actorId: user?.id });
   }
 }

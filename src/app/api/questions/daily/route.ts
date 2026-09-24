@@ -76,6 +76,7 @@ export async function GET(request: Request) {
     // 4. Compute community stats for today's question
     const allAttempts = await prisma.dailyQuestionAttempt.findMany({
       where: { dateString, questionId: question.id },
+      take: 50,
       select: { userAnswer: true, isCorrect: true },
     });
 
@@ -217,6 +218,7 @@ export async function POST(request: Request) {
     // Fetch updated community distribution
     const allAttempts = await prisma.dailyQuestionAttempt.findMany({
       where: { dateString, questionId: question.id },
+      take: 50,
       select: { userAnswer: true, isCorrect: true },
     });
 

@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { requireAdminAuth } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
 import { PeriodService, PeriodDomainError } from "@/lib/accounting/periodService";
+import { handleAccountingError } from "@/lib/errors/apiErrorHandler";
 
 export async function GET(request: Request) {
   try {
@@ -11,6 +12,7 @@ export async function GET(request: Request) {
     if (errorResponse) return errorResponse;
 
     const periods = await prisma.accountingPeriod.findMany({
+      take: 50,
       orderBy: { startDate: "desc" },
       include: {
         _count: { select: { ledgerEntries: true, deductions: true } },
@@ -25,9 +27,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let user: any;
   try {
-    const { user, errorResponse } = await requireAdminAuth(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requireAdminAuth(request);
+    user = authResult.user;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
@@ -87,18 +91,16 @@ export async function POST(request: Request) {
       message: `Accounting Period '${period.name}' created!`,
     });
   } catch (error: any) {
-    if (error instanceof PeriodDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    console.error("[ADMIN_PERIODS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create period" }, { status: 500 });
+    return handleAccountingError("ADMIN_PERIODS_POST", error, { actorId: user?.id });
   }
 }
 
 export async function PATCH(request: Request) {
+  let user: any;
   try {
-    const { user, errorResponse } = await requireAdminAuth(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requireAdminAuth(request);
+    user = authResult.user;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await request.json();
@@ -160,10 +162,6 @@ export async function PATCH(request: Request) {
       message: `Period '${period.name}' updated to ${status}!`,
     });
   } catch (error: any) {
-    if (error instanceof PeriodDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    console.error("[ADMIN_PERIODS_PATCH_ERROR]", error);
-    return NextResponse.json({ error: "Failed to update period" }, { status: 500 });
+    return handleAccountingError("ADMIN_PERIODS_PATCH", error, { actorId: user?.id });
   }
 }

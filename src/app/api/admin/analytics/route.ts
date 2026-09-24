@@ -21,7 +21,7 @@ export async function GET(request: Request) {
       prisma.user.count({ where: { role: "USER", isPaid: true } }),
       prisma.question.count(),
       prisma.readingMaterial.count(),
-      prisma.examResult.findMany({ select: { score: true, createdAt: true } }),
+      prisma.examResult.findMany({ take: 100, select: { score: true, createdAt: true } }),
       prisma.user.findMany({
         where: { role: "USER" },
         take: 5,
@@ -30,6 +30,7 @@ export async function GET(request: Request) {
       }),
       prisma.transaction.findMany({
         where: { status: "PAID" },
+        take: 100,
         select: { amount: true, planType: true },
       }),
     ]);

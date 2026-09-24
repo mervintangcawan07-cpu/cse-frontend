@@ -135,6 +135,7 @@ export async function POST(request: Request) {
       where: {
         id: { in: verifiedAttempt.questionIds },
       },
+      take: 200,
       select: {
         id: true,
         category: true,

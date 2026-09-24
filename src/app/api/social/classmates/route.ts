@@ -76,6 +76,7 @@ export async function GET(request: Request) {
       where: {
         OR: [{ senderId: userId }, { receiverId: userId }],
       },
+      take: 50,
       include: {
         sender: { select: USER_STUDY_SELECT },
         receiver: { select: USER_STUDY_SELECT },

@@ -211,6 +211,7 @@ export async function GET(request: Request) {
     // 1. Gather question IDs from user history for pool filtering
     const userResults = await prisma.examResult.findMany({
       where: { userId },
+      take: 100,
       select: { detailsJson: true },
     });
 
@@ -248,6 +249,7 @@ export async function GET(request: Request) {
     if (pool === "MISTAKES_ONLY") {
       const mistakes = await prisma.userMistake.findMany({
         where: { userId, isMastered: false },
+        take: 100,
         select: { questionId: true },
       });
       mistakes.forEach((m) => mistakeQuestionIds.add(m.questionId));

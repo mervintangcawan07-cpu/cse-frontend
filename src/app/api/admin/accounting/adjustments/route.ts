@@ -5,6 +5,7 @@ import { LedgerService } from "@/lib/accounting/ledgerService";
 import { PeriodService, PeriodDomainError } from "@/lib/accounting/periodService";
 import { IdempotencyService, IdempotencyDomainError } from "@/lib/accounting/idempotencyService";
 import { Prisma } from "@prisma/client";
+import { handleAccountingError } from "@/lib/errors/apiErrorHandler";
 import crypto from "crypto";
 
 function generateAdjustmentNumber(): string {
@@ -32,9 +33,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let user: any;
   try {
-    const { user, errorResponse } = await requireAdminAuth(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requireAdminAuth(request);
+    user = authResult.user;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const idempotencyKey = IdempotencyService.parseAndValidateIdempotencyKey(request);
@@ -268,13 +271,6 @@ export async function POST(request: Request) {
       }
     );
   } catch (error: any) {
-    if (error instanceof IdempotencyDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    if (error instanceof PeriodDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    console.error("[ADMIN_ADJUSTMENTS_POST_ERROR]", error);
-    return NextResponse.json({ error: "Failed to create adjustment" }, { status: 500 });
+    return handleAccountingError("ADMIN_ADJUSTMENTS_POST", error, { actorId: user?.id });
   }
 }

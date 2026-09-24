@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/serverAuth";
+import { extractPagination } from "@/lib/pagination";
 
 export async function GET(request: Request) {
   try {
@@ -10,9 +11,12 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
+    const { take, skip } = extractPagination(request.url, 50, 100);
 
     const applications = await prisma.partnerApplication.findMany({
       where: status && status !== "ALL" ? { status: status as any } : undefined,
+      take: take,
+      skip: skip,
       orderBy: { createdAt: "desc" },
     });
 

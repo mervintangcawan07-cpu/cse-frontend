@@ -1,0 +1,4034 @@
+{
+  "summary": {
+    "totalRoutes": 161,
+    "routesWithoutAuth": [
+      {
+        "route": "src/app/api/admin/sudo/verify/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/login/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/register/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/resend-verification/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/signup/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/verify-email/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/csc/public-info/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/health/liveness/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/maintenance/status/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/apply/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/login/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/logout/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/setup/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/paymongo/webhook/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "route": "src/app/api/pricing/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/referral/validate-code/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "route": "src/app/api/webhooks/paymongo/route.ts",
+        "methods": [
+          "POST"
+        ]
+      }
+    ],
+    "routesWithoutRateLimit": [
+      {
+        "route": "src/app/api/admin/accounting/adjustments/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/applications/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/applications/[id]/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/deductions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/drilldown/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/ledger/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/overview/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/partners/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/partners/[id]/resend-setup/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/partners/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/partners/[id]/statement/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/payouts/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/periods/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/reconciliation/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/refunds/execute/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth",
+          "requireSudo"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/refunds/preview/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/reports/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/settings/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/taxes/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/accounting/vouchers/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/analytics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/backups/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/backups/[id]/route.ts",
+        "methods": [
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/db-storage/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/elimination-drills/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/feature-flags/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/flags/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/flashcards/bulk/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireSudo",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/flashcards/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/login-history/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/logs/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/maintenance/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/notifications/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/pricing/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/questions/bulk-delete/route.ts",
+        "methods": [],
+        "auth": [
+          "requireSudo",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/questions/export/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/questions/import/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/questions/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/questions/[id]/route.ts",
+        "methods": [],
+        "auth": [
+          "requireSudo",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/reading/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/reading/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/recovery/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireSudo",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/referrals/analytics/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/referrals/payouts/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/referrals/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/referrals/settings/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/referrals/[id]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/stats/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/sudo/verify/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/admin/support-tickets/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/trash/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/users/action/route.ts",
+        "methods": [],
+        "auth": [
+          "requireSudo",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/admin/users/route.ts",
+        "methods": [
+          "GET",
+          "PATCH"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/analytics/dashboard/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/logout/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "verifyJWT"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/me/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/auth/verify-email/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/cron/background-worker/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/cron/daily-backup/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/cron/db-storage-check/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/cron/health-monitor/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/csc/public-info/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/csc/seed/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/csc/sync/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser",
+          "isValidCronSecret",
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/drills/elimination/check/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/drills/elimination/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/drills/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/duels/challenge/respond/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/duels/challenge/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/duels/matchmake/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/duels/[id]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/exam/draft/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/exam/history/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/flashcards/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/health/liveness/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/health/readiness/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "CRON_SECRET"
+        ]
+      },
+      {
+        "route": "src/app/api/maintenance/status/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/mock-exam/history/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/mock-exam/history/[id]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/notifications/read-all/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/notifications/route.ts",
+        "methods": [
+          "GET",
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/auth/logout/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/partner/auth/me/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/commissions/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/overview/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/payout/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/payout-methods/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/profile/route.ts",
+        "methods": [
+          "GET",
+          "PUT"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/security/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/statements/export/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/statements/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/partner/portal/transactions/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requirePartnerAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/paymongo/webhook/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/pricing/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/questions/daily/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/questions/flag/route.ts",
+        "methods": [
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/questions/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "requireProAuth",
+          "getAuthenticatedUser",
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/questions/[id]/route.ts",
+        "methods": [
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/reading-materials/file/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/reading-materials/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "requireAdminAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/referral/me/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "requireAuthUser",
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/referral/validate-code/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": []
+      },
+      {
+        "route": "src/app/api/reviewer/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "auth": [
+          "requireAdminAuth",
+          "requireProAuth"
+        ]
+      },
+      {
+        "route": "src/app/api/social/classmates/respond/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/classmates/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/join/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/[clubId]/invite/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/[clubId]/members/route.ts",
+        "methods": [
+          "GET",
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/[clubId]/route.ts",
+        "methods": [
+          "GET",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/clubs/[clubId]/transfer/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/counts/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/events/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/events/rsvp/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/messages/conversations/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/posts/[id]/reactions/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/posts/[id]/route.ts",
+        "methods": [
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/presence/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/profile/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/profile/[userId]/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/join/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/chat/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/invite/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/leave/route.ts",
+        "methods": [
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/participants/route.ts",
+        "methods": [
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/route.ts",
+        "methods": [
+          "GET",
+          "PATCH",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/topic/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
+        "methods": [
+          "GET",
+          "POST",
+          "DELETE"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/user/analytics/detailed/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedSessionResult"
+        ]
+      },
+      {
+        "route": "src/app/api/user/badges/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/user/profile/route.ts",
+        "methods": [
+          "PUT"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/user/readiness-card/route.ts",
+        "methods": [
+          "GET"
+        ],
+        "auth": [
+          "getAuthenticatedUser"
+        ]
+      },
+      {
+        "route": "src/app/api/webhooks/paymongo/route.ts",
+        "methods": [
+          "POST"
+        ],
+        "auth": []
+      }
+    ],
+    "routesLeakingErrorMessages": [],
+    "routesWithUnboundedFindMany": []
+  },
+  "details": [
+    {
+      "route": "src/app/api/admin/accounting/adjustments/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/applications/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/applications/[id]/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/deductions/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/drilldown/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/ledger/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/overview/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/partners/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/partners/[id]/resend-setup/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/partners/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/partners/[id]/statement/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/payouts/route.ts",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/periods/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/reconciliation/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/refunds/execute/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth",
+        "requireSudo"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/refunds/preview/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/reports/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/settings/route.ts",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/taxes/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/accounting/vouchers/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/analytics/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/backups/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/backups/[id]/route.ts",
+      "methods": [
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/db-storage/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/elimination-drills/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/feature-flags/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/flags/route.ts",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/flashcards/bulk/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireSudo",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/flashcards/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/login-history/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": true
+    },
+    {
+      "route": "src/app/api/admin/logs/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/maintenance/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": false,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/notifications/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/pricing/route.ts",
+      "methods": [
+        "PUT"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/questions/ai-generate/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/questions/bulk-delete/route.ts",
+      "methods": [],
+      "authMechanisms": [
+        "requireSudo",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/questions/export/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/questions/import/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/questions/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": true
+    },
+    {
+      "route": "src/app/api/admin/questions/[id]/route.ts",
+      "methods": [],
+      "authMechanisms": [
+        "requireSudo",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/reading/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/reading/[id]/route.ts",
+      "methods": [
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/recovery/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireSudo",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/referrals/analytics/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/referrals/payouts/route.ts",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/referrals/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/referrals/settings/route.ts",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/referrals/[id]/route.ts",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/stats/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/sudo/verify/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": false,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/support-tickets/route.ts",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": true
+    },
+    {
+      "route": "src/app/api/admin/trash/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/users/action/route.ts",
+      "methods": [],
+      "authMechanisms": [
+        "requireSudo",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/admin/users/route.ts",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": true
+    },
+    {
+      "route": "src/app/api/ai/explain-mistake/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/analytics/dashboard/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/forgot-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/login/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/logout/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "verifyJWT"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/me/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/register/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/resend-verification/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/reset-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/signup/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/auth/verify-email/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/bookmarks/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/cron/background-worker/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/cron/daily-backup/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/cron/db-storage-check/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/cron/health-monitor/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/csc/public-info/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/csc/seed/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/csc/sync/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser",
+        "isValidCronSecret",
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/drills/elimination/check/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/drills/elimination/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/drills/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/duels/challenge/respond/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/duels/challenge/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/duels/matchmake/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/duels/[id]/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/exam/draft/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/exam/guided-review/check/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/exam/history/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/exam/start/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/exam/submit/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/flashcards/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/health/liveness/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": false,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/health/readiness/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "CRON_SECRET"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/maintenance/status/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/mock-exam/history/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/mock-exam/history/[id]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/notifications/read-all/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/notifications/route.ts",
+      "methods": [
+        "GET",
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/apply/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/forgot-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/login/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/logout/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/me/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/reset-password/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/auth/setup/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/commissions/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/overview/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/payout/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/payout-methods/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/profile/route.ts",
+      "methods": [
+        "GET",
+        "PUT"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/security/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/statements/export/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/statements/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/partner/portal/transactions/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requirePartnerAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/paymongo/checkout/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/paymongo/verify/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/paymongo/webhook/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": false,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/pricing/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/questions/daily/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/questions/flag/route.ts",
+      "methods": [
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/questions/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireProAuth",
+        "getAuthenticatedUser",
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/questions/[id]/route.ts",
+      "methods": [
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/reading-materials/file/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/reading-materials/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/referral/me/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "requireAuthUser",
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/referral/payout/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAuthUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/referral/validate-code/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": true
+    },
+    {
+      "route": "src/app/api/reviewer/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "requireAdminAuth",
+        "requireProAuth"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/classmates/respond/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/classmates/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/join/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/[clubId]/invite/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/[clubId]/members/route.ts",
+      "methods": [
+        "GET",
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/[clubId]/route.ts",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/clubs/[clubId]/transfer/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/counts/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/events/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/events/rsvp/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/messages/conversations/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/messages/[conversationId]/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/posts/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/posts/[id]/comments/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/posts/[id]/reactions/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/posts/[id]/route.ts",
+      "methods": [
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/presence/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/profile/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/profile/[userId]/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/join/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/chat/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/invite/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/leave/route.ts",
+      "methods": [
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/participants/route.ts",
+      "methods": [
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/route.ts",
+      "methods": [
+        "GET",
+        "PATCH",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/topic/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/voice-token/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/social/rooms/[roomId]/whiteboard/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/support/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/user/analytics/detailed/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedSessionResult"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/user/badges/route.ts",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/user/mistakes/route.ts",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/user/profile/route.ts",
+      "methods": [
+        "PUT"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/user/readiness-card/route.ts",
+      "methods": [
+        "GET"
+      ],
+      "authMechanisms": [
+        "getAuthenticatedUser"
+      ],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/vouchers/redeem/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [
+        "requireAuthUser"
+      ],
+      "hasRateLimit": true,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": true,
+      "leaksErrorMessage": false,
+      "usesTransaction": true,
+      "hasInputValidation": false
+    },
+    {
+      "route": "src/app/api/webhooks/paymongo/route.ts",
+      "methods": [
+        "POST"
+      ],
+      "authMechanisms": [],
+      "hasRateLimit": false,
+      "hasFindManyWithoutTake": false,
+      "unboundedFindManyDetails": [],
+      "catchesErrorString": false,
+      "leaksErrorMessage": false,
+      "usesTransaction": false,
+      "hasInputValidation": false
+    }
+  ]
+}

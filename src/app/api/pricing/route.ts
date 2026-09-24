@@ -40,6 +40,7 @@ export async function GET() {
           in: supportedPlanTypes,
         },
       },
+      take: 50,
       orderBy: { durationDays: "asc" },
     });
 
@@ -55,7 +56,10 @@ export async function GET() {
 
     return NextResponse.json(
       { success: true, plans },
-      { headers: NO_STORE_HEADERS }
+      {
+        status: 200,
+        headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" },
+      }
     );
   } catch (error) {
     console.error("[PRICING_FETCH_ERROR]", error);

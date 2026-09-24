@@ -41,6 +41,7 @@ export async function GET(request: Request) {
     // Fetch full question details
     const questions = await prisma.question.findMany({
       where: { id: { in: questionIds } },
+      take: 100,
       select: {
         id: true,
         category: true,

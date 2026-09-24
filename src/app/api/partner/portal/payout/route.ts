@@ -7,6 +7,8 @@ import { formatCentavosToPesos } from "@/lib/accounting/money";
 import { decrypt } from "@/lib/crypto/encryption";
 import { IdempotencyService, IdempotencyDomainError } from "@/lib/accounting/idempotencyService";
 import { PayoutMethod } from "@prisma/client";
+import { handleAccountingError } from "@/lib/errors/apiErrorHandler";
+import { extractPagination } from "@/lib/pagination";
 
 export async function GET(request: Request) {
   try {
@@ -14,10 +16,14 @@ export async function GET(request: Request) {
     if (errorResponse) return errorResponse;
     if (!partner) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    const { take, skip } = extractPagination(request.url, 50, 100);
+
     const [overview, payouts, savedMethods] = await Promise.all([
       PartnerService.getPartnerFinancialOverview(partner.id),
       prisma.partnerPayout.findMany({
         where: { partnerId: partner.id },
+        take: take,
+        skip: skip,
         orderBy: { createdAt: "desc" },
       }),
       PartnerService.listPayoutProfiles(partner.id),
@@ -59,9 +65,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let partner: any;
   try {
-    const { partner, errorResponse } = await requirePartnerAuth(request);
-    if (errorResponse) return errorResponse;
+    const authResult = await requirePartnerAuth(request);
+    partner = authResult.partner;
+    if (authResult.errorResponse) return authResult.errorResponse;
     if (!partner) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const idempotencyKey = IdempotencyService.parseAndValidateIdempotencyKey(request);
@@ -221,13 +229,6 @@ export async function POST(request: Request) {
       }
     );
   } catch (error: any) {
-    if (error instanceof IdempotencyDomainError) {
-      return NextResponse.json({ error: error.message }, { status: error.status });
-    }
-    console.error("[PARTNER_PORTAL_PAYOUT_ERROR]", error);
-    return NextResponse.json(
-      { error: "Failed to process payout request." },
-      { status: 500 }
-    );
+    return handleAccountingError("PARTNER_PORTAL_PAYOUT", error, { partnerId: partner?.id });
   }
 }

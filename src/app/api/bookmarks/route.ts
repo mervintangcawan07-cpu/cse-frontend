@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { isAccountAuthorizedFor } from "@/lib/accountLifecycle";
 import { prisma } from "@/lib/prisma";
+import { extractPagination } from "@/lib/pagination";
+import { checkRateLimit, createRateLimitResponse, GENERAL_API_LIMITER } from "@/lib/ratelimit";
 
 // Helper for Session Authentication
 async function getAuthUserId() {
@@ -25,6 +27,7 @@ export async function GET(request: Request) {
     if (idsOnly) {
       const bookmarks = await prisma.bookmark.findMany({
         where: { userId },
+        take: 100,
         select: { targetId: true, targetType: true },
       });
       const questionIds = bookmarks
@@ -37,10 +40,13 @@ export async function GET(request: Request) {
     }
 
     const canReadStudyNotes = isAccountAuthorizedFor(user, "PRO");
+    const { take, skip } = extractPagination(request.url, 50, 100);
 
-    // Fetch all user bookmarks
+    // Fetch user bookmarks with bounded pagination
     const bookmarks = await prisma.bookmark.findMany({
       where: { userId },
+      take: take,
+      skip: skip,
       orderBy: { createdAt: "desc" },
     });
 
@@ -61,9 +67,11 @@ export async function GET(request: Request) {
       canReadStudyNotes
         ? prisma.studyNote.findMany({
             where: { id: { in: studyNoteIds } },
+            take: 100,
           })
         : prisma.studyNote.findMany({
             where: { id: { in: studyNoteIds } },
+            take: 100,
             select: {
               id: true,
               category: true,
@@ -127,9 +135,15 @@ export async function GET(request: Request) {
 // 2. TOGGLE OR ADD BOOKMARK (QUESTION OR STUDY_NOTE)
 export async function POST(request: Request) {
   try {
-    const userId = await getAuthUserId();
-    if (!userId) {
+    const user = await getAuthenticatedUser();
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = user.id;
+
+    const rateLimitResult = await checkRateLimit(GENERAL_API_LIMITER, `bookmarks:${userId}`);
+    if (!rateLimitResult.success) {
+      return createRateLimitResponse(rateLimitResult);
     }
 
     const body = await request.json();

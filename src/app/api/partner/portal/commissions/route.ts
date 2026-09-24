@@ -42,6 +42,7 @@ export async function GET(request: Request) {
 
     const allCommissions = await prisma.partnerCommission.findMany({
       where: { partnerId: partner.id },
+      take: 1000,
       select: {
         commissionAmountCentavos: true,
         status: true,

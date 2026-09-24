@@ -1,18 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthenticatedUser } from "@/lib/serverAuth";
+import { requireAdminAuth } from "@/lib/serverAuth";
 
-async function checkAdminSession() {
-  const user = await getAuthenticatedUser();
-  return user?.role === "ADMIN" ? user : null;
-}
-
-export async function GET() {
-  const session = await checkAdminSession();
-  if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+export async function GET(request: Request) {
+  const { user, errorResponse } = await requireAdminAuth(request);
+  if (errorResponse) return errorResponse;
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const modules = await (prisma as any).readingMaterial.findMany({
+    const modules = await prisma.readingMaterial.findMany({
+      take: 100,
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(modules, { status: 200 });
@@ -22,8 +19,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await checkAdminSession();
-  if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const { user, errorResponse } = await requireAdminAuth(request);
+  if (errorResponse) return errorResponse;
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
     const body = await request.json();
@@ -33,7 +31,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const newModule = await (prisma as any).readingMaterial.create({
+    const newModule = await prisma.readingMaterial.create({
       data: {
         title,
         category,

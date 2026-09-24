@@ -43,6 +43,7 @@ export async function GET(request: Request) {
 
     const rooms = await prisma.studyRoom.findMany({
       where: whereClause,
+      take: 50,
       include: {
         host: { select: { id: true, name: true } },
         participants: {

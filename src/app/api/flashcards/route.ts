@@ -17,6 +17,7 @@ export async function GET(request: Request) {
 
     const flashcards = await prisma.flashcard.findMany({
       where: activeFlashcardWhere(),
+      take: 100,
       orderBy: { createdAt: "desc" },
     });
 

@@ -12,10 +12,11 @@ export async function GET() {
 
     let attempts: any[] = [];
 
-    // Fetch ALL completed exams with lightweight projection (excluding heavy detailsJson)
+    // Fetch completed exams with lightweight projection (excluding heavy detailsJson)
     try {
       attempts = await prisma.examResult.findMany({
         where: { userId },
+        take: 50,
         select: {
           id: true,
           score: true,
@@ -31,6 +32,7 @@ export async function GET() {
       if ((prisma as any).examAttempt) {
         attempts = await (prisma as any).examAttempt.findMany({
           where: { userId },
+          take: 50,
           select: {
             id: true,
             score: true,

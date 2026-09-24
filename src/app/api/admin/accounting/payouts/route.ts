@@ -10,6 +10,7 @@ import { PartnerAuditService } from "@/lib/accounting/partnerAuditService";
 import { PartnerService } from "@/lib/accounting/partnerService";
 import { getSiteUrl } from "@/lib/config/site";
 import { logger } from "@/lib/logger/logger";
+import { extractPagination } from "@/lib/pagination";
 
 export async function GET(request: Request) {
   try {
@@ -23,11 +24,15 @@ export async function GET(request: Request) {
     const where: any = {};
     if (status && status !== "ALL") where.status = status;
 
+    const { take, skip } = extractPagination(request.url, 50, 100);
+
     const [referralPayouts, partnerPayouts] = await Promise.all([
       type === "PARTNER"
         ? []
         : prisma.referralPayout.findMany({
             where,
+            take: take,
+            skip: skip,
             orderBy: { createdAt: "desc" },
             include: { user: { select: { name: true, email: true } } },
           }),
@@ -35,6 +40,8 @@ export async function GET(request: Request) {
         ? []
         : prisma.partnerPayout.findMany({
             where,
+            take: take,
+            skip: skip,
             orderBy: { createdAt: "desc" },
             include: { partner: { select: { name: true, partnerId: true, code: true, type: true } } },
           }),
@@ -200,9 +207,11 @@ export async function PATCH(request: Request) {
           const now = new Date();
           const commissions = await tx.partnerCommission.findMany({
             where: { partnerId: preLookup.partnerId },
+            take: 1000,
           });
           const allPayouts = await tx.partnerPayout.findMany({
             where: { partnerId: preLookup.partnerId },
+            take: 500,
           });
 
           let totalValidEarnedCentavos = 0;

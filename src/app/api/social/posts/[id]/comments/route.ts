@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/serverAuth";
 import { prisma } from "@/lib/prisma";
+import { extractPagination } from "@/lib/pagination";
+import { checkRateLimit, createRateLimitResponse, GENERAL_API_LIMITER } from "@/lib/ratelimit";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +19,15 @@ export async function GET(
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const currentUserId = authenticatedUser.id;
+    const { take, skip } = extractPagination(request.url, 30, 100);
 
     const comments = await prisma.studyPostComment.findMany({
       where: {
         postId,
         deletedAt: null,
       },
+      take: take,
+      skip: skip,
       include: {
         author: {
           select: {
@@ -91,6 +96,11 @@ export async function POST(
     const authenticatedUser = await getAuthenticatedUser();
     if (!authenticatedUser) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const authorId = authenticatedUser.id;
+
+    const rateLimitResult = await checkRateLimit(GENERAL_API_LIMITER, `comments:${authorId}`);
+    if (!rateLimitResult.success) {
+      return createRateLimitResponse(rateLimitResult);
+    }
 
     const body = await request.json();
     const { content, isAnonymous } = body;

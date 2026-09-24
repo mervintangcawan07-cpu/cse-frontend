@@ -12,6 +12,7 @@ export async function GET() {
     // Fetch user's conversation IDs
     const userParticipants = await prisma.directMessageParticipant.findMany({
       where: { userId },
+      take: 30,
       select: { conversationId: true },
     });
 
@@ -19,6 +20,7 @@ export async function GET() {
 
     const conversations = await prisma.conversation.findMany({
       where: { id: { in: conversationIds } },
+      take: 30,
       include: {
         participants: {
           include: {
@@ -122,6 +124,7 @@ export async function POST(request: Request) {
           },
         },
       },
+      take: 50,
       include: {
         participants: true,
       },

@@ -11,6 +11,7 @@ export async function GET(request: Request) {
     if (errorResponse) return errorResponse;
 
     const batches = await prisma.institutionalVoucherBatch.findMany({
+      take: 100,
       orderBy: { createdAt: "desc" },
       include: {
         _count: { select: { codes: true } },

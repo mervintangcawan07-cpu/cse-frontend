@@ -15,6 +15,7 @@ export async function GET() {
 
     const earned = await prisma.userBadge.findMany({
       where: { userId },
+      take: 50,
       orderBy: { earnedAt: "desc" },
     });
 

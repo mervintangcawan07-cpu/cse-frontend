@@ -66,6 +66,7 @@ export async function POST(
     // Fetch updated reaction counts and user reactions for this post
     const allReactions = await prisma.studyPostReaction.findMany({
       where: { postId },
+      take: 100,
       select: { userId: true, reactionType: true },
     });
 
