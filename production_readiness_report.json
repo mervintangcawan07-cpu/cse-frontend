@@ -1,0 +1,233 @@
+{
+  "timestamp": "2026-09-24T11:27:31.165Z",
+  "environment": {
+    "nodeVersion": "v24.19.0",
+    "platform": "win32",
+    "branch": "audit/production-readiness-resilience",
+    "nodeEnv": "development"
+  },
+  "summary": {
+    "status": "PASSED",
+    "totalPhases": 4,
+    "passedPhases": 4,
+    "failedPhases": 0,
+    "durationMs": 12968
+  },
+  "phases": {
+    "phase1_concurrency_and_race_conditions": {
+      "suite": "PHASE 1: CONCURRENCY & FINANCIAL RACE-CONDITION AUDIT",
+      "status": "PASSED",
+      "timestamp": "2026-09-24T11:27:29.405Z",
+      "durationMs": 11205,
+      "tests": {
+        "doubleSpend": {
+          "status": "PASSED",
+          "initialBalanceCentavos": 50000,
+          "concurrentRequests": 10,
+          "succeededRequests": 1,
+          "failedRequests": 9,
+          "finalBalanceCentavos": 0,
+          "overdraftOccurred": false,
+          "payoutRecordsCreated": 1,
+          "details": [
+            "Initial available balance: 50000 centavos (500 PHP)",
+            "Results: 1 succeeded (HTTP 200), 9 failed (HTTP 400/409). Created payouts in DB: 1. Final balance: 0 centavos."
+          ]
+        },
+        "voucherReplay": {
+          "status": "PASSED",
+          "totalCodes": 1,
+          "concurrentClaims": 10,
+          "succeededClaims": 1,
+          "failedClaims": 9,
+          "voucherStatus": "REDEEMED",
+          "redeemedCount": 1,
+          "entitledUsersCount": 1,
+          "details": [
+            "Seeded voucher code: AUDIT-VOUCHER-23179EA6 (maxUses: 1, batch totalCodes: 1)",
+            "Results: 1 succeeded (HTTP 200), 9 failed. Voucher status: REDEEMED, redeemedBy: cmufg6d69000er0u1t8pa8v6e, batch redeemedCount: 1. Paid users: 1."
+          ]
+        },
+        "webhookIdempotency": {
+          "status": "PASSED",
+          "concurrentWebhooks": 5,
+          "initialProvisionedCount": 1,
+          "idempotentReplayCount": 4,
+          "transactionsCreated": 1,
+          "ledgerEntriesCreated": 6,
+          "duplicateLedgersDetected": false,
+          "details": [
+            "Results: 1 initial provisioning, 4 idempotent replays. DB Transactions: 1. Ledger entries: 6. User isPaid: true."
+          ]
+        }
+      }
+    },
+    "phase2_client_bundle_secret_leak_audit": {
+      "suite": "PHASE 2: CLIENT BUNDLE SECRET LEAK AUDIT",
+      "status": "PASSED",
+      "timestamp": "2026-09-24T11:27:29.641Z",
+      "durationMs": 234,
+      "metrics": {
+        "staticFilesScanned": 101,
+        "clientSourceFilesScanned": 163,
+        "envVarsInspected": 0,
+        "leaksDetected": 0
+      },
+      "findings": [],
+      "details": [
+        "Static client bundles scanned: 101. Client components scanned: 163. NEXT_PUBLIC_ vars: 0. Leaks found: 0."
+      ]
+    },
+    "phase3_connection_pool_stability": {
+      "suite": "PHASE 3: CONNECTION POOL STABILITY UNDER LOAD",
+      "status": "PASSED",
+      "timestamp": "2026-09-24T11:27:30.805Z",
+      "durationMs": 1164,
+      "poolConfiguration": {
+        "poolMax": 10,
+        "idleTimeoutMillis": 10000,
+        "connectionTimeoutMillis": 5000
+      },
+      "waves": [
+        {
+          "wave": 1,
+          "concurrentRequests": 10,
+          "succeeded": 10,
+          "failed": 0,
+          "minLatencyMs": 46,
+          "avgLatencyMs": 52,
+          "p95LatencyMs": 106,
+          "maxLatencyMs": 106,
+          "errors": []
+        },
+        {
+          "wave": 2,
+          "concurrentRequests": 25,
+          "succeeded": 25,
+          "failed": 0,
+          "minLatencyMs": 47,
+          "avgLatencyMs": 88,
+          "p95LatencyMs": 137,
+          "maxLatencyMs": 138,
+          "errors": []
+        },
+        {
+          "wave": 3,
+          "concurrentRequests": 50,
+          "succeeded": 50,
+          "failed": 0,
+          "minLatencyMs": 49,
+          "avgLatencyMs": 146,
+          "p95LatencyMs": 264,
+          "maxLatencyMs": 316,
+          "errors": []
+        }
+      ],
+      "finalPoolMetrics": {
+        "totalCount": 10,
+        "idleCount": 10,
+        "waitingCount": 0
+      },
+      "zeroLeaksConfirmed": true,
+      "p2024TimeoutsDetected": 0,
+      "details": [
+        "Waves executed: 3. Total queries: 85. P2024 timeouts: 0. Leaks confirmed zero: true."
+      ]
+    },
+    "phase4_security_headers_and_cookie_protections": {
+      "suite": "PHASE 4: HTTP SECURITY HEADERS & COOKIE PROTECTIONS AUDIT",
+      "status": "PASSED",
+      "timestamp": "2026-09-24T11:27:31.165Z",
+      "durationMs": 359,
+      "headersAudit": [
+        {
+          "header": "Strict-Transport-Security",
+          "expected": "max-age >= 31536000; includeSubDomains; preload",
+          "actual": "max-age=63072000; includeSubDomains; preload",
+          "status": "PASSED",
+          "details": "Enforces 2-year HSTS with includeSubDomains and preload"
+        },
+        {
+          "header": "X-Frame-Options",
+          "expected": "DENY | SAMEORIGIN",
+          "actual": "SAMEORIGIN",
+          "status": "PASSED",
+          "details": "Clickjacking protection active (SAMEORIGIN)"
+        },
+        {
+          "header": "X-Content-Type-Options",
+          "expected": "nosniff",
+          "actual": "nosniff",
+          "status": "PASSED",
+          "details": "MIME-sniffing protection active (nosniff)"
+        },
+        {
+          "header": "Referrer-Policy",
+          "expected": "strict-origin-when-cross-origin | no-referrer",
+          "actual": "strict-origin-when-cross-origin",
+          "status": "PASSED",
+          "details": "Safe referrer leakage boundary (strict-origin-when-cross-origin)"
+        },
+        {
+          "header": "Content-Security-Policy",
+          "expected": "default-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests",
+          "actual": "default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; media-src 'self' blob: https:; frame-src 'self' https:; worker-src 'self' blob:; manifest-src 'self'; upgrade-insecure-requests",
+          "status": "PASSED",
+          "details": "Robust CSP baseline enforcing object-src 'none', frame-ancestors 'self', and upgrade-insecure-requests"
+        },
+        {
+          "header": "Permissions-Policy",
+          "expected": "Restricts camera, microphone, geolocation",
+          "actual": "camera=(self), microphone=(self), geolocation=(), browsing-topics=()",
+          "status": "PASSED",
+          "details": "Hardware API policy defined: camera=(self), microphone=(self), geolocation=(), browsing-topics=()"
+        }
+      ],
+      "cookiesAudit": [
+        {
+          "file": "src/app/api/auth/login/route.ts",
+          "cookieName": "cse_session",
+          "hasHttpOnly": true,
+          "hasSecure": true,
+          "hasSameSite": true,
+          "hasRootPath": true,
+          "status": "PASSED",
+          "details": "Enforces httpOnly: true, secure (prod), sameSite: lax/strict, path: '/'"
+        },
+        {
+          "file": "src/app/api/user/profile/route.ts",
+          "cookieName": "cse_session",
+          "hasHttpOnly": true,
+          "hasSecure": true,
+          "hasSameSite": true,
+          "hasRootPath": true,
+          "status": "PASSED",
+          "details": "Enforces httpOnly: true, secure (prod), sameSite: lax/strict, path: '/'"
+        },
+        {
+          "file": "src/app/api/partner/portal/security/route.ts",
+          "cookieName": "cse_partner_session",
+          "hasHttpOnly": true,
+          "hasSecure": true,
+          "hasSameSite": true,
+          "hasRootPath": true,
+          "status": "PASSED",
+          "details": "Enforces httpOnly: true, secure (prod), sameSite: lax/strict, path: '/'"
+        },
+        {
+          "file": "src/routes/admin/criticalActions.ts",
+          "cookieName": "cse_sudo_token",
+          "hasHttpOnly": true,
+          "hasSecure": true,
+          "hasSameSite": true,
+          "hasRootPath": true,
+          "status": "PASSED",
+          "details": "Enforces httpOnly: true, secure (prod), sameSite: lax/strict, path: '/'"
+        }
+      ],
+      "details": [
+        "Security headers checked: 6 (All passed: true). Cookies checked: 4 (All passed: true)."
+      ]
+    }
+  }
+}
