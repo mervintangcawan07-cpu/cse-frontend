@@ -1,0 +1,44 @@
+name: Production Readiness Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    name: Typecheck, Audit & Build
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      NEXT_PUBLIC_APP_URL: "https://govstudyx.com"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: TypeScript Check
+        run: npx tsc --noEmit
+
+      - name: Route Security & Query Cap Audit
+        run: npx tsx src/scripts/audit-routes.ts
+
+      - name: Production Build
+        run: npm run build
+
+      - name: Client Bundle Secret Exposure Scan
+        run: npx tsx src/scripts/audit-bundle-secrets.ts
