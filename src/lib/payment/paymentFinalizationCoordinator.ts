@@ -1,3 +1,4 @@
+// Relative Path: src/lib/payment/paymentFinalizationCoordinator.ts
 /**
  * Dormant durable payment-finalization coordinator (P1-001 / Slice 8C).
  */
@@ -877,65 +878,6 @@ function isRunnable(effect: PaymentFinalizationEffect, now: Date): boolean {
   );
 }
 
-function _nextEffectGroup(
-  parent: LoadedFinalization,
-  ordered: readonly PaymentFinalizationEffect[],
-  now: Date
-): EffectGroup | null {
-  const byType = (type: PaymentFinalizationEffect["effectType"]) =>
-    ordered.filter((effect) => effect.effectType === type);
-  const singleton = (
-    type: PaymentFinalizationEffect["effectType"],
-    kind: "PAYMENT" | "FEE" | "REFERRAL"
-  ): EffectGroup | null => {
-    const effect = byType(type)[0];
-    return effect && isRunnable(effect, now)
-      ? { kind, effectIds: [effect.id] }
-      : null;
-  };
-
-  const payment = singleton("PAYMENT_LEDGER", "PAYMENT");
-  if (payment) return payment;
-  const fee = singleton("PROVIDER_FEE_LEDGER", "FEE");
-  if (fee) return fee;
-  const referral = singleton("REFERRAL_REWARD", "REFERRAL");
-  if (referral) return referral;
-
-  const commission = byType("PARTNER_COMMISSION")[0];
-  const liability = byType("PARTNER_LIABILITY_LEDGER")[0];
-  if (commission && liability) {
-    const bothTerminal =
-      (commission.status === "COMPLETE" && liability.status === "COMPLETE") ||
-      (commission.status === "NOT_APPLICABLE" &&
-        liability.status === "NOT_APPLICABLE");
-    if (!bothTerminal && (isRunnable(commission, now) || isRunnable(liability, now))) {
-      return {
-        kind: "PARTNER_PAIR",
-        effectIds: [commission.id, liability.id],
-      };
-    }
-  }
-
-  for (const tax of byType("TAX_PROVISION")) {
-    if (isRunnable(tax, now)) {
-      return { kind: "TAX", effectIds: [tax.id] };
-    }
-  }
-
-  const reconciliation = byType("RECONCILIATION")[0];
-  const siblingsTerminal = parent.effects
-    .filter((effect) => effect.effectType !== "RECONCILIATION")
-    .every(
-      (effect) =>
-        effect.status === "COMPLETE" || effect.status === "NOT_APPLICABLE"
-    );
-  if (reconciliation && siblingsTerminal && isRunnable(reconciliation, now)) {
-    return { kind: "RECONCILIATION", effectIds: [reconciliation.id] };
-  }
-  return null;
-}
-
-
 function nextStrictEffectGroup(
   parent: LoadedFinalization,
   ordered: readonly PaymentFinalizationEffect[],
@@ -1050,27 +992,25 @@ function earliestFutureRetry(
 }
 
 function classifyExecutionError(error: unknown): FailureClassification {
-  if (error instanceof IdempotentLedgerError) {
-    return {
-      retryable: error.code === "LEDGER_CONCURRENT_IDENTITY_CONFLICT",
-      code: error.code,
-      message: "Ledger execution failed with controlled code " + error.code + ".",
-    };
-  }
   if (
     error instanceof ReferralRewardExecutionError ||
     error instanceof PartnerCommissionExecutionError ||
     error instanceof TaxProvisionExecutionError ||
     error instanceof ReconciliationExecutionError
   ) {
+    const execError = error as { code: string };
     return {
       retryable:
-        error.code === "CONCURRENT_IDENTITY_CONFLICT" ||
-        error.code === "DATABASE_EXECUTION_FAILED",
-      code: error.code,
-      message: "Financial execution failed with controlled code " + error.code + ".",
+        execError.code === "CONCURRENT_IDENTITY_CONFLICT" ||
+        execError.code === "DATABASE_EXECUTION_FAILED",
+      code: execError.code,
+      message:
+        "Financial execution failed with controlled code " +
+        execError.code +
+        ".",
     };
   }
+
   if (
     error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2034"
@@ -1081,9 +1021,11 @@ function classifyExecutionError(error: unknown): FailureClassification {
       message: "The database transaction requires a bounded retry.",
     };
   }
+
   if (error instanceof CoordinatorInvariantError) {
     return { retryable: false, code: error.code, message: error.message };
   }
+
   if (error instanceof LifecycleCasError) {
     return {
       retryable: false,
@@ -1091,10 +1033,15 @@ function classifyExecutionError(error: unknown): FailureClassification {
       message: "A financial lifecycle compare-and-set was inconsistent.",
     };
   }
+
+  const fallback = error as { code?: string; message?: string };
   return {
     retryable: false,
-    code: "COORDINATOR_UNCLASSIFIED_ERROR",
-    message: "An unclassified coordinator error requires manual review.",
+    code: fallback?.code || "COORDINATOR_UNCLASSIFIED_ERROR",
+    message:
+      error instanceof Error
+        ? error.message
+        : fallback?.message || "An unclassified coordinator error requires manual review.",
   };
 }
 
@@ -1693,12 +1640,12 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
           workerId,
           claimedGeneration,
           {
-          status: "MANUAL_REVIEW",
-          leaseOwner: null,
-          leaseExpiresAt: null,
-          lastErrorCode: "RECONCILIATION_DISCREPANCY",
-          lastErrorMessage: "Reconciliation produced a controlled discrepancy.",
-          manualReviewReasonCode: "RECONCILIATION_DISCREPANCY",
+            status: "MANUAL_REVIEW",
+            leaseOwner: null,
+            leaseExpiresAt: null,
+            lastErrorCode: "RECONCILIATION_DISCREPANCY",
+            lastErrorMessage: "Reconciliation produced a controlled discrepancy.",
+            manualReviewReasonCode: "RECONCILIATION_DISCREPANCY",
           }
         );
         return {
@@ -1729,13 +1676,13 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
           workerId,
           claimedGeneration,
           {
-          status: "COMPLETE",
-          completedAt: now,
-          leaseOwner: null,
-          leaseExpiresAt: null,
-          lastErrorCode: null,
-          lastErrorMessage: null,
-          manualReviewReasonCode: null,
+            status: "COMPLETE",
+            completedAt: now,
+            leaseOwner: null,
+            leaseExpiresAt: null,
+            lastErrorCode: null,
+            lastErrorMessage: null,
+            manualReviewReasonCode: null,
           }
         );
         return {
@@ -1752,10 +1699,10 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
         workerId,
         claimedGeneration,
         {
-        leaseExpiresAt: addMilliseconds(now, LEASE_DURATION_MS),
-        lastErrorCode: null,
-        lastErrorMessage: null,
-        manualReviewReasonCode: null,
+          leaseExpiresAt: addMilliseconds(now, LEASE_DURATION_MS),
+          lastErrorCode: null,
+          lastErrorMessage: null,
+          manualReviewReasonCode: null,
         }
       );
       return {
@@ -1915,13 +1862,13 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
           workerId,
           claimedGeneration,
           {
-          status: manual ? "MANUAL_REVIEW" : "FAILED_RETRYABLE",
-          leaseOwner: null,
-          leaseExpiresAt: null,
-          ...(nextAttemptAt ? { nextAttemptAt } : {}),
-          lastErrorCode: code,
-          lastErrorMessage: sanitizeMessage(classification.message),
-          manualReviewReasonCode: manual ? code : null,
+            status: manual ? "MANUAL_REVIEW" : "FAILED_RETRYABLE",
+            leaseOwner: null,
+            leaseExpiresAt: null,
+            ...(nextAttemptAt ? { nextAttemptAt } : {}),
+            lastErrorCode: code,
+            lastErrorMessage: sanitizeMessage(classification.message),
+            manualReviewReasonCode: manual ? code : null,
           }
         );
         return makeResult(
@@ -1984,12 +1931,12 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
           workerId,
           claimedGeneration,
           {
-          status: "PENDING",
-          leaseOwner: null,
-          leaseExpiresAt: null,
-          lastErrorCode: null,
-          lastErrorMessage: null,
-          manualReviewReasonCode: null,
+            status: "PENDING",
+            leaseOwner: null,
+            leaseExpiresAt: null,
+            lastErrorCode: null,
+            lastErrorMessage: null,
+            manualReviewReasonCode: null,
           }
         );
       });
@@ -2039,10 +1986,10 @@ class PaymentFinalizationCoordinatorEngine implements CoordinatorRuntime {
           workerId,
           claimedGeneration,
           {
-          status: "FAILED_RETRYABLE",
-          nextAttemptAt,
-          leaseOwner: null,
-          leaseExpiresAt: null,
+            status: "FAILED_RETRYABLE",
+            nextAttemptAt,
+            leaseOwner: null,
+            leaseExpiresAt: null,
           }
         );
       });

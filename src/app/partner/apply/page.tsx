@@ -1,61 +1,108 @@
-// Relative Path: src/app/partner/apply/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ShieldCheck,
-  Award,
   Sparkles,
   TrendingUp,
   DollarSign,
   ArrowRight,
-  CheckCircle2,
   AlertCircle,
-  Users,
-  Layers,
 } from "lucide-react";
 
-export default function PartnerApplyPage() {
-  const [formData, setFormData] = useState({
-    applicantName: "",
-    organizationName: "",
-    email: "",
-    phone: "",
-    type: "CONTENT_CREATOR",
-    socialUrl: "",
-    audienceSize: "10K - 50K followers",
-    proposedSlug: "",
-    pitchReason: "",
-  });
+type PartnerType =
+  | "CONTENT_CREATOR"
+  | "FACEBOOK_PAGE"
+  | "SCHOOL"
+  | "HOST"
+  | "AFFILIATE"
+  | "OTHER";
 
+type AudienceSize =
+  | "Under 5K followers"
+  | "5K - 20K followers"
+  | "20K - 100K followers"
+  | "100K+ followers";
+
+interface PartnerApplicationFormState {
+  applicantName: string;
+  organizationName: string;
+  email: string;
+  phone: string;
+  type: PartnerType;
+  socialUrl: string;
+  audienceSize: AudienceSize;
+  proposedSlug: string;
+  pitchReason: string;
+}
+
+const INITIAL_FORM_STATE: PartnerApplicationFormState = {
+  applicantName: "",
+  organizationName: "",
+  email: "",
+  phone: "",
+  type: "CONTENT_CREATOR",
+  socialUrl: "",
+  audienceSize: "5K - 20K followers",
+  proposedSlug: "",
+  pitchReason: "",
+};
+
+export default function PartnerApplyPage() {
+  const [formData, setFormData] = useState<PartnerApplicationFormState>(INITIAL_FORM_STATE);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFieldChange = <K extends keyof PartnerApplicationFormState>(
+    field: K,
+    value: PartnerApplicationFormState[K]
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (submitting) return;
+
     setSubmitting(true);
     setError(null);
+
+    const payload: PartnerApplicationFormState = {
+      applicantName: formData.applicantName.trim(),
+      organizationName: formData.organizationName.trim(),
+      email: formData.email.trim().toLowerCase(),
+      phone: formData.phone.trim(),
+      type: formData.type,
+      socialUrl: formData.socialUrl.trim(),
+      audienceSize: formData.audienceSize,
+      proposedSlug: formData.proposedSlug.trim().toLowerCase(),
+      pitchReason: formData.pitchReason.trim(),
+    };
 
     try {
       const res = await fetch("/api/partner/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const json = await res.json();
 
       if (res.ok && json.success) {
         setSuccess(true);
-        setSuccessMsg(json.message);
+        setSuccessMsg(
+          json.message ||
+            "Thank you for applying! Our partnership team will review your application within 24–48 hours."
+        );
       } else {
         setError(json.error || "Failed to submit application.");
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("Partner application error:", err);
       setError("Network error. Please check your connection and try again.");
     } finally {
       setSubmitting(false);
@@ -146,7 +193,7 @@ export default function PartnerApplyPage() {
         <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6">
           {success ? (
             <div className="py-12 text-center space-y-4 max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto text-3xl">
+              <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto text-3xl font-black">
                 ✓
               </div>
               <h3 className="text-xl font-black text-white">Application Received!</h3>
@@ -154,7 +201,7 @@ export default function PartnerApplyPage() {
               <div className="pt-4">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition cursor-pointer"
                 >
                   <span>Return to Homepage</span>
                   <ArrowRight className="w-4 h-4" />
@@ -180,29 +227,37 @@ export default function PartnerApplyPage() {
               <form onSubmit={handleSubmit} className="space-y-5 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="applicant-name"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Your Full Name *
                     </label>
                     <input
+                      id="applicant-name"
                       type="text"
                       required
                       placeholder="e.g. Juan Dela Cruz"
                       value={formData.applicantName}
-                      onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })}
+                      onChange={(e) => handleFieldChange("applicantName", e.target.value)}
                       className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="organization-name"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Page / Channel / Organization Name *
                     </label>
                     <input
+                      id="organization-name"
                       type="text"
                       required
                       placeholder="e.g. CSE Reviewers Philippines"
                       value={formData.organizationName}
-                      onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
+                      onChange={(e) => handleFieldChange("organizationName", e.target.value)}
                       className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                     />
                   </div>
@@ -210,28 +265,36 @@ export default function PartnerApplyPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="applicant-email"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Email Address *
                     </label>
                     <input
+                      id="applicant-email"
                       type="email"
                       required
                       placeholder="your.email@gmail.com"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => handleFieldChange("email", e.target.value)}
                       className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="applicant-phone"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Mobile / WhatsApp / Viber Number
                     </label>
                     <input
+                      id="applicant-phone"
                       type="text"
                       placeholder="09171234567"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => handleFieldChange("phone", e.target.value)}
                       className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                     />
                   </div>
@@ -239,13 +302,17 @@ export default function PartnerApplyPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="partner-type"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Partner Type
                     </label>
                     <select
+                      id="partner-type"
                       value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                      className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none"
+                      onChange={(e) => handleFieldChange("type", e.target.value as PartnerType)}
+                      className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none cursor-pointer"
                     >
                       <option value="CONTENT_CREATOR">Content Creator / Vlogger</option>
                       <option value="FACEBOOK_PAGE">Facebook Page / Group Admin</option>
@@ -257,13 +324,17 @@ export default function PartnerApplyPage() {
                   </div>
 
                   <div>
-                    <label className="block font-bold uppercase text-slate-400 mb-1">
+                    <label
+                      htmlFor="audience-size"
+                      className="block font-bold uppercase text-slate-400 mb-1"
+                    >
                       Estimated Community Size
                     </label>
                     <select
+                      id="audience-size"
                       value={formData.audienceSize}
-                      onChange={(e) => setFormData({ ...formData, audienceSize: e.target.value })}
-                      className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none"
+                      onChange={(e) => handleFieldChange("audienceSize", e.target.value as AudienceSize)}
+                      className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none cursor-pointer"
                     >
                       <option value="Under 5K followers">Under 5,000 followers</option>
                       <option value="5K - 20K followers">5,000 – 20,000 followers</option>
@@ -274,41 +345,53 @@ export default function PartnerApplyPage() {
                 </div>
 
                 <div>
-                  <label className="block font-bold uppercase text-slate-400 mb-1">
+                  <label
+                    htmlFor="social-url"
+                    className="block font-bold uppercase text-slate-400 mb-1"
+                  >
                     Facebook Page / YouTube / TikTok Channel URL *
                   </label>
                   <input
+                    id="social-url"
                     type="url"
                     required
                     placeholder="https://facebook.com/yourpage or https://youtube.com/@channel"
                     value={formData.socialUrl}
-                    onChange={(e) => setFormData({ ...formData, socialUrl: e.target.value })}
+                    onChange={(e) => handleFieldChange("socialUrl", e.target.value)}
                     className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold uppercase text-slate-400 mb-1">
+                  <label
+                    htmlFor="proposed-slug"
+                    className="block font-bold uppercase text-slate-400 mb-1"
+                  >
                     Desired Custom URL Slug (e.g. <code>govstudyx.com/p/your-slug</code>)
                   </label>
                   <input
+                    id="proposed-slug"
                     type="text"
                     placeholder="e.g. prof-juan or cse-guide-ph"
                     value={formData.proposedSlug}
-                    onChange={(e) => setFormData({ ...formData, proposedSlug: e.target.value })}
+                    onChange={(e) => handleFieldChange("proposedSlug", e.target.value)}
                     className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl font-mono text-emerald-300 outline-none focus:border-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold uppercase text-slate-400 mb-1">
+                  <label
+                    htmlFor="pitch-reason"
+                    className="block font-bold uppercase text-slate-400 mb-1"
+                  >
                     How do you plan to promote GovStudyX? (Optional)
                   </label>
                   <textarea
+                    id="pitch-reason"
                     rows={3}
                     placeholder="e.g. Posting video tutorials on YouTube, sharing review items in our FB group of 40k CSE takers..."
                     value={formData.pitchReason}
-                    onChange={(e) => setFormData({ ...formData, pitchReason: e.target.value })}
+                    onChange={(e) => handleFieldChange("pitchReason", e.target.value)}
                     className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white outline-none focus:border-emerald-500"
                   />
                 </div>
@@ -334,6 +417,10 @@ export default function PartnerApplyPage() {
           )}
         </div>
       </main>
+
+      <footer className="py-6 text-center text-xs text-slate-600 border-t border-slate-900">
+        &copy; 2026 GovStudyX Partner Network. Protected by enterprise security.
+      </footer>
     </div>
   );
 }

@@ -3,40 +3,73 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Controlled Service Worker Registration Component (PWA-1B)
- *
- * Requirements:
- * - Production-only execution
- * - Registered after window load (or immediately if hydration completes post-load)
- * - Exact root scope ("/") and updateViaCache: "none"
- * - Detection of waiting/new workers without forcing activation or page reloads
- * - Zero visible UI, silent graceful failure
- */
+const PWA_UPDATE_EVENT = "govstudyx:pwa-update-available";
+const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000; // Check every 1 hour
+
 export default function ServiceWorkerRegister() {
   const hasDispatchedUpdateRef = useRef(false);
 
   useEffect(() => {
-    // 1. Production gate: Never register service worker in development or test
+    // 1. Production gate
     if (process.env.NODE_ENV !== "production") {
       return;
     }
 
-    // 2. Browser feature support guard
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+    // 2. Feature detection
+    if (!("serviceWorker" in navigator)) {
       return;
     }
+
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    let cleanupListeners: (() => void) | null = null;
 
     const notifyUpdateAvailable = () => {
       if (hasDispatchedUpdateRef.current) return;
       hasDispatchedUpdateRef.current = true;
+
       try {
-        window.dispatchEvent(
-          new CustomEvent("govstudyx:pwa-update-available")
-        );
+        window.dispatchEvent(new CustomEvent(PWA_UPDATE_EVENT));
       } catch {
-        // Non-critical event dispatch
+        // Non-critical event dispatch failure
       }
+    };
+
+    const attachRegistrationWatchers = (registration: ServiceWorkerRegistration) => {
+      // Case A: A worker is already waiting in the background
+      if (registration.waiting) {
+        notifyUpdateAvailable();
+      }
+
+      // Case B: A new worker begins installing
+      const handleUpdateFound = () => {
+        const installingWorker = registration.installing;
+        if (!installingWorker) return;
+
+        const handleStateChange = () => {
+          if (
+            installingWorker.state === "installed" &&
+            navigator.serviceWorker.controller
+          ) {
+            notifyUpdateAvailable();
+          }
+        };
+
+        installingWorker.addEventListener("statechange", handleStateChange);
+      };
+
+      registration.addEventListener("updatefound", handleUpdateFound);
+
+      // Periodic check for updates on long-running client sessions
+      intervalId = setInterval(() => {
+        registration.update().catch(() => {
+          // Silent ignore background update check errors
+        });
+      }, UPDATE_CHECK_INTERVAL_MS);
+
+      cleanupListeners = () => {
+        registration.removeEventListener("updatefound", handleUpdateFound);
+        if (intervalId) clearInterval(intervalId);
+      };
     };
 
     const registerServiceWorker = () => {
@@ -46,28 +79,10 @@ export default function ServiceWorkerRegister() {
           updateViaCache: "none",
         })
         .then((registration) => {
-          // A. Update already waiting
-          if (registration.waiting) {
-            notifyUpdateAvailable();
-          }
-
-          // B. New update discovered
-          registration.addEventListener("updatefound", () => {
-            const installingWorker = registration.installing;
-            if (!installingWorker) return;
-
-            installingWorker.addEventListener("statechange", () => {
-              if (
-                installingWorker.state === "installed" &&
-                navigator.serviceWorker.controller
-              ) {
-                notifyUpdateAvailable();
-              }
-            });
-          });
+          attachRegistrationWatchers(registration);
         })
         .catch(() => {
-          // Registration failure must not break GovStudyX. Silent graceful degradation.
+          // Graceful silent degradation
         });
     };
 
@@ -80,6 +95,9 @@ export default function ServiceWorkerRegister() {
 
     return () => {
       window.removeEventListener("load", registerServiceWorker);
+      if (cleanupListeners) {
+        cleanupListeners();
+      }
     };
   }, []);
 

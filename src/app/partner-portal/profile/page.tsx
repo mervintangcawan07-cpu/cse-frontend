@@ -1,26 +1,36 @@
-// Relative Path: src/app/partner-portal/profile/page.tsx
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
+import React, { useEffect, useState, useCallback, useRef, type SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
   User,
-  Building2,
-  Mail,
-  Phone,
-  Globe,
   Award,
-  ShieldCheck,
   CheckCircle,
   AlertCircle,
   Save,
 } from "lucide-react";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
 
+interface PartnerProfileDetails {
+  partnerId: string;
+  name: string;
+  contactEmail: string;
+  type: string;
+  status: string;
+  commissionRate: number;
+  holdingPeriodDays: number;
+  contactName?: string;
+  contactPhone?: string;
+  tagline?: string;
+  description?: string;
+  facebookUrl?: string;
+  websiteUrl?: string;
+  [key: string]: unknown;
+}
+
 export default function PartnerProfilePage() {
   const router = useRouter();
-  const [partner, setPartner] = useState<any | null>(null);
+  const [partner, setPartner] = useState<PartnerProfileDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Form State
@@ -35,37 +45,63 @@ export default function PartnerProfilePage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const fetchProfile = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("/api/partner/portal/profile");
-      if (res.status === 401) {
-        router.push("/partner-portal/login");
-        return;
-      }
-      if (res.ok) {
-        const json = await res.json();
-        setPartner(json.partner);
-        setContactName(json.partner.contactName || "");
-        setContactPhone(json.partner.contactPhone || "");
-        setTagline(json.partner.tagline || "");
-        setDescription(json.partner.description || "");
-        setFacebookUrl(json.partner.facebookUrl || "");
-        setWebsiteUrl(json.partner.websiteUrl || "");
-      }
-    } catch (err) {
-      console.error("Failed to load profile:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    fetchProfile();
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  const fetchProfile = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        const res = await fetch("/api/partner/portal/profile", { signal });
+        if (res.status === 401) {
+          router.push("/partner-portal/login");
+          return;
+        }
+        if (res.ok) {
+          const json = await res.json();
+          const profile: PartnerProfileDetails = json.partner;
+          setPartner(profile);
+          setContactName(profile.contactName || "");
+          setContactPhone(profile.contactPhone || "");
+          setTagline(profile.tagline || "");
+          setDescription(profile.description || "");
+          setFacebookUrl(profile.facebookUrl || "");
+          setWebsiteUrl(profile.websiteUrl || "");
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load partner profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchProfile(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchProfile]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (saving) return;
+
     setSaving(true);
     setSaveSuccess(false);
     setSaveError(null);
@@ -75,12 +111,12 @@ export default function PartnerProfilePage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contactName,
-          contactPhone,
-          tagline,
-          description,
-          facebookUrl,
-          websiteUrl,
+          contactName: contactName.trim(),
+          contactPhone: contactPhone.trim(),
+          tagline: tagline.trim(),
+          description: description.trim(),
+          facebookUrl: facebookUrl.trim(),
+          websiteUrl: websiteUrl.trim(),
         }),
       });
 
@@ -88,11 +124,13 @@ export default function PartnerProfilePage() {
 
       if (res.ok && json.success) {
         setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => setSaveSuccess(false), 3000);
       } else {
         setSaveError(json.error || "Failed to update profile.");
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("Partner profile save error:", err);
       setSaveError("Network error. Please try again.");
     } finally {
       setSaving(false);
@@ -104,7 +142,9 @@ export default function PartnerProfilePage() {
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-4">
         <div className="text-center space-y-3">
           <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Loading partner profile...</p>
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+            Loading partner profile...
+          </p>
         </div>
       </div>
     );
@@ -190,8 +230,14 @@ export default function PartnerProfilePage() {
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Partner / Organization Name</label>
+                <label
+                  htmlFor="partner-org-name"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Partner / Organization Name
+                </label>
                 <input
+                  id="partner-org-name"
                   type="text"
                   disabled
                   value={partner?.name || ""}
@@ -200,8 +246,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Registered Contact Email</label>
+                <label
+                  htmlFor="partner-contact-email"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Registered Contact Email
+                </label>
                 <input
+                  id="partner-contact-email"
                   type="email"
                   disabled
                   value={partner?.contactEmail || ""}
@@ -210,8 +262,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Contact Person / Liaison</label>
+                <label
+                  htmlFor="partner-liaison-name"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Contact Person / Liaison
+                </label>
                 <input
+                  id="partner-liaison-name"
                   type="text"
                   placeholder="Primary contact name"
                   value={contactName}
@@ -221,8 +279,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Contact Mobile / Phone</label>
+                <label
+                  htmlFor="partner-phone"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Contact Mobile / Phone
+                </label>
                 <input
+                  id="partner-phone"
                   type="text"
                   placeholder="e.g. +63 917 123 4567"
                   value={contactPhone}
@@ -232,8 +296,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block font-bold uppercase text-slate-400 mb-1">Tagline</label>
+                <label
+                  htmlFor="partner-tagline"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Tagline
+                </label>
                 <input
+                  id="partner-tagline"
                   type="text"
                   placeholder="e.g. Leading Civil Service Exam Community in the Philippines"
                   value={tagline}
@@ -243,8 +313,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block font-bold uppercase text-slate-400 mb-1">Description / Bio</label>
+                <label
+                  htmlFor="partner-description"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Description / Bio
+                </label>
                 <textarea
+                  id="partner-description"
                   rows={3}
                   placeholder="Short description displayed on your dedicated partner landing page"
                   value={description}
@@ -254,8 +330,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Facebook Page / Group URL</label>
+                <label
+                  htmlFor="partner-facebook-url"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Facebook Page / Group URL
+                </label>
                 <input
+                  id="partner-facebook-url"
                   type="url"
                   placeholder="https://facebook.com/..."
                   value={facebookUrl}
@@ -265,8 +347,14 @@ export default function PartnerProfilePage() {
               </div>
 
               <div>
-                <label className="block font-bold uppercase text-slate-400 mb-1">Official Website URL</label>
+                <label
+                  htmlFor="partner-website-url"
+                  className="block font-bold uppercase text-slate-400 mb-1"
+                >
+                  Official Website URL
+                </label>
                 <input
+                  id="partner-website-url"
                   type="url"
                   placeholder="https://yourwebsite.com"
                   value={websiteUrl}
@@ -291,7 +379,7 @@ export default function PartnerProfilePage() {
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

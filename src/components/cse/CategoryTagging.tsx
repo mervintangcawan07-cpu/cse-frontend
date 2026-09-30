@@ -93,18 +93,28 @@ export const CategoryTagging: React.FC<CategoryTaggingProps> = ({
           >
             All Difficulties
           </button>
-          {DIFFICULTY_LEVELS.map((diff) => (
-            <button
-              key={diff}
-              onClick={() => onSelectDifficulty?.(diff)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${getDifficultyBadgeStyle(
-                diff
-              )} ${selectedDifficulty === diff ? "ring-2 ring-blue-500 shadow-xs" : ""}`}
-            >
-              {diff === "Hard/Speed Test" ? "🔥 " : diff === "Intermediate Drill" ? "⚡ " : "🌱 "}
-              {diff}
-            </button>
-          ))}
+          {DIFFICULTY_LEVELS.map((diff) => {
+            let difficultyIcon = "🌱 ";
+
+            if (diff === "Hard/Speed Test") {
+              difficultyIcon = "🔥 ";
+            } else if (diff === "Intermediate Drill") {
+              difficultyIcon = "⚡ ";
+            }
+
+            return (
+              <button
+                key={diff}
+                onClick={() => onSelectDifficulty?.(diff)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${getDifficultyBadgeStyle(
+                  diff
+                )} ${selectedDifficulty === diff ? "ring-2 ring-blue-500 shadow-xs" : ""}`}
+              >
+                {difficultyIcon}
+                {diff}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

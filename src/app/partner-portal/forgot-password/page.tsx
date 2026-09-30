@@ -1,14 +1,12 @@
-// Relative Path: src/app/partner-portal/forgot-password/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ShieldCheck,
   ArrowRight,
   Building2,
-  AlertCircle,
   CheckCircle,
   ArrowLeft,
 } from "lucide-react";
@@ -19,15 +17,18 @@ export default function PartnerForgotPasswordPage() {
   const [submitted, setSubmitted] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
+    const cleanIdentifier = identifier.trim();
 
     try {
       const res = await fetch("/api/partner/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier }),
+        body: JSON.stringify({ identifier: cleanIdentifier }),
       });
 
       const json = await res.json();
@@ -36,7 +37,8 @@ export default function PartnerForgotPasswordPage() {
           "If an eligible partner account matches the information provided, password reset instructions will be sent to the registered email."
       );
       setSubmitted(true);
-    } catch {
+    } catch (err: unknown) {
+      console.error("Partner password recovery network error:", err);
       setMsg(
         "If an eligible partner account matches the information provided, password reset instructions will be sent to the registered email."
       );
@@ -61,11 +63,17 @@ export default function PartnerForgotPasswordPage() {
               />
             </div>
             <div className="font-extrabold text-sm tracking-tight text-white">
-              GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">RECOVERY</span>
+              GovStudyX{" "}
+              <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">
+                RECOVERY
+              </span>
             </div>
           </Link>
 
-          <Link href="/partner-portal/login" className="text-xs text-slate-400 hover:text-white transition flex items-center gap-1">
+          <Link
+            href="/partner-portal/login"
+            className="text-xs text-slate-400 hover:text-white transition flex items-center gap-1"
+          >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Sign In</span>
           </Link>
@@ -104,10 +112,14 @@ export default function PartnerForgotPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                <label
+                  htmlFor="partner-identifier"
+                  className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                >
                   Registered Email or Partner ID
                 </label>
                 <input
+                  id="partner-identifier"
                   type="text"
                   required
                   placeholder="e.g. PT-000123 or partner@email.com"
@@ -138,7 +150,7 @@ export default function PartnerForgotPasswordPage() {
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

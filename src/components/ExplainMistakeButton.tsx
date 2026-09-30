@@ -5,11 +5,11 @@ import { useState } from "react";
 import AudioSpeechButton from "@/components/common/AudioSpeechButton";
 
 interface ExplainMistakeButtonProps {
-  prompt: string;
-  userChoice: string;
-  correctChoice: string;
-  officialExplanation?: string | null;
-  category?: string;
+  readonly prompt: string;
+  readonly userChoice: string;
+  readonly correctChoice: string;
+  readonly officialExplanation?: string | null;
+  readonly category?: string;
 }
 
 export default function ExplainMistakeButton({
@@ -18,7 +18,7 @@ export default function ExplainMistakeButton({
   correctChoice,
   officialExplanation,
   category,
-}: ExplainMistakeButtonProps) {
+}: Readonly<ExplainMistakeButtonProps>) {
   const [loading, setLoading] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

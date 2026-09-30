@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchWithClientCache } from "@/lib/clientCache";
 
 interface Schedule {
   title: string;
@@ -11,54 +10,238 @@ interface Schedule {
   status: string;
 }
 
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+interface MetricUnit {
+  value: number;
+  label: string;
+}
+
+interface DisplayMetrics {
+  unit1: MetricUnit;
+  unit2: MetricUnit;
+  unit3: MetricUnit;
+}
+
+function getPluralLabel(value: number, singular: string, plural: string): string {
+  return value === 1 ? singular : plural;
+}
+
+function calculateTimeLeft(examDate: string): TimeLeft {
+  const target = new Date(examDate).getTime();
+  const difference = target - Date.now();
+
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  };
+}
+
+function computeDisplayMetrics(timeLeft: TimeLeft): DisplayMetrics {
+  if (timeLeft.days >= 30) {
+    const months = Math.floor(timeLeft.days / 30);
+    const remainingDays = timeLeft.days % 30;
+
+    return {
+      unit1: { value: months, label: getPluralLabel(months, "Month", "Months") },
+      unit2: { value: remainingDays, label: getPluralLabel(remainingDays, "Day", "Days") },
+      unit3: { value: timeLeft.hours, label: getPluralLabel(timeLeft.hours, "Hour", "Hours") },
+    };
+  }
+
+  return {
+    unit1: { value: timeLeft.days, label: getPluralLabel(timeLeft.days, "Day", "Days") },
+    unit2: { value: timeLeft.hours, label: getPluralLabel(timeLeft.hours, "Hour", "Hours") },
+    unit3: { value: timeLeft.minutes, label: getPluralLabel(timeLeft.minutes, "Minute", "Minutes") },
+  };
+}
+
+function CSCAppointmentModal({
+  isOpen,
+  onClose,
+}: Readonly<{
+  isOpen: boolean;
+  onClose: () => void;
+}>) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl text-slate-100 animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex justify-between items-start gap-4">
+          <div>
+            <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
+              Official Government Portals
+            </span>
+            <h3 className="text-xl font-black text-white mt-2">
+              Choose CSC Application Portal
+            </h3>
+            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              Different CSC Regional Offices designate different online systems for slot reservations. Select the portal applicable to your region:
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer shrink-0"
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="space-y-3">
+          <a
+            href="https://ocseas.csc.gov.ph"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-4 bg-slate-950 hover:bg-blue-950/40 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
+          >
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-extrabold text-white group-hover:text-blue-400 transition">
+                  1. CSC OCSEAS Portal
+                </span>
+                <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-md border border-blue-500/30">
+                  National System
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Online Civil Service Examination Application System used by CSC Central &amp; participating Regional Offices.
+              </p>
+            </div>
+            <span className="px-3.5 py-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition text-center shrink-0">
+              Open OCSEAS ↗
+            </span>
+          </a>
+
+          <a
+            href="https://services.csc.gov.ph"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-4 bg-slate-950 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
+          >
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-extrabold text-white group-hover:text-indigo-400 transition">
+                  2. CSC Online Services Portal
+                </span>
+                <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-md border border-indigo-500/30">
+                  Regional Appointments
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Centralized CSC Online Services portal used by regional offices for slot reservation, filing, and exam services.
+              </p>
+            </div>
+            <span className="px-3.5 py-2 bg-indigo-600 group-hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition text-center shrink-0">
+              Open Services ↗
+            </span>
+          </a>
+
+          <a
+            href="https://appointment.csc.gov.ph"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-4 bg-slate-950 hover:bg-amber-950/40 border border-slate-800 hover:border-amber-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
+          >
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-extrabold text-white group-hover:text-amber-400 transition">
+                  3. CSC ORAS Portal
+                </span>
+                <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded-md border border-amber-500/30">
+                  Field Office Slots
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Online Registration &amp; Appointment System for specific field office in-person appearance bookings.
+              </p>
+            </div>
+            <span className="px-3.5 py-2 bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition text-center shrink-0">
+              Open ORAS ↗
+            </span>
+          </a>
+        </div>
+
+        <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-[11px] text-slate-400 leading-relaxed font-medium">
+          💡 <strong className="text-slate-300">Regional Tip:</strong> Please verify with your specific CSC Regional Office advisory (e.g. NCR, RO3, RO4, RO7, RO11) to confirm whether your testing center requires OCSEAS, Services, or ORAS.
+        </div>
+
+        <div className="text-right">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs rounded-xl transition cursor-pointer"
+          >
+            Close Chooser
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CSCCountdownWidget() {
   const [schedule, setSchedule] = useState<Schedule | null>(null);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [loading, setLoading] = useState(true);
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function loadData() {
       try {
-        // Fetch public info (bypassing stale null cache if necessary)
-        const res = await fetch(`/api/csc/public-info?t=${Date.now()}`);
+        const res = await fetch(`/api/csc/public-info?t=${Date.now()}`, {
+          signal: controller.signal,
+        });
         if (res.ok) {
           const data = await res.json();
           if (data?.nextSchedule) {
             setSchedule(data.nextSchedule);
           }
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load CSC timetable:", err);
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
-    loadData();
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
     if (!schedule?.examDate) return;
 
-    const timer = setInterval(() => {
-      const target = new Date(schedule.examDate).getTime();
-      const now = new Date().getTime();
-      const difference = target - now;
+    const updateTimer = () => {
+      setTimeLeft(calculateTimeLeft(schedule.examDate));
+    };
 
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-      }
-    }, 1000);
+    updateTimer();
+    const timer = setInterval(updateTimer, 1000);
 
     return () => clearInterval(timer);
-  }, [schedule]);
+  }, [schedule?.examDate]);
 
   if (loading) {
     return (
@@ -72,7 +255,12 @@ export default function CSCCountdownWidget() {
     return (
       <div className="bg-white border border-slate-200/80 p-6 rounded-3xl text-center text-slate-600 text-xs shadow-sm">
         📢 No upcoming examination schedule announced. Visit{" "}
-        <a href="https://erpo.csc.gov.ph" target="_blank" rel="noreferrer" className="text-blue-600 underline font-bold">
+        <a
+          href="https://erpo.csc.gov.ph"
+          target="_blank"
+          rel="noreferrer"
+          className="text-blue-600 underline font-bold"
+        >
           erpo.csc.gov.ph
         </a>{" "}
         for updates.
@@ -80,18 +268,7 @@ export default function CSCCountdownWidget() {
     );
   }
 
-  const isMonthView = timeLeft.days >= 30;
-  const displayMetrics = isMonthView
-    ? {
-        unit1: { value: Math.floor(timeLeft.days / 30), label: Math.floor(timeLeft.days / 30) === 1 ? "Month" : "Months" },
-        unit2: { value: timeLeft.days % 30, label: (timeLeft.days % 30) === 1 ? "Day" : "Days" },
-        unit3: { value: timeLeft.hours, label: timeLeft.hours === 1 ? "Hour" : "Hours" },
-      }
-    : {
-        unit1: { value: timeLeft.days, label: timeLeft.days === 1 ? "Day" : "Days" },
-        unit2: { value: timeLeft.hours, label: timeLeft.hours === 1 ? "Hour" : "Hours" },
-        unit3: { value: timeLeft.minutes, label: timeLeft.minutes === 1 ? "Minute" : "Minutes" },
-      };
+  const displayMetrics = computeDisplayMetrics(timeLeft);
 
   return (
     <div className="bg-white border border-slate-200/80 text-slate-900 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-md space-y-4 sm:space-y-5 relative">
@@ -100,7 +277,9 @@ export default function CSCCountdownWidget() {
           <span className="text-[10px] font-black uppercase px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-200/80">
             Official CSC Timetable
           </span>
-          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mt-1.5 leading-snug">{schedule.title}</h3>
+          <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mt-1.5 leading-snug">
+            {schedule.title}
+          </h3>
         </div>
 
         <span
@@ -116,16 +295,28 @@ export default function CSCCountdownWidget() {
 
       <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center pt-1">
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-amber-500 block leading-tight">{displayMetrics.unit1.value}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit1.label}</span>
+          <span className="text-xl sm:text-3xl font-black text-amber-500 block leading-tight">
+            {displayMetrics.unit1.value}
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">
+            {displayMetrics.unit1.label}
+          </span>
         </div>
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{displayMetrics.unit2.value}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit2.label}</span>
+          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">
+            {displayMetrics.unit2.value}
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">
+            {displayMetrics.unit2.label}
+          </span>
         </div>
         <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/50 p-2 sm:p-3.5 rounded-2xl border border-blue-100 shadow-sm">
-          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">{displayMetrics.unit3.value}</span>
-          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">{displayMetrics.unit3.label}</span>
+          <span className="text-xl sm:text-3xl font-black text-slate-900 block leading-tight">
+            {displayMetrics.unit3.value}
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500 tracking-wider">
+            {displayMetrics.unit3.label}
+          </span>
         </div>
       </div>
 
@@ -157,130 +348,15 @@ export default function CSCCountdownWidget() {
             className="px-3.5 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold text-xs rounded-xl transition text-center flex items-center justify-center gap-1 shadow-sm"
           >
             <span>🏛️</span>
-            <span>OCSERGS & ONSA ↗</span>
+            <span>OCSERGS &amp; ONSA ↗</span>
           </a>
         </div>
       </div>
 
-      {/* 🏛️ REGIONAL CSC APPOINTMENT PORTAL CHOOSER MODAL */}
-      {showAppointmentModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl text-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-start gap-4">
-              <div>
-                <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">
-                  Official Government Portals
-                </span>
-                <h3 className="text-xl font-black text-white mt-2">
-                  Choose CSC Application Portal
-                </h3>
-                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                  Different CSC Regional Offices designate different online systems for slot reservations. Select the portal applicable to your region:
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowAppointmentModal(false)}
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer shrink-0"
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {/* Option 1: OCSEAS */}
-              <a
-                href="https://ocseas.csc.gov.ph"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 bg-slate-950 hover:bg-blue-950/40 border border-slate-800 hover:border-blue-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-extrabold text-white group-hover:text-blue-400 transition">
-                      1. CSC OCSEAS Portal
-                    </span>
-                    <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded-md border border-blue-500/30">
-                      National System
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-400">
-                    Online Civil Service Examination Application System used by CSC Central & participating Regional Offices.
-                  </p>
-                </div>
-                <span className="px-3.5 py-2 bg-blue-600 group-hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition text-center shrink-0">
-                  Open OCSEAS ↗
-                </span>
-              </a>
-
-              {/* Option 2: CSC Services */}
-              <a
-                href="https://services.csc.gov.ph"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 bg-slate-950 hover:bg-indigo-950/40 border border-slate-800 hover:border-indigo-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-extrabold text-white group-hover:text-indigo-400 transition">
-                      2. CSC Online Services Portal
-                    </span>
-                    <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-indigo-500/20 text-indigo-300 rounded-md border border-indigo-500/30">
-                      Regional Appointments
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-400">
-                    Centralized CSC Online Services portal used by regional offices for slot reservation, filing, and exam services.
-                  </p>
-                </div>
-                <span className="px-3.5 py-2 bg-indigo-600 group-hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition text-center shrink-0">
-                  Open Services ↗
-                </span>
-              </a>
-
-              {/* Option 3: CSC ORAS */}
-              <a
-                href="https://appointment.csc.gov.ph"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-4 bg-slate-950 hover:bg-amber-950/40 border border-slate-800 hover:border-amber-500/50 rounded-2xl transition group flex flex-col sm:flex-row sm:items-center justify-between gap-3 block"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-extrabold text-white group-hover:text-amber-400 transition">
-                      3. CSC ORAS Portal
-                    </span>
-                    <span className="text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded-md border border-amber-500/30">
-                      Field Office Slots
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-400">
-                    Online Registration & Appointment System for specific field office in-person appearance bookings.
-                  </p>
-                </div>
-                <span className="px-3.5 py-2 bg-amber-500 group-hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl transition text-center shrink-0">
-                  Open ORAS ↗
-                </span>
-              </a>
-            </div>
-
-            <div className="p-3 bg-slate-950 rounded-2xl border border-slate-800 text-[11px] text-slate-400 leading-relaxed font-medium">
-              💡 <strong className="text-slate-300">Regional Tip:</strong> Please verify with your specific CSC Regional Office advisory (e.g. NCR, RO3, RO4, RO7, RO11) to confirm whether your testing center requires OCSEAS, Services, or ORAS.
-            </div>
-
-            <div className="text-right">
-              <button
-                type="button"
-                onClick={() => setShowAppointmentModal(false)}
-                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs rounded-xl transition cursor-pointer"
-              >
-                Close Chooser
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CSCAppointmentModal
+        isOpen={showAppointmentModal}
+        onClose={() => setShowAppointmentModal(false)}
+      />
     </div>
   );
 }

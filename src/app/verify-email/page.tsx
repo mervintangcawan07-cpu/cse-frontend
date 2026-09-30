@@ -8,20 +8,27 @@ function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [errorMessage, setErrorMessage] = useState("");
+  // Derive initial error state directly so we don't trigger cascading setState in useEffect
+  const [status, setStatus] = useState<"loading" | "success" | "error">(() =>
+    token ? "loading" : "error"
+  );
+  const [errorMessage, setErrorMessage] = useState(() =>
+    token ? "" : "Missing verification token."
+  );
 
   useEffect(() => {
     if (!token) {
-      setStatus("error");
-      setErrorMessage("Missing verification token.");
       return;
     }
 
+    let isMounted = true;
+
     async function verify() {
       try {
-        const res = await fetch(`/api/auth/verify-email?token=${token}`);
+        const res = await fetch(`/api/auth/verify-email?token=${encodeURIComponent(token!)}`);
         const data = await res.json();
+
+        if (!isMounted) return;
 
         if (res.ok && data.success) {
           setStatus("success");
@@ -29,13 +36,19 @@ function VerifyEmailContent() {
           setStatus("error");
           setErrorMessage(data.error || "Failed to verify email.");
         }
-      } catch (err) {
+      } catch (err: unknown) {
+        if (!isMounted) return;
+        console.error("Email verification network error:", err);
         setStatus("error");
         setErrorMessage("An unexpected error occurred during verification.");
       }
     }
 
-    verify();
+    void verify();
+
+    return () => {
+      isMounted = false;
+    };
   }, [token]);
 
   return (
@@ -60,7 +73,7 @@ function VerifyEmailContent() {
               href="/login"
               className="inline-block w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition"
             >
-              {"Proceed to Login →"}
+              Proceed to Login →
             </Link>
           </div>
         )}

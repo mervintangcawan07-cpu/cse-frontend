@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function PartnerPortalRootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-slate-950 flex flex-col font-sans">

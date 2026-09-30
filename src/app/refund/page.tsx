@@ -54,7 +54,7 @@ export default function RefundPolicyPage() {
           {/* Section 1 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">1</span>
+              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">1</span>{}
               What You Are Purchasing
             </h2>
             <p>
@@ -75,7 +75,7 @@ export default function RefundPolicyPage() {
           {/* Section 2 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">2</span>
+              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">2</span>{}
               Digital Access Nature
             </h2>
             <p>
@@ -89,7 +89,7 @@ export default function RefundPolicyPage() {
           {/* Section 3 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">3</span>
+              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">3</span>{}
               Eligible Circumstances for Refund Review
             </h2>
             <p>You may request a refund under the following verified circumstances:</p>
@@ -116,7 +116,7 @@ export default function RefundPolicyPage() {
           {/* Section 4 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">4</span>
+              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">4</span>{}
               Duplicate Payments
             </h2>
             <p>
@@ -136,7 +136,7 @@ export default function RefundPolicyPage() {
           {/* Section 5 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">5</span>
+              <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">5</span>{}
               Technical Problems &amp; Resolution First
             </h2>
             <p>

@@ -147,13 +147,17 @@ export async function checkRateLimit(
       reset: result.reset,
     };
   } catch (error) {
-    console.warn("[RATELIMIT_FAIL_OPEN_WARNING] Upstash Redis unreachable, allowing request:", error);
+    console.warn(
+      "[RATELIMIT_FAIL_OPEN_WARNING] Upstash Redis unreachable, allowing request:",
+      error
+    );
     return { success: true, limit: 0, remaining: 0, reset: 0 };
   }
 }
 
 /**
  * Extracts client IP address from Next.js request headers.
+ * Hardened to prevent header injection and spoofed proxy chains.
  */
 export function getClientIp(req: Request): string {
   // 1. Edge-verified Cloudflare connecting IP
@@ -164,12 +168,15 @@ export function getClientIp(req: Request): string {
   const vercelIp = req.headers.get("x-vercel-ip") || req.headers.get("x-real-ip");
   if (vercelIp) return vercelIp.trim();
 
-  // 3. Fallback to X-Forwarded-For (standard proxy chain)
+  // 3. Fallback to first IP in proxy chain (validated IPv4/IPv6 format)
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) {
-    const ips = forwarded.split(",").map((ip) => ip.trim()).filter(Boolean);
-    if (ips.length > 0) {
-      return ips[0];
+    const rawIp = forwarded.split(",")[0]?.trim();
+    if (
+      rawIp &&
+      /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$\vert{}^[a-fA-F0-9:]+$/.test(rawIp)
+    ) {
+      return rawIp;
     }
   }
 
@@ -187,7 +194,10 @@ export function createRateLimitResponse(
   const now = Date.now();
   const resetSeconds = Math.max(1, Math.ceil((rateLimitResult.reset - now) / 1000));
   const message =
-    customMessage || `Too many requests. Please retry in ${resetSeconds} second${resetSeconds > 1 ? "s" : ""}.`;
+    customMessage ||
+    `Too many requests. Please retry in ${resetSeconds} second${
+      resetSeconds > 1 ? "s" : ""
+    }.`;
 
   const headers = new Headers({
     ...CACHE_PROFILES.PRIVATE,

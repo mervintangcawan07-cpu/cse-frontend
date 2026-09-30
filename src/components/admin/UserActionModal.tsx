@@ -1,21 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface User {
-  id: string;
-  name?: string | null;
-  email: string;
-  isBanned?: boolean;
-  banReason?: string | null;
+  readonly id: string;
+  readonly name?: string | null;
+  readonly email: string;
+  readonly isBanned?: boolean;
+  readonly banReason?: string | null;
 }
 
 interface UserActionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  user: User | null;
-  mode: "BAN" | "UNBAN" | "RESET_PASSWORD" | null;
-  onSuccess: () => void;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly user: User | null;
+  readonly mode: "BAN" | "UNBAN" | "RESET_PASSWORD" | null;
+  readonly onSuccess: () => void;
 }
 
 export default function UserActionModal({
@@ -24,14 +24,15 @@ export default function UserActionModal({
   user,
   mode,
   onSuccess,
-}: UserActionModalProps) {
+}: Readonly<UserActionModalProps>) {
   const [banReason, setBanReason] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   if (!isOpen || !user || !mode) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Uses React.SyntheticEvent to eliminate the deprecated FormEvent warning
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -64,10 +65,10 @@ export default function UserActionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full border border-slate-200 shadow-2xl space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-md space-y-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl md:p-8">
         {/* Modal Header */}
-        <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <h2 className="text-lg font-black text-slate-900">
             {mode === "BAN" && "🚨 Ban User Account"}
             {mode === "UNBAN" && "✅ Unban User Account"}
@@ -76,14 +77,14 @@ export default function UserActionModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 font-bold text-lg cursor-pointer"
+            className="cursor-pointer text-lg font-bold text-slate-400 hover:text-slate-600"
           >
             ✕
           </button>
         </div>
 
         {/* User Target Info */}
-        <p className="text-xs text-slate-600 font-medium">
+        <p className="text-xs font-medium text-slate-600">
           Target User: <strong className="text-slate-900">{user.email}</strong>
         </p>
 
@@ -91,7 +92,7 @@ export default function UserActionModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === "BAN" && (
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 uppercase">
+              <label className="block text-xs font-bold uppercase text-slate-700">
                 Reason for Ban
               </label>
               <textarea
@@ -100,14 +101,14 @@ export default function UserActionModal({
                 placeholder="Explain reason for account suspension..."
                 rows={3}
                 required
-                className="w-full p-3 border border-slate-200 rounded-xl text-xs outline-none focus:border-red-500 transition"
+                className="w-full rounded-xl border border-slate-200 p-3 text-xs outline-none transition focus:border-red-500"
               />
             </div>
           )}
 
           {mode === "RESET_PASSWORD" && (
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 uppercase">
+              <label className="block text-xs font-bold uppercase text-slate-700">
                 New Administrative Password
               </label>
               <input
@@ -117,7 +118,7 @@ export default function UserActionModal({
                 placeholder="Enter at least 6 characters..."
                 minLength={6}
                 required
-                className="w-full p-3 border border-slate-200 rounded-xl text-xs outline-none focus:border-blue-500 transition font-mono"
+                className="w-full rounded-xl border border-slate-200 p-3 font-mono text-xs outline-none transition focus:border-blue-500"
               />
             </div>
           )}
@@ -129,18 +130,18 @@ export default function UserActionModal({
           )}
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+          <div className="flex justify-end gap-3 border-t border-slate-100 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer"
+              className="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className={`px-5 py-2 text-white font-black text-xs rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer ${
+              className={`cursor-pointer rounded-xl px-5 py-2 text-xs font-black text-white shadow-md transition disabled:opacity-50 ${
                 mode === "BAN" ? "bg-red-600 hover:bg-red-500" : "bg-blue-600 hover:bg-blue-500"
               }`}
             >

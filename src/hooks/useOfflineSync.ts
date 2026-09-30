@@ -1,4 +1,3 @@
-// Relative Path: src/hooks/useOfflineSync.ts
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -26,14 +25,23 @@ export function useOfflineSync(): OfflineSyncState {
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [lastSyncTime, setLastSyncTime] = useState<number | null>(null);
 
-  // Use a ref to prevent concurrent sync runs
   const syncingRef = useRef(false);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const refreshPendingCount = useCallback(async () => {
     if (typeof window === "undefined") return;
     try {
       const pending = await getPendingSubmissions();
-      setPendingCount(pending.length);
+      if (isMountedRef.current) {
+        setPendingCount(pending.length);
+      }
     } catch {
       // Silently fail — IndexedDB may be unavailable in some environments
     }
@@ -52,23 +60,26 @@ export function useOfflineSync(): OfflineSyncState {
       if (synced > 0) {
         console.info(`[OFFLINE_SYNC] Successfully synced ${synced} pending submission(s).`);
       }
-      setLastSyncTime(Date.now());
+      if (isMountedRef.current) {
+        setLastSyncTime(Date.now());
+      }
       await refreshPendingCount();
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("[OFFLINE_SYNC] Sync attempt encountered an error:", err);
     } finally {
       syncingRef.current = false;
-      setIsSyncing(false);
+      if (isMountedRef.current) {
+        setIsSyncing(false);
+      }
     }
   }, [refreshPendingCount]);
 
-  // Listen to online/offline network events
+  // Listen to online/offline network events and trigger sync on reconnection
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const handleOnline = () => {
       setIsOnline(true);
-      // Automatically trigger sync as soon as connection is restored
       void runSync();
     };
 
@@ -79,12 +90,15 @@ export function useOfflineSync(): OfflineSyncState {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-    // Refresh pending count on mount
-    void refreshPendingCount();
+    // Defer initial pending count retrieval out of the synchronous effect body
+    const initialTimer = setTimeout(() => {
+      void refreshPendingCount();
+    }, 0);
 
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
+      clearTimeout(initialTimer);
     };
   }, [runSync, refreshPendingCount]);
 
@@ -94,6 +108,7 @@ export function useOfflineSync(): OfflineSyncState {
     const interval = setInterval(() => {
       void refreshPendingCount();
     }, 10_000); // Every 10 seconds
+
     return () => clearInterval(interval);
   }, [refreshPendingCount]);
 

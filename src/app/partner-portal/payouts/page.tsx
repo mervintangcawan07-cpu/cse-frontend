@@ -1,8 +1,6 @@
-// Relative Path: src/app/partner-portal/payouts/page.tsx
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   CreditCard,
@@ -10,7 +8,6 @@ import {
   DollarSign,
   Clock,
   CheckCircle,
-  AlertCircle,
   Lock,
   Smartphone,
   Building2,
@@ -18,15 +15,80 @@ import {
   Check,
   ShieldCheck,
 } from "lucide-react";
-import { getOrCreatePendingFinancialKey, clearPendingFinancialKey, abandonPendingFinancialOperation } from "@/lib/idempotency/client";
+import {
+  getOrCreatePendingFinancialKey,
+  clearPendingFinancialKey,
+  abandonPendingFinancialOperation,
+} from "@/lib/idempotency/client";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
+
+interface PartnerProfile {
+  id: string;
+  name: string;
+  email?: string;
+  partnerId?: string;
+  [key: string]: unknown;
+}
+
+interface PartnerMetrics {
+  canRequestPayout: boolean;
+  formattedAvailableCommission: string;
+  formattedMinPayout: string;
+  formattedReservedForPayout: string;
+  formattedPendingCommission: string;
+  formattedTotalPaid: string;
+}
+
+interface SavedPayoutMethod {
+  id: string;
+  method: "GCASH" | "MAYA" | "BANK_TRANSFER";
+  accountHolderName: string;
+  accountNumberMasked: string;
+  bankName?: string;
+  isDefault: boolean;
+}
+
+interface PartnerPayoutRecord {
+  id: string;
+  date: string;
+  method: string;
+  accountName: string;
+  accountNumberMasked: string;
+  formattedAmount: string;
+  status: "PAID" | "APPROVED" | "PROCESSING" | "REJECTED" | "FAILED";
+  transactionRef?: string;
+}
+
+interface PayoutSubmissionPayload {
+  amountPesos: string;
+  profileId?: string;
+  method?: "GCASH" | "MAYA" | "BANK_TRANSFER";
+  accountName?: string;
+  accountNumber?: string;
+  bankName?: string;
+}
+
+function getPayoutRecordBadgeClass(status: string): string {
+  switch (status.toUpperCase()) {
+    case "PAID":
+      return "bg-teal-500/10 text-teal-400 border-teal-500/30";
+    case "APPROVED":
+    case "PROCESSING":
+      return "bg-blue-500/10 text-blue-400 border-blue-500/30";
+    case "REJECTED":
+    case "FAILED":
+      return "bg-rose-500/10 text-rose-400 border-rose-500/30";
+    default:
+      return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+  }
+}
 
 export default function PartnerPayoutsPage() {
   const router = useRouter();
-  const [partner, setPartner] = useState<any | null>(null);
-  const [metrics, setMetrics] = useState<any | null>(null);
-  const [savedMethods, setSavedMethods] = useState<any[]>([]);
-  const [payouts, setPayouts] = useState<any[]>([]);
+  const [partner, setPartner] = useState<PartnerProfile | null>(null);
+  const [metrics, setMetrics] = useState<PartnerMetrics | null>(null);
+  const [savedMethods, setSavedMethods] = useState<SavedPayoutMethod[]>([]);
+  const [payouts, setPayouts] = useState<PartnerPayoutRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Request Payout Modal State
@@ -53,48 +115,70 @@ export default function PartnerPayoutsPage() {
   const [addingMethod, setAddingMethod] = useState(false);
   const [methodError, setMethodError] = useState<string | null>(null);
 
-  // Load Payout Data
-  const fetchPayoutData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [authRes, payoutRes] = await Promise.all([
-        fetch("/api/partner/auth/me"),
-        fetch("/api/partner/portal/payout"),
-      ]);
-
-      if (authRes.status === 401 || payoutRes.status === 401) {
-        router.push("/partner-portal/login");
-        return;
-      }
-
-      if (authRes.ok) {
-        const authJson = await authRes.json();
-        setPartner(authJson.partner);
-      }
-
-      if (payoutRes.ok) {
-        const payoutJson = await payoutRes.json();
-        setMetrics(payoutJson.metrics);
-        setSavedMethods(payoutJson.savedMethods || []);
-        setPayouts(payoutJson.payouts || []);
-
-        const defaultMethod = (payoutJson.savedMethods || []).find((m: any) => m.isDefault);
-        if (defaultMethod) {
-          setSelectedProfileId(defaultMethod.id);
-        }
-      }
-    } catch (err) {
-      console.error("Failed to load payout data:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
+  const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    fetchPayoutData();
+    return () => {
+      if (redirectTimerRef.current) {
+        clearTimeout(redirectTimerRef.current);
+      }
+    };
+  }, []);
+
+  const fetchPayoutData = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        const [authRes, payoutRes] = await Promise.all([
+          fetch("/api/partner/auth/me", { signal }),
+          fetch("/api/partner/portal/payout", { signal }),
+        ]);
+
+        if (authRes.status === 401 || payoutRes.status === 401) {
+          router.push("/partner-portal/login");
+          return;
+        }
+
+        if (authRes.ok) {
+          const authJson = await authRes.json();
+          setPartner(authJson.partner);
+        }
+
+        if (payoutRes.ok) {
+          const payoutJson = await payoutRes.json();
+          setMetrics(payoutJson.metrics);
+          const methods: SavedPayoutMethod[] = payoutJson.savedMethods || [];
+          setSavedMethods(methods);
+          setPayouts(payoutJson.payouts || []);
+
+          const defaultMethod = methods.find((m) => m.isDefault);
+          if (defaultMethod) {
+            setSelectedProfileId(defaultMethod.id);
+          }
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load payout data:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchPayoutData(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchPayoutData]);
 
-  // Handle explicit user action to abandon pending operation after conflict
   const handleStartNewPayout = () => {
     abandonPendingFinancialOperation("PARTNER_PAYOUT_REQUEST");
     setIdempotencyConflict(false);
@@ -102,9 +186,10 @@ export default function PartnerPayoutsPage() {
     setPayoutInfo("A new payout request can now be submitted.");
   };
 
-  // Handle Payout Request Submit
-  const handlePayoutSubmit = async (e: React.FormEvent) => {
+  const handlePayoutSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (submittingPayout) return;
+
     setSubmittingPayout(true);
     setPayoutError(null);
     setPayoutSuccess(null);
@@ -113,18 +198,18 @@ export default function PartnerPayoutsPage() {
     try {
       const idempotencyKey = getOrCreatePendingFinancialKey("PARTNER_PAYOUT_REQUEST");
 
-      const payload: any = {
-        amountPesos: payoutAmount,
+      const payload: PayoutSubmissionPayload = {
+        amountPesos: payoutAmount.trim(),
       };
 
       if (selectedProfileId && selectedProfileId !== "CUSTOM") {
         payload.profileId = selectedProfileId;
       } else {
         payload.method = customMethod;
-        payload.accountName = customAccountName;
-        payload.accountNumber = customAccountNumber;
+        payload.accountName = customAccountName.trim();
+        payload.accountNumber = customAccountNumber.trim();
         if (customMethod === "BANK_TRANSFER") {
-          payload.bankName = customBankName;
+          payload.bankName = customBankName.trim();
         }
       }
 
@@ -145,7 +230,7 @@ export default function PartnerPayoutsPage() {
         setPayoutSuccess(json.message);
         setPayoutAmount("");
         await fetchPayoutData();
-        setTimeout(() => {
+        redirectTimerRef.current = setTimeout(() => {
           setShowRequestModal(false);
           setPayoutSuccess(null);
         }, 2500);
@@ -159,7 +244,8 @@ export default function PartnerPayoutsPage() {
           setIdempotencyConflict(true);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      console.error("Payout submission error:", err);
       const msg =
         err instanceof Error && err.message
           ? err.message
@@ -170,9 +256,10 @@ export default function PartnerPayoutsPage() {
     }
   };
 
-  // Handle Add Method Submit
-  const handleAddMethodSubmit = async (e: React.FormEvent) => {
+  const handleAddMethodSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (addingMethod) return;
+
     setAddingMethod(true);
     setMethodError(null);
 
@@ -182,9 +269,9 @@ export default function PartnerPayoutsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           method: newMethod,
-          accountHolderName: newAccountName,
-          accountNumber: newAccountNumber,
-          bankName: newMethod === "BANK_TRANSFER" ? newBankName : undefined,
+          accountHolderName: newAccountName.trim(),
+          accountNumber: newAccountNumber.trim(),
+          bankName: newMethod === "BANK_TRANSFER" ? newBankName.trim() : undefined,
           isDefault: newIsDefault,
         }),
       });
@@ -200,14 +287,14 @@ export default function PartnerPayoutsPage() {
       } else {
         setMethodError(json.error || "Failed to add payout method.");
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("Failed to add payout method:", err);
       setMethodError("Network error. Please try again.");
     } finally {
       setAddingMethod(false);
     }
   };
 
-  // Handle Set Default Method
   const handleSetDefault = async (profileId: string) => {
     try {
       const res = await fetch("/api/partner/portal/payout-methods", {
@@ -218,23 +305,22 @@ export default function PartnerPayoutsPage() {
       if (res.ok) {
         await fetchPayoutData();
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      console.error("Failed to set default payout method:", err);
     }
   };
 
-  // Handle Delete Method
   const handleDeleteMethod = async (profileId: string) => {
     if (!confirm("Are you sure you want to remove this payout method?")) return;
     try {
-      const res = await fetch(`/api/partner/portal/payout-methods?profileId=${profileId}`, {
+      const res = await fetch(`/api/partner/portal/payout-methods?profileId=${encodeURIComponent(profileId)}`, {
         method: "DELETE",
       });
       if (res.ok) {
         await fetchPayoutData();
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      console.error("Failed to delete payout method:", err);
     }
   };
 
@@ -255,6 +341,7 @@ export default function PartnerPayoutsPage() {
           </div>
 
           <button
+            type="button"
             onClick={() => setShowRequestModal(true)}
             disabled={!metrics?.canRequestPayout}
             className={`px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition cursor-pointer self-start sm:self-auto ${
@@ -268,7 +355,7 @@ export default function PartnerPayoutsPage() {
           </button>
         </div>
 
-        {/* 4 Payout Balance Metric Cards (Section 21) */}
+        {/* 4 Payout Balance Metric Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-1">
             <div className="text-xs font-bold uppercase text-slate-400 flex items-center justify-between">
@@ -323,7 +410,7 @@ export default function PartnerPayoutsPage() {
           </div>
         </div>
 
-        {/* Saved Payout Methods Section (Section 22) */}
+        {/* Saved Payout Methods Section */}
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
@@ -334,6 +421,7 @@ export default function PartnerPayoutsPage() {
             </div>
 
             <button
+              type="button"
               onClick={() => setShowAddMethodModal(true)}
               className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 border border-slate-700 cursor-pointer"
             >
@@ -364,7 +452,11 @@ export default function PartnerPayoutsPage() {
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-xs uppercase font-mono text-emerald-400 flex items-center gap-1.5">
-                        {m.method === "GCASH" ? <Smartphone className="w-3.5 h-3.5" /> : m.method === "MAYA" ? <Smartphone className="w-3.5 h-3.5" /> : <Building2 className="w-3.5 h-3.5" />}
+                        {m.method === "BANK_TRANSFER" ? (
+                          <Building2 className="w-3.5 h-3.5" />
+                        ) : (
+                          <Smartphone className="w-3.5 h-3.5" />
+                        )}
                         <span>{m.method.replace("_", " ")}</span>
                       </span>
                       {m.isDefault && (
@@ -381,7 +473,8 @@ export default function PartnerPayoutsPage() {
                   <div className="flex items-center justify-between pt-2 border-t border-slate-900 text-xs">
                     {!m.isDefault ? (
                       <button
-                        onClick={() => handleSetDefault(m.id)}
+                        type="button"
+                        onClick={() => void handleSetDefault(m.id)}
                         className="text-slate-400 hover:text-emerald-400 font-bold cursor-pointer"
                       >
                         Set as Default
@@ -394,7 +487,8 @@ export default function PartnerPayoutsPage() {
                     )}
 
                     <button
-                      onClick={() => handleDeleteMethod(m.id)}
+                      type="button"
+                      onClick={() => void handleDeleteMethod(m.id)}
                       className="text-slate-500 hover:text-rose-400 p-1 cursor-pointer"
                       title="Remove method"
                     >
@@ -407,7 +501,7 @@ export default function PartnerPayoutsPage() {
           )}
         </div>
 
-        {/* Payout History Table (Section 25) */}
+        {/* Payout History Table */}
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <h3 className="text-base font-black text-white">Payout History</h3>
@@ -452,15 +546,9 @@ export default function PartnerPayoutsPage() {
                       </td>
                       <td className="py-3.5 px-4">
                         <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
-                            p.status === "PAID"
-                              ? "bg-teal-500/10 text-teal-400 border-teal-500/30"
-                              : p.status === "APPROVED" || p.status === "PROCESSING"
-                              ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
-                              : p.status === "REJECTED" || p.status === "FAILED"
-                              ? "bg-rose-500/10 text-rose-400 border-rose-500/30"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                          }`}
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${getPayoutRecordBadgeClass(
+                            p.status
+                          )}`}
                         >
                           {p.status}
                         </span>
@@ -488,6 +576,7 @@ export default function PartnerPayoutsPage() {
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setShowRequestModal(false)}
                   className="text-slate-400 hover:text-white font-bold p-1 cursor-pointer"
                 >
@@ -524,10 +613,14 @@ export default function PartnerPayoutsPage() {
 
               <form onSubmit={handlePayoutSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                  <label
+                    htmlFor="payout-amount-input"
+                    className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                  >
                     Payout Amount (PHP) &bull; Min {metrics?.formattedMinPayout}
                   </label>
                   <input
+                    id="payout-amount-input"
                     type="number"
                     step="0.01"
                     required
@@ -540,13 +633,17 @@ export default function PartnerPayoutsPage() {
 
                 {savedMethods.length > 0 && (
                   <div>
-                    <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                    <label
+                      htmlFor="destination-account-select"
+                      className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                    >
                       Select Destination Account
                     </label>
                     <select
+                      id="destination-account-select"
                       value={selectedProfileId}
                       onChange={(e) => setSelectedProfileId(e.target.value)}
-                      className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none focus:border-emerald-500"
+                      className="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none focus:border-emerald-500 cursor-pointer"
                     >
                       {savedMethods.map((m) => (
                         <option key={m.id} value={m.id}>
@@ -561,7 +658,9 @@ export default function PartnerPayoutsPage() {
                 {(!savedMethods.length || selectedProfileId === "CUSTOM") && (
                   <div className="space-y-4 p-4 bg-slate-950 rounded-2xl border border-slate-800">
                     <div>
-                      <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">Disbursement Method</label>
+                      <span className="block text-[11px] font-bold uppercase text-slate-400 mb-1">
+                        Disbursement Method
+                      </span>
                       <div className="grid grid-cols-3 gap-2">
                         {(["GCASH", "MAYA", "BANK_TRANSFER"] as const).map((m) => (
                           <button
@@ -581,8 +680,14 @@ export default function PartnerPayoutsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">Account Holder Name</label>
+                      <label
+                        htmlFor="custom-holder-name"
+                        className="block text-[11px] font-bold uppercase text-slate-400 mb-1"
+                      >
+                        Account Holder Name
+                      </label>
                       <input
+                        id="custom-holder-name"
                         type="text"
                         required
                         placeholder="Juan Dela Cruz"
@@ -593,10 +698,14 @@ export default function PartnerPayoutsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">
+                      <label
+                        htmlFor="custom-account-number"
+                        className="block text-[11px] font-bold uppercase text-slate-400 mb-1"
+                      >
                         {customMethod === "BANK_TRANSFER" ? "Account Number" : "Mobile Number (09XXXXXXXXX)"}
                       </label>
                       <input
+                        id="custom-account-number"
                         type="text"
                         required
                         placeholder={customMethod === "BANK_TRANSFER" ? "1234567890" : "09171234567"}
@@ -608,8 +717,14 @@ export default function PartnerPayoutsPage() {
 
                     {customMethod === "BANK_TRANSFER" && (
                       <div>
-                        <label className="block text-[11px] font-bold uppercase text-slate-400 mb-1">Bank Name</label>
+                        <label
+                          htmlFor="custom-bank-name"
+                          className="block text-[11px] font-bold uppercase text-slate-400 mb-1"
+                        >
+                          Bank Name
+                        </label>
                         <input
+                          id="custom-bank-name"
                           type="text"
                           required
                           placeholder="e.g. BDO, BPI, UnionBank"
@@ -646,6 +761,7 @@ export default function PartnerPayoutsPage() {
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <h3 className="text-base font-black">Register New Payout Method</h3>
                 <button
+                  type="button"
                   onClick={() => setShowAddMethodModal(false)}
                   className="text-slate-400 hover:text-white font-bold p-1 cursor-pointer"
                 >
@@ -661,7 +777,7 @@ export default function PartnerPayoutsPage() {
 
               <form onSubmit={handleAddMethodSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">Method</label>
+                  <span className="block text-xs font-bold uppercase text-slate-400 mb-1.5">Method</span>
                   <div className="grid grid-cols-3 gap-2">
                     {(["GCASH", "MAYA", "BANK_TRANSFER"] as const).map((m) => (
                       <button
@@ -681,8 +797,14 @@ export default function PartnerPayoutsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">Account Holder Name</label>
+                  <label
+                    htmlFor="new-holder-name"
+                    className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                  >
+                    Account Holder Name
+                  </label>
                   <input
+                    id="new-holder-name"
                     type="text"
                     required
                     placeholder="Full Name as registered with account"
@@ -693,10 +815,14 @@ export default function PartnerPayoutsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                  <label
+                    htmlFor="new-account-number"
+                    className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                  >
                     {newMethod === "BANK_TRANSFER" ? "Bank Account Number" : "Mobile Number (09XXXXXXXXX)"}
                   </label>
                   <input
+                    id="new-account-number"
                     type="text"
                     required
                     placeholder={newMethod === "BANK_TRANSFER" ? "e.g. 1234567890" : "09171234567"}
@@ -708,8 +834,14 @@ export default function PartnerPayoutsPage() {
 
                 {newMethod === "BANK_TRANSFER" && (
                   <div>
-                    <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">Bank Name</label>
+                    <label
+                      htmlFor="new-bank-name"
+                      className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                    >
+                      Bank Name
+                    </label>
                     <input
+                      id="new-bank-name"
                       type="text"
                       required
                       placeholder="e.g. BDO, BPI, Metrobank, UnionBank"
@@ -726,7 +858,7 @@ export default function PartnerPayoutsPage() {
                     id="isDef"
                     checked={newIsDefault}
                     onChange={(e) => setNewIsDefault(e.target.checked)}
-                    className="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0"
+                    className="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-0 cursor-pointer"
                   />
                   <label htmlFor="isDef" className="text-xs text-slate-300 cursor-pointer">
                     Set as default payout method
@@ -747,7 +879,7 @@ export default function PartnerPayoutsPage() {
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

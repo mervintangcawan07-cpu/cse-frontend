@@ -6,11 +6,6 @@ import {
   Download,
   Video,
   Layers,
-  CheckCircle2,
-  Share2,
-  ChevronRight,
-  Eye,
-  RefreshCw,
   Flame,
 } from "lucide-react";
 
@@ -74,16 +69,16 @@ const CURATED_QUIZZES: SampleQuiz[] = [
 ];
 
 interface SocialQuizCardExporterProps {
-  partnerName: string;
-  partnerCode: string;
-  partnerSlug?: string | null;
+  readonly partnerName: string;
+  readonly partnerCode: string;
+  readonly partnerSlug?: string | null;
 }
 
 export default function SocialQuizCardExporter({
   partnerName,
   partnerCode,
   partnerSlug,
-}: SocialQuizCardExporterProps) {
+}: Readonly<SocialQuizCardExporterProps>) {
   const [selectedQuizIndex, setSelectedQuizIndex] = useState(0);
   const [activeSlide, setActiveSlide] = useState<1 | 2>(1);
   const [generatingPng, setGeneratingPng] = useState(false);

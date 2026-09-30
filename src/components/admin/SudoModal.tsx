@@ -4,9 +4,9 @@
 import React, { useState } from "react";
 
 interface SudoModalProps {
-  isOpen: boolean;
-  onSuccess: () => void;
-  onCancel: () => void;
+  readonly isOpen: boolean;
+  readonly onSuccess: () => void;
+  readonly onCancel: () => void;
 }
 
 export function SudoModal({ isOpen, onSuccess, onCancel }: SudoModalProps) {

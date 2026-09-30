@@ -1,14 +1,15 @@
 ﻿"use client";
 
+import { Link } from "lucide-react";
 import { useEffect } from "react";
 
 export default function GlobalError({
   error,
   reset,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   reset: () => void;
-}) {
+}>) {
   useEffect(() => {
     console.error("[CRITICAL_ROOT_LAYOUT_ERROR]", error);
   }, [error]);
@@ -40,12 +41,12 @@ export default function GlobalError({
             >
               🔄 Reload Application
             </button>
-            <a
+            <Link
               href="/"
               className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl transition cursor-pointer"
             >
               Home Page
-            </a>
+            </Link>
           </div>
         </div>
       </body>

@@ -1,4 +1,4 @@
-import RefundPolicyPage, { metadata } from "../refund/page";
+import RefundPolicyPage from "../refund/page";
 
-export { metadata };
+export { metadata } from "../refund/page";
 export default RefundPolicyPage;

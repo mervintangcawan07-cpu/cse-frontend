@@ -37,7 +37,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 interface BadgeDisplayProps {
-  compact?: boolean; // Show only earned badges in a compact row
+  readonly compact?: boolean; // Show only earned badges in a compact row
 }
 
 export default function BadgeDisplay({ compact = false }: BadgeDisplayProps) {

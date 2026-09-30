@@ -1,29 +1,37 @@
-// Relative Path: src/app/partner-portal/setup/page.tsx
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  ShieldCheck,
-  Lock,
-  ArrowRight,
   Building2,
   AlertCircle,
   CheckCircle,
   Eye,
   EyeOff,
+  ArrowRight,
 } from "lucide-react";
+
+interface PartnerInviteInfo {
+  name: string;
+  partnerId: string;
+  email?: string;
+  [key: string]: unknown;
+}
 
 function SetupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [partnerInfo, setPartnerInfo] = useState<any | null>(null);
-  const [verifying, setVerifying] = useState(true);
-  const [verifyError, setVerifyError] = useState<string | null>(null);
+  // Derive initial verification state without triggering cascading renders in useEffect
+  const [partnerInfo, setPartnerInfo] = useState<PartnerInviteInfo | null>(null);
+  const [verifying, setVerifying] = useState(() => Boolean(token));
+  const [verifyError, setVerifyError] = useState<string | null>(() =>
+    token ? null : "No setup token provided. Please use the link sent to your email."
+  );
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,33 +41,50 @@ function SetupForm() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      setVerifying(false);
-      setVerifyError("No setup token provided. Please use the link sent to your email.");
-      return;
-    }
+    return () => {
+      if (redirectTimerRef.current) {
+        clearTimeout(redirectTimerRef.current);
+      }
+    };
+  }, []);
 
-    async function verifyToken() {
+  useEffect(() => {
+    if (!token) return;
+
+    const activeToken = token;
+    const controller = new AbortController();
+
+    async function verifyToken(currentToken: string) {
       try {
-        const res = await fetch(`/api/partner/auth/setup?token=${token}`);
+        const res = await fetch(
+          `/api/partner/auth/setup?token=${encodeURIComponent(currentToken)}`,
+          { signal: controller.signal }
+        );
         const json = await res.json();
         if (res.ok && json.success) {
           setPartnerInfo(json.partner);
         } else {
           setVerifyError(json.error || "Invalid or expired setup token.");
         }
-      } catch {
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
         setVerifyError("Network error. Please try again.");
       } finally {
         setVerifying(false);
       }
     }
 
-    verifyToken();
+    void verifyToken(activeToken);
+
+    return () => {
+      controller.abort();
+    };
   }, [token]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (submitting) return;
+
     setFormError(null);
 
     if (password.length < 8) {
@@ -84,14 +109,15 @@ function SetupForm() {
       const json = await res.json();
 
       if (res.ok && json.success) {
-        setSuccessMsg(json.message);
-        setTimeout(() => {
+        setSuccessMsg(json.message || "Account activated successfully!");
+        redirectTimerRef.current = setTimeout(() => {
           router.push("/partner-portal/dashboard");
         }, 2000);
       } else {
         setFormError(json.error || "Failed to activate partner account.");
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("Partner account activation error:", err);
       setFormError("Network error. Please try again.");
     } finally {
       setSubmitting(false);
@@ -102,7 +128,9 @@ function SetupForm() {
     return (
       <div className="text-center space-y-3 py-12">
         <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Verifying partner invitation...</p>
+        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+          Verifying partner invitation...
+        </p>
       </div>
     );
   }
@@ -154,11 +182,15 @@ function SetupForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+          <label
+            htmlFor="partner-password"
+            className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+          >
             Create Password (Min. 8 characters)
           </label>
           <div className="relative">
             <input
+              id="partner-password"
               type={showPassword ? "text" : "password"}
               required
               minLength={8}
@@ -169,9 +201,10 @@ function SetupForm() {
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer"
               tabIndex={-1}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -179,10 +212,14 @@ function SetupForm() {
         </div>
 
         <div>
-          <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+          <label
+            htmlFor="partner-confirm-password"
+            className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+          >
             Confirm Password
           </label>
           <input
+            id="partner-confirm-password"
             type={showPassword ? "text" : "password"}
             required
             minLength={8}
@@ -222,7 +259,10 @@ export default function PartnerSetupPage() {
               />
             </div>
             <div className="font-extrabold text-sm tracking-tight text-white">
-              GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">ONBOARDING</span>
+              GovStudyX{" "}
+              <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">
+                ONBOARDING
+              </span>
             </div>
           </Link>
         </div>
@@ -237,7 +277,7 @@ export default function PartnerSetupPage() {
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

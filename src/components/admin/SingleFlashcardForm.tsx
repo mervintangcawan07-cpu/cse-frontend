@@ -3,11 +3,14 @@
 import React, { useState } from 'react';
 
 export interface SingleFlashcardFormProps {
-  onAdded?: () => void;
-  onSuccess?: () => void;
+  readonly onAdded?: () => void;
+  readonly onSuccess?: () => void;
 }
 
-export default function SingleFlashcardForm({ onAdded, onSuccess }: SingleFlashcardFormProps) {
+export default function SingleFlashcardForm({
+  onAdded,
+  onSuccess,
+}: Readonly<SingleFlashcardFormProps>) {
   const [form, setForm] = useState({
     category: '',
     question: '',
@@ -18,7 +21,7 @@ export default function SingleFlashcardForm({ onAdded, onSuccess }: SingleFlashc
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -37,15 +40,23 @@ export default function SingleFlashcardForm({ onAdded, onSuccess }: SingleFlashc
       });
 
       if (res.ok) {
-        setForm({ category: '', question: '', answer: '', options: '', explanation: '', difficulty: 'medium' });
-        if (onAdded) onAdded();
-        if (onSuccess) onSuccess();
+        setForm({
+          category: '',
+          question: '',
+          answer: '',
+          options: '',
+          explanation: '',
+          difficulty: 'medium',
+        });
+        onAdded?.();
+        onSuccess?.();
         alert('Flashcard saved successfully!');
       } else {
         const errorData = await res.json();
         alert(errorData.error || errorData.message || 'Error saving flashcard');
       }
     } catch (err) {
+      console.error('Failed to save flashcard:', err);
       alert('Error saving flashcard');
     } finally {
       setLoading(false);

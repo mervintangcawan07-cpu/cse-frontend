@@ -1,4 +1,3 @@
-// Relative Path: src/app/partner-portal/commissions/page.tsx
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
@@ -11,53 +10,204 @@ import {
   CheckCircle,
   Award,
   ArrowRight,
-  Eye,
   Calculator,
   ShieldCheck,
 } from "lucide-react";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
 
+interface PartnerProfile {
+  id: string;
+  name: string;
+  email?: string;
+  partnerId?: string;
+  [key: string]: unknown;
+}
+
+interface CommissionSummary {
+  formattedTotalEarned: string;
+  formattedAvailable: string;
+  formattedPending: string;
+  formattedPaid: string;
+  formattedReversed: string;
+}
+
+interface CommissionCalculationDetails {
+  purchaseAmountPesos: string;
+  ratePercent: string;
+  basis: string;
+  formula: string;
+  commissionPesos: string;
+}
+
+interface CommissionItem {
+  id: string;
+  date: string;
+  studentName: string;
+  studentEmailMasked: string;
+  formattedPurchase: string;
+  effectiveRate: number;
+  formattedCommission: string;
+  status: "PAID" | "AVAILABLE" | "REVERSED" | "PENDING";
+  commissionAmountCentavos: number;
+  calculation: CommissionCalculationDetails;
+}
+
+function getCommissionStatusBadgeClass(status: CommissionItem["status"]): string {
+  switch (status) {
+    case "PAID":
+      return "bg-teal-500/10 text-teal-400 border-teal-500/30";
+    case "AVAILABLE":
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+    case "REVERSED":
+      return "bg-rose-500/10 text-rose-400 border-rose-500/30";
+    case "PENDING":
+    default:
+      return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+  }
+}
+
 export default function PartnerCommissionsPage() {
   const router = useRouter();
-  const [partner, setPartner] = useState<any | null>(null);
-  const [summary, setSummary] = useState<any | null>(null);
-  const [commissions, setCommissions] = useState<any[]>([]);
+  const [partner, setPartner] = useState<PartnerProfile | null>(null);
+  const [summary, setSummary] = useState<CommissionSummary | null>(null);
+  const [commissions, setCommissions] = useState<CommissionItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCalc, setSelectedCalc] = useState<any | null>(null);
+  const [selectedCalc, setSelectedCalc] = useState<CommissionItem | null>(null);
 
-  const fetchCommissions = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [authRes, commRes] = await Promise.all([
-        fetch("/api/partner/auth/me"),
-        fetch("/api/partner/portal/commissions?limit=100"),
-      ]);
+  const fetchCommissions = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        const [authRes, commRes] = await Promise.all([
+          fetch("/api/partner/auth/me", { signal }),
+          fetch("/api/partner/portal/commissions?limit=100", { signal }),
+        ]);
 
-      if (authRes.status === 401 || commRes.status === 401) {
-        router.push("/partner-portal/login");
-        return;
+        if (authRes.status === 401 || commRes.status === 401) {
+          router.push("/partner-portal/login");
+          return;
+        }
+
+        if (authRes.ok) {
+          const authJson = await authRes.json();
+          setPartner(authJson.partner);
+        }
+
+        if (commRes.ok) {
+          const commJson = await commRes.json();
+          setSummary(commJson.summary);
+          setCommissions(commJson.items || []);
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load commissions:", err);
+      } finally {
+        setLoading(false);
       }
-
-      if (authRes.ok) {
-        const authJson = await authRes.json();
-        setPartner(authJson.partner);
-      }
-
-      if (commRes.ok) {
-        const commJson = await commRes.json();
-        setSummary(commJson.summary);
-        setCommissions(commJson.items || []);
-      }
-    } catch (err) {
-      console.error("Failed to load commissions:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
   useEffect(() => {
-    fetchCommissions();
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchCommissions(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchCommissions]);
+
+  const renderCommissionsContent = () => {
+    if (loading) {
+      return (
+        <div className="py-16 text-center space-y-3">
+          <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+            Loading commissions...
+          </p>
+        </div>
+      );
+    }
+
+    if (commissions.length === 0) {
+      return (
+        <div className="py-16 text-center space-y-2">
+          <div className="text-3xl">💰</div>
+          <h3 className="text-sm font-bold text-white">No commissions accrued yet</h3>
+          <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            When students purchase premium memberships using your partner link, your earned commissions will appear here.
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
+            <tr>
+              <th className="py-3.5 px-4">Date</th>
+              <th className="py-3.5 px-4">Student</th>
+              <th className="py-3.5 px-4 text-right">Qualifying Payment</th>
+              <th className="py-3.5 px-4">Rate</th>
+              <th className="py-3.5 px-4 text-right">Commission</th>
+              <th className="py-3.5 px-4">Status</th>
+              <th className="py-3.5 px-4 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {commissions.map((c) => (
+              <tr key={c.id} className="hover:bg-slate-800/40 transition">
+                <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
+                  {new Date(c.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </td>
+                <td className="py-3.5 px-4">
+                  <div className="font-bold text-white">{c.studentName}</div>
+                  <div className="text-[10px] text-slate-400 font-mono">{c.studentEmailMasked}</div>
+                </td>
+                <td className="py-3.5 px-4 text-right font-mono font-bold text-white">
+                  {c.formattedPurchase}
+                </td>
+                <td className="py-3.5 px-4 font-mono font-bold text-purple-400">
+                  {c.effectiveRate}%
+                </td>
+                <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400">
+                  {c.formattedCommission}
+                </td>
+                <td className="py-3.5 px-4">
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${getCommissionStatusBadgeClass(
+                      c.status
+                    )}`}
+                  >
+                    {c.status}
+                  </span>
+                </td>
+                <td className="py-3.5 px-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCalc(c)}
+                    className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold rounded-lg border border-slate-700 transition cursor-pointer inline-flex items-center gap-1"
+                  >
+                    <Calculator className="w-3 h-3 text-emerald-400" />
+                    <span>View Calculation</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -84,7 +234,7 @@ export default function PartnerCommissionsPage() {
           </Link>
         </div>
 
-        {/* 6 Commission Summary Cards (Section 16) */}
+        {/* 5 Commission Summary Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-1">
             <div className="text-[11px] font-bold uppercase text-slate-400 flex items-center justify-between">
@@ -137,96 +287,17 @@ export default function PartnerCommissionsPage() {
           </div>
         </div>
 
-        {/* Commissions Table with View Calculation */}
+        {/* Commissions Table Container */}
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-xl space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <h3 className="text-base font-black text-white">Commissions Ledger</h3>
             <span className="text-xs text-slate-400 font-mono">Total: {commissions.length} entries</span>
           </div>
 
-          {loading ? (
-            <div className="py-16 text-center space-y-3">
-              <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Loading commissions...</p>
-            </div>
-          ) : commissions.length === 0 ? (
-            <div className="py-16 text-center space-y-2">
-              <div className="text-3xl">💰</div>
-              <h3 className="text-sm font-bold text-white">No commissions accrued yet</h3>
-              <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                When students purchase premium memberships using your partner link, your earned commissions will appear here.
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
-                  <tr>
-                    <th className="py-3.5 px-4">Date</th>
-                    <th className="py-3.5 px-4">Student</th>
-                    <th className="py-3.5 px-4 text-right">Qualifying Payment</th>
-                    <th className="py-3.5 px-4">Rate</th>
-                    <th className="py-3.5 px-4 text-right">Commission</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4 text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800">
-                  {commissions.map((c) => (
-                    <tr key={c.id} className="hover:bg-slate-800/40 transition">
-                      <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
-                        {new Date(c.date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-white">{c.studentName}</div>
-                        <div className="text-[10px] text-slate-400 font-mono">{c.studentEmailMasked}</div>
-                      </td>
-                      <td className="py-3.5 px-4 text-right font-mono font-bold text-white">
-                        {c.formattedPurchase}
-                      </td>
-                      <td className="py-3.5 px-4 font-mono font-bold text-purple-400">
-                        {c.effectiveRate}%
-                      </td>
-                      <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400">
-                        {c.formattedCommission}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
-                            c.status === "PAID"
-                              ? "bg-teal-500/10 text-teal-400 border-teal-500/30"
-                              : c.status === "AVAILABLE"
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                              : c.status === "REVERSED"
-                              ? "bg-rose-500/10 text-rose-400 border-rose-500/30"
-                              : "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                          }`}
-                        >
-                          {c.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <button
-                          onClick={() => setSelectedCalc(c)}
-                          className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold rounded-lg border border-slate-700 transition cursor-pointer inline-flex items-center gap-1"
-                        >
-                          <Calculator className="w-3 h-3 text-emerald-400" />
-                          <span>View Calculation</span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {renderCommissionsContent()}
         </div>
 
-        {/* View Calculation Modal (Section 16) */}
+        {/* View Calculation Modal */}
         {selectedCalc && (
           <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl text-white">
@@ -237,10 +308,13 @@ export default function PartnerCommissionsPage() {
                   </div>
                   <div>
                     <h3 className="text-base font-black">Commission Calculation</h3>
-                    <p className="text-[11px] text-slate-400 font-mono">Txn: {selectedCalc.id.slice(0, 16)}...</p>
+                    <p className="text-[11px] text-slate-400 font-mono">
+                      Txn: {selectedCalc.id.slice(0, 16)}...
+                    </p>
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedCalc(null)}
                   className="text-slate-400 hover:text-white font-bold p-1 cursor-pointer"
                 >
@@ -251,34 +325,48 @@ export default function PartnerCommissionsPage() {
               <div className="space-y-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800">
                 <div className="flex justify-between py-1 border-b border-slate-800/80">
                   <span className="text-slate-400">Qualifying Customer Payment:</span>
-                  <span className="font-mono font-bold text-white">{selectedCalc.calculation.purchaseAmountPesos}</span>
+                  <span className="font-mono font-bold text-white">
+                    {selectedCalc.calculation.purchaseAmountPesos}
+                  </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-800/80">
                   <span className="text-slate-400">Partner Agreement Rate:</span>
-                  <span className="font-mono font-bold text-purple-400">{selectedCalc.calculation.ratePercent}</span>
+                  <span className="font-mono font-bold text-purple-400">
+                    {selectedCalc.calculation.ratePercent}
+                  </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-800/80">
                   <span className="text-slate-400">Calculation Basis:</span>
-                  <span className="font-bold text-slate-200">{selectedCalc.calculation.basis}</span>
+                  <span className="font-bold text-slate-200">
+                    {selectedCalc.calculation.basis}
+                  </span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-slate-800/80">
                   <span className="text-slate-400">Applied Formula:</span>
-                  <span className="font-mono font-bold text-emerald-300">{selectedCalc.calculation.formula}</span>
+                  <span className="font-mono font-bold text-emerald-300">
+                    {selectedCalc.calculation.formula}
+                  </span>
                 </div>
                 <div className="flex justify-between py-1 text-sm font-bold pt-2">
                   <span className="text-emerald-400">Partner Commission:</span>
-                  <span className="font-mono text-emerald-400 font-black text-base">{selectedCalc.calculation.commissionPesos}</span>
+                  <span className="font-mono text-emerald-400 font-black text-base">
+                    {selectedCalc.calculation.commissionPesos}
+                  </span>
                 </div>
               </div>
 
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-[11px] text-emerald-300 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 flex-shrink-0" />
-                <span>Computed server-side with zero floating-point rounding errors ({selectedCalc.commissionAmountCentavos} centavos).</span>
+                <span>
+                  Computed server-side with zero floating-point rounding errors (
+                  {selectedCalc.commissionAmountCentavos} centavos).
+                </span>
               </div>
 
               <button
+                type="button"
                 onClick={() => setSelectedCalc(null)}
-                className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition"
+                className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl transition cursor-pointer"
               >
                 Close
               </button>
@@ -288,7 +376,7 @@ export default function PartnerCommissionsPage() {
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

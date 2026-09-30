@@ -7,7 +7,7 @@ import { ReferralProgramConfig } from "./types";
  */
 export function isUserReferralEnabled(envValue?: string): boolean {
   const val =
-    envValue !== undefined
+    envValue ?? undefined
       ? envValue
       : process.env.NEXT_PUBLIC_USER_REFERRAL_ENABLED;
   return val === "true";

@@ -7,7 +7,16 @@ import {
   getPromoReferencePrice,
 } from "@/config/promoPricingDisplay";
 
-const DEFAULT_PRICING_PLANS = [
+interface PricingPlan {
+  planType: string;
+  name: string;
+  price: string;
+  duration: string;
+  description: string;
+  popular: boolean;
+}
+
+const DEFAULT_PRICING_PLANS: PricingPlan[] = [
   {
     planType: "1_MONTH",
     name: "1-Month Intensive Pass",
@@ -38,15 +47,16 @@ const DEFAULT_PRICING_PLANS = [
 ];
 
 export default function PricingSection() {
-  const [pricingPlans, setPricingPlans] = useState(DEFAULT_PRICING_PLANS);
+  const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(DEFAULT_PRICING_PLANS);
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
 
     async function loadPricingPlans() {
       try {
         const res = await fetch("/api/pricing", {
           cache: "no-store",
+          signal: controller.signal,
         });
 
         if (!res.ok) {
@@ -60,14 +70,12 @@ export default function PricingSection() {
           }>;
         };
 
-        if (cancelled || !Array.isArray(data.plans)) {
+        if (controller.signal.aborted || !Array.isArray(data.plans)) {
           return;
         }
 
         const priceByType = new Map(
-          data.plans.map(
-            (plan) => [plan.planType, plan.price] as const
-          )
+          data.plans.map((plan) => [plan.planType, plan.price] as const)
         );
 
         setPricingPlans((previous) =>
@@ -87,15 +95,17 @@ export default function PricingSection() {
             };
           })
         );
-      } catch (error) {
-        console.warn("Could not refresh public pricing:", error);
+      } catch (error: unknown) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
       }
     }
 
     void loadPricingPlans();
 
     return () => {
-      cancelled = true;
+      controller.abort();
     };
   }, []);
 
@@ -115,12 +125,12 @@ export default function PricingSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {pricingPlans.map((plan, idx) => {
+          {pricingPlans.map((plan) => {
             const promoRefPrice = getPromoReferencePrice(plan.planType);
 
             return (
               <div
-                key={idx}
+                key={plan.planType}
                 className={`p-6 sm:p-7 rounded-3xl border flex flex-col justify-between space-y-6 relative transition ${
                   plan.popular
                     ? "bg-gradient-to-b from-blue-50/50 to-indigo-50/50 border-2 border-blue-600 shadow-xl"
@@ -159,39 +169,39 @@ export default function PricingSection() {
                     {plan.description}
                   </p>
 
-                <div className="pt-3 border-t border-slate-100 space-y-2 text-xs font-medium text-slate-700">
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-600 font-bold">✓</span>
-                    <span>Full Timed Mock Exam Suite</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-600 font-bold">✓</span>
-                    <span>Complete Step-by-Step Rationalizations</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-600 font-bold">✓</span>
-                    <span>Mistake Notebook & Elimination Drills</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-600 font-bold">✓</span>
-                    <span>Classmates & Study Rooms Access</span>
+                  <div className="pt-3 border-t border-slate-100 space-y-2 text-xs font-medium text-slate-700">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span>
+                      <span>Full Timed Mock Exam Suite</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span>
+                      <span>Complete Step-by-Step Rationalizations</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span>
+                      <span>Mistake Notebook &amp; Elimination Drills</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-600 font-bold">✓</span>
+                      <span>Classmates &amp; Study Rooms Access</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <Link
-                href="/signup"
-                className={`w-full py-3.5 text-center text-xs font-black rounded-xl transition ${
-                  plan.popular
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white shadow-md"
-                    : "bg-slate-900 hover:bg-slate-800 text-white"
-                }`}
-              >
-                Get Started Now
-              </Link>
-            </div>
-          );
-        })}
+                <Link
+                  href="/signup"
+                  className={`w-full py-3.5 text-center text-xs font-black rounded-xl transition ${
+                    plan.popular
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-95 text-white shadow-md"
+                      : "bg-slate-900 hover:bg-slate-800 text-white"
+                  }`}
+                >
+                  Get Started Now
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

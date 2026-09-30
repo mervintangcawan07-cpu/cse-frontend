@@ -5,12 +5,12 @@ import { OptionAnalysisItem } from "@/types/question";
 import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface OptionAnalysisProps {
-  whyA?: string | null;
-  whyB?: string | null;
-  whyC?: string | null;
-  whyD?: string | null;
-  options?: string[];
-  correctIndex?: number;
+  readonly whyA?: string | null;
+  readonly whyB?: string | null;
+  readonly whyC?: string | null;
+  readonly whyD?: string | null;
+  readonly options?: string[];
+  readonly correctIndex?: number;
 }
 
 export default function OptionAnalysis({
@@ -20,7 +20,7 @@ export default function OptionAnalysis({
   whyD,
   options = [],
   correctIndex,
-}: OptionAnalysisProps) {
+}: Readonly<OptionAnalysisProps>) {
   const analysisItems: OptionAnalysisItem[] = [];
 
   const rawEntries = [
@@ -31,7 +31,7 @@ export default function OptionAnalysis({
   ];
 
   rawEntries.forEach(({ key, val, idx }) => {
-    if (val && val.trim()) {
+    if (val?.trim()) {
       const cleanOption = options[idx] ? cleanMathText(options[idx]) : "";
       const optionLabel = cleanOption ? `${key} (${cleanOption})` : key;
       analysisItems.push({
@@ -52,9 +52,9 @@ export default function OptionAnalysis({
       </h4>
 
       <div className="space-y-2">
-        {analysisItems.map((item, idx) => (
+        {analysisItems.map((item) => (
           <div
-            key={idx}
+            key={`${item.option}-${item.text}`}
             className={`p-3 rounded-xl border text-xs sm:text-sm leading-relaxed transition break-words min-w-0 ${
               item.isCorrect
                 ? "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60 text-slate-800 dark:text-slate-200"

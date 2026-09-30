@@ -1,78 +1,125 @@
 ﻿// Relative Path: src/lib/security/idempotency.ts
+import crypto from "crypto";
+import { Redis } from "@upstash/redis";
 
-interface IdempotencyRecord {
+const hasRedis = Boolean(
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+);
+
+const redis = hasRedis
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null;
+
+export interface IdempotencyRecord {
   status: "PENDING" | "RESOLVED";
   statusCode?: number;
   responseBody?: unknown;
-  expiresAt: number;
 }
 
-class IdempotencyStore {
-  private store = new Map<string, IdempotencyRecord>();
-  private readonly defaultTtlMs = 60 * 1000; // 60 seconds lock retention
+const localFallbackStore = new Map<
+  string,
+  { record: IdempotencyRecord; expiresAt: number }
+>();
 
-  constructor() {
-    // Periodically purge expired idempotency entries
-    if (typeof setInterval !== "undefined") {
-      setInterval(() => this.cleanupExpired(), 30 * 1000);
-    }
-  }
-
-  /**
-   * Attempts to lock an idempotency key.
-   * Returns 'ACQUIRED' if new, 'PENDING' if currently processing, or 'RESOLVED' if previously completed.
-   */
-  public acquire(
-    key: string,
-    ttlMs: number = this.defaultTtlMs
-  ): { status: "ACQUIRED" | "PENDING" | "RESOLVED"; record?: IdempotencyRecord } {
-    const existing = this.store.get(key);
-    const now = Date.now();
-
-    if (existing && existing.expiresAt > now) {
-      if (existing.status === "PENDING") {
-        return { status: "PENDING", record: existing };
-      }
-      return { status: "RESOLVED", record: existing };
-    }
-
-    // Acquire lock
-    const newRecord: IdempotencyRecord = {
-      status: "PENDING",
-      expiresAt: now + ttlMs,
-    };
-
-    this.store.set(key, newRecord);
-    return { status: "ACQUIRED" };
-  }
-
-  /**
-   * Caches the API response for an acquired idempotency key.
-   */
-  public resolve(key: string, statusCode: number, responseBody: unknown): void {
-    const existing = this.store.get(key);
-    if (existing) {
-      existing.status = "RESOLVED";
-      existing.statusCode = statusCode;
-      existing.responseBody = responseBody;
-    }
-  }
-
-  /**
-   * Releases a lock if an unhandled error occurred during processing.
-   */
-  public release(key: string): void {
-    this.store.delete(key);
-  }
-
-  private cleanupExpired(): void {
-    const now = Date.now();
-    for (const [key, record] of this.store.entries()) {
-      if (record.expiresAt <= now) {
-        this.store.delete(key);
-      }
-    }
-  }
+function buildScopedKey(rawKey: string, userId?: string): string {
+  const digest = crypto
+    .createHash("sha256")
+    .update(`${userId || "anon"}:${rawKey}`)
+    .digest("hex")
+    .slice(0, 32);
+  const env = process.env.VERCEL_ENV || process.env.NODE_ENV || "development";
+  return `@idempotency/${env}/${digest}`;
 }
 
-export const idempotencyStore = new IdempotencyStore();
+export async function acquireIdempotency(
+  key: string,
+  userId?: string,
+  ttlSeconds: number = 60
+): Promise<{ status: "ACQUIRED" | "PENDING" | "RESOLVED"; record?: IdempotencyRecord }> {
+  const scopedKey = buildScopedKey(key, userId);
+
+  if (redis) {
+    try {
+      const initialRecord: IdempotencyRecord = { status: "PENDING" };
+      const setSuccess = await redis.set(scopedKey, JSON.stringify(initialRecord), {
+        nx: true,
+        ex: ttlSeconds,
+      });
+
+      if (setSuccess === "OK") {
+        return { status: "ACQUIRED" };
+      }
+
+      const existing = await redis.get<string | IdempotencyRecord>(scopedKey);
+      if (!existing) return { status: "ACQUIRED" };
+
+      const parsed: IdempotencyRecord =
+        typeof existing === "string" ? JSON.parse(existing) : existing;
+
+      return { status: parsed.status, record: parsed };
+    } catch (err) {
+      console.warn("[IDEMPOTENCY_REDIS_FALLBACK] Falling back to memory lock:", err);
+    }
+  }
+
+  // Serverless in-memory fallback
+  const now = Date.now();
+  const cached = localFallbackStore.get(scopedKey);
+
+  if (cached && cached.expiresAt > now) {
+    return { status: cached.record.status, record: cached.record };
+  }
+
+  localFallbackStore.set(scopedKey, {
+    record: { status: "PENDING" },
+    expiresAt: now + ttlSeconds * 1000,
+  });
+
+  return { status: "ACQUIRED" };
+}
+
+export async function resolveIdempotency(
+  key: string,
+  statusCode: number,
+  responseBody: unknown,
+  userId?: string,
+  ttlSeconds: number = 300
+): Promise<void> {
+  const scopedKey = buildScopedKey(key, userId);
+  const record: IdempotencyRecord = {
+    status: "RESOLVED",
+    statusCode,
+    responseBody,
+  };
+
+  if (redis) {
+    try {
+      await redis.set(scopedKey, JSON.stringify(record), { ex: ttlSeconds });
+      return;
+    } catch {
+      // Fall through to memory
+    }
+  }
+
+  localFallbackStore.set(scopedKey, {
+    record,
+    expiresAt: Date.now() + ttlSeconds * 1000,
+  });
+}
+
+export async function releaseIdempotency(key: string, userId?: string): Promise<void> {
+  const scopedKey = buildScopedKey(key, userId);
+
+  if (redis) {
+    try {
+      await redis.del(scopedKey);
+    } catch {
+      // Ignore cleanup error
+    }
+  }
+
+  localFallbackStore.delete(scopedKey);
+}

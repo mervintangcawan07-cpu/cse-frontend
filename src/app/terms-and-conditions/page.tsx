@@ -1,4 +1,4 @@
-import TermsAndConditionsPage, { metadata } from "../terms/page";
+import TermsAndConditionsPage from "../terms/page";
 
-export { metadata };
+export { metadata } from "../terms/page";
 export default TermsAndConditionsPage;

@@ -4,31 +4,30 @@
 import React, { useEffect, useState } from "react";
 
 interface PaymentConfirmationLoaderProps {
-  isOpen: boolean;
-  onComplete?: () => void;
+  readonly isOpen: boolean;
+  readonly onComplete?: () => void;
 }
 
-export default function PaymentConfirmationLoader({
-  isOpen,
-}: PaymentConfirmationLoaderProps) {
+interface PaymentConfirmationContentProps {
+  readonly onComplete?: () => void;
+}
+
+function PaymentConfirmationContent({
+  onComplete,
+}: Readonly<PaymentConfirmationContentProps>) {
   const [step, setStep] = useState(1);
 
   useEffect(() => {
-    if (!isOpen) {
-      setStep(1);
-      return;
-    }
-
     const t1 = setTimeout(() => setStep(2), 1200);
     const t2 = setTimeout(() => setStep(3), 2600);
+    const t3 = setTimeout(() => onComplete?.(), 3600);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
+      clearTimeout(t3);
     };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
+  }, [onComplete]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
@@ -85,9 +84,11 @@ export default function PaymentConfirmationLoader({
         {/* Step Progress Tracker */}
         <div className="space-y-2.5 bg-slate-950/70 border border-slate-800/80 rounded-2xl p-4 text-left">
           <div className="flex items-center gap-3 text-xs">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
-              step >= 1 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
-            }`}>
+            <span
+              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
+                step >= 1 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
+              }`}
+            >
               {step > 1 ? "✓" : "1"}
             </span>
             <span className={step >= 1 ? "text-slate-200 font-bold" : "text-slate-500"}>
@@ -96,9 +97,11 @@ export default function PaymentConfirmationLoader({
           </div>
 
           <div className="flex items-center gap-3 text-xs">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
-              step >= 2 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
-            }`}>
+            <span
+              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
+                step >= 2 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
+              }`}
+            >
               {step > 2 ? "✓" : "2"}
             </span>
             <span className={step >= 2 ? "text-slate-200 font-bold" : "text-slate-500"}>
@@ -107,9 +110,11 @@ export default function PaymentConfirmationLoader({
           </div>
 
           <div className="flex items-center gap-3 text-xs">
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
-              step >= 3 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
-            }`}>
+            <span
+              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
+                step >= 3 ? "bg-emerald-500 text-slate-950" : "bg-slate-800 text-slate-400"
+              }`}
+            >
               {step >= 3 ? "⚡" : "3"}
             </span>
             <span className={step >= 3 ? "text-slate-200 font-bold" : "text-slate-500"}>
@@ -120,4 +125,13 @@ export default function PaymentConfirmationLoader({
       </div>
     </div>
   );
+}
+
+export default function PaymentConfirmationLoader({
+  isOpen,
+  onComplete,
+}: Readonly<PaymentConfirmationLoaderProps>) {
+  if (!isOpen) return null;
+
+  return <PaymentConfirmationContent onComplete={onComplete} />;
 }

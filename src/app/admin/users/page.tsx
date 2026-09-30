@@ -72,7 +72,6 @@ export default function AdminUsersPage() {
     const requestId = ++usersRequestIdRef.current;
 
     try {
-      setLoading(true);
       const params = new URLSearchParams({
         q: query,
         filter,
@@ -83,14 +82,12 @@ export default function AdminUsersPage() {
         signal: controller.signal,
       });
       const data = await res.json();
-      if (requestId === usersRequestIdRef.current) {
-        if (res.ok && data.users) {
-          setUsers(data.users);
-          setUserPagination(data.pagination ?? INITIAL_PAGINATION);
-        }
+      if (requestId === usersRequestIdRef.current && res.ok && data.users) {
+        setUsers(data.users);
+        setUserPagination(data.pagination ?? INITIAL_PAGINATION);
       }
-    } catch (err: any) {
-      if (err?.name === "AbortError") return;
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
       console.error("Failed to load users:", err);
     } finally {
       if (requestId === usersRequestIdRef.current) {
@@ -108,26 +105,22 @@ export default function AdminUsersPage() {
     const requestId = ++logsRequestIdRef.current;
 
     try {
-      setLoading(true);
       const params = new URLSearchParams({
         q: query,
         filter,
         page: String(page),
         limit: String(PAGE_SIZE),
       });
-      const res = await fetch(
-        `/api/admin/login-history?${params.toString()}`,
-        { signal: controller.signal }
-      );
+      const res = await fetch(`/api/admin/login-history?${params.toString()}`, {
+        signal: controller.signal,
+      });
       const data = await res.json();
-      if (requestId === logsRequestIdRef.current) {
-        if (res.ok && data.history) {
-          setLogs(data.history);
-          setLogPagination(data.pagination ?? INITIAL_PAGINATION);
-        }
+      if (requestId === logsRequestIdRef.current && res.ok && data.history) {
+        setLogs(data.history);
+        setLogPagination(data.pagination ?? INITIAL_PAGINATION);
       }
-    } catch (err: any) {
-      if (err?.name === "AbortError") return;
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
       console.error("Failed to load login logs:", err);
     } finally {
       if (requestId === logsRequestIdRef.current) {
@@ -150,20 +143,29 @@ export default function AdminUsersPage() {
     };
   }, []);
 
+  // Asynchronously execute fetching to avoid synchronous setState cascading warnings
   useEffect(() => {
-    if (activeTab === "USERS") {
-      fetchUsers(searchQuery, statusFilter, 1);
-    } else {
-      fetchLogs(searchQuery, statusFilter, 1);
-    }
+    const executeFetch = async () => {
+      setLoading(true);
+      if (activeTab === "USERS") {
+        await fetchUsers(searchQuery, statusFilter, 1);
+      } else {
+        await fetchLogs(searchQuery, statusFilter, 1);
+      }
+    };
+
+    void executeFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, fetchUsers, fetchLogs, statusFilter]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  // Uses React.SyntheticEvent to satisfy SonarQube & React 19 deprecation rules
+  const handleSearch = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (activeTab === "USERS") {
-      fetchUsers(searchQuery, statusFilter, 1);
+      void fetchUsers(searchQuery, statusFilter, 1);
     } else {
-      fetchLogs(searchQuery, statusFilter, 1);
+      void fetchLogs(searchQuery, statusFilter, 1);
     }
   };
 
@@ -184,7 +186,7 @@ export default function AdminUsersPage() {
       });
 
       if (res.ok) {
-        fetchUsers(searchQuery, statusFilter, userPagination.page);
+        void fetchUsers(searchQuery, statusFilter, userPagination.page);
       } else {
         alert("Failed to update user access.");
       }
@@ -195,7 +197,184 @@ export default function AdminUsersPage() {
     }
   };
 
-  const filteredUsers = users;
+  // Helper render functions resolve SonarQube's nested ternary rule (typescript:S3358)
+  const renderUsersContent = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={6} className="p-8 text-center text-slate-400 font-medium animate-pulse">
+            Loading reviewee accounts...
+          </td>
+        </tr>
+      );
+    }
+
+    if (users.length === 0) {
+      return (
+        <tr>
+          <td colSpan={6} className="p-8 text-center text-slate-400">
+            No reviewees matched your filter or search criteria.
+          </td>
+        </tr>
+      );
+    }
+
+    return users.map((u) => {
+      const isExpired = u.paidUntil && new Date(u.paidUntil) < new Date();
+      const isActive = u.isPaid && !isExpired;
+
+      return (
+        <tr key={u.id} className="hover:bg-slate-50/80 transition">
+          <td className="p-3.5">
+            <p className="font-extrabold text-slate-800">{u.name || "Reviewee"}</p>
+            <p className="text-slate-400 text-[11px] font-mono">{u.email}</p>
+          </td>
+
+          <td className="p-3.5">
+            <span
+              className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
+                u.role === "ADMIN" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-600"
+              }`}
+            >
+              {u.role}
+            </span>
+          </td>
+
+          <td className="p-3.5">
+            <span
+              className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${
+                isActive ? "bg-emerald-100 text-emerald-800" : "bg-slate-100 text-slate-500"
+              }`}
+            >
+              {isActive ? "✓ Paid PRO" : "Free Tier"}
+            </span>
+          </td>
+
+          <td className="p-3.5">
+            {u.isBanned ? (
+              <span
+                className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-red-100 text-red-800"
+                title={u.banReason || ""}
+              >
+                🚨 Banned
+              </span>
+            ) : (
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
+                Active
+              </span>
+            )}
+          </td>
+
+          <td className="p-3.5 text-slate-600 font-medium">
+            {u.paidUntil
+              ? new Date(u.paidUntil).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "N/A"}
+          </td>
+
+          <td className="p-3.5 text-right space-x-1 shrink-0">
+            <button
+              onClick={() => void handleUpdateAccess(u.id, "EXTEND_30")}
+              disabled={updatingId === u.id}
+              className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] rounded-lg border border-blue-200 transition disabled:opacity-50 cursor-pointer"
+            >
+              +30 Days
+            </button>
+            <button
+              onClick={() => void handleUpdateAccess(u.id, "EXTEND_180")}
+              disabled={updatingId === u.id}
+              className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] rounded-lg border border-emerald-200 transition disabled:opacity-50 cursor-pointer"
+            >
+              +180 Days
+            </button>
+            <button
+              onClick={() => void handleUpdateAccess(u.id, "EXTEND_365")}
+              disabled={updatingId === u.id}
+              className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-[10px] rounded-lg border border-purple-200 transition disabled:opacity-50 cursor-pointer"
+            >
+              +1 Year
+            </button>
+            {u.isPaid && (
+              <button
+                onClick={() => void handleUpdateAccess(u.id, "REVOKE")}
+                disabled={updatingId === u.id}
+                className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[10px] rounded-lg border border-rose-200 transition disabled:opacity-50 cursor-pointer"
+              >
+                Revoke PRO
+              </button>
+            )}
+
+            <button
+              onClick={() => { setSelectedUser(u); setModalMode("RESET_PASSWORD"); }}
+              className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg border border-slate-200 transition cursor-pointer"
+            >
+              🔑 Password
+            </button>
+            {u.isBanned ? (
+              <button
+                onClick={() => { setSelectedUser(u); setModalMode("UNBAN"); }}
+                className="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
+              >
+                Unban
+              </button>
+            ) : (
+              <button
+                onClick={() => { setSelectedUser(u); setModalMode("BAN"); }}
+                className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
+              >
+                Ban
+              </button>
+            )}
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const renderLogsContent = () => {
+    if (loading) {
+      return (
+        <tr>
+          <td colSpan={5} className="p-8 text-center text-slate-400 font-medium animate-pulse">
+            Loading audit logs...
+          </td>
+        </tr>
+      );
+    }
+
+    if (logs.length === 0) {
+      return (
+        <tr>
+          <td colSpan={5} className="p-8 text-center text-slate-400">
+            No login records match your filter criteria.
+          </td>
+        </tr>
+      );
+    }
+
+    return logs.map((log) => (
+      <tr key={log.id} className="hover:bg-slate-50/80 transition">
+        <td className="p-3.5 text-slate-400 font-mono text-[11px]">
+          {new Date(log.createdAt).toLocaleString()}
+        </td>
+        <td className="p-3.5 font-bold text-slate-800">{log.email}</td>
+        <td className="p-3.5">
+          <span
+            className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+              log.status === "FAILED" ? "bg-red-100 text-red-800" : "bg-emerald-100 text-emerald-800"
+            }`}
+          >
+            {log.status}
+          </span>
+        </td>
+        <td className="p-3.5 font-mono text-slate-600">{log.ipAddress || "127.0.0.1"}</td>
+        <td className="p-3.5 text-slate-500">{log.reason || "Authentication successful"}</td>
+      </tr>
+    ));
+  };
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 space-y-6">
@@ -304,139 +483,11 @@ export default function AdminUsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {loading ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400 font-medium animate-pulse">
-                      Loading reviewee accounts...
-                    </td>
-                  </tr>
-                ) : filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-400">
-                      No reviewees matched your filter or search criteria.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((u) => {
-                    const isExpired = u.paidUntil && new Date(u.paidUntil) < new Date();
-                    const isActive = u.isPaid && !isExpired;
-
-                    return (
-                      <tr key={u.id} className="hover:bg-slate-50/80 transition">
-                        <td className="p-3.5">
-                          <p className="font-extrabold text-slate-800">{u.name || "Reviewee"}</p>
-                          <p className="text-slate-400 text-[11px] font-mono">{u.email}</p>
-                        </td>
-
-                        <td className="p-3.5">
-                          <span
-                            className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
-                              u.role === "ADMIN" ? "bg-amber-100 text-amber-800" : "bg-slate-100 text-slate-600"
-                            }`}
-                          >
-                            {u.role}
-                          </span>
-                        </td>
-
-                        <td className="p-3.5">
-                          <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${
-                              isActive
-                                ? "bg-emerald-100 text-emerald-800"
-                                : "bg-slate-100 text-slate-500"
-                            }`}
-                          >
-                            {isActive ? "✓ Paid PRO" : "Free Tier"}
-                          </span>
-                        </td>
-
-                        <td className="p-3.5">
-                          {u.isBanned ? (
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-red-100 text-red-800" title={u.banReason || ""}>
-                              🚨 Banned
-                            </span>
-                          ) : (
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
-                              Active
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="p-3.5 text-slate-600 font-medium">
-                          {u.paidUntil
-                            ? new Date(u.paidUntil).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })
-                            : "N/A"}
-                        </td>
-
-                        <td className="p-3.5 text-right space-x-1 shrink-0">
-                          {/* PRO Duration Extension Buttons */}
-                          <button
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_30")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] rounded-lg border border-blue-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +30 Days
-                          </button>
-                          <button
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_180")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] rounded-lg border border-emerald-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +180 Days
-                          </button>
-                          <button
-                            onClick={() => handleUpdateAccess(u.id, "EXTEND_365")}
-                            disabled={updatingId === u.id}
-                            className="px-2.5 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-[10px] rounded-lg border border-purple-200 transition disabled:opacity-50 cursor-pointer"
-                          >
-                            +1 Year
-                          </button>
-                          {u.isPaid && (
-                            <button
-                              onClick={() => handleUpdateAccess(u.id, "REVOKE")}
-                              disabled={updatingId === u.id}
-                              className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-[10px] rounded-lg border border-rose-200 transition disabled:opacity-50 cursor-pointer"
-                            >
-                              Revoke PRO
-                            </button>
-                          )}
-
-                          {/* Moderation Controls */}
-                          <button
-                            onClick={() => { setSelectedUser(u); setModalMode("RESET_PASSWORD"); }}
-                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] rounded-lg border border-slate-200 transition cursor-pointer"
-                          >
-                            🔑 Password
-                          </button>
-                          {u.isBanned ? (
-                            <button
-                              onClick={() => { setSelectedUser(u); setModalMode("UNBAN"); }}
-                              className="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
-                            >
-                              Unban
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => { setSelectedUser(u); setModalMode("BAN"); }}
-                              className="px-2 py-1 bg-red-100 hover:bg-red-200 text-red-800 font-bold text-[10px] rounded-lg transition cursor-pointer"
-                            >
-                              Ban
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
+                {renderUsersContent()}
               </tbody>
             </table>
           </div>
         ) : (
-          /* Login Audit Table */
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
@@ -449,44 +500,13 @@ export default function AdminUsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
-                {loading ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-400 font-medium animate-pulse">
-                      Loading audit logs...
-                    </td>
-                  </tr>
-                ) : logs.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-400">
-                      No login records match your filter criteria.
-                    </td>
-                  </tr>
-                ) : (
-                  logs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/80 transition">
-                      <td className="p-3.5 text-slate-400 font-mono text-[11px]">
-                        {new Date(log.createdAt).toLocaleString()}
-                      </td>
-                      <td className="p-3.5 font-bold text-slate-800">{log.email}</td>
-                      <td className="p-3.5">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                            log.status === "FAILED" ? "bg-red-100 text-red-800" : "bg-emerald-100 text-emerald-800"
-                          }`}
-                        >
-                          {log.status}
-                        </span>
-                      </td>
-                      <td className="p-3.5 font-mono text-slate-600">{log.ipAddress || "127.0.0.1"}</td>
-                      <td className="p-3.5 text-slate-500">{log.reason || "Authentication successful"}</td>
-                    </tr>
-                  ))
-                )}
+                {renderLogsContent()}
               </tbody>
             </table>
           </div>
         )}
 
+        {/* Pagination - Users */}
         {!loading && activeTab === "USERS" && (
           <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
             <span className="font-semibold text-slate-500">
@@ -495,9 +515,7 @@ export default function AdminUsersPage() {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() =>
-                  fetchUsers(searchQuery, statusFilter, userPagination.page - 1)
-                }
+                onClick={() => void fetchUsers(searchQuery, statusFilter, userPagination.page - 1)}
                 disabled={!userPagination.hasPreviousPage || loading}
                 className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -505,9 +523,7 @@ export default function AdminUsersPage() {
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  fetchUsers(searchQuery, statusFilter, userPagination.page + 1)
-                }
+                onClick={() => void fetchUsers(searchQuery, statusFilter, userPagination.page + 1)}
                 disabled={!userPagination.hasNextPage || loading}
                 className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -517,6 +533,7 @@ export default function AdminUsersPage() {
           </div>
         )}
 
+        {/* Pagination - Logs */}
         {!loading && activeTab === "LOGIN_LOGS" && (
           <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 text-xs">
             <span className="font-semibold text-slate-500">
@@ -525,9 +542,7 @@ export default function AdminUsersPage() {
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() =>
-                  fetchLogs(searchQuery, statusFilter, logPagination.page - 1)
-                }
+                onClick={() => void fetchLogs(searchQuery, statusFilter, logPagination.page - 1)}
                 disabled={!logPagination.hasPreviousPage || loading}
                 className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -535,9 +550,7 @@ export default function AdminUsersPage() {
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  fetchLogs(searchQuery, statusFilter, logPagination.page + 1)
-                }
+                onClick={() => void fetchLogs(searchQuery, statusFilter, logPagination.page + 1)}
                 disabled={!logPagination.hasNextPage || loading}
                 className="rounded-lg border border-slate-200 px-3 py-2 font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -554,7 +567,7 @@ export default function AdminUsersPage() {
         onClose={() => { setModalMode(null); setSelectedUser(null); }}
         user={selectedUser}
         mode={modalMode}
-        onSuccess={() => fetchUsers(searchQuery, statusFilter, userPagination.page)}
+        onSuccess={() => void fetchUsers(searchQuery, statusFilter, userPagination.page)}
       />
     </div>
   );

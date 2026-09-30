@@ -1,34 +1,57 @@
-// Relative Path: src/app/referrals/page.tsx
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import {
   Gift,
   Copy,
   Check,
   Share2,
-  DollarSign,
   Clock,
   CheckCircle,
-  TrendingUp,
   ArrowUpRight,
   ShieldCheck,
-  AlertCircle,
   Users,
   Wallet,
   Building2,
   Smartphone,
-  ExternalLink,
-  ChevronRight,
   Info,
 } from "lucide-react";
-import { getOrCreatePendingFinancialKey, clearPendingFinancialKey, abandonPendingFinancialOperation } from "@/lib/idempotency/client";
+import {
+  getOrCreatePendingFinancialKey,
+  clearPendingFinancialKey,
+  abandonPendingFinancialOperation,
+} from "@/lib/idempotency/client";
 import {
   UserReferralDashboardData,
   PayoutMethod,
 } from "@/lib/referral/types";
 import { formatCentavosToPesos } from "@/lib/referral/rewardCalculator";
+
+const PAYOUT_METHODS: PayoutMethod[] = ["GCASH", "MAYA", "BANK_TRANSFER"];
+
+function getReferralStatusClass(status: string): string {
+  if (["QUALIFIED", "AVAILABLE", "PAID"].includes(status)) {
+    return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+  }
+  if (status === "REWARD_PENDING") {
+    return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+  }
+  if (status === "PENDING_PREMIUM") {
+    return "bg-sky-500/10 text-sky-400 border-sky-500/30";
+  }
+  return "bg-rose-500/10 text-rose-400 border-rose-500/30";
+}
+
+function getPayoutStatusClass(status: string): string {
+  if (status === "PAID") {
+    return "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+  }
+  if (status === "REQUESTED" || status === "PROCESSING") {
+    return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+  }
+  return "bg-rose-500/10 text-rose-400 border-rose-500/30";
+}
 
 export default function UserReferralsPage() {
   const [data, setData] = useState<UserReferralDashboardData | null>(null);
@@ -49,14 +72,15 @@ export default function UserReferralsPage() {
   const [payoutInfo, setPayoutInfo] = useState<string | null>(null);
   const [idempotencyConflict, setIdempotencyConflict] = useState(false);
 
-  const fetchDashboard = useCallback(async () => {
+  const fetchDashboard = useCallback(async (signal?: AbortSignal) => {
     try {
-      const res = await fetch("/api/referral/me");
+      const res = await fetch("/api/referral/me", { signal });
       if (res.ok) {
         const json = await res.json();
         setData(json.data);
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
       console.error("Failed to load referral dashboard:", err);
     } finally {
       setLoading(false);
@@ -64,19 +88,29 @@ export default function UserReferralsPage() {
   }, []);
 
   useEffect(() => {
-    fetchDashboard();
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchDashboard(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchDashboard]);
 
   const handleCopyCode = () => {
     if (!data?.referralCode) return;
-    navigator.clipboard.writeText(data.referralCode);
+    void navigator.clipboard.writeText(data.referralCode);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2500);
   };
 
   const handleCopyLink = () => {
     if (!data?.referralLink) return;
-    navigator.clipboard.writeText(data.referralLink);
+    void navigator.clipboard.writeText(data.referralLink);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
   };
@@ -90,15 +124,14 @@ export default function UserReferralsPage() {
           text: `Prepare for the Philippine Civil Service Examination with me on GovStudyX! Use my referral code ${data.referralCode}:`,
           url: data.referralLink,
         });
-      } catch (err) {
-        // User cancelled share
+      } catch {
+        // User cancelled native share
       }
     } else {
       handleCopyLink();
     }
   };
 
-  // Handle explicit user action to abandon pending operation after conflict
   const handleStartNewPayout = () => {
     abandonPendingFinancialOperation("REFERRAL_PAYOUT_REQUEST");
     setIdempotencyConflict(false);
@@ -106,7 +139,7 @@ export default function UserReferralsPage() {
     setPayoutInfo("A new payout request can now be submitted.");
   };
 
-  const handlePayoutSubmit = async (e: React.FormEvent) => {
+  const handlePayoutSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setPayoutMessage(null);
     setPayoutInfo(null);
@@ -134,9 +167,9 @@ export default function UserReferralsPage() {
         body: JSON.stringify({
           amountPesos: amountNum,
           method: payoutMethod,
-          accountNumber,
-          accountName,
-          bankName: payoutMethod === "BANK_TRANSFER" ? bankName : undefined,
+          accountNumber: accountNumber.trim(),
+          accountName: accountName.trim(),
+          bankName: payoutMethod === "BANK_TRANSFER" ? bankName.trim() : undefined,
         }),
       });
 
@@ -164,7 +197,8 @@ export default function UserReferralsPage() {
           setIdempotencyConflict(true);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      console.error("Payout submission error:", err);
       if (!requestStarted) {
         const msg =
           err instanceof Error && err.message
@@ -179,9 +213,150 @@ export default function UserReferralsPage() {
     }
   };
 
-  const availablePesos = data ? data.stats.availableBalanceCentavos / 100 : 0;
-  const minPayoutPesos = data ? data.minPayoutCentavos / 100 : 150;
+  const availablePesos = useMemo(
+    () => (data ? data.stats.availableBalanceCentavos / 100 : 0),
+    [data]
+  );
+  const minPayoutPesos = useMemo(
+    () => (data ? data.minPayoutCentavos / 100 : 150),
+    [data]
+  );
   const isPayoutEligible = availablePesos >= minPayoutPesos;
+
+  const renderReferralsTable = () => {
+    if (!data?.history.length) {
+      return (
+        <div className="py-16 text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-xl">
+            👥
+          </div>
+          <h4 className="text-base font-black text-white">No referrals yet</h4>
+          <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            Invite classmates to GovStudyX using your referral link above. You will see your earnings here once they join and upgrade!
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
+            <tr>
+              <th className="py-3 px-4">Referral ID</th>
+              <th className="py-3 px-4">Student</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4">Qualifying Purchase</th>
+              <th className="py-3 px-4">Rate</th>
+              <th className="py-3 px-4">Your Reward</th>
+              <th className="py-3 px-4">Available Date</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {data.history.map((item) => (
+              <tr key={item.id} className="hover:bg-slate-800/40 transition">
+                <td className="py-3.5 px-4 font-mono font-bold text-slate-300">{item.referralId}</td>
+                <td className="py-3.5 px-4">
+                  <div className="font-bold text-white">{item.referredUserName}</div>
+                  <div className="text-[10px] text-slate-400 font-mono">{item.referredUserEmailMasked}</div>
+                </td>
+                <td className="py-3.5 px-4">
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${getReferralStatusClass(item.status)}`}
+                  >
+                    {item.status.replace("_", " ")}
+                  </span>
+                </td>
+                <td className="py-3.5 px-4 font-mono">
+                  {item.qualifyingPurchaseCentavos ? formatCentavosToPesos(item.qualifyingPurchaseCentavos) : "—"}
+                </td>
+                <td className="py-3.5 px-4 font-mono font-bold text-slate-300">
+                  {item.effectiveRate ? `${item.effectiveRate}%` : "20%"}
+                </td>
+                <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                  {item.rewardAmountCentavos ? formatCentavosToPesos(item.rewardAmountCentavos) : "Pending"}
+                </td>
+                <td className="py-3.5 px-4 text-slate-400 text-[11px]">
+                  {new Date(item.holdingUntil || item.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderPayoutsTable = () => {
+    if (!data?.payouts.length) {
+      return (
+        <div className="py-16 text-center space-y-3">
+          <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-xl">
+            💸
+          </div>
+          <h4 className="text-base font-black text-white">No payout requests yet</h4>
+          <p className="text-xs text-slate-400 max-w-sm mx-auto">
+            When your available reward balance reaches ₱150.00, you can request cash payout via GCash, Maya, or Bank Transfer.
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
+            <tr>
+              <th className="py-3 px-4">Date</th>
+              <th className="py-3 px-4">Method</th>
+              <th className="py-3 px-4">Account Holder</th>
+              <th className="py-3 px-4">Account Number</th>
+              <th className="py-3 px-4">Amount</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4">Reference</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {data.payouts.map((p) => (
+              <tr key={p.id} className="hover:bg-slate-800/40 transition">
+                <td className="py-3.5 px-4 text-slate-400">
+                  {new Date(p.createdAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </td>
+                <td className="py-3.5 px-4 font-bold text-white flex items-center gap-1.5">
+                  {p.method === "GCASH" && <Smartphone className="w-3.5 h-3.5 text-blue-400" />}
+                  {p.method === "BANK_TRANSFER" && <Building2 className="w-3.5 h-3.5 text-indigo-400" />}
+                  <span>{p.method.replace("_", " ")}</span>
+                </td>
+                <td className="py-3.5 px-4 font-medium text-slate-200">{p.accountName}</td>
+                <td className="py-3.5 px-4 font-mono text-slate-400">{p.accountNumberMasked}</td>
+                <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                  {formatCentavosToPesos(p.amountCentavos)}
+                </td>
+                <td className="py-3.5 px-4">
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${getPayoutStatusClass(p.status)}`}
+                  >
+                    {p.status}
+                  </span>
+                </td>
+                <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px]">
+                  {p.transactionRef || p.adminNotes || "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -212,9 +387,9 @@ export default function UserReferralsPage() {
             </p>
           </div>
 
-          {/* Quick Payout Action Button */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <button
+              type="button"
               onClick={() => {
                 setPayoutAmount(String(availablePesos));
                 setShowPayoutModal(true);
@@ -236,7 +411,6 @@ export default function UserReferralsPage() {
 
       {/* Share & Code Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Referral Link & Code Card */}
         <div className="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
           <div className="flex items-center justify-between border-b border-slate-800 pb-4">
             <div>
@@ -251,16 +425,22 @@ export default function UserReferralsPage() {
           </div>
 
           <div className="space-y-4">
-            {/* Referral Code Box */}
             <div>
-              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-400 mb-1.5">
+              <label
+                htmlFor="referral-code-display"
+                className="block text-[11px] font-black uppercase tracking-wider text-slate-400 mb-1.5"
+              >
                 Unique Referral Code
               </label>
               <div className="flex items-center gap-2">
-                <div className="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3.5 font-mono text-base font-black text-emerald-400 tracking-wider">
+                <div
+                  id="referral-code-display"
+                  className="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3.5 font-mono text-base font-black text-emerald-400 tracking-wider"
+                >
                   {data?.referralCode}
                 </div>
                 <button
+                  type="button"
                   onClick={handleCopyCode}
                   className="px-4 py-3.5 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl border border-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
                 >
@@ -270,19 +450,23 @@ export default function UserReferralsPage() {
               </div>
             </div>
 
-            {/* Shareable Link Box */}
             <div>
-              <label className="block text-[11px] font-black uppercase tracking-wider text-slate-400 mb-1.5">
+              <label
+                htmlFor="shareable-link-input"
+                className="block text-[11px] font-black uppercase tracking-wider text-slate-400 mb-1.5"
+              >
                 Direct Share Link
               </label>
               <div className="flex items-center gap-2">
                 <input
+                  id="shareable-link-input"
                   type="text"
                   readOnly
                   value={data?.referralLink || ""}
                   className="flex-1 bg-slate-950 border border-slate-700 rounded-2xl px-4 py-3.5 text-xs text-slate-300 font-mono outline-none"
                 />
                 <button
+                  type="button"
                   onClick={handleCopyLink}
                   className="px-4 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-xs font-bold flex items-center gap-1.5 transition cursor-pointer shadow-lg shadow-blue-500/20"
                 >
@@ -290,7 +474,8 @@ export default function UserReferralsPage() {
                   <span>{copiedLink ? "Copied Link!" : "Copy Link"}</span>
                 </button>
                 <button
-                  onClick={handleNativeShare}
+                  type="button"
+                  onClick={() => void handleNativeShare()}
                   className="p-3.5 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl border border-slate-700 text-xs font-bold transition cursor-pointer"
                   title="Share Link"
                 >
@@ -301,7 +486,6 @@ export default function UserReferralsPage() {
           </div>
         </div>
 
-        {/* How It Works & Transparency Card */}
         <div className="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl flex flex-col justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-emerald-400 font-black text-xs uppercase tracking-wider">
@@ -396,6 +580,7 @@ export default function UserReferralsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-4">
           <div className="flex items-center gap-3">
             <button
+              type="button"
               onClick={() => setActiveTab("referrals")}
               className={`px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer ${
                 activeTab === "referrals"
@@ -406,6 +591,7 @@ export default function UserReferralsPage() {
               Referral Activity ({data?.history.length || 0})
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("payouts")}
               className={`px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer ${
                 activeTab === "payouts"
@@ -420,158 +606,7 @@ export default function UserReferralsPage() {
           <span className="text-xs text-slate-400">Authoritative Server Ledger</span>
         </div>
 
-        {/* Tab 1: Referral Activity Table */}
-        {activeTab === "referrals" && (
-          <div>
-            {!data?.history.length ? (
-              <div className="py-16 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-xl">
-                  👥
-                </div>
-                <h4 className="text-base font-black text-white">No referrals yet</h4>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                  Invite classmates to GovStudyX using your referral link above. You will see your earnings here once they join and upgrade!
-                </p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
-                    <tr>
-                      <th className="py-3 px-4">Referral ID</th>
-                      <th className="py-3 px-4">Student</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4">Qualifying Purchase</th>
-                      <th className="py-3 px-4">Rate</th>
-                      <th className="py-3 px-4">Your Reward</th>
-                      <th className="py-3 px-4">Available Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {data.history.map((item) => (
-                      <tr key={item.id} className="hover:bg-slate-800/40 transition">
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-300">{item.referralId}</td>
-                        <td className="py-3.5 px-4">
-                          <div className="font-bold text-white">{item.referredUserName}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">{item.referredUserEmailMasked}</div>
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
-                              ["QUALIFIED", "AVAILABLE", "PAID"].includes(item.status)
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                                : item.status === "REWARD_PENDING"
-                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                                : item.status === "PENDING_PREMIUM"
-                                ? "bg-sky-500/10 text-sky-400 border-sky-500/30"
-                                : "bg-rose-500/10 text-rose-400 border-rose-500/30"
-                            }`}
-                          >
-                            {item.status.replace("_", " ")}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 font-mono">
-                          {item.qualifyingPurchaseCentavos ? formatCentavosToPesos(item.qualifyingPurchaseCentavos) : "—"}
-                        </td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-300">
-                          {item.effectiveRate ? `${item.effectiveRate}%` : "20%"}
-                        </td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
-                          {item.rewardAmountCentavos ? formatCentavosToPesos(item.rewardAmountCentavos) : "Pending"}
-                        </td>
-                        <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                          {item.holdingUntil
-                            ? new Date(item.holdingUntil).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })
-                            : new Date(item.createdAt).toLocaleDateString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              })}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Tab 2: Payout History Table */}
-        {activeTab === "payouts" && (
-          <div>
-            {!data?.payouts.length ? (
-              <div className="py-16 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-xl">
-                  💸
-                </div>
-                <h4 className="text-base font-black text-white">No payout requests yet</h4>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                  When your available reward balance reaches ₱150.00, you can request cash payout via GCash, Maya, or Bank Transfer.
-                </p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
-                    <tr>
-                      <th className="py-3 px-4">Date</th>
-                      <th className="py-3 px-4">Method</th>
-                      <th className="py-3 px-4">Account Holder</th>
-                      <th className="py-3 px-4">Account Number</th>
-                      <th className="py-3 px-4">Amount</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4">Reference</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {data.payouts.map((p) => (
-                      <tr key={p.id} className="hover:bg-slate-800/40 transition">
-                        <td className="py-3.5 px-4 text-slate-400">
-                          {new Date(p.createdAt).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </td>
-                        <td className="py-3.5 px-4 font-bold text-white flex items-center gap-1.5">
-                          {p.method === "GCASH" && <Smartphone className="w-3.5 h-3.5 text-blue-400" />}
-                          {p.method === "BANK_TRANSFER" && <Building2 className="w-3.5 h-3.5 text-indigo-400" />}
-                          <span>{p.method.replace("_", " ")}</span>
-                        </td>
-                        <td className="py-3.5 px-4 font-medium text-slate-200">{p.accountName}</td>
-                        <td className="py-3.5 px-4 font-mono text-slate-400">{p.accountNumberMasked}</td>
-                        <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
-                          {formatCentavosToPesos(p.amountCentavos)}
-                        </td>
-                        <td className="py-3.5 px-4">
-                          <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${
-                              p.status === "PAID"
-                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                                : p.status === "REQUESTED" || p.status === "PROCESSING"
-                                ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                                : "bg-rose-500/10 text-rose-400 border-rose-500/30"
-                            }`}
-                          >
-                            {p.status}
-                          </span>
-                        </td>
-                        <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px]">
-                          {p.transactionRef || p.adminNotes || "—"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
+        {activeTab === "referrals" ? renderReferralsTable() : renderPayoutsTable()}
       </div>
 
       {/* Payout Request Modal */}
@@ -586,6 +621,7 @@ export default function UserReferralsPage() {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setShowPayoutModal(false)}
                 className="text-slate-400 hover:text-white text-lg font-bold p-1 cursor-pointer"
               >
@@ -594,13 +630,15 @@ export default function UserReferralsPage() {
             </div>
 
             <form onSubmit={handlePayoutSubmit} className="space-y-4">
-              {/* Method Selector */}
               <div>
-                <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                <label
+                  htmlFor="payout-method-selector"
+                  className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                >
                   Payout Method
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["GCASH", "MAYA", "BANK_TRANSFER"] as PayoutMethod[]).map((m) => (
+                <div id="payout-method-selector" className="grid grid-cols-3 gap-2">
+                  {PAYOUT_METHODS.map((m) => (
                     <button
                       key={m}
                       type="button"
@@ -617,14 +655,17 @@ export default function UserReferralsPage() {
                 </div>
               </div>
 
-              {/* Amount Input */}
               <div>
-                <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                <label
+                  htmlFor="payout-amount-input"
+                  className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                >
                   Amount in PHP (Min. ₱150.00)
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-3.5 text-slate-400 font-bold">₱</span>
                   <input
+                    id="payout-amount-input"
                     type="number"
                     step="0.01"
                     min="150"
@@ -638,13 +679,16 @@ export default function UserReferralsPage() {
                 </div>
               </div>
 
-              {/* Bank Name if Bank Transfer */}
               {payoutMethod === "BANK_TRANSFER" && (
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                  <label
+                    htmlFor="bank-name-input"
+                    className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                  >
                     Bank Name
                   </label>
                   <input
+                    id="bank-name-input"
                     type="text"
                     required
                     placeholder="BDO, BPI, UnionBank, LandBank, etc."
@@ -655,12 +699,15 @@ export default function UserReferralsPage() {
                 </div>
               )}
 
-              {/* Account Holder Name */}
               <div>
-                <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                <label
+                  htmlFor="account-name-input"
+                  className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                >
                   Account Holder Full Name
                 </label>
                 <input
+                  id="account-name-input"
                   type="text"
                   required
                   placeholder="Juan Dela Cruz"
@@ -670,12 +717,15 @@ export default function UserReferralsPage() {
                 />
               </div>
 
-              {/* Account Number */}
               <div>
-                <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+                <label
+                  htmlFor="account-number-input"
+                  className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+                >
                   {payoutMethod === "BANK_TRANSFER" ? "Bank Account Number" : "Mobile Number (09XX-XXX-XXXX)"}
                 </label>
                 <input
+                  id="account-number-input"
                   type="text"
                   required
                   placeholder={payoutMethod === "BANK_TRANSFER" ? "1234567890" : "09171234567"}

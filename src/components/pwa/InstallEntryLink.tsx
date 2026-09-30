@@ -14,11 +14,11 @@ type NavigatorWithStandalone = Navigator & {
 };
 
 interface InstallEntryLinkProps {
-  label?: string;
-  className?: string;
-  showIcon?: boolean;
-  onNavigate?: () => void;
-  "aria-label"?: string;
+  readonly label?: string;
+  readonly className?: string;
+  readonly showIcon?: boolean;
+  readonly onNavigate?: () => void;
+  readonly "aria-label"?: string;
 }
 
 export default function InstallEntryLink({
@@ -27,7 +27,7 @@ export default function InstallEntryLink({
   showIcon = true,
   onNavigate,
   "aria-label": ariaLabel,
-}: InstallEntryLinkProps) {
+}: Readonly<InstallEntryLinkProps>) {
   // ZERO-FLASH REQUIREMENT: default to false (unresolved/hidden)
   const [canShow, setCanShow] = useState(false);
 
@@ -35,8 +35,7 @@ export default function InstallEntryLink({
     // 1. Standalone / Already Installed Detection
     const isChromiumStandalone =
       typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia("(display-mode: standalone)").matches;
+      window.matchMedia?.("(display-mode: standalone)")?.matches;
 
     const isIosStandalone =
       typeof navigator !== "undefined" &&

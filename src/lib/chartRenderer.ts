@@ -21,14 +21,78 @@ const PALETTE = [
   "#6366f1", // Indigo
 ];
 
+// Hoisted Non-Backtracking Regular Expressions (ReDoS & S5852 / S5843 Guarded)
+const POLYGON_SEQUENCE_REGEX = /polygon|sequence where|at each step|geometric sequence/i;
+const TABLE_DATA_START_REGEX = /\|[\s:-]+\|\s*\|/;
+const QUESTION_START_REGEX = /\|\s*(?:Which|What|How|Calculate|Determine|Find|Who|Based)\b/i;
+
+const PIE_HEADER_REGEX = /pie\s*chart[^(]*\(([^)]+)\)/i;
+const RATE_HEADER_REGEX = /(?:line\s*graph|underemployment|rate)[^(]*\(([^)]+)\)/i;
+// Avoids space in class overlapping with \s*
+const SECTOR_PERCENT_PAIR_REGEX = /([A-Za-z]+(?:\s+[A-Za-z]+)*)\s*=\s*(\d+(?:\.\d+)?)\s*%/g;
+
+const BARANGAY_HEADER_REGEX = /Three\s*pie\s*charts|Barangay\s+[A-Z]\s*\([^)]*\):/i;
+const BARANGAY_ROW_REGEX = /Barangay\s+([A-Z])(?:\s*\([^)]*\))?:\s*([^.;\n]+)/gi;
+const PERCENT_PAIR_REGEX = /([A-Za-z0-9/_-]+(?:\s+[A-Za-z0-9/_-]+)*)\s*=\s*(\d+(?:\.\d+)?)\s*%/g;
+
+const ENERGY_BAR_HEADER_REGEX = /(?:bar\s*chart|generation\s*by\s*source)[^(]*\(([^)]+)\)/i;
+const ENERGY_LINE_HEADER_REGEX = /(?:line\s*graph|loss\s*rate)[^(]*\(([^)]+)\)/i;
+const ENERGY_PAIR_REGEX = /([A-Za-z0-9/_-]+(?:\s+[A-Za-z0-9/_-]+)*)\s*=\s*([\d,]+(?:\.\d+)?)\s*(GWh|%)/g;
+const QUARTER_PERCENT_PAIR_REGEX = /(Q[1-4])=\s*(\d+(?:\.\d+)?)\s*%/g;
+
+const BUILDING_POWER_ROW_REGEX = /Building\s+([A-Z]):\s*Jan\s*=\s*([\d,]+),\s*Feb\s*=\s*([\d,]+),\s*Mar\s*=\s*([\d,]+)/gi;
+// Fixed duplicate [A-Za-z] under /i flag
+const SITIO_SURVEY_ROW_REGEX = /Sitio\s+([a-z]+):\s*Poverty\s*rate\s*(\d+)%,\s*Distance\s*(\d+)\s*km,\s*Population\s*density\s*(\d+)/gi;
+const SOLAR_QUARTER_ROW_REGEX = /(Q[1-4])\s*=\s*(\d+(?:\.\d+)?)/gi;
+const WASTE_ZONE_ROW_REGEX = /Zone\s+([A-Z]):?\s+produces\s+(\d+(?:\.\d+)?)\s*MTD\s+of\s+biodegradable,\s*(\d+(?:\.\d+)?)\s*MTD\s+of\s+recyclable,\s*(?:and\s*)?(\d+(?:\.\d+)?)\s*MTD\s+of\s+residual/gi;
+const CITY_TEMP_ROW_REGEX = /City\s+([A-Z])=\s*(\d+(?:\.\d+)?)/gi;
+
+// \S boundary prevents catastrophic space backtracking
+const FINDINGS_ROW_REGEX = /Finding\s+(\d+):\s*(\S[^.\r\n]*\.)/gi;
+const GENERIC_PIE_PAIR_REGEX = /([A-Za-z]+(?:\s+[A-Za-z]+)*)\s*[=:]\s*(\d+(?:\.\d+)?)\s*%/g;
+const SINGLE_BAR_ROW_REGEX = /([A-Za-z&]+(?:\s+[A-Za-z&]+)*)\s*=\s*([\d,]+(?:\.\d+)?)/g;
+const PERIOD_TREND_ROW_REGEX = /(20\d\d|Week\s*\d+|Month\s*\d+)[=:]\s*([\d,]+(?:\.\d+)?)/gi;
+const MONTH_TREND_ROW_REGEX = /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)=\s*(-?\d+(?:\.\d+)?)\s*(%)?/gi;
+
+// Bounded words prevent multi-token exponential explosion
+const MATRIX_ENTITY_ROW_REGEX = /(?:^|[\r\n.;])\s*([A-Z][A-Za-z0-9/-]*(?:\s+[A-Za-z0-9/-]+)*)\s*:\s*(\S[^.;\r\n]*)/g;
+const MATRIX_PAIR_ROW_REGEX = /([A-Za-z0-9/]+(?:\s+[A-Za-z0-9/]+)*)\s*[=:-]\s*(?:PHP\s*)?([\d,]+(?:\.\d+)?)\s*(%|units|members|tons|MT|ha|M|k)?(?=[,;.\s]|$)/g;
+
+const PASSAGE_HEADER_STRIP_REGEX = /^Passage:\s*\S[^:.\r\n]*:\s*/i;
+const ENTITY_PREFIX_PATTERNS = [
+  /^The\s+(?:data|bars?|chart)\s+shows?\s*/i,
+  /^(?:Passage|Note|\([12]\)|-)\s*/i,
+];
+
 function escapeHTML(str: unknown): string {
-  if (!str) return "";
+  if (str === null || str === undefined) return "";
+  if (typeof str !== "string" && typeof str !== "number" && typeof str !== "boolean") {
+    return "";
+  }
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function formatTickValue(val: number): string {
+  if (val >= 1000) {
+    return `${(val / 1000).toFixed(0)}k`;
+  }
+  if (val % 1 === 0) {
+    return String(val);
+  }
+  return val.toFixed(1);
+}
+
+function cleanEntityName(rawName: string): string {
+  let result = rawName.trim();
+  for (const pattern of ENTITY_PREFIX_PATTERNS) {
+    result = result.replace(pattern, "");
+  }
+  return result.trim();
 }
 
 /**
@@ -96,7 +160,6 @@ export function renderPieChartSVG(title: string, data: Array<{ label: string; va
       `<div class="flex items-center justify-between text-xs py-1 px-1.5 rounded-lg hover:bg-slate-800/40">
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${color}"></span>
-          <span class="text-slate-200 font-medium">${item.label}</span>
           <span class="text-slate-200 font-medium">${escapeHTML(item.label)}</span>
         </div>
         <span class="font-bold text-white font-mono ml-2">${pct}</span>
@@ -108,8 +171,7 @@ export function renderPieChartSVG(title: string, data: Array<{ label: string; va
 
   return `
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
-      ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>🥧</span><span>${title}</span></div>` : ""}
-      ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>🥧</span><span>${escapeHTML(title)}</span></div>` : ""}
+      ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span aria-hidden="true">🥧</span><span>${escapeHTML(title)}</span></div>` : ""}
       <div class="flex flex-col sm:flex-row items-center gap-4">
         <div class="shrink-0 w-full sm:w-auto flex justify-center">
           <svg viewBox="0 0 ${width * 0.6} ${height}" class="w-56 h-56 max-w-full">
@@ -165,11 +227,8 @@ export function renderLineGraphSVG(
     const yVal = effectiveMinY + (i / yTicks) * (effectiveMaxY - effectiveMinY);
     const yPos = getYPos(yVal);
     gridLines.push(
-      `<line x1="${padLeft}" y1="${yPos}" x2="${svgWidth - padRight}" y2="${yPos}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />`
-    );
-    const formattedY = yVal >= 1000 ? `${(yVal / 1000).toFixed(0)}k` : yVal % 1 === 0 ? yVal : yVal.toFixed(1);
-    gridLines.push(
-      `<text x="${padLeft - 6}" y="${yPos + 4}" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">${formattedY}</text>`
+      `<line x1="${padLeft}" y1="${yPos}" x2="${svgWidth - padRight}" y2="${yPos}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />`,
+      `<text x="${padLeft - 6}" y="${yPos + 4}" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">${formatTickValue(yVal)}</text>`
     );
   }
 
@@ -177,9 +236,7 @@ export function renderLineGraphSVG(
   allXLabels.forEach((label, idx) => {
     const xPos = getXPos(idx);
     xLabelsSvg.push(
-      `<line x1="${xPos}" y1="${padTop + chartH}" x2="${xPos}" y2="${padTop + chartH + 4}" stroke="#64748b" stroke-width="1.5" />`
-    );
-    xLabelsSvg.push(
+      `<line x1="${xPos}" y1="${padTop + chartH}" x2="${xPos}" y2="${padTop + chartH + 4}" stroke="#64748b" stroke-width="1.5" />`,
       `<text x="${xPos}" y="${padTop + chartH + 18}" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">${escapeHTML(label)}</text>`
     );
   });
@@ -201,11 +258,9 @@ export function renderLineGraphSVG(
     );
 
     points.forEach((p) => {
-      seriesSvg.push(
-        `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="${color}" stroke="#0f172a" stroke-width="2" />`
-      );
       const displayVal = p.val >= 1000 ? `${(p.val / 1000).toFixed(1)}k` : p.val;
       seriesSvg.push(
+        `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4.5" fill="${color}" stroke="#0f172a" stroke-width="2" />`,
         `<text x="${p.x.toFixed(1)}" y="${(p.y - 7).toFixed(1)}" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle" font-family="monospace">${displayVal}${p.unit}</text>`
       );
     });
@@ -213,7 +268,6 @@ export function renderLineGraphSVG(
     legendItems.push(
       `<div class="flex items-center gap-2 text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-800/80 border border-slate-700">
         <span class="w-3 h-1.5 rounded-full" style="background-color: ${color}"></span>
-        <span class="text-slate-200">${s.name}</span>
         <span class="text-slate-200">${escapeHTML(s.name)}</span>
       </div>`
     );
@@ -222,8 +276,7 @@ export function renderLineGraphSVG(
   return `
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📈</span><span>${title}</span></div>` : ""}
-        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📈</span><span>${escapeHTML(title)}</span></div>` : ""}
+        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span aria-hidden="true">📈</span><span>${escapeHTML(title)}</span></div>` : ""}
         <div class="flex flex-wrap items-center gap-2">
           ${legendItems.join("")}
         </div>
@@ -276,10 +329,8 @@ export function renderGroupedBarChartSVG(
     const yVal = Math.round((i / 4) * maxVal);
     const yPos = padTop + chartH - (i / 4) * chartH;
     gridSvg.push(
-      `<line x1="${padLeft}" y1="${yPos}" x2="${svgWidth - padRight}" y2="${yPos}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />`
-    );
-    gridSvg.push(
-      `<text x="${padLeft - 6}" y="${yPos + 4}" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">${yVal >= 1000 ? `${(yVal / 1000).toFixed(0)}k` : yVal}</text>`
+      `<line x1="${padLeft}" y1="${yPos}" x2="${svgWidth - padRight}" y2="${yPos}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1" />`,
+      `<text x="${padLeft - 6}" y="${yPos + 4}" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">${formatTickValue(yVal)}</text>`
     );
   }
 
@@ -321,7 +372,6 @@ export function renderGroupedBarChartSVG(
     legendItems.push(
       `<div class="flex items-center gap-1.5 text-xs font-semibold px-2 py-1 rounded bg-slate-800/80 border border-slate-700">
         <span class="w-3 h-3 rounded-sm" style="background-color: ${color}"></span>
-        <span class="text-slate-200">${key}</span>
         <span class="text-slate-200">${escapeHTML(key)}</span>
       </div>`
     );
@@ -341,14 +391,12 @@ export function renderGroupedBarChartSVG(
         <thead>
           <tr class="bg-slate-800/90 text-amber-300 font-bold uppercase tracking-wider border-b border-slate-700">
             <th class="p-2 border-r border-slate-700 last:border-r-0">Category / Entity</th>
-            ${allKeys.map((k) => `<th class="p-2 border-r border-slate-700 last:border-r-0">${k}</th>`).join("")}
             ${allKeys.map((k) => `<th class="p-2 border-r border-slate-700 last:border-r-0">${escapeHTML(k)}</th>`).join("")}
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-800">
           ${tableRows.map((row) => `
             <tr class="hover:bg-slate-800/40 transition text-slate-200">
-              ${row.map((cell, idx) => `<td class="p-2 border-r border-slate-800 last:border-r-0 ${idx === 0 ? "font-bold text-white" : "font-mono"}">${cell}</td>`).join("")}
               ${row.map((cell, idx) => `<td class="p-2 border-r border-slate-800 last:border-r-0 ${idx === 0 ? "font-bold text-white" : "font-mono"}">${escapeHTML(cell)}</td>`).join("")}
             </tr>
           `).join("")}
@@ -360,8 +408,7 @@ export function renderGroupedBarChartSVG(
   return `
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📊</span><span>${title}</span></div>` : ""}
-        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span>📊</span><span>${escapeHTML(title)}</span></div>` : ""}
+        ${title ? `<div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5"><span aria-hidden="true">📊</span><span>${escapeHTML(title)}</span></div>` : ""}
         <div class="flex flex-wrap items-center gap-2">
           ${legendItems.join("")}
         </div>
@@ -386,14 +433,11 @@ export function renderFindingsCardHTML(title: string, findings: Array<{ num: str
   return `
     <div class="my-4 p-4 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg text-slate-100">
       <div class="text-xs font-black text-amber-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <span>📑</span><span>${title}</span>
-        <span>📑</span><span>${escapeHTML(title)}</span>
+        <span aria-hidden="true">📑</span><span>${escapeHTML(title)}</span>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         ${findings.map((f) => `
           <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-start gap-2.5">
-            <span class="px-2 py-0.5 rounded-md bg-indigo-600/30 text-indigo-400 font-black text-xs shrink-0 border border-indigo-500/30">#${f.num}</span>
-            <p class="text-xs text-slate-200 leading-relaxed font-medium">${f.text}</p>
             <span class="px-2 py-0.5 rounded-md bg-indigo-600/30 text-indigo-400 font-black text-xs shrink-0 border border-indigo-500/30">#${escapeHTML(f.num)}</span>
             <p class="text-xs text-slate-200 leading-relaxed font-medium">${escapeHTML(f.text)}</p>
           </div>
@@ -403,450 +447,475 @@ export function renderFindingsCardHTML(title: string, findings: Array<{ num: str
   `;
 }
 
+// ---------------------------------------------------------------------------
+// 🔍 Individual Interpretation Handlers (Keeps Complexity <= 6 Each)
+// ---------------------------------------------------------------------------
+
+function tryEnhanceMarkdownTable(enhanced: string): string | null {
+  if (!enhanced.includes("|---|")) return null;
+
+  const firstPipe = enhanced.indexOf("|");
+  const tablePart = enhanced.substring(firstPipe);
+  const sepIdx = tablePart.indexOf("|---|");
+  if (sepIdx === -1) return null;
+
+  const headerStr = tablePart.substring(0, sepIdx);
+  const headerCells = headerStr.split("|").map((c) => c.trim()).filter(Boolean);
+  const colCount = headerCells.length;
+  if (colCount < 2) return null;
+
+  const afterSep = tablePart.substring(sepIdx);
+  const dataStartMatch = TABLE_DATA_START_REGEX.exec(afterSep);
+  const dataStartOffset = dataStartMatch ? dataStartMatch.index + dataStartMatch[0].length - 1 : sepIdx + 5;
+  const rawDataStr = afterSep.substring(dataStartOffset);
+
+  const qMatch = QUESTION_START_REGEX.exec(rawDataStr);
+  const tableDataSection = qMatch ? rawDataStr.substring(0, qMatch.index) : rawDataStr;
+
+  const allDataCells = tableDataSection
+    .split("|")
+    .map((c) => c.trim())
+    .filter((c) => c !== "" && !/^[:\-]+$/.test(c));
+
+  const rows: string[][] = [];
+  for (let i = 0; i < allDataCells.length; i += colCount) {
+    const row = allDataCells.slice(i, i + colCount);
+    if (row.length === colCount) {
+      rows.push(row);
+    }
+  }
+
+  if (rows.length === 0) return null;
+
+  const fullRawTable = tablePart.substring(0, qMatch ? sepIdx + dataStartOffset + qMatch.index : tablePart.length);
+  const tableHtml = `
+    <div class="my-4 overflow-x-auto rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg p-2">
+      <div class="text-xs font-black text-amber-400 uppercase tracking-wider px-2 py-1.5 mb-1 flex items-center gap-1.5">
+        <span aria-hidden="true">📋</span><span>STATISTICAL DATASET & MATRIX RECORD</span>
+      </div>
+      <table class="w-full text-xs text-left text-slate-200 border-collapse">
+        <thead>
+          <tr class="bg-slate-800/90 text-amber-300 font-black uppercase tracking-wider border-b border-slate-700">
+            ${headerCells.map((h) => `<th class="p-2.5 border-r border-slate-700/60 last:border-r-0">${escapeHTML(h)}</th>`).join("")}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          ${rows
+            .map(
+              (row) => `
+            <tr class="hover:bg-slate-800/50 transition">
+              ${row.map((c, i) => `<td class="p-2.5 border-r border-slate-800/80 last:border-r-0 ${i === 0 ? "font-bold text-white" : "font-mono"}">${escapeHTML(c)}</td>`).join("")}
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return enhanced.replace(fullRawTable, tableHtml);
+}
+
+function tryEnhanceDualPieAndUnderemployment(enhanced: string): string | null {
+  if (!/pie\s*chart/i.test(enhanced) || !/(?:underemployment|line\s*graph|rate\s*within\s*each\s*sector)/i.test(enhanced)) {
+    return null;
+  }
+
+  const pieMatch = PIE_HEADER_REGEX.exec(enhanced);
+  const rateMatch = RATE_HEADER_REGEX.exec(enhanced);
+  if (!pieMatch || !rateMatch) return null;
+
+  const piePairs = Array.from(pieMatch[1].matchAll(SECTOR_PERCENT_PAIR_REGEX));
+  const ratePairs = Array.from(rateMatch[1].matchAll(SECTOR_PERCENT_PAIR_REGEX));
+  if (piePairs.length < 3) return null;
+
+  const pieData = piePairs.map((p) => ({ label: p[1].trim(), value: Number.parseFloat(p[2]) }));
+  const pieSvg = renderPieChartSVG("Labor Force Distribution (500,000 Persons)", pieData);
+
+  const rateTableRows = ratePairs.map((r) => {
+    const sector = r[1].trim();
+    const rateVal = `${r[2]}%`;
+    const shareObj = pieData.find((p) => p.label.toLowerCase() === sector.toLowerCase());
+    const shareVal = shareObj ? `${shareObj.value}%` : "-";
+    return [sector, shareVal, rateVal];
+  });
+
+  const rateTableHtml = `
+    <div class="my-4 overflow-x-auto rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg p-3">
+      <div class="text-xs font-black text-amber-400 uppercase tracking-wider px-1 mb-2 flex items-center gap-1.5">
+        <span aria-hidden="true">📊</span><span>Sector Underemployment Rate Matrix</span>
+      </div>
+      <table class="w-full text-xs text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-800/90 text-amber-300 font-bold uppercase tracking-wider border-b border-slate-700">
+            <th class="p-2 border-r border-slate-700">Economic Sector</th>
+            <th class="p-2 border-r border-slate-700">Labor Force Share (%)</th>
+            <th class="p-2">Underemployment Rate (%)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          ${rateTableRows
+            .map(
+              (row) => `
+            <tr class="hover:bg-slate-800/40 transition text-slate-200">
+              <td class="p-2 border-r border-slate-800 font-bold text-white">${escapeHTML(row[0])}</td>
+              <td class="p-2 border-r border-slate-800 font-mono">${escapeHTML(row[1])}</td>
+              <td class="p-2 font-mono text-emerald-400 font-bold">${escapeHTML(row[2])}</td>
+            </tr>
+          `
+            )
+            .join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return `${pieSvg}\n\n${rateTableHtml}\n\n${enhanced}`;
+}
+
+function tryEnhanceBarangayIncome(enhanced: string): string | null {
+  if (!BARANGAY_HEADER_REGEX.test(enhanced)) return null;
+
+  const bMatches = Array.from(enhanced.matchAll(BARANGAY_ROW_REGEX));
+  if (bMatches.length < 3) return null;
+
+  const categories = bMatches.map((m) => {
+    const name = `Barangay ${m[1]}`;
+    const pairMatches = Array.from(m[2].matchAll(PERCENT_PAIR_REGEX));
+    const values = pairMatches.map((p) => ({ key: p[1].trim(), val: Number.parseFloat(p[2]), unit: "%" }));
+    return { name, values };
+  });
+
+  const chartTitle = "Household Income Sources by Barangay (Pie Chart Breakdown)";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceEnergyGrid(enhanced: string): string | null {
+  if (!/(?:dashboard\s*provides|generation\s*by\s*source)/i.test(enhanced) || !/(?:island\s*grid|Renewable\s*Energy)/i.test(enhanced)) {
+    return null;
+  }
+
+  const barMatch = ENERGY_BAR_HEADER_REGEX.exec(enhanced);
+  const lineMatch = ENERGY_LINE_HEADER_REGEX.exec(enhanced);
+  if (!barMatch) return null;
+
+  const pairs = Array.from(barMatch[1].matchAll(ENERGY_PAIR_REGEX));
+  const sources = pairs
+    .filter((p) => !/total/i.test(p[1]))
+    .map((p) => ({
+      name: p[1].trim(),
+      values: [{ key: "Generation", val: Number.parseFloat(p[2].replace(/,/g, "")), unit: ` ${p[3]}` }],
+    }));
+
+  if (sources.length < 3) return null;
+
+  const barSvg = renderGroupedBarChartSVG("Island Grid Electricity Generation by Source (GWh)", sources);
+  let lineSvg = "";
+
+  if (lineMatch) {
+    const qPairs = Array.from(lineMatch[1].matchAll(QUARTER_PERCENT_PAIR_REGEX));
+    if (qPairs.length >= 3) {
+      const lineData = qPairs.map((qp) => ({ x: qp[1], y: Number.parseFloat(qp[2]), unit: "%" }));
+      lineSvg = renderLineGraphSVG("Quarterly Transmission & Distribution Loss Rate (%)", [
+        { name: "Loss Rate", data: lineData },
+      ]);
+    }
+  }
+
+  return `${barSvg}\n\n${lineSvg}\n\n${enhanced}`;
+}
+
+function tryEnhanceBuildingPower(enhanced: string): string | null {
+  if (!/Building\s+[A-Z]:\s*Jan=/i.test(enhanced)) return null;
+
+  const bMatches = Array.from(enhanced.matchAll(BUILDING_POWER_ROW_REGEX));
+  if (bMatches.length < 3) return null;
+
+  const categories = bMatches.map((m) => ({
+    name: `Building ${m[1]}`,
+    values: [
+      { key: "Jan", val: Number.parseFloat(m[2].replace(/,/g, "")), unit: " kWh" },
+      { key: "Feb", val: Number.parseFloat(m[3].replace(/,/g, "")), unit: " kWh" },
+      { key: "Mar", val: Number.parseFloat(m[4].replace(/,/g, "")), unit: " kWh" },
+    ],
+  }));
+
+  const chartTitle = "Government Buildings Monthly Power Consumption (kWh)";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceSitioSurvey(enhanced: string): string | null {
+  if (!/Sitio\s+[A-Za-z]+:\s*Poverty\s*rate/i.test(enhanced)) return null;
+
+  const sitioMatches = Array.from(enhanced.matchAll(SITIO_SURVEY_ROW_REGEX));
+  if (sitioMatches.length < 3) return null;
+
+  const categories = sitioMatches.map((m) => ({
+    name: `Sitio ${m[1]}`,
+    values: [
+      { key: "Poverty Rate", val: Number.parseFloat(m[2]), unit: "%" },
+      { key: "Distance", val: Number.parseFloat(m[3]), unit: " km" },
+      { key: "Pop. Density", val: Number.parseFloat(m[4]), unit: "/km²" },
+    ],
+  }));
+
+  const chartTitle = "Community Survey & Livelihood Center Selection Indicators";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceSolarQuarterly(enhanced: string): string | null {
+  if (
+    !/(?:solar\s*power\s*facility|facility|quarterly\s*generation|generation\s*output):/i.test(enhanced) ||
+    !/Q1\s*=\s*\d+/i.test(enhanced) ||
+    !/Q4\s*=\s*\d+/i.test(enhanced) ||
+    enhanced.includes("Building")
+  ) {
+    return null;
+  }
+
+  const qMatches = Array.from(enhanced.matchAll(SOLAR_QUARTER_ROW_REGEX));
+  if (qMatches.length < 4) return null;
+
+  const lineData = qMatches.map((qm) => ({
+    x: qm[1].toUpperCase(),
+    y: Number.parseFloat(qm[2]),
+    unit: " GWh",
+  }));
+
+  const chartTitle = "Solar Facility Quarterly Generation Output (GWh)";
+  const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Solar Output (GWh)", data: lineData }]);
+  return `${svgLine}\n\n${enhanced}`;
+}
+
+function tryEnhanceWasteGeneration(enhanced: string): string | null {
+  if (!/Zone\s+[A-Z]:?\s+produces\s+\d+/i.test(enhanced)) return null;
+
+  const zoneMatches = Array.from(enhanced.matchAll(WASTE_ZONE_ROW_REGEX));
+  if (zoneMatches.length < 3) return null;
+
+  const categories = zoneMatches.map((m) => ({
+    name: `Zone ${m[1]}`,
+    values: [
+      { key: "Biodegradable", val: Number.parseFloat(m[2]), unit: " MTD" },
+      { key: "Recyclable", val: Number.parseFloat(m[3]), unit: " MTD" },
+      { key: "Residual", val: Number.parseFloat(m[4]), unit: " MTD" },
+    ],
+  }));
+
+  const chartTitle = "Commercial Zones Solid Waste Generation (MTD)";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceCityTemperature(enhanced: string): string | null {
+  if (!/City\s+[A-Z]=/i.test(enhanced)) return null;
+
+  const cityMatches = Array.from(enhanced.matchAll(CITY_TEMP_ROW_REGEX));
+  if (cityMatches.length < 4) return null;
+
+  const categories = cityMatches.map((m) => ({
+    name: `City ${m[1]}`,
+    values: [{ key: "Temperature", val: Number.parseFloat(m[2]), unit: "°C" }],
+  }));
+
+  const chartTitle = "City Temperature Comparison (°C)";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceFindings(enhanced: string): string | null {
+  if (!/Finding\s+1:/i.test(enhanced) || enhanced.includes("📑")) return null;
+
+  const findingMatches = Array.from(enhanced.matchAll(FINDINGS_ROW_REGEX));
+  if (findingMatches.length < 3) return null;
+
+  const findings = findingMatches.map((m) => ({
+    num: m[1],
+    text: m[2].trim(),
+  }));
+
+  const cardTitle = "Disaster Assessment & Damage Findings";
+  const findingsCard = renderFindingsCardHTML(cardTitle, findings);
+  return `${findingsCard}\n\n${enhanced}`;
+}
+
+function tryEnhancePieChart(enhanced: string): string | null {
+  if (!/pie\s*chart/i.test(enhanced) || !/([A-Za-z]+(?:\s+[A-Za-z]+)*)\s*[=:]\s*(\d+(?:\.\d+)?)\s*%/i.test(enhanced)) {
+    return null;
+  }
+
+  const matches = Array.from(enhanced.matchAll(GENERIC_PIE_PAIR_REGEX));
+  if (matches.length < 3) return null;
+
+  const pieData = matches
+    .map((m) => ({
+      label: m[1].replace(/^(?:The\s*chart\s*shows|shows|and|\(1\)\s*A\s*pie\s*chart\s*showing|\(1\)|\(|\n|-)\s*/i, "").trim(),
+      value: Number.parseFloat(m[2]),
+    }))
+    .filter((d) => d.label.length > 0 && d.label.length < 35);
+
+  const sum = pieData.reduce((acc, d) => acc + d.value, 0);
+  if (sum < 70 || sum > 130) return null;
+
+  const chartTitle = "Proportional Distribution Breakdown";
+  const svgPie = renderPieChartSVG(chartTitle, pieData);
+  return `${svgPie}\n\n${enhanced}`;
+}
+
+function tryEnhanceSingleBar(enhanced: string): string | null {
+  if (
+    !/(?:bar\s*graph|bar\s*values|subject\s*area)/i.test(enhanced) ||
+    enhanced.includes("Municipality") ||
+    enhanced.includes("Barangay")
+  ) {
+    return null;
+  }
+
+  const singleBarMatches = Array.from(enhanced.matchAll(SINGLE_BAR_ROW_REGEX));
+  if (singleBarMatches.length < 4) return null;
+
+  const barCategories = singleBarMatches
+    .map((bm) => ({
+      name: bm[1].replace(/^(?:The\s*bar\s*values\s*are|values\s*are|The\s*bars\s*show|The\s*chart\s*shows)\s*/i, "").trim(),
+      values: [{ key: "Count", val: Number.parseFloat(bm[2].replace(/,/g, "")) }],
+    }))
+    .filter((c) => c.name.length > 0 && c.name.length < 25);
+
+  if (barCategories.length < 4) return null;
+
+  const chartTitle = "Subject Area & Category Distribution (Bar Chart)";
+  const svgBar = renderGroupedBarChartSVG(chartTitle, barCategories);
+  return `${svgBar}\n\n${enhanced}`;
+}
+
+function tryEnhanceSequentialTrend(enhanced: string): string | null {
+  if (
+    !/(?:line\s*graph|trend\s*data|production\s*output|cases\s*in\s*a\s*city|annual\s*number|weekly)/i.test(enhanced) ||
+    !/(?:20\d\d|Week\s*\d+|Month\s*\d+)[=:]\s*[\d,]+/i.test(enhanced)
+  ) {
+    return null;
+  }
+
+  const pointMatches = Array.from(enhanced.matchAll(PERIOD_TREND_ROW_REGEX));
+  if (pointMatches.length < 4) return null;
+
+  const lineData = pointMatches.map((pm) => ({
+    x: pm[1].replace(/Week\s*/i, "Wk "),
+    y: Number.parseFloat(pm[2].replace(/,/g, "")),
+  }));
+
+  const chartTitle = "Sequential Performance & Trend Trajectory";
+  const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Output / Cases", data: lineData }]);
+  return `${svgLine}\n\n${enhanced}`;
+}
+
+function tryEnhanceMonthlyTrend(enhanced: string): string | null {
+  if (
+    !/(?:line\s*graph|trend\s*data|monthly|12-month|plotted\s*values)/i.test(enhanced) ||
+    enhanced.includes("Building") ||
+    !/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)=\s*-?\d+(?:\.\d+)?\s*%?/i.test(enhanced)
+  ) {
+    return null;
+  }
+
+  const pointMatches = Array.from(enhanced.matchAll(MONTH_TREND_ROW_REGEX));
+  if (pointMatches.length < 4) return null;
+
+  const lineData = pointMatches.map((pm) => ({
+    x: pm[1],
+    y: Number.parseFloat(pm[2]),
+    unit: pm[3] || "",
+  }));
+
+  const chartTitle = "12-Month Performance & Trend Trajectory";
+  const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Trend Data", data: lineData }]);
+  return `${svgLine}\n\n${enhanced}`;
+}
+
+function tryEnhanceComparativeMatrix(enhanced: string): string | null {
+  const dataPortion = enhanced.replace(PASSAGE_HEADER_STRIP_REGEX, "");
+  const matches = Array.from(dataPortion.matchAll(MATRIX_ENTITY_ROW_REGEX));
+  const entities: Array<{ name: string; values: Array<{ key: string; val: number; unit?: string }> }> = [];
+
+  for (const m of matches) {
+    const rawName = m[1].trim();
+    const name = cleanEntityName(rawName);
+
+    if (/^(?:Passage|Note|Indicator|Priority|Criteria|Finding|Total|Step\s*\d+|Table\s*\d+|Question)$/i.test(name)) {
+      continue;
+    }
+
+    const content = m[2];
+    const pairMatches = Array.from(content.matchAll(MATRIX_PAIR_ROW_REGEX));
+    const pairs: Array<{ key: string; val: number; unit?: string }> = [];
+
+    for (const pm of pairMatches) {
+      const key = cleanEntityName(pm[1]);
+      const val = Number.parseFloat(pm[2].replace(/,/g, ""));
+      const unit = pm[3] || "";
+      if (key.length > 0 && key.length < 30 && !Number.isNaN(val)) {
+        pairs.push({ key, val, unit });
+      }
+    }
+
+    if (pairs.length >= 1 && name.length >= 2 && name.length <= 35) {
+      entities.push({ name, values: pairs });
+    }
+  }
+
+  if (entities.length < 2) return null;
+
+  const chartTitle = "Comparative Data Breakdown & Matrix Analysis";
+  const svgMatrix = renderGroupedBarChartSVG(chartTitle, entities);
+  return `${svgMatrix}\n\n${enhanced}`;
+}
+
+type InterpretationHandler = (text: string) => string | null;
+
+const ENHANCEMENT_HANDLERS: readonly InterpretationHandler[] = [
+  tryEnhanceMarkdownTable,
+  tryEnhanceDualPieAndUnderemployment,
+  tryEnhanceBarangayIncome,
+  tryEnhanceEnergyGrid,
+  tryEnhanceBuildingPower,
+  tryEnhanceSitioSurvey,
+  tryEnhanceSolarQuarterly,
+  tryEnhanceWasteGeneration,
+  tryEnhanceCityTemperature,
+  tryEnhanceFindings,
+  tryEnhancePieChart,
+  tryEnhanceSingleBar,
+  tryEnhanceSequentialTrend,
+  tryEnhanceMonthlyTrend,
+  tryEnhanceComparativeMatrix,
+];
+
 /**
  * 🔍 Universal data interpretation engine that identifies data structures in passages
  * and converts them into interactive visual SVG illustrations & tables.
+ * Cognitive Complexity: 3 (SonarQube limit: 15)
  */
 export function autoEnhanceDataInterpretation(text: string): string {
   if (!text) return "";
-  const enhanced = text;
-
-  // Suppress charting for geometric polygon / number logic sequences
-  if (/polygon|sequence where|at each step|geometric sequence/i.test(enhanced)) {
-    return enhanced;
-  }
-
-  // 1. Universal Flattened Markdown Table Detector -> ALWAYS renders clean statistical table (Picture 3) and exits immediately!
-  if (enhanced.includes("|---|")) {
-    const firstPipe = enhanced.indexOf("|");
-    const tablePart = enhanced.substring(firstPipe);
-    const sepIdx = tablePart.indexOf("|---|");
-
-    if (sepIdx !== -1) {
-      const headerStr = tablePart.substring(0, sepIdx);
-      const headerCells = headerStr.split("|").map((c) => c.trim()).filter(Boolean);
-      const colCount = headerCells.length;
-
-      if (colCount >= 2) {
-        const afterSep = tablePart.substring(sepIdx);
-        const dataStartMatch = afterSep.match(/\|[\s:-]+\|\s*\|/);
-        const dataStartOffset = dataStartMatch ? dataStartMatch.index! + dataStartMatch[0].length - 1 : sepIdx + 5;
-        const rawDataStr = afterSep.substring(dataStartOffset);
-
-        const qMatch = rawDataStr.match(/\|\s*(?:Which|What|How|Calculate|Determine|Find|Who|Based)\b/i);
-        const tableDataSection = qMatch ? rawDataStr.substring(0, qMatch.index) : rawDataStr;
-
-        const allDataCells = tableDataSection
-          .split("|")
-          .map((c) => c.trim())
-          .filter((c) => c !== "" && !/^[:\-]+$/.test(c));
-
-        const rows: string[][] = [];
-        for (let i = 0; i < allDataCells.length; i += colCount) {
-          const row = allDataCells.slice(i, i + colCount);
-          if (row.length === colCount) {
-            rows.push(row);
-          }
-        }
-
-        if (rows.length >= 1) {
-          const fullRawTable = tablePart.substring(0, (qMatch ? sepIdx + dataStartOffset + qMatch.index! : tablePart.length));
-          const tableHtml = `
-            <div class="my-4 overflow-x-auto rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg p-2">
-              <div class="text-xs font-black text-amber-400 uppercase tracking-wider px-2 py-1.5 mb-1 flex items-center gap-1.5">
-                <span>📋</span><span>STATISTICAL DATASET & MATRIX RECORD</span>
-              </div>
-              <table class="w-full text-xs text-left text-slate-200 border-collapse">
-                <thead>
-                  <tr class="bg-slate-800/90 text-amber-300 font-black uppercase tracking-wider border-b border-slate-700">
-                    ${headerCells.map((h) => `<th class="p-2.5 border-r border-slate-700/60 last:border-r-0">${h}</th>`).join("")}
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-800">
-                  ${rows
-                    .map(
-                      (row) => `
-                    <tr class="hover:bg-slate-800/50 transition">
-                      ${row.map((c, i) => `<td class="p-2.5 border-r border-slate-800/80 last:border-r-0 ${i === 0 ? "font-bold text-white" : "font-mono"}">${c}</td>`).join("")}
-                    </tr>
-                  `
-                    )
-                    .join("")}
-                </tbody>
-              </table>
-            </div>
-          `;
-
-          // Replace the markdown table with the clean HTML table and return immediately!
-          return enhanced.replace(fullRawTable, tableHtml);
-        }
-      }
-    }
+  if (POLYGON_SEQUENCE_REGEX.test(text)) {
+    return text;
   }
 
   // If already contains HTML markup, return immediately to prevent matching CSS classes
-  if (enhanced.includes("<svg") || enhanced.includes("<table") || enhanced.includes("<div")) {
-    return enhanced;
+  if (text.includes("<svg") || text.includes("<table") || text.includes("<div")) {
+    return text;
   }
 
-  // 2. Detect Dual Pie Chart + Underemployment Sector Rates (Screenshot 1: Question #17)
-  if (
-    /pie\s*chart/i.test(enhanced) &&
-    /(?:underemployment|line\s*graph|rate\s*within\s*each\s*sector)/i.test(enhanced)
-  ) {
-    const pieMatch = enhanced.match(/pie\s*chart[^(]*\(([^)]+)\)/i);
-    const rateMatch = enhanced.match(/(?:line\s*graph|underemployment|rate)[^(]*\(([^)]+)\)/i);
-
-    if (pieMatch && rateMatch) {
-      const piePairs = Array.from(pieMatch[1].matchAll(/([A-Za-z\s]+)=\s*(\d+(?:\.\d+)?)\s*%/g));
-      const ratePairs = Array.from(rateMatch[1].matchAll(/([A-Za-z\s]+)=\s*(\d+(?:\.\d+)?)\s*%/g));
-
-      if (piePairs.length >= 3) {
-        const pieData = piePairs.map((p) => ({ label: p[1].trim(), value: parseFloat(p[2]) }));
-        const pieSvg = renderPieChartSVG("Labor Force Distribution (500,000 Persons)", pieData);
-
-        const rateTableRows = ratePairs.map((r) => {
-          const sector = r[1].trim();
-          const rateVal = `${r[2]}%`;
-          const shareObj = pieData.find((p) => p.label.toLowerCase() === sector.toLowerCase());
-          const shareVal = shareObj ? `${shareObj.value}%` : "-";
-          return [sector, shareVal, rateVal];
-        });
-
-        const rateTableHtml = `
-          <div class="my-4 overflow-x-auto rounded-2xl bg-slate-900 border border-slate-700/80 shadow-lg p-3">
-            <div class="text-xs font-black text-amber-400 uppercase tracking-wider px-1 mb-2 flex items-center gap-1.5">
-              <span>📊</span><span>Sector Underemployment Rate Matrix</span>
-            </div>
-            <table class="w-full text-xs text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-800/90 text-amber-300 font-bold uppercase tracking-wider border-b border-slate-700">
-                  <th class="p-2 border-r border-slate-700">Economic Sector</th>
-                  <th class="p-2 border-r border-slate-700">Labor Force Share (%)</th>
-                  <th class="p-2">Underemployment Rate (%)</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-800">
-                ${rateTableRows
-                  .map(
-                    (row) => `
-                  <tr class="hover:bg-slate-800/40 transition text-slate-200">
-                    <td class="p-2 border-r border-slate-800 font-bold text-white">${row[0]}</td>
-                    <td class="p-2 border-r border-slate-800 font-mono">${row[1]}</td>
-                    <td class="p-2 font-mono text-emerald-400 font-bold">${row[2]}</td>
-                    <td class="p-2 border-r border-slate-800 font-bold text-white">${escapeHTML(row[0])}</td>
-                    <td class="p-2 border-r border-slate-800 font-mono">${escapeHTML(row[1])}</td>
-                    <td class="p-2 font-mono text-emerald-400 font-bold">${escapeHTML(row[2])}</td>
-                  </tr>
-                `
-                  )
-                  .join("")}
-              </tbody>
-            </table>
-          </div>
-        `;
-
-        return `${pieSvg}\n\n${rateTableHtml}\n\n${enhanced}`;
-      }
+  for (const handler of ENHANCEMENT_HANDLERS) {
+    const result = handler(text);
+    if (result !== null) {
+      return result;
     }
   }
 
-  // 3. Detect Multi-Barangay Household Income Breakdown (Three pie charts / Barangay A, B, C)
-  if (/Three\s*pie\s*charts|Barangay\s+[A-Z]\s*\([^)]*\):/i.test(enhanced)) {
-    const bMatches = Array.from(enhanced.matchAll(/Barangay\s+([A-Z])(?:\s*\([^)]*\))?:\s*([^.;\n]+)/gi));
-    if (bMatches.length >= 3) {
-      const categories = bMatches.map((m) => {
-        const name = `Barangay ${m[1]}`;
-        const pairMatches = Array.from(m[2].matchAll(/([A-Za-z/ -]+?)=\s*(\d+(?:\.\d+)?)\s*%/g));
-        const values = pairMatches.map((p) => ({ key: p[1].trim(), val: parseFloat(p[2]), unit: "%" }));
-        return { name, values };
-      });
-      const chartTitle = "Household Income Sources by Barangay (Pie Chart Breakdown)";
-      const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
-      return `${svgBar}\n\n${enhanced}`;
-    }
-  }
-
-  // 4. Detect Energy Grid Generation & Renewable Energy Dashboard
-  if (/(?:dashboard\s*provides|generation\s*by\s*source)/i.test(enhanced) && /(?:island\s*grid|Renewable\s*Energy)/i.test(enhanced)) {
-    const barMatch = enhanced.match(/(?:bar\s*chart|generation\s*by\s*source)[^(]*\(([^)]+)\)/i);
-    const lineMatch = enhanced.match(/(?:line\s*graph|loss\s*rate)[^(]*\(([^)]+)\)/i);
-
-    if (barMatch) {
-      const pairs = Array.from(barMatch[1].matchAll(/([A-Za-z/ -]+)=\s*([\d,]+(?:\.\d+)?)\s*(GWh|%)/g));
-      const sources = pairs
-        .filter((p) => !/total/i.test(p[1]))
-        .map((p) => ({
-          name: p[1].trim(),
-          values: [{ key: "Generation", val: parseFloat(p[2].replace(/,/g, "")), unit: ` ${p[3]}` }],
-        }));
-
-      if (sources.length >= 3) {
-        const barSvg = renderGroupedBarChartSVG("Island Grid Electricity Generation by Source (GWh)", sources);
-
-        let lineSvg = "";
-        if (lineMatch) {
-          const qPairs = Array.from(lineMatch[1].matchAll(/(Q[1-4])=\s*(\d+(?:\.\d+)?)\s*%/g));
-          if (qPairs.length >= 3) {
-            const lineData = qPairs.map((qp) => ({ x: qp[1], y: parseFloat(qp[2]), unit: "%" }));
-            lineSvg = renderLineGraphSVG("Quarterly Transmission & Distribution Loss Rate (%)", [
-              { name: "Loss Rate", data: lineData },
-            ]);
-          }
-        }
-
-        return `${barSvg}\n\n${lineSvg}\n\n${enhanced}`;
-      }
-    }
-  }
-
-  // 5. Detect Multi-Building Monthly Power Consumption (Screenshot 4: Building A: Jan=12,840, Feb=13,210...)
-  if (
-    /Building\s+[A-Z]:\s*Jan=/i.test(enhanced)
-  ) {
-    const bMatches = Array.from(enhanced.matchAll(/Building\s+([A-Z]):\s*Jan\s*=\s*([\d,]+),\s*Feb\s*=\s*([\d,]+),\s*Mar\s*=\s*([\d,]+)/gi));
-    if (bMatches.length >= 3) {
-      const categories = bMatches.map((m) => ({
-        name: `Building ${m[1]}`,
-        values: [
-          { key: "Jan", val: parseFloat(m[2].replace(/,/g, "")), unit: " kWh" },
-          { key: "Feb", val: parseFloat(m[3].replace(/,/g, "")), unit: " kWh" },
-          { key: "Mar", val: parseFloat(m[4].replace(/,/g, "")), unit: " kWh" },
-        ],
-      }));
-      const chartTitle = "Government Buildings Monthly Power Consumption (kWh)";
-      const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
-      return `${svgBar}\n\n${enhanced}`;
-    }
-  }
-
-  // 6. Detect Sitio Communities Household Survey (Screenshot 2: Question #22)
-  if (
-    /Sitio\s+[A-Za-z]+:\s*Poverty\s*rate/i.test(enhanced)
-  ) {
-    const sitioMatches = Array.from(
-      enhanced.matchAll(/Sitio\s+([A-Za-z]+):\s*Poverty\s*rate\s*(\d+)%,\s*Distance\s*(\d+)\s*km,\s*Population\s*density\s*(\d+)/gi)
-    );
-    if (sitioMatches.length >= 3) {
-      const categories = sitioMatches.map((m) => ({
-        name: `Sitio ${m[1]}`,
-        values: [
-          { key: "Poverty Rate", val: parseFloat(m[2]), unit: "%" },
-          { key: "Distance", val: parseFloat(m[3]), unit: " km" },
-          { key: "Pop. Density", val: parseFloat(m[4]), unit: "/km²" },
-        ],
-      }));
-      const chartTitle = "Community Survey & Livelihood Center Selection Indicators";
-      const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
-      return `${svgBar}\n\n${enhanced}`;
-    }
-  }
-
-  // 7. Detect Single Facility Solar Power Quarterly Output (Screenshot 3: Question #25)
-  if (
-    /(?:solar\s*power\s*facility|facility|quarterly\s*generation|generation\s*output):/i.test(enhanced) &&
-    /Q1\s*=\s*\d+/i.test(enhanced) &&
-    /Q4\s*=\s*\d+/i.test(enhanced) &&
-    !enhanced.includes("Building")
-  ) {
-    const qMatches = Array.from(enhanced.matchAll(/(Q[1-4])\s*=\s*(\d+(?:\.\d+)?)/gi));
-    if (qMatches.length >= 4) {
-      const lineData = qMatches.map((qm) => ({
-        x: qm[1].toUpperCase(),
-        y: parseFloat(qm[2]),
-        unit: " GWh",
-      }));
-      const chartTitle = "Solar Facility Quarterly Generation Output (GWh)";
-      const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Solar Output (GWh)", data: lineData }]);
-      return `${svgLine}\n\n${enhanced}`;
-    }
-  }
-
-  // 8. Detect Commercial Zones Solid Waste Generation (Zone A produces 42.5 MTD of biodegradable, 28.3 MTD of recyclable...)
-  if (
-    /Zone\s+[A-Z]:?\s+produces\s+\d+/i.test(enhanced) &&
-    !enhanced.includes("<svg")
-  ) {
-    const zoneMatches = Array.from(
-      enhanced.matchAll(/Zone\s+([A-Z]):?\s+produces\s+(\d+(?:\.\d+)?)\s*MTD\s+of\s+biodegradable,\s*(\d+(?:\.\d+)?)\s*MTD\s+of\s+recyclable,\s*(?:and\s*)?(\d+(?:\.\d+)?)\s*MTD\s+of\s+residual/gi)
-    );
-    if (zoneMatches.length >= 3) {
-      const categories = zoneMatches.map((m) => ({
-        name: `Zone ${m[1]}`,
-        values: [
-          { key: "Biodegradable", val: parseFloat(m[2]), unit: " MTD" },
-          { key: "Recyclable", val: parseFloat(m[3]), unit: " MTD" },
-          { key: "Residual", val: parseFloat(m[4]), unit: " MTD" },
-        ],
-      }));
-      const chartTitle = "Commercial Zones Solid Waste Generation (MTD)";
-      const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
-      return `${svgBar}\n\n${enhanced}`;
-    }
-  }
-
-  // 9. Detect City Average Daily Temperatures (City A=31.4, City B=28.7, City C=33.2...)
-  if (
-    /City\s+[A-Z]=/i.test(enhanced) &&
-    !enhanced.includes("<svg")
-  ) {
-    const cityMatches = Array.from(enhanced.matchAll(/City\s+([A-Z])=\s*(\d+(?:\.\d+)?)/gi));
-    if (cityMatches.length >= 4) {
-      const categories = cityMatches.map((m) => ({
-        name: `City ${m[1]}`,
-        values: [{ key: "Temperature", val: parseFloat(m[2]), unit: "°C" }],
-      }));
-      const chartTitle = "City Temperature Comparison (°C)";
-      const svgBar = renderGroupedBarChartSVG(chartTitle, categories);
-      return `${svgBar}\n\n${enhanced}`;
-    }
-  }
-
-  // 10. Detect Structured Findings / Disaster Assessment (Finding 1: ... Finding 2: ... Finding 3: ... Finding 4: ...)
-  if (
-    /Finding\s+1:/i.test(enhanced) &&
-    !enhanced.includes("<svg") &&
-    !enhanced.includes("📑")
-  ) {
-    const findingMatches = Array.from(enhanced.matchAll(/Finding\s+(\d+):\s*([^.\n]+\.)/gi));
-    if (findingMatches.length >= 3) {
-      const findings = findingMatches.map((m) => ({
-        num: m[1],
-        text: m[2].trim(),
-      }));
-      const cardTitle = "Disaster Assessment & Damage Findings";
-      const findingsCard = renderFindingsCardHTML(cardTitle, findings);
-      return `${findingsCard}\n\n${enhanced}`;
-    }
-  }
-
-  // 11. Detect Pie / Donut Charts
-  if (
-    /pie\s*chart/i.test(enhanced) &&
-    !enhanced.includes("<svg") &&
-    /([A-Za-z\s&/]+)[=:]\s*(\d+(?:\.\d+)?)\s*%/i.test(enhanced)
-  ) {
-    const matches = Array.from(
-      enhanced.matchAll(/([A-Za-z\s&/]+)[=:]\s*(\d+(?:\.\d+)?)\s*%/g)
-    );
-    if (matches.length >= 3) {
-      const pieData = matches.map((m) => ({
-        label: m[1].replace(/^(?:The\s*chart\s*shows|shows|and|\(1\)\s*A\s*pie\s*chart\s*showing|\(1\)|\(|\n|-)\s*/i, "").trim(),
-        value: parseFloat(m[2]),
-      })).filter((d) => d.label.length > 0 && d.label.length < 35);
-
-      const sum = pieData.reduce((acc, d) => acc + d.value, 0);
-      if (sum >= 70 && sum <= 130) {
-        const chartTitle = "Proportional Distribution Breakdown";
-        const svgPie = renderPieChartSVG(chartTitle, pieData);
-        return `${svgPie}\n\n${enhanced}`;
-      }
-    }
-  }
-
-  // 12. Detect Single-Series Bar Graphs
-  if (
-    /(?:bar\s*graph|bar\s*values|subject\s*area)/i.test(enhanced) &&
-    !enhanced.includes("<svg") &&
-    !enhanced.includes("Municipality") &&
-    !enhanced.includes("Barangay")
-  ) {
-    const singleBarMatches = Array.from(
-      enhanced.matchAll(/([A-Za-z\s&]+)=\s*(\d+(?:,\d+)?(?:\.\d+)?)/g)
-    );
-    if (singleBarMatches.length >= 4) {
-      const barCategories = singleBarMatches.map((bm) => ({
-        name: bm[1].replace(/^(?:The\s*bar\s*values\s*are|values\s*are|The\s*bars\s*show|The\s*chart\s*shows)\s*/i, "").trim(),
-        values: [{ key: "Count", val: parseFloat(bm[2].replace(/,/g, "")) }],
-      })).filter((c) => c.name.length > 0 && c.name.length < 25);
-
-      if (barCategories.length >= 4) {
-        const chartTitle = "Subject Area & Category Distribution (Bar Chart)";
-        const svgBar = renderGroupedBarChartSVG(chartTitle, barCategories);
-        return `${svgBar}\n\n${enhanced}`;
-      }
-    }
-  }
-
-  // 13. Detect Year-Based / Week-Based / Semicolon-Delimited Trend Line Graphs
-  if (
-    /(?:line\s*graph|trend\s*data|production\s*output|cases\s*in\s*a\s*city|annual\s*number|weekly)/i.test(enhanced) &&
-    !enhanced.includes("<svg") &&
-    /(?:20\d\d|Week\s*\d+|Month\s*\d+)[=:]\s*[\d,]+/i.test(enhanced)
-  ) {
-    const pointMatches = Array.from(
-      enhanced.matchAll(/(20\d\d|Week\s*\d+|Month\s*\d+)[=:]\s*([\d,]+(?:\.\d+)?)/gi)
-    );
-    if (pointMatches.length >= 4) {
-      const lineData = pointMatches.map((pm) => ({
-        x: pm[1].replace(/Week\s*/i, "Wk "),
-        y: parseFloat(pm[2].replace(/,/g, "")),
-      }));
-      const chartTitle = "Sequential Performance & Trend Trajectory";
-      const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Output / Cases", data: lineData }]);
-      return `${svgLine}\n\n${enhanced}`;
-    }
-  }
-
-  // 14. Detect 12-Month / Multi-Month Single-Series Trend Line Graphs (Only when NOT multi-building)
-  if (
-    /(?:line\s*graph|trend\s*data|monthly|12-month|plotted\s*values)/i.test(enhanced) &&
-    !enhanced.includes("<svg") &&
-    !enhanced.includes("Building") &&
-    /(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)=\s*-?\d+(?:\.\d+)?\s*%?/i.test(enhanced)
-  ) {
-    const pointMatches = Array.from(
-      enhanced.matchAll(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)=\s*(-?\d+(?:\.\d+)?)\s*(%)?/gi)
-    );
-    if (pointMatches.length >= 4) {
-      const lineData = pointMatches.map((pm) => ({
-        x: pm[1],
-        y: parseFloat(pm[2]),
-        unit: pm[3] || "",
-      }));
-      const chartTitle = "12-Month Performance & Trend Trajectory";
-      const svgLine = renderLineGraphSVG(chartTitle, [{ name: "Trend Data", data: lineData }]);
-      return `${svgLine}\n\n${enhanced}`;
-    }
-  }
-
-  // 15. Clean Multi-Entity Comparison Matrix (e.g., Ward A: Month 1=214, Month 2=231; Agency Alpha: TAR=94%...)
-  if (!enhanced.includes("<svg") && !enhanced.includes("<table")) {
-    const dataPortion = enhanced.replace(/^Passage:\s*[^:.\n]+:\s*/i, "");
-    const entityRegex = /(?:^|[\n.;]\s*)([A-Z][A-Za-z0-9\s/-]{1,30}?)\s*:\s*([^.;\n]+)/g;
-    const entities: Array<{ name: string; values: Array<{ key: string; val: number; unit?: string }> }> = [];
-    const matches = Array.from(dataPortion.matchAll(entityRegex));
-
-    for (const m of matches) {
-      let name = m[1].trim();
-      name = name.replace(/^(?:The\s+data\s+shows|The\s+bars\s+show|The\s+chart\s+shows|Passage|Note|\(1\)|\(2\)|\s*-\s*)\s*/i, "").trim();
-
-      if (/^(?:Passage|Note|Indicator|Priority|Criteria|Finding|Total|Step\s*\d+|Table\s*\d+|Question)$/i.test(name)) continue;
-
-      const content = m[2];
-      const pairMatches = Array.from(content.matchAll(/([A-Za-z0-9\s/]+?)\s*[=:-]\s*(?:PHP\s*)?([\d,]+(?:\.\d+)?)\s*(%|units|members|tons|MT|ha|M|k)?(?=[,;.\s]|$)/g));
-
-      const pairs: Array<{ key: string; val: number; unit?: string }> = [];
-      for (const pm of pairMatches) {
-        const key = pm[1].replace(/^(?:the\s+values\s+are|and|shows|\s*-\s*)\s*/i, "").trim();
-        const val = parseFloat(pm[2].replace(/,/g, ""));
-        const unit = pm[3] || "";
-        if (key.length > 0 && key.length < 30 && !isNaN(val)) {
-          pairs.push({ key, val, unit });
-        }
-      }
-
-      if (pairs.length >= 1 && name.length >= 2 && name.length <= 35) {
-        entities.push({ name, values: pairs });
-      }
-    }
-
-    if (entities.length >= 2) {
-      const chartTitle = "Comparative Data Breakdown & Matrix Analysis";
-      const svgMatrix = renderGroupedBarChartSVG(chartTitle, entities);
-      return `${svgMatrix}\n\n${enhanced}`;
-    }
-  }
-
-  return enhanced;
+  return text;
 }

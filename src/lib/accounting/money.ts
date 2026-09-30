@@ -11,16 +11,25 @@
  */
 
 export function sanitizePercentage(rate: unknown, fallback = 0.0): number {
-  if (typeof rate !== "number" || isNaN(rate) || !isFinite(rate)) {
-    const parsed = parseFloat(String(rate));
-    if (isNaN(parsed) || !isFinite(parsed)) return fallback;
-    rate = parsed;
+  let numericRate: number;
+
+  if (typeof rate === "number" && !Number.isNaN(rate) && Number.isFinite(rate)) {
+    numericRate = rate;
+  } else {
+    const parsed = Number.parseFloat(String(rate));
+    if (Number.isNaN(parsed) || !Number.isFinite(parsed)) {
+      return fallback;
+    }
+    numericRate = parsed;
   }
-  return Math.min(100.0, Math.max(0.0, Math.round(Number(rate) * 100) / 100));
+
+  return Math.min(100.0, Math.max(0.0, Math.round(numericRate * 100) / 100));
 }
 
 export function deterministicRound(centavos: number): number {
-  if (isNaN(centavos) || !isFinite(centavos)) return 0;
+  if (Number.isNaN(centavos) || !Number.isFinite(centavos)) {
+    return 0;
+  }
   return Math.round(centavos);
 }
 
@@ -34,7 +43,9 @@ export function calculatePercentageShareCentavos(
 }
 
 export function formatCentavosToPesos(centavos: number | null | undefined): string {
-  if (centavos === null || centavos === undefined || isNaN(centavos)) return "₱0.00";
+  if (centavos === null || centavos === undefined || Number.isNaN(centavos) || !Number.isFinite(centavos)) {
+    return "₱0.00";
+  }
   const isNegative = centavos < 0;
   const absPesos = Math.abs(centavos) / 100;
   const formatted = `₱${absPesos.toLocaleString("en-PH", {
@@ -45,11 +56,15 @@ export function formatCentavosToPesos(centavos: number | null | undefined): stri
 }
 
 export function centavosToPesosNumber(centavos: number | null | undefined): number {
-  if (!centavos || isNaN(centavos)) return 0;
+  if (centavos === null || centavos === undefined || Number.isNaN(centavos) || !Number.isFinite(centavos)) {
+    return 0;
+  }
   return Math.round(centavos) / 100;
 }
 
 export function pesosToCentavos(pesos: number | null | undefined): number {
-  if (!pesos || isNaN(pesos)) return 0;
-  return Math.round(Number(pesos) * 100);
+  if (pesos === null || pesos === undefined || Number.isNaN(pesos) || !Number.isFinite(pesos)) {
+    return 0;
+  }
+  return Math.round(pesos * 100);
 }

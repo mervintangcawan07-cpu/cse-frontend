@@ -9,18 +9,18 @@ import ExplanationPanel from "./ExplanationPanel";
 import { StructuredQuestion, QuestionReviewMode } from "@/types/question";
 
 export interface QuestionReviewProps {
-  question: StructuredQuestion;
-  userAnswerIndex?: number | null;
-  itemNumber?: number | string;
-  mode?: QuestionReviewMode; // "INTERACTIVE" | "REVIEW" | "PREVIEW"
-  isSubmitted?: boolean;
-  isSkipped?: boolean;
-  badgeLabel?: string | null;
-  onSelectOption?: (index: number) => void;
-  onSubmitAnswer?: () => void;
-  actions?: React.ReactNode;
-  footerActions?: React.ReactNode;
-  className?: string;
+  readonly question: StructuredQuestion;
+  readonly userAnswerIndex?: number | null;
+  readonly itemNumber?: number | string;
+  readonly mode?: QuestionReviewMode; // "INTERACTIVE" | "REVIEW" | "PREVIEW"
+  readonly isSubmitted?: boolean;
+  readonly isSkipped?: boolean;
+  readonly badgeLabel?: string | null;
+  readonly onSelectOption?: (index: number) => void;
+  readonly onSubmitAnswer?: () => void;
+  readonly actions?: React.ReactNode;
+  readonly footerActions?: React.ReactNode;
+  readonly className?: string;
 }
 
 export default function QuestionReview({
@@ -36,7 +36,7 @@ export default function QuestionReview({
   actions,
   footerActions,
   className = "",
-}: QuestionReviewProps) {
+}: Readonly<QuestionReviewProps>) {
   // Local state for interactive mode when unmanaged
   const [localSelection, setLocalSelection] = useState<number | null>(null);
   const [localSubmitted, setLocalSubmitted] = useState(false);

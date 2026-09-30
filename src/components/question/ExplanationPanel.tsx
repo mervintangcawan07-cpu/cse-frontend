@@ -10,19 +10,64 @@ import FormattedExplanation from "@/components/exam/FormattedExplanation";
 import AudioSpeechButton from "@/components/common/AudioSpeechButton";
 import { StepSolutionItem } from "@/types/question";
 
+function hasMeaningfulText(value?: string | null): boolean {
+  return typeof value === "string" && value.trim().length > 0;
+}
 
-interface ExplanationPanelProps {
+function hasStepByStepContent(stepByStep?: string | StepSolutionItem[] | null): boolean {
+  if (!stepByStep) {
+    return false;
+  }
+
+  if (Array.isArray(stepByStep)) {
+    return stepByStep.length > 0;
+  }
+
+  return hasMeaningfulText(stepByStep);
+}
+
+function hasOptionAnalysisContent(
+  whyA?: string | null,
+  whyB?: string | null,
+  whyC?: string | null,
+  whyD?: string | null
+): boolean {
+  return [whyA, whyB, whyC, whyD].some(hasMeaningfulText);
+}
+
+function buildSpeechText({
+  explanation,
+  eliminationStrategy,
+  commonTrap,
+  examTip,
+}: {
   explanation?: string | null;
-  stepByStep?: string | StepSolutionItem[] | null;
-  whyA?: string | null;
-  whyB?: string | null;
-  whyC?: string | null;
-  whyD?: string | null;
   eliminationStrategy?: string | null;
   commonTrap?: string | null;
   examTip?: string | null;
-  options?: string[];
-  correctIndex?: number;
+}): string {
+  const segments = [
+    explanation,
+    hasMeaningfulText(eliminationStrategy) ? `Strategy: ${eliminationStrategy}` : "",
+    hasMeaningfulText(commonTrap) ? `Common Trap: ${commonTrap}` : "",
+    hasMeaningfulText(examTip) ? `Exam Tip: ${examTip}` : "",
+  ].filter(hasMeaningfulText);
+
+  return segments.join(". ");
+}
+
+interface ExplanationPanelProps {
+  readonly explanation?: string | null;
+  readonly stepByStep?: string | StepSolutionItem[] | null;
+  readonly whyA?: string | null;
+  readonly whyB?: string | null;
+  readonly whyC?: string | null;
+  readonly whyD?: string | null;
+  readonly eliminationStrategy?: string | null;
+  readonly commonTrap?: string | null;
+  readonly examTip?: string | null;
+  readonly options?: string[];
+  readonly correctIndex?: number;
 }
 
 export default function ExplanationPanel({
@@ -37,46 +82,36 @@ export default function ExplanationPanel({
   examTip,
   options = [],
   correctIndex,
-}: ExplanationPanelProps) {
-  const hasStepByStep = Boolean(
-    stepByStep &&
-      (Array.isArray(stepByStep) ? stepByStep.length > 0 : stepByStep.trim().length > 0)
-  );
-  const hasOptionAnalysis = Boolean(
-    (whyA && whyA.trim()) ||
-      (whyB && whyB.trim()) ||
-      (whyC && whyC.trim()) ||
-      (whyD && whyD.trim())
-  );
-  const hasStrategy = Boolean(eliminationStrategy && eliminationStrategy.trim());
-  const hasTrap = Boolean(commonTrap && commonTrap.trim());
-  const hasTip = Boolean(examTip && examTip.trim());
-  const hasStandardExplanation = Boolean(explanation && explanation.trim());
+}: Readonly<ExplanationPanelProps>) {
+  const hasStepByStep = hasStepByStepContent(stepByStep);
+  const hasOptionAnalysis = hasOptionAnalysisContent(whyA, whyB, whyC, whyD);
+  const hasStrategy = hasMeaningfulText(eliminationStrategy);
+  const hasTrap = hasMeaningfulText(commonTrap);
+  const hasTip = hasMeaningfulText(examTip);
+  const hasStandardExplanation = hasMeaningfulText(explanation);
+  const hasAnyContent = [
+    hasStepByStep,
+    hasOptionAnalysis,
+    hasStrategy,
+    hasTrap,
+    hasTip,
+    hasStandardExplanation,
+  ].some(Boolean);
+  const showStandardExplanation = hasStandardExplanation && (!hasStepByStep || !hasOptionAnalysis);
+  const fullSpeechText = buildSpeechText({
+    explanation,
+    eliminationStrategy,
+    commonTrap,
+    examTip,
+  });
 
-  // If absolutely nothing is available
-  if (
-    !hasStepByStep &&
-    !hasOptionAnalysis &&
-    !hasStrategy &&
-    !hasTrap &&
-    !hasTip &&
-    !hasStandardExplanation
-  ) {
+  if (!hasAnyContent) {
     return (
       <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs text-slate-500 italic">
         No additional explanation provided for this item.
       </div>
     );
   }
-
-  const fullSpeechText = [
-    explanation,
-    hasStrategy ? `Strategy: ${eliminationStrategy}` : "",
-    hasTrap ? `Common Trap: ${commonTrap}` : "",
-    hasTip ? `Exam Tip: ${examTip}` : "",
-  ]
-    .filter(Boolean)
-    .join(". ");
 
   return (
     <div className="bg-slate-50 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-5 text-xs text-slate-800 dark:text-slate-200">
@@ -92,7 +127,7 @@ export default function ExplanationPanel({
       {hasStepByStep && <StepByStepSolution stepByStep={stepByStep} />}
 
       {/* 2. Standard Official Rationale (Displayed if no StepByStep exists or as high-level summary) */}
-      {hasStandardExplanation && (!hasStepByStep || !hasOptionAnalysis) && (
+      {showStandardExplanation && (
         <div className="space-y-1.5 pt-1">
           <FormattedExplanation
             explanation={explanation}

@@ -1,7 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
+
+interface ForgotPasswordApiResponse {
+  success?: boolean;
+  message?: string;
+  error?: string;
+}
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -9,27 +15,32 @@ export default function ForgotPasswordPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     setMessage(null);
     setError(null);
+
+    const cleanEmail = email.trim().toLowerCase();
 
     try {
       const res = await fetch("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: cleanEmail }),
       });
 
-      const data = await res.json();
+      const data: ForgotPasswordApiResponse = await res.json();
 
       if (res.ok && data.success) {
-        setMessage(data.message);
+        setMessage(data.message || "Password reset instructions have been sent to your email.");
       } else {
         setError(data.error || "Failed to process request.");
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("Forgot password request error:", err);
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -51,11 +62,16 @@ export default function ForgotPasswordPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
+            <label
+              htmlFor="forgot-password-email"
+              className="block text-xs font-bold uppercase text-slate-400 mb-1"
+            >
               Email Address
             </label>
             <input
+              id="forgot-password-email"
               type="email"
+              autoComplete="email"
               required
               placeholder="e.g., juan@gmail.com"
               value={email}
@@ -79,7 +95,7 @@ export default function ForgotPasswordPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Sending Link..." : "Send Password Reset Link"}
           </button>
@@ -87,7 +103,7 @@ export default function ForgotPasswordPage() {
 
         <div className="text-center pt-2 border-t border-slate-800">
           <Link href="/login" className="text-xs text-slate-400 hover:text-white font-bold transition">
-            {"← Back to Login"}
+            &larr; Back to Login
           </Link>
         </div>
       </div>

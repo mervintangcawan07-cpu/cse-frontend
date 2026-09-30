@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -8,6 +8,7 @@ function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const router = useRouter();
+  const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,8 +16,18 @@ function ResetPasswordContent() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    return () => {
+      if (redirectTimerRef.current) {
+        clearTimeout(redirectTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     if (!token) {
       setError("Missing reset token from URL link.");
       return;
@@ -42,11 +53,14 @@ function ResetPasswordContent() {
 
       if (res.ok && data.success) {
         setMessage("Password updated! Redirecting to login...");
-        setTimeout(() => router.push("/login"), 2000);
+        redirectTimerRef.current = setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       } else {
         setError(data.error || "Failed to reset password.");
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("Password reset error:", err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
@@ -66,10 +80,14 @@ function ResetPasswordContent() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
+            <label
+              htmlFor="new-password-input"
+              className="block text-xs font-bold uppercase text-slate-400 mb-1"
+            >
               New Password
             </label>
             <input
+              id="new-password-input"
               type="password"
               required
               minLength={8}
@@ -81,10 +99,14 @@ function ResetPasswordContent() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-slate-400 mb-1">
+            <label
+              htmlFor="confirm-password-input"
+              className="block text-xs font-bold uppercase text-slate-400 mb-1"
+            >
               Confirm New Password
             </label>
             <input
+              id="confirm-password-input"
               type="password"
               required
               minLength={8}
@@ -110,7 +132,7 @@ function ResetPasswordContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-lg transition disabled:opacity-50 cursor-pointer"
           >
             {loading ? "Updating Password..." : "Update Password"}
           </button>
@@ -118,7 +140,7 @@ function ResetPasswordContent() {
 
         <div className="text-center pt-2 border-t border-slate-800">
           <Link href="/login" className="text-xs text-slate-400 hover:text-white font-bold transition">
-            {"← Back to Login"}
+            &larr; Back to Login
           </Link>
         </div>
       </div>

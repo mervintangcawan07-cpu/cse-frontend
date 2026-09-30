@@ -19,7 +19,7 @@ export default function QuestionChoices({
   isSubmitted,
   disabled = false,
   onSelectOption,
-}: QuestionChoicesProps) {
+}: Readonly<QuestionChoicesProps>) {
   const letters = ["A", "B", "C", "D", "E", "F"];
 
   return (
@@ -40,30 +40,27 @@ export default function QuestionChoices({
               "bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-950 dark:text-blue-200 font-bold shadow-xs";
             letterStyle = "bg-blue-600 text-white border-blue-600";
           }
+        } else if (isCorrect) {
+          containerStyle =
+            "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-950 dark:text-emerald-200 font-bold shadow-xs";
+          letterStyle = "bg-emerald-600 text-white border-emerald-600";
+        } else if (isUserSelection && !isCorrect) {
+          containerStyle =
+            "bg-rose-50 dark:bg-rose-950/40 border-rose-400 text-rose-950 dark:text-rose-200 font-medium shadow-xs";
+          letterStyle = "bg-rose-600 text-white border-rose-600";
         } else {
-          // Submitted / Review Mode
-          if (isCorrect) {
-            containerStyle =
-              "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-950 dark:text-emerald-200 font-bold shadow-xs";
-            letterStyle = "bg-emerald-600 text-white border-emerald-600";
-          } else if (isUserSelection && !isCorrect) {
-            containerStyle =
-              "bg-rose-50 dark:bg-rose-950/40 border-rose-400 text-rose-950 dark:text-rose-200 font-medium shadow-xs";
-            letterStyle = "bg-rose-600 text-white border-rose-600";
-          } else {
-            containerStyle =
-              "bg-slate-50/60 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 opacity-75";
-            letterStyle =
-              "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700";
-          }
+          containerStyle =
+            "bg-slate-50/60 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 opacity-75";
+          letterStyle =
+            "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700";
         }
 
         return (
           <button
-            key={idx}
+            key={`option-${correctIndex}-${idx}`}
             type="button"
             disabled={disabled || isSubmitted}
-            onClick={() => onSelectOption && onSelectOption(idx)}
+            onClick={() => onSelectOption?.(idx)}
             className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border transition flex items-center justify-between gap-3 text-xs sm:text-sm cursor-pointer disabled:cursor-default ${containerStyle}`}
           >
             <div className="flex items-center gap-3">

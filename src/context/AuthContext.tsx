@@ -75,7 +75,9 @@ function isKickedSafePath(pathname: string) {
   );
 }
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+type AuthProviderProps = Readonly<{ children: React.ReactNode }>;
+
+export function AuthProvider({ children }: AuthProviderProps) {
   const pathname = usePathname();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [status, setStatus] = useState<AuthStatus>("loading");

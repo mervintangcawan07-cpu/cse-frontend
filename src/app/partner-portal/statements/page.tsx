@@ -1,8 +1,6 @@
-// Relative Path: src/app/partner-portal/statements/page.tsx
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   FileText,
@@ -10,69 +8,337 @@ import {
   Calendar,
   ShieldCheck,
   AlertTriangle,
-  Layers,
-  DollarSign,
-  TrendingUp,
-  ExternalLink,
 } from "lucide-react";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
 
+interface PartnerProfile {
+  id: string;
+  name: string;
+  email?: string;
+  code?: string;
+  [key: string]: unknown;
+}
+
+interface StatementSummary {
+  formattedQualifyingPayments: string;
+  formattedGrossCommission: string;
+  formattedRefundReversals: string;
+  formattedAdjustments: string;
+  formattedNetCommission: string;
+  formattedPaid: string;
+  formattedReserved: string;
+  formattedOutstanding: string;
+}
+
+interface StatementReconciliation {
+  isReconciled: boolean;
+  discrepancyCentavos: number;
+}
+
+interface StatementTransaction {
+  id: string;
+  date: string;
+  planType: string;
+  customerMasked: string;
+  formattedPurchase: string;
+  effectiveRate: number;
+  formattedCommission: string;
+  status: string;
+}
+
+interface StatementData {
+  statementReference: string;
+  period?: {
+    label: string;
+  };
+  summary: StatementSummary;
+  reconciliation: StatementReconciliation;
+  transactions: StatementTransaction[];
+  payouts?: unknown[];
+}
+
+const PERIOD_OPTIONS = [
+  { id: "THIS_MONTH", label: "This Month" },
+  { id: "LAST_MONTH", label: "Last Month" },
+  { id: "THIS_QUARTER", label: "This Quarter" },
+  { id: "THIS_YEAR", label: "This Year" },
+  { id: "CUSTOM", label: "Custom Range" },
+] as const;
+
 export default function PartnerStatementsPage() {
   const router = useRouter();
-  const [partner, setPartner] = useState<any | null>(null);
-  const [period, setPeriod] = useState("THIS_MONTH");
+  const [partner, setPartner] = useState<PartnerProfile | null>(null);
+  const [period, setPeriod] = useState<string>("THIS_MONTH");
   const [customStart, setCustomStart] = useState("");
   const [customEnd, setCustomEnd] = useState("");
-  const [statement, setStatement] = useState<any | null>(null);
+  const [statement, setStatement] = useState<StatementData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchStatement = useCallback(async () => {
-    setLoading(true);
-    try {
-      let url = `/api/partner/portal/statements?period=${period}`;
-      if (period === "CUSTOM" && customStart && customEnd) {
-        url += `&startDate=${customStart}&endDate=${customEnd}`;
-      }
+  const fetchStatement = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        let url = `/api/partner/portal/statements?period=${encodeURIComponent(period)}`;
+        if (period === "CUSTOM" && customStart && customEnd) {
+          url += `&startDate=${encodeURIComponent(customStart)}&endDate=${encodeURIComponent(customEnd)}`;
+        }
 
-      const [authRes, stmtRes] = await Promise.all([
-        fetch("/api/partner/auth/me"),
-        fetch(url),
-      ]);
+        const [authRes, stmtRes] = await Promise.all([
+          fetch("/api/partner/auth/me", { signal }),
+          fetch(url, { signal }),
+        ]);
 
-      if (authRes.status === 401 || stmtRes.status === 401) {
-        router.push("/partner-portal/login");
-        return;
-      }
+        if (authRes.status === 401 || stmtRes.status === 401) {
+          router.push("/partner-portal/login");
+          return;
+        }
 
-      if (authRes.ok) {
-        const authJson = await authRes.json();
-        setPartner(authJson.partner);
-      }
+        if (authRes.ok) {
+          const authJson = await authRes.json();
+          setPartner(authJson.partner);
+        }
 
-      if (stmtRes.ok) {
-        const stmtJson = await stmtRes.json();
-        setStatement(stmtJson.data);
+        if (stmtRes.ok) {
+          const stmtJson = await stmtRes.json();
+          setStatement(stmtJson.data);
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load statement:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load statement:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [period, customStart, customEnd, router]);
+    },
+    [period, customStart, customEnd, router]
+  );
 
   useEffect(() => {
-    fetchStatement();
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchStatement(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchStatement]);
 
+  const handlePeriodChange = (newPeriod: string) => {
+    setLoading(true);
+    setPeriod(newPeriod);
+  };
+
   const getExportUrl = (format: "xlsx" | "csv" | "pdf") => {
-    let url = `/api/partner/portal/statements/export?format=${format}&period=${period}`;
+    let url = `/api/partner/portal/statements/export?format=${format}&period=${encodeURIComponent(period)}`;
     if (period === "CUSTOM" && customStart && customEnd) {
-      url += `&startDate=${customStart}&endDate=${customEnd}`;
+      url += `&startDate=${encodeURIComponent(customStart)}&endDate=${encodeURIComponent(customEnd)}`;
     }
     return url;
   };
 
-  const { summary, reconciliation, transactions, payouts } = statement || {};
+  const renderStatementContent = () => {
+    if (loading) {
+      return (
+        <div className="py-20 text-center space-y-3">
+          <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+            Generating financial statement...
+          </p>
+        </div>
+      );
+    }
+
+    if (!statement) {
+      return (
+        <div className="py-20 text-center text-xs text-slate-400">
+          Failed to load statement data.
+        </div>
+      );
+    }
+
+    const { summary, reconciliation, transactions } = statement;
+
+    return (
+      <div className="space-y-6">
+        {/* Statement Header Card */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                Statement Reference
+              </span>
+              <div className="font-mono text-lg font-black text-white">
+                {statement.statementReference}
+              </div>
+              <p className="text-xs text-slate-400">{statement.period?.label}</p>
+            </div>
+
+            {/* Reconciliation Badge */}
+            <div className="flex items-center gap-2 bg-slate-950 px-4 py-2.5 rounded-2xl border border-slate-800">
+              {reconciliation?.isReconciled ? (
+                <>
+                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                  <div>
+                    <div className="text-xs font-black text-emerald-400 uppercase">
+                      RECONCILED &bull; MATCHED
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Balances balanced with General Ledger
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  <div>
+                    <div className="text-xs font-black text-amber-400 uppercase">
+                      RECONCILIATION REQUIRED
+                    </div>
+                    <div className="text-[10px] text-slate-400">
+                      Discrepancy: {reconciliation?.discrepancyCentavos} centavos
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Statement Breakdown Table */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">
+                Accrued Revenue &amp; Commissions
+              </h3>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Qualifying Customer Payments:</span>
+                  <span className="font-mono font-bold text-white">
+                    {summary?.formattedQualifyingPayments}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Gross Commission Accrued:</span>
+                  <span className="font-mono font-bold text-purple-400">
+                    {summary?.formattedGrossCommission}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Refund &amp; Chargeback Reversals:</span>
+                  <span className="font-mono font-bold text-rose-400">
+                    {summary?.formattedRefundReversals}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Financial Adjustments:</span>
+                  <span className="font-mono font-bold text-slate-300">
+                    {summary?.formattedAdjustments}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 pt-2 font-bold text-sm">
+                  <span className="text-white">Net Commission Earned:</span>
+                  <span className="font-mono text-emerald-400 font-black">
+                    {summary?.formattedNetCommission}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">
+                Disbursements &amp; Settlement
+              </h3>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Total Paid Out to Date:</span>
+                  <span className="font-mono font-bold text-teal-400">
+                    {summary?.formattedPaid}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 border-b border-slate-900">
+                  <span className="text-slate-400">Reserved for Pending Payouts:</span>
+                  <span className="font-mono font-bold text-blue-400">
+                    {summary?.formattedReserved}
+                  </span>
+                </div>
+                <div className="flex justify-between py-1 pt-3 border-t-2 border-slate-800 text-sm font-bold">
+                  <span className="text-emerald-400">Outstanding Available Balance:</span>
+                  <span className="font-mono text-emerald-400 font-black text-lg">
+                    {summary?.formattedOutstanding}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Statement Transactions Section */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 className="text-sm font-black text-white uppercase tracking-wider">
+              Period Transactions ({transactions?.length || 0})
+            </h3>
+          </div>
+
+          {!transactions?.length ? (
+            <div className="py-8 text-center text-xs text-slate-400">
+              No student transactions recorded in this period.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
+                  <tr>
+                    <th className="py-3 px-4">Date</th>
+                    <th className="py-3 px-4">Transaction ID</th>
+                    <th className="py-3 px-4">Plan Type</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4 text-right">Payment</th>
+                    <th className="py-3 px-4">Rate</th>
+                    <th className="py-3 px-4 text-right">Commission</th>
+                    <th className="py-3 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800">
+                  {transactions.map((t) => (
+                    <tr key={t.id} className="hover:bg-slate-800/40">
+                      <td className="py-3 px-4 text-slate-400 whitespace-nowrap">
+                        {t.date.slice(0, 10)}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-slate-300">
+                        {t.id.slice(0, 12)}...
+                      </td>
+                      <td className="py-3 px-4 font-bold text-slate-200">
+                        {t.planType.replace(/_/g, " ")}
+                      </td>
+                      <td className="py-3 px-4 text-slate-300 font-mono">
+                        {t.customerMasked}
+                      </td>
+                      <td className="py-3 px-4 text-right font-mono font-bold text-white">
+                        {t.formattedPurchase}
+                      </td>
+                      <td className="py-3 px-4 font-mono font-bold text-purple-400">
+                        {t.effectiveRate}%
+                      </td>
+                      <td className="py-3 px-4 text-right font-mono font-bold text-emerald-400">
+                        {t.formattedCommission}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-950 border border-slate-800 text-slate-300">
+                          {t.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -90,7 +356,6 @@ export default function PartnerStatementsPage() {
             </p>
           </div>
 
-          {/* Export Action Buttons (Section 18) */}
           <div className="flex items-center gap-2 flex-wrap">
             <a
               href={getExportUrl("xlsx")}
@@ -130,16 +395,11 @@ export default function PartnerStatementsPage() {
               <span>Statement Period:</span>
             </span>
 
-            {[
-              { id: "THIS_MONTH", label: "This Month" },
-              { id: "LAST_MONTH", label: "Last Month" },
-              { id: "THIS_QUARTER", label: "This Quarter" },
-              { id: "THIS_YEAR", label: "This Year" },
-              { id: "CUSTOM", label: "Custom Range" },
-            ].map((p) => (
+            {PERIOD_OPTIONS.map((p) => (
               <button
                 key={p.id}
-                onClick={() => setPeriod(p.id)}
+                type="button"
+                onClick={() => handlePeriodChange(p.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                   period === p.id
                     ? "bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20"
@@ -153,14 +413,22 @@ export default function PartnerStatementsPage() {
 
           {period === "CUSTOM" && (
             <div className="flex items-center gap-2 w-full sm:w-auto text-xs">
+              <label htmlFor="custom-start-date" className="sr-only">
+                Start Date
+              </label>
               <input
+                id="custom-start-date"
                 type="date"
                 value={customStart}
                 onChange={(e) => setCustomStart(e.target.value)}
                 className="p-2 bg-slate-950 border border-slate-800 rounded-xl text-white outline-none focus:border-emerald-500"
               />
               <span className="text-slate-500">to</span>
+              <label htmlFor="custom-end-date" className="sr-only">
+                End Date
+              </label>
               <input
+                id="custom-end-date"
                 type="date"
                 value={customEnd}
                 onChange={(e) => setCustomEnd(e.target.value)}
@@ -170,155 +438,11 @@ export default function PartnerStatementsPage() {
           )}
         </div>
 
-        {loading ? (
-          <div className="py-20 text-center space-y-3">
-            <div className="w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Generating financial statement...</p>
-          </div>
-        ) : !statement ? (
-          <div className="py-20 text-center text-xs text-slate-400">
-            Failed to load statement data.
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {/* Statement Header Card */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-                <div>
-                  <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Statement Reference</span>
-                  <div className="font-mono text-lg font-black text-white">{statement.statementReference}</div>
-                  <p className="text-xs text-slate-400">{statement.period?.label}</p>
-                </div>
-
-                {/* Reconciliation Badge (Section 19) */}
-                <div className="flex items-center gap-2 bg-slate-950 px-4 py-2.5 rounded-2xl border border-slate-800">
-                  {reconciliation?.isReconciled ? (
-                    <>
-                      <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                      <div>
-                        <div className="text-xs font-black text-emerald-400 uppercase">RECONCILED &bull; MATCHED</div>
-                        <div className="text-[10px] text-slate-400">Balances balanced with General Ledger</div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <AlertTriangle className="w-5 h-5 text-amber-400" />
-                      <div>
-                        <div className="text-xs font-black text-amber-400 uppercase">RECONCILIATION REQUIRED</div>
-                        <div className="text-[10px] text-slate-400">Discrepancy: {reconciliation?.discrepancyCentavos} centavos</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* Statement Breakdown Table */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">
-                    Accrued Revenue &amp; Commissions
-                  </h3>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Qualifying Customer Payments:</span>
-                      <span className="font-mono font-bold text-white">{summary?.formattedQualifyingPayments}</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Gross Commission Accrued:</span>
-                      <span className="font-mono font-bold text-purple-400">{summary?.formattedGrossCommission}</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Refund &amp; Chargeback Reversals:</span>
-                      <span className="font-mono font-bold text-rose-400">{summary?.formattedRefundReversals}</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Financial Adjustments:</span>
-                      <span className="font-mono font-bold text-slate-300">{summary?.formattedAdjustments}</span>
-                    </div>
-                    <div className="flex justify-between py-1 pt-2 font-bold text-sm">
-                      <span className="text-white">Net Commission Earned:</span>
-                      <span className="font-mono text-emerald-400 font-black">{summary?.formattedNetCommission}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 border-b border-slate-800/80 pb-2">
-                    Disbursements &amp; Settlement
-                  </h3>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Total Paid Out to Date:</span>
-                      <span className="font-mono font-bold text-teal-400">{summary?.formattedPaid}</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-900">
-                      <span className="text-slate-400">Reserved for Pending Payouts:</span>
-                      <span className="font-mono font-bold text-blue-400">{summary?.formattedReserved}</span>
-                    </div>
-                    <div className="flex justify-between py-1 pt-3 border-t-2 border-slate-800 text-sm font-bold">
-                      <span className="text-emerald-400">Outstanding Available Balance:</span>
-                      <span className="font-mono text-emerald-400 font-black text-lg">{summary?.formattedOutstanding}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Statement Transactions Section */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-sm font-black text-white uppercase tracking-wider">
-                  Period Transactions ({transactions?.length || 0})
-                </h3>
-              </div>
-
-              {!transactions?.length ? (
-                <div className="py-8 text-center text-xs text-slate-400">
-                  No student transactions recorded in this period.
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
-                      <tr>
-                        <th className="py-3 px-4">Date</th>
-                        <th className="py-3 px-4">Transaction ID</th>
-                        <th className="py-3 px-4">Plan Type</th>
-                        <th className="py-3 px-4">Customer</th>
-                        <th className="py-3 px-4 text-right">Payment</th>
-                        <th className="py-3 px-4">Rate</th>
-                        <th className="py-3 px-4 text-right">Commission</th>
-                        <th className="py-3 px-4">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800">
-                      {transactions.map((t: any) => (
-                        <tr key={t.id} className="hover:bg-slate-800/40">
-                          <td className="py-3 px-4 text-slate-400 whitespace-nowrap">{t.date.slice(0, 10)}</td>
-                          <td className="py-3 px-4 font-mono font-bold text-slate-300">{t.id.slice(0, 12)}...</td>
-                          <td className="py-3 px-4 font-bold text-slate-200">{t.planType.replace(/_/g, " ")}</td>
-                          <td className="py-3 px-4 text-slate-300 font-mono">{t.customerMasked}</td>
-                          <td className="py-3 px-4 text-right font-mono font-bold text-white">{t.formattedPurchase}</td>
-                          <td className="py-3 px-4 font-mono font-bold text-purple-400">{t.effectiveRate}%</td>
-                          <td className="py-3 px-4 text-right font-mono font-bold text-emerald-400">{t.formattedCommission}</td>
-                          <td className="py-3 px-4">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-950 border border-slate-800 text-slate-300">
-                              {t.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        {renderStatementContent()}
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

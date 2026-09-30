@@ -6,9 +6,9 @@ import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-slate-950 border-t border-slate-800 text-slate-400 text-xs mt-auto">
+    <footer className="hidden xl:block w-full bg-slate-950 border-t border-slate-800 text-slate-400 text-xs mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-10">
-        {/* Top 4-Column Grid */}
+        {/* Top 5-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
           {/* Brand & Mission (2 Cols on lg) */}
           <div className="lg:col-span-2 space-y-4">

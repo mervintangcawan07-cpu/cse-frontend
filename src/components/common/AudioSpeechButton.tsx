@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 
 interface AudioSpeechButtonProps {
-  textToSpeak: string;
-  label?: string;
+  readonly textToSpeak: string;
+  readonly label?: string;
 }
 
 export default function AudioSpeechButton({ textToSpeak, label = "Listen" }: AudioSpeechButtonProps) {

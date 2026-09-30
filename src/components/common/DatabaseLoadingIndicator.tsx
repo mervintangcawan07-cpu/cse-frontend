@@ -4,11 +4,11 @@
 import React from "react";
 
 interface DatabaseLoadingIndicatorProps {
-  title?: string;
-  subtitle?: string;
-  showSkeletonCards?: boolean;
-  skeletonCount?: number;
-  className?: string;
+  readonly title?: string;
+  readonly subtitle?: string;
+  readonly showSkeletonCards?: boolean;
+  readonly skeletonCount?: number;
+  readonly className?: string;
 }
 
 export default function DatabaseLoadingIndicator({

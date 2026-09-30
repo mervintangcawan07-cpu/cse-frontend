@@ -1,12 +1,12 @@
 import React from "react";
 
 interface QuestionHeaderProps {
-  itemNumber?: number | string;
-  category: string;
-  subtopic?: string | null;
-  difficulty?: string | null;
-  badgeLabel?: string | null;
-  actions?: React.ReactNode;
+  readonly itemNumber?: number | string;
+  readonly category: string;
+  readonly subtopic?: string | null;
+  readonly difficulty?: string | null;
+  readonly badgeLabel?: string | null;
+  readonly actions?: React.ReactNode;
 }
 
 export default function QuestionHeader({
@@ -16,7 +16,7 @@ export default function QuestionHeader({
   difficulty,
   badgeLabel,
   actions,
-}: QuestionHeaderProps) {
+}: Readonly<QuestionHeaderProps>) {
   const getDifficultyColor = (diff?: string | null) => {
     switch (diff?.toUpperCase()) {
       case "HARD":

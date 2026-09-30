@@ -1,4 +1,4 @@
-import CookiePolicyPage, { metadata } from "../cookies/page";
+import CookiePolicyPage from "../cookies/page";
 
-export { metadata };
+export { metadata } from "../cookies/page";
 export default CookiePolicyPage;

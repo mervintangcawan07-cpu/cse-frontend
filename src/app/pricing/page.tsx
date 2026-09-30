@@ -14,7 +14,7 @@ interface Plan {
   durationDays: number;
 }
 
-const FALLBACK_PLANS: Plan[] = [
+const FALLBACK_PLANS: readonly Plan[] = [
   {
     planType: "1_MONTH",
     name: "1-Month Pass",
@@ -36,16 +36,17 @@ const FALLBACK_PLANS: Plan[] = [
 ];
 
 export default function PricingPage() {
-  const [plans, setPlans] = useState<Plan[]>(FALLBACK_PLANS);
+  const [plans, setPlans] = useState<readonly Plan[]>(FALLBACK_PLANS);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const controller = new AbortController();
 
     async function loadPricing() {
       try {
         const res = await fetch("/api/pricing", {
           cache: "no-store",
+          signal: controller.signal,
         });
 
         if (!res.ok) {
@@ -57,25 +58,28 @@ export default function PricingPage() {
         };
 
         if (
-          !cancelled &&
+          !controller.signal.aborted &&
           Array.isArray(data.plans) &&
           data.plans.length > 0
         ) {
           setPlans(data.plans);
         }
-      } catch (error) {
-        console.warn("Could not load current pricing:", error);
+      } catch (error: unknown) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
       }
     }
 
     void loadPricing();
 
     return () => {
-      cancelled = true;
+      controller.abort();
     };
   }, []);
 
   const handleCheckout = async (planType: string) => {
+    if (loadingPlan !== null) return;
     setLoadingPlan(planType);
 
     try {
@@ -95,8 +99,8 @@ export default function PricingPage() {
       }
 
       alert(data.error || "Failed to launch payment.");
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      console.error("PayMongo checkout launch error:", error);
       alert("Error starting checkout session.");
     } finally {
       setLoadingPlan(null);
@@ -208,12 +212,12 @@ export default function PricingPage() {
 
                 <button
                   type="button"
-                  onClick={() => handleCheckout(plan.planType)}
+                  onClick={() => void handleCheckout(plan.planType)}
                   disabled={loadingPlan !== null}
                   className={
                     recommended
-                      ? "w-full py-4 rounded-xl font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition disabled:opacity-60"
-                      : "w-full py-4 rounded-xl font-black bg-blue-600 hover:bg-blue-500 text-white transition disabled:opacity-60"
+                      ? "w-full py-4 rounded-xl font-black bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition disabled:opacity-60 cursor-pointer"
+                      : "w-full py-4 rounded-xl font-black bg-blue-600 hover:bg-blue-500 text-white transition disabled:opacity-60 cursor-pointer"
                   }
                 >
                   {loadingPlan === plan.planType

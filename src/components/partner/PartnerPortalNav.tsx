@@ -13,7 +13,6 @@ import {
   User,
   Shield,
   LogOut,
-  Sparkles,
   ExternalLink,
   Layers,
   Menu,
@@ -21,12 +20,12 @@ import {
 } from "lucide-react";
 
 interface PartnerPortalNavProps {
-  partner?: {
-    name?: string;
-    partnerId?: string;
-    code?: string;
-    badgeText?: string;
-    slug?: string | null;
+  readonly partner?: {
+    readonly name?: string;
+    readonly partnerId?: string;
+    readonly code?: string;
+    readonly badgeText?: string;
+    readonly slug?: string | null;
   } | null;
 }
 

@@ -57,7 +57,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 1 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>{" "}
               About the Website
             </h2>
             <p>
@@ -81,7 +81,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 2 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">2</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">2</span>{" "}
               Independent Educational Status Disclaimer
             </h2>
             <div className="p-5 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-950 space-y-2">
@@ -98,7 +98,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 3 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">3</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">3</span>{" "}
               Eligibility &amp; Acceptable Use
             </h2>
             <p>You must provide accurate and truthful information when registering for an account. You agree NOT to:</p>
@@ -116,7 +116,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 4 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">4</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">4</span>{" "}
               Account Security &amp; Responsibility
             </h2>
             <p>
@@ -130,7 +130,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 5 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">5</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">5</span>{" "}
               Free vs. Premium (PRO) Services
             </h2>
             <p>
@@ -144,7 +144,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 6 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">6</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">6</span>{" "}
               Payment Processing
             </h2>
             <p>
@@ -158,7 +158,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 7 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">7</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">7</span>{" "}
               Premium Access Limitations
             </h2>
             <p>PRO access is personal and granted strictly to the registered account holder. You agree NOT to:</p>
@@ -173,7 +173,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 8 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">8</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">8</span>{" "}
               Educational Content &amp; No Guarantee of Exam Results
             </h2>
             <p>
@@ -196,7 +196,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 9 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">9</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">9</span>{" "}
               Accuracy of Information
             </h2>
             <p>
@@ -207,7 +207,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 10 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">10</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">10</span>{" "}
               Intellectual Property Rights
             </h2>
             <p>
@@ -221,7 +221,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 11 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">11</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">11</span>{" "}
               User-Submitted Content &amp; Study Hub Conduct
             </h2>
             <p>
@@ -232,7 +232,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 12 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">12</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">12</span>{" "}
               Prohibited Technical Activities
             </h2>
             <p>You may not:</p>
@@ -247,7 +247,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 13 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">13</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">13</span>{" "}
               Website Availability &amp; Maintenance
             </h2>
             <p>
@@ -258,7 +258,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 14 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">14</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">14</span>{" "}
               Third-Party Integrations
             </h2>
             <p>
@@ -269,7 +269,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 15 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">15</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">15</span>{" "}
               Account Suspension &amp; Termination
             </h2>
             <p>
@@ -280,7 +280,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 16 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">16</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">16</span>{" "}
               Changes to These Terms
             </h2>
             <p>
@@ -291,7 +291,7 @@ export default function TermsAndConditionsPage() {
           {/* Section 17 */}
           <section className="space-y-4 pt-4 border-t border-slate-100">
             <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">17</span>
+              <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs">17</span>{" "}
               Contact Information
             </h2>
             <p>For questions or notices regarding these Terms, please contact:</p>

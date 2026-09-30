@@ -23,7 +23,7 @@ export function checkAccountLockout(email: string): {
   const cleanEmail = email.toLowerCase().trim();
   const record = lockoutStore.get(cleanEmail);
 
-  if (!record || !record.lockedUntil) {
+  if (!record?.lockedUntil) {
     return { isLocked: false, remainingSeconds: 0 };
   }
 

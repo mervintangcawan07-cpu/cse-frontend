@@ -6,8 +6,8 @@ import { Sun, Moon } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 
 interface ThemeToggleProps {
-  className?: string;
-  showLabel?: boolean;
+  readonly className?: string;
+  readonly showLabel?: boolean;
 }
 
 const emptySubscribe = () => () => {};

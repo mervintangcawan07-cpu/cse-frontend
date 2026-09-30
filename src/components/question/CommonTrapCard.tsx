@@ -5,8 +5,8 @@ interface CommonTrapCardProps {
   trap?: string | null;
 }
 
-export default function CommonTrapCard({ trap }: CommonTrapCardProps) {
-  if (!trap || !trap.trim()) return null;
+export default function CommonTrapCard({ trap }: Readonly<CommonTrapCardProps>) {
+  if (!trap?.trim()) return null;
 
   return (
     <div className="p-3.5 sm:p-4 bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 rounded-2xl space-y-1.5 shadow-2xs min-w-0 break-words">

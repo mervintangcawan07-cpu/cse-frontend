@@ -4,16 +4,16 @@
 import React from "react";
 
 interface ErrorFallbackProps {
-  error: Error | null;
-  errorId?: string;
-  resetErrorBoundary?: () => void;
+  readonly error: Error | null;
+  readonly errorId?: string;
+  readonly resetErrorBoundary?: () => void;
 }
 
 export function ErrorFallback({
   error,
   errorId,
   resetErrorBoundary,
-}: ErrorFallbackProps) {
+}: Readonly<ErrorFallbackProps>) {
   const isDev = process.env.NODE_ENV === "development";
 
   return (

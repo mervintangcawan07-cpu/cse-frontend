@@ -1,12 +1,9 @@
-// Relative Path: src/app/partner-portal/security/page.tsx
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Shield,
-  Lock,
   CheckCircle,
   AlertCircle,
   Eye,
@@ -16,10 +13,26 @@ import {
 } from "lucide-react";
 import PartnerPortalNav from "@/components/partner/PartnerPortalNav";
 
+interface PartnerProfile {
+  id: string;
+  name: string;
+  email?: string;
+  partnerId?: string;
+  [key: string]: unknown;
+}
+
+interface PartnerAuditLog {
+  id: string;
+  createdAt: string;
+  action: string;
+  reason?: string | null;
+  ipAddress: string;
+}
+
 export default function PartnerSecurityPage() {
   const router = useRouter();
-  const [partner, setPartner] = useState<any | null>(null);
-  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [partner, setPartner] = useState<PartnerProfile | null>(null);
+  const [auditLogs, setAuditLogs] = useState<PartnerAuditLog[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Change Password Form
@@ -31,41 +44,56 @@ export default function PartnerSecurityPage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const fetchSecurityData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [authRes, secRes] = await Promise.all([
-        fetch("/api/partner/auth/me"),
-        fetch("/api/partner/portal/security"),
-      ]);
+  const fetchSecurityData = useCallback(
+    async (signal?: AbortSignal) => {
+      try {
+        const [authRes, secRes] = await Promise.all([
+          fetch("/api/partner/auth/me", { signal }),
+          fetch("/api/partner/portal/security", { signal }),
+        ]);
 
-      if (authRes.status === 401 || secRes.status === 401) {
-        router.push("/partner-portal/login");
-        return;
-      }
+        if (authRes.status === 401 || secRes.status === 401) {
+          router.push("/partner-portal/login");
+          return;
+        }
 
-      if (authRes.ok) {
-        const authJson = await authRes.json();
-        setPartner(authJson.partner);
-      }
+        if (authRes.ok) {
+          const authJson = await authRes.json();
+          setPartner(authJson.partner);
+        }
 
-      if (secRes.ok) {
-        const secJson = await secRes.json();
-        setAuditLogs(secJson.auditLogs || []);
+        if (secRes.ok) {
+          const secJson = await secRes.json();
+          setAuditLogs(secJson.auditLogs || []);
+        }
+      } catch (err: unknown) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        console.error("Failed to load partner security audit logs:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load security data:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
   useEffect(() => {
-    fetchSecurityData();
+    const controller = new AbortController();
+
+    const loadData = async () => {
+      await fetchSecurityData(controller.signal);
+    };
+
+    void loadData();
+
+    return () => {
+      controller.abort();
+    };
   }, [fetchSecurityData]);
 
-  const handlePasswordChange = async (e: React.FormEvent) => {
+  const handlePasswordChange = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (updating) return;
+
     setErrorMsg(null);
     setSuccessMsg(null);
 
@@ -91,7 +119,7 @@ export default function PartnerSecurityPage() {
       const json = await res.json();
 
       if (res.ok && json.success) {
-        setSuccessMsg(json.message);
+        setSuccessMsg(json.message || "Password updated successfully.");
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -99,11 +127,68 @@ export default function PartnerSecurityPage() {
       } else {
         setErrorMsg(json.error || "Failed to update password.");
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("Password update error:", err);
       setErrorMsg("Network error. Please try again.");
     } finally {
       setUpdating(false);
     }
+  };
+
+  const renderAuditLogsContent = () => {
+    if (loading) {
+      return (
+        <div className="py-8 text-center text-xs text-slate-400">
+          Loading audit history...
+        </div>
+      );
+    }
+
+    if (!auditLogs.length) {
+      return (
+        <div className="py-8 text-center text-xs text-slate-400">
+          No activity recorded yet.
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
+            <tr>
+              <th className="py-3 px-4">Timestamp</th>
+              <th className="py-3 px-4">Event</th>
+              <th className="py-3 px-4">Reason / Details</th>
+              <th className="py-3 px-4 text-right">Origin</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {auditLogs.map((log) => (
+              <tr key={log.id} className="hover:bg-slate-800/40">
+                <td className="py-3 px-4 text-slate-400 whitespace-nowrap">
+                  {new Date(log.createdAt).toLocaleString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </td>
+                <td className="py-3 px-4 font-mono font-bold text-emerald-300">
+                  {log.action.replace(/_/g, " ")}
+                </td>
+                <td className="py-3 px-4 text-slate-300">
+                  {log.reason || "Standard system event"}
+                </td>
+                <td className="py-3 px-4 text-right font-mono text-slate-400">
+                  {log.ipAddress}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   };
 
   return (
@@ -149,9 +234,15 @@ export default function PartnerSecurityPage() {
 
           <form onSubmit={handlePasswordChange} className="space-y-4 text-xs max-w-md">
             <div>
-              <label className="block font-bold uppercase text-slate-400 mb-1">Current Password</label>
+              <label
+                htmlFor="current-password"
+                className="block font-bold uppercase text-slate-400 mb-1"
+              >
+                Current Password
+              </label>
               <div className="relative">
                 <input
+                  id="current-password"
                   type={showPassword ? "text" : "password"}
                   required
                   placeholder="••••••••"
@@ -161,9 +252,10 @@ export default function PartnerSecurityPage() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer"
                   tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -171,8 +263,14 @@ export default function PartnerSecurityPage() {
             </div>
 
             <div>
-              <label className="block font-bold uppercase text-slate-400 mb-1">New Password (Min. 8 characters)</label>
+              <label
+                htmlFor="new-password"
+                className="block font-bold uppercase text-slate-400 mb-1"
+              >
+                New Password (Min. 8 characters)
+              </label>
               <input
+                id="new-password"
                 type={showPassword ? "text" : "password"}
                 required
                 minLength={8}
@@ -184,8 +282,14 @@ export default function PartnerSecurityPage() {
             </div>
 
             <div>
-              <label className="block font-bold uppercase text-slate-400 mb-1">Confirm New Password</label>
+              <label
+                htmlFor="confirm-password"
+                className="block font-bold uppercase text-slate-400 mb-1"
+              >
+                Confirm New Password
+              </label>
               <input
+                id="confirm-password"
                 type={showPassword ? "text" : "password"}
                 required
                 minLength={8}
@@ -206,7 +310,7 @@ export default function PartnerSecurityPage() {
           </form>
         </div>
 
-        {/* Security Audit Activity Log (Section 8) */}
+        {/* Security Audit Activity Log */}
         <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
@@ -220,52 +324,12 @@ export default function PartnerSecurityPage() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="py-8 text-center text-xs text-slate-400">Loading audit history...</div>
-          ) : !auditLogs.length ? (
-            <div className="py-8 text-center text-xs text-slate-400">No activity recorded yet.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="text-[10px] font-black uppercase text-slate-400 border-b border-slate-800 bg-slate-950/40">
-                  <tr>
-                    <th className="py-3 px-4">Timestamp</th>
-                    <th className="py-3 px-4">Event</th>
-                    <th className="py-3 px-4">Reason / Details</th>
-                    <th className="py-3 px-4 text-right">Origin</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800">
-                  {auditLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-800/40">
-                      <td className="py-3 px-4 text-slate-400 whitespace-nowrap">
-                        {new Date(log.createdAt).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="py-3 px-4 font-mono font-bold text-emerald-300">
-                        {log.action.replace(/_/g, " ")}
-                      </td>
-                      <td className="py-3 px-4 text-slate-300">
-                        {log.reason || "Standard system event"}
-                      </td>
-                      <td className="py-3 px-4 text-right font-mono text-slate-400">
-                        {log.ipAddress}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          {renderAuditLogsContent()}
         </div>
       </main>
 
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

@@ -19,7 +19,7 @@ export default function LoadingButton({
   variant = "primary",
   type = "submit",
   ...props
-}: LoadingButtonProps) {
+}: Readonly<LoadingButtonProps>) {
   const baseStyles = "relative inline-flex items-center justify-center font-bold transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed select-none";
   
   let variantStyles = "bg-blue-600 hover:bg-blue-500 text-white shadow-md";

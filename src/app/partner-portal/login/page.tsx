@@ -1,19 +1,16 @@
-// Relative Path: src/app/partner-portal/login/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ShieldCheck,
-  Lock,
   ArrowRight,
   Building2,
   AlertCircle,
   Eye,
   EyeOff,
-  Sparkles,
 } from "lucide-react";
 
 export default function PartnerLoginPage() {
@@ -24,16 +21,20 @@ export default function PartnerLoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     setErrorMsg(null);
+
+    const cleanIdentifier = identifier.trim();
 
     try {
       const res = await fetch("/api/partner/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ identifier: cleanIdentifier, password }),
       });
 
       const json = await res.json();
@@ -43,7 +44,8 @@ export default function PartnerLoginPage() {
       } else {
         setErrorMsg(json.error || "Invalid partner credentials.");
       }
-    } catch {
+    } catch (err: unknown) {
+      console.error("Partner login error:", err);
       setErrorMsg("Network error. Please check your internet connection.");
     } finally {
       setLoading(false);
@@ -98,10 +100,14 @@ export default function PartnerLoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+              <label
+                htmlFor="partner-login-identifier"
+                className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+              >
                 Email or Partner ID
               </label>
               <input
+                id="partner-login-identifier"
                 type="text"
                 required
                 placeholder="e.g. PT-000123 or partner@email.com"
@@ -113,7 +119,10 @@ export default function PartnerLoginPage() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold uppercase text-slate-400">
+                <label
+                  htmlFor="partner-login-password"
+                  className="block text-xs font-bold uppercase text-slate-400"
+                >
                   Password
                 </label>
                 <Link
@@ -125,6 +134,7 @@ export default function PartnerLoginPage() {
               </div>
               <div className="relative">
                 <input
+                  id="partner-login-password"
                   type={showPassword ? "text" : "password"}
                   required
                   placeholder="••••••••"
@@ -134,8 +144,8 @@ export default function PartnerLoginPage() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1 cursor-pointer"
                   tabIndex={-1}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
@@ -169,7 +179,7 @@ export default function PartnerLoginPage() {
 
       {/* Footer */}
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

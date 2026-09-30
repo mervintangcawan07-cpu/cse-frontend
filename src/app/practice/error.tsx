@@ -7,8 +7,8 @@ export default function PracticeError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  readonly error: Error & { digest?: string };
+  readonly reset: () => void;
 }) {
   useEffect(() => {
     console.error("[PRACTICE_ROUTE_ERROR]", error);

@@ -1,28 +1,49 @@
-﻿// Relative Path: src/hooks/useDoubleSubmitPreventer.ts
-"use client";
+﻿"use client";
 
-import { useState, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 /**
  * Wraps an asynchronous action (e.g., form submit or API call) to prevent double submissions.
- * Automatically manages loading state and safely resets state if validation or network errors occur.
+ * Uses a synchronous ref lock to prevent rapid multi-clicks, while exposing reactive `isSubmitting`
+ * state for disabling buttons and showing loaders.
  */
-export function useDoubleSubmitPreventer<T extends (...args: any[]) => Promise<any>>(
-  asyncAction: T
+export function useDoubleSubmitPreventer<
+  Args extends readonly unknown[],
+  ReturnVal,
+>(
+  asyncAction: (...args: Args) => Promise<ReturnVal>
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmittingRef = useRef(false);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleSubmit = useCallback(
-    async (...args: Parameters<T>) => {
-      if (isSubmitting) return;
+    async (...args: Args): Promise<ReturnVal | undefined> => {
+      // Synchronous lock: instantly blocks concurrent clicks before React re-renders
+      if (isSubmittingRef.current) {
+        return undefined;
+      }
+
+      isSubmittingRef.current = true;
       setIsSubmitting(true);
+
       try {
         return await asyncAction(...args);
       } finally {
-        setIsSubmitting(false);
+        isSubmittingRef.current = false;
+        if (isMountedRef.current) {
+          setIsSubmitting(false);
+        }
       }
     },
-    [asyncAction, isSubmitting]
+    [asyncAction]
   );
 
   return { isSubmitting, handleSubmit };

@@ -18,7 +18,7 @@ interface ScoreHistoryPoint {
 }
 
 interface ScoreAnalyticsChartProps {
-  scoreHistory: ScoreHistoryPoint[];
+  readonly scoreHistory: ScoreHistoryPoint[];
 }
 
 export default function ScoreAnalyticsChart({ scoreHistory }: ScoreAnalyticsChartProps) {

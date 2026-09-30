@@ -1,9 +1,10 @@
 import React from "react";
+import Image from "next/image";
 import { formatPromptHTML } from "@/lib/formatPrompt";
 
 interface QuestionPromptProps {
-  prompt: string;
-  imageUrl?: string | null;
+  readonly prompt: string;
+  readonly imageUrl?: string | null;
 }
 
 export default function QuestionPrompt({ prompt, imageUrl }: QuestionPromptProps) {
@@ -20,12 +21,15 @@ export default function QuestionPrompt({ prompt, imageUrl }: QuestionPromptProps
       {/* Image / Diagram / Chart Display */}
       {imageUrl && (
         <div className="my-4 flex justify-center bg-slate-50 dark:bg-slate-950/80 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <img
+          <Image
             src={imageUrl}
             alt="Question Diagram"
+            width={1200}
+            height={800}
             loading="lazy"
             decoding="async"
-            className="max-h-72 object-contain rounded-xl shadow-xs"
+            unoptimized
+            className="max-h-72 w-auto h-auto object-contain rounded-xl shadow-xs"
           />
         </div>
       )}

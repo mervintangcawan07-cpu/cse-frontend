@@ -1,7 +1,14 @@
-// Relative Path: src/context/SudoContext.tsx
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+  ReactNode,
+} from "react";
 import { SudoModal } from "@/components/admin/SudoModal";
 
 interface SudoContextType {
@@ -11,70 +18,97 @@ interface SudoContextType {
 
 const SudoContext = createContext<SudoContextType | undefined>(undefined);
 
-export function SudoProvider({ children }: { children: ReactNode }) {
+async function isSudoRequiredResponse(response: Response): Promise<boolean> {
+  if (response.status !== 403) return false;
+  if (response.headers.get("X-Sudo-Required") === "true") return true;
+
+  try {
+    const data = await response.clone().json();
+    return (
+      data.code === "SUDO_REQUIRED" ||
+      data.code === "SUDO_EXPIRED" ||
+      data.error === "SUDO_REQUIRED"
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function SudoProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [resolver, setResolver] = useState<((success: boolean) => void) | null>(null);
+  const resolversRef = useRef<((success: boolean) => void)[]>([]);
+  const pendingPromiseRef = useRef<Promise<boolean> | null>(null);
 
-  const requestSudo = (): Promise<boolean> => {
+  const requestSudo = useCallback((): Promise<boolean> => {
+    // If a sudo verification prompt is already active, piggyback on the same promise
+    if (pendingPromiseRef.current) {
+      return pendingPromiseRef.current;
+    }
+
     setIsOpen(true);
-    return new Promise((resolve) => {
-      setResolver(() => resolve);
+
+    const promise = new Promise<boolean>((resolve) => {
+      resolversRef.current.push(resolve);
     });
-  };
 
-  const handleVerifySuccess = () => {
+    pendingPromiseRef.current = promise;
+    return promise;
+  }, []);
+
+  const resolveAll = useCallback((success: boolean) => {
     setIsOpen(false);
-    if (resolver) {
-      resolver(true);
-      setResolver(null);
+    const activeResolvers = resolversRef.current;
+    resolversRef.current = [];
+    pendingPromiseRef.current = null;
+
+    for (const resolve of activeResolvers) {
+      resolve(success);
     }
-  };
+  }, []);
 
-  const handleCancel = () => {
-    setIsOpen(false);
-    if (resolver) {
-      resolver(false);
-      setResolver(null);
-    }
-  };
+  const handleVerifySuccess = useCallback(() => {
+    resolveAll(true);
+  }, [resolveAll]);
 
-  const fetchWithSudo = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    let res = await fetch(input, init);
+  const handleCancel = useCallback(() => {
+    resolveAll(false);
+  }, [resolveAll]);
 
-    if (res.status === 403) {
-      const cloned = res.clone();
-      try {
-        const data = await cloned.json();
-        const isSudoReq =
-          data.code === "SUDO_REQUIRED" ||
-          data.code === "SUDO_EXPIRED" ||
-          data.error === "SUDO_REQUIRED" ||
-          res.headers.get("X-Sudo-Required") === "true";
+  const fetchWithSudo = useCallback(
+    async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+      let res = await fetch(input, init);
 
-        if (isSudoReq) {
-          const success = await requestSudo();
-          if (success) {
-            // Retry original request with newly issued sudo ticket cookie
-            res = await fetch(input, init);
-          }
+      if (await isSudoRequiredResponse(res)) {
+        const authorized = await requestSudo();
+        if (authorized) {
+          // Re-fetch original request with the freshly minted sudo cookie attached
+          res = await fetch(input, init);
         }
-      } catch {
-        // Response wasn't JSON, return original response
       }
-    }
 
-    return res;
-  };
+      return res;
+    },
+    [requestSudo]
+  );
+
+  const contextValue = useMemo<SudoContextType>(
+    () => ({ requestSudo, fetchWithSudo }),
+    [requestSudo, fetchWithSudo]
+  );
 
   return (
-    <SudoContext.Provider value={{ requestSudo, fetchWithSudo }}>
+    <SudoContext.Provider value={contextValue}>
       {children}
-      <SudoModal isOpen={isOpen} onSuccess={handleVerifySuccess} onCancel={handleCancel} />
+      <SudoModal
+        isOpen={isOpen}
+        onSuccess={handleVerifySuccess}
+        onCancel={handleCancel}
+      />
     </SudoContext.Provider>
   );
 }
 
-export function useSudo() {
+export function useSudo(): SudoContextType {
   const context = useContext(SudoContext);
   if (!context) {
     throw new Error("useSudo must be used within a SudoProvider");

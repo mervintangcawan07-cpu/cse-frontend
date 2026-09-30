@@ -4,10 +4,10 @@ import React from "react";
 import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface QuestionResultBannerProps {
-  isCorrect: boolean;
-  correctLetter: string;
-  correctText: string;
-  isSkipped?: boolean;
+  readonly isCorrect: boolean;
+  readonly correctLetter: string;
+  readonly correctText: string;
+  readonly isSkipped?: boolean;
 }
 
 export default function QuestionResultBanner({

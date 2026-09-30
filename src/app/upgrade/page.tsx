@@ -126,16 +126,17 @@ export default function UpgradePage() {
 
       setErrorMsg(msg);
       alert(msg);
-    } catch (error: any) {
-      console.error("Checkout error:", error);
+    } catch (error: unknown) {
+        console.error("Checkout error:", error);
 
-      const msg =
-        error?.message ||
-        "An unexpected error occurred. Please try again.";
+        const msg =
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred. Please try again.";
 
-      setErrorMsg(msg);
-      alert(msg);
-    }
+        setErrorMsg(msg);
+        alert(msg);
+      }
   };
 
   const {

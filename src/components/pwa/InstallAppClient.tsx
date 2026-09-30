@@ -52,8 +52,7 @@ export default function InstallAppClient() {
   useEffect(() => {
     // 1. Standalone / Already Installed Detection
     const isChromiumStandalone =
-      window.matchMedia &&
-      window.matchMedia("(display-mode: standalone)").matches;
+      window.matchMedia?.("(display-mode: standalone)")?.matches ?? false;
     const isIosStandalone =
       (navigator as NavigatorWithStandalone).standalone === true;
 

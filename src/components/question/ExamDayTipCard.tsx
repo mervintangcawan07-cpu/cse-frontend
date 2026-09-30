@@ -4,11 +4,11 @@ import React from "react";
 import { cleanMathText } from "@/lib/sanitizeMath";
 
 interface ExamDayTipCardProps {
-  tip?: string | null;
+  readonly tip?: string | null;
 }
 
 export default function ExamDayTipCard({ tip }: ExamDayTipCardProps) {
-  if (!tip || !tip.trim()) return null;
+  if (!tip?.trim()) return null;
 
   return (
     <div className="p-3.5 sm:p-4 bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-2xl flex items-start gap-2.5 text-amber-950 dark:text-amber-200 text-xs sm:text-sm shadow-2xs min-w-0 break-words">

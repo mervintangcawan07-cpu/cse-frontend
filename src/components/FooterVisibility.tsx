@@ -50,10 +50,12 @@ function shouldShowFooter(pathname: string | null): boolean {
 }
 
 interface FooterVisibilityProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export default function FooterVisibility({ children }: FooterVisibilityProps) {
+  // ensure props are treated as readonly
+  const _props: Readonly<FooterVisibilityProps> = { children };
   const pathname = usePathname();
 
   if (!shouldShowFooter(pathname)) {

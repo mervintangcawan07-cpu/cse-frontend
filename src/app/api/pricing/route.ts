@@ -30,9 +30,7 @@ const NO_STORE_HEADERS = {
 
 export async function GET() {
   try {
-    const supportedPlanTypes = DEFAULT_PLANS.map(
-      (plan) => plan.planType
-    );
+    const supportedPlanTypes = DEFAULT_PLANS.map((plan) => plan.planType);
 
     const databasePlans = await prisma.pricingPlan.findMany({
       where: {
@@ -50,8 +48,7 @@ export async function GET() {
 
     const plans = DEFAULT_PLANS.map(
       (defaultPlan) =>
-        databasePlanByType.get(defaultPlan.planType) ??
-        defaultPlan
+        databasePlanByType.get(defaultPlan.planType) ?? defaultPlan
     );
 
     return NextResponse.json(
@@ -61,13 +58,14 @@ export async function GET() {
         headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600" },
       }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[PRICING_FETCH_ERROR]", error);
 
+    // Resilient fallback: returns static default plans with 200 OK so client interfaces never crash
     return NextResponse.json(
-      { error: "Failed to load pricing" },
+      { success: true, plans: DEFAULT_PLANS, fallback: true },
       {
-        status: 500,
+        status: 200,
         headers: NO_STORE_HEADERS,
       }
     );

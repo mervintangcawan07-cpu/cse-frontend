@@ -1,15 +1,12 @@
-// Relative Path: src/app/partner/login/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ShieldCheck,
-  Lock,
   ArrowRight,
-  Sparkles,
   Building2,
   AlertCircle,
 } from "lucide-react";
@@ -21,16 +18,20 @@ export default function PartnerLoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (loading) return;
+
     setLoading(true);
     setErrorMsg(null);
+
+    const cleanIdentifier = identifier.trim();
 
     try {
       const res = await fetch("/api/partner/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ identifier: cleanIdentifier, password }),
       });
 
       const json = await res.json();
@@ -40,7 +41,8 @@ export default function PartnerLoginPage() {
       } else {
         setErrorMsg(json.error || "Invalid partner credentials.");
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error("Partner portal login error:", err);
       setErrorMsg("Network error. Please check your internet connection.");
     } finally {
       setLoading(false);
@@ -63,7 +65,7 @@ export default function PartnerLoginPage() {
               />
             </div>
             <div className="font-extrabold text-sm tracking-tight text-white flex items-center gap-1.5">
-              GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">PARTNER PORTAL</span>
+              GovStudyX <span className="text-emerald-400 text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-800 font-mono">PARTNER PORTAL</span>
             </div>
           </Link>
 
@@ -95,37 +97,45 @@ export default function PartnerLoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+              <label
+                htmlFor="partner-identifier"
+                className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+              >
                 Partner Code, Slug, or Email
               </label>
               <input
+                id="partner-identifier"
                 type="text"
                 required
                 placeholder="e.g. PTR-FB-CSEPH or email"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500 transition"
+                className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500 transition font-mono"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-slate-400 mb-1.5">
+              <label
+                htmlFor="partner-password"
+                className="block text-xs font-bold uppercase text-slate-400 mb-1.5"
+              >
                 Partner Password
               </label>
               <input
+                id="partner-password"
                 type="password"
                 required
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500 transition"
+                className="w-full p-3.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500 transition font-mono"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
             >
               <span>{loading ? "Authenticating..." : "Sign In to Partner Portal"}</span>
               <ArrowRight className="w-4 h-4" />
@@ -147,7 +157,7 @@ export default function PartnerLoginPage() {
 
       {/* Footer */}
       <footer className="py-4 text-center text-xs text-slate-600 border-t border-slate-900">
-        &copy; {new Date().getFullYear()} GovStudyX Partner Portal. Protected by enterprise security.
+        &copy; 2026 GovStudyX Partner Portal. Protected by enterprise security.
       </footer>
     </div>
   );

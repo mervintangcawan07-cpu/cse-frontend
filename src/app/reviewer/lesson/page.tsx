@@ -51,7 +51,7 @@ export default async function LessonPage() {
           </p>
           
           <div className="p-5 bg-slate-50 border border-slate-200 rounded-2xl font-mono text-slate-700 text-sm">
-            <span className="font-bold text-slate-900 block mb-2 uppercase text-xs tracking-wider">Example:</span>
+            <span className="font-bold text-slate-900 block mb-2 uppercase text-xs tracking-wider">Example:</span>{' '}
             3 / 4 = 0.75
           </div>
         </section>
