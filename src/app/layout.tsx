@@ -1,4 +1,5 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -6,6 +7,7 @@ import Footer from "@/components/Footer";
 import FooterVisibility from "@/components/FooterVisibility";
 import CookieConsent from "@/components/common/CookieConsent";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
+import AppViewportShell from "../components/common/AppViewportShell";
 import { siteConfig } from "@/lib/config/site";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
@@ -40,11 +42,7 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html
       lang="en"
@@ -61,25 +59,16 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <ThemeProvider>
           <AuthProvider>
-            {/* The global Navbar */}
             <Navbar />
-
-            {/* Main page content wrapped in a subtle background */}
-            <main className="w-full flex-grow">
-              {children}
-            </main>
+            <AppViewportShell>{children}</AppViewportShell>
           </AuthProvider>
         </ThemeProvider>
 
-        {/* Global Footer */}
         <FooterVisibility>
           <Footer />
         </FooterVisibility>
 
-        {/* Cookie Consent Banner */}
         <CookieConsent />
-
-        {/* PWA Service Worker Registration */}
         <ServiceWorkerRegister />
       </body>
     </html>

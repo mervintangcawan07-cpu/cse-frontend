@@ -1,4 +1,3 @@
-// Relative Path: src/components/FooterVisibility.tsx
 "use client";
 
 import type { ReactNode } from "react";
@@ -6,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 const FOOTER_VISIBLE_EXACT_ROUTES = new Set([
   "/",
-  "/dashboard",
   "/pricing",
   "/upgrade",
   "/about",
@@ -33,7 +31,6 @@ function shouldShowFooter(pathname: string | null): boolean {
   if (!pathname) return true;
   if (FOOTER_VISIBLE_EXACT_ROUTES.has(pathname)) return true;
 
-  // Render on legal, support, or about sub-routes if any exist
   if (
     pathname.startsWith("/privacy") ||
     pathname.startsWith("/terms") ||
@@ -53,9 +50,9 @@ interface FooterVisibilityProps {
   readonly children: ReactNode;
 }
 
-export default function FooterVisibility({ children }: FooterVisibilityProps) {
-  // ensure props are treated as readonly
-  const _props: Readonly<FooterVisibilityProps> = { children };
+export default function FooterVisibility({
+  children,
+}: FooterVisibilityProps) {
   const pathname = usePathname();
 
   if (!shouldShowFooter(pathname)) {

@@ -6,15 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, type ReactNode } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import ThemeToggle from "@/components/common/ThemeToggle";
-import { USER_REFERRAL_ENABLED } from "@/lib/referral/config";
-import { STUDY_TOGETHER_ENABLED } from "@/lib/config/features";
 import { useAuth } from "@/context/AuthContext";
 import InstallEntryLink from "@/components/pwa/InstallEntryLink";
+import { getAppNavItems, type AppNavItem } from "@/components/navigation/appNavigation";
 
-interface NavItem {
-  label: string;
-  href: string;
-}
+type NavItem = AppNavItem;
 
 interface UserProfilePreview {
   name?: string | null;
@@ -42,27 +38,7 @@ interface MobileDrawerProps {
   onSync: () => void;
 }
 
-function getNavItems(role?: string | null): readonly NavItem[] {
-  const items: NavItem[] = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Practice & Prep", href: "/practice" },
-    { label: "Learning Hub", href: "/learning" },
-  ];
 
-  if (STUDY_TOGETHER_ENABLED) {
-    items.push({ label: "Study Together 👥", href: "/social" });
-  }
-
-  if (USER_REFERRAL_ENABLED) {
-    items.push({ label: "Referrals 🎁", href: "/referrals" });
-  }
-
-  if (role === "ADMIN") {
-    items.push({ label: "Admin Portal", href: "/admin" });
-  }
-
-  return items;
-}
 
 function getSyncBadgeTitle(isOnline: boolean, isSyncing: boolean, pendingCount: number): string {
   if (!isOnline) return "You are offline";
@@ -426,13 +402,14 @@ export default function Navbar(): ReactNode {
     }
   };
 
-  const navItems = useMemo(() => getNavItems(user?.role), [user?.role]);
+  const navItems = useMemo(() => getAppNavItems(user?.role), [user?.role]);
   const isLandingPage = pathname === "/";
+  const isDashboardPage = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
 
   return (
     <header
       className={`${
-        isLandingPage ? "hidden xl:block" : "block"
+        isLandingPage ? "hidden xl:block" : isDashboardPage ? "hidden" : "block"
       } bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50`}
     >
       <div className="w-full max-w-none px-3 sm:px-4 md:px-6 xl:px-8 h-16 flex items-center justify-between">

@@ -42,3 +42,4 @@ next-env.d.ts
 
 # prisma generated files
 /src/generated/prisma
+.govstudyx-backup/
