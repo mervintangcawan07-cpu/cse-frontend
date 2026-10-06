@@ -116,29 +116,30 @@ export default function LandingPage() {
       <LandingAuthRedirect />
 
       <main className="flex-1 flex flex-col">
-        {/* ================================================================= */}
-        {/* 1. PORTRAIT VIEW: ALL PHONES & TABLETS IN PORTRAIT (< 1280px)     */}
-        {/* Full-screen 2-stage animated onboarding flow                      */}
+       {/* ================================================================= */}
+        {/* 1. PORTRAIT VIEW                                                   */}
+        {/* Phones & tablets in portrait keep the existing mobile experience. */}
         {/* ================================================================= */}
         <div className="block xl:hidden landscape:hidden">
           <MobileHeroExperience heroImage={mobileHeroBg} />
         </div>
 
         {/* ================================================================= */}
-        {/* 2. LANDSCAPE VIEW: PHONES & TABLETS IN LANDSCAPE (< 1280px)       */}
-        {/* Symmetrical 2-column split-card workspace                         */}
+        {/* 2. SMALL LANDSCAPE FALLBACK                                        */}
+        {/* Preserve the existing landscape experience only for small phones. */}
+        {/* Tablet landscape no longer uses the dark tablet hero.              */}
         {/* ================================================================= */}
-        <div className="hidden xl:hidden landscape:block">
+        <div className="hidden max-md:landscape:block">
           <TabletHeroExperience heroImage={heroBg1} />
         </div>
 
         {/* ================================================================= */}
-        {/* 3. DESKTOP VIEWPORT (≥ 1280px)                                    */}
-        {/* Full marketing platform experience for desktop monitors & laptops */}
+        {/* 3. TABLET LANDSCAPE + DESKTOP                                      */}
+        {/* Both now use the primary light GovStudyX landing-page experience.  */}
         {/* ================================================================= */}
-        <div className="hidden xl:block">
+        <div className="hidden md:landscape:block xl:block">
           {/* DESKTOP HERO */}
-          <section className="relative w-full border-b border-slate-200/60 overflow-hidden min-h-[720px] flex items-center">
+          <section className="relative w-full border-b border-slate-200/60 overflow-hidden min-h-[620px] lg:min-h-[680px] xl:min-h-[720px] flex items-center">
             <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
               <Image
                 src={heroBg1}
@@ -147,50 +148,50 @@ export default function LandingPage() {
                 priority
                 quality={75}
                 sizes="(min-width: 1280px) 100vw, 0px"
-                className="object-cover object-center"
+                className="object-cover object-[68%_center] lg:object-center"
               />
-              <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-slate-50/85 via-slate-50/35 to-transparent pointer-events-none" />
+              <div className="absolute inset-y-0 left-0 w-[72%] lg:w-[62%] xl:w-1/2 bg-gradient-to-r from-slate-50/95 via-slate-50/65 lg:via-slate-50/45 xl:via-slate-50/35 to-transparent pointer-events-none" />
             </div>
 
-            <div className="relative z-10 w-full pl-16 pr-8 mt-8 mb-7">
-              <div className="max-w-3xl text-left space-y-8">
+            <div className="relative z-10 w-full px-8 lg:px-12 xl:pl-16 xl:pr-8 mt-8 mb-7">
+             <div className="max-w-[640px] lg:max-w-3xl text-left space-y-6 lg:space-y-8">
                 <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-blue-50/90 backdrop-blur-sm border border-blue-200/80 rounded-full text-sm font-bold text-blue-700 shadow-xs">
                   <span className="text-base">🇵🇭</span>
                   <span>Comprehensive Philippine Civil Service Reviewer</span>
                 </div>
 
-                <h1 className="text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-[1.12]">
+                <h1 className="text-5xl lg:text-6xl xl:text-7xl font-black text-slate-900 tracking-tight leading-[1.12]">
                   Prepare Smarter for the <br />
                   <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
                     Civil Service Examination
                   </span>
                 </h1>
 
-                <p className="text-lg xl:text-xl text-slate-700 leading-relaxed font-medium max-w-2xl">
+                <p className="text-base lg:text-lg xl:text-xl text-slate-700 leading-relaxed font-medium max-w-2xl">
                   Practice challenging CSE-style questions, understand why each answer is correct,
                   learn how to eliminate wrong choices, and build stronger exam reasoning skills.
                 </p>
 
-                <div className="flex flex-row items-center gap-4 pt-3">
+                <div className="flex flex-row flex-wrap items-center gap-3 lg:gap-4 pt-3">
                   <Link
                     href="/signup"
-                    className="px-9 py-4 font-black text-base text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:opacity-95 rounded-2xl shadow-lg shadow-blue-600/20 transition transform active:scale-98 text-center"
+                    className="px-6 lg:px-8 xl:px-9 py-3.5 lg:py-4 font-black text-sm lg:text-base text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:opacity-95 rounded-2xl shadow-lg shadow-blue-600/20 transition transform active:scale-98 text-center"
                   >
                     Start Reviewing Free
                   </Link>
                   <a
                     href="#pricing"
-                    className="px-9 py-4 font-bold text-base text-slate-700 bg-white/90 backdrop-blur-sm hover:bg-white rounded-2xl border border-slate-300/80 shadow-xs transition text-center"
+                    className="px-6 lg:px-8 xl:px-9 py-3.5 lg:py-4 font-bold text-sm lg:text-base text-slate-700 bg-white/90 backdrop-blur-sm hover:bg-white rounded-2xl border border-slate-300/80 shadow-xs transition text-center"
                   >
                     Explore PRO Plans
                   </a>
                   <InstallEntryLink
                     label="Install GovStudyX"
-                    className="px-7 py-4 font-bold text-base text-blue-700 bg-blue-50/90 backdrop-blur-sm hover:bg-blue-100 rounded-2xl border border-blue-200/80 shadow-xs transition text-center inline-flex items-center justify-center gap-2"
+                    className="px-6 lg:px-7 py-3.5 lg:py-4 font-bold text-sm lg:text-base text-blue-700 bg-blue-50/90 backdrop-blur-sm hover:bg-blue-100 rounded-2xl border border-blue-200/80 shadow-xs transition text-center inline-flex items-center justify-center gap-2"
                   />
                 </div>
 
-                <div className="pt-4 flex flex-row items-center gap-8 text-base font-semibold text-slate-700">
+                <div className="pt-4 flex flex-row flex-wrap items-center gap-x-6 gap-y-3 lg:gap-x-8 text-sm lg:text-base font-semibold text-slate-700">
                   <div className="flex items-center gap-2">
                     <span className="text-emerald-600 font-black text-lg">✓</span>
                     <span>Updated 2026 CSC Syllabus</span>

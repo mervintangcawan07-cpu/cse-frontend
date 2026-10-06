@@ -134,8 +134,9 @@ export default function DashboardHero({
               />
             </span>
 
-            <span className="text-base font-black tracking-tight text-white sm:text-lg">
-              GovStudy</span><span className="text-[23px] text-blue-300">X</span>
+           <span className="text-sm font-black leading-none tracking-tight text-white sm:text-base">
+              GovStudy<span className="text-[#50A2FF]">X</span>
+            </span>
             
           </Link>
 
