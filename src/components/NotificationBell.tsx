@@ -151,13 +151,17 @@ export default function NotificationBell() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       {/* Bell Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center justify-center focus:outline-none"
+        className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition focus:outline-none"
         aria-label="View Notifications"
       >
-        <span className="text-lg">🔔</span>
+        <span className="text-[14px] sm:text-[15px] leading-none">
+          🔔
+        </span>
+
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-black text-white ring-2 ring-white animate-pulse">
+          <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-rose-500 text-[8px] font-black text-white ring-2 ring-white animate-pulse">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
