@@ -1,18 +1,24 @@
 @import "tailwindcss";
 
+/*
+ * GovStudyX uses explicit class-based dark mode.
+ *
+ * Because the application is now light-only, the root <html> element never
+ * receives the "dark" class. This prevents Tailwind's dark:* variants from
+ * being activated by the device's prefers-color-scheme setting.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
+  html {
+    color-scheme: light;
+  }
+
   body {
     background-color: rgb(248 250 252);
     color: rgb(15 23 42);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: rgb(2 6 23);
-      color: rgb(248 250 252);
-    }
   }
 }
