@@ -76,7 +76,7 @@ export default function MobileHeroExperience({
         {/* 🎛️ KNOB 1: VERTICAL POSITION (Downward shift)                           */}
         {/* - Mobile: `pt-24` or `pt-[14dvh]` pushes it downward toward the center.   */}
         {/* - Tablet (`md:`): `md:pt-28` or `md:pt-[12dvh]` independently sets tablet */}
-        <div className="pt-33 md:pt-33 space-y-4 text-center">
+        <div className="pt-32 md:pt-32 space-y-4 text-center">
           <div className="space-y-3 md:space-y-5 text-center px-4 max-w-sm md:max-w-2xl mx-auto">
             
             {/* 🎛️ KNOB 2: MAIN HEADLINE FONT SIZE                                   */}

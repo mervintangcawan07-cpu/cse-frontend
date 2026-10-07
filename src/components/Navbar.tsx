@@ -5,7 +5,6 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo, type ReactNode } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
-import ThemeToggle from "@/components/common/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 import { getAppNavItems, type AppNavItem } from "@/components/navigation/appNavigation";
@@ -466,13 +465,12 @@ export default function Navbar(): ReactNode {
           />
 
           <DesktopUserSection user={user} onLogout={() => void handleLogout()} />
-          <ThemeToggle />
+          
         </div>
 
         {/* MOBILE/TABLET HEADER ACTIONS */}
         <div className="flex items-center gap-2 xl:hidden">
-          <ThemeToggle />
-
+          
           <SyncStatusButton
             isOnline={isOnline}
             pendingCount={pendingCount}

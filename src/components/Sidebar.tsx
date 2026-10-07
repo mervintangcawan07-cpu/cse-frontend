@@ -249,11 +249,6 @@ export default function Sidebar() {
             </button>
           )}
 
-          <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/60 px-3 py-2">
-            <span className="text-[11px] font-bold text-slate-400">Theme</span>
-            <ThemeToggle />
-          </div>
-
           <Link
             href={APP_ROUTES.support}
             className="flex min-h-[38px] items-center gap-2 rounded-xl px-3 text-[11px] font-bold text-slate-500 transition hover:bg-slate-900 hover:text-slate-300"

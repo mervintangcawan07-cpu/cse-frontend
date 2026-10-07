@@ -5,8 +5,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useMemo,
-  useSyncExternalStore,
+  type ReactNode,
 } from "react";
 
 export type Theme = "light" | "dark";
@@ -19,68 +18,46 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-function applyTheme(theme: Theme) {
+function applyLightTheme() {
   if (typeof document === "undefined") return;
+
   const root = document.documentElement;
-  if (theme === "dark") {
-    root.classList.add("dark");
-    root.style.colorScheme = "dark";
-  } else {
-    root.classList.remove("dark");
-    root.style.colorScheme = "light";
-  }
-}
 
-function getThemeSnapshot(): Theme {
-  if (typeof window === "undefined") return "light";
+  // GovStudyX now uses light mode only.
+  root.classList.remove("dark");
+  root.style.colorScheme = "light";
+
   try {
-    return localStorage.getItem("theme") === "dark" ? "dark" : "light";
+    localStorage.setItem("theme", "light");
   } catch {
-    return "light";
+    // Ignore storage errors.
   }
 }
 
-function getServerSnapshot(): Theme {
-  return "light";
-}
-
-function subscribeTheme(callback: () => void) {
-  window.addEventListener("storage", callback);
-  window.addEventListener("govstudyx-theme-change", callback);
-  return () => {
-    window.removeEventListener("storage", callback);
-    window.removeEventListener("govstudyx-theme-change", callback);
-  };
-}
-
-export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const theme = useSyncExternalStore(
-    subscribeTheme,
-    getThemeSnapshot,
-    getServerSnapshot
-  );
-
-  // Synchronize the DOM element when theme value changes
+export function ThemeProvider({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    applyLightTheme();
+  }, []);
 
-  const setTheme = (nextTheme: Theme) => {
-    try {
-      localStorage.setItem("theme", nextTheme);
-    } catch {
-      // Ignore write errors in sandboxed storage
-    }
-    applyTheme(nextTheme);
-    window.dispatchEvent(new Event("govstudyx-theme-change"));
+  // Preserve the existing context API so no dependent component can break.
+  const setTheme = (_theme: Theme) => {
+    applyLightTheme();
   };
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    applyLightTheme();
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme: "light",
+        setTheme,
+        toggleTheme,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );
@@ -88,8 +65,10 @@ export function ThemeProvider({ children }: Readonly<{ children: React.ReactNode
 
 export function useTheme(): ThemeContextType {
   const context = useContext(ThemeContext);
+
   if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
+
   return context;
 }
