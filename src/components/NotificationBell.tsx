@@ -82,14 +82,18 @@ export default function NotificationBell() {
       resetTimer();
     };
 
-    void fetchNotifications();
-    resetTimer();
+      const initialFetchTimer = window.setTimeout(() => {
+        void fetchNotifications();
+      }, 0);
 
-    document.addEventListener("visibilitychange", handleVisibilityOrOnline);
-    window.addEventListener("online", handleVisibilityOrOnline);
-    window.addEventListener("offline", handleVisibilityOrOnline);
+      resetTimer();
 
-    return () => {
+      document.addEventListener("visibilitychange", handleVisibilityOrOnline);
+      window.addEventListener("online", handleVisibilityOrOnline);
+      window.addEventListener("offline", handleVisibilityOrOnline);
+
+      return () => {
+        window.clearTimeout(initialFetchTimer);
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
