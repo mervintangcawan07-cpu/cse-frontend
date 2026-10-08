@@ -14,7 +14,7 @@ export default function QuestionPrompt({ prompt, imageUrl }: QuestionPromptProps
     <div className="space-y-4">
       {/* Question Prompt Text / Table / Mathematical expressions */}
       <div
-        className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-relaxed overflow-x-auto whitespace-pre-line"
+        className="w-full max-w-full text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-relaxed whitespace-normal break-words [overflow-wrap:anywhere]"
         dangerouslySetInnerHTML={{ __html: formattedHtml }}
       />
 

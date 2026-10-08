@@ -239,7 +239,7 @@ function TakeExamPageInner() {
 
   // Data States
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
-  const [categories, setCategories] = useState<string[]>(DEFAULT_CATEGORIES);
+  const categories = DEFAULT_CATEGORIES;
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
   // App State
@@ -264,9 +264,6 @@ function TakeExamPageInner() {
   // Configuration States
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [timerMinutes, setTimerMinutes] = useState(0); // 0 means untimed
-  // Custom quiz metadata (from builder)
-  const [isCustomQuiz, setIsCustomQuiz] = useState(false);
-  const [customQuizLabel, setCustomQuizLabel] = useState("");
   const [timeLeft, setTimeLeft] = useState(0); // In seconds
 
   // Exam States
@@ -277,12 +274,18 @@ function TakeExamPageInner() {
   const [attemptToken, setAttemptToken] = useState<string | null>(null);
 
 
-  // Load saved font size preference
+  // Load saved font size preference after mount.
+  // Deferring the state update avoids synchronously setting React state
+  // inside the effect body while preserving the existing preference behavior.
   useEffect(() => {
-    const saved = localStorage.getItem("cse_exam_font_size");
-    if (saved === "sm" || saved === "md" || saved === "lg") {
-      setFontSize(saved);
-    }
+    const preferenceTimer = window.setTimeout(() => {
+      const saved = localStorage.getItem("cse_exam_font_size");
+      if (saved === "sm" || saved === "md" || saved === "lg") {
+        setFontSize(saved);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(preferenceTimer);
   }, []);
 
   const handleFontSizeChange = (size: "sm" | "md" | "lg") => {
@@ -290,15 +293,22 @@ function TakeExamPageInner() {
     localStorage.setItem("cse_exam_font_size", size);
   };
 
-  function handleSelectOption(optionIndex: number) {
-    if (examMode === "GUIDED_REVIEW" && (checkedAnswers[currentIndex] || checkingAnswer)) {
-      return; // Locked after checking or while check request is in-flight
-    }
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [currentIndex]: optionIndex,
-    }));
-  }
+  const handleSelectOption = useCallback(
+    (optionIndex: number) => {
+      if (
+        examMode === "GUIDED_REVIEW" &&
+        (checkedAnswers[currentIndex] || checkingAnswer)
+      ) {
+        return; // Locked after checking or while check request is in-flight
+      }
+
+      setSelectedAnswers((prev) => ({
+        ...prev,
+        [currentIndex]: optionIndex,
+      }));
+    },
+    [examMode, checkedAnswers, currentIndex, checkingAnswer]
+  );
 
   const handleCheckAnswer = useCallback(async () => {
     if (examMode !== "GUIDED_REVIEW") return;
@@ -382,6 +392,32 @@ function TakeExamPageInner() {
     isOnline,
   ]);
 
+  // Toggle Bookmark Handler
+  const toggleBookmark = useCallback(async (questionId: string) => {
+    try {
+      const res = await fetch("/api/bookmarks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetId: questionId, targetType: "QUESTION" }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setBookmarkedIds((prev) => {
+          const next = new Set(prev);
+          if (data.isBookmarked) {
+            next.add(questionId);
+          } else {
+            next.delete(questionId);
+          }
+          return next;
+        });
+      }
+    } catch (err) {
+      console.error("Failed to update bookmark:", err);
+    }
+  }, []);
+
   // Keyboard Shortcuts (A/B/C/D, 1/2/3/4, ArrowRight, ArrowLeft, F/B)
   useEffect(() => {
     if (isSetupPhase || isPauseModalOpen || submitting) return;
@@ -432,7 +468,20 @@ function TakeExamPageInner() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSetupPhase, isPauseModalOpen, submitting, examQuestions, currentIndex, examMode, checkedAnswers, selectedAnswers, handleCheckAnswer, checkingAnswer]);
+  }, [
+    isSetupPhase,
+    isPauseModalOpen,
+    submitting,
+    examQuestions,
+    currentIndex,
+    examMode,
+    checkedAnswers,
+    selectedAnswers,
+    handleCheckAnswer,
+    checkingAnswer,
+    handleSelectOption,
+    toggleBookmark,
+  ]);
 
   // 1. Load Initial Categories, Bookmarks & Check for In-Progress Session
   useEffect(() => {
@@ -530,7 +579,11 @@ function TakeExamPageInner() {
         setLoading(false);
       }
     }
-    initExam();
+    const initialExamTimer = window.setTimeout(() => {
+      void initExam();
+    }, 0);
+
+    return () => window.clearTimeout(initialExamTimer);
   }, []);
 
   // 2. Auto-Save Active Exam State to LocalStorage
@@ -583,32 +636,6 @@ function TakeExamPageInner() {
     guidedFeedbackByQuestionId,
     offlineBanner,
   ]);
-
-  // Toggle Bookmark Handler
-  const toggleBookmark = async (questionId: string) => {
-    try {
-      const res = await fetch("/api/bookmarks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetId: questionId, targetType: "QUESTION" }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        setBookmarkedIds((prev) => {
-          const next = new Set(prev);
-          if (data.isBookmarked) {
-            next.add(questionId);
-          } else {
-            next.delete(questionId);
-          }
-          return next;
-        });
-      }
-    } catch (err) {
-      console.error("Failed to update bookmark:", err);
-    }
-  };
 
   // 3. Submit Exam & Clear Active Session
   const handleSubmitExam = useCallback(async () => {
@@ -718,15 +745,40 @@ function TakeExamPageInner() {
 
   // Timer Logic
   useEffect(() => {
-    if (!isSetupPhase && timerMinutes > 0 && !isPauseModalOpen && examMode !== "GUIDED_REVIEW") {
-      if (timeLeft > 0) {
-        const timerId = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-        return () => clearInterval(timerId);
-      } else if (timeLeft === 0 && !submitting) {
-        handleSubmitExam();
-      }
+    if (
+      isSetupPhase ||
+      timerMinutes <= 0 ||
+      isPauseModalOpen ||
+      examMode === "GUIDED_REVIEW"
+    ) {
+      return;
     }
-  }, [isSetupPhase, timerMinutes, timeLeft, submitting, handleSubmitExam, isPauseModalOpen, examMode]);
+
+    if (timeLeft > 0) {
+      const timerId = window.setInterval(
+        () => setTimeLeft((prev) => prev - 1),
+        1000
+      );
+
+      return () => window.clearInterval(timerId);
+    }
+
+    if (timeLeft === 0 && !submitting) {
+      const submitTimer = window.setTimeout(() => {
+        void handleSubmitExam();
+      }, 0);
+
+      return () => window.clearTimeout(submitTimer);
+    }
+  }, [
+    isSetupPhase,
+    timerMinutes,
+    timeLeft,
+    submitting,
+    handleSubmitExam,
+    isPauseModalOpen,
+    examMode,
+  ]);
 
   // Resume Saved Session Handler
   function handleResumeSavedSession() {
@@ -791,84 +843,94 @@ function TakeExamPageInner() {
     }
   }
 
-  // 4. Auto-start custom quiz if URL params are present
-  useEffect(() => {
-    const itemCount = searchParams.get("itemCount");
-    const categories = searchParams.get("categories");
-    const pool = searchParams.get("pool");
-    const mode = searchParams.get("mode");
+  const handleStartCustomExam = useCallback(
+    async (
+      itemCount: string,
+      categories: string,
+      pool: string,
+      mode: string
+    ) => {
+      setExamMode("SIMULATION");
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      setSavedSessionData(null);
+      setAttemptToken(null);
+      setGuidedReviewToken(null);
+      setGuidedFeedbackByQuestionId({});
+      setCheckedAnswers({});
+      setSelectedAnswers({});
+      setGuidedFinished(false);
+      setStartingExam(true);
 
-    if (
-      itemCount?.trim() &&
-      categories?.trim() &&
-      pool?.trim() &&
-      mode?.trim()
-    ) {
-      setIsCustomQuiz(true);
-      const modeLabel = mode === "SELF_PACED" ? "Self-Paced" : "Timed";
-      setCustomQuizLabel(`${itemCount}-item ${modeLabel} Quiz`);
-      // Auto-launch
-      void handleStartCustomExam(itemCount, categories, pool, mode);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      const isTimed = mode === "TIMED";
+      const count = parseInt(itemCount, 10) || 20;
+      const mins = isTimed ? Math.ceil((count * 45) / 60) : 0;
+      setTimerMinutes(mins);
 
-  async function handleStartCustomExam(
-    itemCount: string,
-    categories: string,
-    pool: string,
-    mode: string
-  ) {
-    setExamMode("SIMULATION");
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
-    setSavedSessionData(null);
-    setAttemptToken(null);
-    setGuidedReviewToken(null);
-    setGuidedFeedbackByQuestionId({});
-    setCheckedAnswers({});
-    setSelectedAnswers({});
-    setGuidedFinished(false);
-    setStartingExam(true);
+      try {
+        const params = new URLSearchParams({
+          itemCount,
+          categories,
+          pool,
+          mode,
+        });
+        const res = await fetch(`/api/exam/start?${params.toString()}`);
+        const data = await res.json();
 
-    const isTimed = mode === "TIMED";
-    const count = parseInt(itemCount, 10) || 20;
-    const mins = isTimed ? Math.ceil((count * 45) / 60) : 0;
-    setTimerMinutes(mins);
-
-    try {
-      const params = new URLSearchParams({ itemCount, categories, pool, mode });
-      const res = await fetch(`/api/exam/start?${params.toString()}`);
-      const data = await res.json();
-
-      if (
-        res.ok &&
-        Array.isArray(data.questions) &&
-        data.questions.length > 0 &&
-        typeof data.attemptToken === "string" &&
-        data.attemptToken.trim().length > 0
-      ) {
-        setExamMode("SIMULATION");
-        setExamQuestions(data.questions);
-        setAttemptToken(data.attemptToken.trim());
-        setGuidedReviewToken(null);
-        setGuidedFeedbackByQuestionId({});
-        setCheckedAnswers({});
-        setCurrentIndex(0);
-        setSelectedAnswers({});
-        setTimeLeft(mins * 60);
-        setIsSetupPhase(false);
-      } else {
-        alert("Unable to generate custom quiz questions. Please try again.");
+        if (
+          res.ok &&
+          Array.isArray(data.questions) &&
+          data.questions.length > 0 &&
+          typeof data.attemptToken === "string" &&
+          data.attemptToken.trim().length > 0
+        ) {
+          setExamMode("SIMULATION");
+          setExamQuestions(data.questions);
+          setAttemptToken(data.attemptToken.trim());
+          setGuidedReviewToken(null);
+          setGuidedFeedbackByQuestionId({});
+          setCheckedAnswers({});
+          setCurrentIndex(0);
+          setSelectedAnswers({});
+          setTimeLeft(mins * 60);
+          setIsSetupPhase(false);
+        } else {
+          alert("Unable to generate custom quiz questions. Please try again.");
+          router.push("/practice/custom");
+        }
+      } catch (err) {
+        console.error("Error starting custom exam:", err);
+        alert("Connection error starting exam.");
         router.push("/practice/custom");
+      } finally {
+        setStartingExam(false);
       }
-    } catch (err) {
-      console.error("Error starting custom exam:", err);
-      alert("Connection error starting exam.");
-      router.push("/practice/custom");
-    } finally {
-      setStartingExam(false);
-    }
-  }
+    },
+    [router]
+  );
+
+  // 4. Auto-start custom quiz if URL params are present.
+  // The start is deferred to avoid synchronous state updates inside the effect.
+  useEffect(() => {
+    if (!isCompleteNonEmptyCustom) return;
+
+    const customStartTimer = window.setTimeout(() => {
+      void handleStartCustomExam(
+        itemCountVal,
+        categoriesVal,
+        poolVal,
+        modeVal
+      );
+    }, 0);
+
+    return () => window.clearTimeout(customStartTimer);
+  }, [
+    isCompleteNonEmptyCustom,
+    itemCountVal,
+    categoriesVal,
+    poolVal,
+    modeVal,
+    handleStartCustomExam,
+  ]);
 
   // 5. Start New Smart Exam Session (Spaced Repetition Engine)
   async function handleStartExam() {
@@ -1589,7 +1651,7 @@ function TakeExamPageInner() {
 
         {/* PROMPT RENDERING WITH HTML TABLE SUPPORT */}
         <div
-          className={`font-bold text-slate-800 dark:text-slate-100 leading-relaxed overflow-x-auto ${
+          className={`w-full max-w-full min-w-0 text-slate-800 dark:text-slate-100 leading-relaxed whitespace-normal break-words [overflow-wrap:anywhere] ${
             fontSize === "sm" ? "text-base" : fontSize === "lg" ? "text-xl" : "text-lg"
           }`}
           dangerouslySetInnerHTML={{ __html: formatPromptHTML(currentQ?.prompt || "") }}

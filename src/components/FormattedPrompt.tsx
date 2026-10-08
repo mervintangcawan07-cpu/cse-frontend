@@ -14,7 +14,7 @@ export default function FormattedPrompt({ text, className = "" }: FormattedPromp
 
   return (
     <div
-      className={`leading-relaxed overflow-x-auto ${className}`}
+      className={`w-full max-w-full leading-relaxed whitespace-normal break-words [overflow-wrap:anywhere] ${className}`}
       dangerouslySetInnerHTML={{ __html: formattedHtml }}
     />
   );
