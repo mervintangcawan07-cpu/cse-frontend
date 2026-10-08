@@ -52,12 +52,12 @@ export default function TabletHeroExperience({
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-[1.12] drop-shadow-md">
+            <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-[1.12] drop-shadow-md">
               Small Steps Every Day <br />
               <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-amber-300 bg-clip-text text-transparent">
                 Make Big Dreams Come True
               </span>
-            </h1>
+            </h2>
 
             <p className="text-base sm:text-lg text-slate-300 font-medium leading-relaxed max-w-xl">
               Keep studying. Your future in public service is worth it. Master challenging CSE questions with verified rationalizations.

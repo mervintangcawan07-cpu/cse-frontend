@@ -1,6 +1,8 @@
 // Relative Path: src/app/page.tsx
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { siteConfig } from "@/lib/config/site";
 
 // 1. Static Asset Imports
 import heroBg1 from "./image3-2.webp";
@@ -14,6 +16,60 @@ import FaqSection from "@/components/landing/FaqSection";
 import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 import MobileHeroExperience from "@/components/landing/MobileHeroExperience";
 import TabletHeroExperience from "@/components/landing/TabletHeroExperience";
+
+const homepageTitle = "Philippine Civil Service Exam Reviewer & Mock Exams";
+const homepageDescription =
+  "Prepare for the Philippine Civil Service Examination with realistic CSE questions, mock exams, flashcards, drills, and detailed answer rationalizations.";
+
+export const metadata: Metadata = {
+  title: homepageTitle,
+  description: homepageDescription,
+  alternates: {
+    canonical: siteConfig.url,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_PH",
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: `${homepageTitle} | ${siteConfig.name}`,
+    description: homepageDescription,
+  },
+  twitter: {
+    card: "summary",
+    title: `${homepageTitle} | ${siteConfig.name}`,
+    description: homepageDescription,
+  },
+};
+
+const homepageStructuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteConfig.url}/#organization`,
+    name: siteConfig.name,
+    legalName: siteConfig.legalName,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    email: siteConfig.emails.general,
+    areaServed: {
+      "@type": "Country",
+      name: "Philippines",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteConfig.url}/#website`,
+    url: siteConfig.url,
+    name: siteConfig.name,
+    description: homepageDescription,
+    inLanguage: "en-PH",
+    publisher: {
+      "@id": `${siteConfig.url}/#organization`,
+    },
+  },
+] as const;
 
 interface ScopeCategory {
   title: string;
@@ -113,6 +169,12 @@ const coreFeatures: readonly CoreFeature[] = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-blue-600 selection:text-white flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(homepageStructuredData).replace(/</g, "\\u003c"),
+        }}
+      />
       <LandingAuthRedirect />
 
       <main className="flex-1 flex flex-col">

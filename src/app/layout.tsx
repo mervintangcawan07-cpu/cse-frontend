@@ -22,20 +22,51 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const defaultTitle = `${siteConfig.name} | Philippine Civil Service Exam Reviewer`;
+const googleSiteVerification =
+  process.env.GOOGLE_SITE_VERIFICATION ||
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
-  applicationName: "GovStudyX",
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   title: {
-    default: `${siteConfig.name} - ${siteConfig.tagline}`,
+    default: defaultTitle,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.legalName,
   manifest: "/manifest.json",
-  metadataBase: new URL(siteConfig.url),
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_PH",
+    siteName: siteConfig.name,
+    title: defaultTitle,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary",
+    title: defaultTitle,
+    description: siteConfig.description,
+  },
   appleWebApp: {
     capable: true,
-    title: "GovStudyX",
+    title: siteConfig.name,
     statusBarStyle: "default",
   },
+  ...(googleSiteVerification
+    ? {
+        verification: {
+          google: googleSiteVerification,
+        },
+      }
+    : {}),
 };
 
 export const viewport: Viewport = {

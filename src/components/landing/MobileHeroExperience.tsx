@@ -82,12 +82,12 @@ export default function MobileHeroExperience({
             {/* 🎛️ KNOB 2: MAIN HEADLINE FONT SIZE                                   */}
             {/* - Mobile: `text-4xl` (~36px) or `text-[38px]`                         */}
             {/* - Tablet (`md:`): `md:text-6xl` (~60px) or `md:text-[68px]` (Much bolder) */}
-            <h1 className="text-[40px] sm:text-[38px] md:text-[63px] lg:text-[77px] font-black tracking-tight leading-[1.12] text-white drop-shadow-lg">
+            <h2 className="text-[40px] sm:text-[38px] md:text-[63px] lg:text-[77px] font-black tracking-tight leading-[1.12] text-white drop-shadow-lg">
               Small Steps <br />
               Every Day <br />
               Make Big Dreams <br />
               Come True
-            </h1>
+            </h2>
 
             {/* 🎛️ KNOB 3: SUBTITLE FONT SIZES                                        */}
             {/* - Mobile: `text-base` (~16px)                                         */}
