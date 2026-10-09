@@ -1,38 +1,48 @@
 ﻿"use client";
 
-import { useEffect } from "react";
+import { useEffect, useId, useRef } from "react";
 import { CalendarIcon, CloseIcon, ExternalIcon, GlobeIcon, GovernmentIcon } from "./CSCIcons";
 import { cscStyles } from "./cscStyles";
 import type { OverlayProps } from "./cscTypes";
 
 export default function CSCAppointmentModal({ isOpen, onClose }: OverlayProps) {
+  const appointmentDialogRef = useRef<HTMLDialogElement>(null);
+  const portalTitleId = useId();
+
   useEffect(() => {
-    if (!isOpen) return;
+    const dialog = appointmentDialogRef.current;
+    if (!dialog) return;
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+    if (isOpen && !dialog.open) dialog.showModal();
+    if (!isOpen && dialog.open) dialog.close();
+
+    return () => {
+      if (dialog.open) dialog.close();
     };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
+  }, [isOpen]);
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-end justify-center p-0 md:items-center md:p-5">
-      <button
-        type="button"
-        aria-label="Close CSC application portal chooser"
-        className="absolute inset-0 cursor-default bg-slate-950/65 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      <dialog
-        open
-        aria-labelledby="csc-portal-title"
-        className={`${cscStyles.dialog} fixed bottom-0 left-0 right-0 top-auto max-h-[90dvh] rounded-t-[28px] p-5 md:inset-0 md:m-auto md:h-fit md:max-w-xl md:rounded-3xl md:p-7`}
-      >
+    <dialog
+      ref={appointmentDialogRef}
+      aria-labelledby={portalTitleId}
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        if (event.target !== event.currentTarget) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        if (
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom
+        ) {
+          onClose();
+        }
+      }}
+      className={`${cscStyles.dialog} fixed bottom-0 left-0 right-0 top-auto max-h-[90dvh] rounded-t-[28px] p-5 md:inset-0 md:m-auto md:h-fit md:max-w-xl md:rounded-3xl md:p-7 backdrop:bg-slate-950/65 backdrop:backdrop-blur-sm`}
+    >
         <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-700 md:hidden" />
 
         <div className="flex items-start justify-between gap-4">
@@ -40,7 +50,7 @@ export default function CSCAppointmentModal({ isOpen, onClose }: OverlayProps) {
             <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-blue-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
               Official Government Portals
             </span>
-            <h2 id="csc-portal-title" className="mt-2 text-xl font-black tracking-tight text-slate-950 dark:text-white">
+            <h2 id={portalTitleId} className="mt-2 text-xl font-black tracking-tight text-slate-950 dark:text-white">
               Choose CSC Application Portal
             </h2>
             <p className="mt-1 text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400">
@@ -48,7 +58,7 @@ export default function CSCAppointmentModal({ isOpen, onClose }: OverlayProps) {
             </p>
           </div>
 
-          <button type="button" onClick={onClose} className={`${cscStyles.closeButton} border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800`} aria-label="Close CSC application portal chooser">
+          <button type="button" autoFocus onClick={onClose} className={`${cscStyles.closeButton} border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800`} aria-label="Close CSC application portal chooser">
             <CloseIcon />
           </button>
         </div>
@@ -100,8 +110,7 @@ export default function CSCAppointmentModal({ isOpen, onClose }: OverlayProps) {
         <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/70 p-3 text-[11px] font-medium leading-relaxed text-slate-600 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-slate-300">
           ðŸ’¡ <strong className="text-slate-800 dark:text-white">Regional Tip:</strong> Please verify with your specific CSC Regional Office advisory (e.g. NCR, RO3, RO4, RO7, RO11) to confirm whether your testing center requires OCSEAS, Services, or ORAS.
         </div>
-      </dialog>
-    </div>
+    </dialog>
   );
 }
 

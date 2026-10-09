@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import CSCAppointmentModal from "./CSCAppointmentModal";
 import { CalendarIcon, CloseIcon, ExternalIcon, GovernmentIcon } from "./CSCIcons";
 import { cscStyles } from "./cscStyles";
@@ -11,6 +11,8 @@ export default function CSCServicesSheet({
   onClose,
 }: OverlayProps) {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+  const servicesDialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
 
   const closeSheet = () => {
     setShowAppointmentModal(false);
@@ -18,41 +20,46 @@ export default function CSCServicesSheet({
   };
 
   useEffect(() => {
-    if (!isOpen) return;
+    const dialog = servicesDialogRef.current;
+    if (!dialog) return;
 
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !showAppointmentModal) {
-        onClose();
-      }
+    if (isOpen && !dialog.open) dialog.showModal();
+    if (!isOpen && dialog.open) dialog.close();
+
+    return () => {
+      if (dialog.open) dialog.close();
     };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen, onClose, showAppointmentModal]);
-
-  if (!isOpen) return null;
+  }, [isOpen]);
 
   return (
     <>
-      <div className="fixed inset-0 z-[80] flex items-end justify-center md:items-end xl:items-center">
-        <button
-          type="button"
-          aria-label="Close CSC services"
-          className="absolute inset-0 cursor-default bg-slate-950/45 backdrop-blur-sm"
-          onClick={closeSheet}
-        />
-
-        <dialog
-          open
-          aria-labelledby="csc-services-title"
-          className={`${cscStyles.dialog} fixed bottom-0 left-0 right-0 top-auto rounded-t-[28px] px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 sm:px-5 md:bottom-5 md:left-1/2 md:right-auto md:w-[min(36rem,calc(100vw-2.5rem))] md:-translate-x-1/2 md:rounded-3xl xl:bottom-auto xl:top-1/2 xl:-translate-y-1/2`}
-        >
+      <dialog
+        ref={servicesDialogRef}
+        aria-labelledby={titleId}
+        onCancel={(event) => {
+          event.preventDefault();
+          if (!showAppointmentModal) closeSheet();
+        }}
+        onClick={(event) => {
+          if (event.target !== event.currentTarget || showAppointmentModal) return;
+          const rect = event.currentTarget.getBoundingClientRect();
+          if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+          ) {
+            closeSheet();
+          }
+        }}
+        className={`${cscStyles.dialog} fixed bottom-0 left-0 right-0 top-auto rounded-t-[28px] px-4 pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 sm:px-5 md:bottom-5 md:left-1/2 md:right-auto md:w-[min(36rem,calc(100vw-2.5rem))] md:-translate-x-1/2 md:rounded-3xl xl:bottom-auto xl:top-1/2 xl:-translate-y-1/2 backdrop:bg-slate-950/45 backdrop:backdrop-blur-sm`}
+      >
           <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-700 xl:hidden" />
 
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2
-                id="csc-services-title"
+                id={titleId}
                 className="text-lg font-black tracking-tight text-slate-950 dark:text-white"
               >
                 CSC Services
@@ -64,6 +71,7 @@ export default function CSCServicesSheet({
 
             <button
               type="button"
+              autoFocus
               onClick={closeSheet}
               className={cscStyles.closeButton}
               aria-label="Close CSC services"
@@ -120,8 +128,7 @@ export default function CSCServicesSheet({
               </span>
             </a>
           </div>
-        </dialog>
-      </div>
+      </dialog>
 
       <CSCAppointmentModal
         isOpen={showAppointmentModal}
