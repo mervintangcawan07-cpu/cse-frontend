@@ -7,7 +7,7 @@ import { useEffect, useState, useMemo, type ReactNode } from "react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { useAuth } from "@/context/AuthContext";
 import InstallEntryLink from "@/components/pwa/InstallEntryLink";
-import { getAppNavItems, type AppNavItem } from "@/components/navigation/appNavigation";
+import { getAppNavItems, isRouteActive, type AppNavItem } from "@/components/navigation/appNavigation";
 
 type NavItem = AppNavItem;
 
@@ -297,12 +297,13 @@ function MobileNavigationDrawer({
         </p>
         <nav className="flex flex-col space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive = isRouteActive(pathname, item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
+                aria-current={isActive ? "page" : undefined}
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center justify-between ${
                   isActive
                     ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"
@@ -404,11 +405,13 @@ export default function Navbar(): ReactNode {
   const navItems = useMemo(() => getAppNavItems(user?.role), [user?.role]);
   const isLandingPage = pathname === "/";
   const isDashboardPage = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  // Admin routes already render an independent sticky header.
+  const hasIndependentNavigation = isRouteActive(pathname, "/admin");
 
   return (
     <header
       className={`${
-        isLandingPage ? "hidden xl:block" : isDashboardPage ? "hidden" : "block"
+        isLandingPage ? "hidden xl:block" : (isDashboardPage || hasIndependentNavigation) ? "hidden" : "block"
       } bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50`}
     >
       <div className="w-full max-w-none px-3 sm:px-4 md:px-6 xl:px-8 h-16 flex items-center justify-between">
@@ -431,11 +434,12 @@ export default function Navbar(): ReactNode {
           {/* DESKTOP NAVIGATION */}
           <nav className="hidden xl:flex items-center gap-1">
             {navItems.map((item) => {
-              const isActive = pathname.startsWith(item.href);
+              const isActive = isRouteActive(pathname, item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-current={isActive ? "page" : undefined}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
                     isActive
                       ? "bg-blue-600/20 text-blue-400 border border-blue-500/30"

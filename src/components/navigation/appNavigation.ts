@@ -23,6 +23,14 @@ export const APP_ROUTES = {
   support: "/support",
 } as const;
 
+// These routes belong to the Learning Hub even though their URLs have separate roots.
+export const LEARNING_RESOURCE_ROUTE_PREFIXES = [
+  "/reviewer",
+  "/reading-materials",
+  "/flashcards",
+  "/bookmarks",
+] as const;
+
 export const REVIEW_TOOL_ITEMS: readonly AppNavItem[] = [
   { label: "Mistakes", href: APP_ROUTES.mistakes },
   { label: "Badges", href: APP_ROUTES.badges },
@@ -53,6 +61,16 @@ export function getAppNavItems(role?: string | null): readonly AppNavItem[] {
 }
 
 export function isRouteActive(pathname: string, href: string): boolean {
+  if (href === APP_ROUTES.learning) {
+    return (
+      pathname === href ||
+      pathname.startsWith(`${href}/`) ||
+      LEARNING_RESOURCE_ROUTE_PREFIXES.some(
+        (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+      )
+    );
+  }
+
   if (href === APP_ROUTES.dashboard) {
     return pathname === APP_ROUTES.dashboard || pathname.startsWith(`${APP_ROUTES.dashboard}/`);
   }

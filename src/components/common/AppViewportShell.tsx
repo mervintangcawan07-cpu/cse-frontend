@@ -4,16 +4,17 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import MobileBottomNavigation from "../navigation/MobileBottomNavigation";
+import { LEARNING_RESOURCE_ROUTE_PREFIXES } from "../navigation/appNavigation";
 
 const MOBILE_APP_ROUTE_PREFIXES = [
   "/dashboard",
   "/practice",
   "/learning",
+  ...LEARNING_RESOURCE_ROUTE_PREFIXES,
   "/profile",
   "/mistakes",
   "/badges",
   "/drills",
-  "/flashcards",
   "/readiness-card",
   "/social",
   "/referrals",
