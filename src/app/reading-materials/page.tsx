@@ -145,6 +145,7 @@ export default function ReadingMaterialsPage() {
                   <input
                     type="text"
                     placeholder="Search handbooks..."
+                    aria-label="Search handbooks"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:bg-white focus:border-blue-500 transition"
@@ -154,7 +155,8 @@ export default function ReadingMaterialsPage() {
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                        aria-pressed={selectedCategory === cat}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                           selectedCategory === cat
                             ? "bg-blue-600 text-white shadow-xs"
                             : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -181,7 +183,8 @@ export default function ReadingMaterialsPage() {
                         }}
                         role="button"
                         tabIndex={0}
-                        className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-2.5 ${
+                        aria-label={`Open ${doc.title}${isSelected ? " (currently selected)" : ""}`}
+                        className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                           isSelected
                             ? "bg-blue-50/80 border-blue-500 shadow-xs"
                             : "bg-white border-slate-200 hover:border-slate-300"

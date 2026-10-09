@@ -129,10 +129,14 @@ export default function FlashcardsPage() {
   // Keyboard Shortcuts: Spacebar to flip, ArrowLeft for previous, ArrowRight for next
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent shortcut interference when focus is in an input or textarea
+      // Never steal keyboard activation, editing, or dialog shortcuts.
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target;
       if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement
+        target instanceof Element &&
+        target.closest(
+          "a, button, input, textarea, select, dialog, [role='button'], [role='link'], [role='dialog'], [role='textbox'], [role='combobox'], [contenteditable='true']"
+        )
       ) {
         return;
       }
@@ -234,7 +238,8 @@ export default function FlashcardsPage() {
                   key={cat}
                   type="button"
                   onClick={() => handleSelectCategory(cat)}
-                  className={`px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer ${
+                  aria-pressed={selectedCategory === cat}
+                  className={`px-3.5 py-2 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                     selectedCategory === cat
                       ? "bg-blue-600 text-white shadow-md"
                       : "bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800"
@@ -263,10 +268,25 @@ export default function FlashcardsPage() {
           {/* MAIN FLASHCARD STACK - GENUINE 3D FLIP ARCHITECTURE */}
           {currentCard ? (
             <div className="space-y-4">
+              <span id="flashcard-accessible-status" className="sr-only" aria-live="polite">
+                {isFlipped ? `Answer: ${currentCard.back}` : `Question: ${currentCard.front}`}
+              </span>
               {/* 3D Container with Perspective */}
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="w-full min-h-[360px] sm:min-h-[400px] cursor-pointer select-none relative"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setIsFlipped((prev) => !prev);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label="Flip flashcard"
+                aria-pressed={isFlipped}
+                aria-describedby="flashcard-accessible-status"
+                className="w-full min-h-[360px] sm:min-h-[400px] cursor-pointer select-none relative focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                 style={{ perspective: "1000px" }}
               >
                 {/* Rotating 3D Inner Layer */}
@@ -353,6 +373,8 @@ export default function FlashcardsPage() {
                 <button
                   type="button"
                   onClick={() => toggleMastered(currentCard.id)}
+                  aria-label="Mark flashcard as mastered"
+                  aria-pressed={isCurrentMastered}
                   className={`px-4 py-3 rounded-2xl font-black text-xs transition border shadow-sm cursor-pointer ${
                     isCurrentMastered
                       ? "bg-emerald-50 dark:bg-emerald-500/20 border-emerald-300 dark:border-emerald-500 text-emerald-700 dark:text-emerald-300"

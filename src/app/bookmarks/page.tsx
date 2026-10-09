@@ -190,6 +190,8 @@ export default function BookmarksPage() {
             {/* TYPE FILTER TABS */}
             <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3 text-xs font-bold">
               <button
+                type="button"
+                aria-pressed={filterType === "ALL"}
                 onClick={() => setFilterType("ALL")}
                 className={`px-4 py-2 rounded-xl transition ${
                   filterType === "ALL"
@@ -200,6 +202,8 @@ export default function BookmarksPage() {
                 🔖 All Saved Items ({bookmarks.length})
               </button>
               <button
+                type="button"
+                aria-pressed={filterType === "QUESTION"}
                 onClick={() => setFilterType("QUESTION")}
                 className={`px-4 py-2 rounded-xl transition ${
                   filterType === "QUESTION"
@@ -210,6 +214,8 @@ export default function BookmarksPage() {
                 ❓ Questions ({bookmarks.filter((b) => b.targetType === "QUESTION").length})
               </button>
               <button
+                type="button"
+                aria-pressed={filterType === "STUDY_NOTE"}
                 onClick={() => setFilterType("STUDY_NOTE")}
                 className={`px-4 py-2 rounded-xl transition ${
                   filterType === "STUDY_NOTE"
@@ -228,6 +234,7 @@ export default function BookmarksPage() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
+                    aria-pressed={selectedCategory === cat}
                     className={`px-3 py-1.5 rounded-lg transition shrink-0 ${
                       selectedCategory === cat
                         ? "bg-slate-700 text-white"
@@ -243,6 +250,7 @@ export default function BookmarksPage() {
                 <input
                   type="text"
                   placeholder="Search bookmarks..."
+                  aria-label="Search bookmarks"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 w-full sm:w-60"
