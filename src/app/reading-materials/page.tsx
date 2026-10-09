@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import PassageScanner from "@/components/PassageScanner";
 
@@ -19,6 +19,43 @@ export default function ReadingMaterialsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [readerOpen, setReaderOpen] = useState(false);
+  const readerDialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = readerDialogRef.current;
+    if (!dialog) return;
+    if (readerOpen && !dialog.open) dialog.showModal();
+    if (!readerOpen && dialog.open) dialog.close();
+  }, [readerOpen]);
+
+  const closeReader = () => {
+    if (document.fullscreenElement === readerDialogRef.current) {
+      void document.exitFullscreen().catch(() => undefined);
+    }
+    setReaderOpen(false);
+  };
+
+  const toggleBrowserFullscreen = async () => {
+    const dialog = readerDialogRef.current;
+    if (!dialog || !dialog.requestFullscreen) return;
+    try {
+      if (document.fullscreenElement === dialog) {
+        await document.exitFullscreen();
+      } else {
+        await dialog.requestFullscreen();
+      }
+    } catch {
+      // Full-viewport dialog remains available on browsers that deny Fullscreen API.
+    }
+  };
+
+  const openDocument = (doc: DocumentItem) => {
+    setSelectedDoc(doc);
+    if (doc.fileName?.toLowerCase().endsWith(".pdf")) {
+      setReaderOpen(true);
+    }
+  };
 
   const categories = ["All", "Constitutional Basis", "Ethical Standards", "Civil Service Rules", "General Knowledge"];
 
@@ -135,7 +172,15 @@ export default function ReadingMaterialsPage() {
                     return (
                       <div
                         key={doc.id}
-                        onClick={() => setSelectedDoc(doc)}
+                        onClick={() => openDocument(doc)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            openDocument(doc);
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
                         className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-2.5 ${
                           isSelected
                             ? "bg-blue-50/80 border-blue-500 shadow-xs"
@@ -180,14 +225,34 @@ export default function ReadingMaterialsPage() {
                     </div>
 
                     <div className="relative flex-1 bg-slate-100">
-                      <iframe
-                        src={`/api/reading-materials/file?id=${selectedDoc.id}#toolbar=0&navpanes=0&scrollbar=1`}
-                        className="w-full h-full border-none"
-                        title={selectedDoc.title}
-                      />
-                      <div className="absolute top-0 right-0 left-0 p-2 bg-slate-900/90 text-slate-300 text-[11px] font-medium text-center backdrop-blur-sm pointer-events-none">
+                      {selectedDoc.fileName?.toLowerCase().endsWith(".pdf") ? (
+                        <div className="flex h-full min-h-[360px] flex-col items-center justify-center gap-4 p-6 text-center">
+                          <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5">
+                            <h3 className="text-lg font-extrabold text-slate-900">Ready to read</h3>
+                            <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
+                              Open this PDF in a distraction-free, full-screen reader.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => setReaderOpen(true)}
+                              className="mt-4 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                              Open full-screen PDF reader
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <iframe
+                          src={`/api/reading-materials/file?id=${selectedDoc.id}#toolbar=0&navpanes=0&scrollbar=1`}
+                          className="h-full w-full border-none"
+                          title={selectedDoc.title}
+                        />
+                      )}
+                      {!selectedDoc.fileName?.toLowerCase().endsWith(".pdf") && (
+                        <div className="absolute top-0 right-0 left-0 p-2 bg-slate-900/90 text-slate-300 text-[11px] font-medium text-center backdrop-blur-sm pointer-events-none">
                         Official Civil Service Reviewer • Protected Read-Only View Mode
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </>
                 ) : (
@@ -198,6 +263,64 @@ export default function ReadingMaterialsPage() {
           )}
         </div>
       </div>
+      <dialog
+        ref={readerDialogRef}
+        aria-label={selectedDoc ? `${selectedDoc.title} PDF reader` : "PDF reader"}
+        onCancel={(event) => {
+          event.preventDefault();
+          closeReader();
+        }}
+        onClose={() => setReaderOpen(false)}
+        className="fixed inset-0 m-0 h-[100dvh] max-h-none w-screen max-w-none overflow-hidden border-0 bg-slate-950 p-0 text-white backdrop:bg-slate-950/90"
+      >
+        <div className="flex h-full w-full flex-col">
+          <header className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-slate-950 px-3 py-2 sm:px-5">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-blue-300">GovStudyX Reader</p>
+              <h2 className="truncate text-sm font-bold text-white sm:text-base">
+                {selectedDoc?.title ?? "Handbook"}
+              </h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              {selectedDoc && (
+                <a
+                  href={`/api/reading-materials/file?id=${encodeURIComponent(selectedDoc.id)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-100 hover:bg-slate-800"
+                >
+                  Browser viewer
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={() => void toggleBrowserFullscreen()}
+                className="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-100 hover:bg-slate-800"
+              >
+                Full screen
+              </button>
+              <button
+                type="button"
+                onClick={closeReader}
+                autoFocus
+                className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                Close
+              </button>
+            </div>
+          </header>
+          <div className="min-h-0 flex-1 bg-slate-200">
+            {readerOpen && selectedDoc?.fileName?.toLowerCase().endsWith(".pdf") && (
+              <iframe
+                key={selectedDoc.id}
+                src={`/api/reading-materials/file?id=${encodeURIComponent(selectedDoc.id)}#toolbar=1&navpanes=0&view=FitH`}
+                title={`${selectedDoc.title} - PDF document`}
+                className="h-full w-full border-0"
+              />
+            )}
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 }
