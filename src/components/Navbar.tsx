@@ -406,7 +406,12 @@ export default function Navbar(): ReactNode {
   const isLandingPage = pathname === "/";
   const isDashboardPage = pathname === "/dashboard" || pathname.startsWith("/dashboard/");
   // Admin routes already render an independent sticky header.
-  const hasIndependentNavigation = isRouteActive(pathname, "/admin");
+  // Dedicated admin/partner chrome and exam controls own these routes.
+  const hasIndependentNavigation =
+    isRouteActive(pathname, "/admin") ||
+    isRouteActive(pathname, "/partner-portal") ||
+    isRouteActive(pathname, "/partner") ||
+    pathname === "/mock-exam/take";
 
   return (
     <header
