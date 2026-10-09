@@ -82,7 +82,7 @@ export default function LearningHubPage() {
         </div>
 
         {/* Futuristic Knowledge Cards Grid */}
-        <div className="p-3.5 sm:p-6 md:p-8 bg-slate-50/60 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="p-3.5 sm:p-6 md:p-8 bg-slate-50/60 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
 
           {/* CARD 1: STUDY NOTES & CHEAT SHEETS */}
           <div className="bg-white text-slate-900 p-6 rounded-3xl border border-amber-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-amber-400 hover:shadow-lg transition-all duration-300">

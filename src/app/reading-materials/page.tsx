@@ -211,7 +211,7 @@ export default function ReadingMaterialsPage() {
               </div>
 
               {/* PDF VIEWER CONTAINER */}
-              <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs overflow-hidden flex flex-col h-[750px]">
+              <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs overflow-hidden flex flex-col h-[440px] sm:h-[560px] lg:h-[750px]">
                 {selectedDoc ? (
                   <>
                     <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center gap-4">
