@@ -8,7 +8,6 @@ import DatabaseLoadingIndicator from "@/components/common/DatabaseLoadingIndicat
 import {
   RotateCw,
   Shuffle,
-  Sparkles,
   CheckCircle,
   AlertCircle,
   ThumbsUp,
@@ -40,7 +39,7 @@ export default function StudyFlashcardsPage() {
 
   // Spaced Repetition Mastery Tracking
   const [masteredIds, setMasteredIds] = useState<Set<string>>(new Set());
-  const [reviewAgainIds, setReviewAgainIds] = useState<Set<string>>(new Set());
+  const [, setReviewAgainIds] = useState<Set<string>>(new Set());
 
   // Fetch real flashcards from DB
   useEffect(() => {
@@ -97,16 +96,14 @@ export default function StudyFlashcardsPage() {
     };
   }, [status, isPaid, router]);
 
-  // Category filter
-  useEffect(() => {
+  // Filter the active deck when the student selects a category.
+  // The initial fetch already sets both allCards and deck.
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
     setIsFlipped(false);
     setCurrentIndex(0);
-    if (selectedCategory === "ALL") {
-      setDeck(allCards);
-    } else {
-      setDeck(allCards.filter((c) => c.category === selectedCategory));
-    }
-  }, [selectedCategory, allCards]);
+    setDeck(category === "ALL" ? allCards : allCards.filter((card) => card.category === category));
+  };
 
   const handleNext = useCallback(() => {
     setIsFlipped(false);
@@ -126,8 +123,10 @@ export default function StudyFlashcardsPage() {
     }
   }, [currentIndex, deck.length]);
 
+  const currentCard = deck[currentIndex];
+
   // Spaced Repetition Responses
-  const handleRateAgain = () => {
+  const handleRateAgain = useCallback(() => {
     if (!currentCard) return;
     setReviewAgainIds((prev) => new Set(prev).add(currentCard.id));
     setMasteredIds((prev) => {
@@ -136,14 +135,14 @@ export default function StudyFlashcardsPage() {
       return next;
     });
     handleNext();
-  };
+  }, [currentCard, handleNext]);
 
-  const handleRateGood = () => {
+  const handleRateGood = useCallback(() => {
     if (!currentCard) return;
     handleNext();
-  };
+  }, [currentCard, handleNext]);
 
-  const handleRateMastered = () => {
+  const handleRateMastered = useCallback(() => {
     if (!currentCard) return;
     setMasteredIds((prev) => new Set(prev).add(currentCard.id));
     setReviewAgainIds((prev) => {
@@ -152,7 +151,7 @@ export default function StudyFlashcardsPage() {
       return next;
     });
     handleNext();
-  };
+  }, [currentCard, handleNext]);
 
   const shuffleDeck = () => {
     setIsFlipped(false);
@@ -163,16 +162,32 @@ export default function StudyFlashcardsPage() {
   // Keyboard Shortcuts (Space to flip, 1/2/3 to rate, Left/Right arrows)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Do not intercept native controls, editing, or browser shortcuts.
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || deck.length === 0) return;
+      const target = e.target;
+      if (
+        target instanceof Element &&
+        target.closest(
+          "a, button, input, textarea, select, dialog, [role='link'], [role='dialog'], [role='textbox'], [role='combobox'], [contenteditable='true']"
+        )
+      ) {
+        return;
+      }
+
       if (e.code === "Space") {
+        if (e.repeat) return;
         e.preventDefault();
         setIsFlipped((prev) => !prev);
       } else if (e.key === "1") {
+        if (e.repeat) return;
         e.preventDefault();
         handleRateAgain();
       } else if (e.key === "2") {
+        if (e.repeat) return;
         e.preventDefault();
         handleRateGood();
       } else if (e.key === "3") {
+        if (e.repeat) return;
         e.preventDefault();
         handleRateMastered();
       } else if (e.key === "ArrowRight") {
@@ -186,9 +201,8 @@ export default function StudyFlashcardsPage() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleNext, handlePrev, isFlipped]);
+  }, [deck.length, handleNext, handlePrev, handleRateAgain, handleRateGood, handleRateMastered]);
 
-  const currentCard = deck[currentIndex];
   const categories = ["ALL", ...Array.from(new Set(allCards.map((c) => c.category)))];
   const masteredPercentage = deck.length > 0 ? Math.round((masteredIds.size / deck.length) * 100) : 0;
 
@@ -258,7 +272,7 @@ export default function StudyFlashcardsPage() {
             <button
               onClick={shuffleDeck}
               disabled={deck.length === 0}
-              className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold rounded-xl border border-slate-800 transition flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold rounded-xl border border-slate-800 transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
             >
               <Shuffle className="w-3.5 h-3.5" />
               <span>Shuffle</span>
@@ -274,8 +288,10 @@ export default function StudyFlashcardsPage() {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              type="button"
+              onClick={() => handleSelectCategory(cat)}
+              aria-pressed={selectedCategory === cat}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
                 selectedCategory === cat
                   ? "bg-blue-600 text-white shadow-md"
                   : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
@@ -303,13 +319,29 @@ export default function StudyFlashcardsPage() {
         {/* Interactive Flashcard with Flip Animation */}
         {currentCard ? (
           <div
-            onClick={() => setIsFlipped(!isFlipped)}
-            className={`rounded-3xl border p-8 sm:p-14 text-center cursor-pointer min-h-[340px] flex flex-col justify-between items-center relative transition-all duration-300 shadow-2xl ${
+            onClick={() => setIsFlipped((prev) => !prev)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                if (event.repeat) return;
+                event.preventDefault();
+                event.stopPropagation();
+                setIsFlipped((prev) => !prev);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label="Flip flashcard"
+            aria-pressed={isFlipped}
+            aria-describedby="study-flashcard-accessible-status"
+            className={`rounded-3xl border p-8 sm:p-14 text-center cursor-pointer min-h-[340px] flex flex-col justify-between items-center relative transition-all duration-300 shadow-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
               isFlipped
                 ? "bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 border-indigo-500/50 shadow-indigo-950/50"
                 : "bg-slate-900 border-slate-800 hover:border-slate-700 shadow-black/50"
             }`}
           >
+            <span id="study-flashcard-accessible-status" className="sr-only" aria-live="polite">
+              {isFlipped ? `Answer: ${currentCard.back}` : `Question: ${currentCard.front}`}
+            </span>
             <div className="w-full flex justify-between items-center">
               <span className="text-[10px] font-black uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/30 px-3 py-1 rounded-full">
                 {currentCard.category}
@@ -355,7 +387,7 @@ export default function StudyFlashcardsPage() {
             <div className="grid grid-cols-3 gap-3">
               <button
                 onClick={handleRateAgain}
-                className="py-3 px-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer"
+                className="py-3 px-4 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               >
                 <div className="flex items-center gap-1">
                   <AlertCircle className="w-4 h-4 text-rose-400" />
@@ -366,7 +398,7 @@ export default function StudyFlashcardsPage() {
 
               <button
                 onClick={handleRateGood}
-                className="py-3 px-4 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer"
+                className="py-3 px-4 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               >
                 <div className="flex items-center gap-1">
                   <ThumbsUp className="w-4 h-4 text-amber-400" />
@@ -377,7 +409,7 @@ export default function StudyFlashcardsPage() {
 
               <button
                 onClick={handleRateMastered}
-                className="py-3 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer"
+                className="py-3 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-2xl font-bold text-xs transition flex flex-col items-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               >
                 <div className="flex items-center gap-1">
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
@@ -391,14 +423,14 @@ export default function StudyFlashcardsPage() {
           <div className="flex items-center justify-between gap-3 pt-2">
             <button
               onClick={handlePrev}
-              className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition flex items-center justify-center gap-1.5 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Previous [←]</span>
             </button>
             <button
               onClick={handleNext}
-              className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-600/20"
+              className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-blue-600/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
             >
               <span>Next Card [→]</span>
               <ArrowRight className="w-4 h-4" />

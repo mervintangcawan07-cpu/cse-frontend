@@ -50,7 +50,8 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<TabType>("account");
 
   // Form states
-  const [name, setName] = useState(() => user?.name || "");
+  const [editedName, setEditedName] = useState<string | null>(null);
+  const name = editedName ?? user?.name ?? "";
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -66,17 +67,25 @@ export default function ProfilePage() {
     }
   }, [authStatus, router]);
 
+  // Read the clock after mount, not during the render phase.
+  // This also keeps the subscription countdown current while the page is open.
+  const [clockNow, setClockNow] = useState<number | null>(null);
   useEffect(() => {
-    if (user?.name) {
-      setName(user.name);
-    }
-  }, [user?.name]);
+    const updateClock = () => setClockNow(Date.now());
+    const initialTick = window.setTimeout(updateClock, 0);
+    const interval = window.setInterval(updateClock, 60_000);
+    return () => {
+      window.clearTimeout(initialTick);
+      window.clearInterval(interval);
+    };
+  }, []);
 
+  const paidUntil = user?.paidUntil;
   const daysRemaining = useMemo(() => {
-    if (!user?.paidUntil) return null;
-    const diff = new Date(user.paidUntil).getTime() - Date.now();
+    if (!paidUntil || clockNow === null) return null;
+    const diff = new Date(paidUntil).getTime() - clockNow;
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-  }, [user?.paidUntil]);
+  }, [paidUntil, clockNow]);
 
   const handleProfileSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -107,6 +116,7 @@ export default function ProfilePage() {
         setConfirmPassword("");
         if (data.user) {
           await refreshAuth("profile");
+          setEditedName(null);
         }
       } else {
         setMessage({ type: "error", text: data.error || "Failed to update profile." });
@@ -157,7 +167,7 @@ export default function ProfilePage() {
             id="display-name"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setEditedName(e.target.value)}
             className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-white focus:outline-none focus:border-blue-500"
             placeholder="Your Full Name"
             required
@@ -338,16 +348,20 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
-              className="w-full text-left p-4 flex justify-between items-center text-xs font-bold text-white hover:text-blue-400 transition cursor-pointer"
+              aria-expanded={openFaq === faq.id}
+              aria-controls={`profile-faq-answer-${faq.id}`}
+              className="w-full text-left p-4 flex justify-between items-center text-xs font-bold text-white hover:text-blue-400 transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-400"
             >
               <span>{faq.q}</span>
               <span className="text-slate-400 text-base">{openFaq === faq.id ? "−" : "+"}</span>
             </button>
-            {openFaq === faq.id && (
-              <div className="p-4 pt-0 text-xs text-slate-400 leading-relaxed border-t border-slate-800/40">
-                {faq.a}
-              </div>
-            )}
+            <div
+              id={`profile-faq-answer-${faq.id}`}
+              hidden={openFaq !== faq.id}
+              className="p-4 pt-0 text-xs text-slate-400 leading-relaxed border-t border-slate-800/40"
+            >
+              {faq.a}
+            </div>
           </div>
         ))}
       </div>
@@ -518,7 +532,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("account")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "account"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "account"
               ? "bg-blue-600 text-white shadow-md"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
@@ -529,7 +544,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("subscription")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "subscription"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "subscription"
               ? "bg-blue-600 text-white shadow-md"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
@@ -540,7 +556,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("achievements")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "achievements"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "achievements"
               ? "bg-amber-500 text-slate-950 shadow-md font-black"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
@@ -551,7 +568,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("faqs")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "faqs"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "faqs"
               ? "bg-blue-600 text-white shadow-md"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
@@ -562,7 +580,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("about")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "about"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "about"
               ? "bg-blue-600 text-white shadow-md"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
@@ -573,7 +592,8 @@ export default function ProfilePage() {
         <button
           type="button"
           onClick={() => setActiveTab("terms")}
-          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer ${
+          aria-pressed={activeTab === "terms"}
+          className={`px-4 py-2.5 rounded-xl transition shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
             activeTab === "terms"
               ? "bg-blue-600 text-white shadow-md"
               : "bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
