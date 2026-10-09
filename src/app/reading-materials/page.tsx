@@ -57,7 +57,7 @@ export default function ReadingMaterialsPage() {
     }
   };
 
-  const categories = ["All", "Constitutional Basis", "Ethical Standards", "Civil Service Rules", "General Knowledge"];
+  const categories = ["All", "General Information", "Verbal Ability", "Analytical Ability", "Numerical Reasoning"];
 
   useEffect(() => {
     const controller = new AbortController();

@@ -3,6 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
+const EXAM_SUBJECTS = [
+  "General Information",
+  "Verbal Ability",
+  "Analytical Ability",
+  "Numerical Reasoning",
+] as const;
+
 interface Handbook {
   id: string;
   title: string;
@@ -21,7 +28,7 @@ export default function AdminReadingMaterialsPage() {
 
   // Form State
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Constitutional Basis");
+  const [category, setCategory] = useState("General Information");
   const [description, setDescription] = useState("");
   const [pages, setPages] = useState("12 Pages");
   const [fileData, setFileData] = useState<string | null>(null);
@@ -49,7 +56,7 @@ export default function AdminReadingMaterialsPage() {
   const resetForm = () => {
     setEditingHandbookId(null);
     setTitle("");
-    setCategory("Constitutional Basis");
+    setCategory("General Information");
     setDescription("");
     setPages("12 Pages");
     setFileData(null);
@@ -212,10 +219,14 @@ export default function AdminReadingMaterialsPage() {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition"
             >
-              <option value="Constitutional Basis" className="text-slate-900 bg-white">Constitutional Basis</option>
-              <option value="Ethical Standards" className="text-slate-900 bg-white">Ethical Standards</option>
-              <option value="Civil Service Rules" className="text-slate-900 bg-white">Civil Service Rules</option>
-              <option value="General Knowledge" className="text-slate-900 bg-white">General Knowledge</option>
+              {category && !EXAM_SUBJECTS.some((subject) => subject === category) && (
+                <option value={category}>{category} (existing category)</option>
+              )}
+              {EXAM_SUBJECTS.map((subject) => (
+                <option key={subject} value={subject} className="text-slate-900 bg-white">
+                  {subject}
+                </option>
+              ))}
             </select>
           </div>
 
