@@ -117,7 +117,31 @@ export default function LearningHubPage() {
             </div>
           </div>
 
-          {/* CARD 2: FLASHCARDS */}
+          {/* CARD 2: OFFICIAL READING MATERIALS & HANDBOOKS */}
+          <div className="bg-white text-slate-900 p-6 rounded-3xl border border-purple-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-purple-400 hover:shadow-lg transition-all duration-300">
+            <div className="relative z-10">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">
+                  PDF Repository
+                </span>
+                <span className="text-xs font-bold text-slate-500">{stats.handbooksCount} Handbooks</span>
+              </div>
+              <h2 className="text-xl font-extrabold text-slate-900 mt-3">Official Handbooks</h2>
+              <p className="text-xs text-slate-600 leading-relaxed mt-2 font-medium">
+                <strong className="text-purple-700 font-bold">Official references!</strong> Read PDF handbooks for 1987 Constitution, R.A. 6713, and Executive Orders.
+              </p>
+            </div>
+            <div className="pt-2 relative z-10">
+              <Link
+                href="/reading-materials"
+                className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-purple-600/30"
+              >
+                Open PDF Reader 📖
+              </Link>
+            </div>
+          </div>
+
+          {/* CARD 3: FLASHCARDS */}
           <div className="bg-white text-slate-900 p-6 rounded-3xl border border-blue-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-blue-400 hover:shadow-lg transition-all duration-300">
             <div className="relative z-10">
               <div className="flex justify-between items-center">
@@ -150,7 +174,7 @@ export default function LearningHubPage() {
             </div>
           </div>
 
-          {/* CARD 3: BOOKMARKS */}
+          {/* CARD 4: BOOKMARKS */}
           <div className="bg-white text-slate-900 p-6 rounded-3xl border border-emerald-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-400 hover:shadow-lg transition-all duration-300">
             <div className="relative z-10">
               <div className="flex justify-between items-center">
@@ -174,29 +198,7 @@ export default function LearningHubPage() {
             </div>
           </div>
 
-          {/* CARD 4: OFFICIAL READING MATERIALS & HANDBOOKS */}
-          <div className="bg-white text-slate-900 p-6 rounded-3xl border border-purple-200/90 shadow-md space-y-4 flex flex-col justify-between relative overflow-hidden group hover:border-purple-400 hover:shadow-lg transition-all duration-300">
-            <div className="relative z-10">
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-black uppercase px-2.5 py-1 bg-purple-50 text-purple-700 rounded-md border border-purple-200">
-                  PDF Repository
-                </span>
-                <span className="text-xs font-bold text-slate-500">{stats.handbooksCount} Handbooks</span>
-              </div>
-              <h2 className="text-xl font-extrabold text-slate-900 mt-3">Official Handbooks</h2>
-              <p className="text-xs text-slate-600 leading-relaxed mt-2 font-medium">
-                <strong className="text-purple-700 font-bold">Official references!</strong> Read PDF handbooks for 1987 Constitution, R.A. 6713, and Executive Orders.
-              </p>
-            </div>
-            <div className="pt-2 relative z-10">
-              <Link
-                href="/reading-materials"
-                className="inline-block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs text-center rounded-xl transition shadow-lg shadow-purple-600/30"
-              >
-                Open PDF Reader 📖
-              </Link>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>
