@@ -24,7 +24,7 @@ export default function NotificationBell() {
   const lastFetchTimeRef = useRef(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const fetchNotifications = useCallback(async (isManual = false) => {
     if (inFlightRef.current) return;
@@ -37,7 +37,11 @@ export default function NotificationBell() {
       const res = await fetch("/api/notifications");
       const data = await res.json();
       if (res.ok && Array.isArray(data.notifications)) {
+        if (!Number.isSafeInteger(data.unreadCount) || data.unreadCount < 0) {
+          throw new Error("Invalid unread count in notifications response");
+        }
         setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
       }
       lastFetchTimeRef.current = Date.now();
     } catch (err) {
@@ -117,14 +121,13 @@ export default function NotificationBell() {
 
   const handleMarkAllRead = async () => {
     try {
-      const res = await fetch("/api/notifications", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+      const res = await fetch("/api/notifications/read-all", {
+        method: "POST",
       });
 
       if (res.ok) {
         setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+        setUnreadCount(0);
       }
     } catch (err) {
       console.error("Failed to mark notifications read:", err);
@@ -137,14 +140,16 @@ export default function NotificationBell() {
 
     if (!item.isRead) {
       try {
-        await fetch("/api/notifications", {
+        const response = await fetch("/api/notifications", {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ notificationId: item.id }),
         });
+        if (!response.ok) return;
         setNotifications((prev) =>
           prev.map((n) => (n.id === item.id ? { ...n, isRead: true } : n))
         );
+        setUnreadCount((prev) => Math.max(0, prev - 1));
       } catch (err) {
         console.error("Failed to mark notification read:", err);
       }

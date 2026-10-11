@@ -123,6 +123,7 @@ model User {
   earnedRewards       ReferralReward[]      @relation("EarnedRewards")
   generatedRewards    ReferralReward[]      @relation("GeneratedRewards")
   payouts             ReferralPayout[]      @relation("UserPayouts")
+  notificationReceipts NotificationReceipt[]
 
   @@index([email])
   @@index([role])
@@ -625,13 +626,31 @@ model Notification {
   title     String
   message   String   @db.Text
   type      String   @default("INFO")
+  origin    String   @default("UNVERIFIED")
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+  receipts  NotificationReceipt[]
 
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, isRead])
   @@index([isRead])
   @@index([createdAt])
+  @@index([origin, createdAt(sort: Desc)])
+}
+
+model NotificationReceipt {
+  id             String       @id @default(cuid())
+  notificationId String
+  userId         String
+  isRead         Boolean      @default(false)
+  isDismissed    Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, userId])
+  @@index([userId, isRead, isDismissed])
 }
 
 model ActivityLog {

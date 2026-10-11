@@ -18,6 +18,7 @@ export async function GET() {
     }
 
     const notifications = await prisma.notification.findMany({
+      where: { origin: "ADMIN" },
       take: 50,
       orderBy: { createdAt: "desc" },
     });
@@ -48,6 +49,7 @@ export async function POST(request: Request) {
     const notification = await prisma.notification.create({
       data: {
         userId: targetUserId || null,
+        origin: "ADMIN",
         title: String(title).trim(),
         message: String(message).trim(),
         type: String(type).trim(),
@@ -85,18 +87,32 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: "Notification ID is required" }, { status: 400 });
     }
 
-    const deleted = await prisma.notification.delete({
-      where: { id },
-    });
+    // Both ownership and deletion are enforced within the same transaction.
+    // Unverified, support, and social notifications remain untouched.
+    const deleted = await prisma.$transaction(async (tx) => {
+      const matching = await tx.notification.findFirst({
+        where: { id, origin: "ADMIN" },
+        select: { id: true, title: true },
+      });
+      if (!matching) return null;
 
-    // Log admin deletion activity
-    await prisma.activityLog.create({
-      data: {
-        userId: session.id,
-        action: "BROADCAST_NOTIFICATION_DELETED",
-        metadata: JSON.stringify({ notificationId: id, title: deleted.title }),
-      },
+      const result = await tx.notification.deleteMany({
+        where: { id, origin: "ADMIN" },
+      });
+      if (result.count !== 1) throw new Error("Admin notification deletion count mismatch");
+
+      await tx.activityLog.create({
+        data: {
+          userId: session.id,
+          action: "BROADCAST_NOTIFICATION_DELETED",
+          metadata: JSON.stringify({ notificationId: id, title: matching.title }),
+        },
+      });
+      return matching;
     });
+    if (!deleted) {
+      return NextResponse.json({ error: "Notification not found" }, { status: 404 });
+    }
 
     return NextResponse.json({ success: true, message: "Announcement deleted successfully" });
   } catch (error) {
