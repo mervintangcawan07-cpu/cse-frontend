@@ -126,17 +126,23 @@ export async function PATCH(request: Request) {
     }
 
     if (action === "DELETE") {
-      await prisma.notification.delete({
-        where: { id: String(notificationId) },
+      const deleted = await prisma.notification.deleteMany({
+        where: { id: String(notificationId), userId },
       });
+      if (deleted.count !== 1) {
+        return NextResponse.json({ error: "Notification not found or forbidden" }, { status: 404 });
+      }
       return NextResponse.json({ success: true, message: "Notification deleted" });
     }
 
     // Default action: Mark as READ
-    await prisma.notification.update({
-      where: { id: String(notificationId) },
+    const updated = await prisma.notification.updateMany({
+      where: { id: String(notificationId), userId },
       data: { isRead: true },
     });
+    if (updated.count !== 1) {
+      return NextResponse.json({ error: "Notification not found or forbidden" }, { status: 404 });
+    }
 
     return NextResponse.json({ success: true, message: "Notification marked as read" });
   } catch (error) {
@@ -204,9 +210,12 @@ export async function DELETE(request: Request) {
         return NextResponse.json({ success: true, message: "Notification deleted" });
       }
 
-      await prisma.notification.delete({
-        where: { id: String(notificationId) },
+      const deleted = await prisma.notification.deleteMany({
+        where: { id: String(notificationId), userId },
       });
+      if (deleted.count !== 1) {
+        return NextResponse.json({ error: "Notification not found or forbidden" }, { status: 404 });
+      }
       return NextResponse.json({ success: true, message: "Notification deleted" });
     }
 

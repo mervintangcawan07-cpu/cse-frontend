@@ -21,8 +21,23 @@ export async function GET() {
       // 1. Unread Alerts / Notifications
       prisma.notification.count({
         where: {
-          OR: [{ userId }, { userId: null }],
-          isRead: false,
+          OR: [
+            { userId, isRead: false },
+            {
+              userId: null,
+              OR: [
+                {
+                  receipts: {
+                    some: { userId, isRead: false, isDismissed: false },
+                  },
+                },
+                {
+                  isRead: false,
+                  receipts: { none: { userId } },
+                },
+              ],
+            },
+          ],
         },
       }),
 
@@ -85,7 +100,7 @@ export async function GET() {
         clubsCount,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[SOCIAL_COUNTS_GET_ERROR]", error);
     return NextResponse.json({ error: "Failed to fetch counts" }, { status: 500 });
   }

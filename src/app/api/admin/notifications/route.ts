@@ -38,31 +38,80 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Forbidden: Admin access required" }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { title, message, type = "SYSTEM", targetUserId } = body;
-
-    if (!title || !message) {
-      return NextResponse.json({ error: "Title and message are required" }, { status: 400 });
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    // Create system broadcast (targetUserId = null broadcasts to all users)
-    const notification = await prisma.notification.create({
-      data: {
-        userId: targetUserId || null,
-        origin: "ADMIN",
-        title: String(title).trim(),
-        message: String(message).trim(),
-        type: String(type).trim(),
-      },
-    });
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    }
 
-    // Log admin activity
-    await prisma.activityLog.create({
-      data: {
-        userId: session.id,
-        action: "BROADCAST_NOTIFICATION_SENT",
-        metadata: JSON.stringify({ title, type, targetUserId }),
-      },
+    const input = body as Record<string, unknown>;
+
+    if (typeof input.title !== "string" || typeof input.message !== "string") {
+      return NextResponse.json({ error: "Title and message must be strings" }, { status: 400 });
+    }
+
+    const title = input.title.trim();
+    const message = input.message.trim();
+    const rawType = input.type === undefined ? "SYSTEM" : input.type;
+
+    if (typeof rawType !== "string") {
+      return NextResponse.json({ error: "Invalid notification type" }, { status: 400 });
+    }
+
+    const type = rawType.trim();
+
+    if (!title || title.length > 160 ||
+        !message || message.length > 10000 ||
+        !type || type.length > 64) {
+      return NextResponse.json({ error: "Invalid notification field length" }, { status: 400 });
+    }
+
+    let targetUserId: string | null = null;
+
+    if (input.targetUserId !== undefined && input.targetUserId !== null) {
+      if (typeof input.targetUserId !== "string" ||
+          !input.targetUserId.trim() ||
+          input.targetUserId.trim().length > 128) {
+        return NextResponse.json({ error: "Invalid target user ID" }, { status: 400 });
+      }
+
+      targetUserId = input.targetUserId.trim();
+
+      const target = await prisma.user.findUnique({
+        where: { id: targetUserId },
+        select: { id: true, deletedAt: true, anonymizedAt: true },
+      });
+
+      if (!target || target.deletedAt !== null || target.anonymizedAt !== null) {
+        return NextResponse.json({ error: "Target user unavailable" }, { status: 400 });
+      }
+    }
+
+    const notification = await prisma.$transaction(async (tx) => {
+      const created = await tx.notification.create({
+        data: {
+          userId: targetUserId,
+          origin: "ADMIN",
+          title,
+          message,
+          type,
+        },
+      });
+
+      await tx.activityLog.create({
+        data: {
+          userId: session.id,
+          action: "BROADCAST_NOTIFICATION_SENT",
+          metadata: JSON.stringify({ title, type, targetUserId }),
+        },
+      });
+
+      return created;
     });
 
     return NextResponse.json({ success: true, notification });
