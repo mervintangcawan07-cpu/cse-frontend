@@ -53,7 +53,12 @@ export default function ReadingMaterialsPage() {
   const openDocument = (doc: DocumentItem) => {
     setSelectedDoc(doc);
     if (doc.fileName?.toLowerCase().endsWith(".pdf")) {
-      setReaderOpen(true);
+      // Open synchronously from the user's tap/key press to avoid mobile popup blockers.
+      window.open(
+        `/api/reading-materials/file?id=${encodeURIComponent(doc.id)}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
     }
   };
 
@@ -233,14 +238,14 @@ export default function ReadingMaterialsPage() {
                           <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5">
                             <h3 className="text-lg font-extrabold text-slate-900">Ready to read</h3>
                             <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
-                              Open this PDF in a distraction-free, full-screen reader.
+                              Open this PDF using your browser&apos;s native PDF viewer.
                             </p>
                             <button
                               type="button"
-                              onClick={() => setReaderOpen(true)}
+                              onClick={() => openDocument(selectedDoc)}
                               className="mt-4 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
-                              Open full-screen PDF reader
+                              Open PDF in Browser
                             </button>
                           </div>
                         </div>
