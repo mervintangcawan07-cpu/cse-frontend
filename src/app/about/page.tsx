@@ -3,7 +3,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/config/site";
 
 export const metadata: Metadata = {
-  title: `About Us | ${siteConfig.name}`,
+  title: "About Us",
   description: `Discover how ${siteConfig.name} (${siteConfig.domain}) helps Filipino examinees prepare smarter for the Philippine Civil Service Examination through structured practice, rationalizations, and collaborative learning.`,
   alternates: {
     canonical: `${siteConfig.url}/about`,

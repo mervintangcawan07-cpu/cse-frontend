@@ -17,12 +17,12 @@ import InstallEntryLink from "@/components/pwa/InstallEntryLink";
 import MobileHeroExperience from "@/components/landing/MobileHeroExperience";
 import TabletHeroExperience from "@/components/landing/TabletHeroExperience";
 
-const homepageTitle = "Philippine Civil Service Exam Reviewer & Mock Exams";
+const homepageTitle = `${siteConfig.name} | Philippine Civil Service Exam Reviewer & Mock Exams`;
 const homepageDescription =
-  "Prepare for the Philippine Civil Service Examination with realistic CSE questions, mock exams, flashcards, drills, and detailed answer rationalizations.";
+  "GovStudyX is an independent Philippine Civil Service Exam reviewer with realistic CSE questions, timed mock exams, flashcards, drills, and detailed answer explanations.";
 
 export const metadata: Metadata = {
-  title: homepageTitle,
+  title: { absolute: homepageTitle },
   description: homepageDescription,
   alternates: {
     canonical: siteConfig.url,
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     locale: "en_PH",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: `${homepageTitle} | ${siteConfig.name}`,
+    title: homepageTitle,
     description: homepageDescription,
   },
   twitter: {
     card: "summary",
-    title: `${homepageTitle} | ${siteConfig.name}`,
+    title: homepageTitle,
     description: homepageDescription,
   },
 };
@@ -63,6 +63,7 @@ const homepageStructuredData = [
     "@id": `${siteConfig.url}/#website`,
     url: siteConfig.url,
     name: siteConfig.name,
+    alternateName: siteConfig.domain,
     description: homepageDescription,
     inLanguage: "en-PH",
     publisher: {
