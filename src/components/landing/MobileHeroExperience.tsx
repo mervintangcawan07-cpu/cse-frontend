@@ -64,7 +64,7 @@ export default function MobileHeroExperience({
       {/* SCREEN 1: INSPIRATIONAL INTRO SCREEN                                      */}
       {/* ========================================================================= */}
       <div
-        className={`absolute inset-0 z-10 flex flex-col justify-between p-6 sm:p-12 transition-all duration-500 ease-out ${
+        className={`absolute inset-0 z-10 flex min-h-0 flex-col justify-between gap-2 p-[clamp(1rem,4vw,3rem)] transition-all duration-500 ease-out ${
           screenStep === 1
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-12 pointer-events-none"
@@ -76,13 +76,13 @@ export default function MobileHeroExperience({
         {/* 🎛️ KNOB 1: VERTICAL POSITION (Downward shift)                           */}
         {/* - Mobile: `pt-24` or `pt-[14dvh]` pushes it downward toward the center.   */}
         {/* - Tablet (`md:`): `md:pt-28` or `md:pt-[12dvh]` independently sets tablet */}
-        <div className="pt-32 md:pt-32 space-y-4 text-center">
-          <div className="space-y-3 md:space-y-5 text-center px-4 max-w-sm md:max-w-2xl mx-auto">
+        <div className="pt-[clamp(3.5rem,13dvh,7rem)] md:pt-[clamp(4rem,10dvh,8rem)] text-center">
+          <div className="mx-auto w-full max-w-full sm:max-w-xl md:max-w-2xl space-y-3 md:space-y-5 px-1 sm:px-3 md:px-4 text-center">
             
             {/* 🎛️ KNOB 2: MAIN HEADLINE FONT SIZE                                   */}
             {/* - Mobile: `text-4xl` (~36px) or `text-[38px]`                         */}
             {/* - Tablet (`md:`): `md:text-6xl` (~60px) or `md:text-[68px]` (Much bolder) */}
-            <h2 className="text-[40px] sm:text-[38px] md:text-[63px] lg:text-[77px] font-black tracking-tight leading-[1.12] text-white drop-shadow-lg">
+            <h2 className="text-[clamp(1.625rem,7.8vw,2.5rem)] sm:text-[clamp(2.5rem,6vw,3.25rem)] md:text-[clamp(3.25rem,6.5vw,4.8125rem)] font-black tracking-tight leading-[1.08] text-white drop-shadow-lg">
               Small Steps <br />
               Every Day <br />
               Make Big Dreams <br />
@@ -93,10 +93,10 @@ export default function MobileHeroExperience({
             {/* - Mobile: `text-base` (~16px)                                         */}
             {/* - Tablet (`md:`): `md:text-2xl` (~24px) or `md:text-[26px]`           */}
             <div className="space-y-1 pt-2 md:pt-4">
-              <p className="text-[20px] sm:text-[24px] md:text-3xl font-semibold text-slate-200/90 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
+              <p className="text-[clamp(0.875rem,4vw,1.25rem)] sm:text-[clamp(1rem,3.4vw,1.5rem)] md:text-[clamp(1.25rem,3.25vw,1.875rem)] font-semibold text-slate-200/90 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
                 Keep studying. Your future
               </p>
-              <p className="text-[20px] sm:text-[24px] md:text-3xl font-bold text-amber-300 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
+              <p className="text-[clamp(0.875rem,4vw,1.25rem)] sm:text-[clamp(1rem,3.4vw,1.5rem)] md:text-[clamp(1.25rem,3.25vw,1.875rem)] font-bold text-amber-300 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
                 is worth it.
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function MobileHeroExperience({
         </div>
 
         {/* BOTTOM CONTROLS: Brand Icon Logo & Animated Swipe-Up Button */}
-        <div className="space-y-4 sm:space-y-5 flex flex-col items-center pb-15 sm:pb-14 md:pb-25">
+        <div className="space-y-3 sm:space-y-5 flex flex-col items-center pb-[clamp(0.75rem,3dvh,2.5rem)] md:pb-[clamp(1.5rem,5dvh,5rem)]">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 sm:w-9 sm:h-9 relative shrink-0 overflow-hidden rounded-lg drop-shadow-md">
               <Image
@@ -133,8 +133,7 @@ export default function MobileHeroExperience({
             
             {/* 🎛️ KNOB 2: ARROW ICON SIZE */}
             {/* Mobile: w-6 h-6 (24px) | Tablet: md:w-8 md:h-8 (32px) */}
-            <svg
-              className="w-6 h-6 md:w-8 md:h-8 text-amber-400 group-hover:text-amber-300 transition"
+            <svg className="w-6 h-6 md:w-8 md:h-8 text-amber-400 group-hover:text-amber-300 transition"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
