@@ -52,14 +52,14 @@ export default function TabletHeroExperience({
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-[1.12] drop-shadow-md">
+            <h2 className="text-[clamp(2.5rem,8vw,3.25rem)] sm:text-[clamp(3.25rem,6.8vw,4.25rem)] lg:text-[clamp(3.25rem,4.8vw,4rem)] font-black text-white tracking-tight leading-[1.12] drop-shadow-md">
               Small Steps Every Day <br />
               <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-amber-300 bg-clip-text text-transparent">
                 Make Big Dreams Come True
               </span>
             </h2>
 
-            <p className="text-base sm:text-lg text-slate-300 font-medium leading-relaxed max-w-xl">
+            <p className="text-lg sm:text-xl lg:text-[1.25rem] text-slate-300 font-medium leading-relaxed max-w-xl">
               Keep studying. Your future in public service is worth it. Master challenging CSE questions with verified rationalizations.
             </p>
           </div>
@@ -108,11 +108,11 @@ export default function TabletHeroExperience({
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <span className="text-2xl font-black tracking-tight text-white">
+                <span className="text-[1.75rem] sm:text-[2rem] lg:text-[1.875rem] font-black tracking-tight text-white">
                   GovStudy<span className="text-amber-400">X</span>
                 </span>
               </div>
-              <p className="text-xs font-semibold text-slate-400">
+              <p className="text-sm sm:text-base lg:text-sm font-semibold text-slate-400">
                 Your Path to a Brighter Future
               </p>
             </div>

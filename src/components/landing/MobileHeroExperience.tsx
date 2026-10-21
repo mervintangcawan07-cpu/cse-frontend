@@ -80,9 +80,9 @@ export default function MobileHeroExperience({
           <div className="mx-auto w-full max-w-full sm:max-w-xl md:max-w-2xl space-y-3 md:space-y-5 px-1 sm:px-3 md:px-4 text-center">
             
             {/* 🎛️ KNOB 2: MAIN HEADLINE FONT SIZE                                   */}
-            {/* - Mobile: `text-4xl` (~36px) or `text-[38px]`                         */}
-            {/* - Tablet (`md:`): `md:text-6xl` (~60px) or `md:text-[68px]` (Much bolder) */}
-            <h2 className="text-[clamp(1.625rem,7.8vw,2.5rem)] sm:text-[clamp(2.5rem,6vw,3.25rem)] md:text-[clamp(3.25rem,6.5vw,4.8125rem)] font-black tracking-tight leading-[1.08] text-white drop-shadow-lg">
+            {/* - Mobile: fluid 30–44px; sm: fluid 44–58px                            */}
+            {/* - Tablet (`md:`): fluid 56–84px, capped for safe line width             */}
+            <h2 className="text-[clamp(1.875rem,8.6vw,2.75rem)] sm:text-[clamp(2.75rem,6.8vw,3.625rem)] md:text-[clamp(3.5rem,7vw,5.25rem)] font-black tracking-tight leading-[1.08] text-white drop-shadow-lg">
               Small Steps <br />
               Every Day <br />
               Make Big Dreams <br />
@@ -90,13 +90,13 @@ export default function MobileHeroExperience({
             </h2>
 
             {/* 🎛️ KNOB 3: SUBTITLE FONT SIZES                                        */}
-            {/* - Mobile: `text-base` (~16px)                                         */}
-            {/* - Tablet (`md:`): `md:text-2xl` (~24px) or `md:text-[26px]`           */}
+            {/* - Mobile: fluid 16–22px; sm: fluid 18–26px                           */}
+            {/* - Tablet (`md:`): fluid 24–32px                                      */}
             <div className="space-y-1 pt-2 md:pt-4">
-              <p className="text-[clamp(0.875rem,4vw,1.25rem)] sm:text-[clamp(1rem,3.4vw,1.5rem)] md:text-[clamp(1.25rem,3.25vw,1.875rem)] font-semibold text-slate-200/90 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
+              <p className="text-[clamp(1rem,4.5vw,1.375rem)] sm:text-[clamp(1.125rem,3.8vw,1.625rem)] md:text-[clamp(1.5rem,3.4vw,2rem)] font-semibold text-slate-200/90 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
                 Keep studying. Your future
               </p>
-              <p className="text-[clamp(0.875rem,4vw,1.25rem)] sm:text-[clamp(1rem,3.4vw,1.5rem)] md:text-[clamp(1.25rem,3.25vw,1.875rem)] font-bold text-amber-300 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
+              <p className="text-[clamp(1rem,4.5vw,1.375rem)] sm:text-[clamp(1.125rem,3.8vw,1.625rem)] md:text-[clamp(1.5rem,3.4vw,2rem)] font-bold text-amber-300 max-w-xs md:max-w-lg mx-auto drop-shadow-md leading-snug">
                 is worth it.
               </p>
             </div>
@@ -161,7 +161,7 @@ export default function MobileHeroExperience({
         {/* SCREEN 2: ACTION & ONBOARDING SCREEN                                      */}
         {/* ========================================================================= */}
         <div
-          className={`absolute inset-0 z-20 flex flex-col justify-between p-6 md:p-14 backdrop-blur-xs transition-all duration-500 ease-out ${
+          className={`absolute inset-0 z-20 flex flex-col justify-between overflow-y-auto p-6 md:p-14 backdrop-blur-xs transition-all duration-500 ease-out ${
             screenStep === 2
               ? "opacity-100 translate-y-0 pointer-events-auto"
               : "opacity-0 translate-y-12 pointer-events-none"
@@ -185,8 +185,8 @@ export default function MobileHeroExperience({
                   className="w-full h-full object-contain"
                 />
               </div>
-              {/* 🎛️ KNOB 3: BRAND TEXT (Mobile: text-xl | Tablet: md:text-3xl) */}
-              <span className="text-xl md:text-3xl font-black tracking-tight text-white drop-shadow">
+              {/* 🎛️ KNOB 3: BRAND TEXT (Mobile: 24px | Tablet: 34px) */}
+              <span className="text-2xl md:text-[2.125rem] font-black tracking-tight text-white drop-shadow">
                 GovStudy<span className="text-amber-400">X</span>
               </span>
             </div>
@@ -194,16 +194,16 @@ export default function MobileHeroExperience({
             {/* Motivational Pitch */}
             <div className="space-y-1.5 md:space-y-3">
               {/* 🎛️ KNOB 4: SCREEN 2 HEADLINE SIZE */}
-              {/* - Mobile: `text-2xl` (~24px) or `text-[26px]` */}
-              {/* - Tablet (`md:`): `md:text-4xl` (~36px) or `md:text-5xl` (~48px) */}
-              <h2 className="text-3xl sm:text-3xl md:text-7xl font-black text-white tracking-tight leading-tight drop-shadow-md">
+              {/* - Mobile: fluid 32–44px */}
+              {/* - Tablet (`md:`): fluid 76–84px */}
+              <h2 className="text-[clamp(2rem,8.5vw,2.75rem)] sm:text-[clamp(2.75rem,6vw,3.5rem)] md:text-[clamp(4.75rem,7.6vw,5.25rem)] font-black text-white tracking-tight leading-tight drop-shadow-md">
                 Your Path to a <br />
                 Brighter Future.
               </h2>
 
               {/* 🎛️ KNOB 5: SUBTITLE TEXT SIZE */}
-              {/* - Mobile: `text-xs` (~12px) | Tablet: `md:text-lg` (~18px) */}
-              <p className="text-xs sm:text-sm md:text-3xl text-slate-300 font-semibold leading-relaxed max-w-xs md:max-w-md mx-auto drop-shadow-sm">
+              {/* - Mobile: 14px | sm: 16px | Tablet: fluid 30–32px */}
+              <p className="text-sm sm:text-base md:text-[clamp(1.875rem,3.3vw,2rem)] text-slate-300 font-semibold leading-relaxed max-w-xs md:max-w-md mx-auto drop-shadow-sm">
                 CSE Reviewer &amp; Government Exam Preparation
               </p>
             </div>
@@ -260,10 +260,10 @@ export default function MobileHeroExperience({
 
         {/* Brand Tagline */}
         <div className="pt-2 md:pt-4 text-center">
-          <p className="text-[11px] md:text-sm font-black uppercase tracking-wider text-slate-400">
+          <p className="text-sm md:text-base font-black uppercase tracking-wider text-slate-400">
             GovStudy<span className="text-amber-400">X</span>
           </p>
-          <p className="text-[10px] md:text-xs text-slate-400/80">
+          <p className="text-xs md:text-sm text-slate-400/80">
             Small Steps Every Day Make Big Dreams Come True
           </p>
         </div>
