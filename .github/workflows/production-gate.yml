@@ -33,6 +33,9 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Generate Next.js Type Declarations
+        run: npx next typegen
+
       - name: TypeScript Check
         run: npx tsc --noEmit
 
