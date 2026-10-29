@@ -157,20 +157,20 @@ export async function checkRateLimit(
 }
 
 /**
- * Extracts client IP address from Next.js request headers.
- * Hardened to prevent header injectiexport function getClientIp(req: Request): string {
-  // On Vercel, X-Forwarded-For is overwritten by the trusted platform edge.
-  // Do not prioritize inbound CF-Connecting-IP or X-Real-IP headers that
-  // may be supplied directly by an arbitrary requester.
+ * Returns the requester's IP using only the forwarding header provided by
+ * Vercel's trusted edge. Do not use CF-Connecting-IP, X-Real-IP or arbitrary
+ * client-supplied forwarding headers as the first source of truth.
+ *
+ * Outside Vercel, use a stable local fallback. Hosting behind another reverse
+ * proxy requires its own explicit trusted-proxy implementation.
+ */
+export function getClientIp(req: Request): string {
   if (process.env.VERCEL !== "1" && !process.env.VERCEL_ENV) {
     return "127.0.0.1";
   }
 
   const candidate = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   return candidate && isIP(candidate) ? candidate : "unknown";
-}
- testing
-  return "127.0.0.1";
 }
 
 /**
