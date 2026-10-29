@@ -148,7 +148,9 @@ const summary = {
     .map((r) => ({ route: r.route, details: r.unboundedFindManyDetails })),
 };
 
-const outputPath = path.resolve(process.cwd(), "audit_summary.json");
+const outputDir = path.resolve(process.cwd(), ".govstudyx-audit");
+fs.mkdirSync(outputDir, { recursive: true });
+const outputPath = path.join(outputDir, "audit_summary.json");
 fs.writeFileSync(outputPath, JSON.stringify({ summary, details: results }, null, 2), "utf-8");
 
 console.log("\n==================================================");
