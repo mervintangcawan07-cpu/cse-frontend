@@ -79,7 +79,7 @@ export async function proxy(request: NextRequest) {
   const session = userToken ? await verifyJWT(userToken) : null;
 
   // 5. Edge Gate for Admin API Endpoints
-  if (pathname.startsWith("/api/admin")) {
+  if ((pathname === "/api/admin" || pathname.startsWith("/api/admin/"))) {
     if (!session) {
       return NextResponse.json(
         { error: "Authentication required." },
@@ -96,7 +96,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // 6. Partner Portal Protection
-  if (pathname.startsWith("/partner-portal")) {
+  if ((pathname === "/partner-portal" || pathname.startsWith("/partner-portal/"))) {
     const isPublicPartnerRoute =
       pathname === "/partner-portal/login" ||
       pathname === "/partner-portal/setup" ||
@@ -122,7 +122,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // 7. Admin UI Routes
-  if (pathname.startsWith("/admin")) {
+  if ((pathname === "/admin" || pathname.startsWith("/admin/"))) {
     if (!session) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
@@ -151,7 +151,7 @@ export async function proxy(request: NextRequest) {
     "/bookmarks",
   ];
 
-  if (protectedUserPrefixes.some((prefix) => pathname.startsWith(prefix))) {
+  if (protectedUserPrefixes.some((prefix) => (pathname === prefix || pathname.startsWith(`${prefix}/`)))) {
     if (!session) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);

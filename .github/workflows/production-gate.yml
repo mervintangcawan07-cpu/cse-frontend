@@ -11,9 +11,11 @@ jobs:
     name: Typecheck, Audit & Build
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DIRECT_URL: ${{ secrets.DIRECT_URL }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      # CI-only placeholders: no live DB access and no production secrets required.
+      # Prisma client generation and static compilation should not query Postgres.
+      DATABASE_URL: "postgresql://ci:ci@127.0.0.1:5432/govstudyx_ci"
+      DIRECT_URL: "postgresql://ci:ci@127.0.0.1:5432/govstudyx_ci"
+      JWT_SECRET: "ci-only-placeholder-not-used-in-production-please-never-deploy"
       NEXT_PUBLIC_APP_URL: "https://govstudyx.com"
     steps:
       - name: Checkout Code
@@ -30,6 +32,9 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
+
+      - name: Generate Next.js Type Declarations
+        run: npx next typegen
 
       - name: TypeScript Check
         run: npx tsc --noEmit

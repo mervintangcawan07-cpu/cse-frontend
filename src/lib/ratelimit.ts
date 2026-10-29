@@ -1,5 +1,6 @@
 // Relative Path: src/lib/ratelimit.ts
 import crypto from "crypto";
+import { isIP } from "node:net";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
@@ -156,32 +157,20 @@ export async function checkRateLimit(
 }
 
 /**
- * Extracts client IP address from Next.js request headers.
- * Hardened to prevent header injection and spoofed proxy chains.
+ * Returns the requester's IP using only the forwarding header provided by
+ * Vercel's trusted edge. Do not use CF-Connecting-IP, X-Real-IP or arbitrary
+ * client-supplied forwarding headers as the first source of truth.
+ *
+ * Outside Vercel, use a stable local fallback. Hosting behind another reverse
+ * proxy requires its own explicit trusted-proxy implementation.
  */
 export function getClientIp(req: Request): string {
-  // 1. Edge-verified Cloudflare connecting IP
-  const cfIp = req.headers.get("cf-connecting-ip");
-  if (cfIp) return cfIp.trim();
-
-  // 2. Edge-verified Vercel incoming IP
-  const vercelIp = req.headers.get("x-vercel-ip") || req.headers.get("x-real-ip");
-  if (vercelIp) return vercelIp.trim();
-
-  // 3. Fallback to first IP in proxy chain (validated IPv4/IPv6 format)
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const rawIp = forwarded.split(",")[0]?.trim();
-    if (
-      rawIp &&
-      /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$\vert{}^[a-fA-F0-9:]+$/.test(rawIp)
-    ) {
-      return rawIp;
-    }
+  if (process.env.VERCEL !== "1" && !process.env.VERCEL_ENV) {
+    return "127.0.0.1";
   }
 
-  // 4. Default fallback for local development / testing
-  return "127.0.0.1";
+  const candidate = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  return candidate && isIP(candidate) ? candidate : "unknown";
 }
 
 /**
