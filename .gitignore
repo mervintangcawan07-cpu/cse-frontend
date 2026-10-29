@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# generated route-security audit report
+/audit_summary.json
+
 # prisma generated files
 /src/generated/prisma
 .govstudyx-backup/
