@@ -15,6 +15,10 @@ import {
   resetFailedAttempts,
 } from "@/lib/accountLockout";
 import { recordLoginFailure } from "@/lib/systemHealthMonitor";
+import {
+  getDistributedLoginLockout,
+  isDistributedLoginLockoutEnabled,
+} from "@/lib/security/distributedAccountLockout";
 import { isAccountOperational } from "@/lib/accountLifecycle";
 
 export async function POST(request: Request) {
@@ -38,7 +42,13 @@ export async function POST(request: Request) {
     const cleanEmail = String(email).trim().toLowerCase();
 
     // 🔒 Check if account is locked out due to previous failed password attempts
-    const { isLocked, remainingSeconds } = checkAccountLockout(cleanEmail);
+    // Opt-in distributed protection; no default behavior changes.
+    const distributedLockout = isDistributedLoginLockoutEnabled()
+      ? getDistributedLoginLockout()
+      : null;
+    const { isLocked, remainingSeconds } = distributedLockout
+      ? await distributedLockout.check(cleanEmail)
+      : checkAccountLockout(cleanEmail);
     if (isLocked) {
       const minutes = Math.ceil(remainingSeconds / 60);
       return NextResponse.json(
@@ -58,7 +68,9 @@ export async function POST(request: Request) {
 
     if (!user || !user.password) {
       recordLoginFailure();
-      const failure = recordFailedAttempt(cleanEmail);
+      const failure = distributedLockout
+        ? await distributedLockout.recordFailure(cleanEmail)
+        : recordFailedAttempt(cleanEmail);
       if (failure.isLocked) {
         const mins = Math.ceil(failure.remainingSeconds / 60);
         return NextResponse.json(
@@ -72,7 +84,9 @@ export async function POST(request: Request) {
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       recordLoginFailure();
-      const failure = recordFailedAttempt(cleanEmail);
+      const failure = distributedLockout
+        ? await distributedLockout.recordFailure(cleanEmail)
+        : recordFailedAttempt(cleanEmail);
       if (failure.isLocked) {
         const mins = Math.ceil(failure.remainingSeconds / 60);
         return NextResponse.json(
@@ -88,7 +102,11 @@ export async function POST(request: Request) {
     }
 
     // 🔒 Reset failed attempts on successful password verification
-    resetFailedAttempts(cleanEmail);
+    if (distributedLockout) {
+      await distributedLockout.reset(cleanEmail);
+    } else {
+      resetFailedAttempts(cleanEmail);
+    }
 
     // 🔒 Require Email Verification (Admins bypass verification)
     if (!user.isEmailVerified && user.role !== "ADMIN") {
