@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { logger } from "@/lib/logger/logger";
 import { SudoTicket } from "@/types/auth";
 import { SUDO_LIMITER } from "@/lib/ratelimit";
+import { checkStrictSudoRateLimit, isStrictSudoRateLimitEnabled } from "@/lib/security/strictSudoRateLimit";
 
 function getSudoSecret(): string {
   const secret = process.env.SUDO_SECRET;
@@ -32,6 +33,12 @@ export async function checkSudoRateLimit(identifier: string): Promise<{
     .update(identifier)
     .digest("hex")
     .slice(0, 32);
+
+  // Optional strict mode denies sudo attempts if distributed limiting is unavailable.
+  // Default legacy fallback remains unchanged until explicitly enabled.
+  if (isStrictSudoRateLimitEnabled()) {
+    return checkStrictSudoRateLimit(SUDO_LIMITER, hashedIdentifier);
+  }
 
   if (SUDO_LIMITER) {
     try {
